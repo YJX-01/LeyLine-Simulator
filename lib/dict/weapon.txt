@@ -1,0 +1,5 @@
+单手剑-Sword
+双手剑-Claymore
+长柄武器-Polearm
+弓-Bow
+法器-Catalyst

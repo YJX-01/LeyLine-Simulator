@@ -1,0 +1,6 @@
+风-Anemo
+岩-Geo
+雷-Electro
+水-Hydro
+火-Pyro
+冰-Cryo
