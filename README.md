@@ -1,2 +1,2 @@
-# LeyLine-Simulater
-地脉模拟器 | LeyLine Simulater - a genshin team simulater
+# LeyLine-Simulator
+地脉模拟器 | LeyLine Simulater - a genshin team simulator
