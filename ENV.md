@@ -1,5 +1,10 @@
 ### 环境配置记录
 
+#### 项目虚拟环境配置
+https://code.visualstudio.com/docs/python/environments#_work-with-environments
+
+python -m venv .venv
+
 #### 导出/导入安装依赖
 (venv)
 pip freeze -l > requirements.txt
