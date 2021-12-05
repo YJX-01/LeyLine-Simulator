@@ -5,6 +5,5 @@
   },
   "terminal.integrated.env.windows": {
     "PYTHONPATH": "src"
-  },
-  "python.pythonPath": "venv\\Scripts\\python.exe"
+  }
 }
