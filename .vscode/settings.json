@@ -1,0 +1,10 @@
+{
+  "python.envFile": "${workspaceFolder}/.env",
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "src"
+  },
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "src"
+  },
+  "python.pythonPath": "venv\\Scripts\\python.exe"
+}
