@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 
 # 先暂时忽略pycharm项目配置
-.idea
+.idea/
+# 忽略vscode配置, 不同系统配置会有冲突
+.vscode/
