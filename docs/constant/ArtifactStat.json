@@ -1,0 +1,98 @@
+{
+    "position": ["flower", "plume", "sands", "goblet", "circlet"],
+    "main_stat": {
+        "flower": ["hp_const"],
+        "plume": ["atk_const"],
+        "sands": ["atk_percent", "EM", "ER", "hp_percent", "def_percent"],
+        "goblet": [
+            "anemo_bonus",
+            "geo_bonus",
+            "electro_bonus",
+            "hydro_bonus",
+            "pyro_bonus",
+            "cryo_bonus",
+            "physical_bonus",
+            "atk_percent",
+            "hp_percent",
+            "def_percent",
+            "EM"
+        ],
+        "circlet": [
+            "crit_rate",
+            "atk_percent",
+            "crit_damage",
+            "hp_percent",
+            "def_percent",
+            "cureEffect",
+            "EM"
+        ]
+    },
+    "sub_stat": [
+        "crit_rate",
+        "crit_damage",
+        "hp_percent",
+        "atk_percent",
+        "def_percent",
+        "atk_const",
+        "def_const",
+        "hp_const",
+        "ER",
+        "EM"
+    ],
+    "stat_growth": {
+        "4": {
+            "crit_rate": [0.022, 0.025, 0.028, 0.031],
+            "crit_damage": [0.044, 0.05, 0.056, 0.062],
+            "hp_percent": [0.033, 0.037, 0.042, 0.047],
+            "atk_percent": [0.033, 0.037, 0.042, 0.047],
+            "def_percent": [0.041, 0.047, 0.053, 0.058],
+            "atk_const": [11, 12, 14, 16],
+            "def_const": [13, 15, 17, 19],
+            "hp_const": [167, 191, 215, 239],
+            "ER": [0.036, 0.041, 0.047, 0.052],
+            "EM": [13, 15, 17, 19]
+        },
+        "5": {
+            "crit_rate": [0.027, 0.031, 0.035, 0.039],
+            "crit_damage": [0.054, 0.062, 0.07, 0.078],
+            "hp_percent": [0.041, 0.047, 0.053, 0.058],
+            "atk_percent": [0.041, 0.047, 0.053, 0.058],
+            "def_percent": [0.051, 0.058, 0.066, 0.073],
+            "atk_const": [14, 16, 18, 19],
+            "def_const": [16, 19, 21, 23],
+            "hp_const": [209, 239, 269, 299],
+            "ER": [0.045, 0.052, 0.058, 0.065],
+            "EM": [16, 19, 21, 23]
+        }
+    },
+    "stat_max": {
+        "4": {
+            "crit_rate": 0.232,
+            "crit_damage": 0.464,
+            "hp_percent": 0.348,
+            "atk_percent": 0.348,
+            "def_percent": 0.435,
+            "atk_const": 232,
+            "hp_const": 3571,
+            "ER": 0.387,
+            "EM": 139,
+            "heal_bonus": 0.268,
+            "physical_bonus": 0.435,
+            "elem_bonus": 0.348
+        },
+        "5": {
+            "crit_rate": 0.311,
+            "crit_damage": 0.622,
+            "hp_percent": 0.466,
+            "atk_percent": 0.466,
+            "def_percent": 0.583,
+            "atk_const": 311,
+            "hp_const": 4780,
+            "ER": 0.518,
+            "EM": 187,
+            "heal_bonus": 0.359,
+            "physical_bonus": 0.583,
+            "elem_bonus": 0.466
+        }
+    }
+}
