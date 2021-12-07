@@ -10,6 +10,13 @@
             "request": "launch",
             "program": "D:\\Projects\\LeyLine-Simulater\\src\\main.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Start Simulator",
+            "type": "python",
+            "request": "launch",
+            "program": "D:\\Projects\\LeyLine-Simulater\\src\\simulator.py",
+            "console": "integratedTerminal"
         }
     ]
 }
