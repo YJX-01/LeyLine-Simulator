@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-docs/
 lib64/
 parts/
 sdist/
@@ -132,3 +131,6 @@ dmypy.json
 .idea/
 # 忽略vscode配置, 不同系统配置会有冲突
 .vscode/
+
+# 忽略qt缓存文件
+.qt_for_python/
