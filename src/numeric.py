@@ -2,6 +2,7 @@ class Multiplier():
     '''
     定义伤害乘区的类\n
     '''
+
     # <0> = Basic Multiplier
     # <00> Stat Multiplier
     # <01> Scalar Multiplier
@@ -13,46 +14,12 @@ class Multiplier():
     # <13> Resistance Multiplier
     # <14> Defence Multiplier
 
-    # <2> = upheaval Multiplier?
+    # <2> = transformative Multiplier?
     # <20> basic reaction stat Multiplier
 
-    def __init__(self, ID: str) -> None:
-        self.type = ID
-        self.data = None
-        self.work_function = None
-        self.selectFunction()
+    # <3> = healing Multiplier
 
-    def merge(self, ID: str, *multipliers):
-        '''ID should not be repeated'''
-        pass
-
-    def selectFunction(self) -> None:
-        if self.type == '00':
-            self.work_function = Multiplier.statProcessor
-            return
-        elif self.type == '01':
-            self.work_function = Multiplier.scalarProcessor
-            return
-        elif self.type == '10':
-            self.work_function = Multiplier.damageBonusProcessor
-            return
-        elif self.type == '11':
-            self.work_function = Multiplier.critDamageProcessor
-            return
-        elif self.type == '12':
-            self.work_function = Multiplier.reactionProcessor
-            return
-        elif self.type == '13':
-            self.work_function = Multiplier.resistanceProcessor
-            return
-        elif self.type == '14':
-            self.work_function = Multiplier.defenceProcessor
-            return
-        elif self.type == '14':
-            self.work_function = Multiplier.defenceProcessor
-            return
-        else:
-            pass
+    # <4> = shield Multiplier
 
     @staticmethod
     def statProcessor(data: dict, *buffs):
@@ -82,6 +49,24 @@ class Multiplier():
     def defenceProcessor(data: dict, *buffs):
         pass
 
+    __type_map = \
+        {
+            '00': statProcessor,
+            '01': scalarProcessor,
+            '10': damageBonusProcessor,
+            '11': critDamageProcessor,
+            '12': reactionProcessor,
+            '13': resistanceProcessor,
+            '14': defenceProcessor
+        }
+
+    def __init__(self, type: str) -> None:
+        self.func = self.__type_map.get(type, None)
+
+    def merge(self, ID: str, *multipliers):
+        '''ID should not be repeated'''
+        pass
+
 
 class Damage():
     def __init__(self) -> None:
@@ -90,17 +75,22 @@ class Damage():
         self.multipliers = None
         self.information = None
 
+
 class AmplifyingDamage(Damage):
     pass
+
 
 class TransformativeDamage(Damage):
     pass
 
+
 class blankDamage(Damage):
     pass
 
+
 class Heal():
     pass
+
 
 class Shield():
     pass

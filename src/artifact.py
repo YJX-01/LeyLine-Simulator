@@ -1,14 +1,19 @@
-class Artifact:
+from wrapper import Wrapper
+
+
+class Artifact(Wrapper):
     '''
     定义单个圣遗物的类\n
     '''
 
     def __init__(self) -> None:
-        self.set_name = ''  # 圣遗物套装: str
-        self.position = ''  # 圣遗物位置: str
-        self.quality = 5    # 圣遗物星级: int
-        self.main_stat = ''  # 圣遗物主词条: str
-        self.sub_stat = []  # 圣遗物副词条: str
+        config = dict()
+        config['set_name'] = None  # 圣遗物套装: str
+        config['postion'] = None  # 圣遗物位置: str
+        config['quality'] = None    # 圣遗物星级: int
+        config['main_stat'] = None  # 圣遗物主词条: str
+        config['sub_stat'] = None  # 圣遗物副词条: str
+        super().__init__(config)
 
 
 class ArtifactSet():
