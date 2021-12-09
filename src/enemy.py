@@ -1,5 +1,9 @@
-class Enemy():
+from wrapper import Wrapper
+
+class Enemy(Wrapper):
     def __init__(self) -> None:
-        self.name = None
-        self.resistance_list = []
-        self.HP = 0
+        config = dict()
+        config['res'] = None
+        config['hp'] = None
+        config['name'] = None
+        super().__init__(config)

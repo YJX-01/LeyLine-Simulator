@@ -1,4 +1,4 @@
-import allogenes
+# import allogenes
 
 from character import *
 
