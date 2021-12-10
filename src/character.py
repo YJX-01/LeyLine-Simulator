@@ -1,6 +1,7 @@
-import allogenes
+# import allogenes
 from buff import Buff
 from skill import Skill
+from wrapper import Wrapper
 
 class Character():
     '''
@@ -21,7 +22,7 @@ class Character():
             buff.settle(time)
         skill.use(time)
 
-class Panel():
+class Panel(Wrapper):
     """[summary]\n
         角色面板类。Buff 结算时需要返回角色的实时面板，所以单独拿出来
     """
@@ -38,49 +39,9 @@ class Panel():
         ]
     
     def __init__(self) -> None:
-        self.__atk_base = 0
-        self.__def_base = 0
-        self.__hp_base = 0
+        config = dict.fromkeys(self.__panel_name, lambda x: 0)
+        super().__init__(config)
 
-        self.__atk = 0
-        self.__def = 0
-        self.__hp = 0
-
-        self.__EM = 0
-        self.__ER = 0
-
-        self.__crit_rate = 0
-        self.__crit_damage = 0
-
-        self.__heal_bonus = 0
-        self.__heal_income = 0
-
-        self.__shield_strength = 0
-        self.__cd_reduction = 0
-
-        self.__anemo_bonus = 0
-        self.__geo_bonus = 0
-        self.__electro_bonus = 0
-        self.__hydro_bonus = 0
-        self.__pyro_bonus = 0
-        self.__cryo_bonus = 0
-        self.__physical_bonus = 0
-
-        self.__anemo_res = 0
-        self.__geo_res = 0
-        self.__electro_res = 0
-        self.__hydro_res = 0
-        self.__pyro_res = 0
-        self.__cryo_res = 0
-        self.__physical_res = 0
-        
-    @property
-    def atk_base(self):
-        return self.__atk_base
-    
-    @atk_base.setter
-    def atk_base(self, atk_base):
-        self.__atk_base = atk_base
 
 
 

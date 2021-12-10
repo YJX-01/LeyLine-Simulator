@@ -1,21 +1,9 @@
 class Event():
     def __init__(self, data: dict = {}) -> None:
-        self.__type = data.get('type', '')
-        self.__source = data.get('source', '')
-        self.__start_time = data.get('start_time', -1)
-        self.__duration = data.get('duration', -1)  # dur > 0
-
-    @property
-    def start(self):
-        return self.__start_time
-
-    @property
-    def end(self):
-        return self.__start_time + self.__duration
-
-    @start.setter
-    def start(self, time):
-        self.__start_time = time
+        self.type = data.get('type', '')
+        self.source = data.get('source', '')
+        self.start = data.get('start', -1)
+        self.duration = data.get('duration', -1)  # dur > 0
 
 
 class ActionEvent(Event):
