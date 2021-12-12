@@ -4,9 +4,9 @@ from enum import Enum
 class WeaponType(Enum):
     SWORD = 1
     CLAYMORE = 2
-    BOW = 3
-    POLEARM = 4
-    CATALYST = 5
+    POLEARM = 3
+    CATALYST = 4
+    BOW = 5
 
 
 class Weapon:

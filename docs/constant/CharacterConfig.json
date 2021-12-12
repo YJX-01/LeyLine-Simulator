@@ -1,0 +1,460 @@
+[
+    {
+        "name": "Ayaka",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 6,
+        "nationality": 3,
+        "HP_base": 1000.9860229492188,
+        "ATK_base": 26.62660026550293,
+        "DEF_base": 61.0265998840332
+    },
+    {
+        "name": "Jean",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 1,
+        "nationality": 1,
+        "HP_base": 1143.9840087890625,
+        "ATK_base": 18.6200008392334,
+        "DEF_base": 59.83000183105469
+    },
+    {
+        "name": "Traveler_anemo",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 1,
+        "nationality": 9,
+        "HP_base": 911.791015625,
+        "ATK_base": 17.808000564575195,
+        "DEF_base": 57.224998474121094
+    },
+    {
+        "name": "Traveler_geo",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 2,
+        "nationality": 9,
+        "HP_base": 911.791015625,
+        "ATK_base": 17.808000564575195,
+        "DEF_base": 57.224998474121094
+    },
+    {
+        "name": "Traveler_electro",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 3,
+        "nationality": 9,
+        "HP_base": 911.791015625,
+        "ATK_base": 17.808000564575195,
+        "DEF_base": 57.224998474121094
+    },
+    {
+        "name": "Lisa",
+        "rarity": 4,
+        "weapon_type": 4,
+        "element": 3,
+        "nationality": 1,
+        "HP_base": 802.3760986328125,
+        "ATK_base": 19.410720825195312,
+        "DEF_base": 48.069000244140625
+    },
+    {
+        "name": "Barbara",
+        "rarity": 4,
+        "weapon_type": 4,
+        "element": 4,
+        "nationality": 1,
+        "HP_base": 820.6118774414062,
+        "ATK_base": 13.355999946594238,
+        "DEF_base": 56.080501556396484
+    },
+    {
+        "name": "Kaeya",
+        "rarity": 4,
+        "weapon_type": 1,
+        "element": 6,
+        "nationality": 1,
+        "HP_base": 975.6163940429688,
+        "ATK_base": 18.698400497436523,
+        "DEF_base": 66.38099670410156
+    },
+    {
+        "name": "Diluc",
+        "rarity": 5,
+        "weapon_type": 2,
+        "element": 5,
+        "nationality": 1,
+        "HP_base": 1010.5192260742188,
+        "ATK_base": 26.06800079345703,
+        "DEF_base": 61.0265998840332
+    },
+    {
+        "name": "Razor",
+        "rarity": 4,
+        "weapon_type": 2,
+        "element": 3,
+        "nationality": 1,
+        "HP_base": 1002.9700927734375,
+        "ATK_base": 19.58880043029785,
+        "DEF_base": 62.9474983215332
+    },
+    {
+        "name": "Amber",
+        "rarity": 4,
+        "weapon_type": 5,
+        "HP_base": 793.2581787109375,
+        "ATK_base": 18.698400497436523,
+        "DEF_base": 50.358001708984375
+    },
+    {
+        "name": "Venti",
+        "rarity": 5,
+        "weapon_type": 5,
+        "element": 1,
+        "nationality": 1,
+        "HP_base": 819.855224609375,
+        "ATK_base": 20.48200035095215,
+        "DEF_base": 52.052101135253906
+    },
+    {
+        "name": "Xiangling",
+        "rarity": 4,
+        "weapon_type": 3,
+        "element": 5,
+        "nationality": 2,
+        "HP_base": 911.791015625,
+        "ATK_base": 18.876480102539062,
+        "DEF_base": 56.080501556396484
+    },
+    {
+        "name": "Beidou",
+        "rarity": 4,
+        "weapon_type": 2,
+        "element": 3,
+        "nationality": 2,
+        "HP_base": 1094.149169921875,
+        "ATK_base": 18.876480102539062,
+        "DEF_base": 54.36375045776367
+    },
+    {
+        "name": "Xingqiu",
+        "rarity": 4,
+        "weapon_type": 1,
+        "element": 4,
+        "nationality": 2,
+        "HP_base": 857.0835571289062,
+        "ATK_base": 16.917600631713867,
+        "DEF_base": 63.51974868774414
+    },
+    {
+        "name": "Xiao",
+        "rarity": 5,
+        "weapon_type": 3,
+        "element": 1,
+        "nationality": 2,
+        "HP_base": 991.4528198242188,
+        "ATK_base": 27.185199737548828,
+        "DEF_base": 62.223201751708984
+    },
+    {
+        "name": "Ningguang",
+        "rarity": 4,
+        "weapon_type": 4,
+        "element": 2,
+        "nationality": 2,
+        "HP_base": 820.6118774414062,
+        "ATK_base": 17.808000564575195,
+        "DEF_base": 48.069000244140625
+    },
+    {
+        "name": "Klee",
+        "rarity": 5,
+        "weapon_type": 4,
+        "element": 5,
+        "nationality": 1,
+        "HP_base": 800.788818359375,
+        "ATK_base": 24.20599937438965,
+        "DEF_base": 47.86399841308594
+    },
+    {
+        "name": "Zhongli",
+        "rarity": 5,
+        "weapon_type": 3,
+        "element": 2,
+        "nationality": 2,
+        "HP_base": 1143.9840087890625,
+        "ATK_base": 19.551000595092773,
+        "DEF_base": 57.436798095703125
+    },
+    {
+        "name": "Fischl",
+        "rarity": 4,
+        "weapon_type": 5,
+        "element": 3,
+        "nationality": 1,
+        "HP_base": 770.46337890625,
+        "ATK_base": 20.47920036315918,
+        "DEF_base": 49.78575134277344
+    },
+    {
+        "name": "Bennett",
+        "rarity": 4,
+        "weapon_type": 1,
+        "element": 5,
+        "nationality": 1,
+        "HP_base": 1039.4417724609375,
+        "ATK_base": 16.02720069885254,
+        "DEF_base": 64.66425323486328
+    },
+    {
+        "name": "Tartaglia",
+        "rarity": 5,
+        "weapon_type": 5,
+        "element": 4,
+        "nationality": 7,
+        "HP_base": 1020.0524291992188,
+        "ATK_base": 23.461200714111328,
+        "DEF_base": 63.4197998046875
+    },
+    {
+        "name": "Noelle",
+        "rarity": 4,
+        "weapon_type": 2,
+        "element": 2,
+        "nationality": 1,
+        "HP_base": 1012.0880126953125,
+        "ATK_base": 16.02720069885254,
+        "DEF_base": 66.9532470703125
+    },
+    {
+        "name": "Qiqi",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 6,
+        "nationality": 2,
+        "HP_base": 962.8532104492188,
+        "ATK_base": 22.3439998626709,
+        "DEF_base": 71.7959976196289
+    },
+    {
+        "name": "Chongyun",
+        "rarity": 4,
+        "weapon_type": 2,
+        "element": 6,
+        "nationality": 2,
+        "HP_base": 920.908935546875,
+        "ATK_base": 18.698400497436523,
+        "DEF_base": 54.36375045776367
+    },
+    {
+        "name": "Ganyu",
+        "rarity": 5,
+        "weapon_type": 5,
+        "element": 6,
+        "nationality": 2,
+        "HP_base": 762.656005859375,
+        "ATK_base": 26.06800079345703,
+        "DEF_base": 49.06060028076172
+    },
+    {
+        "name": "Albedo",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 2,
+        "nationality": 1,
+        "HP_base": 1029.5855712890625,
+        "ATK_base": 19.551000595092773,
+        "DEF_base": 68.2061996459961
+    },
+    {
+        "name": "Diona",
+        "rarity": 4,
+        "weapon_type": 5,
+        "element": 6,
+        "nationality": 1,
+        "HP_base": 802.3760986328125,
+        "ATK_base": 17.808000564575195,
+        "DEF_base": 50.358001708984375
+    },
+    {
+        "name": "Mona",
+        "rarity": 5,
+        "weapon_type": 4,
+        "element": 4,
+        "nationality": 1,
+        "HP_base": 810.322021484375,
+        "ATK_base": 22.3439998626709,
+        "DEF_base": 50.855499267578125
+    },
+    {
+        "name": "Keqing",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 3,
+        "nationality": 2,
+        "HP_base": 1020.0524291992188,
+        "ATK_base": 25.136999130249023,
+        "DEF_base": 62.223201751708984
+    },
+    {
+        "name": "Sucrose",
+        "rarity": 4,
+        "weapon_type": 4,
+        "element": 1,
+        "nationality": 1,
+        "HP_base": 775.0223388671875,
+        "ATK_base": 14.246399879455566,
+        "DEF_base": 58.941749572753906
+    },
+    {
+        "name": "Xinyan",
+        "rarity": 4,
+        "weapon_type": 2,
+        "element": 5,
+        "nationality": 2,
+        "HP_base": 939.1447143554688,
+        "ATK_base": 20.835359573364258,
+        "DEF_base": 66.9532470703125
+    },
+    {
+        "name": "Rosaria",
+        "rarity": 4,
+        "weapon_type": 3,
+        "element": 6,
+        "nationality": 1,
+        "HP_base": 1030.3238525390625,
+        "ATK_base": 20.12303924560547,
+        "DEF_base": 59.513999938964844
+    },
+    {
+        "name": "Hutao",
+        "rarity": 5,
+        "weapon_type": 3,
+        "element": 5,
+        "nationality": 2,
+        "HP_base": 1210.7164306640625,
+        "ATK_base": 8.285900115966797,
+        "DEF_base": 68.2061996459961
+    },
+    {
+        "name": "Kazuha",
+        "rarity": 5,
+        "weapon_type": 1,
+        "element": 1,
+        "nationality": 3,
+        "HP_base": 1039.1187744140625,
+        "ATK_base": 23.08880043029785,
+        "DEF_base": 62.82149887084961
+    },
+    {
+        "name": "Yanfei",
+        "rarity": 4,
+        "weapon_type": 4,
+        "element": 5,
+        "nationality": 2,
+        "HP_base": 784.1402587890625,
+        "ATK_base": 20.12303924560547,
+        "DEF_base": 49.2135009765625
+    },
+    {
+        "name": "Yoimiya",
+        "rarity": 5,
+        "weapon_type": 5,
+        "element": 5,
+        "nationality": 3,
+        "HP_base": 791.255615234375,
+        "ATK_base": 25.136999130249023,
+        "DEF_base": 47.86399841308594
+    },
+    {
+        "name": "Thoma",
+        "rarity": 4,
+        "weapon_type": 3,
+        "element": 5,
+        "nationality": 3,
+        "HP_base": 866.2014770507812,
+        "ATK_base": 16.917600631713867,
+        "DEF_base": 62.9474983215332
+    },
+    {
+        "name": "Eula",
+        "rarity": 5,
+        "weapon_type": 2,
+        "element": 6,
+        "nationality": 1,
+        "HP_base": 1029.5855712890625,
+        "ATK_base": 26.62660026550293,
+        "DEF_base": 58.45391082763672
+    },
+    {
+        "name": "Shogun",
+        "rarity": 5,
+        "weapon_type": 3,
+        "element": 3,
+        "nationality": 3,
+        "HP_base": 1004.7992553710938,
+        "ATK_base": 26.254199981689453,
+        "DEF_base": 61.445411682128906
+    },
+    {
+        "name": "Sayu",
+        "rarity": 4,
+        "weapon_type": 2,
+        "element": 1,
+        "nationality": 3,
+        "HP_base": 993.8521728515625,
+        "ATK_base": 20.47920036315918,
+        "DEF_base": 62.43247604370117
+    },
+    {
+        "name": "Kokomi",
+        "rarity": 5,
+        "weapon_type": 4,
+        "element": 4,
+        "nationality": 3,
+        "HP_base": 1048.6519775390625,
+        "ATK_base": 18.247600555419922,
+        "DEF_base": 51.1546516418457
+    },
+    {
+        "name": "Gorou",
+        "rarity": 4,
+        "weapon_type": 5,
+        "element": 2,
+        "nationality": 3,
+        "HP_base": 802.3760986328125,
+        "ATK_base": 15.31488037109375,
+        "DEF_base": 54.36375045776367
+    },
+    {
+        "name": "Sara",
+        "rarity": 4,
+        "weapon_type": 5,
+        "element": 3,
+        "nationality": 3,
+        "HP_base": 802.3760986328125,
+        "ATK_base": 16.383359909057617,
+        "DEF_base": 52.64699935913086
+    },
+    {
+        "name": "Itto",
+        "rarity": 5,
+        "weapon_type": 2,
+        "element": 2,
+        "nationality": 3,
+        "HP_base": 1000.9860229492188,
+        "ATK_base": 17.68899917602539,
+        "DEF_base": 74.66783905029297
+    },
+    {
+        "name": "Aloy",
+        "rarity": 4,
+        "weapon_type": 5,
+        "element": 6,
+        "nationality": 9,
+        "HP_base": 848.4547729492188,
+        "ATK_base": 18.210359573364258,
+        "DEF_base": 52.65039825439453
+    }
+]
