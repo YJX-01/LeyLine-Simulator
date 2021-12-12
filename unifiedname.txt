@@ -1,30 +1,30 @@
 level
 ascension
 
-atk_percent
-atk_const
-def_percent
-def_const
-hp_percent
-hp_const
+ATK_percent
+ATK_const
+DEF_percent
+DEF_const
+HP_percent
+HP_const
 EM
 ER
-crit_rate
-crit_damage
+CRIT_rate
+CRIT_DMG
 heal_bonus
 heal_income
 
-atk_spd
+ATK_spd
 shield_strength
 cd_reduction
 
 stat_dependence
 
-atk
-def
-hp
+ATK
+DEF
+HP
 EM ER 
-crit_rate crit_damage
+CRIT_rate CRIT_DMG
 
 elem_type
 
@@ -46,11 +46,11 @@ cryo_res
 dendro_res
 physical_res
 
-atk_base
-def_base
-hp_base
+ATK_base
+DEF_base
+HP_base
 
-damage_type
+DMG_type
 
 norm_atk
 elem_skill
