@@ -1,6 +1,4 @@
 # import allogenes
-from buff import Buff
-from skill import Skill
 from wrapper import Wrapper
 
 class Character():
@@ -16,11 +14,6 @@ class Character():
         self.panel = Panel()
         self.skills = {}
         self.buffs = []
-    
-    def useSkill(self, skill: Skill, time: float) -> None:
-        for buff in self.buffs:
-            buff.settle(time)
-        skill.use(time)
 
 class Panel(Wrapper):
     """[summary]\n
