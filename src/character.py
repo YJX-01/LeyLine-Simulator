@@ -9,16 +9,16 @@ class Character():
     '''
     
     def __init__(self, name: str, weapon, artifacts) -> None:
-        self.__name = name
-        self.__allogene = None
-        self.__weapon = weapon
-        self.__artifacts = artifacts
-        self.__panel = Panel()
-        self.__skills = {}
-        self.__buffs = []
+        self.name = name
+        self.allogene = None
+        self.weapon = weapon
+        self.artifacts = artifacts
+        self.panel = Panel()
+        self.skills = {}
+        self.buffs = []
     
     def useSkill(self, skill: Skill, time: float) -> None:
-        for buff in self.__buffs:
+        for buff in self.buffs:
             buff.settle(time)
         skill.use(time)
 
