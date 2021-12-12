@@ -2,14 +2,14 @@
 
 from character import *
 
-class Creation():
-    def __init__(self, data: dict) -> None:
-        self.__panel = None
-        self.__func = None
-        self.initialize(data)
 
-    def initialize(self, data):
-        self.__panel = data.get('panel', {})
+class Creation():
+    '''
+    定义召唤物的类\n
+    '''
+    def __init__(self, data: dict) -> None:
+        self.panel = None
+        self.func = None
 
 
 class Weapon:
@@ -18,10 +18,10 @@ class Weapon:
     '''
 
     def __init__(self, name: str, level: int, bonuses, effects) -> None:
-        self.__name = name
-        self.__level = level
-        self.__bonuses = bonuses
-        self.__effects = effects
+        self.name = name
+        self.level = level
+        self.bonuses = bonuses
+        self.effects = effects
 
 
 class Team():

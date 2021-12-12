@@ -6,25 +6,25 @@ class TimeLine():
     __max_time = 1200
 
     def __init__(self) -> None:
-        self.__current_time = 0
-        self.__lines = []
-        self.__happening = []
+        self.current_time = 0
+        self.lines = []
+        self.happening = []
 
     @property
     def time(self):
-        return self.__current_time
+        return self.current_time
 
-    def __find_happening(self) -> None:
-        def f(x): return x.start <= self.__current_time and self.__current_time < x.end
-        self.__happening = list(filter(f, self.__lines))
+    def find_happening(self) -> None:
+        def f(x): return x.start <= self.current_time and self.current_time < x.end
+        self.happening = list(filter(f, self.lines))
 
     def addOne(self) -> None:
-        self.__current_time += 1
-        self.__find_happening()
+        self.current_time += 1
+        self.find_happening()
 
     def minusOne(self) -> None:
-        self.__current_time -= 1
-        self.__find_happening()
+        self.current_time -= 1
+        self.find_happening()
 
     def delAfter(self):
         pass
@@ -33,6 +33,6 @@ class TimeLine():
         pass
 
     def __del__(self) -> None:
-        self.__current_time = 0
-        del self.__lines
+        self.current_time = 0
+        del self.lines
         return

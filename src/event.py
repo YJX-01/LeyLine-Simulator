@@ -14,8 +14,8 @@ class ActionEvent(Event):
 class BuffEvent(Event):
     def __init__(self, data: dict) -> None:
         super().__init__(data)
-        self.__target = None
-        self.__buff = None
+        self.target = None
+        self.buff = None
 
 
 class CDEvent(Event):
