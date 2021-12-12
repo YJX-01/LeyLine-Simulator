@@ -8,14 +8,14 @@
             "name": "Start Main",
             "type": "python",
             "request": "launch",
-            "program": "D:\\Projects\\LeyLine-Simulater\\src\\main.py",
+            "program": "${workspaceFolder}/src/main.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "Start Simulator",
+            "name": "Start Sample",
             "type": "python",
             "request": "launch",
-            "program": "D:\\Projects\\LeyLine-Simulater\\src\\simulator.py",
+            "program": "${workspaceFolder}/src/demo/simple_simulation.py",
             "console": "integratedTerminal"
         }
     ]
