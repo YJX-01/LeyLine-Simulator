@@ -6,8 +6,7 @@
 
 
 from core.simulation import Simulation, Operation
-from data.characters.aloy.aloy import get_character_aloy
-from data.characters.albedo.albedo import get_character_albedo
+from data.characters import get_character
 
 
 if __name__ == '__main__':
@@ -15,8 +14,8 @@ if __name__ == '__main__':
     simulation = Simulation()
 
     # TODO 模拟的配置项以后从UI界面录入
-    simulation.set_party([get_character_aloy({'name': "Aloy", 'level': 80, 'asc': 5}),
-                          get_character_albedo({'name': "Albedo", 'level': 90, 'asc': 6})])
+    simulation.set_party([get_character({'name': "Aloy", 'level': 80, 'asc': 5}),
+                          get_character({'name': "Albedo", 'level': 90, 'asc': 6})])
     simulation.set_operation_track(
         # 测试一下乱序插入是否能正确执行
         [
