@@ -1,4 +1,6 @@
+autopep8==1.6.0
 click==7.1.2
+pycodestyle==2.8.0
 PyQt5==5.15.4
 pyqt5-plugins==5.15.4.2.2;platform_system=="Windows"
 PyQt5-Qt5==5.15.2
@@ -9,3 +11,4 @@ PyQtChart-Qt5==5.15.2
 python-dotenv==0.19.2
 qt5-applications==5.15.2.2.2
 qt5-tools==5.15.2.1.2
+toml==0.10.2
