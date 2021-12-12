@@ -5,5 +5,11 @@
   },
   "terminal.integrated.env.windows": {
     "PYTHONPATH": "src"
+  },
+  "python.formatting.provider": "autopep8",
+  "editor.formatOnSave": true,
+  "python.linting.lintOnSave": true,
+  "files.exclude": {
+    "**/__pycache__": true
   }
 }
