@@ -5,10 +5,10 @@ import json
 
 
 class Character:
-    def __init__(self, config: dict) -> None:
-        self.name: str = config.get('name', '')
-        self.level = config.get('level', 0)
-        self.asc = config.get('asc', 0)
+    def __init__(self, configs: dict) -> None:
+        self.name: str = configs.get('name', '')
+        self.level: int = configs.get('level', 0)
+        self.asc: int = configs.get('asc', 0)
         self.element_type = None
         self.nationality = None
         self.weapon_type = None
