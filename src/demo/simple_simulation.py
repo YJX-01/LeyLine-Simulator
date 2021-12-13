@@ -32,3 +32,6 @@ if __name__ == '__main__':
         ]
     )
     simulation.start_calculate()
+    # testing whether character information is correctly loaded
+    simulation.characters[0].demo_output()
+    simulation.characters[1].demo_output()

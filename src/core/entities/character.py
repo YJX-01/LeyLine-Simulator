@@ -1,6 +1,6 @@
 from enum import Enum
 from .weapon import WeaponType
-from core.rules.element import ElementalType
+from core.rules.element import ElementType
 import json
 
 
@@ -28,13 +28,19 @@ class Character:
                 if self.name == c['name']:
                     info = c.copy()
                     break
-        self.element_type = ElementalType(info['element'])
+        self.element_type = ElementType(info['element'])
         self.nationality = Nationality(info['nationality'])
         self.weapon_type = WeaponType(info['weapon_type'])
         self.rarity = info['rarity']
         self.HP_base = info['HP_base']
         self.ATK_base = info['ATK_base']
         self.DEF_base = info['DEF_base']
+
+    # for testing
+    def demo_output(self):
+        print(self.name, self.level, self.asc,
+              self.element_type, self.nationality, self.weapon_type, self.rarity,
+              self.HP_base, self.ATK_base, self.DEF_base)
 
 
 class Nationality(Enum):

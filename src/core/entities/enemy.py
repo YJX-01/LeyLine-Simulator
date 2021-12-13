@@ -1,10 +1,17 @@
+from typing import Dict
+from core.rules.element import ElementType
+
+
 class Enemy:
-    HP = 100000000
-    anemo_res = 10
-    geo_res = 10
-    electro_res = 10
-    hydro_res = 10
-    pyro_res = 10
-    cryo_res = 10
-    dendro_res = 10
-    physical_res = 10
+    def __init__(self) -> None:
+        self.HP = 100
+        self.RES: Dict[ElementType: int] = {
+            ElementType.ANEMO: 10,
+            ElementType.GEO: 10,
+            ElementType.ELECTRO: 10,
+            ElementType.HYDRO: 10,
+            ElementType.PYRO: 10,
+            ElementType.CRYO: 10,
+            ElementType.DENDRO: 10,
+            ElementType.PHYSICAL: 10
+        }
