@@ -1,13 +1,16 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Callable, Dict, List
+
+from .character import Panel
 from .weapon import WeaponType
 from core.rules.element import ElementType
 from core.rules import Event
 import json
 
 
-class Character:
+class Character(Panel):
     def __init__(self, configs: dict) -> None:
+        super().__init__(configs)
         self.name: str = configs.get('name', '')
         self.level: int = configs.get('level', 0)
         self.asc: int = configs.get('asc', 0)  # asc is abbr for ascension
