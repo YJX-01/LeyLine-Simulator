@@ -13,6 +13,7 @@ from core.simulation import Operation, operation
 
 class Simulation:
     # TODO 这里以后需要记录一下party和player的配置，同时计算下ElementalResonance的状态
+    # REPLY 元素共鸣不用单独搞个类，可以直接加到player里
     party: Party = None
     players: List[Player] = []
     characters: List[Character] = []
@@ -39,7 +40,13 @@ class Simulation:
         while self.event_queue.unfinished_tasks > 0:
             event: Event = self.event_queue.get()[1]
             event.execute(self)
-            self.records.append(event.description)
+            self.records.append(event.desc)
             self.event_queue.task_done()
 
         print('CALCULATE FINISHED!')
+
+    # TODO 还没定好要输出什么
+    def reference(self) -> dict:
+        reference = dict()
+        reference['players'] = self.players
+        return reference

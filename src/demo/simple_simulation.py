@@ -20,15 +20,15 @@ if __name__ == '__main__':
         # 测试一下乱序插入是否能正确执行
         [
             Operation({'time': 6, 'character_index': 0,
-                      'skill_key': 'normal_ATK_1_hit'}),
+                      'command': 'normal_ATK_1_hit'}),
             Operation({'time': 0, 'character_index': 0,
-                      'skill_key': 'normal_ATK_1_hit'}),
+                      'command': 'normal_ATK_1_hit'}),
             Operation({'time': 2, 'character_index': 0,
-                      'skill_key': 'normal_ATK_1_hit'}),
+                      'command': 'normal_ATK_1_hit'}),
             Operation({'time': 1, 'character_index': 0,
-                      'skill_key': 'normal_ATK_1_hit'}),
+                      'command': 'normal_ATK_1_hit'}),
             Operation({'time': 3, 'character_index': 1,
-                       'skill_key': 'normal_ATK_1_hit'})
+                       'command': 'normal_ATK_1_hit'})
         ]
     )
     simulation.start_calculate()
