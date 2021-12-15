@@ -46,7 +46,9 @@ class Simulation:
         print('CALCULATE FINISHED!')
 
     # TODO 还没定好要输出什么
-    def reference(self) -> dict:
+    def reference(self, *args, **kwargs) -> dict:
         reference = dict()
-        reference['players'] = self.players
+        for arg in args:
+            if (tmp:=getattr(self, arg, False)):
+                reference[arg] = tmp
         return reference

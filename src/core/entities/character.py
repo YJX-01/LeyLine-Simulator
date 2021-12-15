@@ -1,16 +1,14 @@
 from enum import Enum
-from typing import TYPE_CHECKING, Callable, Dict, List
+from typing import Callable, Dict, List
 
-from .character import Panel
 from .weapon import WeaponType
 from core.rules.element import ElementType
 from core.rules import Event
 import json
 
 
-class Character(Panel):
+class Character():
     def __init__(self, configs: dict) -> None:
-        super().__init__(configs)
         self.name: str = configs.get('name', '')
         self.level: int = configs.get('level', 0)
         self.asc: int = configs.get('asc', 0)  # asc is abbr for ascension
@@ -22,9 +20,9 @@ class Character(Panel):
         self.HP_base: float = None
         self.ATK_base: float = None
         self.DEF_base: float = None
-        self.talents: Dict[str, Callable[[Dict]]] = []
-        self.skills: Dict[str, Callable[[Dict]]] = []
-        self.constellations: Dict[str, Callable[[Dict]]] = []
+        self.talents: Dict[str, Callable[[Dict]]] = {}
+        self.skills: Dict[str, Callable[[Dict]]] = {}
+        self.constellations: Dict[str, Callable[[Dict]]] = {}
         self.initialize()
 
     def initialize(self):
@@ -44,6 +42,15 @@ class Character(Panel):
         self.HP_base = info['HP_base']
         self.ATK_base = info['ATK_base']
         self.DEF_base = info['DEF_base']
+    
+    def set_talents(self, talents):
+        self.talents = talents
+
+    def set_skills(self, skills):
+        self.skills = skills
+    
+    def set_constellations(self, constellations):
+        self.constellations = constellations
 
     def __call__(self, *args):
         # TODO 可能要使用 importlib 动态导入模块， 先写死
@@ -57,7 +64,11 @@ class Character(Panel):
             else:
                 pass
         if command_type == 'skill':
-            return [Event({'time': time+0.1, 'event_type': 1})]
+            events: List[Event] = []
+            for cmd in commands:
+                f = self.skills[cmd]
+                events.extend(f(time))
+            return events
         elif command_type == 'talent':
             return [Event({'time': time+0.2, 'event_type': 2})]
         else:
