@@ -2,8 +2,8 @@
 from typing import Dict, Callable
 
 from core.entities.character import Character
-from data.characters.albedo.albedo import get_character_albedo
-from data.characters.aloy.aloy import get_character_aloy
+from data.characters.albedo import get_character_albedo
+from data.characters.aloy import get_character_aloy
 
 from .albedo import *
 from .aloy import *
