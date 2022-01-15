@@ -1,119 +1,220 @@
-class Multiplier():
-    '''
-    定义伤害乘区的类\n
-    '''
+from typing import Iterable, List
 
-    # <0> = Basic Multiplier
-    # <00> Stat Multiplier
-    # <01> Scalar Multiplier
 
-    # <1> = Buffs Multiplier
-    # <10> Damage Bonus Multiplier
-    # <11> Critical Damage Multiplier
-    # <12> Reaction Multiplier
-    # <13> Resistance Multiplier
-    # <14> Defence Multiplier
+class DNode(object):
+    def __init__(self, key='', func='', num=0) -> None:
+        self.key: str = key
+        self.func: str = func
+        self.num: float = num
+        self.leaf: bool = (func == '%' or func == '')
+        if not self.leaf:
+            self.child: List[object] = []
 
-    # <2> = transformative Multiplier?
-    # <20> basic reaction stat Multiplier
-
-    # <3> = healing Multiplier
-
-    # <4> = shield Multiplier
-
-    @staticmethod
-    def statProcessor(data: dict, *buffs):
-        dependency = data['dependency']
-        return data[f'{dependency}']
-
-    @staticmethod
-    def scalarProcessor(data: dict, *buffs):
-        return data['scalar']
-
-    @staticmethod
-    def damageBonusProcessor(data: dict, *buffs):
-        dependency = data['dependency']
-        bonus = sum([b for b in buffs])+data[f'{dependency}_bonus']
-        return 1+bonus
-
-    @staticmethod
-    def critDamageProcessor(data: dict, *buffs):
-        return 1+data['crit_damage']*data['crit_rate']
-
-    @staticmethod
-    def reactionProcessor(data: dict, *buffs):
-        return 1+(2.78*data['EM'])/(1400+data['EM'])+data['react_bonus']
-
-    @staticmethod
-    def resistanceProcessor(data: dict, *buffs):
-        elem = data.get('elem_type')
-        reduce = data['monster'][f'{elem}_res'] - \
-            data.get(f'{elem}_res_reduce', 0)
-        if reduce > 75:
-            return 1/(1+0.04*reduce)
-        elif 0 <= reduce <= 75:
-            return 1-0.01*reduce
+    def __call__(self) -> float:
+        if self.leaf:
+            if self.func == '':
+                return self.num
+            elif self.func == '%':
+                return self.num/100
+            else:
+                raise Exception('constant has not children')
         else:
-            return 1-0.005*reduce
+            if self.func == '*':
+                self.num = 1.0
+                for c in self.child:
+                    self.num *= c()
+                return self.num
+            elif self.func == '+':
+                self.num = 0.0
+                for c in self.child:
+                    self.num += c()
+                return self.num
+            elif self.func == 'EM':
+                self.num = self.EM(sum([c() for c in self.child]))
+                return self.num
+            elif self.func == 'RES':
+                res = sum([c() for c in self.child])
+                self.num = self.RES(res)
+                return self.num
+            elif self.func == 'DEF':
+                lv_char = int(self.find('Character Level')())
+                lv_enemy = int(self.find('Enemy Level')())
+                def_ig = self.find('Defence Ignore')()
+                def_red = self.find('Defence Reduction')()
+                self.num = self.DEF(lv_char, lv_enemy, def_red, def_ig)
+                return self.num
+            elif self.func == 'THRES_E':
+                c_rate = self.find('Critical Rate')()
+                c_rate = 0 if c_rate < 0 else min(1, c_rate)
+                c_dmg = self.find('Critical DMG')()
+                self.num = c_rate * c_dmg
+                return self.num
+            elif self.func == 'THRES_A':
+                r = self.find('Reaction Multiplier')()
+                self.num = r
+                if r > 1:
+                    self.num *= self.find('Reaction Scaler')()
+                return self.num
+            else:
+                raise KeyError
 
     @staticmethod
-    def defenceProcessor(data: dict, *buffs):
-        return (data['level']+100)/(data['level']+100+(1-data['def_ignore'])(1-data['def_reduce'])(data['monster']['level']+100))
+    def EM(em: float) -> float:
+        return 2.78*em/(em+1400)
 
-    __type_map = \
-        {
-            '00': statProcessor,
-            '01': scalarProcessor,
-            '10': damageBonusProcessor,
-            '11': critDamageProcessor,
-            '12': reactionProcessor,
-            '13': resistanceProcessor,
-            '14': defenceProcessor
-        }
+    @staticmethod
+    def RES(res: float) -> float:
+        if res < 0:
+            return 1-0.5*res
+        elif res < 0.75:
+            return 1-res
+        else:
+            return 1/(1+4*res)
 
-    def __init__(self, type: str) -> None:
-        self.func = self.__type_map.get(type, None)
-        self.data = dict()
-        self.buffs = None
-        self.value = 1.0
+    @staticmethod
+    def DEF(lv_char: int, lv_enemy: int, def_red: float, def_ig: float) -> float:
+        d: float = (100+lv_char)/((100+lv_char) +
+                                  (100+lv_enemy)*(1-def_red)*(1-def_ig))
+        return d
 
-    def update(self, data, *buffs):
-        self.data = data
-        self.buffs = buffs
-        self.value = self.func(data, buffs)
+    def find(self, key: str) -> object:
+        if self.key == key:
+            return self
+        if self.leaf:
+            return None
+        que = []
+        que.extend(self.child)
+        while(que):
+            c = que.pop(0)
+            if c.key == key:
+                return c
+            elif not c.leaf:
+                que.extend(c.child)
+        raise Exception('not found')
 
-    def __float__(self) -> float:
-        return self.value
+    def insert(self, node: object) -> object:
+        if not self.leaf:
+            self.child.append(node)
+            return self.find(node.key)
+        else:
+            raise KeyError
+
+    def extend(self, iterable: Iterable) -> None:
+        if not self.leaf:
+            self.child.extend(iterable)
+        else:
+            raise KeyError
+
+    def remove(self, key: str) -> None:
+        que = []
+        que.append(self)
+        while(que):
+            p = que.pop(0)
+            if not p.leaf:
+                for i in range(len(p.child)):
+                    if p.child[i].key == key:
+                        del p.child[i]
+                        return
+                que.extend(p.child)
+
+    def modify(self, key: str, **kwargs) -> object:
+        obj = self.find(key)
+        for k, v in kwargs.items():
+            obj.__setattr__(k, v)
+        return obj
 
 
-class Damage():
-    def __init__(self) -> None:
-        self.dealer = None
-        self.type = None
-        self.multipliers = None
-        self.information = None
+class AMP_DMG():
+    __multipliers = ['Basic Multiplier', 'Bonus Multiplier', 'Critical Multiplier',
+                     'Amplifying Multiplier', 'Resistance Multiplier', 'Defence Multiplier']
 
+    def __init__(self):
+        self.root: DNode = DNode('Total Damage', '*')
+        for m in self.__multipliers:
+            self.root.insert(DNode(m, '+'))
+        self.m_basic: DNode = self.root.find('Basic Multiplier')
+        self.m_bonus: DNode = self.root.find('Bonus Multiplier')
+        self.m_critical: DNode = self.root.find('Critical Multiplier')
+        self.m_amplifying: DNode = self.root.find('Amplifying Multiplier')
+        self.m_resistance: DNode = self.root.find('Resistance Multiplier')
+        self.m_defense: DNode = self.root.find('Defence Multiplier')
+        self.buildtree()
 
-class AmplifyingDamage(Damage):
-    def __init__(self) -> None:
-        super().__init__()
+    def buildtree(self) -> None:
+        stat_ability: DNode = self.m_basic.insert(
+            DNode('Stats * Ability', '*')
+        )
+        stat_ability.child.extend([
+            DNode('Ability Scaler', '+'),
+            DNode('Ability Stat')
+        ])
+        self.m_bonus.extend([
+            DNode('Base', '', 1),
+            DNode('Element DMG Bonus', '+'),
+            DNode('Elemental Skill Bonus', '+'),
+            DNode('Elemental Burst Bonus', '+'),
+            DNode('Normal Attack Bonus', '+'),
+            DNode('Charged Attack Bonus', '+'),
+            DNode('Other Bonus', '+')
+        ])
+        self.m_critical.insert(DNode('Base', '', 1))
+        expect: DNode = self.m_critical.insert(
+            DNode('Expectation', 'THRES_E')
+        )
+        expect.extend([
+            DNode('Critical Rate', '+'),
+            DNode('Critical DMG', '+')
+        ])
+        expect.find('Critical Rate').extend([
+            DNode('Basic Critical Rate', '%', 5),
+            DNode('Bonus Critical Rate', '%', 0)
+        ])
+        expect.find('Critical DMG').extend([
+            DNode('Basic Critical DMG', '%', 50),
+            DNode('Bonus Critical DMG', '%', 0)
+        ])
+        self.m_amplifying.insert(
+            DNode('Amplifying Reaction', 'THRES_A')
+        ).extend([
+            DNode('Reaction Scaler', '+'),
+            DNode('Reaction Multiplier', '', 1)
+        ])
+        react_scaler: DNode = self.m_amplifying.find('Reaction Scaler')
+        react_scaler.insert(DNode('Base', '', 1))
+        react_scaler.insert(
+            DNode('Elemental Mastery', 'EM')
+        ).insert(
+            DNode('EM', '', 0)
+        )
+        react_scaler.insert(
+            DNode('Reaction Bonus', '+')
+        )
+        self.m_resistance.insert(
+            DNode('Resistance', 'RES'),
+        ).extend([
+            DNode('Resistance Base', '%', 10),
+            DNode('Resistance Debuff', '%', 0)
+        ])
+        self.m_defense.insert(
+            DNode('Defence', 'DEF')
+        ).extend([
+            DNode('Character Level', '', 1),
+            DNode('Enemy Level', '', 1),
+            DNode('Defence Ignore', '%', 0),
+            DNode('Defence Reduction', '+')
+        ])
 
+    def visualize(self) -> None:
+        que = []
+        que.append((self.root, 0))
+        while (que):
+            c, n = que.pop(0)
+            print('\t'*n+'->', f'[{c.key}][f={c.func}][ {c.num} ]')
+            if not c.leaf:
+                for i in range(len(c.child)):
+                    que.insert(i, (c.child[i], n+1))
 
-class TransformativeDamage(Damage):
-    def __init__(self) -> None:
-        super().__init__()
-
-
-class blankDamage(Damage):
-    def __init__(self) -> None:
-        super().__init__()
-
-
-class Heal():
-    def __init__(self) -> None:
-        pass
-
-
-class Shield():
-    def __init__(self) -> None:
-        pass
+    def connect(self, **kwargs) -> None:
+        for k, v in kwargs.items():
+            pass
+        return
