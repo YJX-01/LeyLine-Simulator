@@ -5,17 +5,17 @@ from typing import Dict
 class Panel:
 
     __panel_name = [
-        'ATK_base', 'DEF_base', 'HP_base',
-        'ATK', 
-        'DEF', 
+        'ATK_BASE', 'DEF_BASE', 'HP_BASE',
+        'ATK',
+        'DEF',
         'HP',
-        'EM', 
+        'EM',
         'ER',
-        'CRIT_RATE', 
+        'CRIT_RATE',
         'CRIT_DMG',
-        'HEAL_BONUS', 
+        'HEAL_BONUS',
         'HEAL_INCMOE',
-        'SHIELD_STRENGTH', 
+        'SHIELD_STRENGTH',
         'CD_REDUCTION',
         'ANEMO_DMG', 'GEO_DMG', 'ELECTRO_DMG', 'HYDRO_DMG', 'PYRO_DMG', 'CRYO_DMG', 'DENDRO_DMG', 'PHYSICAL_DMG',
         'ANEMO_RES', 'GEO_RES', 'ELECTRO_RES', 'HYDRO_RES', 'PYRO_RES', 'CRYO_RES', 'DENDRO_RES', 'PHYSICAL_RES'

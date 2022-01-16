@@ -17,9 +17,9 @@ class Character():
         self.nationality = None
         self.weapon_type = None
         self.rarity: int = None
-        self.HP_base: float = None
-        self.ATK_base: float = None
-        self.DEF_base: float = None
+        self.HP_BASE: float = None
+        self.ATK_BASE: float = None
+        self.DEF_BASE: float = None
         self.talents: Dict[str, Callable[[Dict]]] = {}
         self.skills: Dict[str, Callable[[Dict]]] = {}
         self.constellations: Dict[str, Callable[[Dict]]] = {}
@@ -39,16 +39,16 @@ class Character():
         self.nationality = Nationality(info['nationality'])
         self.weapon_type = WeaponType(info['weapon_type'])
         self.rarity = info['rarity']
-        self.HP_base = info['HP_base']
-        self.ATK_base = info['ATK_base']
-        self.DEF_base = info['DEF_base']
-    
+        self.HP_BASE = info['HP_BASE']
+        self.ATK_BASE = info['ATK_BASE']
+        self.DEF_BASE = info['DEF_BASE']
+
     def set_talents(self, talents):
         self.talents = talents
 
     def set_skills(self, skills):
         self.skills = skills
-    
+
     def set_constellations(self, constellations):
         self.constellations = constellations
 
@@ -78,7 +78,7 @@ class Character():
     def demo_output(self):
         print(self.name, self.level, self.asc,
               self.element_type, self.nationality, self.weapon_type, self.rarity,
-              self.HP_base, self.ATK_base, self.DEF_base)
+              self.HP_BASE, self.ATK_BASE, self.DEF_BASE)
 
 
 class Nationality(Enum):

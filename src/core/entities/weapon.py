@@ -22,6 +22,6 @@ class Weapon:
         self.name: str = configs.get('name', '')
         self.weapon_type = None
         self.rarity: int = 0
-        self.ATK_base: float = 0
+        self.ATK_BASE: float = 0
         self.main_stat = None
         self.skills = []
