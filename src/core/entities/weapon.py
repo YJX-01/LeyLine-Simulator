@@ -1,12 +1,4 @@
-from enum import Enum
-
-
-class WeaponType(Enum):
-    SWORD = 1
-    CLAYMORE = 2
-    POLEARM = 3
-    CATALYST = 4
-    BOW = 5
+from core.rules.alltypes import WeaponType
 
 
 class Weapon:

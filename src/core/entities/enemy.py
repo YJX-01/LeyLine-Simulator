@@ -1,5 +1,5 @@
 from typing import Dict
-from core.rules.element import ElementType
+from core.rules.alltypes import ElementType
 
 
 class Enemy:

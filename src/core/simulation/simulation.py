@@ -6,16 +6,15 @@
 
 from queue import PriorityQueue
 from typing import List
-from core.entities import Character, Party, Player
+from core.entities import Character
 from core.rules import Event
-from core.simulation import Operation, operation
+from core.simulation import Operation
 
 
 class Simulation:
     # TODO 这里以后需要记录一下party和player的配置，同时计算下ElementalResonance的状态
     # REPLY 元素共鸣不用单独搞个类，可以直接加到player里
-    party: Party = None
-    players: List[Player] = []
+
     characters: List[Character] = []
 
     operation_track: List[Operation] = []  # USER INPUT
