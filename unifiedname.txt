@@ -1,6 +1,11 @@
-level
-ascension
-asc
+#CHARACTER
+
+lv = level
+asc = ascension
+cx = constellation
+passive = passive talents
+
+#STAT
 
 ATK_PER
 ATK_CONST
@@ -15,19 +20,35 @@ CRIT_DMG
 HEAL_BONUS
 HEAL_INCOME
 
-ATK_SPD
-SHIELD_STRENGTH
-CD_REDUCTION
-
-stat_dependence
+#PANEL
 
 ATK
 DEF
 HP
-EM ER 
-CRIT_RATE CRIT_DMG
+ATK_BASE
+DEF_BASE
+HP_BASE
+EM 
+ER 
+CRIT_RATE 
+CRIT_DMG
+HEAL_BONUS
+HEAL_INCOME
+SHIELD_STRENGTH
+CD_REDUCTION
 
-elem_type
+#HIDDEN ATTRIBUTES
+
+ATK_SPD
+INTERRUPT_RES
+MOVE_SPD
+STAMINA_CONSUMPTION
+DMG_REDUCTION
+
+ENERGY
+STAMINA
+
+#ELEMENT
 
 ANEMO = 1
 GEO = 2
@@ -56,19 +77,32 @@ CRYO_RES
 DENDRO_RES
 PHYSICAL_RES
 
-ATK_BASE
-DEF_BASE
-HP_BASE
+#ACTION
 
-DMG_type
+STAND = 1
+JUMP = 2
+WALK = 3
+SPRINT = 4
+AIM = 5
+LOOSE = 6
 
-norm_atk
-elem_skill
-elem_burst
+NORMAL_ATK = 1
+NORMAL_ATK_CHARGE = 2
+NORMAL_ATK_PLUNGE = 3
+ELEM_SKILL_DEFAULT = 4
+ELEM_SKILL_SHORT = 5
+ELEM_SKILL_LONG = 6
+ELEM_BURST_DEFAULT = 7
+ELEM_BURST_TRANSFORMATION = 8
 
-amplifying DMG
-transformative DMG
-blank DMG
+
+#DMG
+
+Amplifying DMG
+Transformative DMG
+Swirl DMG
+
+#NATION
 
 mondstadt
 liyue
@@ -78,3 +112,13 @@ fontaine
 natlan
 snezhnaya
 khaenriah
+
+MONDSTADT = 1
+LIYUE = 2
+INAZUMA = 3
+SUMERU = 4
+FONTAINE = 5
+NATLAN = 6
+SNEZHNAYA = 7
+KHAENRIAH = 8
+OTHER = 9

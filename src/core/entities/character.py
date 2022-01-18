@@ -1,5 +1,6 @@
 from typing import Callable, Dict, List
 from core.rules.alltypes import NationType, ElementType, WeaponType, PanelType
+from core.rules.dnode import DNode
 from core.rules import Event
 import json
 
@@ -78,6 +79,13 @@ class Character():
               self.HP_BASE, self.ATK_BASE, self.DEF_BASE)
 
 
+class Character_:
+    def __init__(self) -> None:
+        self.base = CharacterBase()
+        self.attribute = CharacterAttribute()
+        self.action = CharacterAction()
+
+
 class CharacterBase:
     with open('./docs/constant/LevelMultiplier.json', 'r') as f:
         __lv_curve = json.load(f)
@@ -124,7 +132,7 @@ class CharacterBase:
                     self.EXTRA[1] = self.asc_info[k][self.asc-1]
                     break
 
-    def choose(self, name: str):
+    def choose(self, name: str) -> None:
         self.name = name
         for c in self.__char_info:
             if c['name'] == name:
@@ -136,7 +144,7 @@ class CharacterBase:
                 self.ATK_BASE = c['ATK_BASE']
                 self.DEF_BASE = c['DEF_BASE']
                 self.asc_info = c['asc']
-                break
+                return
 
     @staticmethod
     def set_asc(lv: int, asc: bool):
@@ -155,7 +163,141 @@ class CharacterBase:
             self.HP, self.ATK, self.DEF, self.EXTRA[0], self.EXTRA[1]))
 
 
+class CharacterAction:
+    def __init__(self) -> None:
+        self.NORMAL_ATK: Callable
+        self.ELEM_SKILL: Callable
+        self.ELEM_BURST: Callable
+        self.passive: Callable
+        self.cx: Callable
+        # self.JUMP
+
+
 class CharacterAttribute:
     def __init__(self) -> None:
-        for t in PanelType:
-            pass
+        self.ATK: DNode = self.init_ATK()
+        self.DEF: DNode = self.init_DEF()
+        self.HP: DNode = self.init_HP()
+        self.EM = DNode('Total EM', '+')
+        self.ER = DNode('Total ER', '+')
+        self.CRIT_RATE = DNode('Total CRIT_RATE', '+')
+        self.CRIT_DMG = DNode('Total CRIT_DMG', '+')
+        self.HEAL_BONUS = DNode('Total HEAL_BONUS', '+')
+        self.HEAL_INCOME = DNode('Total HEAL_INCOME', '+')
+        self.SHIELD_STRENGTH = DNode('Total SHIELD_STRENGTH', '+')
+        self.CD_REDUCTION = DNode('Total CD_REDUCTION', '+')
+        self.ANEMO_DMG = DNode('Total ANEMO_DMG', '+')
+        self.GEO_DMG = DNode('Total GEO_DMG', '+')
+        self.ELECTRO_DMG = DNode('Total ELECTRO_DMG', '+')
+        self.HYDRO_DMG = DNode('Total HYDRO_DMG', '+')
+        self.PYRO_DMG = DNode('Total PYRO_DMG', '+')
+        self.CRYO_DMG = DNode('Total CRYO_DMG', '+')
+        self.DENDRO_DMG = DNode('Total DENDRO_DMG', '+')
+        self.PHYSICAL_DMG = DNode('Total PHYSICAL_DMG', '+')
+
+    def init_ATK(self) -> DNode:
+        root = DNode('Total ATK', '+')
+        root.extend([
+            DNode('Scaled ATK', '*').extend([
+                DNode('ATK Base', '+').extend([
+                    DNode('Charater ATK Base'),
+                    DNode('Weapon ATK Base')
+                ]),
+                DNode('ATK Scalers', '+').extend([
+                    DNode('Artifact Scalers', '+').extend([
+                        DNode('Main Stat Scaler', '+'),
+                        DNode('Sub Stat Scaler', '+')
+                    ]),
+                    DNode('Bonus Scalers', '+'),
+                    DNode('Weapon Scaler', '%'),
+                    DNode('Ascension Scaler', '%')
+                ])
+            ]),
+            DNode('Flat ATK', '+').extend([
+                DNode('Artifact Flat ATKs', '+'),
+                DNode('Bonus Flat ATKs', '+')
+            ]),
+            DNode('Bonus ATK', '+').extend([
+                DNode('Skill Transform ATK', '*').extend([
+                    DNode('Skill Transform Stat'),
+                    DNode('Skill Transform Scaler', '%')
+                ]),
+                DNode('Weapon Transform ATK', '*').extend([
+                    DNode('Weapon Transform Stat'),
+                    DNode('Weapon Transform Scaler', '%')
+                ])
+            ])
+        ])
+        return root
+
+    def init_DEF(self) -> DNode:
+        root = DNode('Total DEF', '+')
+        root.extend([
+            DNode('Scaled DEF', '*').extend([
+                DNode('DEF Base', '+').extend([
+                    DNode('Charater DEF Base'),
+                ]),
+                DNode('DEF Scalers', '+').extend([
+                    DNode('Artifact Scalers', '+').extend([
+                        DNode('Main Stat Scaler', '+'),
+                        DNode('Sub Stat Scaler', '+')
+                    ]),
+                    DNode('Bonus Scalers', '+'),
+                    DNode('Weapon Scaler', '%'),
+                    DNode('Ascension Scaler', '%')
+                ])
+            ]),
+            DNode('Flat DEF', '+').extend([
+                DNode('Artifact Flat DEFs', '+'),
+                DNode('Bonus Flat DEFs', '+')
+            ]),
+            DNode('Bonus DEF', '+').extend([
+                DNode('Skill Transform DEF', '*').extend([
+                    DNode('Skill Transform Stat'),
+                    DNode('Skill Transform Scaler', '%')
+                ]),
+                DNode('Weapon Transform DEF', '*').extend([
+                    DNode('Weapon Transform Stat'),
+                    DNode('Weapon Transform Scaler', '%')
+                ])
+            ])
+        ])
+        return root
+
+    def init_HP(self) -> DNode:
+        root = DNode('Total HP', '+')
+        root.extend([
+            DNode('Scaled HP', '*').extend([
+                DNode('HP Base', '+').extend([
+                    DNode('Charater HP Base'),
+                ]),
+                DNode('HP Scalers', '+').extend([
+                    DNode('Artifact Scalers', '+').extend([
+                        DNode('Main Stat Scaler', '+'),
+                        DNode('Sub Stat Scaler', '+')
+                    ]),
+                    DNode('Bonus Scalers', '+'),
+                    DNode('Weapon Scaler', '%'),
+                    DNode('Ascension Scaler', '%')
+                ])
+            ]),
+            DNode('Flat HP', '+').extend([
+                DNode('Artifact Flat HPs', '+'),
+                DNode('Bonus Flat HPs', '+')
+            ])
+        ])
+        return root
+
+
+# def visualize(a) -> None:
+#     que: List = []
+#     que.append((a, 0))
+#     while (que):
+#         c, n = que.pop(0)
+#         print('\t'*n+'->', f'[{c.key}][{c.func}][ {c.num} ]')
+#         if not c.leaf:
+#             for i in range(len(c.child)):
+#                 que.insert(i, (c.child[i], n+1))
+
+# d = CharacterAttribute()
+# visualize(d.DEF)

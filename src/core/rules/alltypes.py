@@ -138,7 +138,7 @@ class PanelType(Enum):
     CRIT_RATE = 9
     CRIT_DMG = 10
     HEAL_BONUS = 11
-    HEAL_INCMOE = 12
+    HEAL_INCOME = 12
     SHIELD_STRENGTH = 13
     CD_REDUCTION = 14
     ANEMO_DMG = 15

@@ -9,6 +9,8 @@ class ActionPose(Enum):
     JUMP = 2
     WALK = 3
     SPRINT = 4
+    AIM = 5
+    LOOSE = 6
 
 class AttackPose(Enum):
     NORMAL_ATK = 1

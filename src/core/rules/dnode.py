@@ -20,12 +20,12 @@ class DNode:
                 raise Exception('constant has not children')
         else:
             if self.func == '*':
-                self.num = 1.0
+                self.num = 1
                 for c in self.child:
                     self.num *= c()
                 return self.num
             elif self.func == '+':
-                self.num = 0.0
+                self.num = 0
                 for c in self.child:
                     self.num += c()
                 return self.num
@@ -33,8 +33,7 @@ class DNode:
                 self.num = self.EM(sum([c() for c in self.child]))
                 return self.num
             elif self.func == 'RES':
-                res = sum([c() for c in self.child])
-                self.num = self.RES(res)
+                self.num = self.RES(sum([c() for c in self.child]))
                 return self.num
             elif self.func == 'DEF':
                 lv_char = int(self.find('Character Level')())
@@ -80,8 +79,8 @@ class DNode:
     def find(self, key: str) -> object:
         if self.key == key:
             return self
-        if self.leaf:
-            return None
+        elif self.leaf:
+            raise Exception('not found')
         que: List[DNode] = []
         que.extend(self.child)
         while(que):
@@ -99,9 +98,10 @@ class DNode:
         else:
             raise KeyError
 
-    def extend(self, iterable: Iterable) -> None:
+    def extend(self, iterable: Iterable) -> object:
         if not self.leaf:
             self.child.extend(iterable)
+            return self
         else:
             raise KeyError
 
@@ -111,8 +111,8 @@ class DNode:
         while(que):
             p = que.pop(0)
             if not p.leaf:
-                for i in range(len(p.child)):
-                    if p.child[i].key == key:
+                for i, c in enumerate(p.child):
+                    if c.key == key:
                         del p.child[i]
                         return
                 que.extend(p.child)
