@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List
+from typing import Callable, Mapping, Sequence, Dict, List
 from core.rules.alltypes import NationType, ElementType, WeaponType, PanelType
 from core.rules.dnode import DNode
 from core.rules import Event
@@ -81,9 +81,9 @@ class Character():
 
 class Character_:
     def __init__(self) -> None:
-        self.base = CharacterBase()
-        self.attribute = CharacterAttribute()
-        self.action = CharacterAction()
+        self.base: CharacterBase = CharacterBase()
+        self.attribute: CharacterAttribute = CharacterAttribute()
+        self.action: CharacterAction = CharacterAction()
 
 
 class CharacterBase:
@@ -100,20 +100,20 @@ class CharacterBase:
         self.region: int = 0
         self.lv: int = 0
         self.asc: int = 0
-        self.asc_info: dict = {}
-        self.HP_BASE: int = 0
-        self.ATK_BASE: int = 0
-        self.DEF_BASE: int = 0
-        self.HP: int = 0
-        self.ATK: int = 0
-        self.DEF: int = 0
-        self.EXTRA: list = ['', 0]
+        self.asc_info: Mapping[str, List[float]] = {}
+        self.HP_BASE: float = 0
+        self.ATK_BASE: float = 0
+        self.DEF_BASE: float = 0
+        self.HP: float = 0
+        self.ATK: float = 0
+        self.DEF: float = 0
+        self.EXTRA: Sequence[str, float] = ['', 0]
         if 'name' in kwargs.keys():
             self.choose(kwargs['name'])
         if 'lv' in kwargs.keys() and 'asc' in kwargs.keys() and self.name:
-            self.setLv(kwargs['lv'], kwargs['asc'])
+            self.set_lv(kwargs['lv'], kwargs['asc'])
 
-    def setLv(self, lv: int, asc: bool) -> None:
+    def set_lv(self, lv: int, asc: bool) -> None:
         if not self.name:
             return
         self.lv = lv

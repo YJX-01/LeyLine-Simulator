@@ -57,6 +57,9 @@ class DNode:
             else:
                 raise KeyError
 
+    def __eq__(self, __o: object) -> bool:
+        return self.key == __o.key
+
     @staticmethod
     def EM(em: float) -> float:
         return 2.78*em/(em+1400)

@@ -10,7 +10,6 @@ class Artifact:
 
 
 class ArtifactPiece:
-    __data = dict()
     with open(r'.\docs\constant\ArtifactStat.json', 'r') as d:
         __data = json.load(d)
 
@@ -91,4 +90,3 @@ class ArtifactPiece:
                      for sub in self.sub_stat])
         s3 = ']@LV{}@{}STAR;'.format(self.level, self.rarity)
         return s1 + s2 + s3
-

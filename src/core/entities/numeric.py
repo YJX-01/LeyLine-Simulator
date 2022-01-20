@@ -101,5 +101,5 @@ class AMP_DMG():
         self.visualize()
 
 
-d = AMP_DMG()
-d.test()
+# d = AMP_DMG()
+# d.test()
