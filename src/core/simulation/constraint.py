@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Constraint:
+class Constraint(object):
     def __init__(self):
         self.type: ConstraintType = ConstraintType(1)
 

@@ -2,22 +2,33 @@ from queue import PriorityQueue
 from typing import TYPE_CHECKING, Sequence, Mapping, Tuple, Union
 from core.entities import *
 from core.rules import *
-from core.simulation.operation import *
-from core.simulation.constraint import *
+from .operation import *
+from .constraint import *
 
 
-class Simulation:
+class Simulation(object):
     def __init__(self):
-        self.characters: Mapping[str, Character_] = {}
+        '''
+        attributes:\n
+        \tcharacters: Mapping[str, Character_]\n
+        \tartifactmap: Mapping[str, Artifact]\n
+        \tweaponmap: Mapping[str, Weapon]\n
+        \toperation_track: Sequence[Operation]\n
+        \tconstraint_track: Sequence[Constraint]\n
+        methods:\n
+        \tset_character(name, lv, asc=False) -> None\n
+        \t\tset the character in the simulation\n
+        '''
+        self.characters: Mapping[str, Character] = {}
         self.artifactmap: Mapping[str, Artifact] = {}
         # self.weaponmap: Mapping[str, Weapon] = {}
         self.operation_track: Sequence[Operation] = []
         self.constraint_track: Sequence[Constraint] = []
         self.recorder = []
 
-    def set_character(self, name='', lv=1, asc=False):
+    def set_character(self, name='', lv=1, asc=False) -> None:
         if name not in self.characters.keys() and len(self.characters) <= 4:
-            tmp = Character_()
+            tmp = Character()
             tmp.base.choose(name)
             tmp.base.set_lv(lv, asc)
             self.characters[name] = tmp
@@ -39,7 +50,7 @@ class Simulation:
     def set_artifact(self, name='', art={}):
         self.artifactmap[name].artifacts[0].initialize(art)
         return
-    
+
     def insert(self, obj: Union['Operation', 'Constraint']):
         if isinstance(obj, Operation):
             self.operation_track.append(obj)
@@ -47,7 +58,7 @@ class Simulation:
             self.constraint_track.append(obj)
         else:
             raise TypeError
-    
+
     def remove(self, obj: Union['Operation', 'Constraint']):
         try:
             if isinstance(obj, Operation):
@@ -63,8 +74,9 @@ class Simulation:
 
     def start(self):
         '''
-        每一次模拟配置生成一个实例
-        同样的配置项可以多次执行计算(考虑到例如暴击率的效果每次执行的结果是随机的，暴击率也可以设置成折算为期望收益)
+        每一次模拟配置生成一个实例\n
+        同样的配置项可以多次执行计算\n
+        (考虑到例如暴击率的效果每次执行的结果是随机的，暴击率也可以设置成折算为期望收益)
         '''
         print('CALCULATE START!')
         operation_queue: PriorityQueue[Tuple[float, Operation]] = PriorityQueue()

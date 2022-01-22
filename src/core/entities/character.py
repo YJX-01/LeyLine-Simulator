@@ -1,11 +1,11 @@
-from typing import Callable, Mapping, Sequence, Dict, List
-from core.rules.alltypes import NationType, ElementType, WeaponType, PanelType
-from core.rules.dnode import DNode
-from core.rules import Event
 import json
+from typing import Callable, Mapping, Sequence, Dict, List
+from core.rules import DNode, NationType, ElementType, WeaponType, PanelType
+from core.simulation.event import Event
 
 
-class Character():
+# TODO abandoned class
+class Character_():
     def __init__(self, configs: dict) -> None:
         self.name: str = configs.get('name', '')
         self.level: int = configs.get('level', 0)
@@ -79,14 +79,14 @@ class Character():
               self.HP_BASE, self.ATK_BASE, self.DEF_BASE)
 
 
-class Character_:
+class Character(object):
     def __init__(self) -> None:
         self.base: CharacterBase = CharacterBase()
         self.attribute: CharacterAttribute = CharacterAttribute()
         self.action: CharacterAction = CharacterAction()
 
 
-class CharacterBase:
+class CharacterBase(object):
     with open('./docs/constant/LevelMultiplier.json', 'r') as f:
         __lv_curve = json.load(f)
     with open('./docs/constant/CharacterConfig.json', 'r') as f:
@@ -163,18 +163,28 @@ class CharacterBase:
             self.HP, self.ATK, self.DEF, self.EXTRA[0], self.EXTRA[1]))
 
 
-class CharacterAction:
+class CharacterAction(object):
     def __init__(self) -> None:
-        self.NORMAL_ATK: Callable
-        self.ELEM_SKILL: Callable
-        self.ELEM_BURST: Callable
-        self.passive: Callable
-        self.cx: Callable
+        self.NORMAL_ATK: Callable = None
+        self.ELEM_SKILL: Callable = None
+        self.ELEM_BURST: Callable = None
+        self.PASSIVE: Callable = None
+        self.CX: Callable = None
         # self.JUMP
 
 
-class CharacterAttribute:
+class CharacterAttribute(object):
     def __init__(self) -> None:
+        '''
+        include panel attributes:\n
+        \tATK | DEF | HP | EM | ER | CRIT_RATE | CRIT_DMG\n
+        \tHEAL_BONUS | HEAL_INCOME | SHIELD_STRENGTH | CD_REDUCTION\n
+        \tELEM_DMG... | ELEM_RES...\n
+        and other character attributes:\n
+        \tENERGY | STAMINA | STAMINA_CONSUMPTION\n
+        \tATK_SPD | MOVE_SPD | INTERRUPT_RES | DMG_REDUCTION\n
+        '''
+        # panel attributes
         self.ATK: DNode = self.init_ATK()
         self.DEF: DNode = self.init_DEF()
         self.HP: DNode = self.init_HP()
@@ -194,6 +204,14 @@ class CharacterAttribute:
         self.CRYO_DMG = DNode('Total CRYO_DMG', '+')
         self.DENDRO_DMG = DNode('Total DENDRO_DMG', '+')
         self.PHYSICAL_DMG = DNode('Total PHYSICAL_DMG', '+')
+        # other attributes
+        self.ENERGY: float = 0
+        self.STAMINA: float = 0
+        self.STAMINA_CONSUMPTION: float = 0
+        self.ATK_SPD: float = 0
+        self.MOVE_SPD: float = 0
+        self.INTERRUPT_RES: float = 0
+        self.DMG_REDUCTION: float = 0
 
     def init_ATK(self) -> DNode:
         root = DNode('Total ATK', '+')
