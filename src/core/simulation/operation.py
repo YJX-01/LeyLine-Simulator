@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING, Sequence
 from .event import Event
 from .constraint import *
+if TYPE_CHECKING:
+    from core.simulation import Simulation
 
 
 class Operation(object):
@@ -23,7 +25,7 @@ class Operation(object):
             if self.constraints \
             else True
 
-    def command_parser(self, command: str, simulation: object) -> None:
+    def command_parser(self, command: str, simulation: 'Simulation') -> None:
         '''
         command type: Charchar.skill@time\n
         \tdefault: time = 'next' | -1
@@ -55,8 +57,8 @@ class Operation(object):
         else:
             return True
 
-    def execute(self, simulation: object) -> None:
+    def execute(self, simulation: 'Simulation') -> None:
         if self.active:
             self.command_parser(self.command, simulation)
-            list(map(lambda e: e.execute(simulation), self.events))
+            list(map(lambda ev: simulation.event_queue.put((ev.time, ev)), self.events))
         return

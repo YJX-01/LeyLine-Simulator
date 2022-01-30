@@ -1,4 +1,4 @@
-from queue import PriorityQueue
+from queue import PriorityQueue, Queue
 from typing import TYPE_CHECKING, Sequence, Mapping, Tuple, Union
 from core.entities import *
 from core.rules import *
@@ -24,6 +24,7 @@ class Simulation(object):
         # self.weaponmap: Mapping[str, Weapon] = {}
         self.operation_track: Sequence[Operation] = []
         self.constraint_track: Sequence[Constraint] = []
+        self.event_queue: Queue[Event] = PriorityQueue()
         self.recorder = []
 
     def set_character(self, name='', lv=1, asc=False) -> None:
@@ -89,4 +90,10 @@ class Simulation(object):
             op.execute(self)
             self.recorder.append(op.desc)
             operation_queue.task_done()
+            
+        while self.event_queue.unfinished_tasks > 0:
+            ev: Event = self.event_queue.get()[1]
+            ev.execute(self)
+            self.recorder.append(op.desc)
+            self.event_queue.task_done()
         print('CALCULATE FINISHED!')
