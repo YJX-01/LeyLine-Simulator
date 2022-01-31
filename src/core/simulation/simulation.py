@@ -24,8 +24,11 @@ class Simulation(object):
         # self.weaponmap: Mapping[str, Weapon] = {}
         self.operation_track: Sequence[Operation] = []
         self.constraint_track: Sequence[Constraint] = []
-        self.event_queue: Queue[Event] = PriorityQueue()
         self.recorder = []
+
+        self.task_queue: PriorityQueue[Union[Operation,
+                                             Event]] = PriorityQueue()
+        self.active_constraint: Sequence[Constraint] = []
 
     def set_character(self, name='', lv=1, asc=False) -> None:
         if name not in self.characters.keys() and len(self.characters) <= 4:
@@ -81,6 +84,7 @@ class Simulation(object):
         (考虑到例如暴击率的效果每次执行的结果是随机的，暴击率也可以设置成折算为期望收益)
         '''
         print('CALCULATE START!')
+
         operation_queue: PriorityQueue[Tuple[float, Operation]] = PriorityQueue()
         active_constraint: Sequence[Constraint] = []
         active_constraint.extend(self.constraint_track)
@@ -98,4 +102,16 @@ class Simulation(object):
             ev.execute(self)
             self.recorder.append(op.desc)
             self.event_queue.task_done()
+            
+#         self.active_constraint.clear()
+#         self.active_constraint.extend(self.constraint_track)
+
+#         list(map(lambda task: self.task_queue.put_nowait(task), self.operation_track))
+
+#         while self.task_queue.unfinished_tasks > 0:
+#             task: Union[Operation, Event] = self.task_queue.get()
+#             task.execute(self)
+#             self.recorder.append(task.desc)
+#             self.task_queue.task_done()
+            
         print('CALCULATE FINISHED!')

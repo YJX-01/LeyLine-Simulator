@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING, Sequence, Union
 from .event import Event
 from .constraint import *
 if TYPE_CHECKING:
@@ -48,22 +48,43 @@ class Operation(object):
         # cmd_action_obj = cmd_source_obj.action
         # self.events.append(Event({'time': cmd_time, 'priority': 0, 'desc': f'{cmd_action}'}))
 
+    def impose(self, *args: Union[Sequence, Constraint]) -> None:
+        '''
+        impose a array of constraints to the operation\n
+        \t*args: Union[Sequence, Constraint]
+        '''
+        for arg in args:
+            if isinstance(arg, Sequence):
+                self.constraints.extend(arg)
+            elif isinstance(arg, Constraint):
+                self.constraints.append(arg)
+
+        self.active = all([self.check(c) for c in self.constraints]) \
+            if self.constraints \
+            else True
+        return
+
     def check(self, constraint: Constraint) -> bool:
-        cons_type = constraint.type
-        if cons_type == ConstraintType(1):
+        '''
+        check whether the operation is active\n
+        refer to the constraints and objects given
+        '''
+        if isinstance(constraint, ConstraintFlag):
             print('IMPOSE a flag constraint')
             return True
-        elif cons_type == ConstraintType(2):
+        elif isinstance(constraint, ConstraintCounter):
             print('IMPOSE a counter')
             return True
-        elif cons_type == ConstraintType(3):
+        elif isinstance(constraint, ConstraintCooldown):
             print('IMPOSE a cd checker')
             return True
         else:
             return True
 
-    def execute(self, simulation: 'Simulation') -> None:
+    def execute(self, simulation: 'Simulation', *args) -> None:
+        self.objects = simulation
+        self.impose(simulation.active_constraint)
         if self.active:
             self.command_parser(self.command, simulation)
-            list(map(lambda ev: simulation.event_queue.put((ev.time, ev)), self.events))
+            list(map(lambda e: simulation.task_queue.put_nowait(e), self.events))
         return

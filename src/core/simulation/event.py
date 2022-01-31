@@ -1,25 +1,19 @@
-from typing import TYPE_CHECKING, Callable, Mapping, Any
-if TYPE_CHECKING:
-    from core.simulation import Simulation
+from typing import Callable, Mapping, Any
 
 
 class Event(object):
     def __init__(self, configs: Mapping[str, Any] = {}) -> None:
-        self.time: float = 0.0
-        self.priority: int = 0
+        self.time: float = -1
         self.desc: str = ''
         self.func: Callable = None
         self.initialize(configs)
 
     def initialize(self, configs: Mapping[str, Any]) -> None:
         self.time = configs.get('time', 0)
-        self.priority = configs.get('priority', 0)
         self.desc = configs.get('desc', '')
         self.func = configs.get('func', None)
 
-    @property
-    def priorities(self) -> tuple:
-        return (self.time, self.priority)
+    def __lt__(self, other) -> bool: return self.time < other.time
 
     @property
     def time_str(self) -> str:
