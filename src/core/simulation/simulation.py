@@ -32,6 +32,7 @@ class Simulation(object):
             tmp = Character()
             tmp.base.choose(name)
             tmp.base.set_lv(lv, asc)
+            tmp.action.attach_skill(name)
             self.characters[name] = tmp
             self.artifactmap[name] = Artifact()
             # self.weaponmap[name] = Weapon()
@@ -90,7 +91,8 @@ class Simulation(object):
             op.execute(self)
             self.recorder.append(op.desc)
             operation_queue.task_done()
-            
+        
+        print('EXECUTE EVENTS!')
         while self.event_queue.unfinished_tasks > 0:
             ev: Event = self.event_queue.get()[1]
             ev.execute(self)

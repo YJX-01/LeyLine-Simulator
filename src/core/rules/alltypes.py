@@ -157,3 +157,14 @@ class PanelType(Enum):
     DENDRO_RES = 28
     PHYSICAL_DMG = 29
     PHYSICAL_RES = 30
+
+class DamageType(Enum):
+    '''
+    造成的伤害类型
+    '''
+    NORMAL_ATK = 1
+    CHARGED_ATK = 2
+    PLUNGING_ATK = 3
+    ELEM_SKILL = 4
+    ELEM_BURST= 5
+    NONE = 6
