@@ -34,15 +34,21 @@ class Operation(object):
         cmd_time: float = -1
         if '@' in cmd_action:
             cmd_action, cmd_t = tuple(cmd_action.split('@', 1))
+            character = simulation.characters[cmd_source]
             if cmd_t != 'next':
                 cmd_time = float(cmd_t)
-        print('CALL CHARACTER')
-        cmd_source_obj = simulation.characters[cmd_source]
-        print('CALL CHARACTER ACTION')
-        cmd_action_obj = cmd_source_obj.action
-        print('GENERTATE A EVENT')
-        self.events.append(
-            Event({'time': cmd_time, 'priority': 0, 'desc': f'{cmd_action}'}))
+
+            if cmd_action == 'A':
+                print('\tCALL CHARACTER ACTION')
+                append_events = \
+                    character.action.NORMAL_ATK(character, cmd_time)
+                print('\tCHARACTER ACTION GENERTATE EVENTS')
+                self.events.extend(append_events)
+        
+        # cmd_source_obj = simulation.characters[cmd_source]
+        # cmd_action_obj = cmd_source_obj.action
+        # self.events.append(Event({'time': cmd_time, 'priority': 0, 'desc': f'{cmd_action}'}))
+
 
     def impose(self, *args: Union[Sequence, Constraint]) -> None:
         '''
@@ -82,5 +88,6 @@ class Operation(object):
         self.impose(simulation.active_constraint)
         if self.active:
             self.command_parser(self.command, simulation)
-            list(map(lambda e: simulation.task_queue.put_nowait(e), self.events))
+            list(map(lambda ev: simulation.event_queue.put((ev.time, ev)), self.events))
+            # list(map(lambda e: simulation.task_queue.put_nowait(e), self.events))
         return

@@ -1,4 +1,6 @@
-from typing import Callable, Mapping, Any
+from typing import TYPE_CHECKING, Callable, Mapping, Any
+if TYPE_CHECKING:
+    from core.simulation import Simulation
 
 
 class Event(object):
@@ -19,7 +21,9 @@ class Event(object):
     def time_str(self) -> str:
         return format(self.time, '0.2f')
 
-    def execute(self, simulation: object, *args):
+
+    def execute(self, simulation: 'Simulation', *args):
+        print(f'\t[{self.time_str}s]:[Event]:[desc]:[ {self.desc} ]')
         if self.func:
-            self.func(simulation, *args)
-        print(f'[{self.time_str}s]:[Event]:[desc]:[ {self.desc} ]')
+            self.func(simulation)
+

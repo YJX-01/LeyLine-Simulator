@@ -2,81 +2,83 @@ import json
 from typing import Callable, Mapping, Sequence, Dict, List
 from core.rules import DNode, NationType, ElementType, WeaponType, PanelType
 from core.simulation.event import Event
+from data.characters.albedo.albedo_draft import *
+# from data.characters.albedo.albedo_draft import *
 
 
-# TODO abandoned class
-class Character_():
-    def __init__(self, configs: dict) -> None:
-        self.name: str = configs.get('name', '')
-        self.level: int = configs.get('level', 0)
-        self.asc: int = configs.get('asc', 0)  # asc is abbr for ascension
-        self.cx: int = configs.get('cx', 0)  # cx is abbr for constellation
-        self.element_type = None
-        self.nationality = None
-        self.weapon_type = None
-        self.rarity: int = None
-        self.HP_BASE: float = None
-        self.ATK_BASE: float = None
-        self.DEF_BASE: float = None
-        self.talents: Dict[str, Callable[[Dict]]] = {}
-        self.skills: Dict[str, Callable[[Dict]]] = {}
-        self.constellations: Dict[str, Callable[[Dict]]] = {}
-        self.initialize()
+# # TODO abandoned class
+# class Character_():
+#     def __init__(self, configs: dict) -> None:
+#         self.name: str = configs.get('name', '')
+#         self.level: int = configs.get('level', 0)
+#         self.asc: int = configs.get('asc', 0)  # asc is abbr for ascension
+#         self.cx: int = configs.get('cx', 0)  # cx is abbr for constellation
+#         self.element_type = None
+#         self.nationality = None
+#         self.weapon_type = None
+#         self.rarity: int = None
+#         self.HP_BASE: float = None
+#         self.ATK_BASE: float = None
+#         self.DEF_BASE: float = None
+#         self.talents: Dict[str, Callable[[Dict]]] = {}
+#         self.skills: Dict[str, Callable[[Dict]]] = {}
+#         self.constellations: Dict[str, Callable[[Dict]]] = {}
+#         self.initialize()
 
-    def initialize(self):
-        if not self.name:
-            return
-        info = dict()
-        with open('.\docs\constant\CharacterConfig.json', 'r') as d:
-            data: list = json.load(d)
-            for c in data:
-                if self.name == c['name']:
-                    info = c.copy()
-                    break
-        self.element_type = ElementType(info['element'])
-        self.nationality = NationType(info['region'])
-        self.weapon_type = WeaponType(info['weapon'])
-        self.rarity = info['rarity']
-        self.HP_BASE = info['HP_BASE']
-        self.ATK_BASE = info['ATK_BASE']
-        self.DEF_BASE = info['DEF_BASE']
+#     def initialize(self):
+#         if not self.name:
+#             return
+#         info = dict()
+#         with open('.\docs\constant\CharacterConfig.json', 'r') as d:
+#             data: list = json.load(d)
+#             for c in data:
+#                 if self.name == c['name']:
+#                     info = c.copy()
+#                     break
+#         self.element_type = ElementType(info['element'])
+#         self.nationality = NationType(info['region'])
+#         self.weapon_type = WeaponType(info['weapon'])
+#         self.rarity = info['rarity']
+#         self.HP_BASE = info['HP_BASE']
+#         self.ATK_BASE = info['ATK_BASE']
+#         self.DEF_BASE = info['DEF_BASE']
 
-    def set_talents(self, talents):
-        self.talents = talents
+#     def set_talents(self, talents):
+#         self.talents = talents
 
-    def set_skills(self, skills):
-        self.skills = skills
+#     def set_skills(self, skills):
+#         self.skills = skills
 
-    def set_constellations(self, constellations):
-        self.constellations = constellations
+#     def set_constellations(self, constellations):
+#         self.constellations = constellations
 
-    def __call__(self, *args):
-        # TODO 可能要使用 importlib 动态导入模块， 先写死
-        for arg in args:
-            if isinstance(arg, str):
-                command_type: str = arg.split('.')[0]
-                commands: List[str] = arg.split('.')[1:]
-            elif isinstance(arg, dict):
-                if 'time' in arg.keys():
-                    time = arg.get('time')
-            else:
-                pass
-        if command_type == 'skill':
-            events: List[Event] = []
-            for cmd in commands:
-                f = self.skills[cmd]
-                events.extend(f(time))
-            return events
-        elif command_type == 'talent':
-            return [Event({'time': time+0.2, 'event_type': 2})]
-        else:
-            return [Event()]
+#     def __call__(self, *args):
+#         # TODO 可能要使用 importlib 动态导入模块， 先写死
+#         for arg in args:
+#             if isinstance(arg, str):
+#                 command_type: str = arg.split('.')[0]
+#                 commands: List[str] = arg.split('.')[1:]
+#             elif isinstance(arg, dict):
+#                 if 'time' in arg.keys():
+#                     time = arg.get('time')
+#             else:
+#                 pass
+#         if command_type == 'skill':
+#             events: List[Event] = []
+#             for cmd in commands:
+#                 f = self.skills[cmd]
+#                 events.extend(f(time))
+#             return events
+#         elif command_type == 'talent':
+#             return [Event({'time': time+0.2, 'event_type': 2})]
+#         else:
+#             return [Event()]
 
-    # for testing
-    def demo_output(self):
-        print(self.name, self.level, self.asc,
-              self.element_type, self.nationality, self.weapon_type, self.rarity,
-              self.HP_BASE, self.ATK_BASE, self.DEF_BASE)
+#     # for testing
+#     def demo_output(self):
+#         print(self.name, self.level, self.asc,
+#               self.element_type, self.nationality, self.weapon_type, self.rarity,
+#               self.HP_BASE, self.ATK_BASE, self.DEF_BASE)
 
 
 class Character(object):
@@ -165,12 +167,27 @@ class CharacterBase(object):
 
 class CharacterAction(object):
     def __init__(self) -> None:
+        '''
+        属性:
+        \tNORMAL_ATK_count: 普通攻击计数\n
+        \tELEM_SKILL_count: 元素战技计数\n
+        \tELEM_BURST_count: 元素爆发计数\n
+        '''
+        self.NORMAL_ATK_count: int = 1
+        self.ELEM_SKILL_count: int = 1
+        self.ELEM_BURST_count: int = 1
         self.NORMAL_ATK: Callable = None
         self.ELEM_SKILL: Callable = None
         self.ELEM_BURST: Callable = None
         self.PASSIVE: Callable = None
         self.CX: Callable = None
         # self.JUMP
+        
+    # TODO: 附加技能
+    def attach_skill(self, name=''):
+        if name == 'Albedo':
+            self.NORMAL_ATK = Albedo_NORMAL_ATK
+                
 
 
 class CharacterAttribute(object):
