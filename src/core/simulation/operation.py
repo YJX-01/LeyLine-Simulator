@@ -6,7 +6,8 @@ if TYPE_CHECKING:
 
 
 class Operation(object):
-    def __init__(self, command: str, *args):
+    def __init__(self, command: str, time: float, *args):
+        self.time = time
         self.command: str = command
         self.priority: tuple = tuple()
         self.desc: str = ''
@@ -42,6 +43,12 @@ class Operation(object):
                 print('\tCALL CHARACTER ACTION')
                 append_events = \
                     character.action.NORMAL_ATK(character, cmd_time)
+                print('\tCHARACTER ACTION GENERTATE EVENTS')
+                self.events.extend(append_events)
+            if cmd_action == 'E':
+                print('\tCALL CHARACTER ACTION')
+                append_events = \
+                    character.action.ELEM_SKILL(character, cmd_time)
                 print('\tCHARACTER ACTION GENERTATE EVENTS')
                 self.events.extend(append_events)
         

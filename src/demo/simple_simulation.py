@@ -12,5 +12,6 @@ if __name__ == '__main__':
     simulation = Simulation()
     simulation.set_character('Aloy', 90, False)
     simulation.set_character('Albedo', 80, True)
-    simulation.insert(Operation('Albedo.A@1', simulation.constraint_track))
+    simulation.insert(Operation('Albedo.E@1', 1, simulation.constraint_track))
+    simulation.insert(Operation('Albedo.A@2', 2, simulation.constraint_track))
     simulation.start()

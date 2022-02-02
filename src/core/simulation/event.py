@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING, Callable, Mapping, Any
 if TYPE_CHECKING:
     from core.simulation import Simulation
+    from core.entities.character import Character
 
 
 class Event(object):
     def __init__(self, configs: Mapping[str, Any] = {}) -> None:
+        self.character: 'Character' = None
         self.time: float = -1
         self.desc: str = ''
         self.func: Callable = None
@@ -25,5 +27,5 @@ class Event(object):
     def execute(self, simulation: 'Simulation', *args):
         print(f'\t[{self.time_str}s]:[Event]:[desc]:[ {self.desc} ]')
         if self.func:
-            self.func(simulation)
+            self.func(simulation, self.character, self.time)
 

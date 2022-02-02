@@ -187,6 +187,7 @@ class CharacterAction(object):
     def attach_skill(self, name=''):
         if name == 'Albedo':
             self.NORMAL_ATK = Albedo_NORMAL_ATK
+            self.ELEM_SKILL = Albedo_ELEM_SKILL
                 
 
 
