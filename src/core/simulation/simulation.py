@@ -90,7 +90,7 @@ class Simulation(object):
         active_constraint: Sequence[Constraint] = []
         active_constraint.extend(self.constraint_track)
         list(map(lambda op: operation_queue.put(
-            (op.priority, op)), self.operation_track))
+            (op.time, op)), self.operation_track))
         while operation_queue.unfinished_tasks > 0:
             op: Operation = operation_queue.get()[1]
             op.execute(self)
