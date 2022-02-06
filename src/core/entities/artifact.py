@@ -1,15 +1,57 @@
 import json
-from typing import List, Tuple
+from collections import Counter
+from typing import List, Dict, Sequence, Union
 from core.rules.alltypes import ArtifactType, StatType, SetType
 
 
-class Artifact:
-    def __init__(self):
-        self.artifacts: List[ArtifactPiece] = []
+class Artifact(object):
+    __subs = ['ATK_PER', 'ATK_CONST',
+              'DEF_PER', 'DEF_CONST',
+              'HP_PER', 'HP_CONST',
+              'EM', 'ER', 'CRIT_RATE', 'CRIT_DMG']
+
+    __pos = ['FLOWER', 'PLUME', 'SANDS', 'GOBLET', 'CIRCLET']
+
+    def __init__(self) -> None:
+        self.artifacts: List[Union[ArtifactPiece, None]] = \
+            [None, None, None, None, None]
+        # ['FLOWER', 'PLUME', 'SANDS', 'GOBLET', 'CIRCLET']
+        self.piece_active: List[Union[SetType, None]] = \
+            [None, None, None]
+        # [2piece, 2piece, 4piece]
+        self.total_sub: Dict[StatType, int] = {}
         self.active = True
 
+    def update(self) -> None:
+        self.total_sub = dict.fromkeys([StatType(i) for i in range(1, 11)], 0)
+        for a in self.artifacts:
+            if not a:
+                continue
+            for k, v in a.sub_stat.items():
+                self.total_sub[k] += v
 
-class ArtifactPiece:
+        cnt = Counter([a.set_type for a in self.artifacts if a]).most_common(3)
+        for set_name, set_cnt in cnt:
+            if set_cnt >= 4:
+                self.piece_active[2] = set_name
+                self.piece_active[0] = set_name
+                break
+            elif 4 > set_cnt >= 2 and not self.piece_active[0]:
+                self.piece_active[0] = set_name
+            elif 4 > set_cnt >= 2 and not self.piece_active[1]:
+                self.piece_active[1] = set_name
+
+    def equip(self, *artifacts):
+        for artifact in artifacts:
+            if isinstance(artifact, Sequence):
+                for a in artifact:
+                    if isinstance(a, ArtifactPiece):
+                        self.artifacts[a.artifact_type.value-1] = a
+            elif isinstance(artifact, ArtifactPiece):
+                self.artifacts[artifact.artifact_type.value-1] = artifact
+
+
+class ArtifactPiece(object):
     with open(r'.\docs\constant\ArtifactStat.json', 'r') as d:
         __data = json.load(d)
 
@@ -39,19 +81,29 @@ class ArtifactPiece:
         'head': 5
     }
 
-    def __init__(self, configs: dict = {}, mode: str = 'lls') -> None:
+    def __init__(self, configs: Union[dict, str], mode: str = 'lls') -> None:
         self.rarity: int = 5
         self.level: int = 20
         self.set_type: SetType = SetType(1)
         self.artifact_type: ArtifactType = ArtifactType(1)
         self.main_stat: StatType = StatType(1)
-        self.sub_stat: List[Tuple[StatType, int]] = []
+        self.sub_stat: Dict[StatType, int] = {}
         self.initialize(configs, mode)
 
-    def initialize(self, configs: dict, mode: str) -> None:
-        if mode == 'lls':
+    def initialize(self, configs: Union[dict, str], mode: str) -> None:
+        if mode == 'lls' and isinstance(configs, dict):
             for k, v in configs.items():
                 self.__setattr__(k, v)
+        elif mode == 'lls' and isinstance(configs, str):
+            item_list = configs.strip(';').split('@')
+            self.set_type = SetType[item_list[0]]
+            self.artifact_type = ArtifactType[item_list[1]]
+            self.main_stat = StatType[item_list[2].strip('[]')]
+            for sub in item_list[3].strip('[],').split(','):
+                sub_name, sub_value = tuple(sub.split(':'))
+                self.sub_stat[StatType[sub_name]] = int(sub_value)
+            self.level = int(item_list[4].strip('LV'))
+            self.rarity = int(item_list[5][-1])
         elif mode == 'mona':
             self.rarity = configs['star']
             self.level = configs['level']
@@ -70,15 +122,11 @@ class ArtifactPiece:
             for sub in configs['normalTags']:
                 n = self.__translation_mona[sub['name']]
                 if n in ['ATK_CONST', 'DEF_CONST', 'HP_CONST', 'EM']:
-                    self.sub_stat.append((
-                        StatType[n],
-                        round(sub['value']/(sub_stat_reference[n][-1]/10))
-                    ))
+                    self.sub_stat[StatType[n]] = round(
+                        sub['value']/(sub_stat_reference[n][-1]/10))
                 else:
-                    self.sub_stat.append((
-                        StatType[n],
-                        round(100*sub['value']/(sub_stat_reference[n][-1]/10))
-                    ))
+                    self.sub_stat[StatType[n]] = round(
+                        100*sub['value']/(sub_stat_reference[n][-1]/10))
 
     def __repr__(self) -> str:
         nickname = dict([(member.name, name)
@@ -86,7 +134,7 @@ class ArtifactPiece:
         n = nickname[self.set_type.name]
         s1 = '{}@{}@[{}]@['.format(
             n, self.artifact_type.name, self.main_stat.name)
-        s2 = ''.join(['{}:{},'.format(sub[0].name, sub[1])
-                     for sub in self.sub_stat])
-        s3 = ']@LV{}@{}STAR;'.format(self.level, self.rarity)
-        return s1 + s2 + s3
+        s2 = ''.join(['{}:{},'.format(k.name, v)
+                     for k, v in self.sub_stat.items()])
+        s3 = ']@LV{}@STAR{};'.format(self.level, self.rarity)
+        return s1+s2+s3

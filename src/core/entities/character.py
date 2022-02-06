@@ -89,12 +89,12 @@ class Character(object):
 
 
 class CharacterBase(object):
-    with open('./docs/constant/LevelMultiplier.json', 'r') as f:
+    with open('./docs/constant/CharacterLevelMultiplier.json', 'r') as f:
         __lv_curve = json.load(f)
     with open('./docs/constant/CharacterConfig.json', 'r') as f:
         __char_info = json.load(f)
 
-    def __init__(self, **kwargs):
+    def __init__(self, **configs):
         self.name: str = ''
         self.rarity: str = ''
         self.weapon: int = 0
@@ -110,29 +110,13 @@ class CharacterBase(object):
         self.ATK: float = 0
         self.DEF: float = 0
         self.EXTRA: Sequence[str, float] = ['', 0]
-        if 'name' in kwargs.keys():
-            self.choose(kwargs['name'])
-        if 'lv' in kwargs.keys() and 'asc' in kwargs.keys() and self.name:
-            self.set_lv(kwargs['lv'], kwargs['asc'])
+        self.initialize(**configs)
 
-    def set_lv(self, lv: int, asc: bool) -> None:
-        if not self.name:
-            return
-        self.lv = lv
-        self.asc = self.set_asc(self.lv, asc)
-        lv_list = self.__lv_curve[self.rarity]
-        self.HP = self.HP_BASE * lv_list[self.lv]
-        self.ATK = self.ATK_BASE * lv_list[self.lv]
-        self.DEF = self.DEF_BASE * lv_list[self.lv]
-        if self.asc:
-            self.HP += self.asc_info['HP_BASE'][self.asc-1]
-            self.ATK += self.asc_info['ATK_BASE'][self.asc-1]
-            self.DEF += self.asc_info['DEF_BASE'][self.asc-1]
-            for k in self.asc_info.keys():
-                if 'BASE' not in k:
-                    self.EXTRA[0] = k
-                    self.EXTRA[1] = self.asc_info[k][self.asc-1]
-                    break
+    def initialize(self, **configs) -> None:
+        if 'name' in configs.keys():
+            self.choose(configs['name'])
+        if 'lv' in configs.keys() and 'asc' in configs.keys() and self.name:
+            self.set_lv(configs['lv'], configs['asc'])
 
     def choose(self, name: str) -> None:
         self.name = name
@@ -148,8 +132,27 @@ class CharacterBase(object):
                 self.asc_info = c['asc']
                 return
 
+    def set_lv(self, lv: int, asc: bool) -> None:
+        if not self.name:
+            return
+        self.lv = lv
+        self.asc = self.set_asc(lv, asc)
+        lv_list = self.__lv_curve[self.rarity]
+        self.HP = self.HP_BASE * lv_list[self.lv]
+        self.ATK = self.ATK_BASE * lv_list[self.lv]
+        self.DEF = self.DEF_BASE * lv_list[self.lv]
+        if self.asc:
+            self.HP += self.asc_info['HP_BASE'][self.asc-1]
+            self.ATK += self.asc_info['ATK_BASE'][self.asc-1]
+            self.DEF += self.asc_info['DEF_BASE'][self.asc-1]
+            for k in self.asc_info.keys():
+                if 'BASE' not in k:
+                    self.EXTRA[0] = k
+                    self.EXTRA[1] = self.asc_info[k][self.asc-1]
+                    break
+
     @staticmethod
-    def set_asc(lv: int, asc: bool):
+    def set_asc(lv: int, asc: bool) -> int:
         if lv <= 20:
             return (lv + int(asc))//21
         elif (20 < lv < 40):

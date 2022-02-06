@@ -9,6 +9,7 @@
         "ATK_BASE": 26.62660026550293,
         "DEF_BASE": 61.0265998840332,
         "AvatarPromoteId": 2,
+        "SkillDepotId": 201,
         "asc": {
             "HP_BASE": [
                 858.2550048828125,
@@ -54,6 +55,7 @@
         "ATK_BASE": 18.6200008392334,
         "DEF_BASE": 59.83000183105469,
         "AvatarPromoteId": 3,
+        "SkillDepotId": 301,
         "asc": {
             "HP_BASE": [
                 980.8628540039062,
@@ -99,6 +101,7 @@
         "ATK_BASE": 19.410720825195312,
         "DEF_BASE": 48.069000244140625,
         "AvatarPromoteId": 4,
+        "SkillDepotId": 601,
         "asc": {
             "HP_BASE": [
                 599.416015625,
@@ -144,6 +147,7 @@
         "ATK_BASE": 17.808000564575195,
         "DEF_BASE": 57.224998474121094,
         "AvatarPromoteId": 12,
+        "SkillDepotId": 701,
         "asc": {
             "HP_BASE": [
                 681.154541015625,
@@ -189,6 +193,7 @@
         "ATK_BASE": 13.355999946594238,
         "DEF_BASE": 56.080501556396484,
         "AvatarPromoteId": 14,
+        "SkillDepotId": 1401,
         "asc": {
             "HP_BASE": [
                 613.0391235351562,
@@ -234,6 +239,7 @@
         "ATK_BASE": 18.698400497436523,
         "DEF_BASE": 66.38099670410156,
         "AvatarPromoteId": 15,
+        "SkillDepotId": 1501,
         "asc": {
             "HP_BASE": [
                 728.8353881835938,
@@ -279,6 +285,7 @@
         "ATK_BASE": 26.06800079345703,
         "DEF_BASE": 61.0265998840332,
         "AvatarPromoteId": 16,
+        "SkillDepotId": 1601,
         "asc": {
             "HP_BASE": [
                 866.4288330078125,
@@ -324,6 +331,7 @@
         "ATK_BASE": 19.58880043029785,
         "DEF_BASE": 62.9474983215332,
         "AvatarPromoteId": 20,
+        "SkillDepotId": 2001,
         "asc": {
             "HP_BASE": [
                 749.27001953125,
@@ -369,6 +377,7 @@
         "ATK_BASE": 18.698400497436523,
         "DEF_BASE": 50.358001708984375,
         "AvatarPromoteId": 21,
+        "SkillDepotId": 2101,
         "asc": {
             "HP_BASE": [
                 592.6044921875,
@@ -414,6 +423,7 @@
         "ATK_BASE": 20.48200035095215,
         "DEF_BASE": 52.052101135253906,
         "AvatarPromoteId": 22,
+        "SkillDepotId": 2201,
         "asc": {
             "HP_BASE": [
                 702.9517211914062,
@@ -459,6 +469,7 @@
         "ATK_BASE": 18.876480102539062,
         "DEF_BASE": 56.080501556396484,
         "AvatarPromoteId": 23,
+        "SkillDepotId": 2301,
         "asc": {
             "HP_BASE": [
                 681.154541015625,
@@ -504,6 +515,7 @@
         "ATK_BASE": 18.876480102539062,
         "DEF_BASE": 54.36375045776367,
         "AvatarPromoteId": 24,
+        "SkillDepotId": 2401,
         "asc": {
             "HP_BASE": [
                 817.385498046875,
@@ -549,6 +561,7 @@
         "ATK_BASE": 16.917600631713867,
         "DEF_BASE": 63.51974868774414,
         "AvatarPromoteId": 25,
+        "SkillDepotId": 2501,
         "asc": {
             "HP_BASE": [
                 640.2852783203125,
@@ -594,6 +607,7 @@
         "ATK_BASE": 27.185199737548828,
         "DEF_BASE": 62.223201751708984,
         "AvatarPromoteId": 26,
+        "SkillDepotId": 2601,
         "asc": {
             "HP_BASE": [
                 850.0811157226562,
@@ -639,6 +653,7 @@
         "ATK_BASE": 17.808000564575195,
         "DEF_BASE": 48.069000244140625,
         "AvatarPromoteId": 27,
+        "SkillDepotId": 2701,
         "asc": {
             "HP_BASE": [
                 613.0391235351562,
@@ -684,6 +699,7 @@
         "ATK_BASE": 24.20599937438965,
         "DEF_BASE": 47.86399841308594,
         "AvatarPromoteId": 29,
+        "SkillDepotId": 2901,
         "asc": {
             "HP_BASE": [
                 686.60400390625,
@@ -729,6 +745,7 @@
         "ATK_BASE": 19.551000595092773,
         "DEF_BASE": 57.436798095703125,
         "AvatarPromoteId": 30,
+        "SkillDepotId": 3001,
         "asc": {
             "HP_BASE": [
                 980.86279296875,
@@ -774,6 +791,7 @@
         "ATK_BASE": 20.47920036315918,
         "DEF_BASE": 49.78575134277344,
         "AvatarPromoteId": 31,
+        "SkillDepotId": 3101,
         "asc": {
             "HP_BASE": [
                 575.5756225585938,
@@ -819,6 +837,7 @@
         "ATK_BASE": 16.02720069885254,
         "DEF_BASE": 64.66425323486328,
         "AvatarPromoteId": 32,
+        "SkillDepotId": 3201,
         "asc": {
             "HP_BASE": [
                 776.5161743164062,
@@ -864,6 +883,7 @@
         "ATK_BASE": 23.461200714111328,
         "DEF_BASE": 63.4197998046875,
         "AvatarPromoteId": 33,
+        "SkillDepotId": 3301,
         "asc": {
             "HP_BASE": [
                 874.6027221679688,
@@ -909,6 +929,7 @@
         "ATK_BASE": 16.02720069885254,
         "DEF_BASE": 66.9532470703125,
         "AvatarPromoteId": 34,
+        "SkillDepotId": 3401,
         "asc": {
             "HP_BASE": [
                 756.08154296875,
@@ -954,6 +975,7 @@
         "ATK_BASE": 22.3439998626709,
         "DEF_BASE": 71.7959976196289,
         "AvatarPromoteId": 35,
+        "SkillDepotId": 3501,
         "asc": {
             "HP_BASE": [
                 825.5595703125,
@@ -999,6 +1021,7 @@
         "ATK_BASE": 18.698400497436523,
         "DEF_BASE": 54.36375045776367,
         "AvatarPromoteId": 36,
+        "SkillDepotId": 3601,
         "asc": {
             "HP_BASE": [
                 687.9661254882812,
@@ -1044,6 +1067,7 @@
         "ATK_BASE": 26.06800079345703,
         "DEF_BASE": 49.06060028076172,
         "AvatarPromoteId": 37,
+        "SkillDepotId": 3701,
         "asc": {
             "HP_BASE": [
                 653.9085693359375,
@@ -1089,6 +1113,7 @@
         "ATK_BASE": 19.551000595092773,
         "DEF_BASE": 68.2061996459961,
         "AvatarPromoteId": 38,
+        "SkillDepotId": 3801,
         "asc": {
             "HP_BASE": [
                 882.7765502929688,
@@ -1134,6 +1159,7 @@
         "ATK_BASE": 17.808000564575195,
         "DEF_BASE": 50.358001708984375,
         "AvatarPromoteId": 39,
+        "SkillDepotId": 3901,
         "asc": {
             "HP_BASE": [
                 599.416015625,
@@ -1179,6 +1205,7 @@
         "ATK_BASE": 22.3439998626709,
         "DEF_BASE": 50.855499267578125,
         "AvatarPromoteId": 41,
+        "SkillDepotId": 4101,
         "asc": {
             "HP_BASE": [
                 694.77783203125,
@@ -1224,6 +1251,7 @@
         "ATK_BASE": 25.136999130249023,
         "DEF_BASE": 62.223201751708984,
         "AvatarPromoteId": 42,
+        "SkillDepotId": 4201,
         "asc": {
             "HP_BASE": [
                 874.6027221679688,
@@ -1269,6 +1297,7 @@
         "ATK_BASE": 14.246399879455566,
         "DEF_BASE": 58.941749572753906,
         "AvatarPromoteId": 43,
+        "SkillDepotId": 4301,
         "asc": {
             "HP_BASE": [
                 578.9813842773438,
@@ -1314,6 +1343,7 @@
         "ATK_BASE": 20.835359573364258,
         "DEF_BASE": 66.9532470703125,
         "AvatarPromoteId": 44,
+        "SkillDepotId": 4401,
         "asc": {
             "HP_BASE": [
                 701.5891723632812,
@@ -1359,6 +1389,7 @@
         "ATK_BASE": 20.12303924560547,
         "DEF_BASE": 59.513999938964844,
         "AvatarPromoteId": 45,
+        "SkillDepotId": 4501,
         "asc": {
             "HP_BASE": [
                 769.7046508789062,
@@ -1404,6 +1435,7 @@
         "ATK_BASE": 8.285900115966797,
         "DEF_BASE": 68.2061996459961,
         "AvatarPromoteId": 46,
+        "SkillDepotId": 4601,
         "asc": {
             "HP_BASE": [
                 1038.079833984375,
@@ -1449,6 +1481,7 @@
         "ATK_BASE": 23.08880043029785,
         "DEF_BASE": 62.82149887084961,
         "AvatarPromoteId": 47,
+        "SkillDepotId": 4701,
         "asc": {
             "HP_BASE": [
                 890.950439453125,
@@ -1494,6 +1527,7 @@
         "ATK_BASE": 20.12303924560547,
         "DEF_BASE": 49.2135009765625,
         "AvatarPromoteId": 48,
+        "SkillDepotId": 4801,
         "asc": {
             "HP_BASE": [
                 585.7929077148438,
@@ -1539,6 +1573,7 @@
         "ATK_BASE": 25.136999130249023,
         "DEF_BASE": 47.86399841308594,
         "AvatarPromoteId": 49,
+        "SkillDepotId": 4901,
         "asc": {
             "HP_BASE": [
                 678.4301147460938,
@@ -1584,6 +1619,7 @@
         "ATK_BASE": 16.917600631713867,
         "DEF_BASE": 62.9474983215332,
         "AvatarPromoteId": 50,
+        "SkillDepotId": 5001,
         "asc": {
             "HP_BASE": [
                 647.0968017578125,
@@ -1629,6 +1665,7 @@
         "ATK_BASE": 26.62660026550293,
         "DEF_BASE": 58.45391082763672,
         "AvatarPromoteId": 51,
+        "SkillDepotId": 5101,
         "asc": {
             "HP_BASE": [
                 882.7765502929688,
@@ -1674,6 +1711,7 @@
         "ATK_BASE": 26.254199981689453,
         "DEF_BASE": 61.445411682128906,
         "AvatarPromoteId": 52,
+        "SkillDepotId": 5201,
         "asc": {
             "HP_BASE": [
                 861.5245361328125,
@@ -1719,6 +1757,7 @@
         "ATK_BASE": 20.47920036315918,
         "DEF_BASE": 62.43247604370117,
         "AvatarPromoteId": 53,
+        "SkillDepotId": 5301,
         "asc": {
             "HP_BASE": [
                 742.45849609375,
@@ -1764,6 +1803,7 @@
         "ATK_BASE": 18.247600555419922,
         "DEF_BASE": 51.1546516418457,
         "AvatarPromoteId": 54,
+        "SkillDepotId": 5401,
         "asc": {
             "HP_BASE": [
                 899.124267578125,
@@ -1809,6 +1849,7 @@
         "ATK_BASE": 15.31488037109375,
         "DEF_BASE": 54.36375045776367,
         "AvatarPromoteId": 55,
+        "SkillDepotId": 5501,
         "asc": {
             "HP_BASE": [
                 599.416015625,
@@ -1854,6 +1895,7 @@
         "ATK_BASE": 16.383359909057617,
         "DEF_BASE": 52.64699935913086,
         "AvatarPromoteId": 56,
+        "SkillDepotId": 5601,
         "asc": {
             "HP_BASE": [
                 599.416015625,
@@ -1899,6 +1941,7 @@
         "ATK_BASE": 17.68899917602539,
         "DEF_BASE": 74.66783905029297,
         "AvatarPromoteId": 57,
+        "SkillDepotId": 5701,
         "asc": {
             "HP_BASE": [
                 858.2550048828125,
@@ -1944,6 +1987,7 @@
         "ATK_BASE": 18.210359573364258,
         "DEF_BASE": 52.65039825439453,
         "AvatarPromoteId": 62,
+        "SkillDepotId": 6201,
         "asc": {
             "HP_BASE": [
                 727.4732666015625,
@@ -1989,6 +2033,7 @@
         "ATK_BASE": 23.64739990234375,
         "DEF_BASE": 64.61640167236328,
         "AvatarPromoteId": 63,
+        "SkillDepotId": 6301,
         "asc": {
             "HP_BASE": [
                 867.2462158203125,
@@ -2034,6 +2079,7 @@
         "ATK_BASE": 16.02720069885254,
         "DEF_BASE": 61.574100494384766,
         "AvatarPromoteId": 64,
+        "SkillDepotId": 6401,
         "asc": {
             "HP_BASE": [
                 667.531494140625,
