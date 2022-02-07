@@ -17,6 +17,13 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/demo/simple_simulation.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Start Numeric Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/demo/numeric_test.py",
+            "console": "integratedTerminal"
         }
     ]
 }

@@ -1,84 +1,10 @@
 import json
 from typing import Callable, Mapping, Sequence, Dict, List
+from core.entities.artifact import Artifact
+from core.entities.weapon import Weapon
 from core.rules import DNode, NationType, ElementType, WeaponType, PanelType
 from core.simulation.event import Event
 from data.characters.albedo.albedo_draft import *
-# from data.characters.albedo.albedo_draft import *
-
-
-# # TODO abandoned class
-# class Character_():
-#     def __init__(self, configs: dict) -> None:
-#         self.name: str = configs.get('name', '')
-#         self.level: int = configs.get('level', 0)
-#         self.asc: int = configs.get('asc', 0)  # asc is abbr for ascension
-#         self.cx: int = configs.get('cx', 0)  # cx is abbr for constellation
-#         self.element_type = None
-#         self.nationality = None
-#         self.weapon_type = None
-#         self.rarity: int = None
-#         self.HP_BASE: float = None
-#         self.ATK_BASE: float = None
-#         self.DEF_BASE: float = None
-#         self.talents: Dict[str, Callable[[Dict]]] = {}
-#         self.skills: Dict[str, Callable[[Dict]]] = {}
-#         self.constellations: Dict[str, Callable[[Dict]]] = {}
-#         self.initialize()
-
-#     def initialize(self):
-#         if not self.name:
-#             return
-#         info = dict()
-#         with open('.\docs\constant\CharacterConfig.json', 'r') as d:
-#             data: list = json.load(d)
-#             for c in data:
-#                 if self.name == c['name']:
-#                     info = c.copy()
-#                     break
-#         self.element_type = ElementType(info['element'])
-#         self.nationality = NationType(info['region'])
-#         self.weapon_type = WeaponType(info['weapon'])
-#         self.rarity = info['rarity']
-#         self.HP_BASE = info['HP_BASE']
-#         self.ATK_BASE = info['ATK_BASE']
-#         self.DEF_BASE = info['DEF_BASE']
-
-#     def set_talents(self, talents):
-#         self.talents = talents
-
-#     def set_skills(self, skills):
-#         self.skills = skills
-
-#     def set_constellations(self, constellations):
-#         self.constellations = constellations
-
-#     def __call__(self, *args):
-#         # TODO 可能要使用 importlib 动态导入模块， 先写死
-#         for arg in args:
-#             if isinstance(arg, str):
-#                 command_type: str = arg.split('.')[0]
-#                 commands: List[str] = arg.split('.')[1:]
-#             elif isinstance(arg, dict):
-#                 if 'time' in arg.keys():
-#                     time = arg.get('time')
-#             else:
-#                 pass
-#         if command_type == 'skill':
-#             events: List[Event] = []
-#             for cmd in commands:
-#                 f = self.skills[cmd]
-#                 events.extend(f(time))
-#             return events
-#         elif command_type == 'talent':
-#             return [Event({'time': time+0.2, 'event_type': 2})]
-#         else:
-#             return [Event()]
-
-#     # for testing
-#     def demo_output(self):
-#         print(self.name, self.level, self.asc,
-#               self.element_type, self.nationality, self.weapon_type, self.rarity,
-#               self.HP_BASE, self.ATK_BASE, self.DEF_BASE)
 
 
 class Character(object):
@@ -86,6 +12,33 @@ class Character(object):
         self.base: CharacterBase = CharacterBase()
         self.attribute: CharacterAttribute = CharacterAttribute()
         self.action: CharacterAction = CharacterAction()
+        self.artifact: Artifact = Artifact()
+        self.weapon: Weapon = Weapon()
+
+    def initialize(self, **configs) -> None:
+        if 'name' in configs.keys():
+            self.base.choose(configs['name'])
+            self.action.attach_skill(configs['name'])
+        if 'lv' in configs.keys() and 'asc' in configs.keys() and self.base.name:
+            self.base.set_lv(configs['lv'], configs['asc'])
+        return
+
+    def equip(self, *items) -> None:
+        for item in items:
+            if not item:
+                continue
+            elif isinstance(item, Weapon):
+                self.weapon = item
+            elif isinstance(item, Artifact):
+                self.artifact = item
+            else:
+                self.artifact.equip(item)
+        self.update()
+
+    def update(self) -> None:
+        self.attribute.update_base(self.base)
+        self.attribute.update_weapon(self.weapon)
+        self.attribute.update_artifact(self.artifact)
 
 
 class CharacterBase(object):
@@ -176,6 +129,7 @@ class CharacterAction(object):
         \tELEM_SKILL_count: 元素战技计数\n
         \tELEM_BURST_count: 元素爆发计数\n
         '''
+        # battle action
         self.NORMAL_ATK_count: int = 1
         self.ELEM_SKILL_count: int = 1
         self.ELEM_BURST_count: int = 1
@@ -184,14 +138,16 @@ class CharacterAction(object):
         self.ELEM_BURST: Callable = None
         self.PASSIVE: Callable = None
         self.CX: Callable = None
-        # self.JUMP
-        
+        # numeric action
+        self.use_artifact: Callable = None
+        self.use_weapon: Callable = None
+
     # TODO: 附加技能
+
     def attach_skill(self, name=''):
         if name == 'Albedo':
             self.NORMAL_ATK = Albedo_NORMAL_ATK
             self.ELEM_SKILL = Albedo_ELEM_SKILL
-                
 
 
 class CharacterAttribute(object):
@@ -253,8 +209,8 @@ class CharacterAttribute(object):
                 ])
             ]),
             DNode('Flat ATK', '+').extend([
-                DNode('Artifact Flat ATKs', '+'),
-                DNode('Bonus Flat ATKs', '+')
+                DNode('Artifact Flat', '+'),
+                DNode('Bonus Flat', '+')
             ]),
             DNode('Bonus ATK', '+').extend([
                 DNode('Skill Transform ATK', '*').extend([
@@ -287,8 +243,8 @@ class CharacterAttribute(object):
                 ])
             ]),
             DNode('Flat DEF', '+').extend([
-                DNode('Artifact Flat DEFs', '+'),
-                DNode('Bonus Flat DEFs', '+')
+                DNode('Artifact Flat', '+'),
+                DNode('Bonus Flat', '+')
             ]),
             DNode('Bonus DEF', '+').extend([
                 DNode('Skill Transform DEF', '*').extend([
@@ -321,11 +277,75 @@ class CharacterAttribute(object):
                 ])
             ]),
             DNode('Flat HP', '+').extend([
-                DNode('Artifact Flat HPs', '+'),
-                DNode('Bonus Flat HPs', '+')
+                DNode('Artifact Flat', '+'),
+                DNode('Bonus Flat', '+')
             ])
         ])
         return root
+
+    def update_base(self, base: CharacterBase):
+        for k in ['ATK', 'DEF', 'HP']:
+            self.__dict__[k].modify(
+                'Charater {} Base'.format(k), num=base.__dict__[k])
+
+    def update_weapon(self, weapon: Weapon):
+        self.ATK.modify('Weapon ATK Base', num=weapon.base.ATK)
+
+    def update_artifact(self, artifact: Artifact) -> None:
+        for s in ['ATK', 'DEF', 'HP', 'EM', 'ER', 'CRIT_RATE', 'CRIT_DMG', 'HEAL_BONUS',
+                  'ANEMO_DMG', 'GEO_DMG', 'ELECTRO_DMG', 'HYDRO_DMG', 'PYRO_DMG', 'CRYO_DMG',
+                  'PHYSICAL_DMG']:
+            que: List[DNode] = []
+            que.append(self.__dict__[s])
+            while(que):
+                p = que.pop(0)
+                if not p.leaf:
+                    for i, c in enumerate(p.child):
+                        for k in ['FLOWER', 'PLUME', 'SANDS', 'GOBLET', 'CIRCLET']:
+                            if k in c.key:
+                                del p.child[i]
+                    que.extend(p.child)
+
+        for pos_index, art_piece in enumerate(artifact.artifacts):
+            if not art_piece:
+                continue
+            val = art_piece.value_data()
+
+            main_name = art_piece.main_stat.name
+            main_key = 'Main {} {}'.format(
+                art_piece.artifact_type.name, main_name)
+            main_value = val[art_piece.main_stat.name]
+            if 'CONST' in main_name or 'PER' in main_name:
+                main_name = main_name.split('_')[0]
+            if 'PER' in art_piece.main_stat.name:
+                self.__dict__[main_name].find('Main Stat Scaler').insert(
+                    DNode(main_key, '%', main_value))
+            elif 'CONST' in art_piece.main_stat.name:
+                self.__dict__[main_name].find('Artifact Flat').insert(
+                    DNode(main_key, '', main_value))
+            elif main_name == 'EM':
+                self.__dict__[main_name].insert(
+                    DNode(main_key, '', main_value))
+            else:
+                self.__dict__[main_name].insert(
+                    DNode(main_key, '%', main_value))
+
+            for sub, sub_num in val.items():
+                if sub == art_piece.main_stat.name:
+                    continue
+                sub_key = 'Sub {} {}'.format(art_piece.artifact_type.name, sub)
+                if 'PER' in sub:
+                    self.__dict__[sub.split('_')[0]].find('Sub Stat Scaler').insert(
+                        DNode(sub_key, '%', sub_num))
+                elif 'CONST' in sub:
+                    self.__dict__[sub.split('_')[0]].find('Artifact Flat').insert(
+                        DNode(sub_key, '', sub_num))
+                elif sub == 'EM':
+                    self.__dict__[sub].insert(
+                        DNode(sub_key, '', sub_num))
+                else:
+                    self.__dict__[sub].insert(
+                        DNode(sub_key, '%', sub_num))
 
 
 # def visualize(a) -> None:

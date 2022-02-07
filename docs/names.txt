@@ -1,9 +1,7 @@
 Ayaka
 Jean
-Traveler_anemo
-Traveler_geo
-Traveler_electro
 Lisa
+Traveler
 Barbara
 Kaeya
 Diluc
@@ -44,3 +42,5 @@ Gorou
 Sara
 Itto
 Aloy
+Shenhe
+Yunjin

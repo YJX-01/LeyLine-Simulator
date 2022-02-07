@@ -5,12 +5,12 @@ from core.rules.alltypes import ArtifactType, StatType, SetType
 
 
 class Artifact(object):
-    __subs = ['ATK_PER', 'ATK_CONST',
-              'DEF_PER', 'DEF_CONST',
-              'HP_PER', 'HP_CONST',
-              'EM', 'ER', 'CRIT_RATE', 'CRIT_DMG']
+    subs = ['ATK_PER', 'ATK_CONST',
+            'DEF_PER', 'DEF_CONST',
+            'HP_PER', 'HP_CONST',
+            'EM', 'ER', 'CRIT_RATE', 'CRIT_DMG']
 
-    __pos = ['FLOWER', 'PLUME', 'SANDS', 'GOBLET', 'CIRCLET']
+    positions = ['FLOWER', 'PLUME', 'SANDS', 'GOBLET', 'CIRCLET']
 
     def __init__(self) -> None:
         self.artifacts: List[Union[ArtifactPiece, None]] = \
@@ -91,9 +91,13 @@ class ArtifactPiece(object):
         self.initialize(configs, mode)
 
     def initialize(self, configs: Union[dict, str], mode: str) -> None:
+        if not configs:
+            return
+
         if mode == 'lls' and isinstance(configs, dict):
             for k, v in configs.items():
                 self.__setattr__(k, v)
+
         elif mode == 'lls' and isinstance(configs, str):
             item_list = configs.strip(';').split('@')
             self.set_type = SetType[item_list[0]]
@@ -104,6 +108,7 @@ class ArtifactPiece(object):
                 self.sub_stat[StatType[sub_name]] = int(sub_value)
             self.level = int(item_list[4].strip('LV'))
             self.rarity = int(item_list[5][-1])
+
         elif mode == 'mona':
             self.rarity = configs['star']
             self.level = configs['level']
@@ -127,6 +132,15 @@ class ArtifactPiece(object):
                 else:
                     self.sub_stat[StatType[n]] = round(
                         100*sub['value']/(sub_stat_reference[n][-1]/10))
+
+    def value_data(self):
+        val = {}
+        val[self.main_stat.name] = self.__data['main_stat'][str(
+            self.rarity)][self.main_stat.name][self.level]
+        for sub, num in self.sub_stat.items():
+            val[sub.name] = num * \
+                self.__data['sub_stat'][str(self.rarity)][sub.name][-1]/10
+        return val
 
     def __repr__(self) -> str:
         nickname = dict([(member.name, name)

@@ -20,8 +20,6 @@ class Simulation(object):
         \t\tset the character in the simulation\n
         '''
         self.characters: Mapping[str, Character] = {}
-        self.artifactmap: Mapping[str, Artifact] = {}
-        # self.weaponmap: Mapping[str, Weapon] = {}
         self.operation_track: Sequence[Operation] = []
         self.constraint_track: Sequence[Constraint] = []
         self.event_queue: Queue[Event] = PriorityQueue()
@@ -33,13 +31,9 @@ class Simulation(object):
 
     def set_character(self, name='', lv=1, asc=False) -> None:
         if name not in self.characters.keys() and len(self.characters) <= 4:
-            tmp = Character()
-            tmp.base.choose(name)
-            tmp.base.set_lv(lv, asc)
-            tmp.action.attach_skill(name)
-            self.characters[name] = tmp
-            self.artifactmap[name] = Artifact()
-            # self.weaponmap[name] = Weapon()
+            genshin = Character()
+            genshin.initialize(name=name, lv=lv, asc=asc)
+            self.characters[name] = genshin
         elif name in self.characters:
             self.characters[name].base.set_lv(lv, asc)
         else:
@@ -50,12 +44,13 @@ class Simulation(object):
             raise KeyError
         else:
             del self.characters[name]
-            del self.artifactmap[name]
-            # del self.weaponmap[name]
 
-    def set_artifact(self, name='', art={}):
-        self.artifactmap[name].artifacts[0].initialize(art)
-        return
+
+    def set_artifact(self, name='', artifact=None):
+        self.characters[name].equip(artifact)
+
+    def set_weapon(self, name='', weapon=None):
+        self.characters[name].equip(weapon)
 
     def insert(self, obj: Union['Operation', 'Constraint']):
         if isinstance(obj, Operation):
@@ -86,7 +81,8 @@ class Simulation(object):
         '''
         print('CALCULATE START!')
 
-        operation_queue: PriorityQueue[Tuple[float, Operation]] = PriorityQueue()
+        operation_queue: PriorityQueue[Tuple[float,
+                                             Operation]] = PriorityQueue()
         active_constraint: Sequence[Constraint] = []
         active_constraint.extend(self.constraint_track)
         list(map(lambda op: operation_queue.put(
@@ -96,7 +92,7 @@ class Simulation(object):
             op.execute(self)
             self.recorder.append(op.desc)
             operation_queue.task_done()
-        
+
         print('EXECUTE EVENTS!')
         while self.event_queue.unfinished_tasks > 0:
             ev: Event = self.event_queue.get()[1]
