@@ -1,6 +1,6 @@
 import json
 from collections import Counter
-from typing import List, Dict, Sequence, Union
+from typing import Any, List, Dict, Sequence, Union
 from core.rules.alltypes import ArtifactType, StatType, SetType
 
 
@@ -53,7 +53,7 @@ class Artifact(object):
 
 class ArtifactPiece(object):
     with open(r'.\docs\constant\ArtifactStat.json', 'r') as d:
-        __data = json.load(d)
+        art_data: Dict[str, Any] = json.load(d)
 
     __translation_mona = {
         "critical": "CRIT_RATE",
@@ -112,7 +112,7 @@ class ArtifactPiece(object):
         elif mode == 'mona':
             self.rarity = configs['star']
             self.level = configs['level']
-            sub_stat_reference = self.__data['sub_stat'][str(self.rarity)]
+            sub_stat_reference = self.art_data['sub_stat'][str(self.rarity)]
             name_pats = [(s_type.name.split('_'), s_type.value)
                          for s_type in SetType]
             for name in name_pats:
@@ -135,11 +135,11 @@ class ArtifactPiece(object):
 
     def value_data(self):
         val = {}
-        val[self.main_stat.name] = self.__data['main_stat'][str(
+        val[self.main_stat.name] = self.art_data['main_stat'][str(
             self.rarity)][self.main_stat.name][self.level]
         for sub, num in self.sub_stat.items():
             val[sub.name] = num * \
-                self.__data['sub_stat'][str(self.rarity)][sub.name][-1]/10
+                self.art_data['sub_stat'][str(self.rarity)][sub.name][-1]/10
         return val
 
     def __repr__(self) -> str:
