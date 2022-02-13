@@ -27,5 +27,5 @@ class Event(object):
     def execute(self, simulation: 'Simulation', *args):
         print(f'\t[{self.time_str}s]:[Event]:[desc]:[ {self.desc} ]')
         if self.func:
-            self.func(simulation, self.character, self.time)
+            self.func(simulation, self)
 

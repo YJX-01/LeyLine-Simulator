@@ -4,6 +4,15 @@ from typing import Callable, List, Dict
 
 
 class Trigger(object):
+    '''
+    Trigger 触发器 单例。
+    实现了消息机制。
+    提供了消息注册和触发方法。
+    可以用来实现一些需要收到通知才能被动触发的逻辑。
+    如，行秋雨帘剑，阿贝多阳华。
+    
+    最下面有单元测试 和 基础用法。
+    '''
     instance = None
     
     def __init__(self):
