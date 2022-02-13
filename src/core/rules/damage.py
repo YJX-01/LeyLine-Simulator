@@ -11,7 +11,10 @@ def damage(
     elem=ElementType.PHYSICAL,
     type=DamageType.NONE):
     '''
-    造成伤害
+    伤害装饰器。
+    用于在造成伤害时，添加一些通用的逻辑。
+    如，伤害会触发阿贝多的阳华。
+    另外也可以在这里实现元素附着的逻辑。
     '''
     def decorate(func):
         @wraps(func)
@@ -20,7 +23,7 @@ def damage(
             print(f"\t\tTRIGGER BEFORE DAMAGE [ELEM:{elem}] [TYPE:{type}]")
             result = func(*args, **kwargs)
             print(f"\t\tTRIGGER AFTER DAMAGE [ELEM:{elem}] [TYPE:{type}]")
-            trigger.notify('damage_trigger', args[0], args[1], args[2])
+            trigger.notify('damage_trigger', *args)
             return result
         return wrapper
     return decorate
