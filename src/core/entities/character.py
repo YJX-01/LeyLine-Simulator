@@ -172,9 +172,10 @@ class Character(object):
 
 class CharacterBase(object):
     with open('./docs/constant/CharacterLevelMultiplier.json', 'r') as f:
-        __lv_curve = json.load(f)
+        __lv_curve: Dict[str, List[float]] = json.load(f)
+        
     with open('./docs/constant/CharacterConfig.json', 'r') as f:
-        __char_info = json.load(f)
+        __char_info: Dict[str, Dict] = json.load(f)
 
     def __init__(self, **configs):
         self.name: str = ''
@@ -202,17 +203,15 @@ class CharacterBase(object):
 
     def choose(self, name: str) -> None:
         self.name = name
-        for c in self.__char_info:
-            if c['name'] == name:
-                self.rarity = str(c['rarity'])
-                self.weapon = c['weapon']
-                self.element = c['element']
-                self.region = c['region']
-                self.HP_BASE = c['HP_BASE']
-                self.ATK_BASE = c['ATK_BASE']
-                self.DEF_BASE = c['DEF_BASE']
-                self.asc_info = c['asc']
-                return
+        c = self.__char_info.get(name)
+        self.rarity = str(c['rarity'])
+        self.weapon = c['weapon']
+        self.element = c['element']
+        self.region = c['region']
+        self.HP_BASE = c['HP_BASE']
+        self.ATK_BASE = c['ATK_BASE']
+        self.DEF_BASE = c['DEF_BASE']
+        self.asc_info = c['asc']
 
     def set_lv(self, lv: int, asc: bool) -> None:
         if not self.name:
