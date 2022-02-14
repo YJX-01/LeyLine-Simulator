@@ -2,6 +2,9 @@ from enum import Enum
 
 
 class ElementType(Enum):
+    '''
+    元素类型
+    '''
     ANEMO = 1  # 风
     GEO = 2  # 岩
     ELECTRO = 3  # 雷
@@ -14,6 +17,9 @@ class ElementType(Enum):
 
 
 class ElementalReactionType(Enum):
+    '''
+    元素反应类型
+    '''
     SWIRL = 1  # 扩散
     CRYSTALLIZE = 2  # 结晶
     ELECTRO_CHARGED = 3  # 感电
@@ -33,31 +39,40 @@ class ElementalReactionType(Enum):
 
 
 class WeaponType(Enum):
-    SWORD = 1
-    CLAYMORE = 2
-    POLEARM = 3
-    CATALYST = 4
-    BOW = 5
+    '''
+    武器类型
+    '''
+    SWORD = 1 # 单手剑
+    CLAYMORE = 2 # 双手剑
+    POLEARM = 3 # 长柄武器
+    CATALYST = 4 # 法器
+    BOW = 5 # 弓
 
 
 class NationType(Enum):
-    MONDSTADT = 1
-    LIYUE = 2
-    INAZUMA = 3
-    SUMERU = 4
-    FONTAINE = 5
-    NATLAN = 6
-    SNEZHNAYA = 7
-    KHAENRIAH = 8
-    OTHER = 9
+    '''
+    人物所属地区类型
+    '''
+    MONDSTADT = 1 # 蒙德
+    LIYUE = 2 # 璃月
+    INAZUMA = 3 # 稻妻
+    SUMERU = 4 # 须弥
+    FONTAINE = 5 # 枫丹
+    NATLAN = 6 # 纳塔
+    SNEZHNAYA = 7 # 至冬
+    KHAENRIAH = 8 # 坎瑞亚
+    OTHER = 9 # 异世界/其他
 
 
 class ArtifactType(Enum):
-    FLOWER = 1
-    PLUME = 2
-    SANDS = 3
-    GOBLET = 4
-    CIRCLET = 5
+    '''
+    圣遗物位置类型
+    '''
+    FLOWER = 1 # 生之花
+    PLUME = 2 # 死之羽
+    SANDS = 3 # 时之沙
+    GOBLET = 4 # 空之杯
+    CIRCLET = 5 # 理之冠
 
 
 class StatType(Enum):
@@ -83,6 +98,9 @@ class StatType(Enum):
 
 
 class SetType(Enum):
+    '''
+    圣遗物套装类型
+    '''
     GLADIATORS_FINALE = 1  # 角斗士的终幕礼
     JUE_DOU_SHI = 1
     WANDERERS_TROUPE = 2  # 流浪大地的乐团

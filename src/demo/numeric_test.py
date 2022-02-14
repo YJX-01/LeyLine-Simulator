@@ -28,21 +28,3 @@ if __name__ == '__main__':
     for k, v in pan.__dict__.items():
         if v():
             print(k, v())
-
-    tmp = a.virtual_artifact({
-        'main': ['HP_PER', 'HP_PER', 'HP_PER'],
-        'HP': 29125,
-        'HP_CONST': 717,
-        'ATK': 506,
-        'ATK_CONST': 80,
-        'DEF': 23,
-        'DEF_CONST': 23,
-        'EM': 63,
-        'ER': 70.6,
-        'CRIT_DMG': 29.5,
-        'CRIT_RATE': 14,
-    })
-    
-    print('----')
-    for a in tmp:
-        print(a)

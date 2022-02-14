@@ -10,14 +10,14 @@ class Simulation(object):
     def __init__(self):
         '''
         attributes:\n
-        \tcharacters: Mapping[str, Character_]\n
-        \tartifactmap: Mapping[str, Artifact]\n
-        \tweaponmap: Mapping[str, Weapon]\n
+        \tcharacters: Mapping[str, Character]\n
         \toperation_track: Sequence[Operation]\n
         \tconstraint_track: Sequence[Constraint]\n
+        \tevent_queue: Queue[Event]\n
         methods:\n
-        \tset_character(name, lv, asc=False) -> None\n
-        \t\tset the character in the simulation\n
+        \tset_character(name, lv, asc=False)\n
+        \tset_artifact(name, artifact)\n
+        \tset_weapon(name, weapon)\n
         '''
         self.characters: Mapping[str, Character] = {}
         self.operation_track: Sequence[Operation] = []
