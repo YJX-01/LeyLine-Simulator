@@ -1,7 +1,7 @@
 import json
 from collections import Counter
 from typing import Any, List, Dict, Sequence, Union
-from core.rules.alltypes import ArtifactType, StatType, SetType
+from core.rules.alltypes import ArtpositionType, StatType, SetType
 
 
 class Artifact(object):
@@ -46,9 +46,9 @@ class Artifact(object):
             if isinstance(artifact, Sequence):
                 for a in artifact:
                     if isinstance(a, ArtifactPiece):
-                        self.artifacts[a.artifact_type.value-1] = a
+                        self.artifacts[a.pos_type.value-1] = a
             elif isinstance(artifact, ArtifactPiece):
-                self.artifacts[artifact.artifact_type.value-1] = artifact
+                self.artifacts[artifact.pos_type.value-1] = artifact
 
 
 class ArtifactPiece(object):
@@ -85,7 +85,7 @@ class ArtifactPiece(object):
         self.rarity: int = 5
         self.level: int = 20
         self.set_type: SetType = SetType(1)
-        self.artifact_type: ArtifactType = ArtifactType(1)
+        self.pos_type: ArtpositionType = ArtpositionType(1)
         self.main_stat: StatType = StatType(1)
         self.sub_stat: Dict[StatType, int] = {}
         self.initialize(configs, mode)
@@ -101,7 +101,7 @@ class ArtifactPiece(object):
         elif mode == 'lls' and isinstance(configs, str):
             item_list = configs.strip(';').split('@')
             self.set_type = SetType[item_list[0]]
-            self.artifact_type = ArtifactType[item_list[1]]
+            self.pos_type = ArtpositionType[item_list[1]]
             self.main_stat = StatType[item_list[2].strip('[]')]
             for sub in item_list[3].strip('[],').split(','):
                 sub_name, sub_value = tuple(sub.split(':'))
@@ -120,7 +120,7 @@ class ArtifactPiece(object):
                 if sum([n.rstrip('S') in configs['setName'].upper() for n in pat]) >= 2:
                     self.set_type = SetType(name[1])
                     break
-            self.artifact_type = ArtifactType(
+            self.pos_type = ArtpositionType(
                 self.__translation_mona[configs['position']])
             self.main_stat = StatType[
                 self.__translation_mona[configs['mainTag']['name']]]
@@ -147,7 +147,7 @@ class ArtifactPiece(object):
                          for name, member in SetType.__members__.items() if member.name != name])
         n = nickname[self.set_type.name]
         s1 = '{}@{}@[{}]@['.format(
-            n, self.artifact_type.name, self.main_stat.name)
+            n, self.pos_type.name, self.main_stat.name)
         s2 = ''.join(['{}:{},'.format(k.name, v)
                      for k, v in self.sub_stat.items()])
         s3 = ']@LV{}@STAR{};'.format(self.level, self.rarity)

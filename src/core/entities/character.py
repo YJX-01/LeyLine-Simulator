@@ -1,10 +1,8 @@
 import json
 from typing import Callable, Mapping, Sequence, Dict, List, Any, Tuple
-from unittest import result
 from core.entities.artifact import Artifact
 from core.entities.weapon import Weapon
 from core.rules import DNode
-from core.simulation.event import Event
 from data.characters.albedo.albedo_draft import *
 
 
@@ -261,7 +259,7 @@ class CharacterAttribute(object):
 
             main_name = art_piece.main_stat.name
             main_key = 'Main {} {}'.format(
-                art_piece.artifact_type.name, main_name)
+                art_piece.pos_type.name, main_name)
             main_value = val[art_piece.main_stat.name]
             if 'CONST' in main_name or 'PER' in main_name:
                 main_name = main_name.split('_')[0]
@@ -281,7 +279,7 @@ class CharacterAttribute(object):
             for sub, sub_num in val.items():
                 if sub == art_piece.main_stat.name:
                     continue
-                sub_key = 'Sub {} {}'.format(art_piece.artifact_type.name, sub)
+                sub_key = 'Sub {} {}'.format(art_piece.pos_type.name, sub)
                 if 'PER' in sub:
                     self.__dict__[sub.split('_')[0]].find('Sub Stat Scaler').insert(
                         DNode(sub_key, '%', sub_num))

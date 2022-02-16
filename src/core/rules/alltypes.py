@@ -42,37 +42,37 @@ class WeaponType(Enum):
     '''
     武器类型
     '''
-    SWORD = 1 # 单手剑
-    CLAYMORE = 2 # 双手剑
-    POLEARM = 3 # 长柄武器
-    CATALYST = 4 # 法器
-    BOW = 5 # 弓
+    SWORD = 1  # 单手剑
+    CLAYMORE = 2  # 双手剑
+    POLEARM = 3  # 长柄武器
+    CATALYST = 4  # 法器
+    BOW = 5  # 弓
 
 
 class NationType(Enum):
     '''
     人物所属地区类型
     '''
-    MONDSTADT = 1 # 蒙德
-    LIYUE = 2 # 璃月
-    INAZUMA = 3 # 稻妻
-    SUMERU = 4 # 须弥
-    FONTAINE = 5 # 枫丹
-    NATLAN = 6 # 纳塔
-    SNEZHNAYA = 7 # 至冬
-    KHAENRIAH = 8 # 坎瑞亚
-    OTHER = 9 # 异世界/其他
+    MONDSTADT = 1  # 蒙德
+    LIYUE = 2  # 璃月
+    INAZUMA = 3  # 稻妻
+    SUMERU = 4  # 须弥
+    FONTAINE = 5  # 枫丹
+    NATLAN = 6  # 纳塔
+    SNEZHNAYA = 7  # 至冬
+    KHAENRIAH = 8  # 坎瑞亚
+    OTHER = 9  # 异世界/其他
 
 
-class ArtifactType(Enum):
+class ArtpositionType(Enum):
     '''
     圣遗物位置类型
     '''
-    FLOWER = 1 # 生之花
-    PLUME = 2 # 死之羽
-    SANDS = 3 # 时之沙
-    GOBLET = 4 # 空之杯
-    CIRCLET = 5 # 理之冠
+    FLOWER = 1  # 生之花
+    PLUME = 2  # 死之羽
+    SANDS = 3  # 时之沙
+    GOBLET = 4  # 空之杯
+    CIRCLET = 5  # 理之冠
 
 
 class StatType(Enum):
@@ -176,6 +176,7 @@ class PanelType(Enum):
     PHYSICAL_DMG = 29
     PHYSICAL_RES = 30
 
+
 class DamageType(Enum):
     '''
     造成的伤害类型
@@ -184,5 +185,5 @@ class DamageType(Enum):
     CHARGED_ATK = 2
     PLUNGING_ATK = 3
     ELEM_SKILL = 4
-    ELEM_BURST= 5
+    ELEM_BURST = 5
     NONE = 6

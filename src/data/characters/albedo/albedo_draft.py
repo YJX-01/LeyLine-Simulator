@@ -85,8 +85,7 @@ def Albedo_ELEM_SKILL(character: 'Character', time: float):
             solar_isotoma_event.initialize(func=on_solar_damage,
                                            desc='SOLAR ISOTOMA DAMAGE EVENT')
             # 这里就直接插入了，trigger 会触发所有同类型的回调，不好取它们的返回值
-            simulation.event_queue.put(
-                (solar_isotoma_event.time, solar_isotoma_event))
+            simulation.event_queue.put(solar_isotoma_event)
             return
         # 把阳华注册进去
         trigger.register('damage_trigger', solar_isotoma)

@@ -26,6 +26,9 @@ class Operation(object):
             if self.constraints \
             else True
 
+    def __lt__(self, other) -> bool:
+        return self.time < other.time
+
     def command_parser(self, command: str, simulation: 'Simulation') -> None:
         '''
         command type: Charchar.skill@time\n
@@ -51,11 +54,6 @@ class Operation(object):
                     character.action.ELEM_SKILL(character, cmd_time)
                 print('\tCHARACTER ACTION GENERTATE EVENTS')
                 self.events.extend(append_events)
-        
-        # cmd_source_obj = simulation.characters[cmd_source]
-        # cmd_action_obj = cmd_source_obj.action
-        # self.events.append(Event({'time': cmd_time, 'priority': 0, 'desc': f'{cmd_action}'}))
-
 
     def impose(self, *args: Union[Sequence, Constraint]) -> None:
         '''
@@ -78,23 +76,13 @@ class Operation(object):
         check whether the operation is active\n
         refer to the constraints and objects given
         '''
-        if isinstance(constraint, ConstraintFlag):
-            print('IMPOSE a flag constraint')
-            return True
-        elif isinstance(constraint, ConstraintCounter):
-            print('IMPOSE a counter')
-            return True
-        elif isinstance(constraint, ConstraintCooldown):
-            print('IMPOSE a cd checker')
-            return True
-        else:
-            return True
+        return True
+
 
     def execute(self, simulation: 'Simulation', *args) -> None:
         self.objects = simulation
         self.impose(simulation.active_constraint)
         if self.active:
             self.command_parser(self.command, simulation)
-            list(map(lambda ev: simulation.event_queue.put((ev.time, ev)), self.events))
-            # list(map(lambda e: simulation.task_queue.put_nowait(e), self.events))
+            list(map(lambda ev: simulation.event_queue.put(ev), self.events))
         return

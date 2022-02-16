@@ -1,12 +1,19 @@
 from queue import PriorityQueue, Queue
-from typing import TYPE_CHECKING, Sequence, Mapping, Tuple, Union
+from typing import Sequence, Mapping, Union
 from core.entities import *
 from core.rules import *
-from .operation import *
 from .constraint import *
+from .operation import Operation
 
 
 class Simulation(object):
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls, *args, **kwargs)
+        return cls.__instance
+
     def __init__(self):
         '''
         attributes:\n
@@ -20,14 +27,12 @@ class Simulation(object):
         \tset_weapon(name, weapon)\n
         '''
         self.characters: Mapping[str, Character] = {}
-        self.operation_track: Sequence[Operation] = []
-        self.constraint_track: Sequence[Constraint] = []
+        self.operation_track: Sequence['Operation'] = []
+        self.constraint_track: Sequence['Constraint'] = []
         self.event_queue: Queue[Event] = PriorityQueue()
-        self.recorder = []
-
-        self.task_queue: PriorityQueue[Union[Operation,
-                                             Event]] = PriorityQueue()
-        self.active_constraint: Sequence[Constraint] = []
+        self.active_constraint: Sequence['Constraint'] = []
+        self.operation_log = []
+        self.event_log = []
 
     def set_character(self, name='', lv=1, asc=False) -> None:
         if name not in self.characters.keys() and len(self.characters) <= 4:
@@ -44,7 +49,6 @@ class Simulation(object):
             raise KeyError
         else:
             del self.characters[name]
-
 
     def set_artifact(self, name='', artifact=None):
         self.characters[name].equip(artifact)
@@ -81,34 +85,21 @@ class Simulation(object):
         '''
         print('CALCULATE START!')
 
-        operation_queue: PriorityQueue[Tuple[float,
-                                             Operation]] = PriorityQueue()
-        active_constraint: Sequence[Constraint] = []
+        operation_queue: Queue['Operation'] = PriorityQueue()
+        active_constraint: Sequence['Constraint'] = []
         active_constraint.extend(self.constraint_track)
-        list(map(lambda op: operation_queue.put(
-            (op.time, op)), self.operation_track))
+        list(map(lambda op: operation_queue.put(op), self.operation_track))
         while operation_queue.unfinished_tasks > 0:
-            op: Operation = operation_queue.get()[1]
+            op: 'Operation' = operation_queue.get()
             op.execute(self)
-            self.recorder.append(op.desc)
+            self.operation_log.append(op)
             operation_queue.task_done()
 
         print('EXECUTE EVENTS!')
         while self.event_queue.unfinished_tasks > 0:
-            ev: Event = self.event_queue.get()[1]
+            ev: 'Event' = self.event_queue.get()
             ev.execute(self)
-            self.recorder.append(op.desc)
+            self.event_log.append(ev)
             self.event_queue.task_done()
-
-        # self.active_constraint.clear()
-        # self.active_constraint.extend(self.constraint_track)
-
-        # list(map(lambda task: self.task_queue.put_nowait(task), self.operation_track))
-
-        # while self.task_queue.unfinished_tasks > 0:
-        #     task: Union[Operation, Event] = self.task_queue.get()
-        #     task.execute(self)
-        #     self.recorder.append(task.desc)
-        #     self.task_queue.task_done()
 
         print('CALCULATE FINISHED!')
