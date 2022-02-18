@@ -1,3 +1,4 @@
+from random import random
 from typing import TYPE_CHECKING, Sequence
 from core.entities.creation import *
 from core.rules.alltypes import *
@@ -22,7 +23,10 @@ class AlbedoNormATK(NormalAttack):
 
         self.cir_cnt = self.albedo_norm_atk_circulation_counter()
 
-    def __call__(self, simulation: 'Simulation', event: 'Event') -> None:
+    def __call__(self, simulation: 'Simulation', event: 'Event'):
+        for c in simulation.active_constraint:
+            if isinstance(c, DurationConstraint) and not c(event):
+                return
         act_cnt: int = self.cir_cnt(simulation.event_log)
         print(f'\t\taction circulation counter: {act_cnt}')
         action_event = Event(time=event.time,
@@ -30,24 +34,29 @@ class AlbedoNormATK(NormalAttack):
                              type=EventType.ACTION,
                              func=self.normatk_action_event,
                              desc=f'Albedo.normatk.{act_cnt}',
-                             info={})
+                             info={'type': self.action_type})
 
         damage_event = Event(time=event.time+0.2,
                              source=self,
                              type=EventType.DAMAGE,
                              func=self.normatk_damage_event,
                              desc='Albedo.damage',
-                             info={})
+                             info={'type': self.damage_type})
 
         simulation.event_queue.put(action_event)
         simulation.event_queue.put(damage_event)
 
+        simulation.active_constraint.append(DurationConstraint(
+            event.time, 0.1,
+            lambda ev: True if ev.type == EventType.COMMAND else False
+        ))
+
     @staticmethod
     def albedo_norm_atk_circulation_counter():
-        def f(ev: Event):
+        def f(ev: 'Event'):
             if ev.type == EventType.ACTION and isinstance(ev.source, AlbedoNormATK):
                 return 1
-            elif ev.type == EventType.ACTION and ev.source.source.name == 'Albedo':
+            elif ev.type == EventType.ACTION:
                 return -10
             else:
                 return 0
@@ -59,10 +68,15 @@ class AlbedoNormATK(NormalAttack):
     @staticmethod
     def normatk_action_event(simulation: 'Simulation', event: 'Event'):
         print('\t\talbedo normal atk action event happen')
+        print('\t\tapply action duration constraint')
 
     @staticmethod
     def normatk_damage_event(simulation: 'Simulation', event: 'Event'):
         print('\t\talbedo normal atk damage event happen')
+
+    @staticmethod
+    def normatk_energy_event(simulation: 'Simulation', event: 'Event'):
+        print('\t\tnormal atk energy restore event')
 
 
 class AlbedoElemskill(Skill):
@@ -79,6 +93,9 @@ class AlbedoElemskill(Skill):
         self.cd = None
 
     def __call__(self, simulation: 'Simulation', event: 'Event') -> None:
+        for c in simulation.active_constraint:
+            if isinstance(c, DurationConstraint) and not c(event):
+                return
         if self.cd and not self.cd(event):
             return
         self.cd = self.elemskill_cd(event.time)
@@ -87,25 +104,30 @@ class AlbedoElemskill(Skill):
                              type=EventType.ACTION,
                              func=self.elemskill_action_event,
                              desc=f'Albedo.elemskill',
-                             info={})
+                             info={'type': self.action_type})
 
         creation_event = Event(time=event.time+0.05,
                                source=self,
                                type=EventType.CREATION_ACT,
                                func=self.elemskill_creation_event,
                                desc=f'Albedo.creation',
-                               info={})
+                               info={'type': 'create'})
 
         damage_event = Event(time=event.time+0.05,
                              source=self,
                              type=EventType.DAMAGE,
                              func=self.elemskill_damage_event,
                              desc='Albedo.elemskill',
-                             info={})
+                             info={'type': self.damage_type})
 
         simulation.event_queue.put(action_event)
         simulation.event_queue.put(creation_event)
         simulation.event_queue.put(damage_event)
+
+        simulation.active_constraint.append(DurationConstraint(
+            event.time, 0.1,
+            lambda ev: True if ev.type == EventType.COMMAND else False
+        ))
 
     @staticmethod
     def elemskill_cd(start):
@@ -118,6 +140,7 @@ class AlbedoElemskill(Skill):
                 return False
 
         cd_counter = DurationConstraint(start, 12, f)
+        cd_counter.refresh()
         return cd_counter
 
     @staticmethod
@@ -136,8 +159,87 @@ class AlbedoElemskill(Skill):
 
 
 class AlbedoElemburst(Skill):
-    def __init__(self) -> None:
+    def __init__(self, albedo: 'Character'):
         super().__init__()
+        self.type = 'elembrust'
+        self.source = albedo
+        self.elem_type = ElementType.GEO
+        self.action_type = ActionType.ELEM_BURST
+        self.damage_type = DamageType.ELEM_BURST
+        self.scaler = albedo.base.ATK
+
+        self.cd = None
+        self.energy = CounterConstraint(0, 1000, 40)
+    
+    def __call__(self, simulation: 'Simulation', event: 'Event'):
+        for c in simulation.active_constraint:
+            if isinstance(c, DurationConstraint) and not c(event):
+                return
+        if self.cd and not self.cd(event):
+            return
+        if not self.energy.full:
+            print('warning: force activate, energy:', self.energy.count)
+        self.energy.clear()
+        self.cd = self.elemburst_cd(event.time)
+        action_event = Event(time=event.time,
+                             source=self,
+                             type=EventType.ACTION,
+                             func=self.elemburst_action_event,
+                             desc=f'Albedo.elemburst',
+                             info={'type': self.action_type})
+
+        damage_event = Event(time=event.time+0.05,
+                             source=self,
+                             type=EventType.DAMAGE,
+                             func=self.elemburst_damage_event,
+                             desc='Albedo.elemburst',
+                             info={'type': self.damage_type})
+
+        simulation.event_queue.put(action_event)
+        simulation.event_queue.put(damage_event)
+
+        simulation.active_constraint.append(DurationConstraint(
+            event.time, 0.1,
+            lambda ev: True if ev.type == EventType.COMMAND else False
+        ))
+
+    def receive_energy(self, simulation: 'Simulation', event: 'Event'):
+        elem_type: ElementType = event.info.get('elem')
+        add_base: int = event.info.get('base')
+        add_num: int = event.info.get('num')
+        increase = add_base*add_num
+        if elem_type.value == self.source.base.element:
+            increase*=3
+        elif elem_type == ElementType.NONE:
+            increase*=2
+            
+        if simulation.onstage != self.source.name:
+            increase *= (1-0.1*len(simulation.characters))
+
+        increase *= simulation.characters[self.source.name].attribute.ER()
+        self.energy.receive(increase)
+    
+    @staticmethod
+    def elemburst_cd(start):
+        def f(ev: Event):
+            if ev.type == EventType.ACTION and isinstance(ev.source, AlbedoElemburst):
+                return True
+            elif ev.type == EventType.COMMAND and ev.source == 'User':
+                return True
+            else:
+                return False
+
+        cd_counter = DurationConstraint(start, 12, f)
+        cd_counter.refresh()
+        return cd_counter
+    
+    @staticmethod
+    def elemburst_action_event(simulation: 'Simulation', event: 'Event'):
+        print('\t\talbedo elem burst action event happen')
+
+    @staticmethod
+    def elemburst_damage_event(simulation: 'Simulation', event: 'Event'):
+        print('\t\talbedo elem burst damage event happen')
 
 
 class SolarIsotoma(TriggerableCreation):
@@ -161,9 +263,11 @@ class SolarIsotoma(TriggerableCreation):
         print('\t\tcall solar istoma object')
         self.skills(simulation, event)
 
-    @staticmethod
-    def solarisotoma_trigger(simulation: 'Simulation', event: 'Event'):
-        return True if event.type == EventType.DAMAGE else False
+    def solarisotoma_trigger(self, simulation: 'Simulation', event: 'Event'):
+        if event.type == EventType.DAMAGE and event.time < self.start+self.duration:
+            return True
+        else:
+            return False
 
 
 class TransientBlossom(Skill):
@@ -185,20 +289,39 @@ class TransientBlossom(Skill):
                              source=self,
                              type=EventType.DAMAGE,
                              func=self.blossom_damage_event,
-                             desc='Albedo.elemskill',
-                             info={})
+                             desc='Albedo.transientblossom',
+                             info={'type': self.damage_type})
+
+        extra_ball = int(random() <= 2/3)
+        energy_event = Event(time=event.time+0.05,
+                             source=self,
+                             type=EventType.ENERGY,
+                             func=self.elemskill_energy_event,
+                             desc='Albedo.give_energy',
+                             info={'elem': ElementType.GEO,
+                                   'base': 1,
+                                   'num': 1+extra_ball})
         simulation.event_queue.put(damage_event)
+        simulation.event_queue.put(energy_event)
 
     @staticmethod
     def blossom_cd(start):
-        def f(ev: Event):
+        def f(ev: 'Event'):
             if ev.type == EventType.DAMAGE or isinstance(ev.source, TransientBlossom):
                 return True
             else:
                 return False
         cd_counter = DurationConstraint(start, 1, f)
+        cd_counter.refresh()
         return cd_counter
 
     @staticmethod
     def blossom_damage_event(simulation: 'Simulation', event: 'Event'):
         print('\t\ttransient blossom damage event happen')
+
+    @staticmethod
+    def elemskill_energy_event(simulation: 'Simulation', event: 'Event'):
+        print('\t\telem skill create element particles')
+        for name, character in simulation.characters.items():
+            character.action.ELEM_BURST.receive_energy(simulation, event)
+        print('\t\tand characters receive particles')

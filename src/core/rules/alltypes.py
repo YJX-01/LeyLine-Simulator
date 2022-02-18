@@ -170,9 +170,13 @@ class EventType(Enum):
     '''事件类型'''
     NONE = 0
     COMMAND = 1
-    ACTION = 2
-    DAMAGE = 3
-    CREATION_ACT = 4
+    SWITCH = 2
+    ACTION = 3
+    DAMAGE = 4
+    ENERGY = 5
+    ELEMENT = 6
+    TRY = 7
+    CREATION_ACT = 8
 
 
 class DamageType(Enum):

@@ -1,4 +1,5 @@
 from queue import PriorityQueue, Queue
+from collections import OrderedDict
 from typing import Sequence, Mapping, Union
 from core.entities import *
 from core.rules import *
@@ -26,19 +27,24 @@ class Simulation(object):
         \tset_artifact(name, artifact)\n
         \tset_weapon(name, weapon)\n
         '''
-        self.characters: Mapping[str, Character] = {}
+        self.characters: OrderedDict[str, Character] = OrderedDict()
         self.operation_track: Sequence['Operation'] = []
         self.constraint_track: Sequence['Constraint'] = []
+        self.char_shortcut: Mapping[str, str] = {}
+
         self.event_queue: Queue[Event] = PriorityQueue()
         self.active_constraint: Sequence['Constraint'] = []
-        self.operation_log = []
-        self.event_log = []
+
+        self.operation_log: Sequence['Operation'] = []
+        self.event_log: Sequence['Event'] = []
+        self.onstage: str = ''
 
     def set_character(self, name='', lv=1, asc=False) -> None:
         if name not in self.characters.keys() and len(self.characters) <= 4:
             genshin = Character()
             genshin.initialize(name=name, lv=lv, asc=asc)
             self.characters[name] = genshin
+            self.char_state_update()
         elif name in self.characters:
             self.characters[name].base.set_lv(lv, asc)
         else:
@@ -49,6 +55,12 @@ class Simulation(object):
             raise KeyError
         else:
             del self.characters[name]
+            self.char_state_update()
+
+    def char_state_update(self):
+        self.onstage = list(self.characters.keys())[0]
+        self.char_shortcut = dict(zip(range(1, 1+len(self.characters)),
+                                      self.characters.keys()))
 
     def set_artifact(self, name='', artifact=None):
         self.characters[name].equip(artifact)
@@ -78,6 +90,7 @@ class Simulation(object):
             return
 
     def clear_result(self):
+        self.char_state_update()
         self.event_log.clear()
         self.operation_log.clear()
 

@@ -29,6 +29,8 @@ class Operation(object):
         self.time = float(cmd_time)
 
     def work(self, simulation: 'Simulation') -> None:
+        if self.source.isnumeric():
+            self.source = simulation.char_shortcut[int(self.source)]
         character = simulation.characters[self.source]
         if self.action == 'A':
             print('\tCALL CHARACTER ACTION: A')
@@ -54,6 +56,21 @@ class Operation(object):
                               func=character.action.ELEM_BURST,
                               desc=f'cmd.{self.source}.{self.action}')
             self.events.append(cmd_event)
+        elif self.action == 'C':
+            def switch_char(simulation: 'Simulation', event: 'Event'):
+                for c in simulation.active_constraint:
+                    if isinstance(c, DurationConstraint) and not c(event):
+                        return
+                print('\t\tswitch character')
+                simulation.onstage = self.source
+
+            print('\tCALL SWITCH CHARACTER ACTION: C')
+            switch_event = Event(time=self.time,
+                                 source='User',
+                                 type=EventType.SWITCH,
+                                 func=switch_char,
+                                 desc=f'cmd.{self.source}.{self.action}')
+            self.events.append(switch_event)
         print('\tCHARACTER ACTION GENERTATE EVENTS')
 
     def impose(self, *args: Union[Sequence, Constraint]) -> None:
@@ -74,13 +91,6 @@ class Operation(object):
         '''
         self.active = True
         return
-        for constraint in self.constraints:
-            try:
-                constraint(simulation)
-            except:
-                pass
-            else:
-                self.active = True
 
     def execute(self, simulation: 'Simulation') -> None:
         self.impose(simulation.active_constraint)

@@ -22,15 +22,20 @@ class DurationConstraint(Constraint):
         super().__init__(func)
         self.start = start
         self.duration = duration
+        self.refreshable = False
 
-    def __call__(self, event: Event) -> bool:
-        if self.func(event) and event.time > self.start+self.duration:
-            self.start = event.time
-            return True
-        return False
+    def refresh(self, flag=True):
+        self.refreshable = flag
 
     def reduce(self, t):
         self.duration -= t
+
+    def __call__(self, event: Event) -> bool:
+        if self.func(event) and event.time > self.start+self.duration:
+            if self.refreshable:
+                self.start = event.time
+            return True
+        return False
 
 
 class CounterConstraint(Constraint):
@@ -61,14 +66,24 @@ class CounterConstraint(Constraint):
     def circulate(self, flag=True):
         self.circulative = flag
 
-    def __call__(self, log: Sequence[Event]):
+    def receive(self, cnt):
+        self.count += cnt
+        self.count = max(0, self.count)
+        if self.circulative:
+            self.count %= self.capacity
+        self.count = min(self.capacity, self.count)
+
+    def clear(self):
+        self.count = 0
+
+    @property
+    def full(self) -> bool:
+        return self.count == self.capacity
+
+    def __call__(self, log: Sequence[Event]) -> float:
         states = [self.func(ev) for ev in log
                   if self.start < ev.time < self.end]
-        self.count = 0
-        for s in states:
-            self.count += s
-            self.count = max(0, self.count)
-            if self.circulative:
-                self.count %= self.capacity
-            self.count = min(self.capacity, self.count)
+        self.clear()
+        for cnt in states:
+            self.receive(cnt)
         return self.count

@@ -7,22 +7,23 @@ from data.characters.albedo.albedo_oo import *
 
 
 class Character(object):
-    def __init__(self) -> None:
+    def __init__(self):
         self.base: CharacterBase = CharacterBase()
         self.attribute: CharacterAttribute = CharacterAttribute()
         self.action: CharacterAction = CharacterAction()
         self.artifact: Artifact = Artifact()
         self.weapon: Weapon = Weapon()
 
-    def initialize(self, **configs) -> None:
+    def initialize(self, **configs):
         if 'name' in configs.keys():
             self.base.choose(configs['name'])
             self.action.attach_skill(configs['name'], self)
         if 'lv' in configs.keys() and 'asc' in configs.keys() and self.base.name:
             self.base.set_lv(configs['lv'], configs['asc'])
+            self.update()
         return
 
-    def equip(self, *items) -> None:
+    def equip(self, *items):
         for item in items:
             if not item:
                 continue
@@ -34,7 +35,7 @@ class Character(object):
                 self.artifact.equip(item)
         self.update()
 
-    def update(self) -> None:
+    def update(self):
         self.attribute.update_base(self.base)
         self.attribute.update_weapon(self.weapon)
         self.attribute.update_artifact(self.artifact)
@@ -156,6 +157,7 @@ class CharacterAction(object):
     def attach_skill(self, name, character: Character):
         exec(f'self.NORMAL_ATK = {name}NormATK(character)')
         exec(f'self.ELEM_SKILL = {name}Elemskill(character)')
+        exec(f'self.ELEM_BURST = {name}Elemburst(character)')
 
 
 class CharacterAttribute(object):
@@ -215,7 +217,7 @@ class CharacterAttribute(object):
                     ]),
                     DNode('Bonus Scalers', '+'),
                     DNode('Weapon Scaler', '%'),
-                    DNode('Ascension Scaler', '%')
+                    DNode('Ascension Scaler')
                 ])
             ]),
             DNode(f'Flat {stat}', '+').extend([
@@ -238,7 +240,23 @@ class CharacterAttribute(object):
     def update_base(self, base: CharacterBase):
         for k in ['ATK', 'DEF', 'HP']:
             self.__dict__[k].modify(
-                'Charater {} Base'.format(k), num=base.__dict__[k])
+                f'Charater {k} Base',
+                num=base.__dict__[k]
+            )
+        for k, n in zip(['ER', 'CRIT_RATE', 'CRIT_DMG'], [100, 5, 50]):
+            try:
+                self.__dict__[k].find(f'Character {k} Base')
+            except:
+                self.__dict__[k].insert(DNode(f'Character {k} Base', '%', n))
+
+        if base.EXTRA[0] in ['ATK_PER', 'DEF_PER', 'HP_PER']:
+            k = base.EXTRA[0].split('_')[0]
+            self.__dict__[k].modify('Ascension Scaler', num=base.EXTRA[1])
+        else:
+            try:
+                self.__dict__[k].modify(f'Character {k} Ascension', num=n)
+            except:
+                self.__dict__[k].insert(DNode(f'Character {k} Ascension', num=n))
 
     def update_weapon(self, weapon: Weapon):
         self.ATK.modify('Weapon ATK Base', num=weapon.base.ATK)
