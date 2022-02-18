@@ -10,8 +10,20 @@ if __name__ == '__main__':
     '''
     print('START A SIMPLE SIMULATION!')
     simulation = Simulation()
-    simulation.set_character('Aloy', 90, False)
     simulation.set_character('Albedo', 80, True)
-    simulation.insert(Operation('Albedo.E@1', 1, simulation.constraint_track))
-    simulation.insert(Operation('Albedo.A@2', 2, simulation.constraint_track))
+    cmd_list = [
+        'Albedo.A@1',
+        'Albedo.A@2',
+        'Albedo.A@2.5',
+        'Albedo.A@3',
+        'Albedo.A@3.5',
+        'Albedo.A@4',
+        'Albedo.E@5',
+        'Albedo.A@6',
+        'Albedo.A@8',
+        'Albedo.E@9',
+        'Albedo.E@20'
+    ]
+    list(map(lambda s: simulation.insert(Operation(s)),
+             cmd_list))
     simulation.start()

@@ -3,7 +3,7 @@ from typing import Callable, Mapping, Sequence, Dict, List, Any, Tuple
 from core.entities.artifact import Artifact
 from core.entities.weapon import Weapon
 from core.rules import DNode
-from data.characters.albedo.albedo_draft import *
+from data.characters.albedo.albedo_oo import *
 
 
 class Character(object):
@@ -17,7 +17,7 @@ class Character(object):
     def initialize(self, **configs) -> None:
         if 'name' in configs.keys():
             self.base.choose(configs['name'])
-            self.action.attach_skill(configs['name'])
+            self.action.attach_skill(configs['name'], self)
         if 'lv' in configs.keys() and 'asc' in configs.keys() and self.base.name:
             self.base.set_lv(configs['lv'], configs['asc'])
         return
@@ -38,6 +38,10 @@ class Character(object):
         self.attribute.update_base(self.base)
         self.attribute.update_weapon(self.weapon)
         self.attribute.update_artifact(self.artifact)
+
+    @property
+    def name(self):
+        return self.base.name
 
 
 class CharacterBase(object):
@@ -126,15 +130,18 @@ class CharacterBase(object):
 class CharacterAction(object):
     def __init__(self) -> None:
         '''
-        属性:
-        \tNORMAL_ATK_count: 普通攻击计数\n
-        \tELEM_SKILL_count: 元素战技计数\n
-        \tELEM_BURST_count: 元素爆发计数\n
+        ### 属性:
+        battle action\n
+        \tNORMAL_ATK: Callable\n
+        \tELEM_SKILL: Callable\n
+        \tELEM_BURST: Callable\n
+        \tPASSIVE: Callable\n
+        \tCX: Callable\n
+        numeric action\n
+        \tuse_artifact: Callable\n
+        \tuse_weapon: Callable\n
         '''
         # battle action
-        self.NORMAL_ATK_count: int = 1
-        self.ELEM_SKILL_count: int = 1
-        self.ELEM_BURST_count: int = 1
         self.NORMAL_ATK: Callable = None
         self.ELEM_SKILL: Callable = None
         self.ELEM_BURST: Callable = None
@@ -146,21 +153,20 @@ class CharacterAction(object):
 
     # TODO: 附加技能
 
-    def attach_skill(self, name=''):
-        if name == 'Albedo':
-            self.NORMAL_ATK = Albedo_NORMAL_ATK
-            self.ELEM_SKILL = Albedo_ELEM_SKILL
+    def attach_skill(self, name, character: Character):
+        exec(f'self.NORMAL_ATK = {name}NormATK(character)')
+        exec(f'self.ELEM_SKILL = {name}Elemskill(character)')
 
 
 class CharacterAttribute(object):
     def __init__(self) -> None:
         '''
-        包含面板属性\n
+        ### 包含面板属性\n
         include panel attributes:\n
         \tATK | DEF | HP | EM | ER | CRIT_RATE | CRIT_DMG\n
         \tHEAL_BONUS | HEAL_INCOME | SHIELD_STRENGTH | CD_REDUCTION\n
         \tELEM_DMG... | ELEM_RES...\n
-        和其他隐藏属性\n
+        ### 和其他隐藏属性\n
         and other character attributes:\n
         \tENERGY | STAMINA | STAMINA_CONSUMPTION\n
         \tATK_SPD | MOVE_SPD | INTERRUPT_RES | DMG_REDUCTION\n

@@ -77,6 +77,10 @@ class Simulation(object):
         else:
             return
 
+    def clear_result(self):
+        self.event_log.clear()
+        self.operation_log.clear()
+
     def start(self):
         '''
         每一次模拟配置生成一个实例\n
@@ -84,10 +88,16 @@ class Simulation(object):
         (考虑到例如暴击率的效果每次执行的结果是随机的，暴击率也可以设置成折算为期望收益)
         '''
         print('CALCULATE START!')
+        self.event_log.clear()
+        self.operation_log.clear()
 
-        operation_queue: Queue['Operation'] = PriorityQueue()
+        print('PROCESS COMMAND!')
         active_constraint: Sequence['Constraint'] = []
         active_constraint.extend(self.constraint_track)
+
+        creation_space = CreationSpace()
+
+        operation_queue: Queue['Operation'] = PriorityQueue()
         list(map(lambda op: operation_queue.put(op), self.operation_track))
         while operation_queue.unfinished_tasks > 0:
             op: 'Operation' = operation_queue.get()
@@ -101,5 +111,6 @@ class Simulation(object):
             ev.execute(self)
             self.event_log.append(ev)
             self.event_queue.task_done()
+            creation_space.execute(self, ev)
 
         print('CALCULATE FINISHED!')

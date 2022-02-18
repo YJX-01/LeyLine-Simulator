@@ -2,9 +2,7 @@ from enum import Enum
 
 
 class ElementType(Enum):
-    '''
-    元素类型
-    '''
+    '''元素类型'''
     ANEMO = 1  # 风
     GEO = 2  # 岩
     ELECTRO = 3  # 雷
@@ -17,9 +15,7 @@ class ElementType(Enum):
 
 
 class ElementalReactionType(Enum):
-    '''
-    元素反应类型
-    '''
+    '''元素反应类型'''
     SWIRL = 1  # 扩散
     CRYSTALLIZE = 2  # 结晶
     ELECTRO_CHARGED = 3  # 感电
@@ -39,9 +35,7 @@ class ElementalReactionType(Enum):
 
 
 class WeaponType(Enum):
-    '''
-    武器类型
-    '''
+    '''武器类型'''
     SWORD = 1  # 单手剑
     CLAYMORE = 2  # 双手剑
     POLEARM = 3  # 长柄武器
@@ -50,9 +44,7 @@ class WeaponType(Enum):
 
 
 class NationType(Enum):
-    '''
-    人物所属地区类型
-    '''
+    '''人物所属地区类型'''
     MONDSTADT = 1  # 蒙德
     LIYUE = 2  # 璃月
     INAZUMA = 3  # 稻妻
@@ -65,9 +57,7 @@ class NationType(Enum):
 
 
 class ArtpositionType(Enum):
-    '''
-    圣遗物位置类型
-    '''
+    '''圣遗物位置类型'''
     FLOWER = 1  # 生之花
     PLUME = 2  # 死之羽
     SANDS = 3  # 时之沙
@@ -98,9 +88,8 @@ class StatType(Enum):
 
 
 class SetType(Enum):
-    '''
-    圣遗物套装类型
-    '''
+    '''圣遗物套装类型'''
+    NONE = 0
     GLADIATORS_FINALE = 1  # 角斗士的终幕礼
     JUE_DOU_SHI = 1
     WANDERERS_TROUPE = 2  # 流浪大地的乐团
@@ -177,13 +166,35 @@ class PanelType(Enum):
     PHYSICAL_RES = 30
 
 
+class EventType(Enum):
+    '''事件类型'''
+    NONE = 0
+    COMMAND = 1
+    ACTION = 2
+    DAMAGE = 3
+    CREATION_ACT = 4
+
+
 class DamageType(Enum):
-    '''
-    造成的伤害类型
-    '''
+    '''造成的伤害类型'''
+    NONE = 0
     NORMAL_ATK = 1
     CHARGED_ATK = 2
     PLUNGING_ATK = 3
     ELEM_SKILL = 4
     ELEM_BURST = 5
-    NONE = 6
+
+
+class ActionType(Enum):
+    '''动作类型'''
+    NONE = 0
+    NORMAL_ATK = 1
+    NORMAL_ATK_CHARGE = 2
+    NORMAL_ATK_PLUNGE = 3
+    ELEM_SKILL = 4
+    ELEM_SKILL_SHORT = 5
+    ELEM_SKILL_LONG = 6
+    ELEM_BURST = 7
+
+    JUMP = 10
+    SPRINT = 11
