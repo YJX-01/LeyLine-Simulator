@@ -30,7 +30,7 @@ class DurationConstraint(Constraint):
     def reduce(self, t):
         self.duration -= t
 
-    def __call__(self, event: Event) -> bool:
+    def test(self, event: Event) -> bool:
         if self.func(event) and event.time > self.start+self.duration:
             if self.refreshable:
                 self.start = event.time
@@ -80,7 +80,7 @@ class CounterConstraint(Constraint):
     def full(self) -> bool:
         return self.count == self.capacity
 
-    def __call__(self, log: Sequence[Event]) -> float:
+    def test(self, log: Sequence[Event]) -> float:
         states = [self.func(ev) for ev in log
                   if self.start < ev.time < self.end]
         self.clear()

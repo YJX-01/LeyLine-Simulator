@@ -48,31 +48,13 @@ def elem_burst(count=1):
     return decorate
 
 
-class NormalAttack(object):
-    '''
-    表征普攻对象的基类\n
-    包含来源 等级 伤害特点 倍率 动作时长 后续效果
-    '''
-
-    def __init__(self) -> None:
-        self.type = None
-        self.source = None
-        self.LV = None
-        self.elem_type = None
-        self.action_type = None
-        self.damage_type = None
-        self.action_time = None
-        self.scaler = None
-        self.buffs = None
-
-
 class Skill(object):
     '''
     表征技能对象的基类\n
     包含来源 等级 伤害特点 倍率 动作时长 后续效果 召唤物
     '''
 
-    def __init__(self) -> None:
+    def __init__(self, **configs):
         self.type = None
         self.source = None
         self.LV = None
@@ -83,3 +65,8 @@ class Skill(object):
         self.scaler = None
         self.buffs = None
         self.creations = None
+        self.initialize(**configs)
+
+    def initialize(self, **configs):
+        for k, v in configs.items():
+            self.__setattr__(k, v)

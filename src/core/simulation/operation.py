@@ -1,101 +1,67 @@
-from typing import TYPE_CHECKING, Sequence, Union
-from core.rules.alltypes import EventType
-from .event import Event
-from .constraint import *
+from typing import TYPE_CHECKING
+from core.simulation.event import *
+from core.simulation.constraint import *
+from data.characters import *
 if TYPE_CHECKING:
     from core.simulation import Simulation
 
 
 class Operation(object):
     def __init__(self, command: str) -> None:
-        '''command format: Charchar.skill@time'''
+        '''
+        格式:\n
+        ### 角色.命令(附加条件)@时间\n
+        ### format: character.command(condition)@time
+        角色可以是名字或队伍位置\n
+        附加条件:\n
+        \- : 默认/期望伤害\n
+        \$ : 实际模拟\n
+        \! : 必定暴击\n
+        \? : 必定不暴击
+        '''
         self.command: str = command
         self.source: str = ''
         self.time: float = 0
         self.action: str = ''
+        self.condition: str = ''
         self.parse(command)
-        self.desc: str = ''
-        self.active: bool = False
-        self.events: Sequence[Event] = []
-        self.constraints: Sequence[Constraint] = []
 
     def __lt__(self, other) -> bool:
-        return self.time < other.time if self.time != other.time else self.desc < other.desc
+        return self.time < other.time
 
     def parse(self, command: str):
         self.source, cmd_action = tuple(command.split('.', 1))
         cmd_action, cmd_time = tuple(cmd_action.split('@', 1))
-        self.action = cmd_action
+        if len(cmd_action) == 1:
+            self.action = cmd_action
+        else:
+            self.action = cmd_action.split()[0]
+            self.condition = cmd_action.split()[1]
         self.time = float(cmd_time)
 
-    def work(self, simulation: 'Simulation') -> None:
+    def work(self, simulation: 'Simulation'):
         if self.source.isnumeric():
             self.source = simulation.char_shortcut[int(self.source)]
-        character = simulation.characters[self.source]
-        if self.action == 'A':
-            print('\tCALL CHARACTER ACTION: A')
-            cmd_event = Event(time=self.time,
-                              source='User',
-                              type=EventType.COMMAND,
-                              func=character.action.NORMAL_ATK,
-                              desc=f'cmd.{self.source}.{self.action}')
-            self.events.append(cmd_event)
-        elif self.action == 'E':
-            print('\tCALL CHARACTER ACTION: E')
-            cmd_event = Event(time=self.time,
-                              source='User',
-                              type=EventType.COMMAND,
-                              func=character.action.ELEM_SKILL,
-                              desc=f'cmd.{self.source}.{self.action}')
-            self.events.append(cmd_event)
-        elif self.action == 'Q':
-            print('\tCALL CHARACTER ACTION: Q')
-            cmd_event = Event(time=self.time,
-                              source='User',
-                              type=EventType.COMMAND,
-                              func=character.action.ELEM_BURST,
-                              desc=f'cmd.{self.source}.{self.action}')
-            self.events.append(cmd_event)
-        elif self.action == 'C':
-            def switch_char(simulation: 'Simulation', event: 'Event'):
-                for c in simulation.active_constraint:
-                    if isinstance(c, DurationConstraint) and not c(event):
-                        return
-                print('\t\tswitch character')
-                simulation.onstage = self.source
+        if self.action == 'C':
+            switch_event = SwitchEvent(time=self.time,
+                                       func=self.switch_char,
+                                       desc=f'cmd.{self.source}.{self.action}')
+            simulation.output_log.append(switch_event.prefix_info)
+            simulation.event_queue.put(switch_event)
+        else:
+            self.controller = None
+            exec(f'self.controller = {self.source}_controller')
+            if not self.controller:
+                raise Exception('controller not defined')
+            self.controller(self, simulation)
 
-            print('\tCALL SWITCH CHARACTER ACTION: C')
-            switch_event = Event(time=self.time,
-                                 source='User',
-                                 type=EventType.SWITCH,
-                                 func=switch_char,
-                                 desc=f'cmd.{self.source}.{self.action}')
-            self.events.append(switch_event)
-        print('\tCHARACTER ACTION GENERTATE EVENTS')
-
-    def impose(self, *args: Union[Sequence, Constraint]) -> None:
-        '''
-        impose a array of constraints to the operation\n
-        \t*args: Union[Sequence, Constraint]
-        '''
-        for arg in args:
-            if isinstance(arg, Sequence):
-                self.constraints.extend(arg)
-            elif isinstance(arg, Constraint):
-                self.constraints.append(arg)
-
-    def check(self, simulation: 'Simulation') -> None:
-        '''
-        check whether the operation is active\n
-        refer to the constraints given
-        '''
-        self.active = True
-        return
-
-    def execute(self, simulation: 'Simulation') -> None:
-        self.impose(simulation.active_constraint)
-        self.check(simulation)
-        if not self.active:
-            return
+    def execute(self, simulation: 'Simulation'):
         self.work(simulation)
-        list(map(lambda ev: simulation.event_queue.put(ev), self.events))
+
+    def switch_char(self, simulation: 'Simulation', event: 'Event'):
+        for c in simulation.active_constraint:
+            if isinstance(c, DurationConstraint) and not c(event):
+                return
+            simulation.event_log.append(event.prefix_info +
+                                        f'\n\t\t[detail ]:[ switch char to {self.source} ]')
+            simulation.onstage = self.source

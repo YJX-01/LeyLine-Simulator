@@ -3,7 +3,7 @@ from typing import Callable, Mapping, Sequence, Dict, List, Any, Tuple
 from core.entities.artifact import Artifact
 from core.entities.weapon import Weapon
 from core.rules import DNode
-from data.characters.albedo.albedo_oo import *
+from data.characters import *
 
 
 class Character(object):
@@ -14,14 +14,19 @@ class Character(object):
         self.artifact: Artifact = Artifact()
         self.weapon: Weapon = Weapon()
 
-    def initialize(self, **configs):
+    def set_base(self, **configs):
         if 'name' in configs.keys():
             self.base.choose(configs['name'])
-            self.action.attach_skill(configs['name'], self)
+            self.update()
         if 'lv' in configs.keys() and 'asc' in configs.keys() and self.base.name:
             self.base.set_lv(configs['lv'], configs['asc'])
             self.update()
-        return
+        if self.base.name and self.base.lv:
+            self.action.attach_skill(configs['name'], self)
+    
+    def set_talents(self, norm=1, skill=1, burst=1, cx=0):
+        self.attribute.update_talents(norm, skill, burst, cx, self.base.asc)
+        self.action.attach_skill(self.base.name, self)
 
     def equip(self, *items):
         for item in items:
@@ -129,6 +134,9 @@ class CharacterBase(object):
 
 
 class CharacterAction(object):
+    with open('./docs/constant/SkillConfig.json', 'r') as f:
+        __skill_info: Dict[str, Dict] = json.load(f)
+        
     def __init__(self) -> None:
         '''
         ### 属性:
@@ -151,10 +159,15 @@ class CharacterAction(object):
         # numeric action
         self.use_artifact: Callable = None
         self.use_weapon: Callable = None
-
-    # TODO: 附加技能
+        # scalers
+        self.normatk_scaler: Dict[str, List[float]] = {}
+        self.elemskill_scaler: Dict[str, List[float]] = {}
+        self.elemburst_scaler: Dict[str, List[float]] = {}
 
     def attach_skill(self, name, character: Character):
+        self.normatk_scaler = self.__skill_info[name]['A']
+        self.elemskill_scaler = self.__skill_info[name]['E']
+        self.elemburst_scaler = self.__skill_info[name]['Q']
         exec(f'self.NORMAL_ATK = {name}NormATK(character)')
         exec(f'self.ELEM_SKILL = {name}Elemskill(character)')
         exec(f'self.ELEM_BURST = {name}Elemburst(character)')
@@ -201,6 +214,12 @@ class CharacterAttribute(object):
         self.MOVE_SPD: float = 0
         self.INTERRUPT_RES: float = 0
         self.DMG_REDUCTION: float = 0
+        # talent attributes
+        self.normatk_lv: int = 1
+        self.elemskill_lv: int = 1
+        self.elemburst_lv: int = 1
+        self.passive_lv = 0
+        self.cx_lv: int = 0
 
     def tree_expr(self, stat: str) -> DNode:
         root = DNode(f'Total {stat}', '+')
@@ -316,6 +335,18 @@ class CharacterAttribute(object):
                 else:
                     self.__dict__[sub].insert(
                         DNode(sub_key, '%', sub_num))
+    
+    def update_talents(self, norm, skill, burst, cx, asc):
+        self.normatk_lv = norm
+        self.elemskill_lv = skill
+        self.elemburst_lv = burst
+        self.cx_lv = cx
+        if asc < 3:
+            self.passive_lv = 0
+        elif asc < 5:
+            self.passive_lv = 1
+        else:
+            self.passive_lv = 2
 
 
 # def visualize(a) -> None:

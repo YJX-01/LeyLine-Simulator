@@ -11,6 +11,7 @@ if __name__ == '__main__':
     print('START A SIMPLE SIMULATION!')
     simulation = Simulation()
     simulation.set_character('Albedo', 80, True)
+    simulation.set_talents('Albedo', 6, 6, 6)
     cmd_list = [
         '1.A@1',
         '1.A@2',

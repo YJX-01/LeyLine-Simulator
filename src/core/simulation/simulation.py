@@ -1,6 +1,6 @@
 from queue import PriorityQueue, Queue
 from collections import OrderedDict
-from typing import Sequence, Mapping, Union
+from typing import Sequence, Mapping, Union, List
 from core.entities import *
 from core.rules import *
 from .constraint import *
@@ -37,20 +37,23 @@ class Simulation(object):
 
         self.operation_log: Sequence['Operation'] = []
         self.event_log: Sequence['Event'] = []
+        self.output_log: List[str] = []
         self.onstage: str = ''
+        self.uni_action_constraint: DurationConstraint = None
+        self.uni_switch_constraint: DurationConstraint = None
 
-    def set_character(self, name='', lv=1, asc=False) -> None:
+    def set_character(self, name, lv=1, asc=False) -> None:
         if name not in self.characters.keys() and len(self.characters) <= 4:
             genshin = Character()
-            genshin.initialize(name=name, lv=lv, asc=asc)
+            genshin.set_base(name=name, lv=lv, asc=asc)
             self.characters[name] = genshin
             self.char_state_update()
         elif name in self.characters:
             self.characters[name].base.set_lv(lv, asc)
         else:
             raise Exception('error occur when setting the character')
-
-    def del_characters(self, name=''):
+    
+    def del_characters(self, name):
         if name not in self.characters.keys():
             raise KeyError
         else:
@@ -62,11 +65,14 @@ class Simulation(object):
         self.char_shortcut = dict(zip(range(1, 1+len(self.characters)),
                                       self.characters.keys()))
 
-    def set_artifact(self, name='', artifact=None):
+    def set_artifact(self, name, artifact=None):
         self.characters[name].equip(artifact)
 
-    def set_weapon(self, name='', weapon=None):
+    def set_weapon(self, name, weapon=None):
         self.characters[name].equip(weapon)
+    
+    def set_talents(self, name, norm=1, skill=1, burst=1, cx=0):
+        self.characters[name].set_talents(norm, skill, burst, cx)
 
     def insert(self, obj: Union['Operation', 'Constraint']):
         if isinstance(obj, Operation):
@@ -125,5 +131,8 @@ class Simulation(object):
             self.event_log.append(ev)
             self.event_queue.task_done()
             creation_space.execute(self, ev)
+        
+        for output in self.output_log:
+            print(output)
 
         print('CALCULATE FINISHED!')

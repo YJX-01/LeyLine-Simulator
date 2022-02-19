@@ -3,6 +3,7 @@ from enum import Enum
 
 class ElementType(Enum):
     '''元素类型'''
+    NONE = 0 # 无
     ANEMO = 1  # 风
     GEO = 2  # 岩
     ELECTRO = 3  # 雷
@@ -11,7 +12,6 @@ class ElementType(Enum):
     CRYO = 6  # 冰
     DENDRO = 7  # 草
     PHYSICAL = 8  # 物理
-    NONE = 9  # 无
 
 
 class ElementalReactionType(Enum):
@@ -176,7 +176,20 @@ class EventType(Enum):
     ENERGY = 5
     ELEMENT = 6
     TRY = 7
-    CREATION_ACT = 8
+    CREATION = 8
+    BUFF = 9
+    NUMERIC = 10
+    
+class SkillType(Enum):
+    '''技能类型'''
+    NONE = 0
+    NORMAL_ATK = 1
+    ELEM_SKILL = 2
+    ELEM_BURST = 3
+    PASSIVE = 4
+    CX = 5
+    CREATION_TRIG = 6
+    CREATION_IND = 7
 
 
 class DamageType(Enum):
@@ -196,9 +209,15 @@ class ActionType(Enum):
     NORMAL_ATK_CHARGE = 2
     NORMAL_ATK_PLUNGE = 3
     ELEM_SKILL = 4
-    ELEM_SKILL_SHORT = 5
-    ELEM_SKILL_LONG = 6
+    ELEM_SKILL_HOLD = 6
     ELEM_BURST = 7
 
     JUMP = 10
     SPRINT = 11
+
+class NumericType(Enum):
+    '''数值事件的类型'''
+    NONE = 0
+    DAMAGE = 1
+    HEAL = 2
+    SHIELD = 3
