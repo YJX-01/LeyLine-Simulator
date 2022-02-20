@@ -16,22 +16,38 @@ class ElementType(Enum):
 
 class ElementalReactionType(Enum):
     '''元素反应类型'''
-    SWIRL = 1  # 扩散
-    CRYSTALLIZE = 2  # 结晶
-    ELECTRO_CHARGED = 3  # 感电
-    OVERLOADED = 4  # 超载
-    SUPERCONDUCT = 5  # 超导
-    SHATTERED = 6  # 碎冰
-    FROZEN = 7  # 冻结
-    VAPORIZE = 8  # 蒸发
-    MELT = 9  # 融化
-    BURNING = 10  # 燃烧
-    # unknown
-    DENDRO_HYDRO = 11
-    DENDRO_CRYO = 12
-    DENDRO_ELECTRO = 13
-    DENDRO_GEO = 14
-    DENDRO_ANEMON = 15
+    NONE = 0
+    # 已知
+    SWIRL = 10
+    # 扩散 风->元
+    CRYSTALLIZE = 20
+    # 结晶 岩->元
+    ELECTRO_CHARGED = 34
+    # 感电 水<->雷
+    OVERLOADED = 35
+    # 超载 火<->雷
+    SUPERCONDUCT = 65
+    # 超导 冰<->雷
+    SHATTERED = 86
+    # 碎冰 无->冻
+    FROZEN = 45
+    # 冻结 水<->冰
+    VAPORIZE = 45
+    # 蒸发 水->火
+    VAPORIZE_REVERSE = 54
+    # 蒸发弱 火->水
+    MELT = 56
+    # 融化 火->冰
+    MELT_REVERSE = 65
+    # 融化弱 冰->火
+    BURNING = 57
+    # 燃烧 火<->草
+    # 未知
+    DENDRO_HYDRO = 47
+    DENDRO_CRYO = 67
+    DENDRO_ELECTRO = 37
+    DENDRO_GEO = 27
+    DENDRO_ANEMON = 17
 
 
 class WeaponType(Enum):
@@ -135,11 +151,8 @@ class SetType(Enum):
 
 class PanelType(Enum):
     HP = 1
-    HP_BASE = 2
-    ATK = 3
-    ATK_BASE = 4
-    DEF = 5
-    DEF_BASE = 6
+    ATK = 2
+    DEF = 3
     EM = 7
     ER = 8
     CRIT_RATE = 9

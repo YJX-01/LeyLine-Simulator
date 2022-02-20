@@ -230,6 +230,7 @@ class CharacterAttribute(object):
                     DNode(f'Weapon {stat} Base')
                 ]),
                 DNode(f'{stat} Scalers', '+').extend([
+                    DNode('Base', '', 1),
                     DNode('Artifact Scalers', '+').extend([
                         DNode('Main Stat Scaler', '+'),
                         DNode('Sub Stat Scaler', '+')
@@ -271,7 +272,8 @@ class CharacterAttribute(object):
         if base.EXTRA[0] in ['ATK_PER', 'DEF_PER', 'HP_PER']:
             k = base.EXTRA[0].split('_')[0]
             self.__dict__[k].modify('Ascension Scaler', num=base.EXTRA[1])
-        else:
+        elif base.EXTRA[0]:
+            k, n = base.EXTRA[0], base.EXTRA[1]
             try:
                 self.__dict__[k].modify(f'Character {k} Ascension', num=n)
             except:
@@ -341,13 +343,18 @@ class CharacterAttribute(object):
         self.elemskill_lv = skill
         self.elemburst_lv = burst
         self.cx_lv = cx
-        if asc < 3:
+        if asc < 1:
             self.passive_lv = 0
-        elif asc < 5:
+        elif asc < 4:
             self.passive_lv = 1
         else:
             self.passive_lv = 2
 
+    def connect(self):
+        pass
+    
+    def disconnect(self):
+        pass
 
 # def visualize(a) -> None:
 #     que: List = []

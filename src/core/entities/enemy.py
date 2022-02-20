@@ -1,10 +1,12 @@
 from typing import Dict
+from core.rules.element import ReactionLogic
 from core.rules.alltypes import ElementType
 
 
-class Enemy:
-    def __init__(self) -> None:
-        self.HP = 100
+class Enemy(object):
+    def __init__(self):
+        self.lv: int = 90
+        self.HP: float = 1e9
         self.RES: Dict[ElementType: int] = {
             ElementType.ANEMO: 10,
             ElementType.GEO: 10,
@@ -15,3 +17,5 @@ class Enemy:
             ElementType.DENDRO: 10,
             ElementType.PHYSICAL: 10
         }
+        self.aura = ReactionLogic()
+        self.debuffs = []

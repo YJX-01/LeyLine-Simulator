@@ -26,7 +26,7 @@ class AlbedoElemburst(Skill):
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
                 return
-        if not simulation.uni_action_constraint(event):
+        if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
             return
         if self.cd and not self.cd.test(event):
             return
@@ -43,6 +43,7 @@ class AlbedoElemburst(Skill):
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.05,
                                 func=self.elemburst_damage_event,
+                                scaler=self.scaler[str(self.LV)][0],
                                 desc='Albedo.elemburst.action')
 
         simulation.event_queue.put(action_event)
@@ -87,6 +88,5 @@ class AlbedoElemburst(Skill):
                                      '\n\t\t\t   apply action duration constraint]')
 
     def elemburst_damage_event(self, simulation: 'Simulation', event: 'Event'):
-        s: list = self.scaler[str(self.LV)]
         simulation.output_log.append(event.prefix_info +
-                                     f'\n\t\t[detail ]:[albedo elemburst damage event happen, scaler: {s}]')
+                                     f'\n\t\t[detail ]:[albedo elemburst damage event happen, scaler: {event.scaler}]')

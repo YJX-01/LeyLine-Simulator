@@ -1,6 +1,7 @@
 from random import random
 from typing import TYPE_CHECKING
 from core.entities.creation import *
+from core.entities.panel import EntityPanel
 from core.rules.alltypes import *
 from core.rules.skill import Skill
 from core.simulation.constraint import *
@@ -28,7 +29,7 @@ class AlbedoElemskill(Skill):
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
                 return
-        if not simulation.uni_action_constraint(event):
+        if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
             return
         if self.cd and not self.cd.test(event):
             return
@@ -48,6 +49,7 @@ class AlbedoElemskill(Skill):
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.05,
                                 func=self.elemskill_damage_event,
+                                scaler=self.scaler[str(self.LV)][0],
                                 desc='Albedo.elemskill.damage')
 
         simulation.event_queue.put(action_event)
@@ -85,15 +87,15 @@ class AlbedoElemskill(Skill):
                                      '\n\t\t[detail ]:[create solar isotoma]')
 
     def elemskill_damage_event(self, simulation: 'Simulation', event: 'Event'):
-        s: list = self.scaler[str(self.LV)]
         simulation.output_log.append(event.prefix_info +
-                                     f'\n\t\t[detail ]:[albedo elemskill damage event happen, scaler: {s}]')
+                                     f'\n\t\t[detail ]:[albedo elemskill damage event happen, scaler: {event.scaler}]')
 
 
 class SolarIsotoma(TriggerableCreation):
     def __init__(self, skill: AlbedoElemskill):
         super().__init__()
         self.source = skill
+        self.attr_panel = EntityPanel(skill.source)
         self.start = 0
         self.duration = 30
         self.exist_num = 1
@@ -135,6 +137,7 @@ class TransientBlossom(Skill):
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.05,
                                 func=self.blossom_damage_event,
+                                scaler=self.scaler[0],
                                 desc='Albedo.transientblossom.damage')
 
         extra_ball = int(random() <= 2/3)
@@ -162,9 +165,8 @@ class TransientBlossom(Skill):
         return cd_counter
 
     def blossom_damage_event(self, simulation: 'Simulation', event: 'Event'):
-        s: list = self.scaler
         simulation.output_log.append(event.prefix_info +
-                                     f'\n\t\t[detail ]:[transient blossom damage event happen, scaler: {s}]')
+                                     f'\n\t\t[detail ]:[transient blossom damage event happen, scaler: {event.scaler}]')
 
     @staticmethod
     def elemskill_energy_event(simulation: 'Simulation', event: 'Event'):

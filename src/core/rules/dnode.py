@@ -1,8 +1,8 @@
-from typing import Iterable, List
+from typing import TYPE_CHECKING, Iterable, List
 
 
 class DNode:
-    def __init__(self, key='', func='', num=0) -> None:
+    def __init__(self, key='', func='', num=0):
         self.key: str = key
         self.func: str = func
         self.num: float = num
@@ -11,6 +11,7 @@ class DNode:
             self.child: List[DNode] = []
 
     def __call__(self) -> float:
+        self.leaf: bool = (self.func == '%' or self.func == '')
         if self.leaf:
             if self.func == '':
                 return self.num
@@ -59,6 +60,14 @@ class DNode:
 
     def __eq__(self, __o: object) -> bool:
         return self.key == __o.key
+    
+    def __float__(self):
+        return self()
+    
+    @property
+    def value(self):
+        self()
+        return self.num
 
     @staticmethod
     def EM(em: float) -> float:
@@ -79,7 +88,7 @@ class DNode:
                                   (100+lv_enemy)*(1-def_red)*(1-def_ig))
         return d
 
-    def find(self, key: str) -> object:
+    def find(self, key: str) -> 'DNode':
         if self.key == key:
             return self
         elif self.leaf:
@@ -94,14 +103,14 @@ class DNode:
                 que.extend(c.child)
         raise Exception('not found')
 
-    def insert(self, node: object) -> object:
+    def insert(self, node: 'DNode') -> 'DNode':
         if not self.leaf:
             self.child.append(node)
             return self.find(node.key)
         else:
             raise KeyError
 
-    def extend(self, iterable: Iterable) -> object:
+    def extend(self, iterable: Iterable) -> 'DNode':
         if not self.leaf:
             self.child.extend(iterable)
             return self
@@ -120,8 +129,11 @@ class DNode:
                         return
                 que.extend(p.child)
 
-    def modify(self, key: str, **kwargs) -> object:
-        obj = self.find(key)
+    def modify(self, key: str, **kwargs) -> 'DNode':
+        if key:
+            obj = self.find(key)
+        else:
+            obj = self
         for k, v in kwargs.items():
             obj.__setattr__(k, v)
         return obj

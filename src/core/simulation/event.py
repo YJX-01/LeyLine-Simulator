@@ -1,10 +1,15 @@
 from typing import Callable
+from core.rules.dnode import DNode
 from core.rules.skill import Skill
 from core.rules.alltypes import ElementType, EventType
 
 
 class Event(object):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function
+        '''
         self.type: EventType = EventType(0)
         self.subtype = None
         self.source: object = None
@@ -49,12 +54,20 @@ class Event(object):
 
 class CommandEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function, | cmd, condition
+        '''
         super().__init__(type=EventType.COMMAND, source='User')
         self.cmd: str = ''
         self.condition: str = ''
         self.initialize(**configs)
 
     def fromcommand(self, operation):
+        '''
+        after this function you need to set:\n
+        ### func
+        '''
         self.time = operation.time
         self.cmd = operation.action
         self.condition = operation.condition
@@ -70,10 +83,18 @@ class SwitchEvent(Event):
 
 class ActionEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function
+        '''
         super().__init__(type=EventType.ACTION)
         self.initialize(**configs)
 
     def fromskill(self, skill: Skill):
+        '''
+        after this function you need to set:\n
+        ### time, desc, func
+        '''
         if not isinstance(skill, Skill):
             raise TypeError('should be a skill object')
         self.subtype = skill.action_type
@@ -83,10 +104,21 @@ class ActionEvent(Event):
 
 class DamageEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function | elem, depend, scaler
+        '''
         super().__init__(type=EventType.DAMAGE)
+        self.elem = ElementType(0)
+        self.depend = 'ATK'
+        self.scaler = 0
         self.initialize(**configs)
 
     def fromskill(self, skill: Skill):
+        '''
+        after this function you need to set:\n
+        ### time, desc, func, depend, scaler
+        '''
         if not isinstance(skill, Skill):
             raise TypeError('should be a skill object')
         self.subtype = skill.damage_type
@@ -97,6 +129,10 @@ class DamageEvent(Event):
 
 class EnergyEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function | elem, base, num
+        '''
         super().__init__(type=EventType.ENERGY)
         self.elem: ElementEvent = ElementType(0)
         self.base: int = 0
@@ -122,13 +158,27 @@ class CreationEvent(Event):
         self.initialize(**configs)
 
 
-class BuffEvents(Event):
+class BuffEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function | duration
+        '''
         super().__init__(type=EventType.BUFF)
+        self.duration = None
         self.initialize(**configs)
 
 
-class NumericEvents(Event):
+class NumericEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, time, desc, function | obj
+        '''
         super().__init__(type=EventType.NUMERIC)
+        self.obj: DNode = None
         self.initialize(**configs)
+    
+    @property
+    def prefix_info(self) -> str:
+        return super().prefix_info+f'\n\t\t[number ]:[ {self.obj.value} ]'

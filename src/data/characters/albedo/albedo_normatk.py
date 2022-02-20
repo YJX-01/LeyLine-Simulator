@@ -26,7 +26,7 @@ class AlbedoNormATK(Skill):
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
                 return
-        if not simulation.uni_action_constraint(Event):
+        if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
             return
         act_cnt: int = self.norm_cnt.test(simulation.event_log)
 
@@ -38,6 +38,7 @@ class AlbedoNormATK(Skill):
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.2,
                                 func=self.normatk_damage_event,
+                                scaler=self.scaler[str(self.LV)][act_cnt],
                                 desc=f'Albedo.damage.normatk.{act_cnt}')
 
         simulation.event_queue.put(action_event)
@@ -67,9 +68,8 @@ class AlbedoNormATK(Skill):
                                      '\n\t\t\t   apply action duration constraint]')
 
     def normatk_damage_event(self, simulation: 'Simulation', event: 'Event'):
-        s = self.scaler[str(self.LV)][self.norm_cnt.test(simulation.event_log)]
         simulation.output_log.append(event.prefix_info +
-                                     f'\n\t\t[detail ]:[albedo normal atk damage event happen, scaler: {s}]')
+                                     f'\n\t\t[detail ]:[albedo normal atk damage event happen, scaler: {event.scaler}]')
 
     @staticmethod
     def normatk_energy_event(simulation: 'Simulation', event: 'Event'):
