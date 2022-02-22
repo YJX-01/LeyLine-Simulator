@@ -16,52 +16,57 @@ class AlbedoElemskill(Skill):
         super().__init__(
             type=SkillType.ELEM_SKILL,
             source=albedo,
+            sourcename=albedo.name,
             LV=albedo.attribute.elemskill_lv,
             elem_type=ElementType.GEO,
             action_type=ActionType.ELEM_SKILL,
             damage_type=DamageType.ELEM_SKILL,
             scaler=albedo.action.elemskill_scaler,
         )
-        self.creations = SolarIsotoma(self)
         self.cd = None
+        self.creations: Creation = SolarIsotoma(self)
 
-    def __call__(self, simulation: 'Simulation', event: 'Event') -> None:
+    def __call__(self, simulation: 'Simulation', event: 'CommandEvent') -> None:
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
                 return
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
             return
         if self.cd and not self.cd.test(event):
-            return
+                return
         self.cd = self.elemskill_cd(event.time)
+        mode = event.mode    
+        
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 func=self.elemskill_action_event,
                                 desc=f'Albedo.elemskill.action')
+        simulation.event_queue.put(action_event)
 
+        self.creations.mode = mode
         creation_event = CreationEvent()
         creation_event.initialize(time=event.time+0.05,
                                   source=self,
+                                  sourcename=self.sourcename,
                                   subtype='creation',
                                   func=self.elemskill_creation_event,
                                   desc=f'Albedo.elemskill.creation')
+        simulation.event_queue.put(creation_event)
 
+        if mode == '0':
+            return
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.05,
-                                func=self.elemskill_damage_event,
                                 scaler=self.scaler[str(self.LV)][0],
+                                mode=mode,
                                 desc='Albedo.elemskill.damage')
-
-        simulation.event_queue.put(action_event)
-        simulation.event_queue.put(creation_event)
         simulation.event_queue.put(damage_event)
+
 
     @staticmethod
     def elemskill_cd(start):
         def f(ev: Event):
             if ev.type == EventType.COMMAND and ev.desc == 'CMD.Albedo.E':
-                return True
-            elif ev.type == EventType.ACTION and isinstance(ev.source, AlbedoElemskill):
                 return True
             else:
                 return False
@@ -75,20 +80,12 @@ class AlbedoElemskill(Skill):
             event.time, 0.1,
             lambda ev: True if ev.type == EventType.COMMAND else False
         )
-        simulation.output_log.append(event.prefix_info +
-                                     '\n\t\t[detail ]:[albedo elemskill action event happen' +
-                                     '\n\t\t\t   apply action duration constraint]')
+        return
 
     def elemskill_creation_event(self, simulation: 'Simulation', event: 'Event'):
         creation_space = CreationSpace()
         self.creations.initialize(event.time)
         creation_space.insert(self.creations)
-        simulation.output_log.append(event.prefix_info +
-                                     '\n\t\t[detail ]:[create solar isotoma]')
-
-    def elemskill_damage_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.output_log.append(event.prefix_info +
-                                     f'\n\t\t[detail ]:[albedo elemskill damage event happen, scaler: {event.scaler}]')
 
 
 class SolarIsotoma(TriggerableCreation):
@@ -124,34 +121,40 @@ class TransientBlossom(Skill):
         super().__init__(
             type=SkillType.CREATION_TRIG,
             source=solar,
+            sourcename=solar.source.sourcename,
             elem_type=ElementType.GEO,
             action_type=ActionType.ELEM_SKILL,
             damage_type=DamageType.ELEM_SKILL,
             scaler=solar.scaler)
-        self.cd = self.blossom_cd(solar.start-1)
+        self.cd = self.blossom_cd(solar.start-2)
 
     def __call__(self, simulation: 'Simulation', event: 'Event') -> None:
         if not self.cd.test(event):
             return
-        self.cd = self.blossom_cd(event.time)
+        mode = self.source.mode
+        
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.05,
-                                func=self.blossom_damage_event,
-                                scaler=self.scaler[0],
+                                scaler=self.scaler[1],
+                                mode=mode,
                                 desc='Albedo.transientblossom.damage')
+        simulation.event_queue.put(damage_event)
 
-        extra_ball = int(random() <= 2/3)
+        if mode == '$':
+            extra_ball = int(random() <= 2/3)
+        else:
+            extra_ball = 2/3
         energy_event = EnergyEvent()
         energy_event.initialize(time=event.time+1,
                                 source=self,
+                                sourcename=self.sourcename,
                                 func=self.elemskill_energy_event,
                                 desc='Albedo.energy',
                                 elem=ElementType.GEO,
                                 base=1,
                                 num=1+extra_ball)
-
-        simulation.event_queue.put(damage_event)
         simulation.event_queue.put(energy_event)
+
 
     @staticmethod
     def blossom_cd(start):
@@ -160,17 +163,12 @@ class TransientBlossom(Skill):
                 return True
             else:
                 return False
+            
         cd_counter = DurationConstraint(start, 2, f)
         cd_counter.refresh()
         return cd_counter
 
-    def blossom_damage_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.output_log.append(event.prefix_info +
-                                     f'\n\t\t[detail ]:[transient blossom damage event happen, scaler: {event.scaler}]')
-
     @staticmethod
     def elemskill_energy_event(simulation: 'Simulation', event: 'Event'):
-        simulation.output_log.append(event.prefix_info +
-                                     '\n\t\t[detail ]:[elem skill create element particles]')
         for name, character in simulation.characters.items():
             character.action.ELEM_BURST.receive_energy(simulation, event)

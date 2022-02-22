@@ -11,7 +11,7 @@ if __name__ == '__main__':
     print('START A SIMPLE SIMULATION!')
     simulation = Simulation()
     simulation.set_show_what('damage', 'numeric')
-    
+
     simulation.set_character('Albedo', 80, True)
     simulation.set_talents('Albedo', 6, 6, 6)
     w = Weapon()
@@ -30,7 +30,7 @@ if __name__ == '__main__':
         'QIAN_YAN@CIRCLET@[HP_PER]@[EM:19,ER:18,DEF_CONST:10,ATK_CONST:25,]@LV20@STAR5;')
     arts.equip(p1, p2, p3, p4, p5)
     simulation.set_artifact('Albedo', arts)
-    
+
     cmd_list = [
         '1.A@1',
         '1.A@2',
@@ -45,8 +45,13 @@ if __name__ == '__main__':
         '1.A@12',
         '1.E@13',
         '1.Q@14',
-        '1.A@15'
+        '1.A@15',
+        '1.S@16'
     ]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
+    import time
+    t1 = time.perf_counter()
     simulation.start()
+    t2 = time.perf_counter()
+    print(1/(t2-t1))

@@ -3,8 +3,9 @@ from typing import TYPE_CHECKING, List, Tuple, Mapping
 from core.rules.dnode import DNode
 from core.rules.alltypes import DamageType, ElementalReactionType, ElementType
 from core.entities.creation import Creation
+from core.entities.buff import *
 from core.entities.enemy import Enemy
-from core.entities.panel import EntityPanel, BuffPanel
+from core.entities.panel import EntityPanel
 from core.entities.character import Character
 from core.simulation.event import *
 if TYPE_CHECKING:
@@ -32,26 +33,33 @@ class NumericController(object):
 
     def __init__(self):
         self.enemy = Enemy()
-        self.active_buffs = []
-        self.triggers = []
+        self.dynamic_buffs_attr = []
+        self.dynamic_buffs_dmg = []
+        self.const_buffs_attr = []
+        self.const_buffs_dmg = []
         self.char_num_log = {}
         self.damage_num_log = {}
         self.heal_num_log = {}
         self.shield_num_log = {}
+        self.clock_time = 0.1
 
     def initialize(self, simulation: 'Simulation'):
         self.__init__()
-        self.character_record(simulation.characters)
+        self.character_record_init(simulation.characters)
+        self.triggers_init(simulation)
 
     def execute(self, simulation: 'Simulation', event: 'Event'):
-        if event.type == EventType.TRY:
-            if event.subtype == 'init':
-                self.initialize(simulation)
-                self.clock(simulation, event)
-            elif event.subtype == 'num_clock':
-                self.clock(simulation, event)
-                self.character_info_enquire()
-        elif event.type == EventType.DAMAGE:
+        if event.type == EventType.TRY and event.subtype == 'init':
+            self.initialize(simulation)
+            return
+
+        if event.time > simulation.clock:
+            while(event.time > simulation.clock):
+                self.refresh(simulation.clock)
+                self.character_info_enquire(simulation)
+                simulation.clock += self.clock_time
+
+        if event.type == EventType.DAMAGE:
             damage = AMP_DMG()
             damage.connect(event)
             source = event.source.source
@@ -61,19 +69,15 @@ class NumericController(object):
             elif isinstance(source, Creation):
                 damage.connect(source.attr_panel)
 
-            def inform(simulation, event):
-                simulation.output_log.append(event.prefix_info)
-
             simulation.event_queue.put(NumericEvent(
                 time=event.time,
-                subtype='DAMAGE',
-                source='Controller',
+                subtype='damage',
+                sourcename='Controller',
                 obj=damage.root,
                 desc=event.desc,
-                func=inform
             ))
 
-    def initialize(self, simulation: 'Simulation'):
+    def triggers_init(self, simulation: 'Simulation'):
         for character in simulation.characters:
             # TODO call all the passive, constellation
             # weapon and artifact passive buff
@@ -81,23 +85,21 @@ class NumericController(object):
             # TODO register all the triggerable talent into triggers
             pass
 
-    def character_record(self, characters: Mapping):
+    def character_record_init(self, characters: Mapping):
         self.char_num_log = dict.fromkeys(characters.keys())
         for k in self.char_num_log:
             self.char_num_log[k] = dict.fromkeys(self.__interest_data)
             for in_k in self.__interest_data:
                 self.char_num_log[k][in_k] = []
 
-    def character_info_enquire(self):
+    def refresh(self, time):
         pass
 
-    def clock(self, simulation: 'Simulation', event: 'Event'):
-        if event.subtype == 'num_clock':
-            clock_time = 0.1
-            simulation.event_queue.put(
-                TryEvent(time=event.time+clock_time, subtype='num_clock'))
-        elif event.subtype == 'init':
-            simulation.event_queue.put(TryEvent(time=0, subtype='num_clock'))
+    def character_info_enquire(self, simulation: 'Simulation'):
+        for name, character in simulation.characters.items():
+            for in_k in self.__interest_data:
+                attr_node = getattr(character.attribute, in_k)
+                self.char_num_log[name][in_k].append(attr_node())
 
 
 class AMP_DMG(object):

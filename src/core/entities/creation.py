@@ -13,6 +13,7 @@ class Creation(object):
         self.scaler = None
         self.skills = None
         self.buffs = None
+        self.mode = None
 
 
 class TriggerableCreation(Creation):

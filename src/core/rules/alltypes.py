@@ -234,3 +234,12 @@ class NumericType(Enum):
     DAMAGE = 1
     HEAL = 2
     SHIELD = 3
+
+class BuffType(Enum):
+    '''buff的类型'''
+    NONE = 0
+    ATTR = 1
+    DMG = 2
+    ENEMY = 3
+    INFUSE = 4
+    OTHER = 5

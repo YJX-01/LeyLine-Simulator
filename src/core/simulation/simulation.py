@@ -40,6 +40,7 @@ class Simulation(object):
         self.event_log: Sequence['Event'] = []
         self.output_log: List[str] = []
         self.onstage: str = ''
+        self.clock: float = 0
         self.uni_action_constraint: DurationConstraint = None
         self.uni_switch_constraint: DurationConstraint = None
 
@@ -82,8 +83,8 @@ class Simulation(object):
             if not isinstance(arg, str):
                 continue
             if arg == 'all':
-                for v in self.show_option.values():
-                    v = True
+                self.show_option = dict.fromkeys(
+                    list(EventType.__members__.keys()), True)
                 break
             self.show_option[arg.upper()] = True
         for k, v in kwargs.items():
@@ -147,15 +148,15 @@ class Simulation(object):
             ev: 'Event' = self.event_queue.get()
             if ev.time > endtime:
                 break
-            creation_space.execute(self, ev)
             numeric_controller.execute(self, ev)
+            creation_space.execute(self, ev)
             ev.execute(self)
             self.event_log.append(ev)
             self.event_queue.task_done()
 
-        not_show = [k for k, b in self.show_option.items() if not b]
+        show_what = [k for k, b in self.show_option.items() if b]
         for output in self.output_log:
-            if all([s not in output for s in not_show]):
+            if sum([s in output for s in show_what]):
                 print(output)
 
         print('CALCULATE FINISHED!')

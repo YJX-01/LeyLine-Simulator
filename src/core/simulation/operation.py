@@ -14,10 +14,11 @@ class Operation(object):
         ### format: character.command(condition)@time
         角色可以是名字或队伍位置\n
         附加条件:\n
-        \- : 默认/期望伤害\n
+        \- : 默认/期望伤害(不加符号)\n
         \$ : 实际模拟\n
         \! : 必定暴击\n
-        \? : 必定不暴击
+        \? : 必定不暴击\n
+        0 : 空挥 0伤害
         '''
         self.command: str = command
         self.source: str = ''
@@ -45,8 +46,7 @@ class Operation(object):
         if self.action == 'C':
             switch_event = SwitchEvent(time=self.time,
                                        func=self.switch_char,
-                                       desc=f'cmd.{self.source}.{self.action}')
-            simulation.output_log.append(switch_event.prefix_info)
+                                       desc=f'CMD.{self.source}.{self.action}')
             simulation.event_queue.put(switch_event)
         else:
             self.controller = None
@@ -62,6 +62,4 @@ class Operation(object):
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c(event):
                 return
-            simulation.event_log.append(event.prefix_info +
-                                        f'\n\t\t[detail ]:[ switch char to {self.source} ]')
-            simulation.onstage = self.source
+        simulation.onstage = self.source

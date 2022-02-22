@@ -1,4 +1,5 @@
 from functools import wraps
+from core.rules.alltypes import *
 
 
 def normal_atk(count=1):
@@ -51,20 +52,32 @@ def elem_burst(count=1):
 class Skill(object):
     '''
     表征技能对象的基类\n
-    包含来源 等级 伤害特点 倍率 动作时长 后续效果 召唤物
+    包含:\n
+    type: SkillType 技能类型
+    source: object 源对象
+    sourcename: str 源对象名字
+    LV: int 等级
+    elem_type: ElementType 
+    action_type: ActionType 
+    damage_type: DamageType 
+    action_time: list 动作时长
+    scaler: dict 倍率
+    creations: object 召唤物
+    parallel: object 同级对象
     '''
 
     def __init__(self, **configs):
-        self.type = None
-        self.source = None
-        self.LV = None
-        self.elem_type = None
-        self.action_type = None
-        self.damage_type = None
-        self.action_time = None
-        self.scaler = None
-        self.buffs = None
-        self.creations = None
+        self.type: SkillType = None
+        self.source: object = None
+        self.sourcename: str = None
+        self.LV: int = 0
+        self.elem_type: ElementType = None
+        self.action_type: ActionType = None
+        self.damage_type: DamageType = None
+        self.action_time: list = None
+        self.scaler: dict = None
+        self.creations: object = None
+        self.parallel: object = None
         self.initialize(**configs)
 
     def initialize(self, **configs):
