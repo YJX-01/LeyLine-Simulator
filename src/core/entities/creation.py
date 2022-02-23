@@ -39,6 +39,8 @@ class CreationSpace(object):
         return cls.__instance
 
     def __init__(self):
+        if hasattr(self, 'creations'):
+            return
         self.creations: Sequence[Creation] = []
 
     def execute(self, simulation, event):
@@ -48,7 +50,7 @@ class CreationSpace(object):
     def insert(self, creation: Creation):
         n, old_i, old_start = 0, 0, 10000
         for i, c in enumerate(self.creations):
-            if isinstance(c, creation):
+            if isinstance(c, Creation):
                 old_i = i if c.start < old_start else old_i
                 n += 1
         if n < creation.exist_num:

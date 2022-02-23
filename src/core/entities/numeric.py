@@ -6,7 +6,6 @@ from core.entities.creation import Creation
 from core.entities.buff import *
 from core.entities.enemy import Enemy
 from core.entities.panel import EntityPanel
-from core.entities.character import Character
 from core.simulation.event import *
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
@@ -32,42 +31,53 @@ class NumericController(object):
     ]
 
     def __init__(self):
+        if hasattr(self, 'enemy'):
+            return
         self.enemy = Enemy()
-        self.dynamic_buffs_attr = []
-        self.dynamic_buffs_dmg = []
-        self.const_buffs_attr = []
-        self.const_buffs_dmg = []
-        self.char_num_log = {}
-        self.damage_num_log = {}
-        self.heal_num_log = {}
-        self.shield_num_log = {}
+        self.dynamic_buffs_attr: List[Buff] = []
+        self.dynamic_buffs_dmg: List[Buff] = []
+        self.const_buffs_attr: List[Buff] = []
+        self.const_buffs_dmg: List[Buff] = []
+        self.char_attr_log = {}
+        self.onstage_log = {}
+        self.dmg_log = {}
+        self.heal_log = {}
+        self.shield_log = {}
         self.clock_time = 0.1
-
-    def initialize(self, simulation: 'Simulation'):
-        self.__init__()
-        self.character_record_init(simulation.characters)
-        self.triggers_init(simulation)
 
     def execute(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
-            self.initialize(simulation)
+            self.__init__()
+            self.character_record_init(simulation.characters)
+            self.triggers_init(simulation)
             return
 
         if event.time > simulation.clock:
             while(event.time > simulation.clock):
-                self.refresh(simulation.clock)
+                self.refresh(simulation)
                 self.character_info_enquire(simulation)
                 simulation.clock += self.clock_time
 
+        self.triggers_call(simulation, event)
         if event.type == EventType.DAMAGE:
             damage = AMP_DMG()
             damage.connect(event)
+
             source = event.source.source
-            if isinstance(source, Character):
+            if hasattr(source, 'attr_panel'):
+                damage.connect(source.attr_panel)
+            else:
                 panel = EntityPanel(source)
                 damage.connect(panel)
-            elif isinstance(source, Creation):
-                damage.connect(source.attr_panel)
+
+            buffs = [b for b in self.const_buffs_dmg
+                     if b.trigger(event.time, event) and
+                     (not b.target_path or b.target_path == event.sourcename)]
+            buffs.extend([b for b in self.dynamic_buffs_dmg
+                          if b.trigger(event.time, event) and
+                          (not b.target_path or b.target_path == event.sourcename)])
+            for b in buffs:
+                damage.connect(b)
 
             simulation.event_queue.put(NumericEvent(
                 time=event.time,
@@ -77,29 +87,67 @@ class NumericController(object):
                 desc=event.desc,
             ))
 
+    def insert_to(self, buff: Buff, type: str, simulation: 'Simulation'):
+        '''
+        insert buff into the controller\n
+        dynamic_attr | da\n
+        dynamic_dmg | dd\n
+        const_attr | ca\n
+        const_dmg | cd\n
+        '''
+        if type == 'dynamic_attr' or type == 'da':
+            if buff not in self.dynamic_buffs_attr:
+                self.dynamic_buffs_attr.append(buff)
+                simulation.characters[buff.target_path[0]
+                                      ].attribute.connect(buff)
+        elif type == 'dynamic_dmg' or type == 'dd':
+            if buff not in self.dynamic_buffs_dmg:
+                self.dynamic_buffs_dmg.append(buff)
+        elif type == 'const_attr' or type == 'ca':
+            if buff not in self.const_buffs_attr:
+                self.const_buffs_attr.append(buff)
+                simulation.characters[buff.target_path[0]
+                                      ].attribute.connect(buff)
+        elif type == 'const_dmg' or type == 'cd':
+            if buff not in self.const_buffs_dmg:
+                self.const_buffs_dmg.append(buff)
+
     def triggers_init(self, simulation: 'Simulation'):
-        for character in simulation.characters:
+        for name, character in simulation.characters.items():
             # TODO call all the passive, constellation
             # weapon and artifact passive buff
 
             # TODO register all the triggerable talent into triggers
-            pass
+            for passive in character.action.PASSIVE:
+                passive(simulation, TryEvent(subtype='init'))
 
     def character_record_init(self, characters: Mapping):
-        self.char_num_log = dict.fromkeys(characters.keys())
-        for k in self.char_num_log:
-            self.char_num_log[k] = dict.fromkeys(self.__interest_data)
+        self.char_attr_log = dict.fromkeys(characters.keys())
+        for k in self.char_attr_log:
+            self.char_attr_log[k] = dict.fromkeys(self.__interest_data)
             for in_k in self.__interest_data:
-                self.char_num_log[k][in_k] = []
+                self.char_attr_log[k][in_k] = []
 
-    def refresh(self, time):
-        pass
+    def refresh(self, simulation: 'Simulation'):
+        time = simulation.clock
+        for b in self.dynamic_buffs_attr:
+            if b.constraint.end < time:
+                self.dynamic_buffs_attr.remove(b)
+                simulation.characters[b.target_path[0]].attribute.disconnect(b)
+        for b in self.dynamic_buffs_dmg:
+            if b.constraint.end < time:
+                self.dynamic_buffs_dmg.remove(b)
+
+    def triggers_call(self, simulation: 'Simulation', event: 'Event'):
+        for name, character in simulation.characters.items():
+            for passive in character.action.PASSIVE:
+                passive(simulation, event)
 
     def character_info_enquire(self, simulation: 'Simulation'):
         for name, character in simulation.characters.items():
             for in_k in self.__interest_data:
                 attr_node = getattr(character.attribute, in_k)
-                self.char_num_log[name][in_k].append(attr_node())
+                self.char_attr_log[name][in_k].append(attr_node())
 
 
 class AMP_DMG(object):

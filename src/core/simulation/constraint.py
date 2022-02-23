@@ -5,8 +5,24 @@ from core.simulation.event import Event
 class Constraint(object):
     '''表示约束条件的基类'''
 
-    def __init__(self, func: Callable = None):
+    def __init__(self, start, duration=0, func: Callable = None):
+        self.start: float = start
+        self.duration: float = duration
         self.func: Callable = func
+
+    @property
+    def exist_time(self) -> tuple:
+        return (self.start, self.start+self.duration)
+
+    @property
+    def end(self) -> float:
+        return self.start+self.duration
+
+    def test(self, *args):
+        if not self.func:
+            return True
+        else:
+            return self.func(*args)
 
 
 class DurationConstraint(Constraint):
@@ -19,9 +35,7 @@ class DurationConstraint(Constraint):
         '''
         func是筛选目标类型的函数
         '''
-        super().__init__(func)
-        self.start = start
-        self.duration = duration
+        super().__init__(start, duration, func)
         self.refreshable = False
 
     def refresh(self, flag=True):
@@ -31,7 +45,7 @@ class DurationConstraint(Constraint):
         self.duration -= t
 
     def test(self, event: Event) -> bool:
-        if self.func(event) and event.time > self.start+self.duration:
+        if not self.func or (self.func(event) and event.time > self.end):
             if self.refreshable:
                 self.start = event.time
             return True
@@ -45,28 +59,26 @@ class CounterConstraint(Constraint):
     默认从零计数
     '''
 
-    def __init__(self, start=0, end=0, capacity=0, func: Callable[[Any], Union[float, int]] = None):
+    def __init__(self, start=0, duration=0, capacity=0, func: Callable[[Any], Union[float, int]] = None):
         '''
         设定\n
         ## start, end, capacity, func\n
         func是对目标类型进行计数判断的函数
         '''
-        super().__init__(func)
-        self.start = start
-        self.end = end
+        super().__init__(start, duration, func)
         self.count = 0
         self.capacity = capacity
         self.circulative = False
 
-    def set(self, start=0, end=0, capacity=0):
+    def set(self, start=0, duration=0, capacity=0):
         self.start = start
-        self.end = end
+        self.duration = duration
         self.capacity = capacity
 
     def circulate(self, flag=True):
         self.circulative = flag
 
-    def receive(self, cnt):
+    def receive(self, cnt: float):
         self.count += cnt
         self.count = max(0, self.count)
         if self.circulative:
@@ -75,6 +87,10 @@ class CounterConstraint(Constraint):
 
     def clear(self):
         self.count = 0
+
+    def reduce(self, cnt: float):
+        self.count -= cnt
+        self.count = max(0, self.count)
 
     @property
     def full(self) -> bool:

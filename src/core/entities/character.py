@@ -23,7 +23,7 @@ class Character(object):
             self.update()
         if self.base.name and self.base.lv:
             self.action.attach_skill(configs['name'], self)
-    
+
     def set_talents(self, norm=1, skill=1, burst=1, cx=0):
         self.attribute.update_talents(norm, skill, burst, cx, self.base.asc)
         self.action.attach_skill(self.base.name, self)
@@ -136,7 +136,7 @@ class CharacterBase(object):
 class CharacterAction(object):
     with open('./docs/constant/SkillConfig.json', 'r') as f:
         __skill_info: Dict[str, Dict] = json.load(f)
-        
+
     def __init__(self) -> None:
         '''
         ### 属性:
@@ -154,8 +154,8 @@ class CharacterAction(object):
         self.NORMAL_ATK: Callable = None
         self.ELEM_SKILL: Callable = None
         self.ELEM_BURST: Callable = None
-        self.PASSIVE: Callable = None
-        self.CX: Callable = None
+        self.PASSIVE: List[Callable] = []
+        self.CX: List[Callable] = []
         # numeric action
         self.use_artifact: Callable = None
         self.use_weapon: Callable = None
@@ -171,6 +171,11 @@ class CharacterAction(object):
         exec(f'self.NORMAL_ATK = {name}NormATK(character)')
         exec(f'self.ELEM_SKILL = {name}Elemskill(character)')
         exec(f'self.ELEM_BURST = {name}Elemburst(character)')
+        for i in range(character.attribute.passive_lv+1):
+            if i:
+                exec(f'self.PASSIVE.append({name}Passive{i}(character))')
+        for i in range(character.attribute.cx_lv+1):
+            pass
 
 
 class CharacterAttribute(object):
@@ -277,7 +282,8 @@ class CharacterAttribute(object):
             try:
                 self.__dict__[k].modify(f'Character {k} Ascension', num=n)
             except:
-                self.__dict__[k].insert(DNode(f'Character {k} Ascension', num=n))
+                self.__dict__[k].insert(
+                    DNode(f'Character {k} Ascension', num=n))
 
     def update_weapon(self, weapon: Weapon):
         self.ATK.modify('Weapon ATK Base', num=weapon.base.ATK)
@@ -337,7 +343,7 @@ class CharacterAttribute(object):
                 else:
                     self.__dict__[sub].insert(
                         DNode(sub_key, '%', sub_num))
-    
+
     def update_talents(self, norm, skill, burst, cx, asc):
         self.normatk_lv = norm
         self.elemskill_lv = skill
@@ -350,11 +356,25 @@ class CharacterAttribute(object):
         else:
             self.passive_lv = 2
 
-    def connect(self):
-        pass
-    
-    def disconnect(self):
-        pass
+    def connect(self, buff: Buff):
+        tar_node = getattr(self, buff.target_path[1])
+        for a in buff.adds:
+            try:
+                tar_node.find(a[1].key)
+            except:
+                tar_node.find(a[0]).insert(a[1])
+            else:
+                tar_node.modify(a[1].key,
+                                func=a[1].func,
+                                num=a[1].num,
+                                child=a[1].child)
+        for c in buff.changes:
+            tar_node.modify(c[0], num=c[1])
+
+    def disconnect(self, buff: Buff):
+        tar_node = getattr(self, buff.target_path[1])
+        for a in buff.adds:
+            tar_node.remove(a[1].key)
 
 # def visualize(a) -> None:
 #     que: List = []

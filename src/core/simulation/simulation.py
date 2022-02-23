@@ -27,6 +27,8 @@ class Simulation(object):
         \tset_artifact(name, artifact)\n
         \tset_weapon(name, weapon)\n
         '''
+        if hasattr(self, 'characters'):
+            return
         self.characters: OrderedDict[str, Character] = OrderedDict()
         self.operation_track: Sequence['Operation'] = []
         self.constraint_track: Sequence['Constraint'] = []
@@ -128,7 +130,6 @@ class Simulation(object):
         creation_space = CreationSpace()
         creation_space.clear()
         numeric_controller = NumericController()
-        numeric_controller.initialize(self)
 
         print('PROCESS COMMAND!')
         active_constraint: Sequence['Constraint'] = []
