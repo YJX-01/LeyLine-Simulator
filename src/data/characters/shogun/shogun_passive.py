@@ -4,8 +4,7 @@ from core.entities.numeric import NumericController
 from core.rules.alltypes import SkillType, EventType, ActionType
 from core.rules.skill import Skill
 from core.simulation.constraint import DurationConstraint
-from core.simulation.event import Event, TryEvent
-from .shogun_elemburst import ChakraDesiderata
+from core.simulation.event import Event
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
     from core.entities.character import Character

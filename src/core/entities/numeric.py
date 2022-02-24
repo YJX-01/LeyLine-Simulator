@@ -40,6 +40,7 @@ class NumericController(object):
         self.const_buffs_dmg: List[Buff] = []
         self.char_attr_log = {}
         self.onstage_log = {}
+        self.energy_log = {}
         self.dmg_log = {}
         self.heal_log = {}
         self.shield_log = {}
@@ -48,7 +49,7 @@ class NumericController(object):
     def execute(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
             self.__init__()
-            self.character_record_init(simulation.characters)
+            self.log_init(simulation.characters)
             self.triggers_init(simulation)
             return
 
@@ -71,21 +72,23 @@ class NumericController(object):
                 damage.connect(panel)
 
             buffs = [b for b in self.const_buffs_dmg
-                     if b.trigger(event.time, event) and
-                     (not b.target_path or b.target_path == event.sourcename)]
+                     if b.trigger(simulation, event) and
+                     (not b.target_path or event.sourcename in b.target_path)]
             buffs.extend([b for b in self.dynamic_buffs_dmg
-                          if b.trigger(event.time, event) and
-                          (not b.target_path or b.target_path == event.sourcename)])
+                          if b.trigger(simulation, event) and
+                          (not b.target_path or event.sourcename in b.target_path)])
             for b in buffs:
                 damage.connect(b)
 
             simulation.event_queue.put(NumericEvent(
                 time=event.time,
-                subtype='damage',
+                subtype=event.subtype,
                 sourcename='Controller',
                 obj=damage.root,
                 desc=event.desc,
             ))
+            self.dmg_log[event.sourcename][event.subtype.name].append(
+                (event.time, damage.root()))
 
     def insert_to(self, buff: Buff, type: str, simulation: 'Simulation'):
         '''
@@ -118,15 +121,23 @@ class NumericController(object):
             # weapon and artifact passive buff
 
             # TODO register all the triggerable talent into triggers
+            ev = TryEvent(subtype='init')
             for passive in character.action.PASSIVE:
-                passive(simulation, TryEvent(subtype='init'))
+                passive(simulation, ev)
+            character.weapon.work(simulation, ev)
+            character.artifact.work(simulation, ev)
 
-    def character_record_init(self, characters: Mapping):
+    def log_init(self, characters: Mapping):
         self.char_attr_log = dict.fromkeys(characters.keys())
         for k in self.char_attr_log:
             self.char_attr_log[k] = dict.fromkeys(self.__interest_data)
+            self.energy_log[k] = []
+            self.onstage_log[k] = []
+            self.dmg_log[k] = dict.fromkeys(DamageType.__members__.keys())
             for in_k in self.__interest_data:
                 self.char_attr_log[k][in_k] = []
+            for type_k in DamageType.__members__.keys():
+                self.dmg_log[k][type_k] = []
 
     def refresh(self, simulation: 'Simulation'):
         time = simulation.clock
@@ -134,6 +145,8 @@ class NumericController(object):
             if b.constraint.end < time:
                 self.dynamic_buffs_attr.remove(b)
                 simulation.characters[b.target_path[0]].attribute.disconnect(b)
+            if b.trigger:
+                b.trigger(simulation)
         for b in self.dynamic_buffs_dmg:
             if b.constraint.end < time:
                 self.dynamic_buffs_dmg.remove(b)
@@ -142,9 +155,14 @@ class NumericController(object):
         for name, character in simulation.characters.items():
             for passive in character.action.PASSIVE:
                 passive(simulation, event)
+            character.weapon.work(simulation, event)
+            character.artifact.work(simulation, event)
 
     def character_info_enquire(self, simulation: 'Simulation'):
+        self.onstage_log[simulation.onstage].append(simulation.clock)
         for name, character in simulation.characters.items():
+            self.energy_log[name].append(
+                character.action.ELEM_BURST.energy.count)
             for in_k in self.__interest_data:
                 attr_node = getattr(character.attribute, in_k)
                 self.char_attr_log[name][in_k].append(attr_node())

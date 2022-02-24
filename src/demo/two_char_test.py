@@ -43,8 +43,10 @@ if __name__ == '__main__':
         '1.Q@5',
         '1.A@6',
         '1.E@8',
+        '2.S@8.5',
         '2.Q@9',
         '2.E@10',
+        '1.S@12',
         '1.Q@19',
         '2.Q@28'
     ]
@@ -61,3 +63,5 @@ if __name__ == '__main__':
     p = LogPrinter(numeric_controller)
     p.print_char_log('Albedo', ['ATK', 'DEF',
                      'CRIT_RATE', 'CRIT_DMG', 'EM'])
+    p.print_energy_log()
+    p.print_damage_log(['Albedo', 'Shogun'])

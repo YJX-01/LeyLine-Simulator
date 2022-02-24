@@ -109,18 +109,18 @@ class EyeOfStormyJudgment(TriggerableCreation):
     def build_buff(self, simulation: 'Simulation', start):
         self.buffs = []
         for name, character in simulation.characters.items():
-            def trigger(time, ev):
-                if time < self.start+self.duration and ev.subtype == DamageType.ELEM_BURST:
+            def trigger(simulation, event):
+                if event.time < self.start+self.duration and event.subtype == DamageType.ELEM_BURST:
                     return True
                 else:
                     return False
             energy_cnt = character.action.ELEM_BURST.energy.capacity
             buff = Buff(
                 type=BuffType.DMG,
-                name=f'Eye of Stormy Judgement {name}',
+                name=f'Shogun: Eye of Stormy Judgement {name}',
                 trigger=trigger,
                 constraint=Constraint(start, 25),
-                target_path=name,
+                target_path=[name],
             )
             buff.add_buff('Elemental Burst Bonus',
                           'Eye of Stormy Judgement',
@@ -184,7 +184,7 @@ class EyeAttack(Skill):
     @staticmethod
     def eye_cd(start):
         def f(ev: 'Event'):
-            if ev.type == EventType.DAMAGE and not isinstance(ev.source, EyeAttack):
+            if ev.type == EventType.DAMAGE and not isinstance(ev.source, ShogunElemskill):
                 return True
             else:
                 return False

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Iterable, List
+from typing import Iterable, List
 
 
 class DNode:
@@ -6,19 +6,18 @@ class DNode:
         self.key: str = key
         self.func: str = func
         self.num: float = num
-        self.leaf: bool = (func == '%' or func == '')
-        if not self.leaf:
-            self.child: List[DNode] = []
+        self.child: List[DNode] = []
+
+    @property
+    def leaf(self) -> bool:
+        return (self.func == '%' or self.func == '')
 
     def __call__(self) -> float:
-        self.leaf: bool = (self.func == '%' or self.func == '')
         if self.leaf:
             if self.func == '':
                 return self.num
             elif self.func == '%':
                 return self.num/100
-            else:
-                raise Exception('constant has not children')
         else:
             if self.func == '*':
                 self.num = 1
@@ -58,16 +57,15 @@ class DNode:
             else:
                 raise KeyError
 
-    def __eq__(self, __o: object) -> bool:
-        return self.key == __o.key
-    
+    def __eq__(self, other: object) -> bool:
+        return self.key == other.key
+
     def __float__(self):
         return self()
-    
+
     @property
     def value(self):
-        self()
-        return self.num
+        return self()
 
     @staticmethod
     def EM(em: float) -> float:

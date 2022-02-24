@@ -21,22 +21,24 @@ class AlbedoPassive1(Skill):
         )
 
     def __call__(self, simulation: 'Simulation', event: 'TryEvent'):
-        if self.LV == 0 or not (event.type == EventType.TRY and event.subtype == 'init'):
+        if event.type == EventType.TRY and event.subtype == 'init':
+            controller = NumericController()
+            controller.insert_to(self.build_buff(), 'cd', simulation)
+        else:
             return
-        controller = NumericController()
-        controller.insert_to(self.calcite_might(), 'cd', simulation)
 
     @staticmethod
-    def calcite_might():
-        def trigger(time, event):
-            if isinstance(event.source, TransientBlossom) and event.type == EventType.DAMAGE:
+    def build_buff():
+        def trigger(simulation, event):
+            if isinstance(event.source, TransientBlossom):
                 return True
             else:
                 return False
         buff = Buff(
             type=BuffType.DMG,
-            name='Calcite Might',
+            name='Albedo: Calcite Might',
             trigger=trigger,
+            target_path=['Albedo'],
         )
         buff.add_buff('Other Bonus', 'Albedo Passive1 Bonus', 0.25)
         return buff
@@ -52,16 +54,17 @@ class AlbedoPassive2(Skill):
         )
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
-        if self.LV <= 1 or not (event.type == EventType.ACTION and event.sourcename == 'Albedo' and event.subtype == ActionType.ELEM_BURST):
+        if event.type == EventType.ACTION and event.sourcename == 'Albedo' and event.subtype == ActionType.ELEM_BURST:
+            controller = NumericController()
+            controller.insert_to(self.build_buff(event.time), 'da', simulation)
+        else:
             return
-        controller = NumericController()
-        controller.insert_to(self.homuncular_nature(event.time), 'da', simulation)
 
-    def homuncular_nature(self, time):
+    def build_buff(self, time):
         dur = Constraint(time, 10)
         buff = Buff(
             type=BuffType.ATTR,
-            name='Homuncular Nature',
+            name='Albedo: Homuncular Nature',
             constraint=dur,
             target_path=['Albedo', 'EM']
         )

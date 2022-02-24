@@ -203,6 +203,8 @@ class SkillType(Enum):
     CX = 5
     CREATION_TRIG = 6
     CREATION_IND = 7
+    WEAPON = 8
+    ARTIFACT = 9
 
 
 class DamageType(Enum):

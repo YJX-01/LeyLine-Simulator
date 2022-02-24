@@ -32,7 +32,7 @@ class Simulation(object):
         self.characters: OrderedDict[str, Character] = OrderedDict()
         self.operation_track: Sequence['Operation'] = []
         self.constraint_track: Sequence['Constraint'] = []
-        self.char_shortcut: Dict[str, str] = {}
+        self.shortcut: Dict[str, str] = {}
 
         self.show_option: Dict[str, bool] = {}
         self.event_queue: Queue[Event] = PriorityQueue()
@@ -66,8 +66,8 @@ class Simulation(object):
 
     def char_state_update(self):
         self.onstage = list(self.characters.keys())[0]
-        self.char_shortcut = dict(zip(range(1, 1+len(self.characters)),
-                                      self.characters.keys()))
+        self.shortcut = dict(zip(range(1, 1+len(self.characters)),
+                                 self.characters.keys()))
 
     def set_artifact(self, name: str, artifact: Artifact):
         self.characters[name].equip(artifact)

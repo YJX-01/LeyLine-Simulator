@@ -34,8 +34,10 @@ class Character(object):
                 continue
             elif isinstance(item, Weapon):
                 self.weapon = item
+                self.weapon.set_owner(self.name)
             elif isinstance(item, Artifact):
                 self.artifact = item
+                self.artifact.set_owner(self.name)
             else:
                 self.artifact.equip(item)
         self.update()
@@ -65,14 +67,14 @@ class CharacterBase(object):
         self.region: int = 0
         self.lv: int = 0
         self.asc: int = 0
-        self.asc_info: Mapping[str, List[float]] = {}
+        self.asc_info: Dict[str, List[float]] = {}
         self.HP_BASE: float = 0
         self.ATK_BASE: float = 0
         self.DEF_BASE: float = 0
         self.HP: float = 0
         self.ATK: float = 0
         self.DEF: float = 0
-        self.EXTRA: Sequence[str, float] = ['', 0]
+        self.EXTRA: List[str, float] = ['', 0]
         self.initialize(**configs)
 
     def initialize(self, **configs) -> None:
@@ -139,7 +141,7 @@ class CharacterAction(object):
 
     def __init__(self) -> None:
         '''
-        ### 属性:
+        # 属性:
         battle action\n
         \tNORMAL_ATK: Callable\n
         \tELEM_SKILL: Callable\n
@@ -181,12 +183,12 @@ class CharacterAction(object):
 class CharacterAttribute(object):
     def __init__(self) -> None:
         '''
-        ### 包含面板属性\n
+        # 包含面板属性\n
         include panel attributes:\n
         \tATK | DEF | HP | EM | ER | CRIT_RATE | CRIT_DMG\n
         \tHEAL_BONUS | HEAL_INCOME | SHIELD_STRENGTH | CD_REDUCTION\n
         \tELEM_DMG... | ELEM_RES...\n
-        ### 和其他隐藏属性\n
+        # 和其他隐藏属性\n
         and other character attributes:\n
         \tENERGY | STAMINA | STAMINA_CONSUMPTION\n
         \tATK_SPD | MOVE_SPD | INTERRUPT_RES | DMG_REDUCTION\n
@@ -241,7 +243,7 @@ class CharacterAttribute(object):
                         DNode('Sub Stat Scaler', '+')
                     ]),
                     DNode('Bonus Scalers', '+'),
-                    DNode('Weapon Scaler', '%'),
+                    DNode('Weapon Scaler'),
                     DNode('Ascension Scaler')
                 ])
             ]),
@@ -252,11 +254,11 @@ class CharacterAttribute(object):
             DNode(f'Bonus {stat}', '+').extend([
                 DNode(f'Skill Transform {stat}', '*').extend([
                     DNode('Skill Transform Stat'),
-                    DNode('Skill Transform Scaler', '%')
+                    DNode('Skill Transform Scaler')
                 ]),
                 DNode(f'Weapon Transform {stat}', '*').extend([
                     DNode('Weapon Transform Stat'),
-                    DNode('Weapon Transform Scaler', '%')
+                    DNode('Weapon Transform Scaler')
                 ])
             ])
         ])
@@ -286,7 +288,42 @@ class CharacterAttribute(object):
                     DNode(f'Character {k} Ascension', num=n))
 
     def update_weapon(self, weapon: Weapon):
-        self.ATK.modify('Weapon ATK Base', num=weapon.base.ATK)
+        self.ATK.modify('Weapon ATK Base', num=weapon.ATK)
+        sub_stat, stat_value = weapon.sub_stat
+        if sub_stat in ['ATK_PER', 'DEF_PER', 'HP_PER']:
+            self.__dict__[sub_stat.split('_')[0]].modify(
+                'Weapon Scaler', num=stat_value)
+        else:
+            try:
+                self.__dict__[sub_stat].modify('Weapon Scaler', num=stat_value)
+            except:
+                self.__dict__[sub_stat].insert(
+                    DNode('Weapon Scaler', '', stat_value))
+        bonus_stat, bonus_value = weapon.bonus_stat
+        if not bonus_stat:
+            return
+        elif bonus_stat in ['ATK_PER', 'DEF_PER', 'HP_PER']:
+            try:
+                self.__dict__[bonus_stat.split('_')[0]].modify(
+                    'Bonus Weapon Scaler', num=bonus_value)
+            except:
+                self.__dict__[bonus_stat.split('_')[0]].find('Bonus Scalers').insert(
+                    'Bonus Weapon Scaler', num=bonus_value)
+        elif bonus_stat != 'ELEM_DMG':
+            try:
+                self.__dict__[bonus_stat].modify(
+                    'Bonus Weapon Scaler', num=bonus_value)
+            except:
+                self.__dict__[bonus_stat].insert(
+                    'Bonus Weapon Scaler', num=bonus_value)
+        elif bonus_stat == 'ELEM_DMG':
+            for k, v in self.__dict__.items():
+                if not 'DMG' in k:
+                    continue
+                try:
+                    v.modify('Bonus Weapon Scaler', num=bonus_value)
+                except:
+                    v.insert('Bonus Weapon Scaler', num=bonus_value)
 
     def update_artifact(self, artifact: Artifact) -> None:
         for s in ['ATK', 'DEF', 'HP', 'EM', 'ER', 'CRIT_RATE', 'CRIT_DMG', 'HEAL_BONUS',
@@ -314,6 +351,7 @@ class CharacterAttribute(object):
             main_value = val[art_piece.main_stat.name]
             if 'CONST' in main_name or 'PER' in main_name:
                 main_name = main_name.split('_')[0]
+                
             if 'PER' in art_piece.main_stat.name:
                 self.__dict__[main_name].find('Main Stat Scaler').insert(
                     DNode(main_key, '%', main_value))
@@ -369,7 +407,10 @@ class CharacterAttribute(object):
                                 num=a[1].num,
                                 child=a[1].child)
         for c in buff.changes:
-            tar_node.modify(c[0], num=c[1])
+            try:
+                tar_node.modify(c[0], num=c[1])
+            except:
+                continue
 
     def disconnect(self, buff: Buff):
         tar_node = getattr(self, buff.target_path[1])

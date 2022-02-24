@@ -41,7 +41,17 @@ class Buff(BuffPanel):
         对DMG类型: 储存需要修改伤害树的键和值\n
         对ENEMY类型: 储存需要修改属性树类型的键和值\n
         对INFUSE类型: 储存需要修改的技能和元素类型\n
-        对OTHER类型: 暂定
+        对OTHER类型: 暂定\n
+        ---
+        type: buff类型\n
+        name: buff施加者\n
+        trigger: (可选)\\
+        对DMG类型,参数(time, event)检查对此伤害是否触发;\\
+        对ATTR类型,参数(simulation)检查加成数值是否更新,适用于动态buff\n
+        constraint: 约束 一般为时间约束\n
+        target_path: (可选)\\
+        对DMG类型,参数([names])buff作用角色;\\
+        对ATTR类型,参数([name, attr])buff作用角色及其值\n
         '''
         super().__init__()
         self.type: BuffType = BuffType(0)

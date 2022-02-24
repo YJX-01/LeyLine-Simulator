@@ -56,17 +56,17 @@ class ShogunElemburst(Skill):
     def receive_energy(self, simulation: 'Simulation', event: 'Event'):
         if not isinstance(event, EnergyEvent):
             raise TypeError
-        increase = event.base*event.num
+        increment = event.base*event.num
         if event.elem.value == self.source.base.element:
-            increase *= 3
+            increment *= 3
         elif event.elem == ElementType.NONE:
-            increase *= 2
+            increment *= 2
 
         if simulation.onstage != self.source.name:
-            increase *= (1-0.1*len(simulation.characters))
+            increment *= (1-0.1*len(simulation.characters))
 
-        increase *= simulation.characters[self.source.name].attribute.ER()
-        self.energy.receive(increase)
+        increment *= simulation.characters[self.source.name].attribute.ER()
+        self.energy.receive(increment)
 
     @staticmethod
     def elemburst_cd(start):

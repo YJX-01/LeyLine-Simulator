@@ -42,7 +42,7 @@ class Operation(object):
 
     def work(self, simulation: 'Simulation'):
         if self.source.isnumeric():
-            self.source = simulation.char_shortcut[int(self.source)]
+            self.source = simulation.shortcut[int(self.source)]
         if self.action == 'C':
             switch_event = SwitchEvent(time=self.time,
                                        func=self.switch_char,

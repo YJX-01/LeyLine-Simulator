@@ -1,16 +1,49 @@
 import json
+from typing import Tuple, List
 from core.rules.alltypes import WeaponType, StatType
+from core.simulation.event import Event
+from data.weapons import *
 
 
 class Weapon(object):
     def __init__(self):
         self.base: WeaponBase = WeaponBase()
         self.action: WeaponAction = WeaponAction()
+        self.owner: str = ''
+
+    def initialize(self, name: str, lv: int, asc=False, refine: int = 1):
+        self.base.initialize(name=name, lv=lv, asc=asc)
+        self.action.choose(self, refine)
+    
+    def set_owner(self, owner: str):
+        self.owner = owner
+        r = self.action.refine
+        self.action.choose(self, refine=r)
+
+    @property
+    def name(self) -> str:
+        return self.base.name
+
+    @property
+    def ATK(self) -> float:
+        return self.base.ATK
+
+    @property
+    def sub_stat(self) -> Tuple[str, float]:
+        return (self.base.sub_stat.name, self.base.stat_value)
+
+    @property
+    def bonus_stat(self) -> Tuple[str, float]:
+        return tuple(self.action.EXTRA)
+    
+    def work(self, simulation, event: 'Event'):
+        self.action.skill(simulation, event)
 
 
 class WeaponBase(object):
     with open('.\docs\constant\WeaponLevelMultiplier.json', 'r') as f:
         __lv_curve = json.load(f)
+
     with open('.\docs\constant\WeaponConfig.json', 'r') as f:
         __weapon_info = json.load(f)
 
@@ -77,11 +110,35 @@ class WeaponBase(object):
         else:
             return min(lv // 10 - 3 + int(asc), 6)
 
-    def show(self) -> None:
-        print('Name:{}\nLv:{}\nATK:{}\nStat:{}:{}'.format(
-            self.name, self.lv, self.ATK, self.sub_stat, self.stat_value))
+    def __repr__(self) -> str:
+        return 'Name:{}\nLv:{}\nATK:{}\nStat:{}:{}'.format(
+            self.name, self.lv, self.ATK, self.sub_stat, self.stat_value)
 
 
 class WeaponAction(object):
-    pass
+    with open('.\docs\constant\WeaponConfig.json', 'r') as f:
+        __weapon_info = json.load(f)
 
+    def __init__(self) -> None:
+        '''
+        ### 属性:
+        refine\n
+        EXTRA\n
+        '''
+        self.refine: int = 1
+        self.EXTRA: List[str, float] = ['', 0]
+        self.scaler: List[float] = []
+        self.skill: object = None
+        self.skillname: str = ''
+
+    def choose(self, weapon: Weapon, refine: int):
+        self.refine = refine
+        name = weapon.name
+        for w in self.__weapon_info:
+            if w['name'] == name:
+                self.skillname = w['skill']['skill_name']
+                self.EXTRA[0] = w['skill']['bonus_stat']
+                if self.EXTRA[0]:
+                    self.EXTRA[1] = w['skill']['bonus_stat_value'][refine-1]
+                self.scaler = w['skill']['param_list'][refine-1]
+        exec(f'self.skill = {name}_Skill(weapon)')
