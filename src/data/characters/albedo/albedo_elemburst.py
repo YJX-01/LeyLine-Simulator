@@ -26,8 +26,12 @@ class AlbedoElemburst(Skill):
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
+                simulation.output_log.append(
+                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
                 return
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
+            simulation.output_log.append(
+                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
             return
         if self.cd and not self.cd.test(event):
             return

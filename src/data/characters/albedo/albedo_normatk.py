@@ -28,8 +28,12 @@ class AlbedoNormATK(Skill):
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
+                simulation.output_log.append(
+                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
                 return
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
+            simulation.output_log.append(
+                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
             return
         cmd = event.cmd
         mode = event.mode
@@ -100,7 +104,6 @@ class AlbedoChargeATK(Skill):
         )
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
-        cmd = event.cmd
         mode = event.mode
 
         action_event = ActionEvent().fromskill(self)

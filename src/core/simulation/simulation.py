@@ -17,15 +17,18 @@ class Simulation(object):
 
     def __init__(self):
         '''
-        attributes:\n
+        ### methods:\n
+        \tset_character(name, lv, asc=False)\n
+        \tset_artifact(name, artifact)\n
+        \tset_weapon(name, weapon)\n
+        \tset_talents(name, norm, skill, burst, cx)\n
+        \tset_enemy(name, lv)\n
+        \tset_show_what(*args, **kwargs)\n
+        ### attributes:\n
         \tcharacters: OrderedDict[str, Character]\n
         \toperation_track: Sequence[Operation]\n
         \tconstraint_track: Sequence[Constraint]\n
         \tevent_queue: Queue[Event]\n
-        methods:\n
-        \tset_character(name, lv, asc=False)\n
-        \tset_artifact(name, artifact)\n
-        \tset_weapon(name, weapon)\n
         '''
         if hasattr(self, 'characters'):
             return
@@ -78,6 +81,10 @@ class Simulation(object):
     def set_talents(self, name, norm=1, skill=1, burst=1, cx=0):
         self.characters[name].set_talents(norm, skill, burst, cx)
 
+    def set_enemy(self, **configs):
+        numeric_controller = NumericController()
+        numeric_controller.set_enemy(**configs)
+
     def set_show_what(self, *args, **kwargs):
         self.show_option = dict.fromkeys(
             list(EventType.__members__.keys()), False)
@@ -86,7 +93,7 @@ class Simulation(object):
                 continue
             if arg == 'all':
                 self.show_option = dict.fromkeys(
-                    list(EventType.__members__.keys()), True)
+                    list(EventType.__members__.keys())+['WARNING', 'REJECT'], True)
                 break
             self.show_option[arg.upper()] = True
         for k, v in kwargs.items():

@@ -48,7 +48,7 @@ class NumericController(object):
 
     def execute(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
-            self.__init__()
+            self.reset()
             self.log_init(simulation.characters)
             self.triggers_init(simulation)
             return
@@ -63,10 +63,15 @@ class NumericController(object):
         if event.type == EventType.DAMAGE:
             damage = AMP_DMG()
             damage.connect(event)
+            damage.connect(self.enemy)
 
             source = event.source.source
-            if hasattr(source, 'attr_panel'):
-                damage.connect(source.attr_panel)
+            if isinstance(source, Creation):
+                if getattr(source, 'attr_panel', None):
+                    damage.connect(source.attr_panel)
+                else:
+                    panel = EntityPanel(source.source.source)
+                    damage.connect(panel)
             else:
                 panel = EntityPanel(source)
                 damage.connect(panel)
@@ -89,6 +94,14 @@ class NumericController(object):
             ))
             self.dmg_log[event.sourcename][event.subtype.name].append(
                 (event.time, damage.root()))
+
+    def set_enemy(self, **configs):
+        self.enemy = Enemy(**configs)
+
+    def reset(self):
+        for k, v in self.__dict__.items():
+            if isinstance(v, list) or isinstance(v, dict):
+                v.clear()
 
     def insert_to(self, buff: Buff, type: str, simulation: 'Simulation'):
         '''
@@ -115,18 +128,6 @@ class NumericController(object):
             if buff not in self.const_buffs_dmg:
                 self.const_buffs_dmg.append(buff)
 
-    def triggers_init(self, simulation: 'Simulation'):
-        for name, character in simulation.characters.items():
-            # TODO call all the passive, constellation
-            # weapon and artifact passive buff
-
-            # TODO register all the triggerable talent into triggers
-            ev = TryEvent(subtype='init')
-            for passive in character.action.PASSIVE:
-                passive(simulation, ev)
-            character.weapon.work(simulation, ev)
-            character.artifact.work(simulation, ev)
-
     def log_init(self, characters: Mapping):
         self.char_attr_log = dict.fromkeys(characters.keys())
         for k in self.char_attr_log:
@@ -139,6 +140,25 @@ class NumericController(object):
             for type_k in DamageType.__members__.keys():
                 self.dmg_log[k][type_k] = []
 
+    def triggers_init(self, simulation: 'Simulation'):
+        for name, character in simulation.characters.items():
+            # TODO call all the passive, constellation
+            # weapon and artifact passive buff
+
+            # TODO register all the triggerable talent into triggers
+            ev = TryEvent(subtype='init')
+            for passive in character.action.PASSIVE:
+                passive(simulation, ev)
+            character.weapon.work(simulation, ev)
+            character.artifact.work(simulation, ev)
+
+    def triggers_call(self, simulation: 'Simulation', event: 'Event'):
+        for name, character in simulation.characters.items():
+            for passive in character.action.PASSIVE:
+                passive(simulation, event)
+            character.weapon.work(simulation, event)
+            character.artifact.work(simulation, event)
+
     def refresh(self, simulation: 'Simulation'):
         time = simulation.clock
         for b in self.dynamic_buffs_attr:
@@ -150,13 +170,6 @@ class NumericController(object):
         for b in self.dynamic_buffs_dmg:
             if b.constraint.end < time:
                 self.dynamic_buffs_dmg.remove(b)
-
-    def triggers_call(self, simulation: 'Simulation', event: 'Event'):
-        for name, character in simulation.characters.items():
-            for passive in character.action.PASSIVE:
-                passive(simulation, event)
-            character.weapon.work(simulation, event)
-            character.artifact.work(simulation, event)
 
     def character_info_enquire(self, simulation: 'Simulation'):
         self.onstage_log[simulation.onstage].append(simulation.clock)
@@ -257,6 +270,8 @@ class AMP_DMG(object):
                 self.to_buff_panel(arg)
             elif isinstance(arg, DamageEvent):
                 self.to_event(arg)
+            elif isinstance(arg, Enemy):
+                self.to_enemy(arg)
         return
 
     def to_entity_panel(self, panel: EntityPanel):
@@ -304,14 +319,19 @@ class AMP_DMG(object):
     def to_buff_panel(self, panel: BuffPanel):
         for a in panel.adds:
             try:
-                self.root.find(a[1].key)
+                self.root.find(a[0])
             except:
-                self.root.find(a[0]).insert(a[1])
+                continue
             else:
-                self.root.modify(a[1].key,
-                                 func=a[1].func,
-                                 num=a[1].num,
-                                 child=a[1].child)
+                try:
+                    self.root.find(a[1].key)
+                except:
+                    self.root.find(a[0]).insert(a[1])
+                else:
+                    self.root.modify(a[1].key,
+                                     func=a[1].func,
+                                     num=a[1].num,
+                                     child=a[1].child)
         for c in panel.changes:
             self.root.modify(c[0], num=c[1])
 
@@ -325,6 +345,21 @@ class AMP_DMG(object):
         self.root.modify('Character Level', num=s.base.lv)
         self.root.find('Ability Scaler').insert(
             DNode('Basic Ability Scaler', '', event.scaler))
+
+        remove_map = {
+            DamageType.ELEM_SKILL: 'Elemental Skill Bonus',
+            DamageType.ELEM_BURST: 'Elemental Burst Bonus',
+            DamageType.NORMAL_ATK: 'Normal Attack Bonus',
+            DamageType.CHARGED_ATK: 'Charged Attack Bonus'
+        }
+        remove_map.pop(self.damage_type)
+        for v in remove_map.values():
+            self.root.remove(v)
+
+    def to_enemy(self, enemy: Enemy):
+        self.root.modify('Enemy Level', num=enemy.lv)
+        self.root.modify('Resistance Base',
+                         num=enemy.RES[self.elem_type])
 
     @property
     def view_str(self) -> str:

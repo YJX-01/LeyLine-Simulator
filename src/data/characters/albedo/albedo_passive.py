@@ -61,11 +61,10 @@ class AlbedoPassive2(Skill):
             return
 
     def build_buff(self, time):
-        dur = Constraint(time, 10)
         buff = Buff(
             type=BuffType.ATTR,
             name='Albedo: Homuncular Nature',
-            constraint=dur,
+            constraint=Constraint(time, 10),
             target_path=['Albedo', 'EM']
         )
         buff.add_buff('Total EM', 'Albedo Passive2 EM', 125)

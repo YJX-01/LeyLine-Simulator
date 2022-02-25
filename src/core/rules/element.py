@@ -1,76 +1,33 @@
-from core.rules.alltypes import ElementType, ElementalReactionType
+from typing import List
+from core.rules.alltypes import ElementType
+from core.rules.alltypes import ElementalReactionType as rt
 
 
 class ReactionLogic(object):
+    __reaction_matrix: List[List[int]] =\
+        [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 10, 20, 0, 34, 35, 36, 37, 0],
+        [0, 10, 20, 34, 0, 54, 46, 47, 0],
+        [0, 10, 20, 35, 45, 0, 65, 57, 0],
+        [0, 10, 20, 36, 46, 56, 0, 67, 0],
+        [0, 17, 27, 37, 47, 57, 67, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]
+    # 8 x 8 matrix
+    # first index is first element, second index is second element
+
     def __init__(self):
         self.uni_element = ElementType(0)
 
-    def react_to(self, element: ElementType) -> ElementalReactionType:
+    def react_to(self, element: ElementType) -> rt:
         if element == ElementType.NONE:
-            return ElementalReactionType.NONE
-        elif element == ElementType.ANEMO:
+            return rt.NONE
+        else:
             if self.uni_element != ElementType.NONE:
-                return ElementalReactionType.SWIRL
+                return rt(self.__reaction_matrix[self.uni_element.value][element.value])
             else:
-                return ElementalReactionType.NONE
-        elif element == ElementType.GEO:
-            if self.uni_element != ElementType.NONE:
-                return ElementalReactionType.CRYSTALLIZE
-            else:
-                return ElementalReactionType.NONE
-        elif element == ElementType.ELECTRO:
-            if self.uni_element == ElementType.NONE:
                 self.uni_element = element
-                return ElementalReactionType.NONE
-            elif self.uni_element == ElementType.HYDRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.ELECTRO_CHARGED
-            elif self.uni_element == ElementType.PYRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.OVERLOADED
-            elif self.uni_element == ElementType.CRYO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.SUPERCONDUCT
-        elif element == ElementType.HYDRO:
-            if self.uni_element == ElementType.NONE:
-                self.uni_element = element
-                return ElementalReactionType.NONE
-            elif self.uni_element == ElementType.ELECTRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.ELECTRO_CHARGED
-            elif self.uni_element == ElementType.PYRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.VAPORIZE
-            elif self.uni_element == ElementType.CRYO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.FROZEN
-        elif element == ElementType.PYRO:
-            if self.uni_element == ElementType.NONE:
-                self.uni_element = element
-                return ElementalReactionType.NONE
-            elif self.uni_element == ElementType.ELECTRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.OVERLOADED
-            elif self.uni_element == ElementType.HYDRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.VAPORIZE_REVERSE
-            elif self.uni_element == ElementType.CRYO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.MELT
-        elif element == ElementType.CRYO:
-            if self.uni_element == ElementType.NONE:
-                self.uni_element = element
-                return ElementalReactionType.NONE
-            elif self.uni_element == ElementType.ELECTRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.SUPERCONDUCT
-            elif self.uni_element == ElementType.HYDRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.FROZEN
-            elif self.uni_element == ElementType.PYRO:
-                self.uni_element = ElementType.NONE
-                return ElementalReactionType.MELT_REVERSE
-        elif element == ElementType.DENDRO:
-            return ElementalReactionType.NONE
-        elif element == ElementType.PHYSICAL:
-            return ElementalReactionType.NONE
+                return rt.NONE

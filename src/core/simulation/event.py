@@ -151,6 +151,11 @@ class EnergyEvent(Event):
         self.base: int = 0
         self.num: float = 0
         self.initialize(**configs)
+    
+    @property
+    def prefix_info(self) -> str:
+        return super().prefix_info+\
+            f'\n\t\t[info   ]:[ {self.elem}; {self.base}; {self.num} ]'
 
 
 class ElementEvent(Event):

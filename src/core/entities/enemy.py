@@ -1,11 +1,13 @@
+import json
 from typing import Dict
 from core.rules.element import ReactionLogic
 from core.rules.alltypes import ElementType
 
 
 class Enemy(object):
-    def __init__(self):
-        self.lv: int = 90
+    def __init__(self, **configs):
+        self.lv: int = 100
+        self.name: str = ''
         self.HP: float = 1e9
         self.RES: Dict[ElementType: int] = {
             ElementType.ANEMO: 10,
@@ -19,3 +21,9 @@ class Enemy(object):
         }
         self.aura = ReactionLogic()
         self.debuffs = []
+        
+        self.initialize(**configs)
+        
+    def initialize(self, **config):
+        for k, v  in config.items():
+            self.__setattr__(k, v)

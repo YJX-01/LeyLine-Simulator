@@ -26,11 +26,11 @@ class ElementalReactionType(Enum):
     # 感电 水<->雷
     OVERLOADED = 35
     # 超载 火<->雷
-    SUPERCONDUCT = 65
+    SUPERCONDUCT = 36
     # 超导 冰<->雷
     SHATTERED = 86
     # 碎冰 无->冻
-    FROZEN = 45
+    FROZEN = 46
     # 冻结 水<->冰
     VAPORIZE = 45
     # 蒸发 水->火

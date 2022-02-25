@@ -31,8 +31,12 @@ class ShogunElemskill(Skill):
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent') -> None:
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
+                simulation.output_log.append(
+                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
                 return
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
+            simulation.output_log.append(
+                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
             return
         if self.cd and not self.cd.test(event):
             return
@@ -94,7 +98,6 @@ class EyeOfStormyJudgment(TriggerableCreation):
     def __init__(self, skill: ShogunElemskill):
         super().__init__()
         self.source = skill
-        self.attr_panel = EntityPanel(skill.source)
         self.start = 0
         self.duration = 25
         self.exist_num = 1
@@ -170,15 +173,14 @@ class EyeAttack(Skill):
             extra_ball = int(random() <= 0.5)
         else:
             extra_ball = 0.5
-        energy_event = EnergyEvent()
-        energy_event.initialize(time=event.time+1,
-                                source=self,
-                                sourcename=self.sourcename,
-                                func=self.elemskill_energy_event,
-                                desc='Shogun.energy',
-                                elem=ElementType.ELECTRO,
-                                base=1,
-                                num=extra_ball)
+        energy_event = EnergyEvent(time=event.time+1,
+                                   source=self,
+                                   sourcename=self.sourcename,
+                                   func=self.elemskill_energy_event,
+                                   desc='Shogun.energy',
+                                   elem=ElementType.ELECTRO,
+                                   base=1,
+                                   num=extra_ball)
         simulation.event_queue.put(energy_event)
 
     @staticmethod

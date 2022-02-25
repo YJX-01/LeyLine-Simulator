@@ -29,14 +29,18 @@ class AlbedoElemskill(Skill):
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent') -> None:
         for c in simulation.active_constraint:
             if isinstance(c, DurationConstraint) and not c.test(event):
+                simulation.output_log.append(
+                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
                 return
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
+            simulation.output_log.append(
+                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
             return
         if self.cd and not self.cd.test(event):
-                return
+            return
         self.cd = self.elemskill_cd(event.time)
-        mode = event.mode    
-        
+        mode = event.mode
+
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 func=self.elemskill_action_event,
@@ -61,7 +65,6 @@ class AlbedoElemskill(Skill):
                                 mode=mode,
                                 desc='Albedo.elemskill.damage')
         simulation.event_queue.put(damage_event)
-
 
     @staticmethod
     def elemskill_cd(start):
@@ -132,7 +135,7 @@ class TransientBlossom(Skill):
         if not self.cd.test(event):
             return
         mode = self.source.mode
-        
+
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time+0.05,
                                 scaler=self.scaler[1],
@@ -144,17 +147,15 @@ class TransientBlossom(Skill):
             extra_ball = int(random() <= 2/3)
         else:
             extra_ball = 2/3
-        energy_event = EnergyEvent()
-        energy_event.initialize(time=event.time+1,
-                                source=self,
-                                sourcename=self.sourcename,
-                                func=self.elemskill_energy_event,
-                                desc='Albedo.energy',
-                                elem=ElementType.GEO,
-                                base=1,
-                                num=1+extra_ball)
+        energy_event = EnergyEvent(time=event.time+1,
+                                   source=self,
+                                   sourcename=self.sourcename,
+                                   func=self.elemskill_energy_event,
+                                   desc='Albedo.energy',
+                                   elem=ElementType.GEO,
+                                   base=1,
+                                   num=1+extra_ball)
         simulation.event_queue.put(energy_event)
-
 
     @staticmethod
     def blossom_cd(start):
@@ -163,7 +164,7 @@ class TransientBlossom(Skill):
                 return True
             else:
                 return False
-            
+
         cd_counter = DurationConstraint(start, 2, f)
         cd_counter.refresh()
         return cd_counter

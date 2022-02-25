@@ -34,8 +34,8 @@ class Engulfing_Lightning_Skill(Skill):
                 constraint=Constraint(event.time, 12),
                 target_path=[self.sourcename, 'ER']
             )
-            buff.add_buff('Total ER', 
-                          'Engulfing Lightning ATK',
+            buff.add_buff('Total ER',
+                          'Engulfing Lightning ER',
                           self.scaler[2])
             controller = NumericController()
             controller.insert_to(buff, 'da', simulation)
