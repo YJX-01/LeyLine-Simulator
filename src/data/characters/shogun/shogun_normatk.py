@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
+from core.entities.creation import CreationSpace
 from core.rules.alltypes import *
 from core.rules.skill import Skill
-from core.simulation.constraint import *
+from core.rules.icd import ICD
+from core.simulation.constraint import CounterConstraint
 from core.simulation.event import *
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
@@ -18,6 +20,7 @@ class ShogunNormATK(Skill):
             elem_type=ElementType.PHYSICAL,
             action_type=ActionType.NORMAL_ATK,
             damage_type=DamageType.NORMAL_ATK,
+            action_time=shogun.action.normatk_time,
             scaler=shogun.action.normatk_scaler
         )
 
@@ -25,101 +28,111 @@ class ShogunNormATK(Skill):
         self.stamina = self.stamina_counter()
         self.parallel = ShogunChargeATK(shogun)
 
-        self.musou_isshin_state = self.musou_isshin_count()
         self.musou = MusouIsshin(shogun)
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
-        for c in simulation.active_constraint:
-            if isinstance(c, DurationConstraint) and not c.test(event):
-                simulation.output_log.append(
-                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
-                return
+        # check action collision
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
-            simulation.output_log.append(
-                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
+            self.reject_event(simulation, event, reason='action collision')
             return
 
-        if self.musou_isshin_state.test(simulation.event_log) and self.musou_isshin_dur(simulation.event_log, event.time):
+        # judge transformation state
+        if self.musou_isshin_state(simulation, event):
             self.musou(simulation, event)
             return
 
+        # fetch cmd and mode
         cmd = event.cmd
         mode = event.mode
         if cmd == 'Z':
             self.parallel(simulation, event)
             return
 
+        # fetch other information
         act_cnt: int = self.attack_counter.test(simulation.event_log)
+        act_t: float = self.action_time[act_cnt]/60
 
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.normatk_action_event,
-                                desc=f'Shogun.action.normatk.{act_cnt}')
+                                dur=act_t,
+                                desc=f'Shogun.normal_atk.{act_cnt}')
         simulation.event_queue.put(action_event)
 
+        # damage event
         if mode == '0':
             return
+        skill_lv = str(self.source.talent[0])
         if act_cnt == 3:
-            scaler = self.scaler[str(self.LV)][3]+self.scaler[str(self.LV)][4]
-        elif act_cnt == 4:
-            scaler = self.scaler[str(self.LV)][5]
+            damage_event1 = self.normatk_damage_event(
+                event.time+act_t, mode, skill_lv, 3, '3-1')
+            damage_event2 = self.normatk_damage_event(
+                event.time+act_t, mode, skill_lv, 4, '3-2')
+            simulation.event_queue.put(damage_event1)
+            simulation.event_queue.put(damage_event2)
         else:
-            scaler = self.scaler[str(self.LV)][act_cnt]
-        damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.1,
-                                scaler=scaler,
-                                mode=mode,
-                                desc=f'Shogun.damage.normatk.{act_cnt}')
-        simulation.event_queue.put(damage_event)
+            scaler_i = 5 if act_cnt == 4 else act_cnt
+            damage_event = self.normatk_damage_event(
+                event.time+act_t, mode, skill_lv, scaler_i, str(act_cnt))
+            simulation.event_queue.put(damage_event)
+
+    @staticmethod
+    def reject_event(sim, ev: 'Event', reason):
+        sim.output_log.append(
+            f'[REJECT]:[{ev.time}s: {ev.desc}; reason: {reason}]')
 
     @staticmethod
     def normatk_counter():
         def f(ev: 'Event'):
-            if ev.type == EventType.ACTION:
-                if isinstance(ev.source, ShogunNormATK) or isinstance(ev.source, MusouIsshin):
-                    return 1
-                else:
-                    return -10
-            else:
+            if ev.type != EventType.ACTION:
                 return 0
-
-        cnt = CounterConstraint(0, 1000, 5, f)
-        cnt.circulate()
+            elif isinstance(ev.source, ShogunNormATK) or isinstance(ev.source, MusouIsshin):
+                return 1
+            else:
+                return -10
+        cnt = CounterConstraint(0, 1000, 5, func=f, cir=True)
         return cnt
 
     @staticmethod
     def stamina_counter():
         def f(ev: 'Event'):
             return
-
-        cnt = CounterConstraint(0, 100, 240, f)
-        cnt.circulate()
+        cnt = CounterConstraint(0, 1000, 240, func=f, cir=True)
         return cnt
 
-    def normatk_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return
+    def normatk_damage_event(self, time, mode, skill_lv: str, scaler_i: int, atk_cnt: str):
+        damage_event = DamageEvent().fromskill(self)
+        damage_event.initialize(time=time,
+                                scaler=self.scaler[skill_lv][scaler_i],
+                                mode=mode,
+                                icd=ICD('normal_atk', '',
+                                        time, 1),
+                                desc=f'Shogun.normal_atk.{atk_cnt}')
+        return damage_event
 
-    def musou_isshin_count(self):
-        def musou(ev: 'Event'):
-            if ev.sourcename == 'Shogun' and ev.subtype == ActionType.ELEM_BURST:
-                return 1
-            elif ev.type == EventType.SWITCH:
-                return -10
-            else:
-                return 0
+    # def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
+    #     def musou(ev: 'Event'):
+    #         if ev.sourcename == 'Shogun' and ev.subtype == ActionType.ELEM_BURST:
+    #             return 1
+    #         elif ev.type == EventType.SWITCH:
+    #             return -10
+    #         else:
+    #             return 0
+    #     state = CounterConstraint(0, 1000, 1, musou)
+    #     flag1 = bool(state.test(simulation.event_log))
+    #     for ev in reversed(simulation.event_log):
+    #         if musou(ev) == 1:
+    #             break
+    #     flag2 = event.time < ev.time + 7
+    #     return flag1 and flag2
 
-        state = CounterConstraint(0, 1000, 1, musou)
-        return state
-
-    def musou_isshin_dur(self, log: list, time: float) -> bool:
-        for ev in reversed(log):
-            if ev.sourcename == 'Shogun' and ev.subtype == ActionType.ELEM_BURST:
-                break
-        return time < ev.time + 7
+    def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
+        creation_space = CreationSpace()
+        for c in creation_space.creations:
+            if c.name == 'Musou Isshin State' and c.end > event.time:
+                return True
+        else:
+            return False
 
 
 class ShogunChargeATK(Skill):
@@ -132,33 +145,34 @@ class ShogunChargeATK(Skill):
             elem_type=ElementType.PHYSICAL,
             action_type=ActionType.NORMAL_ATK_CHARGE,
             damage_type=DamageType.CHARGED_ATK,
+            action_time=shogun.action.normatk_time,
             scaler=shogun.action.normatk_scaler
         )
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
+        # fetch mode and other information
         mode = event.mode
+        act_t: float = self.action_time[5]/60
 
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.chargeatk_action_event,
-                                desc=f'Shogun.action.chargeatk')
+                                dur=act_t,
+                                desc=f'Shogun.charged_atk')
         simulation.event_queue.put(action_event)
 
+        # damage event
         if mode == '0':
             return
+        skill_lv = str(self.source.talent[0])
         damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.1,
-                                scaler=self.scaler[str(self.LV)][6],
+        damage_event.initialize(time=event.time+act_t,
+                                scaler=self.scaler[skill_lv][6],
                                 mode=mode,
-                                desc=f'Shogun.damage.chargeatk')
+                                icd=ICD('normal_atk', '',
+                                        event.time+act_t, 1),
+                                desc=f'Shogun.charged_atk')
         simulation.event_queue.put(damage_event)
-
-    def chargeatk_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return
 
 
 class MusouIsshin(Skill):
@@ -171,6 +185,7 @@ class MusouIsshin(Skill):
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.NORMAL_ATK,
             damage_type=DamageType.ELEM_BURST,
+            action_time=shogun.action.normatk_time,
             scaler=shogun.action.elemburst_scaler
         )
         self.parallel = MusouIsshinCharge(shogun)
@@ -178,70 +193,89 @@ class MusouIsshin(Skill):
         self.restore_cd = None
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
+        # fetch cmd and mode
         cmd = event.cmd
         mode = event.mode
         if cmd == 'Z':
             self.parallel(simulation, event)
             return
 
+        # fetch other information
         act_cnt: int = self.source.action.NORMAL_ATK.attack_counter.test(
             simulation.event_log)
+        act_t: float = self.action_time[act_cnt+6]/60
         stack_cnt: int = round(self.source.action.ELEM_BURST.creations.last)
 
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.musou_isshin_action_event,
-                                desc=f'Shogun.action.musou_isshin.{act_cnt}')
+                                dur=act_t,
+                                desc=f'Shogun.musou_isshin.{act_cnt}')
         simulation.event_queue.put(action_event)
 
+        # damage event
         if mode == '0':
             return
+        skill_lv = str(self.source.talent[2])
         if act_cnt == 3:
-            scaler = self.scaler[str(self.LV)][7] +\
-                self.scaler[str(self.LV)][8] +\
-                self.scaler[str(self.LV)][2]*stack_cnt*2
-        elif act_cnt == 4:
-            scaler = self.scaler[str(self.LV)][9] + \
-                self.scaler[str(self.LV)][2]*stack_cnt
-        else:
-            scaler = self.scaler[str(self.LV)][act_cnt+4] + \
-                self.scaler[str(self.LV)][2]*stack_cnt
-        damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.1,
-                                scaler=scaler,
-                                mode=mode,
-                                desc=f'Shogun.damage.musou_isshin.{act_cnt}')
-        simulation.event_queue.put(damage_event)
+            scaler1 = self.scaler[skill_lv][7] + \
+                self.scaler[skill_lv][2]*stack_cnt
+            damage_event1 = self.musou_isshin_damage_event(
+                event.time+act_t, mode, scaler1, '3-1')
+            simulation.event_queue.put(damage_event1)
 
+            scaler2 = self.scaler[skill_lv][8] + \
+                self.scaler[skill_lv][2]*stack_cnt
+            damage_event2 = self.musou_isshin_damage_event(
+                event.time+act_t, mode, scaler2, '3-2')
+            simulation.event_queue.put(damage_event2)
+        else:
+            if act_cnt == 4:
+                scaler = self.scaler[skill_lv][9] + \
+                    self.scaler[skill_lv][2]*stack_cnt
+            else:
+                scaler = self.scaler[skill_lv][act_cnt+4] + \
+                    self.scaler[skill_lv][2]*stack_cnt
+            damage_event = self.musou_isshin_damage_event(
+                event.time+act_t, mode, scaler, str(act_cnt))
+            simulation.event_queue.put(damage_event)
+
+        # judge special restore cd
         if not self.restore_cd.test(event):
             return
         self.restore_counter.test(simulation.event_log)
         if self.restore_counter.full:
             return
-        restore_energy = self.scaler[str(self.LV)][-4]
+
+        # energy event
+        restore_energy = self.scaler[skill_lv][-4]
+        # passive talent 2
         if len(self.source.PASSIVE) == 2:
-            restore_energy *= (1+(self.source.attribute.ER()-1)*0.6)
+            restore_energy *= (1+(self.source.attribute.ER.value-1)*0.6)
+
+        receiver = [n for n in simulation.shortcut.values() if n != 'Shogun']
         energy_event = EnergyEvent(time=event.time,
                                    source=self,
                                    sourcename=self.sourcename,
-                                   func=self.restore,
-                                   desc='Shogun.musou_isshin.energy',
-                                   num=restore_energy)
+                                   num=restore_energy,
+                                   receiver=receiver,
+                                   desc='Shogun.musou_isshin.energy')
         simulation.event_queue.put(energy_event)
 
-    def musou_isshin_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return
+        # include CX 6
+        if self.source.attribute.cx_lv >= 6:
+            for name in receiver:
+                simulation.characters[name].action.ELEM_BURST.cd.reduce(1)
 
-    @staticmethod
-    def restore(simulation: 'Simulation', event: 'EnergyEvent'):
-        for name, character in simulation.characters.items():
-            if name == 'Shogun':
-                continue
-            character.action.ELEM_BURST.energy.receive(event.num)
+    def musou_isshin_damage_event(self, time, mode, scaler: float, atk_cnt: str):
+        damage_event = DamageEvent().fromskill(self)
+        damage_event.initialize(time=time,
+                                scaler=scaler,
+                                mode=mode,
+                                icd=ICD('elem_burst', '',
+                                        time, 1),
+                                desc=f'Shogun.musou_isshin.{atk_cnt}')
+        return damage_event
 
 
 class MusouIsshinCharge(Skill):
@@ -254,59 +288,70 @@ class MusouIsshinCharge(Skill):
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.NORMAL_ATK_CHARGE,
             damage_type=DamageType.ELEM_BURST,
+            action_time=shogun.action.normatk_time,
             scaler=shogun.action.elemburst_scaler
         )
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
+        # fetch mode and other information
         mode = event.mode
-
+        act_t: float = self.action_time[-1]/60
         stack_cnt: int = round(self.source.action.ELEM_BURST.creations.last)
 
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.musou_isshin_charge_action_event,
-                                desc=f'Shogun.action.musou_isshin_charge')
+                                dur=act_t,
+                                desc=f'Shogun.musou_isshin_charge')
         simulation.event_queue.put(action_event)
 
+        # damage event
         if mode == '0':
             return
-        scaler = self.scaler[str(self.LV)][10] +\
-            self.scaler[str(self.LV)][11] +\
-            self.scaler[str(self.LV)][2]*stack_cnt*2
-        damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.1,
-                                scaler=scaler,
-                                mode=mode,
-                                desc=f'Shogun.damage.musou_isshin_charge')
-        simulation.event_queue.put(damage_event)
+        skill_lv = str(self.source.talent[2])
+        damage_event1 = DamageEvent().fromskill(self)
+        damage_event1.initialize(time=event.time+act_t,
+                                 scaler=self.scaler[skill_lv][10] +
+                                 self.scaler[skill_lv][2]*stack_cnt,
+                                 mode=mode,
+                                 icd=ICD('elem_burst', '',
+                                         event.time+act_t, 1),
+                                 desc=f'Shogun.musou_isshin_charge.1')
+        damage_event2 = DamageEvent().fromskill(self)
+        damage_event2.initialize(time=event.time+act_t,
+                                 scaler=self.scaler[skill_lv][11] +
+                                 self.scaler[skill_lv][2]*stack_cnt,
+                                 mode=mode,
+                                 icd=ICD('elem_burst', '',
+                                         event.time+act_t, 1),
+                                 desc=f'Shogun.musou_isshin_charge.2')
+        simulation.event_queue.put(damage_event1)
+        simulation.event_queue.put(damage_event2)
 
+        # judge special restore cd
         if not self.source.action.NORMAL_ATK.musou.restore_cd.test(event):
             return
         self.source.action.NORMAL_ATK.musou.restore_counter.test(
             simulation.event_log)
         if self.source.action.NORMAL_ATK.musou.restore_counter.full:
             return
-        restore_energy = self.scaler[str(self.LV)][-4]
+
+        # energy event
+        restore_energy = self.scaler[skill_lv][-4]
+        # passive talent 2
         if len(self.source.PASSIVE) == 2:
             restore_energy *= (1+(self.source.attribute.ER()-1)*0.6)
+
+        receiver = [n for n in simulation.shortcut.values() if n != 'Shogun']
         energy_event = EnergyEvent(time=event.time,
                                    source=self,
                                    sourcename=self.sourcename,
-                                   func=self.restore,
-                                   desc='Shogun.musou_isshin.energy',
-                                   base=restore_energy)
+                                   num=restore_energy,
+                                   receiver=receiver,
+                                   desc='Shogun.musou_isshin.energy')
         simulation.event_queue.put(energy_event)
-
-    def musou_isshin_charge_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return
-
-    @staticmethod
-    def restore(simulation: 'Simulation', event: 'EnergyEvent'):
-        for name, character in simulation.characters.items():
-            if name == 'Shogun':
-                continue
-            character.action.ELEM_BURST.energy.receive(event.num)
+        
+        # include CX 6
+        if self.source.attribute.cx_lv >= 6:
+            for name in receiver:
+                simulation.characters[name].action.ELEM_BURST.cd.reduce(1)

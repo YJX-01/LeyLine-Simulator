@@ -3,7 +3,7 @@ from core.rules.alltypes import ElementType
 from core.rules.alltypes import ElementalReactionType as rt
 
 
-class ReactionLogic(object):
+class ElemSys(object):
     __reaction_matrix: List[List[int]] =\
         [
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -14,20 +14,22 @@ class ReactionLogic(object):
         [0, 10, 20, 35, 45, 0, 65, 57, 0],
         [0, 10, 20, 36, 46, 56, 0, 67, 0],
         [0, 17, 27, 37, 47, 57, 67, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]]
     # 8 x 8 matrix
     # first index is first element, second index is second element
 
     def __init__(self):
-        self.uni_element = ElementType(0)
+        self.aura = ElementType(0)
 
     def react_to(self, element: ElementType) -> rt:
         if element == ElementType.NONE:
             return rt.NONE
         else:
-            if self.uni_element != ElementType.NONE:
-                return rt(self.__reaction_matrix[self.uni_element.value][element.value])
+            if self.aura != ElementType.NONE:
+                return rt(self.__reaction_matrix[self.aura.value][element.value])
             else:
-                self.uni_element = element
+                self.aura = element
                 return rt.NONE
+
+    def apply(self, element):
+        pass

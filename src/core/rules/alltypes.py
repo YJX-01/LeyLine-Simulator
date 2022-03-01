@@ -244,4 +244,5 @@ class BuffType(Enum):
     DMG = 2
     ENEMY = 3
     INFUSE = 4
-    OTHER = 5
+    TRANS = 5
+    OTHER = 6

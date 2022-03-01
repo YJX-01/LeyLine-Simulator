@@ -1,11 +1,10 @@
-from typing import Callable, Sequence, Union, Any
-from core.simulation.event import Event
+from typing import Callable, List, Union, Any
 
 
 class Constraint(object):
     '''表示约束条件的基类'''
 
-    def __init__(self, start, duration=0, func: Callable = None):
+    def __init__(self, start=0, duration=0, func: Callable = None):
         self.start: float = start
         self.duration: float = duration
         self.func: Callable = func
@@ -31,12 +30,15 @@ class DurationConstraint(Constraint):
     防止在持续时间内冲突 拒绝冲突动作
     '''
 
-    def __init__(self, start, duration=0, func: Callable[[Any], bool] = None):
+    def __init__(self, start=0, duration=0, func: Callable[[Any], bool] = None, refresh=False):
         '''
-        func是筛选目标类型的函数
+        设定\n
+        ### start, end, func, refresh\n
+        func是筛选目标类型的函数\n
+        refresh表示是否刷新
         '''
         super().__init__(start, duration, func)
-        self.refreshable = False
+        self.refreshable = refresh
 
     def refresh(self, flag=True):
         self.refreshable = flag
@@ -44,7 +46,7 @@ class DurationConstraint(Constraint):
     def reduce(self, t):
         self.duration -= t
 
-    def test(self, event: Event) -> bool:
+    def test(self, event) -> bool:
         if not self.func or (self.func(event) and event.time > self.end):
             if self.refreshable:
                 self.start = event.time
@@ -59,21 +61,17 @@ class CounterConstraint(Constraint):
     默认从零计数
     '''
 
-    def __init__(self, start=0, duration=0, capacity=0, func: Callable[[Any], Union[float, int]] = None):
+    def __init__(self, start=0, duration=0, capacity=0, func: Callable[[Any], Union[float, int]] = None, cir=False):
         '''
         设定\n
-        ## start, end, capacity, func\n
-        func是对目标类型进行计数判断的函数
+        ### start, end, capacity, func, cir\n
+        func是对目标类型进行计数判断的函数\n
+        cir表示是否循环
         '''
         super().__init__(start, duration, func)
         self.count = 0
         self.capacity = capacity
-        self.circulative = False
-
-    def set(self, start=0, duration=0, capacity=0):
-        self.start = start
-        self.duration = duration
-        self.capacity = capacity
+        self.circulative = cir
 
     def circulate(self, flag=True):
         self.circulative = flag
@@ -96,7 +94,7 @@ class CounterConstraint(Constraint):
     def full(self) -> bool:
         return self.count == self.capacity
 
-    def test(self, log: Sequence[Event]) -> float:
+    def test(self, log: List[object]) -> float:
         states = [self.func(ev) for ev in log
                   if self.start < ev.time < self.end]
         self.clear()

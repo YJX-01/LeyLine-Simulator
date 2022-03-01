@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Dict, Tuple, List, Callable, Any
+from typing import Dict, Tuple, List, Callable, Any
 from core.rules.dnode import DNode
 from core.rules.alltypes import BuffType
-from core.simulation.constraint import *
+from core.simulation.constraint import Constraint
 
 
 class BuffPanel(object):
@@ -37,27 +37,29 @@ class Buff(BuffPanel):
     def __init__(self, **configs):
         '''
         用于构建buff\n
-        对ATTR类型: 储存需要修改属性树的键和值 包括添加节点和修改节点操作\n
-        对DMG类型: 储存需要修改伤害树的键和值\n
-        对ENEMY类型: 储存需要修改属性树类型的键和值\n
-        对INFUSE类型: 储存需要修改的技能和元素类型\n
-        对OTHER类型: 暂定\n
-        ---
         type: buff类型\n
-        name: buff施加者\n
-        trigger: (可选)\\
-        对DMG类型,参数(time, event)检查对此伤害是否触发;\\
-        对ATTR类型,参数(simulation)检查加成数值是否更新,适用于动态buff\n
+        name: buff名称\n
+        sourcename: buff施加者\n
         constraint: 约束 一般为时间约束\n
+        trigger: (可选)\\
+        \t对DMG类型,参数(simulation, event)检查对此伤害是否触发;\\
+        \t对ATTR类型,参数(simulation)检查加成数值是否更新, 适用于动态buff\n
         target_path: (可选)\\
-        对DMG类型,参数([names])buff作用角色;\\
-        对ATTR类型,参数([name, attr])buff作用角色及其值\n
+        \t对DMG类型,参数([names] | None) buff作用角色, None为所有;\\
+        \t对ATTR类型,参数([[names], attr] | [None, attr]) buff作用角色及其值, None为所有;\n
+        ---
+        ATTR类型: 储存需要修改属性树的键和值 包括添加节点和修改节点操作\n
+        DMG类型: 储存需要修改伤害树的键和值\n
+        ENEMY类型: 储存需要修改属性树类型的键和值\n
+        INFUSE类型: 储存需要修改的技能和元素类型\n
+        OTHER类型: 暂定\n
         '''
         super().__init__()
         self.type: BuffType = BuffType(0)
         self.name: str = ''
-        self.trigger: Callable[[float, Any], bool] = None
+        self.sourcename: str = ''
         self.constraint: Constraint = None
+        self.trigger: Callable[[float, Any], bool] = None
         self.target_path: Any = None
         self.initialize(**configs)
 
@@ -65,5 +67,5 @@ class Buff(BuffPanel):
         for k, v in configs.items():
             self.__setattr__(k, v)
 
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: 'Buff') -> bool:
         return self.name == other.name

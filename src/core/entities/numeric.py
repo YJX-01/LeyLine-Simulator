@@ -51,6 +51,7 @@ class NumericController(object):
             self.reset()
             self.log_init(simulation.characters)
             self.triggers_init(simulation)
+            self.energy_init(simulation)
             return
 
         if event.time > simulation.clock:
@@ -85,25 +86,36 @@ class NumericController(object):
             for b in buffs:
                 damage.connect(b)
 
-            simulation.event_queue.put(NumericEvent(
-                time=event.time,
-                subtype=event.subtype,
-                sourcename='Controller',
-                obj=damage.root,
-                desc=event.desc,
-            ))
+            apply_flag, react_type, react_multi = self.enemy.attacked_by(event)
+            if apply_flag and event.elem != ElementType.NONE and event.elem != ElementType.PHYSICAL:
+                self.apply_element(simulation, event)
+            if react_type != ElementalReactionType.NONE:
+                react_event = self.react_event(event, react_multi, react_type)
+                simulation.event_queue.put(react_event)
+                damage.connect(react_event)
+
+            numeric_event = NumericEvent(time=event.time,
+                                         subtype=event.subtype,
+                                         sourcename=event.sourcename,
+                                         obj=damage.root,
+                                         desc=event.desc)
+            simulation.event_queue.put(numeric_event)
+
             self.dmg_log[event.sourcename][event.subtype.name].append(
-                (event.time, damage.root()))
+                (event.time, damage.root.value))
 
     def set_enemy(self, **configs):
         self.enemy = Enemy(**configs)
+
+    def set_interval(self, interval: float):
+        self.clock_time = interval
 
     def reset(self):
         for k, v in self.__dict__.items():
             if isinstance(v, list) or isinstance(v, dict):
                 v.clear()
 
-    def insert_to(self, buff: Buff, type: str, simulation: 'Simulation'):
+    def insert_to(self, buff: 'Buff', type: str, simulation: 'Simulation'):
         '''
         insert buff into the controller\n
         dynamic_attr | da\n
@@ -114,16 +126,21 @@ class NumericController(object):
         if type == 'dynamic_attr' or type == 'da':
             if buff not in self.dynamic_buffs_attr:
                 self.dynamic_buffs_attr.append(buff)
-                simulation.characters[buff.target_path[0]
-                                      ].attribute.connect(buff)
-        elif type == 'dynamic_dmg' or type == 'dd':
-            if buff not in self.dynamic_buffs_dmg:
-                self.dynamic_buffs_dmg.append(buff)
+                for name in simulation.characters.keys():
+                    if not buff.target_path[0] or name in buff.target_path[0]:
+                        simulation.characters[name].attribute.connect(buff)
+
         elif type == 'const_attr' or type == 'ca':
             if buff not in self.const_buffs_attr:
                 self.const_buffs_attr.append(buff)
-                simulation.characters[buff.target_path[0]
-                                      ].attribute.connect(buff)
+                for name in simulation.characters.keys():
+                    if not buff.target_path[0] or name in buff.target_path[0]:
+                        simulation.characters[name].attribute.connect(buff)
+
+        elif type == 'dynamic_dmg' or type == 'dd':
+            if buff not in self.dynamic_buffs_dmg:
+                self.dynamic_buffs_dmg.append(buff)
+
         elif type == 'const_dmg' or type == 'cd':
             if buff not in self.const_buffs_dmg:
                 self.const_buffs_dmg.append(buff)
@@ -141,21 +158,29 @@ class NumericController(object):
                 self.dmg_log[k][type_k] = []
 
     def triggers_init(self, simulation: 'Simulation'):
-        for name, character in simulation.characters.items():
+        for character in simulation.characters.values():
             # TODO call all the passive, constellation
             # weapon and artifact passive buff
-
-            # TODO register all the triggerable talent into triggers
             ev = TryEvent(subtype='init')
             for passive in character.action.PASSIVE:
                 passive(simulation, ev)
+            for cx in character.action.CX:
+                cx(simulation, ev)
             character.weapon.work(simulation, ev)
             character.artifact.work(simulation, ev)
+
+    def energy_init(self, simulation: 'Simulation'):
+        if not simulation.energy_full:
+            return
+        for character in simulation.characters.values():
+            character.energy.receive(200)
 
     def triggers_call(self, simulation: 'Simulation', event: 'Event'):
         for name, character in simulation.characters.items():
             for passive in character.action.PASSIVE:
                 passive(simulation, event)
+            for cx in character.action.CX:
+                cx(simulation, event)
             character.weapon.work(simulation, event)
             character.artifact.work(simulation, event)
 
@@ -164,7 +189,10 @@ class NumericController(object):
         for b in self.dynamic_buffs_attr:
             if b.constraint.end < time:
                 self.dynamic_buffs_attr.remove(b)
-                simulation.characters[b.target_path[0]].attribute.disconnect(b)
+                for name in simulation.characters.keys():
+                    if not b.target_path[0] or name in b.target_path[0]:
+                        simulation.characters[name].attribute.disconnect(b)
+                break
             if b.trigger:
                 b.trigger(simulation)
         for b in self.dynamic_buffs_dmg:
@@ -178,7 +206,25 @@ class NumericController(object):
                 character.action.ELEM_BURST.energy.count)
             for in_k in self.__interest_data:
                 attr_node = getattr(character.attribute, in_k)
-                self.char_attr_log[name][in_k].append(attr_node())
+                self.char_attr_log[name][in_k].append(attr_node.value)
+
+    def apply_element(self, simulation: 'Simulation', event: 'Event'):
+        apply_event = ElementEvent(time=event.time,
+                                   subtype='apply',
+                                   sourcename=event.sourcename,
+                                   elem=event.elem,
+                                   num=event.icd.GU,
+                                   desc=f'{event.sourcename}: apply {event.elem} {event.icd.GU}')
+        simulation.event_queue.put(apply_event)
+
+    def react_event(self, event: 'Event', react_multi, react_type):
+        return ElementEvent(time=event.time,
+                            subtype='reaction',
+                            sourcename=event.sourcename,
+                            elem=event.elem,
+                            num=react_multi,
+                            react=react_type,
+                            desc=f'{event.sourcename}: trigger {react_type}')
 
 
 class AMP_DMG(object):
@@ -246,20 +292,11 @@ class AMP_DMG(object):
             DNode('Defence', 'DEF').extend([
                 DNode('Character Level', '', 1),
                 DNode('Enemy Level', '', 1),
-                DNode('Defence Ignore', '%'),
+                DNode('Defence Ignore'),
                 DNode('Defence Reduction', '+')
             ])
         )
         return
-
-    def visualize(self) -> None:
-        que: List[Tuple[DNode, int]] = []
-        que.append((self.root, 0))
-        while (que):
-            c, n = que.pop()
-            print('\t'*n+'->', f'[{c.key}][{c.func}][ {c.num} ]')
-            if not c.leaf:
-                que.extend([(c, n+1) for c in reversed(c.child)])
 
     def connect(self, *args) -> None:
         '''connect to panel objects or damage event'''
@@ -270,6 +307,8 @@ class AMP_DMG(object):
                 self.to_buff_panel(arg)
             elif isinstance(arg, DamageEvent):
                 self.to_event(arg)
+            elif isinstance(arg, ElementEvent):
+                self.to_react(arg)
             elif isinstance(arg, Enemy):
                 self.to_enemy(arg)
         return
@@ -316,7 +355,7 @@ class AMP_DMG(object):
                              func=n.func,
                              child=n.child)
 
-    def to_buff_panel(self, panel: BuffPanel):
+    def to_buff_panel(self, panel: 'BuffPanel'):
         for a in panel.adds:
             try:
                 self.root.find(a[0])
@@ -340,7 +379,7 @@ class AMP_DMG(object):
         self.damage_type = event.subtype
         self.elem_type = event.elem
         s = event.source
-        while(not hasattr(s, 'name')):
+        while(not hasattr(s, 'base')):
             s = s.source
         self.root.modify('Character Level', num=s.base.lv)
         self.root.find('Ability Scaler').insert(
@@ -356,13 +395,17 @@ class AMP_DMG(object):
         for v in remove_map.values():
             self.root.remove(v)
 
+    def to_react(self, event: ElementEvent):
+        if self.subtype != 'reaction':
+            raise TypeError('not a reaction')
+        self.root.modify('Reaction Multiplier', num=event.num)
+
     def to_enemy(self, enemy: Enemy):
         self.root.modify('Enemy Level', num=enemy.lv)
         self.root.modify('Resistance Base',
                          num=enemy.RES[self.elem_type])
 
-    @property
-    def view_str(self) -> str:
+    def __repr__(self) -> str:
         result = []
         que: List[Tuple[DNode, int]] = []
         que.append((self.root, 0))
@@ -384,7 +427,7 @@ class AMP_DMG(object):
         self.root.modify('EM', num=90)
         self.root.modify('Reaction Multiplier', num=1.5)
         self.root()
-        self.visualize()
+        print(self)
 
 
 # d = AMP_DMG()

@@ -3,7 +3,7 @@ from core.entities.buff import Buff
 from core.entities.numeric import NumericController
 from core.rules.skill import Skill
 from core.rules.alltypes import *
-from core.simulation.event import Event
+from core.simulation.event import Event, BuffEvent
 from core.simulation.constraint import Constraint
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
@@ -31,14 +31,16 @@ class Engulfing_Lightning_Skill(Skill):
             buff = Buff(
                 type=BuffType.ATTR,
                 name=f'{self.sourcename}: Engulfing Lightning: Eternal Stove',
+                sourcename=self.sourcename,
                 constraint=Constraint(event.time, 12),
-                target_path=[self.sourcename, 'ER']
+                target_path=[[self.sourcename], 'ER']
             )
             buff.add_buff('Total ER',
                           'Engulfing Lightning ER',
                           self.scaler[2])
             controller = NumericController()
             controller.insert_to(buff, 'da', simulation)
+            simulation.event_queue.put(BuffEvent().frombuff(buff))
         else:
             return
 
@@ -46,9 +48,10 @@ class Engulfing_Lightning_Skill(Skill):
         self.buff = Buff(
             type=BuffType.ATTR,
             name=f'{self.sourcename}: Engulfing Lightning: Timeless Dream',
-            trigger=self.trigger,
+            sourcename=self.sourcename,
             constraint=Constraint(0, 1000),
-            target_path=[self.sourcename, 'ATK']
+            trigger=self.trigger,
+            target_path=[[self.sourcename], 'ATK']
         )
         self.last = simulation.characters[self.sourcename].attribute.ER()
         n = min(self.scaler[1],

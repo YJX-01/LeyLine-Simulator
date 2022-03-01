@@ -114,13 +114,18 @@ class AlbedoChargeATK(Skill):
 
         if mode == '0':
             return
-        damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.1,
-                                scaler=self.scaler[str(self.LV)][5] +
-                                self.scaler[str(self.LV)][6],
-                                mode=mode,
-                                desc=f'Albedo.damage.chargeatk')
-        simulation.event_queue.put(damage_event)
+        damage_event1 = DamageEvent().fromskill(self)
+        damage_event1.initialize(time=event.time+0.1,
+                                 scaler=self.scaler[str(self.LV)][5],
+                                 mode=mode,
+                                 desc=f'Albedo.damage.chargeatk-1')
+        damage_event2 = DamageEvent().fromskill(self)
+        damage_event2.initialize(time=event.time+0.1,
+                                 scaler=self.scaler[str(self.LV)][6],
+                                 mode=mode,
+                                 desc=f'Albedo.damage.chargeatk-2')
+        simulation.event_queue.put(damage_event1)
+        simulation.event_queue.put(damage_event2)
 
     def chargeatk_action_event(self, simulation: 'Simulation', event: 'Event'):
         simulation.uni_action_constraint = DurationConstraint(

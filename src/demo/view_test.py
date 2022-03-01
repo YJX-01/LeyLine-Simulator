@@ -11,14 +11,15 @@ if __name__ == '__main__':
     '''
     print('START A SIMPLE SIMULATION!')
     simulation = Simulation()
-    simulation.set_show_what('numeric', 'warning', 'reject')
+    simulation.set_show_what('numeric', 'buff', 'element', 'warning', 'reject')
+    simulation.set_energy_options(tolerance=40, full=True)
     simulation.set_enemy(lv=72)
 
-    simulation.set_character('Shogun', 90)
-    simulation.set_talents('Shogun', 6, 9, 10)
+    simulation.set_character('Shogun', lv=90)
+    simulation.set_talents('Shogun', norm=6, skill=9, burst=10, cx=2)
 
     w = Weapon()
-    w.initialize('Engulfing_Lightning', 90, False, 1)
+    w.initialize('Engulfing_Lightning', lv=90, asc=False, refine=1)
     simulation.set_weapon('Shogun', w)
 
     arts = Artifact()
@@ -38,7 +39,8 @@ if __name__ == '__main__':
     c = simulation.characters['Shogun']
     p = ArtifactPanel(c)
     print([(k, v.value) for k, v in p.__dict__.items()])
-    print([(k, v.value) for k, v in c.attribute.__dict__.items() if hasattr(v, 'value')])
+    print([(k, v.value)
+          for k, v in c.attribute.__dict__.items() if hasattr(v, 'value')])
 
     cmd_list = [
         '1.A@1',
@@ -46,16 +48,18 @@ if __name__ == '__main__':
         '1.A@3',
         '1.A@4',
         '1.A@5',
-        '1.Z@6',
-        '1.J@7',
-        '1.E@8',
-        '1.A@9'
+        '1.Q@6',
+        '1.A@8',
+        '1.Z@9',
+        '1.J@10',
+        '1.E@11',
+        '1.A@12'
     ]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
     import time
     t1 = time.perf_counter()
-    simulation.start(40)
+    simulation.start(20)
     t2 = time.perf_counter()
     print(1/(t2-t1))
 
@@ -63,7 +67,7 @@ if __name__ == '__main__':
     print(numeric_controller.char_attr_log['Shogun']['ATK'][:5])
     print(numeric_controller.char_attr_log['Shogun']['ER'][:5])
     print(numeric_controller.char_attr_log['Shogun']['ELECTRO_DMG'][:5])
-    
+
     p = LogPrinter(numeric_controller)
     p.print_char_log('Shogun', ['ER', 'ELECTRO_DMG'])
     p.print_energy_log()

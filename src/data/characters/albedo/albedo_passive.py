@@ -4,7 +4,7 @@ from core.entities.numeric import NumericController
 from core.rules.alltypes import SkillType, EventType, ActionType
 from core.rules.skill import Skill
 from core.simulation.constraint import Constraint
-from core.simulation.event import Event, TryEvent
+from core.simulation.event import Event, TryEvent, BuffEvent
 from .albedo_elemskill import TransientBlossom
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
@@ -52,20 +52,23 @@ class AlbedoPassive2(Skill):
             sourcename=albedo.name,
             LV=albedo.attribute.passive_lv
         )
+        self.buff = None
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.ACTION and event.sourcename == 'Albedo' and event.subtype == ActionType.ELEM_BURST:
+            self.build_buff(event.time)
             controller = NumericController()
-            controller.insert_to(self.build_buff(event.time), 'da', simulation)
+            controller.insert_to(self.buff, 'da', simulation)
+            simulation.event_queue.put(BuffEvent().frombuff(self.buff))
         else:
             return
 
     def build_buff(self, time):
-        buff = Buff(
+        self.buff = Buff(
             type=BuffType.ATTR,
             name='Albedo: Homuncular Nature',
+            sourcename='Albedo',
             constraint=Constraint(time, 10),
-            target_path=['Albedo', 'EM']
+            target_path=[None, 'EM']
         )
-        buff.add_buff('Total EM', 'Albedo Passive2 EM', 125)
-        return buff
+        self.buff.add_buff('Total EM', 'Albedo Passive2 EM', 125)

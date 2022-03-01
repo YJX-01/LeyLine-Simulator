@@ -30,7 +30,8 @@ class EMBLEM_OF_SEVERED_FATE_Piece2(Skill):
         self.buff = Buff(
             type=BuffType.ATTR,
             name=f'{self.sourcename}: Emblem of Severed Fate Piece2',
-            target_path=[self.sourcename, 'ER']
+            sourcename=self.sourcename,
+            target_path=[[self.sourcename], 'ER']
         )
         self.buff.add_buff('Total ER', 'Emblem of Severed Fate Piece2', 0.2)
 
@@ -56,6 +57,7 @@ class EMBLEM_OF_SEVERED_FATE_Piece4(Skill):
         self.buff = Buff(
             type=BuffType.DMG,
             name=f'{self.sourcename}: Emblem of Severed Fate Piece4',
+            sourcename=self.sourcename,
             trigger=self.trigger,
             target_path=[self.sourcename]
         )

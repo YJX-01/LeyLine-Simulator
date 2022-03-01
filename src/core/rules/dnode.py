@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from typing import Iterable, List, Tuple
 
 
 class DNode:
@@ -135,3 +135,14 @@ class DNode:
         for k, v in kwargs.items():
             obj.__setattr__(k, v)
         return obj
+
+    def __repr__(self) -> str:
+        result = []
+        que: List[Tuple[DNode, int]] = []
+        que.append((self, 0))
+        while (que):
+            c, n = que.pop()
+            result.append('\t'*n+'->'+f'[{c.key}][{c.func}][ {c.num} ]')
+            if not c.leaf:
+                que.extend([(c, n+1) for c in reversed(c.child)])
+        return '\n'.join(result)

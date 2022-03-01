@@ -40,12 +40,12 @@ class Operation(object):
             self.condition = cmd_action.split()[1]
         self.time = float(cmd_time)
 
-    def work(self, simulation: 'Simulation'):
+    def execute(self, simulation: 'Simulation'):
         if self.source.isnumeric():
             self.source = simulation.shortcut[int(self.source)]
         if self.action == 'C':
             switch_event = SwitchEvent(time=self.time,
-                                       func=self.switch_char,
+                                       source=self.source,
                                        desc=f'CMD.{self.source}.{self.action}')
             simulation.event_queue.put(switch_event)
         else:
@@ -54,12 +54,3 @@ class Operation(object):
             if not self.controller:
                 raise Exception('controller not defined')
             self.controller(self, simulation)
-
-    def execute(self, simulation: 'Simulation'):
-        self.work(simulation)
-
-    def switch_char(self, simulation: 'Simulation', event: 'Event'):
-        for c in simulation.active_constraint:
-            if isinstance(c, DurationConstraint) and not c(event):
-                return
-        simulation.onstage = self.source

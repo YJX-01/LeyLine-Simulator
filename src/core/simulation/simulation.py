@@ -39,13 +39,15 @@ class Simulation(object):
 
         self.show_option: Dict[str, bool] = {}
         self.event_queue: Queue[Event] = PriorityQueue()
-        self.active_constraint: Sequence['Constraint'] = []
 
         self.operation_log: Sequence['Operation'] = []
         self.event_log: Sequence['Event'] = []
         self.output_log: List[str] = []
         self.onstage: str = ''
         self.clock: float = 0
+        self.energy_delay: float = 0.5
+        self.energy_tolerance: int = 10
+        self.energy_full: bool = False
         self.uni_action_constraint: DurationConstraint = None
         self.uni_switch_constraint: DurationConstraint = None
 
@@ -71,6 +73,8 @@ class Simulation(object):
         self.onstage = list(self.characters.keys())[0]
         self.shortcut = dict(zip(range(1, 1+len(self.characters)),
                                  self.characters.keys()))
+        for character in self.characters.values():
+            character.update()
 
     def set_artifact(self, name: str, artifact: Artifact):
         self.characters[name].equip(artifact)
@@ -99,6 +103,11 @@ class Simulation(object):
         for k, v in kwargs.items():
             self.show_option[k.upper()] = v
 
+    def set_energy_options(self, delay: float = 0.5, tolerance: int = 10, full: bool = False):
+        self.energy_delay = delay
+        self.energy_tolerance = tolerance
+        self.energy_full = full
+
     def insert(self, obj: Union['Operation', 'Constraint']):
         if isinstance(obj, Operation):
             self.operation_track.append(obj)
@@ -124,7 +133,11 @@ class Simulation(object):
         self.char_state_update()
         self.event_log.clear()
         self.operation_log.clear()
+        self.output_log.clear()
         self.event_queue = PriorityQueue()
+        self.clock = 0
+        self.uni_action_constraint = None
+        self.uni_switch_constraint = None
 
     def start(self, endtime: float = 30, mode: str = ''):
         '''
@@ -138,11 +151,10 @@ class Simulation(object):
         creation_space.clear()
         numeric_controller = NumericController()
 
-        print('PROCESS COMMAND!')
-        active_constraint: Sequence['Constraint'] = []
-        active_constraint.extend(self.constraint_track)
         self.event_queue.put(TryEvent(time=-1, subtype='init'))
+        self.event_queue.put(TryEvent(time=endtime, subtype='end'))
 
+        print('PROCESS COMMAND!')
         operation_queue: Queue['Operation'] = PriorityQueue()
         list(map(lambda op: operation_queue.put(op), self.operation_track))
         while operation_queue.unfinished_tasks > 0:

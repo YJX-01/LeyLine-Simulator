@@ -25,8 +25,9 @@ class Character(object):
             self.action.attach_skill(configs['name'], self)
 
     def set_talents(self, norm=1, skill=1, burst=1, cx=0):
-        self.attribute.update_talents(norm, skill, burst, cx, self.base.asc)
+        self.action.update_talents(norm, skill, burst, cx, self.base.asc)
         self.action.attach_skill(self.base.name, self)
+        self.update()
 
     def equip(self, *items):
         for item in items:
@@ -44,12 +45,23 @@ class Character(object):
 
     def update(self):
         self.attribute.update_base(self.base)
+        self.attribute.update_talents(self.action)
         self.attribute.update_weapon(self.weapon)
         self.attribute.update_artifact(self.artifact)
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.base.name
+
+    @property
+    def talent(self) -> Tuple[int, int, int]:
+        return (self.attribute.normatk_lv+self.attribute.normatk_bonus_lv,
+                self.attribute.elemskill_lv+self.attribute.elemskill_bonus_lv,
+                self.attribute.elemburst_lv+self.attribute.elemburst_bonus_lv)
+
+    @property
+    def energy(self):
+        return getattr(self.action.ELEM_BURST, 'energy', None)
 
 
 class CharacterBase(object):
@@ -139,18 +151,23 @@ class CharacterAction(object):
     with open('./docs/constant/SkillConfig.json', 'r') as f:
         __skill_info: Dict[str, Dict] = json.load(f)
 
+    with open('./docs/constant/ActionTime.json', 'r') as f:
+        __action_time: Dict[str, Dict] = json.load(f)
+
     def __init__(self) -> None:
         '''
-        # 属性:
+        ### 属性:
         battle action\n
         \tNORMAL_ATK: Callable\n
         \tELEM_SKILL: Callable\n
         \tELEM_BURST: Callable\n
-        \tPASSIVE: Callable\n
-        \tCX: Callable\n
-        numeric action\n
-        \tuse_artifact: Callable\n
-        \tuse_weapon: Callable\n
+        \tPASSIVE: List\n
+        \tCX: List\n
+        \ttalent lv's\\
+        \tscalers\\
+        \taction times\n
+        #### 下辖属性
+        \tenergy <- ELEM_BURST
         '''
         # battle action
         self.NORMAL_ATK: Callable = None
@@ -158,26 +175,47 @@ class CharacterAction(object):
         self.ELEM_BURST: Callable = None
         self.PASSIVE: List[Callable] = []
         self.CX: List[Callable] = []
-        # numeric action
-        self.use_artifact: Callable = None
-        self.use_weapon: Callable = None
+        # static talent levels
+        self.normatk_lv: int = 1
+        self.elemskill_lv: int = 1
+        self.elemburst_lv: int = 1
+        self.passive_lv: int = 0
+        self.cx_lv: int = 0
         # scalers
         self.normatk_scaler: Dict[str, List[float]] = {}
         self.elemskill_scaler: Dict[str, List[float]] = {}
         self.elemburst_scaler: Dict[str, List[float]] = {}
+        # action time
+        self.normatk_time: List[int] = []
+        self.elemskill_time: List[int] = []
+        self.elemburst_time: List[int] = []
 
     def attach_skill(self, name, character: Character):
         self.normatk_scaler = self.__skill_info[name]['A']
         self.elemskill_scaler = self.__skill_info[name]['E']
         self.elemburst_scaler = self.__skill_info[name]['Q']
+        self.normatk_time = self.__action_time[name]['A']
+        self.elemskill_time = self.__action_time[name]['E']
+        self.elemburst_time = self.__action_time[name]['Q']
         exec(f'self.NORMAL_ATK = {name}NormATK(character)')
         exec(f'self.ELEM_SKILL = {name}Elemskill(character)')
         exec(f'self.ELEM_BURST = {name}Elemburst(character)')
-        for i in range(character.attribute.passive_lv+1):
-            if i:
-                exec(f'self.PASSIVE.append({name}Passive{i}(character))')
-        for i in range(character.attribute.cx_lv+1):
-            pass
+        for i in range(1, self.passive_lv+1):
+            exec(f'self.PASSIVE.append({name}Passive{i}(character))')
+        for i in range(1, self.cx_lv+1):
+            exec(f'self.CX.append({name}CX{i}(character))')
+
+    def update_talents(self, norm, skill, burst, cx, asc):
+        self.normatk_lv = norm
+        self.elemskill_lv = skill
+        self.elemburst_lv = burst
+        self.cx_lv = cx
+        if asc < 1:
+            self.passive_lv = 0
+        elif asc < 4:
+            self.passive_lv = 1
+        else:
+            self.passive_lv = 2
 
 
 class CharacterAttribute(object):
@@ -190,7 +228,6 @@ class CharacterAttribute(object):
         \tELEM_DMG... | ELEM_RES...\n
         # 和其他隐藏属性\n
         and other character attributes:\n
-        \tENERGY | STAMINA | STAMINA_CONSUMPTION\n
         \tATK_SPD | MOVE_SPD | INTERRUPT_RES | DMG_REDUCTION\n
         '''
         # panel attributes
@@ -214,19 +251,20 @@ class CharacterAttribute(object):
         self.DENDRO_DMG = DNode('Total DENDRO_DMG', '+')
         self.PHYSICAL_DMG = DNode('Total PHYSICAL_DMG', '+')
         # other attributes
-        self.ENERGY: float = 0
-        self.STAMINA: float = 0
-        self.STAMINA_CONSUMPTION: float = 0
         self.ATK_SPD: float = 0
         self.MOVE_SPD: float = 0
         self.INTERRUPT_RES: float = 0
         self.DMG_REDUCTION: float = 0
-        # talent attributes
+        # dynamic talent attributes
         self.normatk_lv: int = 1
         self.elemskill_lv: int = 1
         self.elemburst_lv: int = 1
-        self.passive_lv = 0
+        self.passive_lv: int = 0
         self.cx_lv: int = 0
+        # bonus lv
+        self.normatk_bonus_lv: int = 0
+        self.elemskill_bonus_lv: int = 0
+        self.elemburst_bonus_lv: int = 0
 
     def tree_expr(self, stat: str) -> DNode:
         root = DNode(f'Total {stat}', '+')
@@ -334,7 +372,7 @@ class CharacterAttribute(object):
             while(que):
                 p = que.pop(0)
                 if not p.leaf:
-                    for i, c in enumerate(p.child):
+                    for c, i in zip(reversed(p.child), range(len(p.child)-1, -1, -1)):
                         for k in ['FLOWER', 'PLUME', 'SANDS', 'GOBLET', 'CIRCLET']:
                             if k in c.key:
                                 del p.child[i]
@@ -351,7 +389,7 @@ class CharacterAttribute(object):
             main_value = val[art_piece.main_stat.name]
             if 'CONST' in main_name or 'PER' in main_name:
                 main_name = main_name.split('_')[0]
-                
+
             if 'PER' in art_piece.main_stat.name:
                 self.__dict__[main_name].find('Main Stat Scaler').insert(
                     DNode(main_key, '%', main_value))
@@ -382,17 +420,15 @@ class CharacterAttribute(object):
                     self.__dict__[sub].insert(
                         DNode(sub_key, '%', sub_num))
 
-    def update_talents(self, norm, skill, burst, cx, asc):
-        self.normatk_lv = norm
-        self.elemskill_lv = skill
-        self.elemburst_lv = burst
-        self.cx_lv = cx
-        if asc < 1:
-            self.passive_lv = 0
-        elif asc < 4:
-            self.passive_lv = 1
-        else:
-            self.passive_lv = 2
+    def update_talents(self, action: 'CharacterAction'):
+        self.normatk_lv = action.normatk_lv
+        self.elemskill_lv = action.elemskill_lv
+        self.elemburst_lv = action.elemburst_lv
+        self.passive_lv = action.passive_lv
+        self.cx_lv = action.cx_lv
+        self.normatk_bonus_lv = 0
+        self.elemskill_bonus_lv = 0
+        self.elemburst_bonus_lv = 0
 
     def connect(self, buff: Buff):
         tar_node = getattr(self, buff.target_path[1])

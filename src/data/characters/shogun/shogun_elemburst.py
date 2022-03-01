@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from core.entities.creation import *
 from core.rules.alltypes import *
 from core.rules.skill import Skill
+from core.rules.icd import ICD
 from core.simulation.constraint import *
 from core.simulation.event import *
 if TYPE_CHECKING:
@@ -19,133 +20,150 @@ class ShogunElemburst(Skill):
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.ELEM_BURST,
             damage_type=DamageType.ELEM_BURST,
+            action_time=shogun.action.elemburst_time,
             scaler=shogun.action.elemburst_scaler
         )
         self.cd = None
         self.energy = CounterConstraint(0, 1000, 90)
         self.creations: Creation = ChakraDesiderata(self)
 
-        self.elemburst_creation_event()
+        self.elemburst_creation_init()
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
-        for c in simulation.active_constraint:
-            if isinstance(c, DurationConstraint) and not c.test(event):
-                simulation.output_log.append(
-                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
-                return
+        # check action collision
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
-            simulation.output_log.append(
-                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
+            self.reject_event(simulation, event, reason='action collision')
             return
-        if self.cd and not self.cd.test(event):
+        # check cd
+        elif self.cd and not self.cd.test(event):
+            self.reject_event(simulation, event, reason='cd')
             return
-        if not self.energy.full:
-            simulation.output_log.append(
-                '[WARNING]:[{} force activate, energy: {}]'.format(self.sourcename, self.energy.count))
+        # check energy
+        elif not self.energy.full:
+            if self.energy.capacity - self.energy.count <= simulation.energy_tolerance:
+                simulation.output_log.append(
+                    f'[WARNING]:[{self.sourcename} force activate, energy: {self.energy.count}]')
+            else:
+                self.reject_event(simulation, event, reason='energy')
+                return
+
+        # check finish, clear energy, reset cd (cd has begin delay)
         self.energy.clear()
-        self.cd = self.elemburst_cd(event.time)
+        self.cd = self.elemburst_cd(event.time+self.action_time[0]/60)
 
+        # fetch mode and other information
         mode = event.mode
+        act_t: float = self.action_time[1]/60  # frame delay
+        # reset ChakraDesiderata
+        self.creations.clear()
+        stack_cnt: int = self.creations.last  # resolve stack
 
-        stack_cnt: int = round(self.creations.stack.count)
-
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.elemburst_action_event,
-                                desc=f'Shogun.elemburst.action')
+                                dur=act_t,
+                                desc='Shogun.elem_burst')
         simulation.event_queue.put(action_event)
 
+        # enter special state
+        self.elemburst_transformation(event.time, simulation)
+
+        # special energy restore mechanism
         restore_cnt = CounterConstraint(
             event.time, 7, 5, func=self.restore_cnt)
-        restore_cd = DurationConstraint(event.time, 7, func=lambda ev: True)
-        restore_cd.refresh()
+        restore_cd = DurationConstraint(
+            event.time, 7, func=lambda ev: True, refresh=True)
         self.source.action.NORMAL_ATK.musou.restore_cnt = restore_cnt
         self.source.action.NORMAL_ATK.musou.restore_cd = restore_cd
 
+        # damage event
         if mode == '0':
             return
+        skill_lv = str(self.source.talent[2])
+        scaler = self.scaler[skill_lv][0] + self.scaler[skill_lv][1]*stack_cnt
         damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.05,
-                                scaler=self.scaler[str(self.LV)][0] +
-                                self.scaler[str(self.LV)][1]*stack_cnt,
+        damage_event.initialize(time=event.time+act_t,
+                                scaler=scaler,
                                 mode=mode,
-                                desc='Shogun.elemburst.damage')
+                                icd=ICD('elem_burst', '',
+                                        event.time+act_t, 2),
+                                desc='Shogun.elem_burst')
         simulation.event_queue.put(damage_event)
 
-    def receive_energy(self, simulation: 'Simulation', event: 'Event'):
-        if not isinstance(event, EnergyEvent):
-            raise TypeError
-        increment = event.base*event.num
-        if event.elem.value == self.source.base.element:
-            increment *= 3
-        elif event.elem == ElementType.NONE:
-            increment *= 2
-
-        if simulation.onstage != self.source.name:
-            increment *= (1-0.1*len(simulation.characters))
-
-        increment *= simulation.characters[self.source.name].attribute.ER()
-        self.energy.receive(increment)
+    @staticmethod
+    def reject_event(sim, ev: 'Event', reason):
+        sim.output_log.append(
+            f'[REJECT]:[{ev.time}s: {ev.desc}; reason: {reason}]')
 
     @staticmethod
     def elemburst_cd(start):
         def f(ev: Event):
-            if ev.type == EventType.COMMAND and ev.desc == 'CMD.Shogun.Q':
-                return True
-            else:
-                return False
-
-        cd_counter = DurationConstraint(start, 18, f)
-        cd_counter.refresh()
+            return ev.type == EventType.COMMAND and ev.desc == 'CMD.Shogun.Q'
+        cd_counter = DurationConstraint(start, 18, func=f, refresh=True)
         return cd_counter
 
-    def elemburst_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return
-
-    def elemburst_creation_event(self):
+    def elemburst_creation_init(self):
         creation_space = CreationSpace()
         creation_space.insert(self.creations)
 
+    def elemburst_transformation(self, time, simulation: 'Simulation'):
+        state = MusouIsshinState(time)
+        creation_space = CreationSpace()
+        creation_space.insert(state)
+
     @staticmethod
     def restore_cnt(ev: 'Event'):
-        if ev.type == EventType.ENERGY and ev.desc == 'Shogun.musou_isshin.energy':
-            return 1
-        else:
-            return 0
+        return int(ev.type == EventType.ENERGY and ev.desc == 'Shogun.musou_isshin.energy')
 
 
 class ChakraDesiderata(TriggerableCreation):
     def __init__(self, skill: ShogunElemburst):
-        super().__init__()
-        self.source = skill
-        self.start = 0
-        self.duration = 1000
-        self.exist_num = 1
-        self.scaler = skill.scaler[str(skill.LV)]
-        self.trigger_func = self.desiderata_trigger
-
+        super().__init__(
+            source=skill,
+            sourcename='Shogun',
+            name='Chakra Desiderata', 
+            start=0,
+            duration=1000,
+            exist_num=1,
+            scaler=skill.scaler[str(skill.source.talent[2])]
+        )
         self.stack = CounterConstraint(0, 1000, 60)
         self.last = 0
 
     def clear(self):
-        self.last = self.stack.count
+        self.last = round(self.stack.count)
         self.stack.clear()
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
-        if not self.desiderata_trigger(simulation, event):
+        if event.type != EventType.ACTION or event.subtype != ActionType.ELEM_BURST:
             return
-        if event.sourcename == 'Shogun':
-            self.clear()
-        else:
-            energy_cnt = simulation.characters[event.sourcename].action.ELEM_BURST.energy.capacity
-            self.stack.receive(energy_cnt*self.scaler[3])
+        # refresh scaler
+        self.scaler = self.source.scaler[str(self.source.source.talent[2])]
 
-    def desiderata_trigger(self, simulation: 'Simulation', event: 'Event'):
-        if event.type == EventType.ACTION and event.subtype == ActionType.ELEM_BURST:
-            return True
+        if event.sourcename != 'Shogun':
+            energy_cnt = event.source.energy.capacity
+            resolve_cnt = energy_cnt*self.scaler[3]
+            # include CX 1
+            if simulation.characters['Shogun'].attribute.cx_lv >= 1:
+                if event.source.base.element == ElementType.ELECTRO.value:
+                    resolve_cnt *= 1.8
+                else:
+                    resolve_cnt *= 1.2
+            self.stack.receive(resolve_cnt)
+
+
+class MusouIsshinState(Creation):
+    def __init__(self, start):
+        super().__init__(
+            sourcename='Shogun',
+            name='Musou Isshin State',
+            start=start,
+            duration=7,
+            exist_num=1
+        )
+
+    def __call__(self, simulation: 'Simulation', event: 'Event'):
+        if event.type == EventType.SWITCH and event.source != 'Shogun':
+            self.duration = event.time - self.start
         else:
-            return False
+            return
