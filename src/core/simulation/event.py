@@ -92,7 +92,7 @@ class SwitchEvent(Event):
         self.initialize(**configs)
 
     def execute(self, simulation: 'Simulation'):
-        if simulation.uni_switch_constraint and not simulation.uni_switch_constraint.test(event):
+        if simulation.uni_switch_constraint and not simulation.uni_switch_constraint.test(self):
             simulation.output_log.append(
                 f'[REJECT]:[{self.time}s: {self.desc}; reason: switch collision]')
             return

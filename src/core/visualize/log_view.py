@@ -1,3 +1,4 @@
+from math import ceil
 from typing import TYPE_CHECKING, List
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,11 +24,19 @@ class LogPrinter(object):
                 label=k
             )
         ax.legend()
+        plt.xlim(left=0)
+        plt.ylim(bottom=0)
+        plt.ylabel('Value')
+        plt.xlabel('time / s')
+        plt.title(f'{name} Attribute Log')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
         plt.show()
 
     def print_energy_log(self):
         lines = []
         labels = []
+        max_x = 0
         for k in self.controller.energy_log:
             line = np.array(self.controller.energy_log[k])
             lines.append(line)
@@ -40,7 +49,16 @@ class LogPrinter(object):
                 lines[i],
                 label=k
             )
+            max_x = max(max_x, len(lines[i])/10)
         ax.legend()
+        plt.xlim(0, ceil(max_x))
+        plt.ylim(0, 100)
+        plt.yticks(np.linspace(0, 100, 11))
+        plt.ylabel('Energy')
+        plt.xlabel('time / s')
+        plt.title('Energy Log')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
         plt.show()
 
     def print_damage_log(self, names: List[str]):
@@ -62,5 +80,11 @@ class LogPrinter(object):
                 label=k, linestyle='-', marker='o'
             )
         ax.legend()
-        plt.grid(True)
+        plt.ylim(bottom=0)
+        plt.xlim(left=0)
+        plt.ylabel('Damage')
+        plt.xlabel('time / s')
+        plt.title('Damage Log')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
         plt.show()

@@ -124,7 +124,7 @@ class EyeOfStormyJudgment(TriggerableCreation):
             energy_cnt = character.action.ELEM_BURST.energy.capacity
             buff = Buff(
                 type=BuffType.DMG,
-                name=f'Shogun: Eye of Stormy Judgement {name}',
+                name=f'{name}: Eye of Stormy Judgement',
                 sourcename='Shogun',
                 constraint=Constraint(start, 25),
                 trigger=trigger,

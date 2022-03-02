@@ -18,13 +18,12 @@ class ShogunPassive1(Skill):
             sourcename=shogun.name,
             LV=shogun.attribute.passive_lv
         )
-        self.cd = DurationConstraint(-3, 3)
-        self.cd.refresh()
+        self.cd = DurationConstraint(-3, 3, refresh=True)
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type != EventType.ENERGY or not event.base:
             return
-        if not self.cd.test(event):
+        elif not self.cd.test(event):
             return
         else:
             self.source.action.ELEM_BURST.creations.stack.receive(2)

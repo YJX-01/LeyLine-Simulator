@@ -1,6 +1,8 @@
 from core.simulation import *
 from core.entities.character import *
 from core.visualize.log_view import LogPrinter
+from core.visualize.genshin_color import ColorManager
+from core.visualize.sim_view import SimPrinter
 
 
 if __name__ == '__main__':
@@ -36,12 +38,6 @@ if __name__ == '__main__':
     arts.equip(p1, p2, p3, p4, p5)
     simulation.set_artifact('Shogun', arts)
 
-    c = simulation.characters['Shogun']
-    p = ArtifactPanel(c)
-    print([(k, v.value) for k, v in p.__dict__.items()])
-    print([(k, v.value)
-          for k, v in c.attribute.__dict__.items() if hasattr(v, 'value')])
-
     cmd_list = [
         '1.A@1',
         '1.A@2',
@@ -57,18 +53,21 @@ if __name__ == '__main__':
     ]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
-    import time
-    t1 = time.perf_counter()
     simulation.start(20)
-    t2 = time.perf_counter()
-    print(1/(t2-t1))
 
     numeric_controller = NumericController()
-    print(numeric_controller.char_attr_log['Shogun']['ATK'][:5])
-    print(numeric_controller.char_attr_log['Shogun']['ER'][:5])
-    print(numeric_controller.char_attr_log['Shogun']['ELECTRO_DMG'][:5])
+    stage = numeric_controller.onstage_record()
 
     p = LogPrinter(numeric_controller)
     p.print_char_log('Shogun', ['ER', 'ELECTRO_DMG'])
     p.print_energy_log()
     p.print_damage_log(['Shogun'])
+
+    cm = ColorManager(simulation)
+    # cm.test(cm.get_element_color('cryo'))
+    # cm.showall()
+    
+    sp = SimPrinter(simulation)
+    sp.print_action(['Shogun'], stage)
+    sp.print_buffs(stage)
+    sp.print_element()

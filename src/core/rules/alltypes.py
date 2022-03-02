@@ -224,8 +224,8 @@ class ActionType(Enum):
     NORMAL_ATK_CHARGE = 2
     NORMAL_ATK_PLUNGE = 3
     ELEM_SKILL = 4
-    ELEM_SKILL_HOLD = 6
-    ELEM_BURST = 7
+    ELEM_SKILL_HOLD = 5
+    ELEM_BURST = 6
 
     JUMP = 10
     SPRINT = 11
