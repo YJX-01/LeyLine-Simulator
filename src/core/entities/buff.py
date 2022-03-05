@@ -1,4 +1,5 @@
 from typing import Dict, Tuple, List, Callable, Any
+from collections import OrderedDict
 from core.rules.dnode import DNode
 from core.rules.alltypes import BuffType
 from core.simulation.constraint import Constraint
@@ -11,11 +12,11 @@ class BuffPanel(object):
         储存需要修改伤害树的键和值\n
         包括添加节点和修改节点操作
         '''
-        self.add_info: Dict[str, Tuple[str, float]] = {}
+        self.add_info: OrderedDict[str, Tuple[str, float, str]] = OrderedDict()
         self.change_info: Dict[str, float] = {}
 
-    def add_buff(self, tar_key, name, value):
-        self.add_info[tar_key] = (name, value)
+    def add_buff(self, tar_key: str, name: str, value: float, func: str = ''):
+        self.add_info[tar_key] = (name, value, func)
 
     def change_buff(self, key, value):
         self.change_info[key] = value
@@ -24,7 +25,7 @@ class BuffPanel(object):
     def adds(self) -> List[Tuple[str, DNode]]:
         adds = []
         for key, tup in self.add_info.items():
-            n: DNode = DNode(tup[0], '', tup[1])
+            n: DNode = DNode(tup[0], tup[2], tup[1])
             adds.append((key, n))
         return adds
 

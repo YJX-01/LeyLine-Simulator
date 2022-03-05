@@ -85,16 +85,18 @@ class NumericController(object):
             for b in buffs:
                 damage.connect(b)
 
-            apply_flag, react_type, react_multi = self.enemy.attacked_by(event)
+            apply_flag, amp_flag, react_type, react_multi = \
+                self.enemy.attacked_by(event)
             if apply_flag and event.elem != ElementType.NONE and event.elem != ElementType.PHYSICAL:
                 self.apply_element(simulation, event)
             if react_type != ElementalReactionType.NONE:
                 react_event = self.react_event(event, react_multi, react_type)
                 simulation.event_queue.put(react_event)
-                damage.connect(react_event)
+                if amp_flag:
+                    damage.connect(react_event)
 
             numeric_event = NumericEvent(time=event.time,
-                                         subtype=event.subtype,
+                                         subtype='DAMAGE',
                                          sourcename=event.sourcename,
                                          obj=damage.root,
                                          desc=event.desc)
@@ -102,6 +104,8 @@ class NumericController(object):
 
             self.dmg_log[event.sourcename][event.subtype.name].append(
                 (event.time, damage.root.value))
+        if event.type == EventType.NUMERIC:
+            self.numeric_case(simulation, event)
 
     def set_enemy(self, **configs):
         self.enemy = Enemy(**configs)
@@ -113,6 +117,13 @@ class NumericController(object):
         for k, v in self.__dict__.items():
             if isinstance(v, list) or isinstance(v, dict):
                 v.clear()
+                
+    def damage_case(self, simulation: 'Simulation', event: 'Event'):
+        pass
+    
+    def numeric_case(self, simulation: 'Simulation', event: 'Event'):
+        if event.subtype == 'DAMAGE':
+            self.enemy.hurt(event.obj.value)
 
     def insert_to(self, buff: 'Buff', type: str, simulation: 'Simulation'):
         '''
@@ -219,6 +230,7 @@ class NumericController(object):
     def react_event(self, event: 'Event', react_multi, react_type):
         return ElementEvent(time=event.time,
                             subtype='reaction',
+                            source=event.source,
                             sourcename=event.sourcename,
                             elem=event.elem,
                             num=react_multi,

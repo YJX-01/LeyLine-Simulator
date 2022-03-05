@@ -158,7 +158,7 @@ class ShogunChargeATK(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc=f'Shogun.charged_atk')
+                                desc='Shogun.charged_atk')
         simulation.event_queue.put(action_event)
 
         # damage event
@@ -171,7 +171,7 @@ class ShogunChargeATK(Skill):
                                 mode=mode,
                                 icd=ICD('normal_atk', '',
                                         event.time+act_t, 1),
-                                desc=f'Shogun.charged_atk')
+                                desc='Shogun.charged_atk')
         simulation.event_queue.put(damage_event)
 
 
@@ -302,7 +302,7 @@ class MusouIsshinCharge(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc=f'Shogun.musou_isshin_charge')
+                                desc='Shogun.musou_isshin_charge')
         simulation.event_queue.put(action_event)
 
         # damage event
@@ -316,7 +316,7 @@ class MusouIsshinCharge(Skill):
                                  mode=mode,
                                  icd=ICD('elem_burst', '',
                                          event.time+act_t, 1),
-                                 desc=f'Shogun.musou_isshin_charge.1')
+                                 desc='Shogun.musou_isshin_charge.1')
         damage_event2 = DamageEvent().fromskill(self)
         damage_event2.initialize(time=event.time+act_t,
                                  scaler=self.scaler[skill_lv][11] +
@@ -324,7 +324,7 @@ class MusouIsshinCharge(Skill):
                                  mode=mode,
                                  icd=ICD('elem_burst', '',
                                          event.time+act_t, 1),
-                                 desc=f'Shogun.musou_isshin_charge.2')
+                                 desc='Shogun.musou_isshin_charge.2')
         simulation.event_queue.put(damage_event1)
         simulation.event_queue.put(damage_event2)
 

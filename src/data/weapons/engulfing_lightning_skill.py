@@ -25,8 +25,6 @@ class Engulfing_Lightning_Skill(Skill):
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
             self.build_buff(simulation)
-            controller = NumericController()
-            controller.insert_to(self.buff, 'da', simulation)
         elif event.sourcename == self.sourcename and event.type == EventType.ACTION and event.subtype == ActionType.ELEM_BURST:
             buff = Buff(
                 type=BuffType.ATTR,
@@ -41,8 +39,6 @@ class Engulfing_Lightning_Skill(Skill):
             controller = NumericController()
             controller.insert_to(buff, 'da', simulation)
             simulation.event_queue.put(BuffEvent().frombuff(buff))
-        else:
-            return
 
     def build_buff(self, simulation: 'Simulation'):
         self.buff = Buff(
@@ -57,12 +53,12 @@ class Engulfing_Lightning_Skill(Skill):
         n = min(self.scaler[1],
                 self.scaler[0] * (self.last-1))
         self.buff.add_buff('Bonus Scalers', 'Engulfing Lightning ATK', n)
+        controller = NumericController()
+        controller.insert_to(self.buff, 'da', simulation)
 
     def trigger(self, simulation: 'Simulation'):
-        if simulation.characters[self.sourcename].attribute.ER() == self.last:
-            return
-        else:
-            self.last = simulation.characters[self.sourcename].attribute.ER()
+        if simulation.characters[self.sourcename].attribute.ER.value != self.last:
+            self.last = simulation.characters[self.sourcename].attribute.ER.value
             n = min(self.scaler[1],
                     self.scaler[0] * (self.last-1))
             self.buff.add_buff('Bonus Scalers', 'Engulfing Lightning ATK', n)

@@ -19,29 +19,31 @@ class AlbedoPassive1(Skill):
             sourcename=albedo.name,
             LV=albedo.attribute.passive_lv
         )
+        self.buff = None
 
     def __call__(self, simulation: 'Simulation', event: 'TryEvent'):
         if event.type == EventType.TRY and event.subtype == 'init':
             controller = NumericController()
-            controller.insert_to(self.build_buff(), 'cd', simulation)
+            if self.build_buff(controller.enemy.hp_percentage):
+                controller.insert_to(self.buff, 'cd', simulation)
         else:
             return
 
-    @staticmethod
-    def build_buff():
+    def build_buff(self, percentage: tuple):
+        if percentage[0] > percentage[1]/2:
+            return False
+
         def trigger(simulation, event):
-            if isinstance(event.source, TransientBlossom):
-                return True
-            else:
-                return False
-        buff = Buff(
+            return isinstance(event.source, TransientBlossom)
+        self.buff = Buff(
             type=BuffType.DMG,
             name='Albedo: Calcite Might',
+            sourcename='Albedo',
             trigger=trigger,
             target_path=['Albedo'],
         )
-        buff.add_buff('Other Bonus', 'Albedo Passive1 Bonus', 0.25)
-        return buff
+        self.buff.add_buff('Other Bonus', 'Albedo Passive1 Bonus', 0.25)
+        return True
 
 
 class AlbedoPassive2(Skill):

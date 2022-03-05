@@ -38,8 +38,6 @@ class ShogunCX2(Skill):
             self.build_buff()
             controller = NumericController()
             controller.insert_to(self.buff, 'cd', simulation)
-        else:
-            return
 
     def build_buff(self):
         self.buff = Buff(
@@ -72,8 +70,6 @@ class ShogunCX3(Skill):
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
             simulation.characters['Shogun'].attribute.elemburst_bonus_lv += 3
-        else:
-            return
 
 
 class ShogunCX4(Skill):
@@ -90,28 +86,22 @@ class ShogunCX4(Skill):
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.time < self.last+10:
             return
-        else:
-            pass
-
-        if event.type == EventType.ACTION and event.sourcename == 'Albedo' and event.subtype == ActionType.ELEM_BURST:
-            self.build_buff(event.time, simulation)
-            controller = NumericController()
-            controller.insert_to(self.buff, 'da', simulation)
+        elif event.type == EventType.ACTION and event.sourcename == 'Shogun' and event.subtype == ActionType.ELEM_BURST:
+            self.build_buff(simulation, event.time)
             simulation.event_queue.put(BuffEvent().frombuff(self.buff))
-        else:
-            return
 
-    def build_buff(self, time, simulation: 'Simulation'):
+    def build_buff(self, simulation: 'Simulation', time):
         names = [n for n in simulation.shortcut.values() if n != 'Shogun']
         self.buff = Buff(
             type=BuffType.ATTR,
-            name='Shogun: Pledge of Propriety',
+            name='Shogun: Pledge of Propriety(CX4)',
             sourcename='Shogun',
             constraint=Constraint(time, 10),
             target_path=[names, 'ATK']
         )
         self.buff.add_buff('Bonus Scalers', 'Shogun CX4 ATK', 0.3)
-
+        controller = NumericController()
+        controller.insert_to(self.buff, 'da', simulation)
 
 class ShogunCX5(Skill):
     def __init__(self, shogun: 'Character'):
@@ -125,8 +115,6 @@ class ShogunCX5(Skill):
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
             simulation.characters['Shogun'].attribute.elemskill_bonus_lv += 3
-        else:
-            return
 
 
 class ShogunCX6(Skill):

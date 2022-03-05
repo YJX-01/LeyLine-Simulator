@@ -1,3 +1,5 @@
+import json
+from random import random
 from copy import deepcopy
 from typing import List, Tuple
 from core.rules.dnode import DNode
@@ -6,6 +8,7 @@ from core.entities.buff import *
 from core.entities.enemy import Enemy
 from core.entities.panel import EntityPanel
 from core.simulation.event import *
+
 
 class AMP_DMG(object):
     __multipliers = ['Basic Multiplier', 'Bonus Multiplier', 'Critical Multiplier',
@@ -17,7 +20,6 @@ class AMP_DMG(object):
         self.depend: str = 'ATK'
         self.damage_type: DamageType = DamageType(0)
         self.elem_type: ElementType = ElementType(0)
-        self.react_type: ElementalReactionType = ElementalReactionType(0)
 
     def init_tree(self) -> None:
         for m in self.__multipliers:
@@ -35,6 +37,7 @@ class AMP_DMG(object):
             DNode('Elemental Burst Bonus', '+'),
             DNode('Normal Attack Bonus', '+'),
             DNode('Charged Attack Bonus', '+'),
+            DNode('Plunging Attack Bonus', '+'),
             DNode('Other Bonus', '+')
         ])
         self.root.find('Critical Multiplier').extend([
@@ -79,7 +82,7 @@ class AMP_DMG(object):
         return
 
     def connect(self, *args) -> None:
-        '''connect to panel objects or damage event'''
+        '''connect to panel objects, events, and enemy'''
         for arg in args:
             if isinstance(arg, EntityPanel):
                 self.to_entity_panel(arg)
@@ -138,19 +141,16 @@ class AMP_DMG(object):
     def to_buff_panel(self, panel: 'BuffPanel'):
         for a in panel.adds:
             try:
-                self.root.find(a[0])
+                father = self.root.find(a[0])
             except:
-                continue
+                pass
             else:
                 try:
-                    self.root.find(a[1].key)
+                    child = self.root.find(a[1].key)
                 except:
-                    self.root.find(a[0]).insert(a[1])
+                    father.insert(a[1])
                 else:
-                    self.root.modify(a[1].key,
-                                     func=a[1].func,
-                                     num=a[1].num,
-                                     child=a[1].child)
+                    child.modify(func=a[1].func, num=a[1].num)
         for c in panel.changes:
             self.root.modify(c[0], num=c[1])
 
@@ -158,6 +158,7 @@ class AMP_DMG(object):
         self.depend = event.depend
         self.damage_type = event.subtype
         self.elem_type = event.elem
+
         s = event.source
         while(not hasattr(s, 'base')):
             s = s.source
@@ -169,11 +170,27 @@ class AMP_DMG(object):
             DamageType.ELEM_SKILL: 'Elemental Skill Bonus',
             DamageType.ELEM_BURST: 'Elemental Burst Bonus',
             DamageType.NORMAL_ATK: 'Normal Attack Bonus',
-            DamageType.CHARGED_ATK: 'Charged Attack Bonus'
+            DamageType.CHARGED_ATK: 'Charged Attack Bonus',
+            DamageType.PLUNGING_ATK: 'Plunging Attack Bonus'
         }
         remove_map.pop(self.damage_type)
         for v in remove_map.values():
             self.root.remove(v)
+
+        if event.mode == '$':
+            cr = max(s.attribute.CRIT_RATE.value, 0)
+            if random() < cr:
+                self.root.find('Bonus Critical Rate').insert(
+                    DNode('Actual Simulation Result', '', 1))
+            else:
+                self.root.find('Bonus Critical Rate').insert(
+                    DNode('Actual Simulation Result', '', -10))
+        elif event.mode == '!':
+            self.root.find('Bonus Critical Rate').insert(
+                DNode('Force Crit', '', 1))
+        elif event.mode == '?':
+            self.root.find('Bonus Critical Rate').insert(
+                DNode('Force non-Crit', '', -10))
 
     def to_react(self, event: ElementEvent):
         if self.subtype != 'reaction':
@@ -184,6 +201,10 @@ class AMP_DMG(object):
         self.root.modify('Enemy Level', num=enemy.lv)
         self.root.modify('Resistance Base',
                          num=enemy.RES[self.elem_type])
+
+    @property
+    def value(self) -> float:
+        return self.root.value
 
     def __repr__(self) -> str:
         result = []
@@ -209,6 +230,81 @@ class AMP_DMG(object):
         self.root()
         print(self)
 
+
+class TRANS_DMG(object):
+    with open('docs\constant\ReactionLevelMultiplier.json', 'r') as f:
+        reaction_info = json.load(f)
+
+    def __init__(self):
+        self.root: DNode = DNode('Total Damage', '*')
+        self.init_tree()
+        self.elem_type: ElementType = ElementType(0)
+        self.react_type: ElementalReactionType = ElementalReactionType(0)
+
+    def init_tree(self):
+        self.root.extend([
+            DNode('Level Multiplier'),
+            DNode('Reaction Multiplier'),
+            DNode('Reaction Scaler', '+').extend([
+                DNode('Base', '', 1),
+                DNode('Elemental Mastery', 'EM_T').extend([
+                    DNode('EM', '')
+                ]),
+                DNode('Reaction Bonus', '+')
+            ]),
+            DNode('Resistance Multiplier', 'RES').extend([
+                DNode('Resistance Base', '%', 10),
+                DNode('Resistance Debuff', '%', 0)
+            ]),
+        ])
+
+    def connect(self, *args) -> None:
+        '''connect to panel objects, events, and enemy'''
+        for arg in args:
+            if isinstance(arg, BuffPanel):
+                self.to_buff_panel(arg)
+            elif isinstance(arg, ElementEvent):
+                self.to_react(arg)
+            elif isinstance(arg, Enemy):
+                self.to_enemy(arg)
+
+    def to_buff_panel(self, panel: 'BuffPanel'):
+        for a in panel.adds:
+            try:
+                father = self.root.find(a[0])
+            except:
+                pass
+            else:
+                try:
+                    child = self.root.find(a[1].key)
+                except:
+                    father.insert(a[1])
+                else:
+                    child.modify(func=a[1].func, num=a[1].num)
+        for c in panel.changes:
+            self.root.modify(c[0], num=c[1])
+
+    def to_react(self, event: ElementEvent):
+        if self.subtype != 'reaction':
+            raise TypeError('not a reaction')
+        self.elem_type = event.elem
+        self.react_type = event.react
+        self.root.modify('Reaction Multiplier', num=event.num)
+        s = event.source
+        while(not hasattr(s, 'base')):
+            s = s.source
+        self.root.modify('Level Multiplier',
+                         num=self.reaction_info['player'][s.base.lv])
+        self.root.modify('EM',
+                         num=s.attribute.EM.value)
+
+    def to_enemy(self, enemy: Enemy):
+        self.root.modify('Resistance Base',
+                         num=enemy.RES[self.elem_type])
+
+    @property
+    def value(self) -> float:
+        return self.root.value
 
 # from functools import wraps
 
@@ -239,5 +335,3 @@ class AMP_DMG(object):
 #             return result
 #         return wrapper
 #     return decorate
-
-    

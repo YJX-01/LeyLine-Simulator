@@ -223,10 +223,10 @@ class ElementEvent(Event):
         '''
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function |
-        ### elem, num(GU), react
+        ### elem, num(GU/mul), react
         subtype: apply, reaction\n
         - you need to set:\n
-        ### time, subtype, sourcename, elem, num, (react), desc
+        ### time, subtype, source, sourcename, elem, num, (react), desc
         '''
         super().__init__(type=EventType.ELEMENT)
         self.elem: ElementType = ElementType.NONE

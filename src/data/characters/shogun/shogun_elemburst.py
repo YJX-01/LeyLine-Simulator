@@ -121,7 +121,7 @@ class ChakraDesiderata(TriggerableCreation):
         super().__init__(
             source=skill,
             sourcename='Shogun',
-            name='Chakra Desiderata', 
+            name='Chakra Desiderata',
             start=0,
             duration=1000,
             exist_num=1,
@@ -165,5 +165,3 @@ class MusouIsshinState(Creation):
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.SWITCH and event.source != 'Shogun':
             self.duration = event.time - self.start
-        else:
-            return

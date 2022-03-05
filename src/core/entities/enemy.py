@@ -2,7 +2,8 @@ import json
 from typing import Dict, Tuple
 from core.rules.icd import ICD
 from core.rules.element import ElemSys
-from core.rules.alltypes import ElementType, ElementalReactionType
+from core.rules.alltypes import ElementType
+from core.rules.alltypes import ElementalReactionType as rt
 from core.simulation.event import DamageEvent
 
 
@@ -11,6 +12,7 @@ class Enemy(object):
         self.lv: int = 100
         self.name: str = ''
         self.HP: float = 1e9
+        self.hp_total: float = 1e9
         self.RES: Dict[ElementType: int] = {
             ElementType.ANEMO: 10,
             ElementType.GEO: 10,
@@ -31,7 +33,13 @@ class Enemy(object):
         for k, v in config.items():
             self.__setattr__(k, v)
 
-    def attacked_by(self, damage: 'DamageEvent') -> Tuple[bool, ElementalReactionType, float]:
+    @property
+    def hp_percentage(self) -> Tuple[float, float]:
+        return (self.HP, self.hp_total)
+
+    def attacked_by(self, damage: 'DamageEvent') -> Tuple[bool, bool, rt, float]:
+        '''return apply_flag, amp_flag, react_type, react_multi'''
+        # judge whether apply element
         apply_flag: bool = False
         if damage.icd and damage.icd.tag:
             icd_map: Dict[str, ICD] = self.icd.setdefault(
@@ -44,16 +52,16 @@ class Enemy(object):
         else:
             apply_flag = True
 
+        # judge reaction type
         if not apply_flag:
-            react_type = self.elem_sys.react_to(ElementType.NONE)
+            react_type = self.elem_sys.react_to(ElementType.NONE, 1)
         else:
-            react_type = self.elem_sys.react_to(damage.elem)
+            react_type = self.elem_sys.react_to(damage.elem, damage.icd.GU)
 
-        if react_type in [ElementalReactionType.MELT, ElementalReactionType.VAPORIZE]:
-            react_multi = 2
-        elif react_type in [ElementalReactionType.MELT_REVERSE, ElementalReactionType.VAPORIZE_REVERSE]:
-            react_multi = 1.5
-        else:
-            react_multi = 1
+        # judge amplify or transformative, determine multiplier
+        react_multi, amp_flag = self.elem_sys.reaction_multiplier.get(react_type, (0, False))
 
-        return apply_flag, react_type, react_multi
+        return apply_flag, amp_flag, react_type, react_multi
+
+    def hurt(self, damage: float):
+        self.HP -= damage

@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
+from core.entities.creation import CreationSpace, TriggerableCreation
 from core.rules.alltypes import *
 from core.rules.skill import Skill
+from core.rules.icd import ICD
 from core.simulation.constraint import *
 from core.simulation.event import *
 if TYPE_CHECKING:
@@ -18,73 +20,109 @@ class AlbedoElemburst(Skill):
             elem_type=ElementType.GEO,
             action_type=ActionType.ELEM_BURST,
             damage_type=DamageType.ELEM_BURST,
+            action_time=albedo.action.elemburst_time,
             scaler=albedo.action.elemburst_scaler
         )
         self.cd = None
         self.energy = CounterConstraint(0, 1000, 40)
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
-        for c in simulation.active_constraint:
-            if isinstance(c, DurationConstraint) and not c.test(event):
-                simulation.output_log.append(
-                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
-                return
+        # check action collision
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
-            simulation.output_log.append(
-                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
+            self.reject_event(simulation, event, reason='action collision')
             return
-        if self.cd and not self.cd.test(event):
+        # check cd
+        elif self.cd and not self.cd.test(event):
+            self.reject_event(simulation, event, reason='cd')
             return
-        if not self.energy.full:
-            simulation.output_log.append(
-                '[WARNING]:[{} force activate, energy: {}]'.format(self.sourcename, self.energy.count))
-        self.energy.clear()
-        self.cd = self.elemburst_cd(event.time)
-        mode = event.mode
+        # check energy
+        elif not self.energy.full:
+            if self.energy.capacity - self.energy.count <= simulation.energy_tolerance:
+                simulation.output_log.append(
+                    f'[WARNING]:[{self.sourcename} force activate, energy: {self.energy.count}]')
+            else:
+                self.reject_event(simulation, event, reason='energy')
+                return
 
+        # check finish, clear energy, reset cd (cd has begin delay)
+        self.energy.clear()
+        self.cd = self.elemburst_cd(event.time+self.action_time[0]/60)
+
+        # fetch mode and other information
+        mode = event.mode
+        act_t: float = self.action_time[1]/60
+
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.elemburst_action_event,
-                                desc=f'Albedo.elemburst.action')
+                                dur=act_t,
+                                desc='Albedo.elem_burst')
         simulation.event_queue.put(action_event)
 
+        # damage event
+        if mode == '0':
+            return
+        skill_lv = str(self.source.talent[2])
         damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.05,
-                                scaler=self.scaler[str(self.LV)][0],
+        damage_event.initialize(time=event.time+act_t,
+                                scaler=self.scaler[skill_lv][0],
                                 mode=mode,
-                                desc='Albedo.elemburst.damage')
+                                icd=ICD('', '',
+                                        event.time+act_t, 1),
+                                desc='Albedo.elem_burst')
         simulation.event_queue.put(damage_event)
 
-    def receive_energy(self, simulation: 'Simulation', event: 'Event'):
-        if not isinstance(event, EnergyEvent):
-            raise TypeError
-        increment = event.base*event.num
-        if event.elem.value == self.source.base.element:
-            increment *= 3
-        elif event.elem == ElementType.NONE:
-            increment *= 2
+        self.trigger_fatal_blossom(simulation, event)
 
-        if simulation.onstage != self.source.name:
-            increment *= (1-0.1*len(simulation.characters))
-
-        increment *= simulation.characters[self.source.name].attribute.ER()
-        self.energy.receive(increment)
+    @staticmethod
+    def reject_event(sim, ev: 'Event', reason):
+        sim.output_log.append(
+            f'[REJECT]:[{ev.time}s: {ev.desc}; reason: {reason}]')
 
     @staticmethod
     def elemburst_cd(start):
         def f(ev: Event):
-            if ev.type == EventType.COMMAND and ev.desc == 'CMD.Albedo.Q':
-                return True
-            else:
-                return False
-
-        cd_counter = DurationConstraint(start, 12, f)
-        cd_counter.refresh()
+            return ev.type == EventType.COMMAND and ev.desc == 'CMD.Albedo.Q'
+        cd_counter = DurationConstraint(start, 12, func=f, refresh=True)
         return cd_counter
 
-    def elemburst_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
+    def trigger_fatal_blossom(self, simulation: 'Simulation', event: 'Event'):
+        creation_space = CreationSpace()
+        for c in creation_space.creations:
+            if c.name == 'Solar Isotoma' and c.end > event.time:
+                skill = FatalBlossom(c)
+                skill.activate(
+                    self.scaler[str(self.source.talent[2])], event.mode)
+                skill(simulation, event)
+                return
+
+
+class FatalBlossom(Skill):
+    def __init__(self, isotoma: 'TriggerableCreation'):
+        super().__init__(
+            type=SkillType.ELEM_BURST,
+            source=isotoma,
+            sourcename='Albedo',
+            elem_type=ElementType.GEO,
+            action_type=ActionType.ELEM_BURST,
+            damage_type=DamageType.ELEM_BURST,
+            action_time=isotoma.source.source.action.elemburst_time
         )
-        return
+        self.mode = None
+
+    def activate(self, scaler, mode):
+        self.scaler = scaler
+        self.mode = mode
+
+    def __call__(self, simulation: 'Simulation', event: 'Event'):
+        act_t: float = self.action_time[1]/60
+        # damage event
+        damage_event = DamageEvent().fromskill(self)
+        damage_event.initialize(time=event.time+act_t,
+                                scaler=self.scaler[1],
+                                mode=self.mode,
+                                icd=ICD('elem_skill', '',
+                                        event.time, 1),
+                                desc='Albedo.elem_burst.fatal_blossom')
+        for _ in range(7):
+            simulation.event_queue.put(damage_event)

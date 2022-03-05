@@ -42,6 +42,9 @@ class DNode:
                 def_red = self.find('Defence Reduction')()
                 self.num = self.DEF(lv_char, lv_enemy, def_red, def_ig)
                 return self.num
+            elif self.func == 'EM_T':
+                self.num = self.EM_T(sum([c() for c in self.child]))
+                return self.num
             elif self.func == 'THRES_E':
                 c_rate = self.find('Critical Rate')()
                 c_rate = 0 if c_rate < 0 else min(1, c_rate)
@@ -86,6 +89,10 @@ class DNode:
                                   (100+lv_enemy)*(1-def_red)*(1-def_ig))
         return d
 
+    @staticmethod
+    def EM_T(em: float) -> float:
+        return 16*em/(em+2000)
+
     def find(self, key: str) -> 'DNode':
         if self.key == key:
             return self
@@ -127,7 +134,7 @@ class DNode:
                         return
                 que.extend(p.child)
 
-    def modify(self, key: str, **kwargs) -> 'DNode':
+    def modify(self, key: str = '', **kwargs) -> 'DNode':
         if key:
             obj = self.find(key)
         else:

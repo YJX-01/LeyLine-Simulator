@@ -53,17 +53,18 @@ class Skill(object):
     '''
     表征技能对象的基类\n
     包含:\n
-    type: SkillType 技能类型
-    source: object 源对象
-    sourcename: str 源对象名字
-    LV: int 等级
-    elem_type: ElementType 
-    action_type: ActionType 
-    damage_type: DamageType 
-    action_time: list 动作时长
-    scaler: dict 倍率
-    creations: object 召唤物
-    parallel: object 同级对象
+    type: SkillType 技能类型\\
+    source: object 源对象\\
+    sourcename: str 源对象名字\\
+    LV: int 等级\\
+    elem_type: ElementType \\
+    action_type: ActionType \\
+    damage_type: DamageType \\
+    action_time: list 动作时长\\
+    scaler: dict 倍率\\
+    creations: object 召唤物\\
+    parallel: object 同级对象\\
+    cd: 冷却
     '''
 
     def __init__(self, **configs):

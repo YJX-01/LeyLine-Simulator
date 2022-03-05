@@ -45,8 +45,6 @@ class ShogunPassive2(Skill):
             self.build_buff(simulation)
             controller = NumericController()
             controller.insert_to(self.buff, 'da', simulation)
-        else:
-            return
 
     def build_buff(self, simulation: 'Simulation'):
         self.buff = Buff(

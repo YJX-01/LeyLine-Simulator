@@ -1,6 +1,7 @@
 from core.simulation import *
 from core.entities.character import *
 from core.visualize.log_view import LogPrinter
+from core.visualize.sim_view import SimPrinter
 
 
 if __name__ == '__main__':
@@ -11,57 +12,88 @@ if __name__ == '__main__':
     '''
     print('START A SIMPLE SIMULATION!')
     simulation = Simulation()
-    simulation.set_show_what('numeric', 'warning')
+    simulation.set_show_what('energy', 'warning', 'reject')
+    simulation.set_energy_options(tolerance=40, full=True)
+    simulation.set_enemy(lv=72)
 
-    simulation.set_character('Albedo', 80, True)
-    simulation.set_talents('Albedo', 6, 6, 6)
+    simulation.set_character('Shogun', lv=90)
+    simulation.set_talents('Shogun', norm=6, skill=9, burst=10, cx=2)
+
+    simulation.set_character('Albedo', lv=80, asc=True)
+    simulation.set_talents('Albedo', norm=6, skill=9, burst=10, cx=2)
+
     w = Weapon()
-    w.base.initialize(name='Favonius_Sword', lv=80, asc=False)
+    w.base.initialize(name='Festering_Desire', lv=90, asc=False, refine=5)
     simulation.set_weapon('Albedo', w)
+
+    w2 = Weapon()
+    w2.initialize('Engulfing_Lightning', lv=90, asc=False, refine=1)
+    simulation.set_weapon('Shogun', w2)
+
     arts = Artifact()
     p1 = ArtifactPiece(
-        'QIAN_YAN@FLOWER@[HP_CONST]@[ATK_CONST:9,CRIT_DMG:14,ER:17,HP_PER:36,]@LV20@STAR5;')
+        'JUE_YUAN@FLOWER@[HP_CONST]@[ER:17,CRIT_RATE:27,CRIT_DMG:15,ATK_PER:8,]@LV20@STAR5;')
     p2 = ArtifactPiece(
-        'QIAN_YAN@PLUME@[ATK_CONST]@[HP_CONST:17,ER:18,CRIT_DMG:16,ATK_PER:19,]@LV20@STAR5;')
+        'JUE_YUAN@PLUME@[ATK_CONST]@[CRIT_DMG:17,CRIT_RATE:18,ATK_PER:23,DEF_PER:10,]@LV20@STAR5;')
     p3 = ArtifactPiece(
-        'QIAN_YAN@SANDS@[HP_PER]@[ER:17,HP_CONST:7,CRIT_RATE:36,EM:8,]@LV20@STAR5;')
+        'JUE_DOU_SHI@SANDS@[ER]@[CRIT_DMG:17,ATK_CONST:8,DEF_PER:24,CRIT_RATE:27,]@LV20@STAR5;')
     p4 = ArtifactPiece(
-        'ZONG_SHI@GOBLET@[HP_PER]@[ER:39,ATK_CONST:7,ATK_PER:16,CRIT_DMG:8,]@LV20@STAR5;')
+        'JUE_YUAN@GOBLET@[ATK_PER]@[ATK_CONST:8,CRIT_DMG:16,ER:14,CRIT_RATE:22,]@LV20@STAR5;')
     p5 = ArtifactPiece(
-        'QIAN_YAN@CIRCLET@[HP_PER]@[EM:19,ER:18,DEF_CONST:10,ATK_CONST:25,]@LV20@STAR5;')
+        'JUE_YUAN@CIRCLET@[CRIT_RATE]@[CRIT_DMG:18,ER:9,ATK_PER:25,EM:15,]@LV20@STAR5;')
     arts.equip(p1, p2, p3, p4, p5)
-    simulation.set_artifact('Albedo', arts)
+    simulation.set_artifact('Shogun', arts)
 
-    simulation.set_character('Shogun', 90, False)
-    simulation.set_talents('Shogun', 6, 9, 9)
+    art2 = Artifact()
+    p1_ = ArtifactPiece(
+        'ZONG_SHI@FLOWER@[HP_CONST]@[ATK_PER:23,CRIT_DMG:27,EM:15,ER:7,]@LV20@STAR5;')
+    p2_ = ArtifactPiece(
+        'ZONG_SHI@PLUME@[ATK_CONST]@[HP_PER:8,CRIT_RATE:27,CRIT_DMG:26,HP_CONST:16,]@LV20@STAR5;')
+    p3_ = ArtifactPiece(
+        'ZONG_SHI@SANDS@[ATK_PER]@[DEF_CONST:9,CRIT_DMG:32,CRIT_RATE:16,ER:15,]@LV20@STAR5;')
+    p4_ = ArtifactPiece(
+        'ZHUI_YI@GOBLET@[GEO_DMG]@[HP_CONST:36,HP_PER:9,CRIT_RATE:29,ATK_PER:10,]@LV20@STAR5;')
+    p5_ = ArtifactPiece(
+        'ZONG_SHI@CIRCLET@[CRIT_RATE]@[DEF_CONST:26,ATK_CONST:8,CRIT_DMG:26,ATK_PER:17,]@LV20@STAR5;')
+    art2.equip(p1_, p2_, p3_, p4_, p5_)
+    simulation.set_artifact('Albedo', art2)
 
     cmd_list = [
         '1.A@1',
         '1.E@2',
-        '1.E@3',
         '1.Q@4',
-        '1.Q@5',
         '1.A@6',
+        '1.a@7',
         '1.E@8',
-        '2.S@8.5',
+        '2.C@8.5',
         '2.Q@9',
-        '2.E@10',
-        '1.S@12',
-        '1.Q@19',
+        '2.E@11',
+        '1.C@12',
+        '1.e@13',
+        '1.a@14',
+        '1.a@15',
+        '1.Q@25',
+        '2.C@27',
         '2.Q@28'
     ]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
     import time
-    import pprint
     t1 = time.perf_counter()
     simulation.start()
     t2 = time.perf_counter()
     print(1/(t2-t1))
 
     numeric_controller = NumericController()
+    stage = numeric_controller.onstage_record()
+
     p = LogPrinter(numeric_controller)
-    p.print_char_log('Albedo', ['ATK', 'DEF',
-                     'CRIT_RATE', 'CRIT_DMG', 'EM'])
+    p.print_char_log('Shogun', ['ATK'])
+    p.print_char_log('Albedo', ['ATK'])
     p.print_energy_log()
-    p.print_damage_log(['Albedo', 'Shogun'])
+    p.print_damage_log(['Shogun', 'Albedo'])
+
+    sp = SimPrinter(simulation)
+    sp.print_action(['Shogun', 'Albedo'], stage)
+    sp.print_buffs(stage)
+    sp.print_element()

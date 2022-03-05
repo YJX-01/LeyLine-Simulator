@@ -62,10 +62,6 @@ if __name__ == '__main__':
     p.print_char_log('Shogun', ['ER', 'ELECTRO_DMG'])
     p.print_energy_log()
     p.print_damage_log(['Shogun'])
-
-    cm = ColorManager(simulation)
-    # cm.test(cm.get_element_color('cryo'))
-    # cm.showall()
     
     sp = SimPrinter(simulation)
     sp.print_action(['Shogun'], stage)

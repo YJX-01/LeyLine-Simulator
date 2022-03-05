@@ -24,11 +24,13 @@ def Albedo_controller(operation: 'Operation', simulation: 'Simulation'):
         action_event = ActionEvent(time=operation.time,
                                    subtype=ActionType.SPRINT,
                                    sourcename='User',
+                                   dur=24/60,
                                    desc=f'{operation.source}.sprint')
         simulation.event_queue.put(action_event)
     elif operation.action == 'J':
         action_event = ActionEvent(time=operation.time,
                                    subtype=ActionType.JUMP,
                                    sourcename='User',
+                                   dur=35/60,
                                    desc=f'{operation.source}.jump')
         simulation.event_queue.put(action_event)

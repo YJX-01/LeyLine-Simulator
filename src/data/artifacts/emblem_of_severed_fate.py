@@ -20,20 +20,15 @@ class EMBLEM_OF_SEVERED_FATE_Piece2(Skill):
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
-            self.build_buff()
+            self.buff = Buff(
+                type=BuffType.ATTR,
+                name=f'{self.sourcename}: Emblem of Severed Fate Piece2',
+                sourcename=self.sourcename,
+                target_path=[[self.sourcename], 'ER']
+            )
+            self.buff.add_buff('Total ER', 'Emblem of Severed Fate Piece2', 0.2)
             controller = NumericController()
             controller.insert_to(self.buff, 'ca', simulation)
-        else:
-            return
-
-    def build_buff(self):
-        self.buff = Buff(
-            type=BuffType.ATTR,
-            name=f'{self.sourcename}: Emblem of Severed Fate Piece2',
-            sourcename=self.sourcename,
-            target_path=[[self.sourcename], 'ER']
-        )
-        self.buff.add_buff('Total ER', 'Emblem of Severed Fate Piece2', 0.2)
 
 
 class EMBLEM_OF_SEVERED_FATE_Piece4(Skill):
@@ -48,10 +43,6 @@ class EMBLEM_OF_SEVERED_FATE_Piece4(Skill):
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
             self.build_buff(simulation)
-            controller = NumericController()
-            controller.insert_to(self.buff, 'cd', simulation)
-        else:
-            return
 
     def build_buff(self, simulation: 'Simulation'):
         self.buff = Buff(
@@ -65,6 +56,8 @@ class EMBLEM_OF_SEVERED_FATE_Piece4(Skill):
         n = min(0.75, er*0.25)
         self.buff.add_buff('Elemental Burst Bonus',
                            'Emblem of Severed Fate Piece4', n)
+        controller = NumericController()
+        controller.insert_to(self.buff, 'cd', simulation)
 
     def trigger(self, simulation: 'Simulation', event: 'Event'):
         if event.subtype == DamageType.ELEM_BURST:

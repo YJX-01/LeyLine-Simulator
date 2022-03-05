@@ -142,22 +142,22 @@ class SimPrinter(object):
 
     @staticmethod
     def format_action_info(action_event: 'ActionEvent'):
-        name_map = {
-            ActionType.NORMAL_ATK: 'A',
-            ActionType.NORMAL_ATK_CHARGE: 'A',
-            ActionType.NORMAL_ATK_PLUNGE: 'A',
-            ActionType.ELEM_SKILL: 'E',
-            ActionType.ELEM_SKILL_HOLD: 'E',
-            ActionType.ELEM_BURST: 'Q'
-        }
-        short = name_map[action_event.subtype]
-        rowname = action_event.sourcename + '.' + short
-        if short != 'A':
-            label = '.' + short
+        rowname_map = {1: 'A', 2: 'A', 3: 'A',
+                       4: 'E', 5: 'E', 6: 'Q',
+                       10: 'A', 11: 'A'}
+        row = rowname_map[action_event.subtype.value]
+        rowname = action_event.sourcename + '.' + row
+
+        labelname_map = {2: 'Z', 3: 'P', 10: 'J', 11: 'S'}
+        if row != 'A':
+            label = '.' + row
         else:
-            s = action_event.desc.split('.')[-1]
-            if s[0].isnumeric():
-                label = '.'+s
+            if labelname_map.get(action_event.subtype.value, False):
+                label = '.' + labelname_map[action_event.subtype.value]
             else:
-                label = ''.join(['.']+[i[0] for i in s.split('_')])
+                s = action_event.desc.split('.')[-1]
+                if s[0].isnumeric():
+                    label = '.' + s
+                else:
+                    label = ''.join(['.']+[i[0] for i in s.split('_')])
         return rowname, label

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from core.rules.alltypes import *
 from core.rules.skill import Skill
+from core.rules.icd import ICD
 from core.simulation.constraint import *
 from core.simulation.event import *
 if TYPE_CHECKING:
@@ -18,6 +19,7 @@ class AlbedoNormATK(Skill):
             elem_type=ElementType.PHYSICAL,
             action_type=ActionType.NORMAL_ATK,
             damage_type=DamageType.NORMAL_ATK,
+            action_time=albedo.action.normatk_time,
             scaler=albedo.action.normatk_scaler
         )
 
@@ -26,68 +28,65 @@ class AlbedoNormATK(Skill):
         self.parallel = AlbedoChargeATK(albedo)
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
-        for c in simulation.active_constraint:
-            if isinstance(c, DurationConstraint) and not c.test(event):
-                simulation.output_log.append(
-                    '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
-                return
+        # check action collision
         if simulation.uni_action_constraint and not simulation.uni_action_constraint.test(event):
-            simulation.output_log.append(
-                '[REJECT]:[{}s: {}]'.format(event.time, event.desc))
+            self.reject_event(simulation, event, reason='action collision')
             return
+
+        # fetch cmd and mode
         cmd = event.cmd
         mode = event.mode
         if cmd == 'Z':
             self.parallel(simulation, event)
             return
 
+        # fetch other information
         act_cnt: int = self.attack_counter.test(simulation.event_log)
+        act_t: float = self.action_time[act_cnt]/60
 
+        # action event
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.normatk_action_event,
-                                desc=f'Albedo.action.normatk.{act_cnt}')
+                                dur=act_t,
+                                desc=f'Albedo.normal_atk.{act_cnt}')
         simulation.event_queue.put(action_event)
 
+        # damage event
         if mode == '0':
             return
+        skill_lv = str(self.source.talent[0])
         damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time+0.1,
-                                scaler=self.scaler[str(self.LV)][act_cnt],
+        damage_event.initialize(time=event.time+act_t,
+                                scaler=self.scaler[skill_lv][act_cnt],
                                 mode=mode,
-                                desc=f'Albedo.damage.normatk.{act_cnt}')
+                                icd=ICD('normal_atk', '',
+                                        event.time+act_t, 1),
+                                desc=f'Albedo.normal_atk.{act_cnt}')
         simulation.event_queue.put(damage_event)
+
+    @staticmethod
+    def reject_event(sim, ev: 'Event', reason):
+        sim.output_log.append(
+            f'[REJECT]:[{ev.time}s: {ev.desc}; reason: {reason}]')
 
     @staticmethod
     def normatk_counter():
         def f(ev: 'Event'):
             if ev.type == EventType.ACTION:
-                if isinstance(ev.source, AlbedoNormATK):
-                    return 1
-                else:
-                    return -10
-            else:
                 return 0
-
-        cnt = CounterConstraint(0, 1000, 5, f)
-        cnt.circulate()
+            elif isinstance(ev.source, AlbedoNormATK):
+                return 1
+            else:
+                return -10
+        cnt = CounterConstraint(0, 1000, 5, func=f, cir=True)
         return cnt
 
     @staticmethod
     def stamina_counter():
         def f(ev: 'Event'):
             return
-
-        cnt = CounterConstraint(0, 100, 240, f)
-        cnt.circulate()
+        cnt = CounterConstraint(0, 1000, 240, func=f, cir=True)
         return cnt
-
-    def normatk_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return
 
 
 class AlbedoChargeATK(Skill):
@@ -100,36 +99,38 @@ class AlbedoChargeATK(Skill):
             elem_type=ElementType.PHYSICAL,
             action_type=ActionType.NORMAL_ATK_CHARGE,
             damage_type=DamageType.CHARGED_ATK,
+            action_time=albedo.action.normatk_time,
             scaler=albedo.action.normatk_scaler
         )
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
+        # fetch mode and other information
         mode = event.mode
+        act_t: float = self.action_time[5]/60
 
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
-                                func=self.chargeatk_action_event,
-                                desc=f'Albedo.action.chargeatk')
+                                dur=act_t,
+                                desc='Albedo.charged_atk')
         simulation.event_queue.put(action_event)
 
+        # damage event
         if mode == '0':
             return
+        skill_lv = str(self.source.talent[0])
         damage_event1 = DamageEvent().fromskill(self)
-        damage_event1.initialize(time=event.time+0.1,
-                                 scaler=self.scaler[str(self.LV)][5],
+        damage_event1.initialize(time=event.time+act_t,
+                                 scaler=self.scaler[skill_lv][5],
                                  mode=mode,
-                                 desc=f'Albedo.damage.chargeatk-1')
+                                 icd=ICD('normal_atk', '',
+                                         event.time+act_t, 1),
+                                 desc='Albedo.charged_atk.1')
         damage_event2 = DamageEvent().fromskill(self)
-        damage_event2.initialize(time=event.time+0.1,
-                                 scaler=self.scaler[str(self.LV)][6],
+        damage_event2.initialize(time=event.time+act_t,
+                                 scaler=self.scaler[skill_lv][6],
                                  mode=mode,
-                                 desc=f'Albedo.damage.chargeatk-2')
+                                 icd=ICD('normal_atk', '',
+                                         event.time+act_t, 1),
+                                 desc='Albedo.charged_atk.2')
         simulation.event_queue.put(damage_event1)
         simulation.event_queue.put(damage_event2)
-
-    def chargeatk_action_event(self, simulation: 'Simulation', event: 'Event'):
-        simulation.uni_action_constraint = DurationConstraint(
-            event.time, 0.1,
-            lambda ev: True if ev.type == EventType.COMMAND else False
-        )
-        return

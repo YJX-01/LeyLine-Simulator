@@ -33,11 +33,11 @@ class Operation(object):
     def parse(self, command: str):
         self.source, cmd_action = tuple(command.split('.', 1))
         cmd_action, cmd_time = tuple(cmd_action.split('@', 1))
-        if len(cmd_action) == 1:
-            self.action = cmd_action
+        if cmd_action[-1].isalpha():
+            self.action = cmd_action.upper()
         else:
-            self.action = cmd_action.split()[0]
-            self.condition = cmd_action.split()[1]
+            self.action = cmd_action[:-1].upper()
+            self.condition = cmd_action[-1]
         self.time = float(cmd_time)
 
     def execute(self, simulation: 'Simulation'):

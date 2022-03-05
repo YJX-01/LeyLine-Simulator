@@ -31,6 +31,7 @@ class TriggerableCreation(Creation):
     def __init__(self, **configs) -> None:
         super().__init__(type='triggerable')
         self.trigger_func = None
+        self.stack = None
         self.initialize(**configs)
 
 

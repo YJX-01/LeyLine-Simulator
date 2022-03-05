@@ -50,7 +50,7 @@ class ShogunElemskill(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc=f'Shogun.elem_skill')
+                                desc='Shogun.elem_skill')
         simulation.event_queue.put(action_event)
 
         # creation event
@@ -91,8 +91,7 @@ class ShogunElemskill(Skill):
 
     def elemskill_creation_event(self, simulation: 'Simulation', event: 'Event'):
         creation_space = CreationSpace()
-        self.creations.activate(event.time)
-        self.creations.build_buff(simulation, event.time)
+        self.creations.activate(simulation, event.time)
         creation_space.insert(self.creations)
 
 
@@ -109,15 +108,17 @@ class EyeOfStormyJudgment(TriggerableCreation):
         )
         self.skills = EyeAttack(self)
 
-    def activate(self, start):
+    def activate(self, simulation, start):
         self.start = start
         self.scaler = self.source.scaler[str(
             self.source.source.talent[1])]
         self.skills = EyeAttack(self)
+        self.build_buff(simulation, start)
 
     def build_buff(self, simulation: 'Simulation', start):
         self.buffs = []
 
+        # build buff for each character in the team
         for name, character in simulation.characters.items():
             def trigger(simulation, event):
                 return self.start < event.time < self.start+self.duration and event.subtype == DamageType.ELEM_BURST
@@ -131,35 +132,35 @@ class EyeOfStormyJudgment(TriggerableCreation):
                 target_path=[name],
             )
             buff.add_buff('Elemental Burst Bonus',
-                          'Eye of Stormy Judgement',
+                          'Shogun Eye Bonus',
                           energy_cnt*self.scaler[3])
             self.buffs.append(buff)
-
-            simulation.event_queue.put(BuffEvent().frombuff(buff))
+            
+            # avoid repeat buff addition
+            if name=='Shogun':
+                simulation.event_queue.put(BuffEvent().frombuff(buff))
 
         numeric_controller = NumericController()
         for b in self.buffs:
             numeric_controller.insert_to(b, 'dd', simulation)
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
-        if event.type == EventType.DAMAGE and event.time < self.start+self.duration:
+        if event.type == EventType.DAMAGE and event.time < self.end:
             self.skills(simulation, event)
-        else:
-            return
 
 
 class EyeAttack(Skill):
-    def __init__(self, solar: EyeOfStormyJudgment):
+    def __init__(self, eye: EyeOfStormyJudgment):
         super().__init__(
             type=SkillType.CREATION_TRIG,
-            source=solar,
-            sourcename=solar.source.sourcename,
+            source=eye,
+            sourcename='Shogun',
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.ELEM_SKILL,
             damage_type=DamageType.ELEM_SKILL,
-            scaler=solar.scaler
+            scaler=eye.scaler
         )
-        self.cd = self.eye_cd(solar.start-0.9)
+        self.cd = self.eye_cd(eye.start-0.9)
 
     def __call__(self, simulation: 'Simulation', event: 'Event') -> None:
         if not self.cd.test(event):
@@ -168,7 +169,7 @@ class EyeAttack(Skill):
 
         # damage event
         damage_event = DamageEvent().fromskill(self)
-        damage_event.initialize(time=event.time,
+        damage_event.initialize(time=event.time+0.02,
                                 scaler=self.scaler[1],
                                 mode=mode,
                                 icd=ICD('elem_skill', '',
