@@ -3,7 +3,7 @@ from core.entities.buff import Buff
 from core.entities.numeric import NumericController
 from core.rules.alltypes import SkillType, BuffType, EventType, DamageType, ActionType
 from core.rules.skill import Skill
-from core.simulation.event import Event
+from core.simulation.event import Event, BuffEvent
 from core.simulation.constraint import Constraint
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
@@ -60,3 +60,4 @@ class NOBLESSE_OBLIGE_Piece4(Skill):
         self.buff.add_buff('Bonus Scalers', 'Noblesse Oblige ATK', 0.2)
         controller = NumericController()
         controller.insert_to(self.buff, 'da', simulation)
+        simulation.event_queue.put(BuffEvent().frombuff(self.buff))

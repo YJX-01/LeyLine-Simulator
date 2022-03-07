@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, Tuple, Dict
 from random import random
-from core.rules.alltypes import ElementType, BuffType
-from core.simulation.event import ActionEvent, BuffEvent
+from core.rules.alltypes import ElementType, BuffType, DamageType
+from core.simulation.event import ActionEvent, BuffEvent, DamageEvent
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
@@ -73,11 +73,17 @@ class ColorManager(object):
             mcolors.LinearSegmentedColormap.from_list(
                 'cryo4', [(0, '#e7f0fd'), (1, '#accbee')], N=32),
         ],
+        'NONE': [
+            mcolors.LinearSegmentedColormap.from_list(
+                'none', [(0, 'lightgrey'), (1, 'darkgrey')], N=8)
+        ]
     }
 
     def __init__(self, simulation: 'Simulation'):
-        self.characters = dict.fromkeys(simulation.shortcut.values())
-        self.elem_map = dict.fromkeys(simulation.shortcut.values())
+        self.characters: Dict[str, 'mcolors.LinearSegmentedColormap'] = \
+            dict.fromkeys(simulation.shortcut.values())
+        self.elem_map: Dict[str, ElementType] = \
+            dict.fromkeys(simulation.shortcut.values())
         self.build_map(simulation)
 
     def build_map(self, simulation: 'Simulation'):
@@ -101,6 +107,12 @@ class ColorManager(object):
         elif isinstance(element, ElementType):
             return self.colormap[element.name][0](0)
 
+    def get_skill_color(self, skill: Union[DamageEvent, Tuple[str, str]]):
+        if isinstance(skill, DamageEvent):
+            return self.characters[skill.sourcename](skill.subtype.value/5)
+        elif isinstance(skill, Tuple):
+            return self.characters[skill[0]](DamageType[skill[1].upper()].value/5)
+
     def get_action_color(self, action_event: 'ActionEvent'):
         name = action_event.sourcename
         index = action_event.subtype.value
@@ -115,7 +127,7 @@ class ColorManager(object):
             return self.characters[name](0.5+(index-4)/8)
         elif index == 6:
             return self.characters[name](0.75)
-    
+
     def get_buff_color(self, buff_event: 'BuffEvent'):
         buff_type = buff_event.subtype
         if buff_type == BuffType.ATTR:
@@ -127,7 +139,7 @@ class ColorManager(object):
         else:
             cmap = plt.colormaps['autumn']
             return cmap(random())
-    
+
     def get_creation_color(self, creation_event):
         pass
 

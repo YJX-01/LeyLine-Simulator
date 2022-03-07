@@ -54,9 +54,9 @@ class Enemy(object):
 
         # judge reaction type
         if not apply_flag:
-            react_type = self.elem_sys.react_to(ElementType.NONE, 1)
+            react_type = self.elem_sys.insert(ElementType.NONE, 1, damage.time)
         else:
-            react_type = self.elem_sys.react_to(damage.elem, damage.icd.GU)
+            react_type = self.elem_sys.insert(damage.elem, damage.icd.GU, damage.time)
 
         # judge amplify or transformative, determine multiplier
         react_multi, amp_flag = self.elem_sys.reaction_multiplier.get(react_type, (0, False))

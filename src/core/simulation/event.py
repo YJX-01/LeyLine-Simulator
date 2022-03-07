@@ -106,7 +106,7 @@ class ActionEvent(Event):
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function |
         ### dur
-        subtype: ActionType\n
+        - subtype: ActionType\n
         - desc format: char.skillname.other
         '''
         super().__init__(type=EventType.ACTION)
@@ -143,7 +143,7 @@ class DamageEvent(Event):
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function | 
         ### elem, depend, scaler, mode, icd
-        subtype: DamageType
+        - subtype: DamageType
         - desc format: obj.damagename.other
         '''
         super().__init__(type=EventType.DAMAGE)
@@ -181,7 +181,7 @@ class EnergyEvent(Event):
         ### elem, base, num, receiver(List[name]|None)
         when base is int(1|2|3|6), it is orb or particle\\
         when base is 0, it is constant energy restore\n
-        subtype: particle, orb, const\n
+        - subtype: particle, orb, const\n
         - you need to set:\n
         ### time, source, sourname, elem, base, num, (receiver) desc, (func)
         - desc format: obj.(skillname).energy
@@ -224,7 +224,7 @@ class ElementEvent(Event):
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function |
         ### elem, num(GU/mul), react
-        subtype: apply, reaction\n
+        - subtype: apply, reaction\n
         - you need to set:\n
         ### time, subtype, source, sourcename, elem, num, (react), desc
         '''
@@ -253,7 +253,7 @@ class BuffEvent(Event):
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function | 
         ### duration
-        subtype: BuffType
+        - subtype: BuffType
         '''
         super().__init__(type=EventType.BUFF)
         self.duration: float = 0
@@ -278,7 +278,7 @@ class NumericEvent(Event):
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function | 
         ### obj
-        subtype: DAMAGE, HEAL, SHIELD
+        - subtype: NumericType
         - you need to set:\n
         ### time, subtype, sourcename, obj, desc
         '''
@@ -289,3 +289,24 @@ class NumericEvent(Event):
     @property
     def prefix_info(self) -> str:
         return super().prefix_info+'\n\t\t[number ]:[ {:.1f} ]'.format(self.obj.value)
+
+
+class HealthEvent(Event):
+    def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, sourcename, time, desc, function | 
+        ### depend, scaler
+        - subtype: HealthType
+        - you need to set:\n
+        ### time, subtype, source, sourcename, depend, scaler, desc
+        '''
+        super().__init__(type=EventType.HEALTH)
+        self.depend: str = 'HP'
+        self.scaler: List[float] = []
+        self.initialize(**configs)
+
+    @property
+    def prefix_info(self) -> str:
+        return super().prefix_info +\
+            f'\n\t\t[info   ]:[ {self.scaler}; {self.depend} ]'

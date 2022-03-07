@@ -59,22 +59,23 @@ if __name__ == '__main__':
     simulation.set_artifact('Albedo', art2)
 
     cmd_list = [
-        '1.A@1',
-        '1.E@2',
-        '1.Q@4',
-        '1.A@6',
-        '1.a@7',
-        '1.E@8',
-        '2.C@8.5',
-        '2.Q@9',
-        '2.E@11',
-        '1.C@12',
-        '1.e@13',
-        '1.a@14',
-        '1.a@15',
-        '1.Q@25',
-        '2.C@27',
-        '2.Q@28'
+        '1.a@0.5',
+        '2.c@1',
+        '2.e@2',
+        '2.a@3',
+        '2.q@4',
+        '1.c@5',
+        '1.e@6',
+        '1.q@8',
+        '1.a@10',
+        '1.a@11',
+        '1.a@12',
+        '1.z@13',
+        '2.c@14',
+        '2.a@15',
+        '2.z@16',
+        '2.e@17',
+        '2.q@18'
     ]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
@@ -82,18 +83,21 @@ if __name__ == '__main__':
     t1 = time.perf_counter()
     simulation.start()
     t2 = time.perf_counter()
-    print(1/(t2-t1))
+    print('freq={:.1f}'.format(1/(t2-t1)))
 
     numeric_controller = NumericController()
     stage = numeric_controller.onstage_record()
 
     p = LogPrinter(numeric_controller)
-    p.print_char_log('Shogun', ['ATK'])
+    p.paint_color(simulation)
+    p.print_char_log('Shogun', ['ATK', 'ER', 'ELECTRO_DMG'])
     p.print_char_log('Albedo', ['ATK'])
     p.print_energy_log()
     p.print_damage_log(['Shogun', 'Albedo'])
+    p.print_damage_pie()
 
     sp = SimPrinter(simulation)
     sp.print_action(['Shogun', 'Albedo'], stage)
     sp.print_buffs(stage)
     sp.print_element()
+    sp.print_energy(stage)

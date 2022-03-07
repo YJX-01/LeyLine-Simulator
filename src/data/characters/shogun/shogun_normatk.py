@@ -110,22 +110,6 @@ class ShogunNormATK(Skill):
                                 desc=f'Shogun.normal_atk.{atk_cnt}')
         return damage_event
 
-    # def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
-    #     def musou(ev: 'Event'):
-    #         if ev.sourcename == 'Shogun' and ev.subtype == ActionType.ELEM_BURST:
-    #             return 1
-    #         elif ev.type == EventType.SWITCH:
-    #             return -10
-    #         else:
-    #             return 0
-    #     state = CounterConstraint(0, 1000, 1, musou)
-    #     flag1 = bool(state.test(simulation.event_log))
-    #     for ev in reversed(simulation.event_log):
-    #         if musou(ev) == 1:
-    #             break
-    #     flag2 = event.time < ev.time + 7
-    #     return flag1 and flag2
-
     def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
         creation_space = CreationSpace()
         for c in creation_space.creations:
@@ -241,16 +225,13 @@ class MusouIsshin(Skill):
             simulation.event_queue.put(damage_event)
 
         # judge special restore cd
-        if not self.restore_cd.test(event):
-            return
-        self.restore_counter.test(simulation.event_log)
-        if self.restore_counter.full:
+        if not self.restore_judge(event):
             return
 
         # energy event
         restore_energy = self.scaler[skill_lv][-4]
         # passive talent 2
-        if len(self.source.PASSIVE) == 2:
+        if self.source.action.passive_lv == 2:
             restore_energy *= (1+(self.source.attribute.ER.value-1)*0.6)
 
         receiver = [n for n in simulation.shortcut.values() if n != 'Shogun']
@@ -276,6 +257,21 @@ class MusouIsshin(Skill):
                                         time, 1),
                                 desc=f'Shogun.musou_isshin.{atk_cnt}')
         return damage_event
+
+    def restore_judge(self, event: 'Event'):
+        if not self.restore_counter or self.restore_counter.end < event.time:
+            creation_space = CreationSpace()
+            for c in creation_space.creations:
+                if c.name == 'Musou Isshin State' and c.end > event.time:
+                    self.restore_counter = CounterConstraint(c.start, 7, 5)
+                    self.restore_cd = DurationConstraint(c.start-1, 1, refresh=True)
+                    break
+                
+        if not self.restore_counter.full and self.restore_cd.test(event):
+            self.restore_counter.receive(1)
+            return True
+        else:
+            return False
 
 
 class MusouIsshinCharge(Skill):
@@ -329,18 +325,14 @@ class MusouIsshinCharge(Skill):
         simulation.event_queue.put(damage_event2)
 
         # judge special restore cd
-        if not self.source.action.NORMAL_ATK.musou.restore_cd.test(event):
-            return
-        self.source.action.NORMAL_ATK.musou.restore_counter.test(
-            simulation.event_log)
-        if self.source.action.NORMAL_ATK.musou.restore_counter.full:
+        if not self.source.action.NORMAL_ATK.musou.restore_judge(event):
             return
 
         # energy event
         restore_energy = self.scaler[skill_lv][-4]
         # passive talent 2
-        if len(self.source.PASSIVE) == 2:
-            restore_energy *= (1+(self.source.attribute.ER()-1)*0.6)
+        if self.source.action.passive_lv == 2:
+            restore_energy *= (1+(self.source.attribute.ER.value-1)*0.6)
 
         receiver = [n for n in simulation.shortcut.values() if n != 'Shogun']
         energy_event = EnergyEvent(time=event.time,
@@ -350,7 +342,7 @@ class MusouIsshinCharge(Skill):
                                    receiver=receiver,
                                    desc='Shogun.musou_isshin.energy')
         simulation.event_queue.put(energy_event)
-        
+
         # include CX 6
         if self.source.attribute.cx_lv >= 6:
             for name in receiver:

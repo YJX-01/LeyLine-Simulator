@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, List, Mapping
 from core.rules.damage import AMP_DMG
-from core.rules.alltypes import DamageType, ElementalReactionType, ElementType
+from core.rules.alltypes import \
+    (DamageType, ElementalReactionType, ElementType, NumericType, HealthType)
 from core.entities.creation import Creation
 from core.entities.buff import *
 from core.entities.enemy import Enemy
@@ -55,57 +56,18 @@ class NumericController(object):
 
         if event.time > simulation.clock:
             while(event.time > simulation.clock):
-                self.refresh(simulation)
-                self.character_info_enquire(simulation)
+                flag = self.refresh(simulation)
+                self.character_info_enquire(simulation, flag)
                 simulation.clock += self.clock_time
 
         self.triggers_call(simulation, event)
+
         if event.type == EventType.DAMAGE:
-            damage = AMP_DMG()
-            damage.connect(event)
-            damage.connect(self.enemy)
-
-            source = event.source.source
-            if isinstance(source, Creation):
-                if getattr(source, 'attr_panel', None):
-                    damage.connect(source.attr_panel)
-                else:
-                    panel = EntityPanel(source.source.source)
-                    damage.connect(panel)
-            else:
-                panel = EntityPanel(source)
-                damage.connect(panel)
-
-            buffs = [b for b in self.const_buffs_dmg
-                     if b.trigger(simulation, event) and
-                     (not b.target_path or event.sourcename in b.target_path)]
-            buffs.extend([b for b in self.dynamic_buffs_dmg
-                          if b.trigger(simulation, event) and
-                          (not b.target_path or event.sourcename in b.target_path)])
-            for b in buffs:
-                damage.connect(b)
-
-            apply_flag, amp_flag, react_type, react_multi = \
-                self.enemy.attacked_by(event)
-            if apply_flag and event.elem != ElementType.NONE and event.elem != ElementType.PHYSICAL:
-                self.apply_element(simulation, event)
-            if react_type != ElementalReactionType.NONE:
-                react_event = self.react_event(event, react_multi, react_type)
-                simulation.event_queue.put(react_event)
-                if amp_flag:
-                    damage.connect(react_event)
-
-            numeric_event = NumericEvent(time=event.time,
-                                         subtype='DAMAGE',
-                                         sourcename=event.sourcename,
-                                         obj=damage.root,
-                                         desc=event.desc)
-            simulation.event_queue.put(numeric_event)
-
-            self.dmg_log[event.sourcename][event.subtype.name].append(
-                (event.time, damage.root.value))
-        if event.type == EventType.NUMERIC:
+            self.damage_case(simulation, event)
+        elif event.type == EventType.NUMERIC:
             self.numeric_case(simulation, event)
+        elif event.type == EventType.ELEMENT:
+            self.element_case(simulation, event)
 
     def set_enemy(self, **configs):
         self.enemy = Enemy(**configs)
@@ -117,13 +79,68 @@ class NumericController(object):
         for k, v in self.__dict__.items():
             if isinstance(v, list) or isinstance(v, dict):
                 v.clear()
-                
+
     def damage_case(self, simulation: 'Simulation', event: 'Event'):
-        pass
-    
+        damage = AMP_DMG()
+        # first connect event
+        damage.connect(event)
+        damage.connect(self.enemy)
+
+        source = event.source.source
+        if isinstance(source, Creation):
+            # snapshot
+            if getattr(source, 'attr_panel', None):
+                damage.connect(source.attr_panel)
+            # dynamic
+            else:
+                panel = EntityPanel(source.source.source)
+                damage.connect(panel)
+        else:
+            panel = EntityPanel(source)
+            damage.connect(panel)
+
+        # constant buff
+        buffs = [b for b in self.const_buffs_dmg
+                 if b.trigger(simulation, event) and
+                 (not b.target_path or event.sourcename in b.target_path)]
+        # dynamic buff
+        buffs.extend([b for b in self.dynamic_buffs_dmg
+                      if b.trigger(simulation, event) and
+                      (not b.target_path or event.sourcename in b.target_path)])
+        for b in buffs:
+            damage.connect(b)
+
+        apply_flag, amp_flag, react_type, react_multi = self.enemy.attacked_by(
+            event)
+        # whether apply element
+        if apply_flag and event.elem != ElementType.NONE and event.elem != ElementType.PHYSICAL:
+            self.apply_element(simulation, event)
+        # whether reaction
+        if react_type != ElementalReactionType.NONE:
+            react_event = self.react_event(event, react_multi, react_type)
+            simulation.event_queue.put(react_event)
+            if amp_flag:
+                damage.connect(react_event)
+
+        numeric_event = NumericEvent(time=event.time,
+                                     subtype=NumericType.DAMAGE,
+                                     sourcename=event.sourcename,
+                                     obj=damage,
+                                     desc=event.desc)
+        simulation.event_queue.put(numeric_event)
+
     def numeric_case(self, simulation: 'Simulation', event: 'Event'):
-        if event.subtype == 'DAMAGE':
+        if event.subtype == NumericType.DAMAGE:
             self.enemy.hurt(event.obj.value)
+            self.dmg_log[event.sourcename][event.obj.damage_type.name].append(
+                (event.time, event.obj.value))
+        elif event.subtype == NumericType.HEAL:
+            pass
+        elif event.subtype == NumericType.SHIELD:
+            pass
+
+    def element_case(self, simulation: 'Simulation', event: 'Event'):
+        return
 
     def insert_to(self, buff: 'Buff', type: str, simulation: 'Simulation'):
         '''
@@ -194,29 +211,36 @@ class NumericController(object):
             character.weapon.work(simulation, event)
             character.artifact.work(simulation, event)
 
-    def refresh(self, simulation: 'Simulation'):
+    def refresh(self, simulation: 'Simulation') -> bool:
         time = simulation.clock
+        flag = False
         for b in self.dynamic_buffs_attr:
             if b.constraint.end < time:
                 self.dynamic_buffs_attr.remove(b)
                 for name in simulation.characters.keys():
                     if not b.target_path[0] or name in b.target_path[0]:
                         simulation.characters[name].attribute.disconnect(b)
+                flag = True
                 break
             if b.trigger:
-                b.trigger(simulation)
+                tmpflag = b.trigger(simulation)
+                flag = True if flag or tmpflag else False
         for b in self.dynamic_buffs_dmg:
             if b.constraint.end < time:
                 self.dynamic_buffs_dmg.remove(b)
+                flag = True
+        return flag
 
-    def character_info_enquire(self, simulation: 'Simulation'):
+    def character_info_enquire(self, simulation: 'Simulation', flag: bool):
         self.onstage_log[simulation.onstage].append(simulation.clock)
         for name, character in simulation.characters.items():
-            self.energy_log[name].append(
-                character.action.ELEM_BURST.energy.count)
-            for in_k in self.__interest_data:
-                attr_node = getattr(character.attribute, in_k)
-                self.char_attr_log[name][in_k].append(attr_node.value)
+            self.energy_log[name].append(character.energy.count)
+            for data in self.__interest_data:
+                if flag or not self.char_attr_log[name][data]:
+                    v = getattr(character.attribute, data).value
+                else:
+                    v = self.char_attr_log[name][data][-1]
+                self.char_attr_log[name][data].append(v)
 
     def apply_element(self, simulation: 'Simulation', event: 'Event'):
         apply_event = ElementEvent(time=event.time,

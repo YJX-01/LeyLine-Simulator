@@ -60,8 +60,8 @@ class Buff(BuffPanel):
         self.name: str = ''
         self.sourcename: str = ''
         self.constraint: Constraint = None
-        self.trigger: Callable[[float, Any], bool] = None
-        self.target_path: Any = None
+        self.trigger: Callable[[Any], bool] = None
+        self.target_path: List = []
         self.initialize(**configs)
 
     def initialize(self, **configs):

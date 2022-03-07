@@ -4,7 +4,7 @@ from copy import deepcopy
 from typing import List, Tuple
 from core.rules.dnode import DNode
 from core.rules.alltypes import DamageType, ElementalReactionType, ElementType
-from core.entities.buff import *
+from core.entities.buff import Buff, BuffPanel
 from core.entities.enemy import Enemy
 from core.entities.panel import EntityPanel
 from core.simulation.event import *

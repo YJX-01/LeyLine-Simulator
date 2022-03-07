@@ -56,10 +56,13 @@ class Engulfing_Lightning_Skill(Skill):
         controller = NumericController()
         controller.insert_to(self.buff, 'da', simulation)
 
-    def trigger(self, simulation: 'Simulation'):
+    def trigger(self, simulation: 'Simulation') -> bool:
         if simulation.characters[self.sourcename].attribute.ER.value != self.last:
             self.last = simulation.characters[self.sourcename].attribute.ER.value
             n = min(self.scaler[1],
                     self.scaler[0] * (self.last-1))
             self.buff.add_buff('Bonus Scalers', 'Engulfing Lightning ATK', n)
             simulation.characters[self.sourcename].attribute.connect(self.buff)
+            return True
+        else:
+            return False

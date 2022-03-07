@@ -192,6 +192,8 @@ class EventType(Enum):
     CREATION = 8
     BUFF = 9
     NUMERIC = 10
+    HEALTH = 11
+    SHIELD = 12
     
 class SkillType(Enum):
     '''技能类型'''
@@ -246,3 +248,9 @@ class BuffType(Enum):
     INFUSE = 4
     TRANS = 5
     OTHER = 6
+    
+class HealthType(Enum):
+    '''关于血量变化的类型'''
+    NONE = 0
+    HEAL = 1
+    LOSS = 2
