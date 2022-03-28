@@ -124,7 +124,6 @@ class FatalReckoning(TriggerableCreation):
             exist_num=1
         )
         self.stack = CounterConstraint(0, 0, 4)
-        self.last = 0
 
     def build_buff(self, simulation: 'Simulation', start):
         self.buff = None
@@ -135,7 +134,7 @@ class FatalReckoning(TriggerableCreation):
             type=BuffType.DMG,
             name='Albedo: Opening of Phanerozoic(CX2)',
             sourcename='Albedo',
-            constraint=Constraint(start, 1),
+            constraint=Constraint(start+1.5, 0.5),
             trigger=trigger,
             target_path=['Albedo']
         )

@@ -153,20 +153,20 @@ class SimPrinter(object):
         for ev in energy_events:
             if ev.subtype == 'particle':
                 base = ev.base*ev.num
-                ax.scatter(ev.time, ev.num, s=base*50, marker='o',
+                ax.scatter(ev.time, ev.num, s=base*60, marker='o', alpha=0.8,
                            color=self.cm.get_element_color(ev.elem))
             elif ev.subtype == 'orb':
                 base = ev.base*ev.num
-                ax.scatter(ev.time, ev.num, s=base*100, marker='s',
+                ax.scatter(ev.time, ev.num, s=base*60, marker='s', alpha=0.8,
                            color=self.cm.get_element_color(ev.elem))
             elif ev.subtype == 'const':
                 base = ev.num
-                ax.scatter(ev.time, base, s=base*50, marker='D',
+                ax.scatter(ev.time, base, s=base*50, marker='p',
                            color=self.cm.get_element_color(ev.elem))
         ax.set_ylim(bottom=0)
-        
-        plt.grid(True, 'both', alpha=0.5)
-        plt.ylabel('Base Energy')
+
+        plt.grid(True, 'both', alpha=0.6)
+        plt.ylabel('Energy')
         plt.title('Energy Log')
         plt.legend(handles=patches)
         plt.show()
@@ -188,14 +188,15 @@ class SimPrinter(object):
                 continue
             markerline, stemlines, baseline = plt.stem(ev.time, ev.num)
             color = self.cm.get_element_color(ev.elem)
-            markerline.set(color=color, markersize=ev.num*6, alpha=0.8)
-            stemlines.set(color=color, alpha=0.5)
+            markerline.set(color=color, markersize=ev.num*9, 
+                           alpha=0.7, markeredgecolor='w')
+            stemlines.set(color=color, alpha=0.5, linewidth=1)
         plt.ylim(0, 5)
         plt.yticks([0, 1, 2, 4])
         plt.ylabel('Gauge Unit')
         plt.xlim(0, last)
         plt.xlabel('time / s')
-        plt.grid(True, 'both', alpha=0.5)
+        plt.grid(True, 'both', alpha=0.6)
         plt.title('Aura Log')
         plt.legend(handles=patches)
         plt.show()

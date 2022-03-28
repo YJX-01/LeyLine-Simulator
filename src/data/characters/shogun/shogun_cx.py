@@ -81,13 +81,20 @@ class ShogunCX4(Skill):
             LV=shogun.attribute.cx_lv
         )
         self.buff = None
+        self.begin = 1000
         self.last = -10
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
-        if event.time < self.last+10:
-            return
-        elif event.type == EventType.ACTION and event.sourcename == 'Shogun' and event.subtype == ActionType.ELEM_BURST:
-            self.build_buff(simulation, event.time)
+        if event.type == EventType.ACTION and event.sourcename == 'Shogun' and event.subtype == ActionType.ELEM_BURST:
+            self.begin = event.time
+            self.last = event.time+7
+            self.build_buff(simulation, self.last)
+        elif event.type == EventType.SWITCH and self.last > event.time > self.begin:
+            self.last = self.time
+            self.build_buff(simulation, self.last)
+            simulation.event_queue.put(BuffEvent().frombuff(self.buff))
+        elif event.time > self.last and event.time > self.begin:
+            self.begin = 1000
             simulation.event_queue.put(BuffEvent().frombuff(self.buff))
 
     def build_buff(self, simulation: 'Simulation', time):
@@ -102,6 +109,7 @@ class ShogunCX4(Skill):
         self.buff.add_buff('Bonus Scalers', 'Shogun CX4 ATK', 0.3)
         controller = NumericController()
         controller.insert_to(self.buff, 'da', simulation)
+
 
 class ShogunCX5(Skill):
     def __init__(self, shogun: 'Character'):

@@ -12,9 +12,9 @@ if __name__ == '__main__':
     '''
     print('START A SIMPLE SIMULATION!')
     simulation = Simulation()
-    simulation.set_show_what('energy', 'warning', 'reject')
+    simulation.set_show_what('numeric', 'warning', 'reject')
     simulation.set_energy_options(tolerance=40, full=True)
-    simulation.set_enemy(lv=72)
+    simulation.set_enemy(lv=90)
 
     simulation.set_character('Shogun', lv=90)
     simulation.set_talents('Shogun', norm=6, skill=9, burst=10, cx=2)
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     simulation.set_weapon('Albedo', w)
 
     w2 = Weapon()
-    w2.initialize('Engulfing_Lightning', lv=90, asc=False, refine=1)
+    w2.initialize('Engulfing_Lightning', lv=90, asc=False, refine=5)
     simulation.set_weapon('Shogun', w2)
 
     arts = Artifact()
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     p2_ = ArtifactPiece(
         'ZONG_SHI@PLUME@[ATK_CONST]@[HP_PER:8,CRIT_RATE:27,CRIT_DMG:26,HP_CONST:16,]@LV20@STAR5;')
     p3_ = ArtifactPiece(
-        'ZONG_SHI@SANDS@[ATK_PER]@[DEF_CONST:9,CRIT_DMG:32,CRIT_RATE:16,ER:15,]@LV20@STAR5;')
+        'ZONG_SHI@SANDS@[DEF_PER]@[DEF_CONST:9,CRIT_DMG:32,CRIT_RATE:16,ER:15,]@LV20@STAR5;')
     p4_ = ArtifactPiece(
         'ZHUI_YI@GOBLET@[GEO_DMG]@[HP_CONST:36,HP_PER:9,CRIT_RATE:29,ATK_PER:10,]@LV20@STAR5;')
     p5_ = ArtifactPiece(
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         '2.q@4',
         '1.c@5',
         '1.e@6',
-        '1.q@8',
+        '1.q@8.1',
         '1.a@10',
         '1.a@11',
         '1.a@12',
@@ -90,10 +90,11 @@ if __name__ == '__main__':
 
     p = LogPrinter(numeric_controller)
     p.paint_color(simulation)
-    p.print_char_log('Shogun', ['ATK', 'ER', 'ELECTRO_DMG'])
-    p.print_char_log('Albedo', ['ATK'])
+    p.print_char_log('Shogun', ['ATK', 'ER', 'ELECTRO_DMG', 'EM'])
+    p.print_char_log('Albedo', ['ATK', 'DEF'])
     p.print_energy_log()
-    p.print_damage_log(['Shogun', 'Albedo'])
+    p.print_damage_one('Shogun')
+    p.print_damage_one('Albedo')
     p.print_damage_pie()
 
     sp = SimPrinter(simulation)

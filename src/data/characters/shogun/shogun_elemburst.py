@@ -23,7 +23,7 @@ class ShogunElemburst(Skill):
             action_time=shogun.action.elemburst_time,
             scaler=shogun.action.elemburst_scaler
         )
-        self.cd = None
+        self.cd = self.elemburst_cd(-18)
         self.energy = CounterConstraint(0, 1000, 90)
         self.creations: Creation = ChakraDesiderata(self)
 

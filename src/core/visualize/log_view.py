@@ -66,34 +66,60 @@ class LogPrinter(object):
         plt.tight_layout()
         plt.show()
 
-    def print_damage_log(self, names: List[str]):
-        times = []
-        damages = []
-        for name in names:
-            line = []
-            for k, v in self.controller.dmg_log[name].items():
-                line.extend(v)
-            line.sort(key=lambda x: x[0])
-            x, y = zip(*line)
-            times.append(np.array(x))
-            damages.append(np.array(y))
+    def print_damage_one(self, name: str, interval: float = 1):
+        markers = dict(
+            NONE='H',
+            NORMAL_ATK='^',
+            CHARGED_ATK='<',
+            PLUNGING_ATK='>',
+            ELEM_SKILL='o',
+            ELEM_BURST='s',
+        )
+        start, end = 0, 0
+        dmg_sum = [0]*500
 
         fig, ax = plt.subplots()
-        for i, k in enumerate(names):
-            if self.cm:
-                ax.plot(times[i], damages[i], label=k, marker='o',
-                        color=self.cm.get_char_color(k))
-            else:
-                ax.plot(times[i], damages[i], label=k, marker='o')
-        ax.legend()
+
+        for k, v in self.controller.dmg_log[name].items():
+            line = list(v)
+            if not line:
+                continue
+            for t, d in line:
+                dmg_sum[int(t/interval)] += (d/interval)
+            x, y = zip(*line)
+            times = np.array(x)
+            damages = np.array(y)
+            end = max(end, times[-1])
+            start = min(start, times[0])
+            color = self.cm.get_skill_color((name, k)) if self.cm else 'deepskyblue'
+
+            markerline, stemlines, baseline = ax.stem(
+                times, damages, label=name+'.'+k.lower())
+            markerline.set(color=color, marker=markers[k],
+                           markersize=9, markeredgecolor='w',
+                           markeredgewidth=1)
+            stemlines.set(color=color, alpha=0.5, linewidth=2)
+            baseline.set(color='w')
+
+        start = int(start)
+        end = ceil(end)
+        color = self.cm.get_char_color(name) if self.cm else 'cyan'
+        ax.bar(np.arange(0, 500*interval, interval),
+               dmg_sum, width=[interval]*500,
+               align='edge', alpha=0.5, color=color)
+
+        plt.legend()
         plt.ylim(bottom=0)
-        plt.xlim(left=0)
+        plt.xlim(start, end)
         plt.ylabel('Damage')
         plt.xlabel('time / s')
         plt.title('Damage Log')
         plt.grid(True, 'both', alpha=0.7)
         plt.tight_layout()
         plt.show()
+
+    def print_damage_team(self):
+        pass
 
     def print_damage_pie(self, names: List[str] = []):
         if not names:

@@ -23,7 +23,7 @@ class AlbedoElemburst(Skill):
             action_time=albedo.action.elemburst_time,
             scaler=albedo.action.elemburst_scaler
         )
-        self.cd = None
+        self.cd = self.elemburst_cd(-12)
         self.energy = CounterConstraint(0, 1000, 40)
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):

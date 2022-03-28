@@ -16,7 +16,7 @@ class BuffPanel(object):
         self.change_info: Dict[str, float] = {}
 
     def add_buff(self, tar_key: str, name: str, value: float, func: str = ''):
-        self.add_info[tar_key] = (name, value, func)
+        self.add_info[name] = (tar_key, value, func)
 
     def change_buff(self, key, value):
         self.change_info[key] = value
@@ -25,8 +25,8 @@ class BuffPanel(object):
     def adds(self) -> List[Tuple[str, DNode]]:
         adds = []
         for key, tup in self.add_info.items():
-            n: DNode = DNode(tup[0], tup[2], tup[1])
-            adds.append((key, n))
+            n: DNode = DNode(key, tup[2], tup[1])
+            adds.append((tup[0], n))
         return adds
 
     @property
