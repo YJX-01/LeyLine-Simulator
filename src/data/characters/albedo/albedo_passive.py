@@ -37,7 +37,7 @@ class AlbedoPassive1(Skill):
             return isinstance(event.source, TransientBlossom)
         self.buff = Buff(
             type=BuffType.DMG,
-            name='Albedo: Calcite Might',
+            name='Albedo: Calcite Might(PA1)',
             sourcename='Albedo',
             trigger=trigger,
             target_path=['Albedo'],
@@ -68,7 +68,7 @@ class AlbedoPassive2(Skill):
     def build_buff(self, time):
         self.buff = Buff(
             type=BuffType.ATTR,
-            name='Albedo: Homuncular Nature',
+            name='Albedo: Homuncular Nature(PA2)',
             sourcename='Albedo',
             constraint=Constraint(time, 10),
             target_path=[None, 'EM']

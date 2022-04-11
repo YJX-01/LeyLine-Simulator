@@ -1,5 +1,5 @@
 from math import ceil
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Tuple
 from core.visualize.genshin_color import ColorManager
 import numpy as np
 import matplotlib.pyplot as plt
@@ -81,7 +81,7 @@ class LogPrinter(object):
         fig, ax = plt.subplots()
 
         for k, v in self.controller.dmg_log[name].items():
-            line = list(v)
+            line: List[Tuple[float, float]] = list(v)
             if not line:
                 continue
             for t, d in line:
@@ -91,7 +91,8 @@ class LogPrinter(object):
             damages = np.array(y)
             end = max(end, times[-1])
             start = min(start, times[0])
-            color = self.cm.get_skill_color((name, k)) if self.cm else 'deepskyblue'
+            color = self.cm.get_skill_color(
+                (name, k)) if self.cm else 'deepskyblue'
 
             markerline, stemlines, baseline = ax.stem(
                 times, damages, label=name+'.'+k.lower())
@@ -102,7 +103,7 @@ class LogPrinter(object):
             baseline.set(color='w')
 
         start = int(start)
-        end = ceil(end)
+        end = ceil(end+1)
         color = self.cm.get_char_color(name) if self.cm else 'cyan'
         ax.bar(np.arange(0, 500*interval, interval),
                dmg_sum, width=[interval]*500,
@@ -176,4 +177,46 @@ class LogPrinter(object):
         ax.legend(wedges2, inner_name)
         ax.set(aspect="equal", title='Damage pie plot')
         plt.setp(autotexts+autotexts2, size=8, weight="bold")
+        plt.show()
+
+    def print_heal_one(self, name: str, interval: float = 1):
+        start, end = 0, 0
+        heal_sum = [0]*500
+
+        fig, ax = plt.subplots()
+
+        line: List[Tuple[float, float]] = self.controller.heal_log[name]
+        for t, d in line:
+            d = max(0, d)
+            heal_sum[int(t/interval)] += (d/interval)
+        x, y = zip(*line)
+        times = np.array(x)
+        heals = np.abs(np.array(y))
+        end = max(end, times[-1])
+        start = min(start, times[0])
+        color = self.cm.get_char_color(name) if self.cm else 'deepskyblue'
+
+        markerline, stemlines, baseline = ax.stem(
+            times, heals, label=name+'.heal')
+        markerline.set(color=color, marker='o',
+                       markersize=9, markeredgecolor='w',
+                       markeredgewidth=1)
+        stemlines.set(color=color, alpha=0.5, linewidth=2)
+        baseline.set(color='w')
+
+        start = int(start)
+        end = ceil(end+1)
+        color = self.cm.get_char_color(name) if self.cm else 'cyan'
+        ax.bar(np.arange(0, 500*interval, interval),
+               heal_sum, width=[interval]*500,
+               align='edge', alpha=0.5, color=color)
+
+        plt.legend()
+        plt.ylim(bottom=0)
+        plt.xlim(start, end)
+        plt.ylabel('Heal')
+        plt.xlabel('time / s')
+        plt.title('Heal Log')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
         plt.show()

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, List, Mapping
 from core.rules.damage import AMP_DMG
+from core.rules.health import Health
 from core.rules.alltypes import \
     (DamageType, ElementalReactionType, ElementType, NumericType, HealthType)
 from core.entities.creation import Creation
@@ -64,6 +65,8 @@ class NumericController(object):
 
         if event.type == EventType.DAMAGE:
             self.damage_case(simulation, event)
+        elif event.type == EventType.HEALTH:
+            self.health_case(simulation, event)
         elif event.type == EventType.NUMERIC:
             self.numeric_case(simulation, event)
         elif event.type == EventType.ELEMENT:
@@ -82,7 +85,7 @@ class NumericController(object):
 
     def damage_case(self, simulation: 'Simulation', event: 'Event'):
         damage = AMP_DMG()
-        # first connect event
+        # connect to event
         damage.connect(event)
         damage.connect(self.enemy)
 
@@ -128,14 +131,42 @@ class NumericController(object):
                                      obj=damage,
                                      desc=event.desc)
         simulation.event_queue.put(numeric_event)
+    
+    def health_case(self, simulation: 'Simulation', event: 'Event'):
+        health = Health()
+        # connect to event
+        health.connect(event)
+        
+        source = event.source.source
+        if isinstance(source, Creation):
+            # snapshot
+            if getattr(source, 'attr_panel', None):
+                health.connect(source.attr_panel)
+            # dynamic
+            else:
+                panel = EntityPanel(source.source.source)
+                health.connect(panel)
+        else:
+            panel = EntityPanel(source)
+            health.connect(panel)
+        
+        numeric_event = NumericEvent(time=event.time,
+                                     subtype=NumericType.HEALTH,
+                                     sourcename=event.sourcename,
+                                     obj=health,
+                                     desc=event.desc)
+        simulation.event_queue.put(numeric_event)
+        
 
     def numeric_case(self, simulation: 'Simulation', event: 'Event'):
         if event.subtype == NumericType.DAMAGE:
             self.enemy.hurt(event.obj.value)
             self.dmg_log[event.sourcename][event.obj.damage_type.name].append(
                 (event.time, event.obj.value))
-        elif event.subtype == NumericType.HEAL:
-            pass
+        elif event.subtype == NumericType.HEALTH:
+            for t in event.obj.target:
+                simulation.characters[t].attribute.hp_now += event.obj.value
+            self.heal_log[event.sourcename].append((event.time, event.obj.value))
         elif event.subtype == NumericType.SHIELD:
             pass
 
@@ -178,6 +209,8 @@ class NumericController(object):
             self.char_attr_log[k] = dict.fromkeys(self.__interest_data)
             self.energy_log[k] = []
             self.onstage_log[k] = []
+            self.heal_log[k] = []
+            self.shield_log[k] = []
             self.dmg_log[k] = dict.fromkeys(DamageType.__members__.keys())
             for in_k in self.__interest_data:
                 self.char_attr_log[k][in_k] = []

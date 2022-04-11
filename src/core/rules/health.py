@@ -7,7 +7,7 @@ from core.entities.panel import EntityPanel
 from core.simulation.event import HealthEvent
 
 
-class Heal(object):
+class Health(object):
     def __init__(self):
         self.root: DNode = DNode('Total Health', '*')
         self.init_tree()
@@ -32,7 +32,7 @@ class Heal(object):
         ])
 
     def connect(self, *args) -> None:
-        '''connect to panel objects, events, and enemy'''
+        '''connect to panel objects, events, and buffs'''
         for arg in args:
             if isinstance(arg, EntityPanel):
                 self.to_entity_panel(arg)
@@ -45,12 +45,16 @@ class Heal(object):
         if panel.mode == 'simple':
             self.root.modify('Ability Stat',
                              num=getattr(panel, self.depend).value)
+            try:
+                multiplier = self.root.find('Bonus Multiplier')
+            except:
+                return
 
-            self.root.find('HEAL_BONUS').insert(
+            multiplier.find('HEAL_BONUS').insert(
                 DNode('Entity HEAL_BONUS', '',
                       getattr(panel, 'HEAL_BONUS').value))
 
-            self.root.find('HEAL_INCOME').insert(
+            multiplier.find('HEAL_INCOME').insert(
                 DNode('Entity HEAL_INCOME', '',
                       getattr(panel, 'HEAL_INCOME').value))
         elif panel.mode == 'complete':
@@ -58,14 +62,18 @@ class Heal(object):
             self.root.modify('Ability Stat',
                              func=n.func,
                              child=n.child)
+            try:
+                multiplier = self.root.find('Bonus Multiplier')
+            except:
+                return
 
             n = deepcopy(getattr(panel, 'HEAL_BONUS'))
             n.key = 'Entity HEAL_BONUS'
-            self.root.find('HEAL_BONUS').insert(n)
+            multiplier.find('HEAL_BONUS').insert(n)
             
             n = deepcopy(getattr(panel, 'HEAL_INCOME'))
             n.key = 'Entity HEAL_INCOME'
-            self.root.find('HEAL_INCOME').insert(n)
+            multiplier.find('HEAL_INCOME').insert(n)
 
     def to_buff_panel(self, panel: 'BuffPanel'):
         for a in panel.adds:
@@ -84,8 +92,9 @@ class Heal(object):
             self.root.modify(c[0], num=c[1])
             
     def to_event(self, event: 'HealthEvent'):
-        self.depend = event.depend
+        self.depend = event.depend if event.depend else 'HP'
         self.health_type = event.subtype
+        self.target = event.target
 
         self.root.find('Ability Scaler').insert(
             DNode('Basic Ability Scaler', '', event.scaler[0]))

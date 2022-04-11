@@ -1,5 +1,6 @@
 import json
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
+from core.entities.buff import Buff
 from core.rules.icd import ICD
 from core.rules.element import ElemSys
 from core.rules.alltypes import ElementType
@@ -12,7 +13,7 @@ class Enemy(object):
         self.lv: int = 100
         self.name: str = ''
         self.HP: float = 1e9
-        self.hp_total: float = 1e9
+        self.hp_now: float = self.HP
         self.RES: Dict[ElementType: int] = {
             ElementType.ANEMO: 10,
             ElementType.GEO: 10,
@@ -25,7 +26,7 @@ class Enemy(object):
         }
         self.elem_sys = ElemSys()
         self.icd: Dict[Dict[str, ICD]] = {}
-        self.debuffs = []
+        self.debuffs: List[Buff] = []
 
         self.initialize(**configs)
 
@@ -35,7 +36,7 @@ class Enemy(object):
 
     @property
     def hp_percentage(self) -> Tuple[float, float]:
-        return (self.HP, self.hp_total)
+        return (self.hp_now, self.HP)
 
     def attacked_by(self, damage: 'DamageEvent') -> Tuple[bool, bool, rt, float]:
         '''return apply_flag, amp_flag, react_type, react_multi'''
@@ -64,4 +65,4 @@ class Enemy(object):
         return apply_flag, amp_flag, react_type, react_multi
 
     def hurt(self, damage: float):
-        self.HP -= damage
+        self.hp_now -= damage

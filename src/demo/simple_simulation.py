@@ -71,4 +71,4 @@ if __name__ == '__main__':
     p = LogPrinter(numeric_controller)
     p.print_char_log('Shogun', ['ER', 'ELECTRO_DMG'])
     p.print_energy_log()
-    p.print_damage_log(['Shogun'])
+    p.print_damage_one('Shogun')

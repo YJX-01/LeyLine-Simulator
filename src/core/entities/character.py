@@ -48,6 +48,7 @@ class Character(object):
         self.attribute.update_talents(self.action)
         self.attribute.update_weapon(self.weapon)
         self.attribute.update_artifact(self.artifact)
+        self.attribute.hp_now = self.attribute.HP.value
 
     @property
     def name(self) -> str:
@@ -60,8 +61,12 @@ class Character(object):
                 self.attribute.elemburst_lv+self.attribute.elemburst_bonus_lv)
 
     @property
-    def energy(self):
+    def energy(self) -> object:
         return getattr(self.action.ELEM_BURST, 'energy', None)
+    
+    @property
+    def hp_percentage(self) -> Tuple[float, float]:
+        return (self.attribute.hp_now, self.attribute.HP.value)
 
 
 class CharacterBase(object):
@@ -167,7 +172,7 @@ class CharacterAction(object):
         \tscalers\\
         \taction times\n
         #### 下辖属性
-        \tenergy <- ELEM_BURST
+        \tELEM_BURST -> energy
         '''
         # battle action
         self.NORMAL_ATK: Callable = None
@@ -221,14 +226,15 @@ class CharacterAction(object):
 class CharacterAttribute(object):
     def __init__(self) -> None:
         '''
-        # 包含面板属性\n
+        ### 包含面板属性\n
         include panel attributes:\n
         \tATK | DEF | HP | EM | ER | CRIT_RATE | CRIT_DMG\n
         \tHEAL_BONUS | HEAL_INCOME | SHIELD_STRENGTH | CD_REDUCTION\n
         \tELEM_DMG... | ELEM_RES...\n
-        # 和其他隐藏属性\n
+        ### 和其他属性\n
         and other character attributes:\n
         \tATK_SPD | MOVE_SPD | INTERRUPT_RES | DMG_REDUCTION\n
+        \thp_now
         '''
         # panel attributes
         self.ATK: DNode = self.tree_expr('ATK')
@@ -255,6 +261,7 @@ class CharacterAttribute(object):
         self.MOVE_SPD: float = 0
         self.INTERRUPT_RES: float = 0
         self.DMG_REDUCTION: float = 0
+        self.hp_now: float = 0
         # dynamic talent attributes
         self.normatk_lv: int = 1
         self.elemskill_lv: int = 1
@@ -452,16 +459,7 @@ class CharacterAttribute(object):
         tar_node = getattr(self, buff.target_path[1])
         for a in buff.adds:
             tar_node.remove(a[1].key)
-
-# def visualize(a) -> None:
-#     que: List = []
-#     que.append((a, 0))
-#     while (que):
-#         c, n = que.pop(0)
-#         print('\t'*n+'->', f'[{c.key}][{c.func}][ {c.num} ]')
-#         if not c.leaf:
-#             for i in range(len(c.child)):
-#                 que.insert(i, (c.child[i], n+1))
-
-# d = CharacterAttribute()
-# visualize(d.DEF)
+    
+    @property
+    def hp_percentage(self) -> Tuple[float, float]:
+        return (self.hp_now, self.HP.value)

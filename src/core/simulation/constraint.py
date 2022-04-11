@@ -47,7 +47,7 @@ class DurationConstraint(Constraint):
         self.duration -= t
 
     def test(self, event) -> bool:
-        if event.time > self.end and (not self.func or self.func(event)):
+        if event.time >= self.end and (not self.func or self.func(event)):
             if self.refreshable:
                 self.start = event.time
             return True

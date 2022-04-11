@@ -42,10 +42,10 @@ class ShogunCX2(Skill):
     def build_buff(self):
         self.buff = Buff(
             type=BuffType.DMG,
-            name='Shogun: Steelbreaker',
+            name='Shogun: Steelbreaker(CX2)',
             sourcename='Shogun',
             trigger=self.musou_isshin_state,
-            target_path=[self.sourcename]
+            target_path=['Shogun']
         )
         self.buff.add_buff('Defence', 'Defence Ignore', 0.6)
 
@@ -90,7 +90,7 @@ class ShogunCX4(Skill):
             self.last = event.time+7
             self.build_buff(simulation, self.last)
         elif event.type == EventType.SWITCH and self.last > event.time > self.begin:
-            self.last = self.time
+            self.last = event.time
             self.build_buff(simulation, self.last)
             simulation.event_queue.put(BuffEvent().frombuff(self.buff))
         elif event.time > self.last and event.time > self.begin:

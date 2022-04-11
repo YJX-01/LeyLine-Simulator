@@ -49,7 +49,7 @@ class ShogunPassive2(Skill):
     def build_buff(self, simulation: 'Simulation'):
         self.buff = Buff(
             type=BuffType.ATTR,
-            name='Shogun: Enlightened One',
+            name='Shogun: Enlightened One(PA2)',
             sourcename='Shogun',
             constraint=Constraint(0, 1000),
             trigger=self.trigger,

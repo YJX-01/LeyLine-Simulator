@@ -236,7 +236,7 @@ class NumericType(Enum):
     '''数值事件的类型'''
     NONE = 0
     DAMAGE = 1
-    HEAL = 2
+    HEALTH = 2
     SHIELD = 3
 
 class BuffType(Enum):

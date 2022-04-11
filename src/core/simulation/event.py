@@ -296,14 +296,15 @@ class HealthEvent(Event):
         '''
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function | 
-        ### depend, scaler
+        ### depend, scaler, target
         - subtype: HealthType
         - you need to set:\n
-        ### time, subtype, source, sourcename, depend, scaler, desc
+        ### time, subtype, source, sourcename, depend, scaler, target, desc
         '''
         super().__init__(type=EventType.HEALTH)
         self.depend: str = 'HP'
         self.scaler: List[float] = []
+        self.target: List[str] = []
         self.initialize(**configs)
 
     @property

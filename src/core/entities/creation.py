@@ -37,9 +37,18 @@ class TriggerableCreation(Creation):
 
 class IndependentCreation(Creation):
     def __init__(self, **configs) -> None:
+        'should have a selfexcite_func'
         super().__init__(type='independent')
-        self.selfexcite_func = None
         self.initialize(**configs)
+        
+class ShieldCreation(Creation):
+    def __init__(self, **configs) -> None:
+        super().__init__(type='shield')
+        self.shield = None
+        self.initialize(**configs)
+    
+    def __eq__(self, __o: 'Creation') -> bool:
+        return self.name == __o.name
 
 
 class CreationSpace(object):
@@ -54,6 +63,7 @@ class CreationSpace(object):
         if hasattr(self, 'creations'):
             return
         self.creations: List[Creation] = []
+        self.shields: List[ShieldCreation] = []
 
     def execute(self, simulation, event):
         for creation in self.creations:
@@ -71,6 +81,13 @@ class CreationSpace(object):
             self.creations.append(creation)
         elif n == creation.exist_num:
             self.creations[old_i] = creation
+    
+    def shield_insert(self, shield: 'ShieldCreation'):
+        if shield in self.shields:
+            n = self.shields.index(shield)
+            self.shields[n] = shield
+        else:
+            self.shields.append(shield)
 
     def clear(self):
         self.creations.clear()
