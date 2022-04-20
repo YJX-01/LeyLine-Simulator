@@ -33,8 +33,8 @@ class ICD(object):
         self.GU = int(gu)
         self.counter = CounterConstraint(time,
                                          self.__group_reference[self.group][0],
-                                         self.__group_reference[self.group][1])
-        self.counter.circulate()
+                                         self.__group_reference[self.group][1],
+                                         cir=True)
 
     def __eq__(self, other: 'ICD') -> bool:
         return self.tag == self.tag and self.group == other.group

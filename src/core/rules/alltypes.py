@@ -106,6 +106,7 @@ class StatType(Enum):
 class SetType(Enum):
     '''圣遗物套装类型'''
     NONE = 0
+    # from 1 - 40 are for 5 star artifacts
     GLADIATORS_FINALE = 1  # 角斗士的终幕礼
     JUE_DOU_SHI = 1
     WANDERERS_TROUPE = 2  # 流浪大地的乐团
@@ -146,7 +147,11 @@ class SetType(Enum):
     HAI_RAN = 19
     HUSK_OF_OPULENT_DREAMS = 20  # 华馆梦醒形骸记
     HUA_GUAN = 20
-    # from 21 - 40 are reserved for 4 star artifacts
+    VERMILLION_HEREAFTER = 21  # 辰砂往生录
+    CHEN_SHA = 21
+    ECHOES_OF_AN_OFFERING = 22  # 来歆余响
+    YU_XIANG = 22
+    # from 41 - 60 are for 4 star artifacts
 
 
 class PanelType(Enum):

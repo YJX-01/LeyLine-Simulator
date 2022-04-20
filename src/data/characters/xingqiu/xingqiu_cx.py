@@ -51,7 +51,11 @@ class ShogunCX2(Skill):
 
     def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
         creation_space = CreationSpace()
-        return creation_space.mark_active('Musou Isshin State', event.time)
+        for c in creation_space.creations:
+            if c.name == 'Musou Isshin State' and c.end > event.time:
+                return True
+        else:
+            return False
 
 
 class ShogunCX3(Skill):

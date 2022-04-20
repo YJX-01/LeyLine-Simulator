@@ -3,13 +3,14 @@ from core.entities.buff import Buff
 from core.entities.numeric import NumericController
 from core.rules.alltypes import SkillType, BuffType, EventType, DamageType
 from core.rules.skill import Skill
-from core.simulation.event import Event, DamageEvent
+from core.simulation.event import Event
+from core.simulation.constraint import Constraint
 if TYPE_CHECKING:
     from core.simulation.simulation import Simulation
     from core.entities.artifact import Artifact
 
 
-class GLADIATORS_FINALE_Piece2(Skill):
+class BLOODSTAINED_CHIVALRY_Piece2(Skill):
     def __init__(self, art: 'Artifact'):
         super().__init__(
             type=SkillType.ARTIFACT,
@@ -22,17 +23,18 @@ class GLADIATORS_FINALE_Piece2(Skill):
         if event.type == EventType.TRY and event.subtype == 'init':
             self.buff = Buff(
                 type=BuffType.ATTR,
-                name=f'{self.sourcename}: Gladiators Finale Piece2',
+                name=f'{self.sourcename}: Bloodstained Chivalry Piece2',
                 sourcename=self.sourcename,
-                target_path=[[self.sourcename], 'ATK']
+                target_path=[[self.sourcename], 'PHYSICAL_DMG']
             )
-            self.buff.add_buff('Bonus Scalers',
-                               'Gladiators Finale Piece2', 0.18)
+            self.buff.add_buff('Total PHYSICAL_DMG',
+                               'Bloodstained Chivalry Piece2', 0.25)
             controller = NumericController()
             controller.insert_to(self.buff, 'ca', simulation)
 
 
-class GLADIATORS_FINALE_Piece4(Skill):
+class BLOODSTAINED_CHIVALRY_Piece4(Skill):
+    # TODO
     def __init__(self, art: 'Artifact'):
         super().__init__(
             type=SkillType.ARTIFACT,
@@ -40,23 +42,31 @@ class GLADIATORS_FINALE_Piece4(Skill):
             sourcename=art.owner
         )
         self.buff = None
+        self.last = 1000
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
             self.build_buff(simulation)
 
     def build_buff(self, simulation: 'Simulation'):
-        def trigger(simulation, event: 'DamageEvent'):
-            return event.subtype == DamageType.NORMAL_ATK
         self.buff = Buff(
             type=BuffType.DMG,
-            name=f'{self.sourcename}: Gladiators Finale Piece4',
+            name=f'{self.sourcename}: Bloodstained Chivalry Piece4',
             sourcename=self.sourcename,
-            trigger=trigger,
+            constraint=Constraint(1000,10),
+            trigger=self.trigger,
             target_path=[self.sourcename]
         )
-        if simulation.characters[self.sourcename].base.weapon in [1, 2, 3]:
-            self.buff.add_buff('Normal Attack Bonus',
-                               'Gladiators Finale Piece4', 0.35)
+        self.buff.add_buff('Charged Attack Bonus',
+                           'Bloodstained Chivalry Piece4', 0.5)
         controller = NumericController()
-        controller.insert_to(self.buff, 'cd', simulation)
+        controller.insert_to(self.buff, 'dd', simulation)
+
+    def trigger(self, simulation: 'Simulation', event: 'Event'):
+        if event.subtype == DamageType.CHARGED_ATK and self.last < event.time <= self.last+10:
+            return True
+        elif event.type == EventType.TRY:
+            # TODO enemy die
+            pass
+        else:
+            return False

@@ -105,18 +105,19 @@ class ActionEvent(Event):
         '''
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function |
-        ### dur
+        ### dur, cd
         - subtype: ActionType\n
         - desc format: char.skillname.other
         '''
         super().__init__(type=EventType.ACTION)
         self.dur: float = 0
+        self.cd: float = -1
         self.initialize(**configs)
 
     def fromskill(self, skill: Skill):
         '''
         after this function you need to set:\n
-        ### time, dur, desc, (func)
+        ### time, dur, (cd), desc, (func)
         '''
         if not isinstance(skill, Skill):
             raise TypeError('should be a skill object')
@@ -147,7 +148,7 @@ class DamageEvent(Event):
         - desc format: obj.damagename.other
         '''
         super().__init__(type=EventType.DAMAGE)
-        self.elem: ElementType = ElementType(0)
+        self.elem: ElementType = ElementType.NONE
         self.depend: str = 'ATK'
         self.scaler: float = 0
         self.mode: str = ''
@@ -180,7 +181,7 @@ class EnergyEvent(Event):
         ### type, subtype, source, sourcename, time, desc, function | 
         ### elem, base, num, receiver(List[name]|None)
         when base is int(1|2|3|6), it is orb or particle\\
-        when base is 0, it is constant energy restore\n
+        when base is 0, it is constant energy restore/reduce\n
         - subtype: particle, orb, const\n
         - you need to set:\n
         ### time, source, sourname, elem, base, num, (receiver) desc, (func)
@@ -203,7 +204,6 @@ class EnergyEvent(Event):
             f'\n\t\t[info   ]:[ {self.elem}; {self.base}; {self.num} ]'
 
     def execute(self, simulation: 'Simulation'):
-        simulation.output_log.append(self.prefix_info)
         if self.base:
             base = self.base*self.num
             for name, character in simulation.characters.items():
@@ -216,6 +216,9 @@ class EnergyEvent(Event):
         else:
             for name in self.receiver:
                 simulation.characters[name].energy.receive(self.num)
+            if self.num <= 0:
+                return
+        simulation.output_log.append(self.prefix_info)
 
 
 class ElementEvent(Event):
@@ -223,15 +226,16 @@ class ElementEvent(Event):
         '''
         attributes: \n
         ### type, subtype, source, sourcename, time, desc, function |
-        ### elem, num(GU/mul), react
+        ### elem, num(GU/mul), react, info
         - subtype: apply, reaction\n
         - you need to set:\n
-        ### time, subtype, source, sourcename, elem, num, (react), desc
+        ### time, subtype, source, sourcename, elem, num, (react), (info) desc
         '''
         super().__init__(type=EventType.ELEMENT)
         self.elem: ElementType = ElementType.NONE
         self.num: int = 0
         self.react: ElementalReactionType = ElementalReactionType.NONE
+        self.info: dict = {}
         self.initialize(**configs)
 
 
@@ -243,6 +247,11 @@ class TryEvent(Event):
 
 class CreationEvent(Event):
     def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, sourcename, time, desc, function
+        - subtype: creation, selfexcite
+        '''
         super().__init__(type=EventType.CREATION)
         self.initialize(**configs)
 
@@ -311,3 +320,25 @@ class HealthEvent(Event):
     def prefix_info(self) -> str:
         return super().prefix_info +\
             f'\n\t\t[info   ]:[ {self.scaler}; {self.depend} ]'
+
+
+class ShieldEvent(Event):
+    def __init__(self, **configs):
+        '''
+        attributes: \n
+        ### type, subtype, source, sourcename, time, desc, function | 
+        ### depend, scaler, elem
+        - subtype: HealthType
+        - you need to set:\n
+        ### time, subtype, source, sourcename, depend, scaler, target, desc
+        '''
+        super().__init__(type=EventType.SHIELD)
+        self.depend: str = 'HP'
+        self.scaler: List[float] = []
+        self.elem: ElementType = ElementType.NONE
+        self.initialize(**configs)
+
+    @property
+    def prefix_info(self) -> str:
+        return super().prefix_info +\
+            f'\n\t\t[info   ]:[ {self.elem.name}; {self.scaler}; {self.depend} ]'

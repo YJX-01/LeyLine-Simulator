@@ -37,6 +37,10 @@ class SimPrinter(object):
             facecolor = self.cm.get_action_color(action_event)
             textcolor = self.text_color(facecolor)
             rowname, label = self.format_action_info(action_event)
+            if action_event.cd > 0:
+                cd_rect = ax.barh(rowname, action_event.cd-action_event.time, left=action_event.time,
+                                  height=0.6, linestyle='--',
+                                  color='none', edgecolor='darkgrey')
             rect = ax.barh(rowname, action_event.dur, left=action_event.time,
                            label=rowname, color=facecolor,
                            height=0.6, edgecolor='darkgrey')
@@ -82,9 +86,14 @@ class SimPrinter(object):
             buff_event = buff_list.pop(0)
             facecolor = self.cm.get_buff_color(buff_event)
             textcolor = self.text_color(facecolor)
-            rowname = buff_event.desc
+            desc_list = buff_event.desc.split('.', 1)
+            rowname = desc_list[0]
+            stack = int(desc_list[1]) if len(desc_list) > 1 else 0
+            label = rowname.split(': ')[-1]
+            if stack:
+                label = label+f'-{stack}'
 
-            # find and merge same buff
+            # find and merge same buff. locate buff with different stacks
             max_dur = buff_event.duration
             mergelist = []
             for i, ev in enumerate(buff_list):
@@ -94,7 +103,9 @@ class SimPrinter(object):
                 elif ev.desc == buff_event.desc and ev.sourcename != buff_event.sourcename and ev.time - buff_event.time <= max_dur:
                     max_dur = ev.time - buff_event.time
                     break
-
+                elif ev.desc[:-2] == rowname and ev.desc[-1] != str(stack) and ev.time - buff_event <= max_dur:
+                    max_dur = ev.time - buff_event.time
+                    break
             for m in reversed(mergelist):
                 buff_list.pop(m)
 
@@ -102,7 +113,7 @@ class SimPrinter(object):
             rect = ax.barh(rowname, max_dur, left=buff_event.time,
                            label=rowname, color=facecolor,
                            height=0.6, edgecolor='darkgrey')
-            ax.bar_label(rect, labels=[rowname], fontsize='small',
+            ax.bar_label(rect, labels=[label], fontsize='small',
                          label_type='center', color=textcolor)
             high = max(high, buff_event.time+buff_event.duration)
 
@@ -161,6 +172,8 @@ class SimPrinter(object):
                            color=self.cm.get_element_color(ev.elem))
             elif ev.subtype == 'const':
                 base = ev.num
+                if base >= 15:
+                    continue
                 ax.scatter(ev.time, base, s=base*50, marker='p',
                            color=self.cm.get_element_color(ev.elem))
         ax.set_ylim(bottom=0)
@@ -188,16 +201,16 @@ class SimPrinter(object):
                 continue
             markerline, stemlines, baseline = plt.stem(ev.time, ev.num)
             color = self.cm.get_element_color(ev.elem)
-            markerline.set(color=color, markersize=ev.num*9, 
+            markerline.set(color=color, markersize=ev.num*9,
                            alpha=0.7, markeredgecolor='w')
             stemlines.set(color=color, alpha=0.5, linewidth=1)
-        plt.ylim(0, 5)
+        plt.ylim(0, 4.5)
         plt.yticks([0, 1, 2, 4])
-        plt.ylabel('Gauge Unit')
+        plt.ylabel('Gauge Unit / U')
         plt.xlim(0, last)
         plt.xlabel('time / s')
         plt.grid(True, 'both', alpha=0.6)
-        plt.title('Aura Log')
+        plt.title('Element apply Log')
         plt.legend(handles=patches)
         plt.show()
 

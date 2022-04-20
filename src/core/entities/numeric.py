@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING, List, Mapping
-from core.rules.damage import AMP_DMG
+from core.rules.damage import AMP_DMG, TRANS_DMG
 from core.rules.health import Health
 from core.rules.alltypes import \
-    (DamageType, ElementalReactionType, ElementType, NumericType, HealthType)
-from core.entities.creation import Creation
-from core.entities.buff import *
+    (DamageType, ElementType, NumericType, HealthType)
+from core.rules.alltypes import ElementalReactionType as rt
+from core.entities.creation import Creation, CreationSpace
+from core.entities.buff import Buff
 from core.entities.enemy import Enemy
 from core.entities.panel import EntityPanel
 from core.simulation.event import *
@@ -44,7 +45,6 @@ class NumericController(object):
         self.energy_log = {}
         self.dmg_log = {}
         self.heal_log = {}
-        self.shield_log = {}
         self.clock_time = 0.1
 
     def execute(self, simulation: 'Simulation', event: 'Event'):
@@ -71,6 +71,8 @@ class NumericController(object):
             self.numeric_case(simulation, event)
         elif event.type == EventType.ELEMENT:
             self.element_case(simulation, event)
+        elif event.type == EventType.SHIELD:
+            self.shield_case(simulation, event)
 
     def set_enemy(self, **configs):
         self.enemy = Enemy(**configs)
@@ -83,12 +85,14 @@ class NumericController(object):
             if isinstance(v, list) or isinstance(v, dict):
                 v.clear()
 
-    def damage_case(self, simulation: 'Simulation', event: 'Event'):
+    def damage_case(self, simulation: 'Simulation', event: 'DamageEvent'):
         damage = AMP_DMG()
         # connect to event
         damage.connect(event)
+        # connect to enemy
         damage.connect(self.enemy)
 
+        # connect to panel
         source = event.source.source
         if isinstance(source, Creation):
             # snapshot
@@ -113,17 +117,20 @@ class NumericController(object):
         for b in buffs:
             damage.connect(b)
 
-        apply_flag, amp_flag, react_type, react_multi = self.enemy.attacked_by(
-            event)
-        # whether apply element
+        c = simulation.characters[event.sourcename]
+        info = dict(em=c.attribute.EM.value, lv=c.base.lv, name=c.name)
+        r_list, apply_flag = self.enemy.attacked_by(event, **info)
+
+        # apply element record
         if apply_flag and event.elem != ElementType.NONE and event.elem != ElementType.PHYSICAL:
             self.apply_element(simulation, event)
-        # whether reaction
-        if react_type != ElementalReactionType.NONE:
-            react_event = self.react_event(event, react_multi, react_type)
-            simulation.event_queue.put(react_event)
-            if amp_flag:
-                damage.connect(react_event)
+
+        # process reactions
+        for r_time, r_type, r_info in r_list:
+            reaction_event = self.react_event(r_time, r_type, r_info)
+            simulation.event_queue.put(reaction_event)
+            if r_type in [rt.MELT, rt.MELT_REVERSE, rt.VAPORIZE, rt.VAPORIZE_REVERSE]:
+                damage.connect(reaction_event)
 
         numeric_event = NumericEvent(time=event.time,
                                      subtype=NumericType.DAMAGE,
@@ -131,12 +138,12 @@ class NumericController(object):
                                      obj=damage,
                                      desc=event.desc)
         simulation.event_queue.put(numeric_event)
-    
-    def health_case(self, simulation: 'Simulation', event: 'Event'):
+
+    def health_case(self, simulation: 'Simulation', event: 'HealthEvent'):
         health = Health()
         # connect to event
         health.connect(event)
-        
+
         source = event.source.source
         if isinstance(source, Creation):
             # snapshot
@@ -149,16 +156,15 @@ class NumericController(object):
         else:
             panel = EntityPanel(source)
             health.connect(panel)
-        
+
         numeric_event = NumericEvent(time=event.time,
                                      subtype=NumericType.HEALTH,
                                      sourcename=event.sourcename,
                                      obj=health,
                                      desc=event.desc)
         simulation.event_queue.put(numeric_event)
-        
 
-    def numeric_case(self, simulation: 'Simulation', event: 'Event'):
+    def numeric_case(self, simulation: 'Simulation', event: 'NumericEvent'):
         if event.subtype == NumericType.DAMAGE:
             self.enemy.hurt(event.obj.value)
             self.dmg_log[event.sourcename][event.obj.damage_type.name].append(
@@ -166,11 +172,33 @@ class NumericController(object):
         elif event.subtype == NumericType.HEALTH:
             for t in event.obj.target:
                 simulation.characters[t].attribute.hp_now += event.obj.value
-            self.heal_log[event.sourcename].append((event.time, event.obj.value))
-        elif event.subtype == NumericType.SHIELD:
-            pass
+            self.heal_log[event.sourcename].append(
+                (event.time, event.obj.value))
 
-    def element_case(self, simulation: 'Simulation', event: 'Event'):
+    def element_case(self, simulation: 'Simulation', event: 'ElementEvent'):
+        if event.subtype != 'reaction':
+            return
+        if event.react in [rt.NONE, rt.MELT, rt.MELT_REVERSE, rt.VAPORIZE, rt.VAPORIZE_REVERSE]:
+            return
+
+        if event.num == 0:
+            return
+        damage = TRANS_DMG()
+        damage.connect(event)
+        damage.connect(self.enemy)
+        buffs = [b for b in self.const_buffs_dmg
+                 if b.trigger(simulation, event) and
+                 (not b.target_path or event.sourcename in b.target_path)]
+        for b in buffs:
+            damage.connect(b)
+        numeric_event = NumericEvent(time=event.time,
+                                     subtype=NumericType.DAMAGE,
+                                     sourcename=event.sourcename,
+                                     obj=damage,
+                                     desc=event.desc)
+        simulation.event_queue.put(numeric_event)
+
+    def shield_case(self, simulation: 'Simulation', event: 'ShieldEvent'):
         return
 
     def insert_to(self, buff: 'Buff', type: str, simulation: 'Simulation'):
@@ -210,7 +238,6 @@ class NumericController(object):
             self.energy_log[k] = []
             self.onstage_log[k] = []
             self.heal_log[k] = []
-            self.shield_log[k] = []
             self.dmg_log[k] = dict.fromkeys(DamageType.__members__.keys())
             for in_k in self.__interest_data:
                 self.char_attr_log[k][in_k] = []
@@ -243,6 +270,11 @@ class NumericController(object):
                 cx(simulation, event)
             character.weapon.work(simulation, event)
             character.artifact.work(simulation, event)
+        creation_space = CreationSpace()
+        for infusion in creation_space.infusions:
+            if event.time > infusion.end:
+                continue
+            infusion(simulation, event)
 
     def refresh(self, simulation: 'Simulation') -> bool:
         time = simulation.clock
@@ -275,24 +307,32 @@ class NumericController(object):
                     v = self.char_attr_log[name][data][-1]
                 self.char_attr_log[name][data].append(v)
 
-    def apply_element(self, simulation: 'Simulation', event: 'Event'):
+    def apply_element(self, simulation: 'Simulation', event: 'DamageEvent'):
         apply_event = ElementEvent(time=event.time,
                                    subtype='apply',
                                    sourcename=event.sourcename,
                                    elem=event.elem,
                                    num=event.icd.GU,
-                                   desc=f'{event.sourcename}: apply {event.elem} {event.icd.GU}')
+                                   desc=f'{event.sourcename}: apply {event.elem.name} {event.icd.GU}')
         simulation.event_queue.put(apply_event)
 
-    def react_event(self, event: 'Event', react_multi, react_type):
-        return ElementEvent(time=event.time,
-                            subtype='reaction',
-                            source=event.source,
-                            sourcename=event.sourcename,
-                            elem=event.elem,
-                            num=react_multi,
-                            react=react_type,
-                            desc=f'{event.sourcename}: trigger {react_type}')
+    def react_event(self, react_time: float, react_type: rt, react_info: dict):
+        n = react_info.get('name', '')
+        react_multi, e = self.enemy.elem_sys.reaction_multiplier.get(
+            react_type)
+        if e == ElementType.NONE:
+            e = react_info.get('elem', ElementType.NONE)
+        if not react_info.get('dmg', True):
+            react_multi = 0
+        reaction_event = ElementEvent(time=react_time,
+                                      subtype='reaction',
+                                      sourcename=n,
+                                      elem=e,
+                                      num=react_multi,
+                                      react=react_type,
+                                      info=react_info,
+                                      desc=f'{n}: reaction {react_type.name}')
+        return reaction_event
 
     def onstage_record(self) -> List[List]:
         '''return List[(name, start, end)]'''

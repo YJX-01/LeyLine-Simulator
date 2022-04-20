@@ -49,6 +49,7 @@ class HutaoElemskill(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
+                                cd=self.cd.end,
                                 desc='Hutao.elem_skill')
         simulation.event_queue.put(action_event)
 
@@ -80,18 +81,15 @@ class HutaoElemskill(Skill):
         return cd_counter
 
     def elemskill_transformation(self, simulation: 'Simulation', event: 'Event'):
+        self.build_buff(simulation, event)
         state = ParamitaPapilioState(event.time)
         creation_space = CreationSpace()
-        creation_space.insert(state)
+        creation_space.mark_insert(state)
 
     def build_buff(self, simulation: 'Simulation', event: 'Event'):
-        def trigger(sim, event: 'Event'):
+        def trigger(simulation: 'Simulation'):
             creation_space = CreationSpace()
-            for c in creation_space.creations:
-                if c.name == 'Paramita Papilio State' and c.end > event.time:
-                    return True
-            else:
-                return False
+            return creation_space.mark_active('Paramita Papilio State', simulation.clock)
         self.buff = Buff(
             type=BuffType.ATTR,
             name='Hutao: Paramita Papilio',
@@ -111,11 +109,7 @@ class HutaoElemskill(Skill):
 
     def paramita_papilio_state(self, simulation: 'Simulation', event: 'Event') -> bool:
         creation_space = CreationSpace()
-        for c in creation_space.creations:
-            if c.name == 'Paramita Papilio State' and c.end > event.time:
-                return True
-        else:
-            return False
+        return creation_space.mark_active('Paramita Papilio State', event.time)
 
 
 class ParamitaPapilioState(Creation):
@@ -188,14 +182,11 @@ class BlossomAttack(Skill):
             damage_type=DamageType.ELEM_SKILL,
             scaler=blossom.scaler
         )
-        self.cd = DurationConstraint(
-            blossom.start, 4, func=lambda x: True, refresh=True)
 
     def __call__(self, simulation: 'Simulation', event: 'Event') -> None:
-        if not self.cd.test(event):
-            return
         mode = self.source.mode
-
+        if mode == '0':
+            return
         # damage event
         damage_event = DamageEvent().fromskill(self)
         damage_event.initialize(time=event.time,

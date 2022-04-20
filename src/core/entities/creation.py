@@ -64,6 +64,8 @@ class CreationSpace(object):
             return
         self.creations: List[Creation] = []
         self.shields: List[ShieldCreation] = []
+        self.marks: List[Creation] = []
+        self.infusions: List[Creation] = []
 
     def execute(self, simulation, event):
         for creation in self.creations:
@@ -88,6 +90,27 @@ class CreationSpace(object):
             self.shields[n] = shield
         else:
             self.shields.append(shield)
+    
+    def mark_insert(self, mark: 'Creation'):
+        if mark in self.marks:
+            n = self.marks.index(mark)
+            self.marks[n] = mark
+        else:
+            self.marks.append(mark)
+    
+    def mark_active(self, name: str, time: float) -> bool:
+        for mark in self.marks:
+            if mark.name == name and mark.end > time:
+                return True
+        else:
+            return False
+    
+    def infusion_insert(self, infusion: 'Creation'):
+        if infusion in self.infusions:
+            n = self.marks.index(infusion)
+            self.marks[n] = infusion
+        else:
+            self.marks.append(infusion)
 
     def clear(self):
         self.creations.clear()

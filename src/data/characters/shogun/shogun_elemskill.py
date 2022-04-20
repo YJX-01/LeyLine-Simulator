@@ -50,6 +50,7 @@ class ShogunElemskill(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
+                                cd=self.cd.end,
                                 desc='Shogun.elem_skill')
         simulation.event_queue.put(action_event)
 

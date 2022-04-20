@@ -112,7 +112,11 @@ class ShogunNormATK(Skill):
 
     def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
         creation_space = CreationSpace()
-        return creation_space.mark_active('Musou Isshin State', event.time)
+        for c in creation_space.creations:
+            if c.name == 'Musou Isshin State' and c.end > event.time:
+                return True
+        else:
+            return False
 
 
 class ShogunChargeATK(Skill):
@@ -256,11 +260,12 @@ class MusouIsshin(Skill):
 
     def restore_judge(self, event: 'Event'):
         if not self.restore_counter or self.restore_counter.end < event.time:
-            creation_space = CreationSpace()    
-            for c in creation_space.marks:
+            creation_space = CreationSpace()
+            for c in creation_space.creations:
                 if c.name == 'Musou Isshin State' and c.end > event.time:
                     self.restore_counter = CounterConstraint(c.start, 7, 5)
                     self.restore_cd = DurationConstraint(c.start-1, 1, refresh=True)
+                    break
                 
         if not self.restore_counter.full and self.restore_cd.test(event):
             self.restore_counter.receive(1)

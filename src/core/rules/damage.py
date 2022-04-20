@@ -7,7 +7,7 @@ from core.rules.alltypes import DamageType, ElementalReactionType, ElementType
 from core.entities.buff import Buff, BuffPanel
 from core.entities.enemy import Enemy
 from core.entities.panel import EntityPanel
-from core.simulation.event import *
+from core.simulation.event import DamageEvent, ElementEvent
 
 
 class AMP_DMG(object):
@@ -18,8 +18,8 @@ class AMP_DMG(object):
         self.root: DNode = DNode('Total Damage', '*')
         self.init_tree()
         self.depend: str = 'ATK'
-        self.damage_type: DamageType = DamageType(0)
-        self.elem_type: ElementType = ElementType(0)
+        self.damage_type: DamageType = DamageType.NONE
+        self.elem_type: ElementType = ElementType.NONE
 
     def init_tree(self) -> None:
         for m in self.__multipliers:
@@ -238,8 +238,9 @@ class TRANS_DMG(object):
     def __init__(self):
         self.root: DNode = DNode('Total Damage', '*')
         self.init_tree()
-        self.elem_type: ElementType = ElementType(0)
-        self.react_type: ElementalReactionType = ElementalReactionType(0)
+        self.damage_type: DamageType = DamageType.NONE
+        self.elem_type: ElementType = ElementType.NONE
+        self.react_type: ElementalReactionType = ElementalReactionType.NONE
 
     def init_tree(self):
         self.root.extend([
@@ -285,18 +286,17 @@ class TRANS_DMG(object):
             self.root.modify(c[0], num=c[1])
 
     def to_react(self, event: ElementEvent):
-        if self.subtype != 'reaction':
+        if event.subtype != 'reaction':
             raise TypeError('not a reaction')
         self.elem_type = event.elem
         self.react_type = event.react
         self.root.modify('Reaction Multiplier', num=event.num)
-        s = event.source
-        while(not hasattr(s, 'base')):
-            s = s.source
+        lv = event.info.get('lv')
+        em = event.info.get('em')
         self.root.modify('Level Multiplier',
-                         num=self.reaction_info['player'][s.base.lv])
+                         num=self.reaction_info['player'][lv])
         self.root.modify('EM',
-                         num=s.attribute.EM.value)
+                         num=em)
 
     def to_enemy(self, enemy: Enemy):
         self.root.modify('Resistance Base',
@@ -305,33 +305,3 @@ class TRANS_DMG(object):
     @property
     def value(self) -> float:
         return self.root.value
-
-# from functools import wraps
-
-# from core.simulation.trigger import Trigger
-# from .alltypes import *
-
-# # TODO: 考虑附魔 buff 等改变元素类型的情况
-# # TODO: 考虑雷神大招 buff 等改变伤害类型的情况
-# def damage(
-#     simulation=None,
-#     time=0.0,
-#     elem=ElementType.PHYSICAL,
-#     type=DamageType.NONE):
-#     '''
-#     伤害装饰器。
-#     用于在造成伤害时，添加一些通用的逻辑。
-#     如，伤害会触发阿贝多的阳华。
-#     另外也可以在这里实现元素附着的逻辑。
-#     '''
-#     def decorate(func):
-#         @wraps(func)
-#         def wrapper(*args, **kwargs):
-#             trigger = Trigger()
-#             print(f"\t\tTRIGGER BEFORE DAMAGE [ELEM:{elem}] [TYPE:{type}]")
-#             result = func(*args, **kwargs)
-#             print(f"\t\tTRIGGER AFTER DAMAGE [ELEM:{elem}] [TYPE:{type}]")
-#             trigger.notify('damage_trigger', *args)
-#             return result
-#         return wrapper
-#     return decorate

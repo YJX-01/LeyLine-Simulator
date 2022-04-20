@@ -114,11 +114,7 @@ class HutaoNormATK(Skill):
 
     def paramita_papilio_state(self, simulation: 'Simulation', event: 'Event') -> bool:
         creation_space = CreationSpace()
-        for c in creation_space.creations:
-            if c.name == 'Paramita Papilio State' and c.end > event.time:
-                return True
-        else:
-            return False
+        return creation_space.mark_active('Paramita Papilio State', event.time)
 
 
 class HutaoChargeATK(Skill):
@@ -223,6 +219,7 @@ class ParamitaPapilio(Skill):
         energy_event = EnergyEvent(time=event.time,
                                    source=self,
                                    sourcename=self.sourcename,
+                                   elem=ElementType.PYRO,
                                    base=1,
                                    num=2+extra_ball,
                                    desc='Hutao.energy')
@@ -238,17 +235,14 @@ class ParamitaPapilio(Skill):
                                 desc=f'Hutao.diewu.{atk_cnt}')
         return damage_event
 
-    def restore_judge(self, event: 'Event'):
-        creation_space = CreationSpace()
-        for c in creation_space.creations:
-            if c.name == 'Paramita Papilio State' and c.end > event.time:
-                self.restore_cd = DurationConstraint(c.start-5, 5, refresh=True)
-                break
-
-        if self.restore_cd.test(event):
-            return True
-        else:
-            return False
+    def restore_judge(self, event: 'Event') -> bool:
+        if not self.restore_cd:
+            creation_space = CreationSpace()
+            for c in creation_space.marks:
+                if c.name == 'Paramita Papilio State' and event.time <= c.end:
+                    self.restore_cd = DurationConstraint(c.start-5, 5, refresh=True)
+                    break
+        return self.restore_cd.test(event)
 
 
 class ParamitaPapilioCharge(Skill):
@@ -305,6 +299,7 @@ class ParamitaPapilioCharge(Skill):
         energy_event = EnergyEvent(time=event.time,
                                    source=self,
                                    sourcename=self.sourcename,
+                                   elem=ElementType.PYRO,
                                    base=1,
                                    num=2+extra_ball,
                                    desc='Hutao.energy')

@@ -5,6 +5,8 @@ from core.rules.alltypes import ArtpositionType, StatType, SetType
 from data.artifacts import *
 if TYPE_CHECKING:
     from core.entities.character import Character
+    from core.simulation.simulation import Simulation
+    from core.simulation.event import Event
 
 
 class Artifact(object):

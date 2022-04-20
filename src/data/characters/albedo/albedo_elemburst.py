@@ -45,8 +45,11 @@ class AlbedoElemburst(Skill):
                 return
 
         # check finish, clear energy, reset cd (cd has begin delay)
-        self.energy.clear()
-        self.cd = self.elemburst_cd(event.time+self.action_time[0]/60)
+        delay_time = event.time+self.action_time[0]/60
+        self.cd = self.elemburst_cd(delay_time)
+        clear_event = EnergyEvent(time=delay_time, sourcename=self.sourcename,
+                                  num=-self.energy.capacity, receiver=[self.sourcename])
+        simulation.event_queue.put(clear_event)
 
         # fetch mode and other information
         mode = event.mode
@@ -56,6 +59,7 @@ class AlbedoElemburst(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
+                                cd=self.cd.end,
                                 desc='Albedo.elem_burst')
         simulation.event_queue.put(action_event)
 

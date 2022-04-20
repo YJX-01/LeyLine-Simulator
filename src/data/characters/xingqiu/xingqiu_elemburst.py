@@ -65,7 +65,6 @@ class ShogunElemburst(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                cd=self.cd.end,
                                 desc='Shogun.elem_burst')
         simulation.event_queue.put(action_event)
 
@@ -113,7 +112,7 @@ class ShogunElemburst(Skill):
     def elemburst_transformation(self, time, simulation: 'Simulation'):
         state = MusouIsshinState(time)
         creation_space = CreationSpace()
-        creation_space.mark_insert(state)
+        creation_space.insert(state)
 
     @staticmethod
     def restore_cnt(ev: 'Event'):
