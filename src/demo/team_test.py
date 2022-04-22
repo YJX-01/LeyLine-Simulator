@@ -2,6 +2,7 @@ from core.simulation import *
 from core.entities.character import *
 from core.visualize.log_view import LogPrinter
 from core.visualize.sim_view import SimPrinter
+from core.visualize.exporter import Exporter
 
 
 if __name__ == '__main__':
@@ -100,48 +101,64 @@ if __name__ == '__main__':
     art4.equip(p1_4, p2_4, p3_4, p4_4, p5_4)
     simulation.set_artifact('Jean', art4)
 
-    cmds = \
-        '''
+    cmds = '''
         1.e@0
-        4.c@1
-        4.a@2
-        4.a@3
-        4.a@4
-        4.eh@5
-        4.er@6.5
-        4.q@8
+        2.c@1
+        2.e@2
+        3.c@3
+        3.e@3.5
+        3.a@4
+        3.z@4.5
+        3.a@5.5
+        3.z@6
+        3.q@7.5
+        2.c@10
+        2.q@11
+        1.c@15
+        1.q@16
+        1.a@18
+        1.z@18.5
+        1.a@20
+        1.z@20.5
+        3.c@22
+        3.e@25
+        3.q@26
+        3.a@28
+        3.z@29
+        4.c@31
+        4.e@32
+        4.q@33
+        4.a@35
         '''
-    cmd_list = []
-    for c in cmds.split():
-        cmd_list.append(c.strip())
+    cmd_list = [c.strip() for c in cmds.split()]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
-    import time
-    t1 = time.perf_counter()
-    simulation.start()
-    t2 = time.perf_counter()
-    print('freq={:.1f}'.format(1/(t2-t1)))
+    simulation.start(endtime=40)
 
     numeric_controller = NumericController()
     stage = numeric_controller.onstage_record()
 
     p = LogPrinter(numeric_controller)
     p.paint_color(simulation)
-    # p.print_char_log('Shogun', ['ATK', 'ER', 'ELECTRO_DMG', 'EM'])
-    # p.print_char_log('Albedo', ['ATK', 'DEF', 'CRIT_RATE'])
-    # p.print_char_log('Hutao', ['ATK'])
-    # p.print_char_log('Jean', ['ATK'])
+    p.print_char_log('Shogun', ['ATK', 'ER', 'ELECTRO_DMG', 'EM'])
+    p.print_char_log('Albedo', ['ATK', 'DEF', 'CRIT_RATE'])
+    p.print_char_log('Hutao', ['ATK'])
+    p.print_char_log('Jean', ['ATK'])
     p.print_energy_log()
-    # p.print_damage_one('Shogun')
-    # p.print_damage_one('Albedo')
-    # p.print_damage_one('Hutao')
+    p.print_damage_one('Shogun')
+    p.print_damage_one('Albedo')
+    p.print_damage_one('Hutao')
     p.print_damage_one('Jean')
-    # p.print_heal_one('Hutao')
+    p.print_heal_one('Hutao')
     p.print_heal_one('Jean')
     p.print_damage_pie()
 
     sp = SimPrinter(simulation)
     sp.print_action(['Shogun', 'Albedo', 'Hutao', 'Jean'], stage)
-    # sp.print_buffs(stage)
-    # sp.print_element()
-    # sp.print_energy(stage)
+    sp.print_buffs(stage)
+    sp.print_element()
+    sp.print_energy(stage)
+
+    e = Exporter(simulation)
+    e.export_dir('./')
+    # e.export()

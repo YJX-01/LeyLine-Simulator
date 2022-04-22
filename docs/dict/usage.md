@@ -236,7 +236,11 @@ sp.print_buffs(stage)
 
 ![buff](./../graph/demo/buff.png)
 
-for more graphs, check the demo in [examples](./src/core/demo "examples")
+for more graphs, check the demo in:
+
+由于系统不完善，只建议使用以下demo中的角色模拟
+
+[examples](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/src/demo/team_test.py "examples")
 
 ---
 

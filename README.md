@@ -14,12 +14,12 @@ You can use simple command to build combat environment and action list. For more
 
 使用简单的字符输入就可以进行模拟，详见：
 
-[Usage](./doc/dict/usage.md "Usage")
+[Usage](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/usage.md "Usage")
 
 ## 参考 Reference
 
-[Reference](./docs/dict/reference.md "Reference")
+[Reference](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/reference.md "Reference")
 
 ## 鸣谢 Thanks
 
-[Thanks](./docs/dict/thanks.md "Thanks")
+[Thanks](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/thanks.md "Thanks")
