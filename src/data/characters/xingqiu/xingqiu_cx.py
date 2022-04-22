@@ -10,26 +10,26 @@ if TYPE_CHECKING:
     from core.entities.character import Character
 
 
-class ShogunCX1(Skill):
+class XingqiuCX1(Skill):
     # already included in skill
-    def __init__(self, shogun: 'Character'):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.CX,
-            sourcename=shogun.name,
-            LV=shogun.attribute.cx_lv
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.cx_lv
         )
 
     def __call__(self, *args):
         return
 
 
-class ShogunCX2(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuCX2(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.CX,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.cx_lv
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.cx_lv
         )
         self.buff = None
 
@@ -42,10 +42,10 @@ class ShogunCX2(Skill):
     def build_buff(self):
         self.buff = Buff(
             type=BuffType.DMG,
-            name='Shogun: Steelbreaker(CX2)',
-            sourcename='Shogun',
+            name='Xingqiu: Steelbreaker(CX2)',
+            sourcename='Xingqiu',
             trigger=self.musou_isshin_state,
-            target_path=['Shogun']
+            target_path=['Xingqiu']
         )
         self.buff.add_buff('Defence', 'Defence Ignore', 0.6)
 
@@ -58,34 +58,34 @@ class ShogunCX2(Skill):
             return False
 
 
-class ShogunCX3(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuCX3(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.CX,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.cx_lv
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.cx_lv
         )
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
-            simulation.characters['Shogun'].attribute.elemburst_bonus_lv += 3
+            simulation.characters['Xingqiu'].attribute.elemburst_bonus_lv += 3
 
 
-class ShogunCX4(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuCX4(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.CX,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.cx_lv
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.cx_lv
         )
         self.buff = None
         self.begin = 1000
         self.last = -10
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
-        if event.type == EventType.ACTION and event.sourcename == 'Shogun' and event.subtype == ActionType.ELEM_BURST:
+        if event.type == EventType.ACTION and event.sourcename == 'Xingqiu' and event.subtype == ActionType.ELEM_BURST:
             self.begin = event.time
             self.last = event.time+7
             self.build_buff(simulation, self.last)
@@ -98,40 +98,40 @@ class ShogunCX4(Skill):
             simulation.event_queue.put(BuffEvent().frombuff(self.buff))
 
     def build_buff(self, simulation: 'Simulation', time):
-        names = [n for n in simulation.shortcut.values() if n != 'Shogun']
+        names = [n for n in simulation.shortcut.values() if n != 'Xingqiu']
         self.buff = Buff(
             type=BuffType.ATTR,
-            name='Shogun: Pledge of Propriety(CX4)',
-            sourcename='Shogun',
+            name='Xingqiu: Pledge of Propriety(CX4)',
+            sourcename='Xingqiu',
             constraint=Constraint(time, 10),
             target_path=[names, 'ATK']
         )
-        self.buff.add_buff('Bonus Scalers', 'Shogun CX4 ATK', 0.3)
+        self.buff.add_buff('Bonus Scalers', 'Xingqiu CX4 ATK', 0.3)
         controller = NumericController()
         controller.insert_to(self.buff, 'da', simulation)
 
 
-class ShogunCX5(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuCX5(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.CX,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.cx_lv
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.cx_lv
         )
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
         if event.type == EventType.TRY and event.subtype == 'init':
-            simulation.characters['Shogun'].attribute.elemskill_bonus_lv += 3
+            simulation.characters['Xingqiu'].attribute.elemskill_bonus_lv += 3
 
 
-class ShogunCX6(Skill):
+class XingqiuCX6(Skill):
     # already included in skill
-    def __init__(self, shogun: 'Character'):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.CX,
-            sourcename=shogun.name,
-            LV=shogun.attribute.cx_lv
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.cx_lv
         )
 
     def __call__(self, *args):

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Mapping
+from typing import TYPE_CHECKING, List, Mapping, Dict, Tuple
 from core.rules.damage import AMP_DMG, TRANS_DMG
 from core.rules.health import Health
 from core.rules.alltypes import \
@@ -40,11 +40,12 @@ class NumericController(object):
         self.dynamic_buffs_dmg: List[Buff] = []
         self.const_buffs_attr: List[Buff] = []
         self.const_buffs_dmg: List[Buff] = []
-        self.char_attr_log = {}
-        self.onstage_log = {}
-        self.energy_log = {}
-        self.dmg_log = {}
-        self.heal_log = {}
+        self.char_attr_log: Dict[str, Dict[str, List[float]]] = {}
+        self.onstage_log: Dict[str, List[float]] = {}
+        self.energy_log: Dict[str, List[float]] = {}
+        self.dmg_log: Dict[str, Dict[str, List[Tuple[float, float]]]] = {}
+        self.heal_log: Dict[str, List[Tuple[float, float]]] = {}
+        self.element_log: Dict[str, List[float]] = {}
         self.clock_time = 0.1
 
     def execute(self, simulation: 'Simulation', event: 'Event'):
@@ -55,11 +56,10 @@ class NumericController(object):
             self.energy_init(simulation)
             return
 
-        if event.time > simulation.clock:
-            while(event.time > simulation.clock):
-                flag = self.refresh(simulation)
-                self.character_info_enquire(simulation, flag)
-                simulation.clock += self.clock_time
+        while(event.time > simulation.clock+self.clock_time):
+            flag = self.refresh(simulation)
+            self.info_enquire(simulation, flag)
+            simulation.clock += self.clock_time
 
         self.triggers_call(simulation, event)
 
@@ -243,6 +243,11 @@ class NumericController(object):
                 self.char_attr_log[k][in_k] = []
             for type_k in DamageType.__members__.keys():
                 self.dmg_log[k][type_k] = []
+        elem_type = ['ANEMO', 'GEO', 'ELECTRO',
+                     'HYDRO', 'PYRO', 'CRYO', 'FROZEN']
+        self.element_log = dict.fromkeys(elem_type)
+        for k in self.element_log:
+            self.element_log[k] = []
 
     def triggers_init(self, simulation: 'Simulation'):
         for character in simulation.characters.values():
@@ -296,7 +301,7 @@ class NumericController(object):
                 flag = True
         return flag
 
-    def character_info_enquire(self, simulation: 'Simulation', flag: bool):
+    def info_enquire(self, simulation: 'Simulation', flag: bool):
         self.onstage_log[simulation.onstage].append(simulation.clock)
         for name, character in simulation.characters.items():
             self.energy_log[name].append(character.energy.count)
@@ -306,6 +311,21 @@ class NumericController(object):
                 else:
                     v = self.char_attr_log[name][data][-1]
                 self.char_attr_log[name][data].append(v)
+        elem_type = ['ANEMO', 'GEO', 'ELECTRO', 'HYDRO', 'PYRO', 'CRYO']
+        self.enemy.elem_sys.input(ElementType.NONE, 0, simulation.clock)
+        element = self.enemy.elem_sys.element_now
+        if len(element) == 2 and element[1][0] == 'FROZEN':
+            self.element_log['FROZEN'].append(element[1][1])
+        else:
+            self.element_log['FROZEN'].append(0)
+        if len(element) == 2 and element[1][0] == 'HYDRO':
+            self.element_log['HYDRO'].append(element[1][1])
+            elem_type.remove('HYDRO')
+        for e in elem_type:
+            if e != element[0][0]:
+                self.element_log[e].append(0)
+            else:
+                self.element_log[e].append(element[0][1])
 
     def apply_element(self, simulation: 'Simulation', event: 'DamageEvent'):
         apply_event = ElementEvent(time=event.time,

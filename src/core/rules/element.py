@@ -130,6 +130,8 @@ class ElemSys(object):
             self.aura_gu = max(self.aura_gu, 0.8*in_gu)
 
     def apply(self, in_elem: ElementType, in_gu: int):
+        if in_elem == ElementType.ANEMO or in_elem == ElementType.GEO:
+            return
         self.aura_elem = in_elem
         self.aura_gu = 0.8*in_gu
         self.aura_type = in_gu
@@ -386,13 +388,11 @@ class ElemSys(object):
         self.remove(co=True)
 
     @property
-    def aura(self) -> List[str]:
+    def element_now(self) -> List[Tuple[str, float]]:
         aura_list = []
+        aura_list.append((self.aura_elem.name, self.aura_gu))
         if self.co_elem == ElementType.HYDRO:
-            aura_list.append(self.co_elem.name)
+            aura_list.append((self.co_elem.name, self.co_gu))
         elif self.co_elem == ElementType.CRYO:
-            aura_list.append('FROZEN')
-            return aura_list
-        if self.aura_gu:
-            aura_list.append(self.aura_elem.name)
+            aura_list.append(('FROZEN', self.co_gu))
         return aura_list

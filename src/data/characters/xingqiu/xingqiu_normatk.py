@@ -10,25 +10,25 @@ if TYPE_CHECKING:
     from core.entities.character import Character
 
 
-class ShogunNormATK(Skill):
-    def __init__(self, shogun: 'Character') -> None:
+class XingqiuNormATK(Skill):
+    def __init__(self, xingqiu: 'Character') -> None:
         super().__init__(
             type=SkillType.NORMAL_ATK,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.normatk_lv,
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.normatk_lv,
             elem_type=ElementType.PHYSICAL,
             action_type=ActionType.NORMAL_ATK,
             damage_type=DamageType.NORMAL_ATK,
-            action_time=shogun.action.normatk_time,
-            scaler=shogun.action.normatk_scaler
+            action_time=xingqiu.action.normatk_time,
+            scaler=xingqiu.action.normatk_scaler
         )
 
         self.attack_counter = self.normatk_counter()
         self.stamina = self.stamina_counter()
-        self.parallel = ShogunChargeATK(shogun)
+        self.parallel = XingqiuChargeATK(xingqiu)
 
-        self.musou = MusouIsshin(shogun)
+        self.musou = MusouIsshin(xingqiu)
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
         # check action collision
@@ -56,7 +56,7 @@ class ShogunNormATK(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc=f'Shogun.normal_atk.{act_cnt}')
+                                desc=f'Xingqiu.normal_atk.{act_cnt}')
         simulation.event_queue.put(action_event)
 
         # damage event
@@ -86,7 +86,7 @@ class ShogunNormATK(Skill):
         def f(ev: 'Event'):
             if ev.type != EventType.ACTION:
                 return 0
-            elif isinstance(ev.source, ShogunNormATK) or isinstance(ev.source, MusouIsshin):
+            elif isinstance(ev.source, XingqiuNormATK) or isinstance(ev.source, MusouIsshin):
                 return 1
             else:
                 return -10
@@ -107,7 +107,7 @@ class ShogunNormATK(Skill):
                                 mode=mode,
                                 icd=ICD('normal_atk', '',
                                         time, 1),
-                                desc=f'Shogun.normal_atk.{atk_cnt}')
+                                desc=f'Xingqiu.normal_atk.{atk_cnt}')
         return damage_event
 
     def musou_isshin_state(self, simulation: 'Simulation', event: 'Event') -> bool:
@@ -119,18 +119,18 @@ class ShogunNormATK(Skill):
             return False
 
 
-class ShogunChargeATK(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuChargeATK(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.NORMAL_ATK,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.normatk_lv,
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.normatk_lv,
             elem_type=ElementType.PHYSICAL,
             action_type=ActionType.NORMAL_ATK_CHARGE,
             damage_type=DamageType.CHARGED_ATK,
-            action_time=shogun.action.normatk_time,
-            scaler=shogun.action.normatk_scaler
+            action_time=xingqiu.action.normatk_time,
+            scaler=xingqiu.action.normatk_scaler
         )
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
@@ -142,7 +142,7 @@ class ShogunChargeATK(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc='Shogun.charged_atk')
+                                desc='Xingqiu.charged_atk')
         simulation.event_queue.put(action_event)
 
         # damage event
@@ -155,24 +155,24 @@ class ShogunChargeATK(Skill):
                                 mode=mode,
                                 icd=ICD('normal_atk', '',
                                         event.time+act_t, 1),
-                                desc='Shogun.charged_atk')
+                                desc='Xingqiu.charged_atk')
         simulation.event_queue.put(damage_event)
 
 
 class MusouIsshin(Skill):
-    def __init__(self, shogun: 'Character'):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.ELEM_BURST,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.elemburst_lv,
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.elemburst_lv,
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.NORMAL_ATK,
             damage_type=DamageType.ELEM_BURST,
-            action_time=shogun.action.normatk_time,
-            scaler=shogun.action.elemburst_scaler
+            action_time=xingqiu.action.normatk_time,
+            scaler=xingqiu.action.elemburst_scaler
         )
-        self.parallel = MusouIsshinCharge(shogun)
+        self.parallel = MusouIsshinCharge(xingqiu)
         self.restore_counter = None
         self.restore_cd = None
 
@@ -194,7 +194,7 @@ class MusouIsshin(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc=f'Shogun.musou_isshin.{act_cnt}')
+                                desc=f'Xingqiu.musou_isshin.{act_cnt}')
         simulation.event_queue.put(action_event)
 
         # damage event
@@ -234,13 +234,13 @@ class MusouIsshin(Skill):
         if self.source.action.passive_lv == 2:
             restore_energy *= (1+(self.source.attribute.ER.value-1)*0.6)
 
-        receiver = [n for n in simulation.shortcut.values() if n != 'Shogun']
+        receiver = [n for n in simulation.shortcut.values() if n != 'Xingqiu']
         energy_event = EnergyEvent(time=event.time,
                                    source=self,
                                    sourcename=self.sourcename,
                                    num=restore_energy,
                                    receiver=receiver,
-                                   desc='Shogun.musou_isshin.energy')
+                                   desc='Xingqiu.musou_isshin.energy')
         simulation.event_queue.put(energy_event)
 
         # include CX 6
@@ -255,7 +255,7 @@ class MusouIsshin(Skill):
                                 mode=mode,
                                 icd=ICD('elem_burst', '',
                                         time, 1),
-                                desc=f'Shogun.musou_isshin.{atk_cnt}')
+                                desc=f'Xingqiu.musou_isshin.{atk_cnt}')
         return damage_event
 
     def restore_judge(self, event: 'Event'):
@@ -264,9 +264,10 @@ class MusouIsshin(Skill):
             for c in creation_space.creations:
                 if c.name == 'Musou Isshin State' and c.end > event.time:
                     self.restore_counter = CounterConstraint(c.start, 7, 5)
-                    self.restore_cd = DurationConstraint(c.start-1, 1, refresh=True)
+                    self.restore_cd = DurationConstraint(
+                        c.start-1, 1, refresh=True)
                     break
-                
+
         if not self.restore_counter.full and self.restore_cd.test(event):
             self.restore_counter.receive(1)
             return True
@@ -275,17 +276,17 @@ class MusouIsshin(Skill):
 
 
 class MusouIsshinCharge(Skill):
-    def __init__(self, shogun: 'Character'):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.ELEM_BURST,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.elemburst_lv,
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.elemburst_lv,
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.NORMAL_ATK_CHARGE,
             damage_type=DamageType.ELEM_BURST,
-            action_time=shogun.action.normatk_time,
-            scaler=shogun.action.elemburst_scaler
+            action_time=xingqiu.action.normatk_time,
+            scaler=xingqiu.action.elemburst_scaler
         )
 
     def __call__(self, simulation: 'Simulation', event: 'CommandEvent'):
@@ -298,7 +299,7 @@ class MusouIsshinCharge(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc='Shogun.musou_isshin_charge')
+                                desc='Xingqiu.musou_isshin_charge')
         simulation.event_queue.put(action_event)
 
         # damage event
@@ -312,7 +313,7 @@ class MusouIsshinCharge(Skill):
                                  mode=mode,
                                  icd=ICD('elem_burst', '',
                                          event.time+act_t, 1),
-                                 desc='Shogun.musou_isshin_charge.1')
+                                 desc='Xingqiu.musou_isshin_charge.1')
         damage_event2 = DamageEvent().fromskill(self)
         damage_event2.initialize(time=event.time+act_t,
                                  scaler=self.scaler[skill_lv][11] +
@@ -320,7 +321,7 @@ class MusouIsshinCharge(Skill):
                                  mode=mode,
                                  icd=ICD('elem_burst', '',
                                          event.time+act_t, 1),
-                                 desc='Shogun.musou_isshin_charge.2')
+                                 desc='Xingqiu.musou_isshin_charge.2')
         simulation.event_queue.put(damage_event1)
         simulation.event_queue.put(damage_event2)
 
@@ -334,13 +335,13 @@ class MusouIsshinCharge(Skill):
         if self.source.action.passive_lv == 2:
             restore_energy *= (1+(self.source.attribute.ER.value-1)*0.6)
 
-        receiver = [n for n in simulation.shortcut.values() if n != 'Shogun']
+        receiver = [n for n in simulation.shortcut.values() if n != 'Xingqiu']
         energy_event = EnergyEvent(time=event.time,
                                    source=self,
                                    sourcename=self.sourcename,
                                    num=restore_energy,
                                    receiver=receiver,
-                                   desc='Shogun.musou_isshin.energy')
+                                   desc='Xingqiu.musou_isshin.energy')
         simulation.event_queue.put(energy_event)
 
         # include CX 6

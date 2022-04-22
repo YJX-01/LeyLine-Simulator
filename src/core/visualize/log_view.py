@@ -10,6 +10,10 @@ if TYPE_CHECKING:
 
 class LogPrinter(object):
     def __init__(self, controller: 'NumericController'):
+        '''
+        input a NumericController to initialize\n
+        use paint_color(Simulation) if you want to customize colors
+        '''
         self.controller = controller
         self.cm = None
 
@@ -114,13 +118,79 @@ class LogPrinter(object):
         plt.xlim(start, end)
         plt.ylabel('Damage')
         plt.xlabel('time / s')
-        plt.title('Damage Log')
+        plt.title(f'Damage Log for {name}')
         plt.grid(True, 'both', alpha=0.7)
         plt.tight_layout()
         plt.show()
 
-    def print_damage_team(self):
-        pass
+    def print_damage_stack(self):
+        end = 0
+        sum_by_char = dict.fromkeys(self.controller.dmg_log.keys())
+        for name in self.controller.dmg_log:
+            dmg_sum = np.zeros(2000)
+            for v in self.controller.dmg_log[name].values():
+                line: List[Tuple[float, float]] = list(v)
+                if not line:
+                    continue
+                for t, d in line:
+                    dmg_sum[int(10*t)] += d
+                    end = max(end, int(t))
+            sum_by_char[name] = np.add.accumulate(dmg_sum)
+        end = ceil(end)
+        if self.cm:
+            colors = [self.cm.get_char_color(n) for n in sum_by_char.keys()]
+            plt.stackplot(np.arange(0, 200, 0.1),
+                          sum_by_char.values(),
+                          labels=sum_by_char.keys(),
+                          alpha=0.7,
+                          colors=colors)
+        else:
+            plt.stackplot(np.arange(0, 200, 0.1),
+                          sum_by_char.values(),
+                          labels=sum_by_char.keys(),
+                          alpha=0.7)
+        plt.legend()
+        plt.ylim(bottom=0)
+        plt.xlim(0, end)
+        plt.ylabel('Damage')
+        plt.xlabel('time / s')
+        plt.title('Damage stackplot')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
+        plt.show()
+
+    def print_damage_stackbar(self, interval: float = 1):
+        end = 0
+        bottom_sum = np.zeros(500)
+        for name in self.controller.dmg_log.keys():
+            dmg_sum = np.zeros(500)
+            for v in self.controller.dmg_log[name].values():
+                line: List[Tuple[float, float]] = list(v)
+                if not line:
+                    continue
+                for t, d in line:
+                    dmg_sum[int(t/interval)] += (d/interval)
+                    end = max(end, t)
+            end = ceil(end+1)
+            if self.cm:
+                color = self.cm.get_char_color(name)
+                plt.bar(np.arange(0, 500*interval, interval),
+                        dmg_sum, width=[interval]*500, bottom=bottom_sum,
+                        align='edge', alpha=0.7, label=name, color=color)
+            else:
+                plt.bar(np.arange(0, 500*interval, interval),
+                        dmg_sum, width=[interval]*500, bottom=bottom_sum,
+                        align='edge', alpha=0.7, label=name)
+            bottom_sum += dmg_sum
+        plt.legend()
+        plt.ylim(bottom=0)
+        plt.xlim(0, end)
+        plt.ylabel('Damage')
+        plt.xlabel('time / s')
+        plt.title('Damage stackbar plot')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
+        plt.show()
 
     def print_damage_pie(self, names: List[str] = []):
         if not names:
@@ -216,7 +286,41 @@ class LogPrinter(object):
         plt.xlim(start, end)
         plt.ylabel('Heal')
         plt.xlabel('time / s')
-        plt.title('Heal Log')
+        plt.title(f'Heal Log for {name}')
         plt.grid(True, 'both', alpha=0.7)
+        plt.tight_layout()
+        plt.show()
+
+    def print_element_log(self):
+        lines = []
+        labels = []
+        max_x = 0
+        for k in self.controller.element_log:
+            line = np.array(self.controller.element_log[k])
+            lines.append(line)
+            labels.append(k)
+        for i, k in enumerate(labels):
+            if self.cm:
+                color = self.cm.get_element_color(k) \
+                    if k != 'FROZEN' else \
+                    self.cm.get_element_color('CRYO')
+                if k == 'FROZEN':
+                    plt.plot(np.arange(0, len(lines[i])/10, 0.1), lines[i], label=k,
+                             color=color, linestyle='--')
+                else:
+                    plt.plot(np.arange(0, len(lines[i])/10, 0.1), lines[i], label=k,
+                             color=color)
+            else:
+                plt.plot(
+                    np.arange(0, len(lines[i])/10, 0.1), lines[i], label=k)
+            max_x = max(max_x, len(lines[i])/10)
+        plt.legend()
+        plt.xlim(0, ceil(max_x))
+        plt.ylim(0, 4.2)
+        plt.yticks(np.linspace(0, 4, 21))
+        plt.ylabel('Gauge Unit / U')
+        plt.xlabel('time / s')
+        plt.grid(True, 'both', alpha=0.7)
+        plt.title('Element Log')
         plt.tight_layout()
         plt.show()

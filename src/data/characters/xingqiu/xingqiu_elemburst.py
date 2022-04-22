@@ -10,18 +10,18 @@ if TYPE_CHECKING:
     from core.entities.character import Character
 
 
-class ShogunElemburst(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuElemburst(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.ELEM_BURST,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.elemburst_lv,
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.elemburst_lv,
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.ELEM_BURST,
             damage_type=DamageType.ELEM_BURST,
-            action_time=shogun.action.elemburst_time,
-            scaler=shogun.action.elemburst_scaler
+            action_time=xingqiu.action.elemburst_time,
+            scaler=xingqiu.action.elemburst_scaler
         )
         self.cd = self.elemburst_cd(-18)
         self.energy = CounterConstraint(0, 1000, 90)
@@ -65,7 +65,7 @@ class ShogunElemburst(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc='Shogun.elem_burst')
+                                desc='Xingqiu.elem_burst')
         simulation.event_queue.put(action_event)
 
         # enter special state
@@ -90,7 +90,7 @@ class ShogunElemburst(Skill):
                                 mode=mode,
                                 icd=ICD('elem_burst', '',
                                         event.time+act_t, 2),
-                                desc='Shogun.elem_burst')
+                                desc='Xingqiu.elem_burst')
         simulation.event_queue.put(damage_event)
 
     @staticmethod
@@ -101,7 +101,7 @@ class ShogunElemburst(Skill):
     @staticmethod
     def elemburst_cd(start):
         def f(ev: Event):
-            return ev.type == EventType.COMMAND and ev.desc == 'CMD.Shogun.Q'
+            return ev.type == EventType.COMMAND and ev.desc == 'CMD.Xingqiu.Q'
         cd_counter = DurationConstraint(start, 18, func=f, refresh=True)
         return cd_counter
 
@@ -116,14 +116,14 @@ class ShogunElemburst(Skill):
 
     @staticmethod
     def restore_cnt(ev: 'Event'):
-        return int(ev.type == EventType.ENERGY and ev.desc == 'Shogun.musou_isshin.energy')
+        return int(ev.type == EventType.ENERGY and ev.desc == 'Xingqiu.musou_isshin.energy')
 
 
 class ChakraDesiderata(TriggerableCreation):
-    def __init__(self, skill: ShogunElemburst):
+    def __init__(self, skill: XingqiuElemburst):
         super().__init__(
             source=skill,
-            sourcename='Shogun',
+            sourcename='Xingqiu',
             name='Chakra Desiderata',
             start=0,
             duration=1000,
@@ -143,11 +143,11 @@ class ChakraDesiderata(TriggerableCreation):
         # refresh scaler
         self.scaler = self.source.scaler[str(self.source.source.talent[2])]
 
-        if event.sourcename != 'Shogun':
+        if event.sourcename != 'Xingqiu':
             energy_cnt = event.source.energy.capacity
             resolve_cnt = energy_cnt*self.scaler[3]
             # include CX 1
-            if simulation.characters['Shogun'].attribute.cx_lv >= 1:
+            if simulation.characters['Xingqiu'].attribute.cx_lv >= 1:
                 if event.source.base.element == ElementType.ELECTRO.value:
                     resolve_cnt *= 1.8
                 else:
@@ -158,7 +158,7 @@ class ChakraDesiderata(TriggerableCreation):
 class MusouIsshinState(Creation):
     def __init__(self, start):
         super().__init__(
-            sourcename='Shogun',
+            sourcename='Xingqiu',
             name='Musou Isshin State',
             start=start,
             duration=7,
@@ -166,5 +166,5 @@ class MusouIsshinState(Creation):
         )
 
     def __call__(self, simulation: 'Simulation', event: 'Event'):
-        if event.type == EventType.SWITCH and event.source != 'Shogun':
+        if event.type == EventType.SWITCH and event.source != 'Xingqiu':
             self.duration = event.time - self.start

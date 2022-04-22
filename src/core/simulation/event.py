@@ -57,11 +57,12 @@ class CommandEvent(Event):
     def __init__(self, **configs):
         '''
         attributes: \n
-        ### type, subtype, source, sourcename, time, desc, function | cmd, condition
+        ### type, subtype, source, sourcename, time, desc, function |
+        ### cmd, mode
         '''
         super().__init__(type=EventType.COMMAND, sourcename='User')
         self.cmd: str = ''
-        self.condition: str = ''
+        self.mode: str = ''
         self.initialize(**configs)
 
     def fromcommand(self, operation):
@@ -171,7 +172,7 @@ class DamageEvent(Event):
     @property
     def prefix_info(self) -> str:
         return super().prefix_info +\
-            f'\n\t\t[info   ]:[ {self.elem}; {self.scaler}; {self.depend}; {self.mode} ]'
+            f'\n\t\t[info   ]:[ {self.elem.name}; {self.scaler}; {self.depend}; {self.mode} ]'
 
 
 class EnergyEvent(Event):
@@ -201,7 +202,7 @@ class EnergyEvent(Event):
         else:
             self.subtype = 'const'
         return super().prefix_info +\
-            f'\n\t\t[info   ]:[ {self.elem}; {self.base}; {self.num} ]'
+            f'\n\t\t[info   ]:[ {self.elem.name}; {self.base}; {self.num} ]'
 
     def execute(self, simulation: 'Simulation'):
         if self.base:

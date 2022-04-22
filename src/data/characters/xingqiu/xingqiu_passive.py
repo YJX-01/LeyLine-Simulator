@@ -10,13 +10,13 @@ if TYPE_CHECKING:
     from core.entities.character import Character
 
 
-class ShogunPassive1(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuPassive1(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.PASSIVE,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.passive_lv
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.passive_lv
         )
         self.cd = DurationConstraint(-3, 3, refresh=True)
 
@@ -29,13 +29,13 @@ class ShogunPassive1(Skill):
             self.source.action.ELEM_BURST.creations.stack.receive(2)
 
 
-class ShogunPassive2(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuPassive2(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.PASSIVE,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.passive_lv
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.passive_lv
         )
         self.buff = None
         self.last = 0
@@ -49,8 +49,8 @@ class ShogunPassive2(Skill):
     def build_buff(self, simulation: 'Simulation'):
         self.buff = Buff(
             type=BuffType.ATTR,
-            name='Shogun: Enlightened One(PA2)',
-            sourcename='Shogun',
+            name='Xingqiu: Enlightened One(PA2)',
+            sourcename='Xingqiu',
             constraint=Constraint(0, 1000),
             trigger=self.trigger,
             target_path=[[self.sourcename], 'ELECTRO_DMG']
@@ -58,7 +58,7 @@ class ShogunPassive2(Skill):
         self.last = self.source.attribute.ER.value
         n = (self.last-1)*0.4
         self.buff.add_buff('Total ELECTRO_DMG',
-                           'Shogun Passive2 ELECTRO_DMG', n)
+                           'Xingqiu Passive2 ELECTRO_DMG', n)
 
     def trigger(self, simulation: 'Simulation'):
         if self.source.attribute.ER.value == self.last:
@@ -67,5 +67,5 @@ class ShogunPassive2(Skill):
             self.last = self.source.attribute.ER.value
             n = (self.last-1)*0.4
             self.buff.add_buff('Total ELECTRO_DMG',
-                               'Shogun Passive2 ELECTRO_DMG', n)
+                               'Xingqiu Passive2 ELECTRO_DMG', n)
             self.source.attribute.connect(self.buff)

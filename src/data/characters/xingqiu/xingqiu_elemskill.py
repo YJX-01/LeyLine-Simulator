@@ -13,18 +13,18 @@ if TYPE_CHECKING:
     from core.entities.character import Character
 
 
-class ShogunElemskill(Skill):
-    def __init__(self, shogun: 'Character'):
+class XingqiuElemskill(Skill):
+    def __init__(self, xingqiu: 'Character'):
         super().__init__(
             type=SkillType.ELEM_SKILL,
-            source=shogun,
-            sourcename=shogun.name,
-            LV=shogun.attribute.elemskill_lv,
+            source=xingqiu,
+            sourcename=xingqiu.name,
+            LV=xingqiu.attribute.elemskill_lv,
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.ELEM_SKILL,
             damage_type=DamageType.ELEM_SKILL,
-            action_time=shogun.action.elemskill_time,
-            scaler=shogun.action.elemskill_scaler,
+            action_time=xingqiu.action.elemskill_time,
+            scaler=xingqiu.action.elemskill_scaler,
         )
         self.cd = None
         self.creations: Creation = EyeOfStormyJudgment(self)
@@ -50,7 +50,7 @@ class ShogunElemskill(Skill):
         action_event = ActionEvent().fromskill(self)
         action_event.initialize(time=event.time,
                                 dur=act_t,
-                                desc='Shogun.elem_skill')
+                                desc='Xingqiu.elem_skill')
         simulation.event_queue.put(action_event)
 
         # creation event
@@ -61,7 +61,7 @@ class ShogunElemskill(Skill):
                                   source=self,
                                   sourcename=self.sourcename,
                                   func=self.elemskill_creation_event,
-                                  desc='Shogun.elem_skill')
+                                  desc='Xingqiu.elem_skill')
         simulation.event_queue.put(creation_event)
 
         # damage event
@@ -74,7 +74,7 @@ class ShogunElemskill(Skill):
                                 mode=mode,
                                 icd=ICD('', '',
                                         event.time+act_t, 1),
-                                desc='Shogun.elem_skill')
+                                desc='Xingqiu.elem_skill')
         simulation.event_queue.put(damage_event)
 
     @staticmethod
@@ -85,7 +85,7 @@ class ShogunElemskill(Skill):
     @staticmethod
     def elemskill_cd(start):
         def f(ev: Event):
-            return ev.type == EventType.COMMAND and ev.desc == 'CMD.Shogun.E'
+            return ev.type == EventType.COMMAND and ev.desc == 'CMD.Xingqiu.E'
         cd_counter = DurationConstraint(start, 10, func=f, refresh=True)
         return cd_counter
 
@@ -96,10 +96,10 @@ class ShogunElemskill(Skill):
 
 
 class EyeOfStormyJudgment(TriggerableCreation):
-    def __init__(self, skill: ShogunElemskill):
+    def __init__(self, skill: XingqiuElemskill):
         super().__init__(
             source=skill,
-            sourcename='Shogun',
+            sourcename='Xingqiu',
             name='Eye Of StormyJudgment',
             start=0,
             duration=25,
@@ -126,18 +126,18 @@ class EyeOfStormyJudgment(TriggerableCreation):
             buff = Buff(
                 type=BuffType.DMG,
                 name=f'{name}: Eye of Stormy Judgement',
-                sourcename='Shogun',
+                sourcename='Xingqiu',
                 constraint=Constraint(start, 25),
                 trigger=trigger,
                 target_path=[name],
             )
             buff.add_buff('Elemental Burst Bonus',
-                          'Shogun Eye Bonus',
+                          'Xingqiu Eye Bonus',
                           energy_cnt*self.scaler[3])
             self.buffs.append(buff)
-            
+
             # avoid repeat buff addition
-            if name=='Shogun':
+            if name == 'Xingqiu':
                 simulation.event_queue.put(BuffEvent().frombuff(buff))
 
         numeric_controller = NumericController()
@@ -154,7 +154,7 @@ class EyeAttack(Skill):
         super().__init__(
             type=SkillType.CREATION_TRIG,
             source=eye,
-            sourcename='Shogun',
+            sourcename='Xingqiu',
             elem_type=ElementType.ELECTRO,
             action_type=ActionType.ELEM_SKILL,
             damage_type=DamageType.ELEM_SKILL,
@@ -174,7 +174,7 @@ class EyeAttack(Skill):
                                 mode=mode,
                                 icd=ICD('elem_skill', '',
                                         event.time, 1),
-                                desc='Shogun.EyeAttack')
+                                desc='Xingqiu.EyeAttack')
         simulation.event_queue.put(damage_event)
 
         if mode == '$':
@@ -187,12 +187,12 @@ class EyeAttack(Skill):
                                    elem=ElementType.ELECTRO,
                                    base=1,
                                    num=extra_ball,
-                                   desc='Shogun.energy')
+                                   desc='Xingqiu.energy')
         simulation.event_queue.put(energy_event)
 
     @staticmethod
     def eye_cd(start):
         def f(ev: 'Event'):
-            return ev.type == EventType.DAMAGE and not isinstance(ev.source, ShogunElemskill)
+            return ev.type == EventType.DAMAGE and not isinstance(ev.source, XingqiuElemskill)
         cd_counter = DurationConstraint(start, 0.9, func=f, refresh=True)
         return cd_counter

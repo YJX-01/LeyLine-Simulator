@@ -2,6 +2,7 @@ from core.simulation import *
 from core.entities.character import *
 from core.visualize.log_view import LogPrinter
 from core.visualize.sim_view import SimPrinter
+from core.visualize.exporter import Exporter
 
 
 if __name__ == '__main__':
@@ -93,9 +94,7 @@ if __name__ == '__main__':
         3.e@25
         3.q@26
         '''
-    cmd_list = []
-    for c in cmds.split():
-        cmd_list.append(c.strip())
+    cmd_list = [c.strip() for c in cmds.split()]
     list(map(lambda s: simulation.insert(Operation(s)),
              cmd_list))
     import time
@@ -118,9 +117,16 @@ if __name__ == '__main__':
     # p.print_damage_one('Hutao')
     # p.print_heal_one('Hutao')
     # p.print_damage_pie()
+    # p.print_element_log()
+    p.print_damage_stackbar(interval=2)
+    p.print_damage_stack()
 
     sp = SimPrinter(simulation)
-    sp.print_action(['Shogun', 'Albedo', 'Hutao'], stage)
-    sp.print_buffs(stage)
+    # sp.print_action(['Shogun', 'Albedo', 'Hutao'], stage)
+    # sp.print_buffs(stage)
     # sp.print_element()
     # sp.print_energy(stage)
+    
+    e = Exporter(simulation)
+    e.export_dir(r'./')
+    # e.export()

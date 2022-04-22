@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from core.simulation.operation import Operation
 
 
-def Shogun_controller(operation: 'Operation', simulation: 'Simulation'):
+def Xingqiu_controller(operation: 'Operation', simulation: 'Simulation'):
     character = simulation.characters[operation.source]
     if operation.action == 'A' or operation.action == 'Z':
         cmd_event = CommandEvent().fromcommand(operation)
