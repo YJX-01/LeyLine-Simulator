@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { defineAsyncComponent, onBeforeUnmount, ref } from 'vue';
-import DeveloperTools from './DeveloperTools.vue';
-const Workbench = defineAsyncComponent(() => import('./Workbench.vue'));
+import { defineAsyncComponent, onBeforeUnmount, ref, h } from 'vue';
+import ViewLoadError from './components/ViewLoadError.vue';
+const options = { errorComponent: ViewLoadError, timeout: 15000, loadingComponent: { render: () => h('main', { role: 'status' }, '正在加载页面…') } };
+const DeveloperTools = defineAsyncComponent({ ...options, loader: () => import('./DeveloperTools.vue') });
+const Workbench = defineAsyncComponent({ ...options, loader: () => import('./Workbench.vue') });
 const hash = ref(window.location.hash);
 function change() { hash.value = window.location.hash; }
 window.addEventListener('hashchange', change);

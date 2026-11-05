@@ -10,7 +10,9 @@
     "build": "pnpm --filter @leyline/web build",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit -p apps/web/tsconfig.json",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "perf:engine": "node --expose-gc scripts/benchmark-engine.mjs",
+    "build:check": "node scripts/check-build.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

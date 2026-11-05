@@ -1,0 +1,57 @@
+{
+  "formatVersion": 1,
+  "budgets": {
+    "largestJavaScriptBytes": 500000,
+    "bootstrapGzipBytes": 50000,
+    "workbenchGzipBytes": 150000
+  },
+  "bootstrapGzipBytes": 31818,
+  "workbenchGzipBytes": 103299,
+  "files": [
+    {
+      "file": "assets/attack.worker-OFhKteRr.js",
+      "bytes": 231827,
+      "gzipBytes": 71205
+    },
+    {
+      "file": "assets/chart-library-yzxJV08_.js",
+      "bytes": 401727,
+      "gzipBytes": 137494
+    },
+    {
+      "file": "assets/chart-renderer-DH3VSg8K.js",
+      "bytes": 182843,
+      "gzipBytes": 61939
+    },
+    {
+      "file": "assets/DeveloperTools-DbYRTOtt.js",
+      "bytes": 34771,
+      "gzipBytes": 10979
+    },
+    {
+      "file": "assets/index-D1O6-Zrw.js",
+      "bytes": 79637,
+      "gzipBytes": 31818
+    },
+    {
+      "file": "assets/PlanLibrary-BTDRXglD.js",
+      "bytes": 115819,
+      "gzipBytes": 33240
+    },
+    {
+      "file": "assets/runtime-BgcAZgFQ.js",
+      "bytes": 261,
+      "gzipBytes": 185
+    },
+    {
+      "file": "assets/tslib.es6-Cg4x8ZAA.js",
+      "bytes": 468,
+      "gzipBytes": 304
+    },
+    {
+      "file": "assets/Workbench-KF_Wlbeq.js",
+      "bytes": 122001,
+      "gzipBytes": 38241
+    }
+  ]
+}
