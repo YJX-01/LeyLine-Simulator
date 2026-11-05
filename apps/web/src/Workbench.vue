@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, toRef } from 'vue';
 import { useWorkspaceStore } from './stores/workspace';
 import { teamSchema } from '@leyline/schema';
 import example from '../../../fixtures/scenarios/first-team.json';
 import { canonical, characterNames } from './domain/editor';
 import TeamEditor from './components/TeamEditor.vue';
 import PlanLibrary from './PlanLibrary.vue';
+import RotationEditor from './components/RotationEditor.vue';
+import { useTeamSimulation } from './composables/useTeamSimulation';
 const workspace = useWorkspaceStore(); workspace.initialize();
 const draft = ref(workspace.input ?? teamSchema.parse(example));
 const tab = ref('team');
+const simulation = useTeamSimulation(toRef(workspace, 'source'), toRef(workspace, 'signature'));
+const { snapshot, busy, error, stale } = simulation;
 watch(draft, value => { const source = JSON.stringify(value, null, 2); if (canonical(value) !== workspace.signature) workspace.source = source; }, { deep: true, flush: 'sync' });
 watch(() => workspace.source, () => { if (workspace.input && canonical(draft.value) !== workspace.signature) draft.value = workspace.input; }, { flush: 'sync' });
 const issues = computed(() => { const parsed = teamSchema.safeParse(draft.value); return parsed.success ? [] : parsed.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`); });
@@ -21,6 +25,9 @@ const issues = computed(() => { const parsed = teamSchema.safeParse(draft.value)
     <aside class="scope">当前支持琴、行秋、胡桃、阿贝多、雷电将军；规则为仓库审计版本的固定单目标、近战范围模拟。不含敌人攻击、移动、多目标及草反应。</aside>
     <p v-if="workspace.notice" role="status">{{ workspace.notice }}</p>
     <div class="actions tabs" aria-label="工作区导航"><button v-for="(label, key) in { team: '配队与装备', rotation: '动作循环', results: '计算结果', plans: '方案管理' }" :key="key" type="button" :aria-pressed="tab === key" @click="tab = key">{{ label }}</button></div>
+    <div class="actions"><button type="button" :disabled="!workspace.input" @click="simulation.run(); tab = 'results'">{{ busy ? '重新运行模拟' : '运行模拟' }}</button><button v-if="busy" type="button" @click="simulation.cancel()">取消模拟</button><span v-if="busy" role="status">正在计算…</span></div>
+    <p v-if="error" role="alert">{{ error }}</p>
+    <p v-if="stale" role="status">配置已修改，以下为上次运行结果，请重新运行。</p>
     <section v-show="tab === 'team'"><TeamEditor v-model="draft" /></section>
     <section v-show="tab === 'rotation'"><h2>模拟设置</h2><div class="fields">
       <label>模拟时长（秒）<input type="number" min="0.001" max="3600" step="0.001" :value="draft.durationMs / 1000" @input="draft.durationMs = Math.round(Number(($event.target as HTMLInputElement).value) * 1000)"></label>
@@ -35,7 +42,8 @@ const issues = computed(() => { const parsed = teamSchema.safeParse(draft.value)
       <label><span><input v-model="draft.enemy.collectCrystallizeShards" type="checkbox">拾取结晶盾（影响阿贝多六命）</span></label>
       <label>日志模式<select v-model="draft.logMode"><option value="detailed">详细</option><option value="summary">摘要</option></select></label>
       <label>日志上限<input v-model.number="draft.maxLogEvents" type="number" min="1" max="20000"></label>
-    </div></section>
+    </div><RotationEditor :key="draft.actors.map(a => a.id).join(',')" v-model="draft" /></section>
+    <section v-show="tab === 'results'"><h2>计算结果</h2><template v-if="snapshot"><h3>总伤害：{{ snapshot.result.totalDamage.toFixed(2) }}</h3><p>DPS：{{ snapshot.result.dps.toFixed(2) }} · 拒绝指令：{{ snapshot.result.eventCounts.rejected ?? 0 }}</p></template><p v-else>运行后在此检查伤害与事件。</p></section>
     <section v-show="tab === 'plans'"><h2>方案管理</h2><PlanLibrary :source="workspace.source" @load="workspace.source = $event" /></section>
     <p v-for="issue in issues.slice(0, 10)" :key="issue" role="alert">{{ issue }}</p>
     <details><summary>高级：配置 JSON</summary><label>工作区 JSON<textarea v-model="workspace.source" rows="12" maxlength="1000000" spellcheck="false"></textarea></label><p v-if="!workspace.input" role="alert">JSON 或配置无效，请修正后再运行。</p></details>
