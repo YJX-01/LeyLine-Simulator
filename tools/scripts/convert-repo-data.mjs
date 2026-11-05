@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const sourceHashes = {};
 function read(path) {
   const bytes = readFileSync(resolve(root, path));
@@ -47,7 +47,7 @@ function checkFinite(value) {
   if (value && typeof value === 'object') Object.values(value).forEach(checkFinite);
 }
 checkFinite(output);
-const destination = resolve(root, 'packages/game-data/src/generated');
+const destination = resolve(root, 'src/game-data/src/generated');
 mkdirSync(destination, { recursive: true });
 for (const [name, data] of Object.entries({ 'content.json': output, 'sources.json': { version: output.version, hashFormat: 'sha256-lf-normalized', hashes: sourceHashes } })) {
   const path = resolve(destination, name);

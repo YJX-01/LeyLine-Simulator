@@ -1,4 +1,4 @@
-import { teamSchema, type TeamInput } from '../../packages/schema/src';
+import { teamSchema, type TeamInput } from '../../src/schema/src';
 import example from '../scenarios/first-team.json' with { type: 'json' };
 export function performanceScenarios(): Record<string, TeamInput> {
   const team = teamSchema.parse(example);

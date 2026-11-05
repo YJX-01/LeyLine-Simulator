@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test';
-import { sourceFingerprint } from './scripts/source-fingerprint.mjs';
+import { sourceFingerprint } from './tools/scripts/source-fingerprint.mjs';
 export default defineConfig({
   testDir: './tests/e2e',
   metadata: { sourceFingerprint: sourceFingerprint() },
@@ -13,5 +13,5 @@ export default defineConfig({
     { name: 'firefox', use: { browserName: 'firefox' } },
     { name: 'webkit', use: { browserName: 'webkit' } },
   ],
-  webServer: { command: 'node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5174 --strictPort', cwd: './apps/web', url: 'http://127.0.0.1:5174', reuseExistingServer: false },
+  webServer: { command: 'node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5174 --strictPort', cwd: './src/web', url: 'http://127.0.0.1:5174', reuseExistingServer: false },
 });

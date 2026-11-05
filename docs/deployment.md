@@ -8,9 +8,9 @@
 4. `pnpm build:subpath`、`pnpm test:production`，验证根路径和 `/leyline/` 两个构建。两套浏览器报告写入 `artifacts/playwright/`，失败trace分开写入 `test-results/development/` 与 `test-results/production/`。
 5. `pnpm release:prepare` 重新构建根路径、检查体积并生成 `artifacts/releases/<commit>-<随机后缀>/`。打包会核对当前源码指纹与两份完整三内核报告，拒绝缺失、失败、跳过或陈旧的证据。最后用 `pnpm release:verify --dir=产物目录` 校验每个站点文件的SHA-256、长度和文件清单。
 
-默认构建位于 `apps/web/dist/`。子路径示例位于 `apps/web/dist-subpath/`，不要将它当作根路径构建混用。其他子路径可执行 `pnpm --filter @leyline/web build --base=/你的路径/`，随后调整本地服务的base验证；路径必须以斜杠结尾。
+默认构建位于 `src/web/dist/`。子路径示例位于 `src/web/dist-subpath/`，不要将它当作根路径构建混用。其他子路径可执行 `pnpm --filter @leyline/web build --base=/你的路径/`，随后调整本地服务的base验证；路径必须以斜杠结尾。
 
-交付目录包含 `site/` 静态文件、版本/源码/验收证据清单、使用指南和本地查看脚本，不包含Python、开发依赖或完整源码。根路径产物可在目录内执行 `node scripts/serve-dist.mjs --dir=site` 查看。当前只生成本地候选目录，不自动上传、发布、建标签或push。
+交付目录包含 `site/` 静态文件、版本/源码/验收证据清单、使用指南和本地查看脚本，不包含Python、开发依赖或完整源码。根路径产物可在目录内执行 `node tools/scripts/serve-dist.mjs --dir=site` 查看。当前只生成本地候选目录，不自动上传、发布、建标签或push。
 
 ## 静态托管约定
 

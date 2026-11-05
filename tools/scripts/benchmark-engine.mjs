@@ -5,12 +5,12 @@ import { resolve, dirname } from 'node:path';
 import { cpus, platform, totalmem } from 'node:os';
 import { execFileSync } from 'node:child_process';
 
-const root = fileURLToPath(new URL('../', import.meta.url));
-const require = createRequire(new URL('../apps/web/package.json', import.meta.url));
+const root = fileURLToPath(new URL('../../', import.meta.url));
+const require = createRequire(new URL('../../src/web/package.json', import.meta.url));
 const { createServer } = await import(pathToFileURL(require.resolve('vite')).href);
 const server = await createServer({ root, configFile: false, logLevel: 'silent', server: { middlewareMode: true } });
 try {
-  const { simulateTeam } = await server.ssrLoadModule('/packages/engine/src/index.ts');
+  const { simulateTeam } = await server.ssrLoadModule('/src/engine/src/index.ts');
   const { performanceScenarios } = await server.ssrLoadModule('/fixtures/performance/scenarios.ts');
   const cases = performanceScenarios();
   const scenarios = [];

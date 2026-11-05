@@ -27,17 +27,34 @@ importers:
         specifier: ^3.1.0
         version: 3.3.14(typescript@5.9.3)
 
-  apps/web:
+  src/engine:
+    dependencies:
+      '@leyline/game-data':
+        specifier: workspace:*
+        version: link:../game-data
+      '@leyline/schema':
+        specifier: workspace:*
+        version: link:../schema
+
+  src/game-data: {}
+
+  src/schema:
+    dependencies:
+      zod:
+        specifier: ^4.1.0
+        version: 4.6.7
+
+  src/web:
     dependencies:
       '@leyline/engine':
         specifier: workspace:*
-        version: link:../../packages/engine
+        version: link:../../src/engine
       '@leyline/game-data':
         specifier: workspace:*
-        version: link:../../packages/game-data
+        version: link:../../src/game-data
       '@leyline/schema':
         specifier: workspace:*
-        version: link:../../packages/schema
+        version: link:../../src/schema
       echarts:
         specifier: ^6.1.0
         version: 6.1.0
@@ -54,23 +71,6 @@ importers:
       vite:
         specifier: ^7.2.0
         version: 7.3.7(@types/node@24.19.2)
-
-  packages/engine:
-    dependencies:
-      '@leyline/game-data':
-        specifier: workspace:*
-        version: link:../game-data
-      '@leyline/schema':
-        specifier: workspace:*
-        version: link:../schema
-
-  packages/game-data: {}
-
-  packages/schema:
-    dependencies:
-      zod:
-        specifier: ^4.1.0
-        version: 4.6.7
 
 packages:
 

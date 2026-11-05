@@ -1,7 +1,7 @@
 packages:
-  - apps/*
-  - packages/*
+  - src/*
+storeDir: .cache/pnpm-store
 allowBuilds:
   esbuild: true
 patchedDependencies:
-  '@vue/devtools-kit@8.2.1': patches/@vue__devtools-kit@8.2.1.patch
+  '@vue/devtools-kit@8.2.1': tools/patches/@vue__devtools-kit@8.2.1.patch

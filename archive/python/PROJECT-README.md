@@ -1,0 +1,25 @@
+以下为旧 Python 项目说明，代码保留于本归档的 `src/`，作为迁移参考。
+
+地脉模拟器 | LeyLine Simulator - a Genshin Impact combat system simulator - simple user input, rich data analysis and visualization
+
+## 目的 Propose
+
+The propose of this project is to calculate different kinds of data in GI combat system, and to visualize it. Also, we hope to find more hidden characteristic of the team-build.
+
+项目旨在精准计算战斗系统中的各种数据，并进行可视化。我们希望从中发掘更多有趣的细节。
+
+## 使用 Usage
+
+You can use simple command to build combat environment and action list. For more details:
+
+使用简单的字符输入就可以进行模拟，详见：
+
+[Usage](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/usage.md "Usage")
+
+## 参考 Reference
+
+[Reference](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/reference.md "Reference")
+
+## 鸣谢 Thanks
+
+[Thanks](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/thanks.md "Thanks")

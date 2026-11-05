@@ -1,6 +1,6 @@
 # 首个真实四人循环验收
 
-场景：fixtures/scenarios/first-team.json，由 `node scripts/create-team-example.mjs` 可重复生成；`pnpm fixture:check` 不修改文件，只检查一致性。预期与审计推导不从引擎输出自动生成。
+场景：fixtures/scenarios/first-team.json，由 `node tools/scripts/create-team-example.mjs` 可重复生成；`pnpm fixture:check` 不修改文件，只检查一致性。预期与审计推导不从引擎输出自动生成。
 
 角色为行秋、阿贝多、琴、胡桃，均90级六突破、零命、天赋8，使用实际武器和五星圣遗物。种子1、暴击期望模式，祭礼R5概率触发按种子抽样。本场景不保证其他种子也能执行相同的双E时序。
 

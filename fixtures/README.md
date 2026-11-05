@@ -8,4 +8,4 @@ jean-tap 场景使用仓库技能倍率与动作时长、手工配置面板，�
 
 combat-stage-3 为四个测试面板的综合机制场景，非真实角色配队。一次运行包含后台召唤、快照、动态直接增伤、切人、命中产球与旅行、充能/固定回能、能量消耗、附着、蒸发和融化。人工总伤害9300、DPS2325；关闭快照为8200。完整推导见 `docs/mechanics/combat-v1.md`，expected 不从程序输出生成。
 
-first-team 是阶段4真实配装场景。输入由scripts/create-team-example.mjs可重复生成；预期不以引擎输出自动回填，而由team-cycle.test.ts的独立逐事件参考式核对总伤害，同时核对36次施放、7切人、0拒绝、第二轮爆发前和最终行秋能量80，以及独立HP公式。推导见docs/mechanics/first-team-cycle.md。
+first-team 是阶段4真实配装场景。输入由tools/scripts/create-team-example.mjs可重复生成；预期不以引擎输出自动回填，而由team-cycle.test.ts的独立逐事件参考式核对总伤害，同时核对36次施放、7切人、0拒绝、第二轮爆发前和最终行秋能量80，以及独立HP公式。推导见docs/mechanics/first-team-cycle.md。

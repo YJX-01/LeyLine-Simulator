@@ -13,6 +13,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm data:check
       - run: pnpm fixture:check
+      - run: pnpm architecture:check
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build

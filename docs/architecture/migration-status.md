@@ -2,11 +2,11 @@
 
 ## 旧项目初步盘点
 
-- UI：PyQt5 生成的窗口，入口 src/main.py。
+- UI：PyQt5 生成的窗口，入口 archive/python/src/main.py。
 - 模拟：优先队列、事件与动作系统；Simulation、NumericController、CreationSpace 和 Trigger 存在单例状态，不能直接迁移为共享服务状态。
 - 指令：角色.命令@时间，部分附加符号控制暴击；旧 Operation 使用 exec 查找控制器，新实现改为显式注册。
 - 规则：伤害、治疗、元素、附着冷却、增益；存在实现不等于验证完整或符合当前游戏规则。
-- 内容：雷电将军、行秋、胡桃、阿贝多、琴存在技能模块；完整性尚未验证。docs 下 JSON 和 src/data/README.md 仅作为盘点线索。
+- 内容：雷电将军、行秋、胡桃、阿贝多、琴存在技能模块；完整性尚未验证。docs 下 JSON 和 archive/python/src/data/README.md 仅作为盘点线索。
 - 可视化：Matplotlib 图表与日志，新界面将消费结构化结果。
 
 ## 当前进度

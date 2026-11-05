@@ -26,7 +26,7 @@ const fixture = { schemaVersion: 1, rulesVersion: 'team-repo-v1', durationMs: 48
     actor('hutao', 'staff-of-homa', 'shimenawa', 'HP_PER', 'PYRO_DMG', 30, 0.6)],
   initialOnField: 'xingqiu', enemy: { level: 90, hpRatio: 1, resistance: 0.1, defenseReduction: 0,
     fatalBlossomHits: 2, collectCrystallizeShards: false }, commands, logMode: 'detailed', maxLogEvents: 10000 };
-const destination = new URL('../fixtures/scenarios/first-team.json', import.meta.url);
+const destination = new URL('../../fixtures/scenarios/first-team.json', import.meta.url);
 const text = `${JSON.stringify(fixture, null, 2)}\n`;
 if (process.argv.includes('--check')) {
   if (readFileSync(destination, 'utf8').replace(/\r\n/g, '\n') !== text) throw new Error('Four-character fixture is stale');

@@ -43,28 +43,20 @@ pnpm dev
 - [装备效果范围](docs/mechanics/supported-equipment.md)
 - [真实四人循环独立审计](docs/mechanics/first-team-cycle.md)
 
-以下为旧 Python 项目说明，代码保留于 `src/`，作为迁移参考。
+## 项目结构与维护
 
-地脉模拟器 | LeyLine Simulator - a Genshin Impact combat system simulator - simple user input, rich data analysis and visualization
+```text
+.github/      提交和 PR 的自动检查配置
+src/          web、engine、schema、game-data 四个 workspace
+tools/        scripts 开发/验证/交付脚本，patches 依赖补丁
+tests/        浏览器回归测试
+fixtures/     场景和性能输入
+docs/         规则依据、架构和使用说明
+archive/      Python 旧实现
+```
 
-## 目的 Propose
+`node_modules/` 是自动安装的依赖；`.cache/` 是本地缓存；`artifacts/`、`test-results/` 和 `src/web/dist*` 是构建与验证产物，均不提交。使用 `pnpm clean:outputs` 清理产物，`pnpm clean:cache` 清理缓存；用 `pnpm clean:outputs --dry-run` 可先查看清单。开发仍使用 `pnpm dev`。
 
-The propose of this project is to calculate different kinds of data in GI combat system, and to visualize it. Also, we hope to find more hidden characteristic of the team-build.
+当前架构、模块职责和扩展规范见 [架构指南](docs/architecture/overview.md)。运行 `pnpm architecture:check` 检查包边界、运行时循环依赖及归档隔离。
 
-项目旨在精准计算战斗系统中的各种数据，并进行可视化。我们希望从中发掘更多有趣的细节。
-
-## 使用 Usage
-
-You can use simple command to build combat environment and action list. For more details:
-
-使用简单的字符输入就可以进行模拟，详见：
-
-[Usage](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/usage.md "Usage")
-
-## 参考 Reference
-
-[Reference](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/reference.md "Reference")
-
-## 鸣谢 Thanks
-
-[Thanks](https://github.com/moon-xu37/LeyLine-Simulator/blob/main/docs/dict/thanks.md "Thanks")
+Python 旧实现、旧环境配置、使用说明和图片已集中到 [archive/python/](archive/python/README.md)，不参与现有应用构建。`docs/constant/` 仍是当前数据生成输入，不属于废弃资源。根目录 `AGENTS.md` 保持原文，其中旧 Python `src/` 路径现指 `archive/python/src/`，旧 `apps/web` 和 `packages/*` 路径分别对应 `src/web` 和 `src/*`。工具维护见 [tools/README.md](tools/README.md)。

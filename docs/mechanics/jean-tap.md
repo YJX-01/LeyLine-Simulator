@@ -6,7 +6,7 @@
 
 - 倍率：`docs/constant/SkillConfig.json` 的 Jean.E[天赋等级][0]，原始浮点数保留，不使用展示文案的百分数反推精度。
 - 6秒冷却：同表 Jean.E[等级][3]，与 `docs/characters/jean.json` 的技能冷却一致。
-- 旧 `src/data/characters/jean/jean_elemskill.py` 中 `elemskill_cd` 硬编码10秒，与两份数据不符；新配置明确选用数据表6秒，不追求复制这一旧行为。
+- 旧 `archive/python/src/data/characters/jean/jean_elemskill.py` 中 `elemskill_cd` 硬编码10秒，与两份数据不符；新配置明确选用数据表6秒，不追求复制这一旧行为。
 - 施放到命中：旧代码使用 ActionTime.Jean.E[1] = 46帧 / 60。整数毫秒中四舍五入为767ms，存在约0.333ms离散误差。
 - 冷却开始延迟：沿用旧代码 ActionTime.Jean.E[0] = 18帧 / 60 = 300ms，因此在t施放后t+6300ms可再次施放。不是简单的t+6000ms。
 - 动作锁：沿用旧代码的动作时长46帧，当前简化为767ms。

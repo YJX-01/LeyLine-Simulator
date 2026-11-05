@@ -1,6 +1,6 @@
 # 引擎质量审查与结构整理
 
-审查日期：2026-11-05。范围为 `packages/engine`，保持 `simulateTeam`、`simulateCombat`、`resolveLoadout` 的输入、输出及版本合同兼容。
+审查日期：2026-11-05。范围为 `src/engine`，保持 `simulateTeam`、`simulateCombat`、`resolveLoadout` 的输入、输出及版本合同兼容。
 
 ## 模块职责
 
@@ -38,7 +38,7 @@
 
 ## 验证
 
-- `pnpm exec vitest run packages/engine`：14 个文件、150 个测试通过，包含真实四人双轮循环、装备、命座、随机种子与状态隔离测试。
+- `pnpm exec vitest run src/engine`：14 个文件、150 个测试通过，包含真实四人双轮循环、装备、命座、随机种子与状态隔离测试。
 - `pnpm exec tsc --noEmit`：通过。
 - GitNexus MCP 和索引不可用，按重构技能的边界检查流程使用 `rg` 核对入口/调用关系，使用 `git diff` 检查变更范围。
 

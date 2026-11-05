@@ -19,10 +19,10 @@
 
 ## 工程结构
 
-- apps/web：Vue 页面、Worker 接入，后续使用 Pinia 管理编辑状态、ECharts 展示结果。
-- packages/schema：Zod 输入输出校验、配置版本与迁移。
-- packages/engine：独立 TS 引擎，不依赖 Vue、DOM 或图表。
-- packages/game-data：经过核实的静态数据与有类型的技能模块。
+- src/web：Vue 页面、Worker 接入，后续使用 Pinia 管理编辑状态、ECharts 展示结果。
+- src/schema：Zod 输入输出校验、配置版本与迁移。
+- src/engine：独立 TS 引擎，不依赖 Vue、DOM 或图表。
+- src/game-data：经过核实的静态数据与有类型的技能模块。
 - fixtures/scenarios、fixtures/expected：标准输入和审核后的预期结果。
 - docs/architecture、docs/mechanics：设计决策、机制依据及限制。
 

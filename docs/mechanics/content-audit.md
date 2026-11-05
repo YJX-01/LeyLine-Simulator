@@ -1,6 +1,6 @@
 # 首批内容数据审计
 
-固定数据版本 repo-content-v1。`node scripts/convert-repo-data.mjs` 从旧仓库8份数值表生成首批五角色、八武器、成长曲线、五星圣遗物主词条和反应等级表；`--check` 检查生成物及源文件 SHA-256 是否一致。哈希先将CRLF规范为LF，跨平台检出不产生伪差异；生成物不包含运行日期，结果可重复。
+固定数据版本 repo-content-v1。`node tools/scripts/convert-repo-data.mjs` 从旧仓库8份数值表生成首批五角色、八武器、成长曲线、五星圣遗物主词条和反应等级表；`--check` 检查生成物及源文件 SHA-256 是否一致。哈希先将CRLF规范为LF，跨平台检出不产生伪差异；生成物不包含运行日期，结果可重复。
 
 ## 单位
 
