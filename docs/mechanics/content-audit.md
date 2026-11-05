@@ -1,0 +1,21 @@
+# 首批内容数据审计
+
+固定数据版本 repo-content-v1。`node scripts/convert-repo-data.mjs` 从旧仓库8份数值表生成首批五角色、八武器、成长曲线、五星圣遗物主词条和反应等级表；`--check` 检查生成物及源文件 SHA-256 是否一致。生成物不包含运行日期，结果可重复。
+
+## 单位
+
+技能倍率、角色突破百分比、武器副词条已经是小数；不可再次除100。旧圣遗物表的百分比主词条是百分数，转换时除100；固定生命/攻击和精通保持原数值。时间表是60FPS帧数，适配时四舍五入为整数毫秒。等级显式提供突破阶段，限定1—90。
+
+## 来源与冲突
+
+旧表没有原始导出提交号，因此保留完整哈希，不能称为当前全版本数据。2026-11-05核对以下理论库的角色描述，作为机制校验参考，不将其新内容整体导入旧数值表：
+
+- [琴](https://library.keqingmains.com/characters/anemo/jean)
+- [行秋](https://library.keqingmains.com/characters/hydro/xingqiu)
+- [胡桃](https://library.keqingmains.com/characters/pyro/hu-tao)
+- [阿贝多](https://library.keqingmains.com/characters/geo/albedo)
+- [雷电将军](https://library.keqingmains.com/characters/electro/raiden-shogun)
+
+已知旧代码冲突：琴E冷却硬编码10秒，表为6秒；琴Q硬编码18秒、领域10秒，而表/技能说明为20秒、领域10秒；按数值表冷却而非复制硬编码。普通攻击多段不能把倍率直接相加后当成一次附着，需逐段命中。旧行秋/胡桃/阿贝多命座文件中的 TODO 不算已实现依据。
+
+当前转换覆盖“数值结构已校验”，不等于所有技能事件已验证。阶段4最终支持矩阵必须分别记录数值、机制与场景验证。

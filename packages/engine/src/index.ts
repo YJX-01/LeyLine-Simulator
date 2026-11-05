@@ -4,3 +4,4 @@ export { simulateRotation } from './rotation';
 export { simulateCharacter } from './character';
 export { resolveAttributes } from './attributes';
 export { simulateCombat } from './combat';
+export { resolveLoadout } from './loadout';

@@ -21,3 +21,4 @@ const jeanTap = {
 export const skillRegistry = { 'jean.e.tap': jeanTap } as const;
 export type SkillId = keyof typeof skillRegistry;
 export const GAME_DATA_VERSION = 'repo-jean-tap-v1';
+export * from './content';

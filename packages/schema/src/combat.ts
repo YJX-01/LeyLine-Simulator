@@ -10,6 +10,11 @@ export const combatStatsSchema = characterStatsSchema.extend({
   energyRecharge: z.number().finite().min(0).max(100),
   elementalMastery: amount,
   reactionBonus: z.number().finite().min(0).max(100),
+  maxHp: z.number().finite().min(1).max(1e9).default(10000),
+  defense: z.number().finite().min(0).max(1e9).default(500),
+  healingBonus: z.number().finite().min(0).max(100).default(0),
+  damageBonuses: z.record(z.string(), z.number().finite().min(0).max(100)).default({}),
+  categoryBonuses: z.record(z.string(), z.number().finite().min(0).max(100)).default({}),
 }).strict();
 export type CombatStats = z.infer<typeof combatStatsSchema>;
 const hit = z.object({
@@ -42,7 +47,7 @@ export type CombatSkill = z.infer<typeof combatSkillSchema>;
 export const combatBuffSchema = z.object({
   id, targetIds: z.array(id).min(1).max(4), startMs: ms, durationMs: positiveMs,
   stacking: z.enum(['add', 'replace']), group: id,
-  modifiers: combatStatsSchema.omit({ level: true, characterBaseAttack: true, weaponBaseAttack: true })
+  modifiers: combatStatsSchema.omit({ level: true, characterBaseAttack: true, weaponBaseAttack: true, damageBonuses: true, categoryBonuses: true })
     .partial().extend({ directDamageBonus: z.number().finite().min(0).max(100).optional() }).strict(),
 }).strict();
 export type CombatBuff = z.infer<typeof combatBuffSchema>;

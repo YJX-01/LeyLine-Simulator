@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "packageManager": "pnpm@11.3.0",
   "scripts": {
+    "data:check": "node scripts/convert-repo-data.mjs --check",
     "dev": "pnpm --filter @leyline/web dev",
     "build": "pnpm --filter @leyline/web build",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit -p apps/web/tsconfig.json",

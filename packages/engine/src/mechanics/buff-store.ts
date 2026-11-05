@@ -2,6 +2,7 @@ import type { CombatBuff, CombatStats } from '@leyline/schema';
 export interface CombatPanel {
   attack: number; damageBonus: number; critRate: number; critDamage: number;
   elementalMastery: number; reactionBonus: number; energyRecharge: number; buffIds: string[];
+  maxHp: number; defense: number; healingBonus: number; damageBonuses: Record<string, number>; categoryBonuses: Record<string, number>;
 }
 export class BuffStore {
   private active = new Map<string, Map<string, CombatBuff>>();
@@ -34,6 +35,8 @@ export class BuffStore {
       damageBonus: values.damageBonus, critRate: Math.min(1, values.critRate), critDamage: values.critDamage,
       elementalMastery: values.elementalMastery, reactionBonus: values.reactionBonus,
       energyRecharge: values.energyRecharge, buffIds,
+      maxHp: values.maxHp, defense: values.defense, healingBonus: values.healingBonus,
+      damageBonuses: { ...values.damageBonuses }, categoryBonuses: { ...values.categoryBonuses },
     };
   }
   directBonus(actorId: string): number {
