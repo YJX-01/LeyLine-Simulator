@@ -9,7 +9,13 @@ export function createGearRuntime(loadouts: ResolvedLoadout[], skillId: (id: str
   const active = (id: string, now: number) => (timers.get(id) ?? -1) > now;
   return {
     panel(ctx: RuntimeContext, id: string, panel: CombatPanel) {
-      const actor = actors.get(id)!;
+      const actor = actors.get(id)!, rank = actor.loadout.weapon.refinement - 1, hp = ctx.health.get(id).ratio;
+      const base = actor.baseStats;
+      if (actor.loadout.weapon.id === 'harbinger-of-dawn' && hp > 0.9) panel.critRate += 0.14 + rank * 0.035;
+      if (actor.loadout.weapon.id === 'staff-of-homa') panel.attack += panel.maxHp * (0.008 + rank * 0.002 + (hp < 0.5 ? 0.01 + rank * 0.002 : 0));
+      if (actor.loadout.weapon.id === 'engulfing-lightning') panel.attack += (base.characterBaseAttack + base.weaponBaseAttack)
+        * Math.max(0, Math.min((panel.energyRecharge - 1) * (0.28 + rank * 0.07), 0.8 + rank * 0.1));
+      if ((actor.sets.emblem ?? 0) >= 4) panel.categoryBonuses.burst = (panel.categoryBonuses.burst ?? 0) + Math.min(0.75, panel.energyRecharge * 0.25);
       if (active(`${id}:shimenawa`, ctx.timeMs)) for (const category of ['normal', 'charged', 'plunge']) panel.categoryBonuses[category] = (panel.categoryBonuses[category] ?? 0) + 0.5;
       if (active(`${id}:starglitter`, ctx.timeMs)) for (const category of ['normal', 'charged']) panel.categoryBonuses[category] = (panel.categoryBonuses[category] ?? 0)
         + (stacks.get(id) ?? 0) * (0.08 + (actor.loadout.weapon.refinement - 1) * 0.02);

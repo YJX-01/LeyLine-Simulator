@@ -32,9 +32,12 @@ export interface RuntimeContext {
 export interface CombatRuntime {
   initialize?(ctx: RuntimeContext): void;
   modifyPanel?(ctx: RuntimeContext, actorId: string, panel: CombatPanel): CombatPanel;
+  /** Runs before rejection checks: mutate the cloned skill, not persistent gameplay state. */
   prepareSkill?(ctx: RuntimeContext, skill: CombatSkill, commandId: string): CombatSkill;
   rejectCast?(ctx: RuntimeContext, skill: CombatSkill): string | undefined;
+  /** Runs after resource/cooldown commitment; true replaces the default skill effect. */
   onCast?(ctx: RuntimeContext, skill: CombatSkill, commandId: string): boolean | void;
+  /** Receives a shallow hit copy for each impact, including repeated summon impacts. */
   prepareHit?(ctx: RuntimeContext, actorId: string, skillId: string, hit: RuntimeHit): RuntimeHit;
   onHit?(ctx: RuntimeContext, event: CombatHitEvent, hit: RuntimeHit): void;
   onSwitch?(ctx: RuntimeContext, previous: string, next: string): void;
