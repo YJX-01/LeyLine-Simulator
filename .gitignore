@@ -135,3 +135,11 @@ dmypy.json
 # 忽略qt缓存文件
 .qt_for_python/
 .DS_Store
+
+# TypeScript workspace
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+playwright-report/
+test-results/

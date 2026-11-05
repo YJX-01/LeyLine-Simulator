@@ -1,5 +1,26 @@
 # LeyLine-Simulator
 
+## TypeScript 重写预览
+
+新版本采用 Vue 3 + TypeScript，独立计算模块通过 Web Worker 在浏览器运行。
+当前仅实现单次攻击公式验证台，不代表完整的游戏伤害或角色模拟。
+
+需要 Node.js 22.12+（建议 24 LTS）和 pnpm 11.3.0。
+
+```sh
+pnpm install
+pnpm dev
+```
+
+验证命令：`pnpm typecheck`、`pnpm test`、`pnpm build`。
+
+浏览器测试：先执行 `pnpm exec playwright install chromium`，再执行 `pnpm test:e2e`。
+
+- [实施计划](docs/rewrite-plan.md)
+- [迁移状态与下一步](docs/architecture/migration-status.md)
+
+以下为旧 Python 项目说明，代码保留于 `src/`，作为迁移参考。
+
 地脉模拟器 | LeyLine Simulator - a Genshin Impact combat system simulator - simple user input, rich data analysis and visualization
 
 ## 目的 Propose

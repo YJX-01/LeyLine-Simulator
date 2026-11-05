@@ -1,0 +1,99 @@
+<script setup lang="ts">
+import { onBeforeUnmount, reactive, ref } from 'vue';
+import { attackSchema, type AttackInput, type AttackResult, type WorkerResponse } from '@leyline/schema';
+
+const config = reactive<AttackInput>({ schemaVersion: 1, attack: 1000, multiplier: 2,
+  damageBonus: 0.5, critRate: 0.5, critDamage: 1, mode: 'expected' });
+const result = ref<AttackResult>();
+const error = ref('');
+const busy = ref(false);
+let worker: Worker | undefined;
+let taskId = 0;
+const fields = [
+  { key: 'attack', label: '攻击力', step: 1, max: 1e9 },
+  { key: 'multiplier', label: '技能倍率（2 = 200%）', step: 0.1, max: 1e9 },
+  { key: 'damageBonus', label: '伤害加成（0.5 = 50%）', step: 0.1, max: 1e9 },
+  { key: 'critRate', label: '暴击率（0.5 = 50%）', step: 0.05, max: 1 },
+  { key: 'critDamage', label: '暴击伤害（1 = 100%）', step: 0.1, max: 1e9 },
+] as const;
+function cancel() {
+  taskId++;
+  worker?.terminate();
+  worker = undefined;
+  busy.value = false;
+}
+function run() {
+  cancel();
+  result.value = undefined;
+  error.value = '';
+  const parsed = attackSchema.safeParse({ ...config });
+  if (!parsed.success) {
+    error.value = parsed.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`).join('\n');
+    return;
+  }
+  const id = ++taskId;
+  try {
+    worker = new Worker(new URL('./attack.worker.ts', import.meta.url), { type: 'module' });
+    busy.value = true;
+    worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
+      if (event.data.id !== taskId) return;
+      if (event.data.ok) result.value = event.data.result;
+      else error.value = event.data.error;
+      cancel();
+    };
+    worker.onerror = () => {
+      if (id !== taskId) return;
+      error.value = '计算进程异常，请重新运行。';
+      cancel();
+    };
+    worker.postMessage({ id, input: parsed.data });
+  } catch {
+    error.value = '无法启动计算进程，请重新运行。';
+    cancel();
+  }
+}
+onBeforeUnmount(cancel);
+</script>
+
+<template>
+  <main>
+    <p class="eyebrow">LEYLINE SIMULATOR · 重写预览</p>
+    <h1>地脉模拟器</h1>
+    <p>单次攻击公式验证台</p>
+    <aside>当前使用人工测试数据，仅计算攻击力 × 倍率 × 伤害加成 × 暴击系数。尚未包含敌人防御、抗性、元素反应和角色机制，不能作为实战伤害结果。</aside>
+    <form @submit.prevent="run">
+      <label v-for="field in fields" :key="field.key">
+        {{ field.label }}
+        <input v-model.number="config[field.key]" type="number" required min="0" :max="field.max" :step="field.step">
+      </label>
+      <label>暴击模式<select v-model="config.mode"><option value="expected">期望伤害</option><option value="critical">必定暴击</option><option value="noncritical">不暴击</option></select></label>
+      <div class="actions"><button type="submit">{{ busy ? '重新计算' : '计算伤害' }}</button><button v-if="busy" type="button" @click="cancel">取消</button></div>
+    </form>
+    <p v-if="error" role="alert" class="error">{{ error }}</p>
+    <section aria-live="polite">
+      <p v-if="busy">正在计算…</p>
+      <template v-if="result">
+        <h2>公式伤害：{{ result.damage.toLocaleString('zh-CN', { maximumFractionDigits: 4 }) }}</h2>
+        <p>{{ result.baseDamage }} × {{ result.bonusMultiplier }} × {{ result.critMultiplier }}</p>
+        <p>基础伤害 × 加成系数 × 暴击系数</p>
+        <small>规则：{{ result.versions.rules }} · 引擎：{{ result.versions.engine }}</small>
+      </template>
+    </section>
+  </main>
+</template>
+
+<style>
+:root { font-family: system-ui, sans-serif; color: #243442; background: #f3f6f7; }
+body { margin: 0; }
+main { max-width: 820px; margin: 48px auto; padding: 24px; }
+h1 { font-size: 2.5rem; margin: 8px 0; }
+.eyebrow { color: #35746d; letter-spacing: .12em; font-size: .8rem; }
+aside { background: #fff3d7; padding: 18px; border-radius: 8px; line-height: 1.7; }
+form { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 28px 0; }
+label { display: grid; gap: 8px; }
+input, select, button { font: inherit; padding: 12px; border: 1px solid #a7b7bd; border-radius: 6px; }
+button { background: #235f58; color: white; cursor: pointer; }
+.actions { display: flex; gap: 10px; align-items: end; }
+section { background: white; padding: 20px; border-radius: 8px; }
+.error { color: #a62424; white-space: pre-wrap; }
+</style>
