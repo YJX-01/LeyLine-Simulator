@@ -106,4 +106,3 @@ onBeforeUnmount(cancel);
     <TeamPanel />
   </main>
 </template>
-

@@ -144,3 +144,5 @@ coverage/
 playwright-report/
 test-results/
 artifacts/
+apps/web/dist-subpath/
+.patch-work/

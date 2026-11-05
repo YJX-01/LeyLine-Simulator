@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@vue/devtools-kit@8.2.1': c02fa1f252f42ba87cb4041be9a6d706cf6904527b4ba223eaa586d625be8dd9
+
 importers:
 
   .:
@@ -1118,9 +1121,9 @@ snapshots:
 
   '@vue/devtools-api@8.2.1':
     dependencies:
-      '@vue/devtools-kit': 8.2.1
+      '@vue/devtools-kit': 8.2.1(patch_hash=c02fa1f252f42ba87cb4041be9a6d706cf6904527b4ba223eaa586d625be8dd9)
 
-  '@vue/devtools-kit@8.2.1':
+  '@vue/devtools-kit@8.2.1(patch_hash=c02fa1f252f42ba87cb4041be9a6d706cf6904527b4ba223eaa586d625be8dd9)':
     dependencies:
       '@vue/devtools-shared': 8.2.1
       birpc: 2.9.0

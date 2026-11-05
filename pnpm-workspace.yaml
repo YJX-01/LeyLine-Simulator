@@ -3,3 +3,5 @@ packages:
   - packages/*
 allowBuilds:
   esbuild: true
+patchedDependencies:
+  '@vue/devtools-kit@8.2.1': patches/@vue__devtools-kit@8.2.1.patch

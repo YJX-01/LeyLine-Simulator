@@ -104,9 +104,13 @@ test('edits a paginated rotation, explains stale results and recovers after canc
   await expect(page.getByText('共 44 条', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: '删除动作', exact: true }).last().click();
   await page.getByRole('button', { name: '按时间稳定排序', exact: true }).click();
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/*attack.worker*', async route => { await gate; await route.continue().catch(() => {}); });
   await page.getByRole('button', { name: '运行模拟', exact: true }).click();
   await page.getByRole('button', { name: '取消模拟', exact: true }).click();
   await expect(page.getByRole('alert')).toHaveText('已取消，可重新运行。');
+  release(); await page.unroute('**/*attack.worker*');
   await page.getByRole('button', { name: '运行模拟', exact: true }).click();
   await expect(page.getByRole('heading', { name: /总伤害：/ })).toBeVisible();
   await expect(page.getByText('配置已修改，以下为上次运行结果，请重新运行。')).toHaveCount(0);
