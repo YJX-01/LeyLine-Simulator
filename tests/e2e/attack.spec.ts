@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('calculates through the worker and accepts another configuration', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#tools');
   await expect(page.getByRole('heading', { name: '地脉模拟器', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '计算伤害', exact: true }).click();
   await expect(page.getByRole('heading', { name: '公式伤害：2,025' })).toBeVisible();
@@ -17,7 +17,7 @@ test('calculates through the worker and accepts another configuration', async ({
 });
 
 test('runs an editable rotation and explains buff expiry', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#tools');
   await page.getByRole('button', { name: '运行动作模拟', exact: true }).click();
   await expect(page.getByRole('heading', { name: '序列总伤害：6,000' })).toBeVisible();
   await expect(page.getByText('DPS：3,000 · 窗口 2000 毫秒')).toBeVisible();
@@ -36,7 +36,7 @@ test('runs an editable rotation and explains buff expiry', async ({ page }) => {
 });
 
 test('can cancel a pending worker and run again', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#tools');
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/src/attack.worker.ts*', async route => {
@@ -54,7 +54,7 @@ test('can cancel a pending worker and run again', async ({ page }) => {
 });
 
 test('recovers when worker loading fails', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#tools');
   await page.route('**/src/attack.worker.ts*', route => route.abort());
   await page.getByRole('button', { name: '运行动作模拟', exact: true }).click();
   await expect(page.getByRole('alert')).toHaveText('模拟进程异常，请重新运行。');
@@ -64,7 +64,7 @@ test('recovers when worker loading fails', async ({ page }) => {
 });
 
 test('simulates Jean casts, rejects early commands and resolves attack stats', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#tools');
   await page.getByRole('button', { name: '运行琴战技', exact: true }).click();
   await expect(page.getByRole('heading', { name: '琴战技总伤害：5,840' })).toBeVisible();
   const log = page.getByRole('list', { name: '琴战技事件日志' });

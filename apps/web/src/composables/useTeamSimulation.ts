@@ -1,9 +1,9 @@
 import { computed, onBeforeUnmount, ref, shallowRef, watch, type Ref } from 'vue';
 import { resolveLoadout } from '@leyline/engine';
-import { teamSchema, type TeamInput, type TeamSimulationResult } from '@leyline/schema';
+import { teamSchema, type TeamInput } from '@leyline/schema';
 import { TeamTask } from '../domain/team-task';
 import { canonical, capacity } from '../domain/editor';
-export interface RunSnapshot { input: TeamInput; result: TeamSimulationResult }
+import type { RunSnapshot } from '../domain/run';
 export function useTeamSimulation(source: Ref<string>, signature: Ref<string>) {
   const snapshot = shallowRef<RunSnapshot>();
   const busy = ref(false), error = ref('');

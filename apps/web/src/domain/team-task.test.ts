@@ -38,7 +38,9 @@ describe('team task ownership', () => {
     const callbacks = { result: vi.fn(), error: vi.fn(), busy: vi.fn() };
     new TeamTask(() => { throw new Error(); }, callbacks).run(input);
     expect(callbacks.error).toHaveBeenCalledWith('无法启动计算进程，请重新运行。');
-    const f = fixture(); f.task.run(input); f.task.cancel();
-    expect(f.callbacks.busy).toHaveBeenLastCalledWith(false);
+    const terminate = vi.fn();
+    const worker: WorkerPort = { onmessage: null, onerror: null, onmessageerror: null, postMessage: () => { throw new Error('clone'); }, terminate };
+    new TeamTask(() => worker, callbacks).run(input);
+    expect(terminate).toHaveBeenCalled(); expect(callbacks.busy).toHaveBeenLastCalledWith(false);
   });
 });

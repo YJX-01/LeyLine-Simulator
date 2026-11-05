@@ -2,7 +2,8 @@
 import { ref } from 'vue';
 import { usePlansStore } from './stores/plans';
 import { parsePlanInput } from './domain/plans';
-const props = defineProps<{ source: string }>();
+import { downloadJson } from './domain/download';
+const props = defineProps<{ source: string; expanded?: boolean }>();
 const emit = defineEmits<{ load: [source: string] }>();
 const library = usePlansStore();
 library.initialize();
@@ -11,9 +12,7 @@ function save() { if (library.save(name.value, props.source)) message.value = '�
 function download() {
   try {
     const input = parsePlanInput(props.source);
-    const url = URL.createObjectURL(new Blob([JSON.stringify(input, null, 2)], { type: 'application/json' }));
-    const link = document.createElement('a'); link.href = url; link.download = 'leyline-team.json'; link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadJson(input, 'leyline-team.json');
     message.value = '方案已导出。';
   } catch { message.value = '当前配置无效，无法导出。'; }
 }
@@ -30,7 +29,7 @@ async function upload(event: Event) {
 }
 </script>
 <template>
-  <details class="plan-library">
+  <details class="plan-library" :open="expanded">
     <summary>本地方案与导入导出</summary>
     <p>方案仅保存在当前浏览器。导入、载入会替换编辑区；请先保存需要保留的配置。</p>
     <label>新方案名称<input v-model="name" maxlength="80"></label>

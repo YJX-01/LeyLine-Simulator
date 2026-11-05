@@ -8,13 +8,18 @@ import TeamEditor from './components/TeamEditor.vue';
 import PlanLibrary from './PlanLibrary.vue';
 import RotationEditor from './components/RotationEditor.vue';
 import { useTeamSimulation } from './composables/useTeamSimulation';
+import ResultPanel from './components/ResultPanel.vue';
+import ComparisonPanel from './components/ComparisonPanel.vue';
+import { useComparisonStore } from './stores/comparison';
 const workspace = useWorkspaceStore(); workspace.initialize();
-const draft = ref(workspace.input ?? teamSchema.parse(example));
+// The form must never mutate the parsed-input cache used to identify a run.
+const draft = ref(teamSchema.parse(JSON.parse(JSON.stringify(workspace.input ?? example))));
 const tab = ref('team');
 const simulation = useTeamSimulation(toRef(workspace, 'source'), toRef(workspace, 'signature'));
 const { snapshot, busy, error, stale } = simulation;
+const comparisons = useComparisonStore();
 watch(draft, value => { const source = JSON.stringify(value, null, 2); if (canonical(value) !== workspace.signature) workspace.source = source; }, { deep: true, flush: 'sync' });
-watch(() => workspace.source, () => { if (workspace.input && canonical(draft.value) !== workspace.signature) draft.value = workspace.input; }, { flush: 'sync' });
+watch(() => workspace.source, () => { if (workspace.input && canonical(draft.value) !== workspace.signature) draft.value = teamSchema.parse(JSON.parse(JSON.stringify(workspace.input))); }, { flush: 'sync' });
 const issues = computed(() => { const parsed = teamSchema.safeParse(draft.value); return parsed.success ? [] : parsed.error.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`); });
 </script>
 <template>
@@ -38,13 +43,13 @@ const issues = computed(() => { const parsed = teamSchema.safeParse(draft.value)
       <label>敌人抗性（%）<input type="number" min="-1000" max="1000" :value="draft.enemy.resistance * 100" @input="draft.enemy.resistance = Number(($event.target as HTMLInputElement).value) / 100"></label>
       <label>敌人减防（%）<input type="number" min="0" max="100" :value="draft.enemy.defenseReduction * 100" @input="draft.enemy.defenseReduction = Number(($event.target as HTMLInputElement).value) / 100"></label>
       <label>敌人生命（%）<input type="number" min="0" max="100" :value="draft.enemy.hpRatio * 100" @input="draft.enemy.hpRatio = Number(($event.target as HTMLInputElement).value) / 100"></label>
-      <label>阿贝多生灭之花命中数<input v-model.number="draft.enemy.fatalBlossomHits" type="number" min="0" max="7" placeholder="使用阿贝多 Q 时必填"></label>
+      <label>阿贝多生灭之花命中数<input :value="draft.enemy.fatalBlossomHits" type="number" min="0" max="7" placeholder="使用阿贝多 Q 时必填" @input="($event.target as HTMLInputElement).value === '' ? delete draft.enemy.fatalBlossomHits : draft.enemy.fatalBlossomHits = Number(($event.target as HTMLInputElement).value)"></label>
       <label><span><input v-model="draft.enemy.collectCrystallizeShards" type="checkbox">拾取结晶盾（影响阿贝多六命）</span></label>
       <label>日志模式<select v-model="draft.logMode"><option value="detailed">详细</option><option value="summary">摘要</option></select></label>
       <label>日志上限<input v-model.number="draft.maxLogEvents" type="number" min="1" max="20000"></label>
     </div><RotationEditor :key="draft.actors.map(a => a.id).join(',')" v-model="draft" /></section>
-    <section v-show="tab === 'results'"><h2>计算结果</h2><template v-if="snapshot"><h3>总伤害：{{ snapshot.result.totalDamage.toFixed(2) }}</h3><p>DPS：{{ snapshot.result.dps.toFixed(2) }} · 拒绝指令：{{ snapshot.result.eventCounts.rejected ?? 0 }}</p></template><p v-else>运行后在此检查伤害与事件。</p></section>
-    <section v-show="tab === 'plans'"><h2>方案管理</h2><PlanLibrary :source="workspace.source" @load="workspace.source = $event" /></section>
+    <section v-show="tab === 'results'"><h2>计算结果</h2><template v-if="snapshot"><div class="actions"><button type="button" :disabled="stale || busy" @click="comparisons.pin('a', snapshot)">设为对比 A</button><button type="button" :disabled="stale || busy" @click="comparisons.pin('b', snapshot)">设为对比 B</button></div><ResultPanel :snapshot="snapshot" /></template><p v-else>运行后在此检查伤害与事件。</p><ComparisonPanel /></section>
+    <section v-show="tab === 'plans'"><h2>方案管理</h2><PlanLibrary :source="workspace.source" expanded @load="workspace.source = $event" /></section>
     <p v-for="issue in issues.slice(0, 10)" :key="issue" role="alert">{{ issue }}</p>
     <details><summary>高级：配置 JSON</summary><label>工作区 JSON<textarea v-model="workspace.source" rows="12" maxlength="1000000" spellcheck="false"></textarea></label><p v-if="!workspace.input" role="alert">JSON 或配置无效，请修正后再运行。</p></details>
   </main>
@@ -56,6 +61,7 @@ const issues = computed(() => { const parsed = teamSchema.safeParse(draft.value)
 .workbench .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
 .workbench .tabs { margin: 28px 0; }
 .workbench button[aria-pressed="true"] { background: #153e39; outline: 2px solid #8eb3a7; outline-offset: 2px; }
+.workbench button:disabled { opacity: .5; cursor: not-allowed; }
 .workbench fieldset { border: 1px solid #dce4e7; border-radius: 8px; margin: 20px 0; padding: 18px; min-width: 0; }
 .workbench input, .workbench select { min-width: 0; width: 100%; }
 .workbench input[type="checkbox"] { width: auto; }

@@ -7,4 +7,4 @@ function change() { hash.value = window.location.hash; }
 window.addEventListener('hashchange', change);
 onBeforeUnmount(() => window.removeEventListener('hashchange', change));
 </script>
-<template><Workbench v-if="hash === '#workbench'" /><DeveloperTools v-else /></template>
+<template><DeveloperTools v-if="['#tools', '#team', '#combat'].includes(hash)" /><Workbench v-else /></template>

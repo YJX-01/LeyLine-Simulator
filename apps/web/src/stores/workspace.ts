@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onScopeDispose } from 'vue';
 import { teamSchema } from '@leyline/schema';
 import example from '../../../../fixtures/scenarios/first-team.json';
-import { parsePlanInput, type StoragePort } from '../domain/plans';
+import { parsePlanInput, jsonSize, type StoragePort } from '../domain/plans';
 import { canonical } from '../domain/editor';
 export const draftKey = 'leyline.draft.v1';
 export const useWorkspaceStore = defineStore('workspace', () => {
@@ -17,6 +17,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       storage = port ?? window.localStorage;
       const raw = storage.getItem(draftKey);
       if (raw) {
+        if (jsonSize(raw) > 1_000_000) throw new Error();
         const saved = JSON.parse(raw);
         if (saved.version !== 1) throw new Error();
         source.value = JSON.stringify(teamSchema.parse(saved.input), null, 2);
@@ -33,5 +34,6 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       catch { notice.value = '草稿保存失败，请导出方案备份。'; }
     }, 300);
   });
+  onScopeDispose(() => clearTimeout(timer));
   return { source, input, signature, notice, initialize };
 });
