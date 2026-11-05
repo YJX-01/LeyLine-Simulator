@@ -18,23 +18,34 @@ export const combatStatsSchema = characterStatsSchema.extend({
 }).strict();
 export type CombatStats = z.infer<typeof combatStatsSchema>;
 const hit = z.object({
-  element: z.enum(['pyro', 'hydro', 'cryo', 'physical']),
+  element: z.enum(['pyro', 'hydro', 'cryo', 'electro', 'anemo', 'geo', 'physical']),
   multiplier: z.number().finite().min(0).max(10000),
   gauge: z.union([z.literal(0), z.literal(1), z.literal(2), z.literal(4)]),
   icdTag: id,
   icdRule: z.enum(['none', 'standard']),
+  category: z.enum(['normal', 'charged', 'plunge', 'skill', 'burst']).optional(),
+  scaling: z.enum(['attack', 'defense', 'maxHp']).optional(),
+  flatDamage: z.number().finite().min(0).max(1e9).optional(),
+  defenseIgnore: z.number().finite().min(0).max(1).optional(),
+  blunt: z.boolean().optional(),
+  damageBonus: z.number().finite().min(0).max(100).optional(),
+  critRateBonus: z.number().finite().min(0).max(1).optional(),
+  applicationOnly: z.boolean().optional(),
 }).strict().refine(h => h.element !== 'physical' || h.gauge === 0, { message: 'Physical hits cannot apply elemental gauge' });
 const summon = z.object({
   slot: id, lifetimeMs: positiveMs,
   hit,
   trigger: z.discriminatedUnion('type', [
     z.object({ type: z.literal('periodic'), intervalMs: positiveMs, firstDelayMs: ms }).strict(),
-    z.object({ type: z.literal('coordinated'), cooldownMs: positiveMs, delayMs: ms }).strict(),
+    z.object({ type: z.literal('coordinated'), cooldownMs: positiveMs, delayMs: ms,
+      condition: z.enum(['damage', 'normal-attack']).optional(), allowSummonHits: z.boolean().optional(),
+    }).strict(),
   ]),
 }).strict();
 export const combatSkillSchema = z.object({
   id, ownerId: id, cooldownMs: ms, cooldownStartDelayMs: ms, actionLockMs: ms,
   hitDelayMs: ms, energyCost: amount, snapshot: z.boolean(),
+  actionCategory: z.enum(['normal', 'charged', 'plunge', 'skill', 'burst']).optional(),
   particlesOnHit: z.object({ element: energyElementSchema.or(z.literal('clear')),
     count: z.number().finite().min(0).max(100), travelMs: ms, cooldownMs: ms,
   }).strict().optional(),
@@ -61,21 +72,24 @@ const pickup = z.discriminatedUnion('type', [
   z.object({ type: z.literal('flat'), id, timeMs: ms, actorId: id, amount }).strict(),
 ]);
 export const combatSchema = z.object({
-  schemaVersion: z.literal(1), rulesVersion: z.literal('combat-core-v1'),
+  schemaVersion: z.literal(1), rulesVersion: z.enum(['combat-core-v1', 'team-core-v1']),
   durationMs: positiveMs, seed: z.number().int().min(0).max(0xffffffff),
   mode: z.enum(['expected', 'random', 'critical', 'noncritical']),
   actors: z.array(z.object({ id, name: z.string().min(1).max(80), element: energyElementSchema,
     stats: combatStatsSchema, energyCapacity: z.number().finite().min(1).max(1000), initialEnergy: amount,
+    initialHpRatio: z.number().finite().min(0.001).max(1).default(1),
   }).strict()).min(1).max(4),
   initialOnField: id,
   enemy: enemySchema.omit({ characterLevel: true }).extend({
     resistances: z.object({ pyro: z.number().finite().min(-10).max(10).optional(),
       hydro: z.number().finite().min(-10).max(10).optional(), cryo: z.number().finite().min(-10).max(10).optional(),
+      electro: z.number().finite().min(-10).max(10).optional(), anemo: z.number().finite().min(-10).max(10).optional(), geo: z.number().finite().min(-10).max(10).optional(),
       physical: z.number().finite().min(-10).max(10).optional() }).strict().optional(),
   }).strict(),
   enemyDebuffs: z.array(z.object({ id, startMs: ms, durationMs: positiveMs,
     resistanceReduction: z.number().finite().min(0).max(10),
     defenseReduction: z.number().finite().min(0).max(1),
+    elements: z.array(z.string()).optional(),
   }).strict()).max(1000).default([]),
   skills: z.array(combatSkillSchema).min(1).max(64),
   commands: z.array(command).max(2000),
@@ -121,15 +135,15 @@ export const combatSchema = z.object({
   });
 });
 export type CombatInput = z.infer<typeof combatSchema>;
-export type CombatReaction = 'vaporize' | 'reverse-vaporize' | 'melt' | 'reverse-melt';
-export interface CombatAura { element: 'pyro' | 'hydro' | 'cryo'; units: number; decayPerMs: number }
+export type CombatReaction = 'vaporize' | 'reverse-vaporize' | 'melt' | 'reverse-melt' | 'swirl' | 'crystallize' | 'overloaded' | 'superconduct' | 'electro-charged' | 'frozen' | 'shattered';
+export interface CombatAura { element: 'pyro' | 'hydro' | 'cryo' | 'electro' | 'frozen'; units: number; decayPerMs: number }
 export interface CombatHitEvent {
-  type: 'hit'; timeMs: number; id: string; actorId: string; skillId: string; source: 'direct' | 'summon';
+  type: 'hit'; timeMs: number; id: string; actorId: string; skillId: string; source: 'direct' | 'summon' | 'reaction';
   damage: number; calculation: AttackResult; reactionMultiplier: number; reaction: CombatReaction | null;
   applied: boolean; aura: CombatAura | null; buffIds: string[]; directBuffIds: string[]; snapshot: boolean; critical: boolean | null;
 }
 export type CombatStateEvent = {
-  type: 'cast' | 'rejected' | 'switch' | 'buff-start' | 'buff-end' | 'buff-replaced' | 'energy' | 'summon-start' | 'summon-end' | 'enemy-debuff-start' | 'enemy-debuff-end';
+  type: 'cast' | 'rejected' | 'switch' | 'buff-start' | 'buff-end' | 'buff-replaced' | 'energy' | 'summon-start' | 'summon-end' | 'enemy-debuff-start' | 'enemy-debuff-end' | 'health' | 'status';
   timeMs: number; id: string; actorId: string; details: Record<string, string | number | boolean>;
 };
 export type CombatEvent = CombatHitEvent | CombatStateEvent;
@@ -139,4 +153,5 @@ export interface CombatResult {
   finalEnergy: Record<string, number>; finalAura: CombatAura | null; finalOnField: string;
   events: CombatEvent[]; eventCounts: Record<string, number>; hits: number; logMode: CombatInput['logMode'];
   reactionCounts: Record<CombatReaction, number>;
+  finalHealth: Record<string, { current: number; max: number }>;
 }

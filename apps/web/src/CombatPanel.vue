@@ -79,8 +79,10 @@ const labels: Record<CombatEvent['type'], string> = {
   'buff-start': '增益开始', 'buff-end': '增益到期', 'buff-replaced': '增益替换',
   'summon-start': '召唤开始', 'summon-end': '召唤结束',
   'enemy-debuff-start': '敌人减益开始', 'enemy-debuff-end': '敌人减益到期',
+  health: '生命变化', status: '角色状态',
 };
-const reactionNames: Record<string, string> = { vaporize: '蒸发', 'reverse-vaporize': '反向蒸发', melt: '融化', 'reverse-melt': '反向融化' };
+const reactionNames: Record<string, string> = { vaporize: '蒸发', 'reverse-vaporize': '反向蒸发', melt: '融化', 'reverse-melt': '反向融化',
+  swirl: '扩散', crystallize: '结晶', overloaded: '超载', superconduct: '超导', 'electro-charged': '感电', frozen: '冻结', shattered: '碎冰' };
 const format = (value: number) => value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 </script>
 

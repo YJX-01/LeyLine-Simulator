@@ -7,8 +7,8 @@ export function calculateAttack(input: unknown): AttackResult {
 }
 
 /** Internal arithmetic for already validated inputs and bounded, accumulated modifiers. */
-export function calculateResolvedAttack(config: AttackInput): AttackResult {
-  const baseDamage = config.attack * config.multiplier;
+export function calculateResolvedAttack(config: AttackInput, flatDamage = 0): AttackResult {
+  const baseDamage = config.attack * config.multiplier + flatDamage;
   const bonusMultiplier = 1 + config.damageBonus;
   const critMultiplier = config.mode === 'critical' ? 1 + config.critDamage
     : config.mode === 'noncritical' ? 1 : 1 + config.critRate * config.critDamage;

@@ -40,6 +40,8 @@ export const teamSchema = z.object({
   actors: z.array(loadoutSchema).min(1).max(4), initialOnField: id,
   enemy: z.object({ level: z.number().int().min(1).max(200), hpRatio: z.number().finite().min(0).max(1),
     resistance: z.number().finite().min(-10).max(10), defenseReduction: z.number().finite().min(0).max(1),
+    fatalBlossomHits: z.number().int().min(0).max(7).optional(),
+    collectCrystallizeShards: z.boolean().default(false),
   }).strict(),
   commands: z.array(z.discriminatedUnion('type', [
     z.object({ type: z.literal('switch'), id, timeMs: ms, actorId: id }).strict(),
