@@ -1,0 +1,9 @@
+{
+  "totalDamage": 9300, "dps": 2325,
+  "hitTimesMs": [500, 1000, 1500, 2000, 2500, 3000],
+  "hitDamage": [1500, 2000, 1800, 1000, 1500, 1500],
+  "damageByActor": { "pyro": 5800, "hydro": 2000, "cryo": 1500, "anemo": 0 },
+  "finalEnergy": { "pyro": 0, "hydro": 7, "cryo": 1.2, "anemo": 1.2 },
+  "reactions": ["vaporize", "reverse-melt"], "finalOnField": "cryo", "events": 24,
+  "dynamicTotalDamage": 8200
+}

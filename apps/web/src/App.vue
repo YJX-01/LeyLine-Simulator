@@ -3,6 +3,7 @@ import { onBeforeUnmount, reactive, ref } from 'vue';
 import { attackSchema, type AttackInput, type AttackResult, type WorkerResponse } from '@leyline/schema';
 import RotationPanel from './RotationPanel.vue';
 import CharacterPanel from './CharacterPanel.vue';
+import CombatPanel from './CombatPanel.vue';
 
 const config = reactive<AttackInput>({ schemaVersion: 1, attack: 1000, multiplier: 2,
   damageBonus: 0.5, critRate: 0.5, critDamage: 1, mode: 'expected' });
@@ -70,6 +71,7 @@ onBeforeUnmount(cancel);
   <main>
     <p class="eyebrow">LEYLINE SIMULATOR · 重写预览</p>
     <h1>地脉模拟器</h1>
+    <nav><a href="#combat">综合战斗机制验证</a></nav>
     <p>单次攻击公式验证台</p>
     <aside>当前使用人工测试数据，可验证基础伤害、暴击、敌人防御和抗性结算。防御与抗性公式来自旧项目，尚未验证当前游戏版本；不包含元素反应和角色机制。</aside>
     <form @submit.prevent="run">
@@ -99,6 +101,7 @@ onBeforeUnmount(cancel);
     </section>
     <RotationPanel />
     <CharacterPanel />
+    <CombatPanel />
   </main>
 </template>
 

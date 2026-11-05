@@ -1,9 +1,13 @@
-import { attackSchema, type AttackResult } from '@leyline/schema';
+import { attackSchema, type AttackInput, type AttackResult } from '@leyline/schema';
 import { ENGINE_VERSION } from './version';
 
 /** Migrated legacy direct-hit formula; reactions and character mechanics are not included. */
 export function calculateAttack(input: unknown): AttackResult {
-  const config = attackSchema.parse(input);
+  return calculateResolvedAttack(attackSchema.parse(input));
+}
+
+/** Internal arithmetic for already validated inputs and bounded, accumulated modifiers. */
+export function calculateResolvedAttack(config: AttackInput): AttackResult {
   const baseDamage = config.attack * config.multiplier;
   const bonusMultiplier = 1 + config.damageBonus;
   const critMultiplier = config.mode === 'critical' ? 1 + config.critDamage

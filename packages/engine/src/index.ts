@@ -3,3 +3,4 @@ export { EventScheduler } from './scheduler';
 export { simulateRotation } from './rotation';
 export { simulateCharacter } from './character';
 export { resolveAttributes } from './attributes';
+export { simulateCombat } from './combat';
