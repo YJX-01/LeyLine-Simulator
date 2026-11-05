@@ -42,9 +42,14 @@ importers:
 
   packages/engine:
     dependencies:
+      '@leyline/game-data':
+        specifier: workspace:*
+        version: link:../game-data
       '@leyline/schema':
         specifier: workspace:*
         version: link:../schema
+
+  packages/game-data: {}
 
   packages/schema:
     dependencies:

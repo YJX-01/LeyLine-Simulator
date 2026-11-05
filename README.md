@@ -3,7 +3,7 @@
 ## TypeScript 重写预览
 
 新版本采用 Vue 3 + TypeScript，独立计算模块通过 Web Worker 在浏览器运行。
-当前仅实现单次攻击公式验证台，不代表完整的游戏伤害或角色模拟。
+当前实现单次攻击公式验证台、可编辑动作序列、限时伤害增益和事件日志，并部分支持琴的点按战技（天赋1—10）。角色面板手动输入，技能采用仓库旧数据，尚未核实当前游戏版本，不代表完整角色模拟。
 
 需要 Node.js 22.12+（建议 24 LTS）和 pnpm 11.3.0。
 
@@ -18,6 +18,8 @@ pnpm dev
 
 - [实施计划](docs/rewrite-plan.md)
 - [迁移状态与下一步](docs/architecture/migration-status.md)
+- [内容支持矩阵](docs/architecture/content-support.md)
+- [琴战技数据依据与差异](docs/mechanics/jean-tap.md)
 
 以下为旧 Python 项目说明，代码保留于 `src/`，作为迁移参考。
 
