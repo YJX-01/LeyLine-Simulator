@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { teamSchema, type TeamSimulationResult, type WorkerResponse } from '@leyline/schema';
 import example from '../../../fixtures/scenarios/first-team.json';
+import PlanLibrary from './PlanLibrary.vue';
 const source = ref(JSON.stringify(example, null, 2));
 const result = ref<TeamSimulationResult>();
 const busy = ref(false), error = ref(''), page = ref(0);
@@ -70,6 +71,7 @@ const rejections = computed(() => result.value?.eventCounts.rejected ?? 0);
       <label>真实队伍配置（JSON）<textarea v-model="source" rows="14" spellcheck="false" maxlength="1000000" required></textarea></label>
       <div class="actions"><button type="submit">{{ busy ? '重新运行真实队伍' : '运行真实队伍' }}</button><button v-if="busy" type="button" @click="cancel">取消队伍模拟</button></div>
     </form>
+    <PlanLibrary :source="source" @load="source = $event" />
     <p v-if="error" role="alert" class="error">{{ error }}</p>
     <div aria-live="polite">
       <p v-if="busy">正在计算队伍…</p>
