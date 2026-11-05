@@ -4,6 +4,7 @@ import { resolveLoadout, type ResolvedLoadout } from './loadout';
 import { simulateCombat } from './combat';
 import type { CombatRuntime, RuntimeContext, RuntimeHit } from './combat-runtime';
 import type { CombatPanel } from './mechanics/buff-store';
+import { createGearRuntime } from './gear-runtime';
 
 const frames = (value: number) => Math.round(value / 60 * 1000);
 const layouts: Record<string, number[][]> = {
@@ -78,12 +79,18 @@ export function simulateTeam(input: unknown): TeamResult {
     '固定单目标、近战范围、无受击/位移/命中停顿；动作取消与敌人击杀不自动模拟。',
     '期望模式对伤害暴击和角色产球取期望，条件装备触发仍由显式种子决定。',
     '防御型命座记录状态；本场景不模拟敌人攻击。草反应不支持。',
+    ...loadouts.flatMap(actor => [
+      ...(actor.loadout.character === 'hutao' && actor.loadout.constellation >= 4 ? ['胡桃C4要求敌人死亡；静态敌人生命条件不产生击杀事件，因此本场景不会触发C4。'] : []),
+      ...((actor.sets.bloodstained ?? 0) >= 4 ? ['染血骑士4件套需要击杀；当前静态目标场景不会触发击杀效果。'] : []),
+      ...(actor.loadout.character === 'albedo' && actor.loadout.constellation >= 6 && !team.enemy.collectCrystallizeShards ? ['阿贝多C6未设置拾取结晶护盾条件，不自动假定护盾增伤生效。'] : []),
+    ]),
   ] };
 }
 
 function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId: (id: string, action: string) => string,
   metadata: Map<string, { owner: string; action: string }>, commands: Map<string, TeamInput['commands'][number]>): CombatRuntime {
   const actors = new Map(loadouts.map(actor => [actor.loadout.id, actor]));
+  const gear = createGearRuntime(loadouts, skillId);
   const party = loadouts.map(actor => actor.loadout.id);
   const timers = new Map<string, number>();
   const counters = new Map<string, number>();
@@ -138,13 +145,16 @@ function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId
   function orbitals(ctx: RuntimeContext, actor: ResolvedLoadout, duration: number) {
     const id = actor.loadout.id, end = ctx.timeMs + duration;
     timers.set(`${id}:orbitals`, end);
+    const newContact = !until(`${id}:contact-active`, ctx.timeMs);
+    const generation = (counters.get(`${id}:contact-generation`) ?? 0) + Number(newContact);
+    if (newContact) counters.set(`${id}:contact-generation`, generation);
     const apply = () => {
-      if (!until(`${id}:orbitals`, ctx.timeMs)) return;
+      if (counters.get(`${id}:contact-generation`) !== generation || !until(`${id}:orbitals`, ctx.timeMs)) return;
       ctx.hit(id, skillId(id, 'orbital'), { ...hit('hydro', 0, 'skill', 1, 'orbitals'), applicationOnly: true }, `orbitals:${ctx.timeMs}`, 'summon');
       ctx.schedule(ctx.timeMs + 2250, apply);
     };
     // Recasts refresh duration, not the existing 2.25s contact timer.
-    if (!until(`${id}:contact-active`, ctx.timeMs)) { timers.set(`${id}:contact-active`, end); apply(); }
+    if (newContact) { timers.set(`${id}:contact-active`, end); apply(); }
     else timers.set(`${id}:contact-active`, end);
     ctx.schedule(end, () => {
       if (timers.get(`${id}:orbitals`) !== end) return;
@@ -173,7 +183,7 @@ function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId
       }
       if (actor.loadout.character === 'raiden' && actor.loadout.ascension >= 4) panel.damageBonuses.electro = (panel.damageBonuses.electro ?? 0) + Math.max(0, panel.energyRecharge - 1) * 0.4;
       panel.critRate = Math.min(1, panel.critRate);
-      return panel;
+      return gear.panel(ctx, id, panel);
     },
     prepareSkill(ctx, skill, commandId) {
       const meta = metadata.get(skill.id)!, actor = actors.get(meta.owner)!, id = meta.owner, role = actor.loadout.character;
@@ -215,6 +225,7 @@ function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId
     },
     rejectCast(ctx, skill) { updateStamina(ctx.timeMs); return staminaCost(ctx, skill) > stamina ? 'stamina' : undefined; },
     onCast(ctx, skill, commandId) {
+      gear.cast(ctx, skill);
       const { owner: id, action } = metadata.get(skill.id)!, actor = actors.get(id)!, role = actor.loadout.character;
       const E = scalers(actor, 'E'), Q = scalers(actor, 'Q');
       const pieces = actionParts.get(commandId)!;
@@ -316,7 +327,7 @@ function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId
     prepareHit(ctx, id, skill, value) {
       const actor = actors.get(id)!, action = metadata.get(skill)?.action, role = actor.loadout.character;
       if (role === 'xingqiu' && action === 'E' && actor.loadout.constellation >= 4 && until(`${id}:rain`, ctx.timeMs)) value.multiplier *= 1.5;
-      if (role === 'albedo' && action === 'E.proc' && actor.loadout.ascension >= 1 && team.enemy.hpRatio <= 0.5) value.damageBonus = (value.damageBonus ?? 0) + 0.25;
+      if (role === 'albedo' && action === 'E.proc' && actor.loadout.ascension >= 1 && team.enemy.hpRatio < 0.5) value.damageBonus = (value.damageBonus ?? 0) + 0.25;
       if (role === 'raiden' && actor.loadout.constellation >= 2 && (value.category === 'burst' || until(`${id}:musou`, ctx.timeMs))) value.defenseIgnore = 0.6;
       for (const source of loadouts) {
         const sid = source.loadout.id;
@@ -326,9 +337,10 @@ function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId
           if (source.loadout.constellation >= 6 && ctx.onField === id && until('crystal-shield', ctx.timeMs)) value.damageBonus = (value.damageBonus ?? 0) + 0.17;
         }
       }
-      return value;
+      return gear.hit(id, value);
     },
     onHit(ctx, event, value) {
+      gear.afterHit(ctx, event, value);
       if (event.source === 'reaction' || event.damage <= 0) return;
       const actor = actors.get(event.actorId)!, id = event.actorId, action = metadata.get(event.skillId)?.action, role = actor.loadout.character;
       if (role === 'jean') {
@@ -355,7 +367,9 @@ function createTeamRuntime(team: TeamInput, loadouts: ResolvedLoadout[], skillId
           timers.set(`${id}:restoreCd`, ctx.timeMs + 1000); counters.set(`${id}:restores`, (counters.get(`${id}:restores`) ?? 0) + 1);
           const restore = scalers(actor, 'Q')[16] * (actor.loadout.ascension >= 4 ? 1 + Math.max(0, ctx.panel(id).energyRecharge - 1) * 0.6 : 1);
           for (const target of party) ctx.restoreEnergy(target, restore, `${id}:Q-restore`);
-          if (actor.loadout.constellation >= 6) for (const target of others(id)) ctx.reduceCooldown(skillId(target, 'Q'), 1000);
+          if (actor.loadout.constellation >= 6) for (const target of others(id)) {
+            ctx.reduceCooldown(skillId(target, 'Q'), 1000); ctx.log('status', 'raiden-C6-cooldown', target, { reducedMs: 1000 });
+          }
         }
       }
     },

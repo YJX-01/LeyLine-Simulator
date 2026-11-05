@@ -2,16 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { simulateTeam } from './team';
 import { content } from '@leyline/game-data';
 import { resolveLoadout } from './loadout';
-import { teamSchema, type CharacterId, type TeamInput } from '@leyline/schema';
-export function testTeam(character: CharacterId = 'jean'): TeamInput {
-  const polearm = character === 'hutao' || character === 'raiden';
-  return teamSchema.parse({ schemaVersion: 1, rulesVersion: 'team-repo-v1', durationMs: 20000, seed: 1, mode: 'noncritical',
-    actors: [{ id: character, character, level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 },
-      weapon: { id: polearm ? 'staff-of-homa' : 'harbinger-of-dawn', level: 90, ascension: 6, refinement: 1 },
-      artifacts: [], initialHpRatio: 1, initialEnergy: { jean: 80, xingqiu: 80, hutao: 60, albedo: 40, raiden: 90 }[character] }],
-    initialOnField: character, enemy: { level: 90, hpRatio: 1, resistance: 0, defenseReduction: 0, fatalBlossomHits: 2 },
-    commands: [{ type: 'cast', id: 'E', timeMs: 0, actorId: character, action: 'E' }], logMode: 'detailed', maxLogEvents: 10000 });
-}
+import { testTeam } from './testing/team-fixture';
 describe('registered first-batch character content', () => {
   it('routes Jean E through the unified engine and independently matches its multiplier', () => {
     const config = testTeam(); const result = simulateTeam(config);
@@ -121,5 +112,11 @@ describe('registered first-batch character content', () => {
     expect(simulateTeam(testTeam('hutao'))).toEqual(first);
     const config = testTeam('jean'); config.commands = [{ type: 'cast', id: 'bad', timeMs: 0, actorId: 'jean', action: 'N6' }];
     expect(() => simulateTeam(config)).toThrow('不支持的动作');
+  });
+  it('does not revive an expired orbital contact timer when recasting before its stale callback', () => {
+    const config = testTeam('xingqiu');
+    config.commands.push({ type: 'cast', id: 'Q', timeMs: 15100, actorId: 'xingqiu', action: 'Q' });
+    const contacts = simulateTeam(config).events.filter(e => e.type === 'status' && e.id.startsWith('orbitals:')).map(e => e.timeMs);
+    expect(contacts).toEqual([0, 2250, 4500, 6750, 9000, 11250, 13500, 15100, 17350, 19600]);
   });
 });

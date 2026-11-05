@@ -7,7 +7,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const sourceHashes = {};
 function read(path) {
   const bytes = readFileSync(resolve(root, path));
-  sourceHashes[path] = createHash('sha256').update(bytes).digest('hex');
+  sourceHashes[path] = createHash('sha256').update(bytes.toString('utf8').replace(/\r\n/g, '\n')).digest('hex');
   return JSON.parse(bytes.toString('utf8'));
 }
 const characters = { jean: 'Jean', xingqiu: 'Xingqiu', hutao: 'Hutao', albedo: 'Albedo', raiden: 'Shogun' };
@@ -49,11 +49,11 @@ function checkFinite(value) {
 checkFinite(output);
 const destination = resolve(root, 'packages/game-data/src/generated');
 mkdirSync(destination, { recursive: true });
-for (const [name, data] of Object.entries({ 'content.json': output, 'sources.json': { version: output.version, hashes: sourceHashes } })) {
+for (const [name, data] of Object.entries({ 'content.json': output, 'sources.json': { version: output.version, hashFormat: 'sha256-lf-normalized', hashes: sourceHashes } })) {
   const path = resolve(destination, name);
   const text = `${JSON.stringify(data, null, 2)}\n`;
   if (process.argv.includes('--check')) {
-    if (readFileSync(path, 'utf8') !== text) throw new Error(`Generated data is stale: ${name}`);
+    if (readFileSync(path, 'utf8').replace(/\r\n/g, '\n') !== text) throw new Error(`Generated data is stale: ${name}`);
   } else writeFileSync(path, text);
 }
 process.stdout.write(`Validated ${Object.keys(characters).length} characters, ${Object.keys(weapons).length} weapons and 5-star artifact main stats.\n`);

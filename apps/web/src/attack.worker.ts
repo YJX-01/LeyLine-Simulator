@@ -1,11 +1,13 @@
 /// <reference lib="webworker" />
-import { calculateAttack, simulateRotation, simulateCharacter, simulateCombat } from '@leyline/engine';
+import { calculateAttack, simulateRotation, simulateCharacter, simulateCombat, simulateTeam } from '@leyline/engine';
 import type { WorkerRequest, WorkerResponse } from '@leyline/schema';
 self.onmessage = (event: MessageEvent<WorkerRequest>) => {
   const { id } = event.data;
   let response: WorkerResponse;
   try {
-    response = event.data.kind === 'combat'
+    response = event.data.kind === 'team'
+      ? { id, ok: true, kind: 'team', result: simulateTeam(event.data.input) }
+      : event.data.kind === 'combat'
       ? { id, ok: true, kind: 'combat', result: simulateCombat(event.data.input) }
       : event.data.kind === 'character'
       ? { id, ok: true, kind: 'character', result: simulateCharacter(event.data.input) }

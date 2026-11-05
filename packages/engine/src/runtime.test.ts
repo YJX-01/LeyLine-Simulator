@@ -50,3 +50,41 @@ it('triggers normal-attack coordinated damage before the primary delayed hit lan
   } };
   expect(simulateCombat(input, runtime).events.filter(e => e.type === 'hit').map(e => e.timeMs)).toEqual([20]);
 });
+
+it('reduces a running cooldown without allowing it to move before the current clock', () => {
+  const input = config(); input.skills[0].cooldownMs = 1000;
+  input.commands.push({ type: 'cast', id: 'second', timeMs: 500, skillId: 'burst' });
+  const runtime: CombatRuntime = { onCast(ctx, skill) {
+    if (ctx.timeMs === 0) ctx.schedule(100, () => ctx.reduceCooldown(skill.id, 500));
+  } };
+  expect(simulateCombat(input, runtime).hits).toBe(2);
+});
+
+it('triggers another rain wave when a long normal animation outlasts its cooldown', () => {
+  const input = config(); input.durationMs = 2000;
+  input.skills[0].actionLockMs = 1500; input.skills[0].actionCategory = 'normal';
+  const runtime: CombatRuntime = { initialize(ctx) {
+    ctx.spawn('pyro', input.skills[0], { slot: 'rain', lifetimeMs: 3000,
+      hit: { element: 'physical', gauge: 0, multiplier: 1, icdTag: 'rain', icdRule: 'none' },
+      trigger: { type: 'coordinated', condition: 'normal-attack', cooldownMs: 1000, delayMs: 20 },
+    });
+  } };
+  expect(simulateCombat(input, runtime).events.filter(e => e.type === 'hit' && e.source === 'summon').map(e => e.timeMs)).toEqual([20, 1020]);
+});
+
+it('keeps a refreshed content debuff when the configured instance expires', () => {
+  const input = config();
+  input.enemyDebuffs = [{ id: 'shared-shred', startMs: 0, durationMs: 200,
+    resistanceReduction: 0.2, defenseReduction: 0 }];
+  input.commands = [0, 300, 600].map(timeMs => ({ type: 'cast' as const,
+    id: `hit-${timeMs}`, timeMs, skillId: 'burst' }));
+  const runtime: CombatRuntime = { initialize(ctx) {
+    ctx.schedule(100, () => ctx.addEnemyDebuff({ id: 'shared-shred', startMs: 100,
+      durationMs: 500, resistanceReduction: 0.5, defenseReduction: 0 }));
+  } };
+  const result = simulateCombat(input, runtime);
+  const hits = result.events.filter(event => event.type === 'hit');
+  expect(hits.map(event => event.damage)).toEqual([1100, 1250, 1000]);
+  expect(result.events.filter(event => event.type === 'enemy-debuff-end')
+    .map(event => event.timeMs)).toEqual([600]);
+});

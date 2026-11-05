@@ -8,16 +8,13 @@ import { ElementalGauge, amplification } from './mechanics/elements';
 import { EnergyPool } from './mechanics/energy';
 import { createRandom } from './mechanics/random';
 import { HealthPool } from './mechanics/health';
-import type { CombatRuntime, RuntimeContext } from './combat-runtime';
+import type { CombatRuntime, RuntimeContext, RuntimeHit, RuntimeSummon, RuntimeSummonInstance } from './combat-runtime';
 import { ReactionGauge, type ReactionDescriptor } from './mechanics/reactions';
 import { content } from '@leyline/game-data';
 
-type Hit = Extract<CombatSkill['effect'], { type: 'hit' }>['hit'];
-type SummonDefinition = Extract<CombatSkill['effect'], { type: 'summon' }>['summon'];
-interface SummonInstance {
-  token: number; ownerId: string; skillId: string; definition: SummonDefinition;
-  endsAt: number; nextProcAt: number; panel?: CombatPanel;
-}
+type Hit = RuntimeHit;
+type SummonDefinition = RuntimeSummon;
+type SummonInstance = RuntimeSummonInstance;
 const PRIORITY = { expiry: -30, buffStart: -20, energy: -10, hit: 0, command: 10 } as const;
 export const COMBAT_EVENT_BUDGET = 20000;
 
@@ -293,6 +290,7 @@ export function simulateCombat(input: unknown, runtime?: CombatRuntime): CombatR
       state('enemy-debuff-start', debuff.id, 'target');
     }, PRIORITY.buffStart);
     scheduler.schedule(debuff.startMs + debuff.durationMs, () => {
+      if (enemyDebuffs.get(debuff.id) !== debuff) return;
       enemyDebuffs.delete(debuff.id);
       state('enemy-debuff-end', debuff.id, 'target');
     }, PRIORITY.expiry);
@@ -336,11 +334,18 @@ export function simulateCombat(input: unknown, runtime?: CombatRuntime): CombatR
       const handled = runtime?.onCast?.(context, skill, command.id);
       if (skill.actionCategory === 'normal') for (const instance of summons.values()) {
         const trigger = instance.definition.trigger;
-        if (trigger.type !== 'coordinated' || trigger.condition !== 'normal-attack' || !isLive(instance) || context.timeMs < instance.nextProcAt) continue;
-        instance.nextProcAt = context.timeMs + trigger.cooldownMs;
-        context.schedule(context.timeMs + trigger.delayMs, () => {
-          if (isLive(instance) && !runtime?.onSummonTrigger?.(context, instance, command.id)) dealHit(instance.ownerId, instance.skillId, instance.definition.hit, `summon-${instance.token}:${command.id}`, 'summon', instance.panel);
-        });
+        if (trigger.type !== 'coordinated' || trigger.condition !== 'normal-attack' || !isLive(instance)) continue;
+        const animationEnd = context.timeMs + Math.max(1, skill.actionLockMs);
+        const attempt = () => {
+          if (!isLive(instance) || context.onField !== skill.ownerId || context.timeMs >= animationEnd) return;
+          if (context.timeMs < instance.nextProcAt) { context.schedule(instance.nextProcAt, attempt); return; }
+          instance.nextProcAt = context.timeMs + trigger.cooldownMs;
+          context.schedule(context.timeMs + trigger.delayMs, () => {
+            if (isLive(instance) && !runtime?.onSummonTrigger?.(context, instance, command.id)) dealHit(instance.ownerId, instance.skillId, instance.definition.hit, `summon-${instance.token}:${command.id}`, 'summon', instance.panel);
+          });
+          if (instance.nextProcAt < animationEnd) context.schedule(instance.nextProcAt, attempt);
+        };
+        attempt();
       }
       if (handled) return;
       const hitAt = scheduler.timeMs + skill.hitDelayMs;

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { CombatResult, CombatStats } from './combat';
 export const characterIdSchema = z.enum(['jean', 'xingqiu', 'hutao', 'albedo', 'raiden']);
 export const weaponIdSchema = z.enum(['harbinger-of-dawn', 'favonius-sword', 'sacrificial-sword', 'festering-desire', 'white-tassel', 'prototype-starglitter', 'staff-of-homa', 'engulfing-lightning']);
 export const artifactSetSchema = z.enum(['none', 'gladiator', 'wanderer', 'noblesse', 'emblem', 'shimenawa', 'bloodstained']);
@@ -67,3 +68,8 @@ export type CharacterId = z.infer<typeof characterIdSchema>;
 export type Loadout = z.infer<typeof loadoutSchema>;
 export type TeamInput = z.infer<typeof teamSchema>;
 export type EquipmentStat = z.infer<typeof equipmentStatSchema>;
+export interface TeamSimulationResult extends CombatResult {
+  loadouts: { loadout: Loadout; name: string; element: string; stats: CombatStats;
+    contributions: { source: string; stat: string; value: number }[] }[];
+  warnings: string[];
+}

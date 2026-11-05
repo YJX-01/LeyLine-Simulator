@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { CombatInput, CombatResult } from './combat';
+import type { TeamInput, TeamSimulationResult } from './team';
 
 const nonnegative = z.number().finite().min(0).max(1e9);
 export const enemySchema = z.object({
@@ -105,11 +106,13 @@ export type WorkerRequest = { id: number } & (
   { kind: 'attack'; input: AttackInput } | { kind: 'rotation'; input: RotationInput }
   | { kind: 'character'; input: CharacterSimulationInput }
   | { kind: 'combat'; input: CombatInput }
+  | { kind: 'team'; input: TeamInput }
 );
 export type WorkerResponse = { id: number } & (
   { ok: true; kind: 'attack'; result: AttackResult }
   | { ok: true; kind: 'rotation'; result: RotationResult }
   | { ok: true; kind: 'character'; result: RotationResult }
   | { ok: true; kind: 'combat'; result: CombatResult }
+  | { ok: true; kind: 'team'; result: TeamSimulationResult }
   | { ok: false; error: string }
 );

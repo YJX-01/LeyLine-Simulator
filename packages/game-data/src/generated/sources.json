@@ -1,5 +1,6 @@
 {
   "version": "repo-content-v1",
+  "hashFormat": "sha256-lf-normalized",
   "hashes": {
     "docs/constant/CharacterConfig.json": "9a42500f71bab5f42a14c9a4258086bcbd043d8e1f6d8324082e13005523eb92",
     "docs/constant/SkillConfig.json": "4a116acd230e4a9151844892f7e61068487ffe9fbff6f3de34c16597da3ea57e",
