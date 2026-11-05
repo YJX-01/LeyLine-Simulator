@@ -2,34 +2,38 @@
 
 ## Project Structure & Module Organization
 
-The active application is a pnpm workspace using Vue 3 and TypeScript. `apps/web/src/` contains Vue components, Pinia stores, charts, and the simulation Web Worker. Shared packages live under `packages/`: `engine` implements combat calculations, `schema` defines validated contracts, and `game-data` supplies game content and generated snapshots.
+The TypeScript pnpm workspace lives under `src/`: `web` contains Vue components, Pinia stores, charts, and the Worker; `engine` owns simulation; `schema` owns validated contracts; `game-data` owns content snapshots. Each keeps implementation in its own `src/` directory.
 
-Unit tests sit beside source files; browser tests live in `tests/e2e/` and `tests/production/`. `fixtures/` holds reproducible scenarios and performance inputs. `docs/` contains mechanics references, architecture decisions, source data, and deployment guidance. `scripts/` handles conversion, benchmarks, and releases. The Python implementation in `src/` is retained as migration reference.
+Colocated `*.test.ts` files use Vitest. Browser `*.spec.ts` files live in `tests/e2e/` and `tests/production/`. Scenarios belong in `fixtures/`, automation in `tools/scripts/`, dependency patches in `tools/patches/`, and references in `docs/`. `archive/python/` is historical material, excluded from the active build.
 
 ## Build, Test, and Development Commands
 
-Use Node.js 22.12+ (24 LTS recommended) and pnpm 11.3.0. Run commands from the repository root.
+Use Node.js 22.12+ and pnpm 11.3.0; CI uses Node.js 24. Run from the repository root.
 
-- `pnpm install --frozen-lockfile`: install workspace dependencies.
-- `pnpm dev`: start the Vite development server.
-- `pnpm typecheck`: check TypeScript and Vue types.
-- `pnpm test`: run Vitest unit tests.
-- `pnpm build`: create the production web build.
-- `pnpm data:check` and `pnpm fixture:check`: verify generated data and scenario consistency.
-- `pnpm exec playwright install chromium firefox webkit`: install browser test engines.
-- `pnpm test:e2e`: run development browser tests; add `--project=chromium` for a focused run.
-- `pnpm build:check` and `pnpm perf:engine`: verify bundle and engine performance budgets.
+- `pnpm install --frozen-lockfile`: install declared dependencies and patches.
+- `pnpm dev`: start Vite; `pnpm build`: build production output.
+- `pnpm architecture:check`: enforce workspace boundaries, runtime cycle checks, and archive isolation.
+- `pnpm data:check` / `pnpm fixture:check`: verify generated inputs.
+- `pnpm typecheck` / `pnpm test`: check types and run unit tests.
+- `pnpm build:check` / `pnpm perf:engine`: check size and performance budgets.
+- `pnpm test:e2e`: run browser tests after installing Playwright browsers.
 
-For production and subpath validation, follow `docs/deployment.md`.
+Production/subpath checks and release prerequisites are documented in `docs/deployment.md`.
 
-## Coding Style & Naming Conventions
+## Coding Style & Architecture
 
-Follow surrounding code: two-space indentation, single-quoted TypeScript strings, semicolons, and ES module imports. Keep strict TypeScript checks passing. Use PascalCase for Vue components, camelCase for functions and variables, and descriptive kebab-case module filenames where established. No dedicated lint or formatter script is configured.
+Use two-space indentation, single-quoted TypeScript strings, semicolons, and strict typing. Use PascalCase Vue components, camelCase functions, and kebab-case filenames. No formatter or lint script is configured.
 
-## Testing Guidelines
+Import workspace public exports through `@leyline/*`. Only web depends on engine; engine may depend on schema and game-data. Keep shared packages independent of UI/platform adapters, and web domain modules independent of reactive stores and components. Preserve deterministic event ordering, seeded randomness, and per-run state.
 
-Name colocated Vitest tests `*.test.ts` and Playwright tests `*.spec.ts`. Add regression coverage for changed mechanics or workflows, using deterministic scenarios and documented expected calculations. No numeric coverage threshold is configured. Before submitting, run data checks, type checks, unit tests, and the build; run relevant browser tests for UI changes. CI also checks all three browser engines, production deployment, and performance budgets.
+## Testing & Data Changes
 
-## Commit & Pull Request Guidelines
+Add regression tests for changed behavior, with independent expected calculations for mechanics. No numeric coverage threshold is configured. Run relevant data checks, architecture checks, types, tests, and build validation; UI/Worker changes also require browser tests.
 
-Recent commits use prefixes such as `feat:`, `fix:`, `test:`, `perf:`, and `docs:` followed by a concise imperative description. Follow that convention. PR descriptions should explain changed behavior, link relevant issues, report validation commands and results, and include screenshots for visible UI changes. Document mechanics assumptions or supported-content changes in `docs/mechanics/` and the support matrix.
+Edit canonical inputs in `docs/constant/`, regenerate with `node tools/scripts/convert-repo-data.mjs`, and review snapshots and hashes together. Update mechanics assumptions and the support matrix when content changes.
+
+## Commits & Repository Hygiene
+
+Use descriptive `feat:`, `fix:`, `refactor:`, `test:`, `perf:`, `docs:`, or `chore:` commits. PRs explain behavior, validation, linked issues, and screenshots for UI changes.
+
+Keep dependencies declared in their owning manifests; commit lockfile and patch changes together. Do not edit `node_modules/` manually or restore retired root directories. Use `pnpm clean:outputs` and `pnpm clean:cache` for generated files; preserve wanted release candidates and temporary patch edits first. Never commit generated outputs or import archived Python code.

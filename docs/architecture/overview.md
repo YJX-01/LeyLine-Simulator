@@ -1,8 +1,10 @@
 # Architecture and extension guidelines
 
+> This document describes the current implementation. The future product direction is a video timeline annotation and build optimization workbench; see [product direction](../planning/product-direction.md). Simulation-specific extension guidance below must be reconsidered during the redesign.
+
 ## Scope and ownership
 
-The maintained product is the Vue 3 + TypeScript workspace under `src/`. Python source and its documentation live in `archive/python/` and have no runtime or build role. Root `AGENTS.md` is retained unchanged: its Python `src/` reference points to the archive, `apps/web` maps to `src/web`, and `packages/*` maps to `src/*`.
+The maintained product is the Vue 3 + TypeScript workspace under `src/`. Python source and its documentation live in `archive/python/` and have no runtime or build role. Root `README.md` describes setup and dependencies; `AGENTS.md` defines contributor and agent instructions for the current layout.
 
 All four source workspaces are discovered by `src/*` in `pnpm-workspace.yaml`. Development scripts and dependency patches live together under `tools/`. Generated dependency data belongs in `node_modules/` and `.cache/`, never in extra root source or patch directories. The architecture check rejects retired root directories so subsequent changes cannot silently restore the old layout.
 

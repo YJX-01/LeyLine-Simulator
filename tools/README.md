@@ -20,6 +20,8 @@ Run `pnpm install --frozen-lockfile` at the repository root. `pnpm-workspace.yam
 
 The cleaner uses fixed repository-local paths and refuses directory links or tracked content. It keeps source, documentation, the Python archive, GitHub workflows, configuration, and installed dependencies. Build/test commands recreate their outputs when needed. After `pnpm clean:outputs`, rebuild before using preview or production tests, and rerun both browser suites before preparing a release.
 
+## Dependency patches
+
 For deliberate dependency patches:
 
 ```sh

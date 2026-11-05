@@ -12,7 +12,7 @@ This directory preserves the pre-TypeScript implementation for historical refere
 | `docs/dict/`, `docs/graph/` | `/docs/dict/`, `/docs/graph/` | Old usage, terminology, diagrams, and demo images |
 | `PROJECT-README.md` | Python section of `/README.md` | Original introduction |
 
-VS Code launch/settings files were intentionally removed. Root `AGENTS.md` predates this move and remains unchanged; its root `src/` reference now means `archive/python/src/`.
+VS Code launch/settings files were intentionally removed. Root `README.md` and `AGENTS.md` describe the maintained TypeScript application. Historical Python paths in the archived material are relative to this directory.
 
 ## Historical reproduction
 

@@ -1,5 +1,7 @@
 # 生产构建与本地交付
 
+> 适用范围：本文说明当前自动模拟实现。未来的视频打轴与配装优化工作台仍在规划，见[产品方向](planning/product-direction.md)。
+
 ## 构建和验证
 
 1. `pnpm install --frozen-lockfile`，随后执行数据/fixture检查、类型检查和单元测试。

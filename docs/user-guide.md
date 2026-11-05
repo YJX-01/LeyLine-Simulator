@@ -1,5 +1,7 @@
 # 地脉模拟器使用指南
 
+> 适用范围：本文说明当前自动模拟实现。未来的视频打轴与配装优化工作台仍在规划，见[产品方向](planning/product-direction.md)。
+
 ## 开始使用
 
 源码运行：安装Node.js 22.12或更新版本及pnpm 11.3.0，执行 `pnpm install --frozen-lockfile`、`pnpm dev`，打开终端给出的本地地址。当前产品完全在浏览器和Web Worker运行，不需要Python。已有生产构建可用 `pnpm preview` 本地查看，不要直接双击index.html。

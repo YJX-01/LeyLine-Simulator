@@ -1,6 +1,7 @@
 # Dependencies and generated builds
 node_modules/
 /.cache/
+/.references/
 dist/
 /src/web/dist-subpath/
 

@@ -1,0 +1,61 @@
+{
+  "formatVersion": 1,
+  "checkedOn": "2026-11-06",
+  "localRoot": ".references/",
+  "ignored": true,
+  "repositories": [
+    {
+      "id": "mona-community",
+      "kind": "git",
+      "url": "https://github.com/1803233552/genshin_artifact",
+      "branch": "main",
+      "commit": "beaced4d82619aa86920d0054ab6114b5fc5608f",
+      "commitDate": "2025-10-11T16:03:24+08:00",
+      "localPath": ".references/mona-community",
+      "purpose": "community artifact import, optimizer, buffs, custom target/DSL reference",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "id": "genshin-db",
+      "kind": "git",
+      "url": "https://github.com/theBowja/genshin-db",
+      "branch": "main",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "commitDate": "2026-11-04T19:44:50-05:00",
+      "localPath": ".references/genshin-db",
+      "purpose": "character, weapon, artifact, enemy and multilingual metadata",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "id": "kqm-tcl",
+      "kind": "git",
+      "url": "https://github.com/KQM-git/TCL",
+      "branch": "master",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "commitDate": "2026-10-13T10:58:20+05:30",
+      "localPath": ".references/kqm-tcl",
+      "purpose": "mechanics articles, evidence, snapshot/dynamic and enemy rules",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": []
+    }
+  ],
+  "webSources": [
+    {
+      "id": "meropide",
+      "url": "https://meropide.cn/chs/",
+      "localPath": ".references/meropide/",
+      "kind": "selected-web-snapshots",
+      "manifest": ".references/meropide/manifest.json",
+      "publicRepositoryIdentified": false
+    }
+  ]
+}
