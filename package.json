@@ -1,6 +1,7 @@
 {
   "name": "leyline-simulator",
   "private": true,
+  "type": "module",
   "version": "0.1.0",
   "packageManager": "pnpm@11.3.0",
   "scripts": {
@@ -12,7 +13,12 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "perf:engine": "node --expose-gc scripts/benchmark-engine.mjs",
-    "build:check": "node scripts/check-build.mjs"
+    "build:check": "node scripts/check-build.mjs",
+    "build:subpath": "pnpm --filter @leyline/web build --base=/leyline/ --outDir=dist-subpath",
+    "test:production": "playwright test --config playwright.production.config.ts",
+    "preview": "node scripts/serve-dist.mjs",
+    "release:prepare": "pnpm build && pnpm build:check && node scripts/prepare-release.mjs",
+    "release:verify": "node scripts/verify-release.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

@@ -20,6 +20,9 @@ jobs:
       - run: pnpm perf:engine
       - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - run: pnpm test:e2e
+      - run: pnpm build:subpath
+      - run: pnpm test:production
+      - run: pnpm release:prepare
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -1,5 +1,5 @@
 import { teamSchema, type TeamInput } from '../../packages/schema/src';
-import example from '../scenarios/first-team.json';
+import example from '../scenarios/first-team.json' with { type: 'json' };
 export function performanceScenarios(): Record<string, TeamInput> {
   const team = teamSchema.parse(example);
   const longTeam: TeamInput = { ...team, durationMs: team.durationMs * 10, maxLogEvents: 20000,

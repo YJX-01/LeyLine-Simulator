@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import scenario from '../../fixtures/scenarios/combat-stage-3.json';
+import scenario from '../../fixtures/scenarios/combat-stage-3.json' with { type: 'json' };
 import { combatSchema } from '../../packages/schema/src';
 
 test('runs the integrated mechanics fixture and compares dynamic to snapshot', async ({ page }) => {

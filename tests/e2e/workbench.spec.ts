@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import example from '../../fixtures/scenarios/first-team.json';
+import example from '../../fixtures/scenarios/first-team.json' with { type: 'json' };
 
 test('edits equipment through forms and restores the draft after reload', async ({ page }, testInfo) => {
   await page.goto('/');

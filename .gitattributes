@@ -1,0 +1,2 @@
+# Unified diff context lines contain a required leading space before upstream tabs.
+patches/*.patch -whitespace

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import fixture from '../../fixtures/scenarios/first-team.json';
+import fixture from '../../fixtures/scenarios/first-team.json' with { type: 'json' };
 
 test('runs two real four-character rotations with no rejected commands and enough repeat energy', async ({ page }) => {
   await page.goto('/#team');

@@ -1,8 +1,11 @@
 import { defineConfig } from '@playwright/test';
+import { sourceFingerprint } from './scripts/source-fingerprint.mjs';
 export default defineConfig({
   testDir: './tests/e2e',
+  metadata: { sourceFingerprint: sourceFingerprint() },
   outputDir: 'test-results/development',
   workers: process.env.CI ? 2 : 4,
+  expect: { timeout: 10000 },
   reporter: [['list'], ['json', { outputFile: 'artifacts/playwright/results.json' }]],
   use: { baseURL: 'http://127.0.0.1:5174', headless: true, trace: 'retain-on-failure' },
   projects: [

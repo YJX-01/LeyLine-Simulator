@@ -1,0 +1,33 @@
+{
+  "formatVersion": 1,
+  "sourceFingerprint": "f2de52c7457632e71ba1d41ddf567955d72001f5da18b86b43e048f7c34e45d7",
+  "developmentPassed": 75,
+  "browsers": [
+    {
+      "browser": "chromium",
+      "resultRenderMs": 496.30000001192093,
+      "filterAndPageMs": 124.79999995231628,
+      "cancelUiMs": 51.80000001192093,
+      "commands": 2000,
+      "retainedLogRows": 40
+    },
+    {
+      "browser": "firefox",
+      "resultRenderMs": 657,
+      "filterAndPageMs": 201,
+      "cancelUiMs": 84,
+      "commands": 2000,
+      "retainedLogRows": 40
+    },
+    {
+      "browser": "webkit",
+      "resultRenderMs": 603,
+      "filterAndPageMs": 248,
+      "cancelUiMs": 171,
+      "commands": 2000,
+      "retainedLogRows": 40
+    }
+  ],
+  "productionPassed": 18,
+  "productionSourceFingerprint": "f2de52c7457632e71ba1d41ddf567955d72001f5da18b86b43e048f7c34e45d7"
+}
