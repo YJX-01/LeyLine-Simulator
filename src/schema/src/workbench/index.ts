@@ -28,7 +28,7 @@ const definition = z.object({
   nodes: z.array(node).max(1000), damage: id.optional(), effects: z.array(effect).max(1000),
 }).strict();
 export const workbenchProjectSchema = z.object({
-  schemaVersion: z.literal(1), rulesVersion: z.enum(['workbench-v1', 'workbench-p3']), id, revision: id,
+  schemaVersion: z.literal(1), rulesVersion: z.enum(['workbench-v1', 'workbench-p3']), id, name: id.optional(), revision: id,
   definitions: z.array(definition).max(200),
   candidate: z.object({
     id, actors: z.array(z.object({ id, name: id.optional(), character: id, weapon: id, inputs: z.record(id, quantity), realBuild: realBuildSchema.optional(),

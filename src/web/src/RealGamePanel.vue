@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import CatalogPicker from './components/CatalogPicker.vue';
+import ArtifactBrowser from './ArtifactBrowser.vue';
+import WorkbenchDialog from './components/WorkbenchDialog.vue';
+import { accountSlots, accountSlotLabels, type AccountSlot } from './domain/account';
 import { computed, onMounted, ref, watch } from 'vue';
 import { realBuildSchema, realWeaponSchema, realSetSchema, realElements, type RealBuild, type RealDamage } from '@leyline/schema';
 import { resolveRealBuild } from '@leyline/engine';
@@ -6,7 +10,7 @@ import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { useAccountStore } from './stores/account';
 import { addRealActor, addRealHits, defaultRealEnemy } from './domain/real-project';
 import { localDataErrorLabel, realStatLabel, realElementLabel, realCategoryLabel, statusLabel } from './domain/workbench-labels';
-const props = defineProps<{ mode: 'axis' | 'account'; accountCharacterId?: string }>();
+const props = defineProps<{ mode: 'axis' | 'account'; accountCharacterId?: string; modern?: boolean }>();
 type Catalog = Awaited<ReturnType<typeof import('@leyline/game-data/real')['loadRealCatalog']>>;
 const axis = useAxisWorkspaceStore();
 const accounts = useAccountStore();
@@ -20,6 +24,7 @@ const loading = ref(false);
 const skillId = ref('');
 const hitTime = ref(2000);
 const crit = ref<RealDamage['crit']>('noncritical');
+const equipSlot = ref<AccountSlot>();
 const filter = ref<'characters' | 'weapons' | 'sets'>('characters');
 const accountCharacter = computed(() => accounts.account.characters.find(entry => entry.id === props.accountCharacterId));
 const inventory = computed(() => accounts.account.artifacts.filter(entry => entry.real));
@@ -27,8 +32,8 @@ const build = computed(() => {
   if (props.mode === 'axis') return axis.actor?.realBuild;
   const owner = accountCharacter.value;
   if (!owner?.realBuild) return undefined;
-  const unresolved = Object.values(owner.equipment).some(id => !inventory.value.some(item => item.id === id));
-  const character = unresolved ? { ...owner.realBuild.character, support: { supported: false, reason: '实际装备中有物品尚未填写真实词条，请先补全或卸下。' } } : owner.realBuild.character;
+  const unresolved = Object.values(owner.equipment).some(id => !inventory.value.some(item => item.id === id && !item.mona?.setIdentityPending));
+  const character = unresolved ? { ...owner.realBuild.character, support: { supported: false, reason: '实际装备中有物品词条缺失或套装身份待核对，请先补全或卸下。' } } : owner.realBuild.character;
   return { ...owner.realBuild, character, artifacts: Object.values(owner.equipment).flatMap(id => { const item = inventory.value.find(entry => entry.id === id); return item?.real ? [{ ...item.real, inventoryAccountId: accounts.account.id }] : []; }) };
 });
 const panel = computed(() => build.value ? resolveRealBuild(build.value) : undefined);
@@ -38,6 +43,7 @@ const realPoint = computed(() => selectedRecord.value?.actor === axis.actorId ? 
 const availableWeapons = computed(() => catalog.value?.weapons.filter(entry => !build.value || entry.weaponType === build.value.character.weaponType) ?? []);
 const entries = computed(() => (catalog.value?.[filter.value] ?? []).filter(entry => entry.name.includes(search.value)).slice(0, 30));
 watch(build, value => { if (!value?.character.skills.some(skill => skill.id === skillId.value)) skillId.value = value?.character.skills.find(skill => skill.support.supported)?.id ?? value?.character.skills[0]?.id ?? ''; }, { immediate: true });
+watch([catalog, () => accountCharacter.value?.name], () => { if (props.modern && props.mode === 'account' && !accountCharacter.value?.realBuild) { const entry = catalog.value?.characters.find(entry => entry.name === accountCharacter.value?.name); if (entry) characterId.value = entry.id; } });
 onMounted(async () => {
   try { catalog.value = await (await import('@leyline/game-data/real')).loadRealCatalog(); }
   catch { error.value = '真实资料库加载失败，请重新打开该页面。'; }
@@ -55,7 +61,8 @@ async function create() {
     const data = await import('@leyline/game-data/real');
     const [character, weapon, artifactMain] = await Promise.all([data.getRealCharacter(chosenCharacter), data.getRealWeapon(chosenWeapon), data.getArtifactMain()]);
     if (destination !== (props.mode === 'axis' ? axis.project : accountCharacter.value) || (props.mode === 'account' && originalAccount !== accounts.account)) return;
-    const value = realBuildSchema.parse({ dataVersion: catalog.value!.version, character, weapon, artifactMain, sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: [20,40,50,60,70,80,90][Math.min(6,weapon.promotion.length-1)], weaponAscension: Math.min(6,weapon.promotion.length-1), refinement: 1, hpRatio: 1, artifacts: [] });
+    const talent = props.modern ? 10 : 9;
+    const value = realBuildSchema.parse({ dataVersion: catalog.value!.version, character, weapon, artifactMain, sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: talent, skill: talent, burst: talent }, weaponLevel: [20,40,50,60,70,80,90][Math.min(6,weapon.promotion.length-1)], weaponAscension: Math.min(6,weapon.promotion.length-1), refinement: 1, hpRatio: 1, artifacts: [] });
     if (value.character.weaponType !== value.weapon.weaponType) throw new Error('角色与武器类型不匹配。');
     if (props.mode === 'account') {
       if (!accountCharacter.value) throw new Error('请先创建并选择账号角色。');
@@ -101,6 +108,7 @@ async function equipCandidate(slot: string, event: Event) {
   const item = inventory.value.find(entry => entry.id === id)?.real;
   if (!build.value) return;
   try {
+    if (inventory.value.find(entry => entry.id === id)?.mona?.setIdentityPending) throw new Error('该实物的原始套装身份尚待核对，不能用于计算。');
     if (item && axis.project.candidate.actors.some(actor => actor.id !== axis.actorId && actor.realBuild?.artifacts.some(piece => piece.id === item.id && (piece.inventoryAccountId ?? actor.realBuild?.inventoryAccountId) === accounts.account.id))) throw new Error('当前队伍已使用这件实物，不能重复占用。请先卸下其他队员的候选装备。');
     const sets = [...build.value.sets];
     if (item && item.setId !== 'none' && !sets.some(entry => entry.id === item.setId)) sets.push(realSetSchema.parse(await (await import('@leyline/game-data/real')).getRealSet(item.setId)));
@@ -113,6 +121,7 @@ async function copyAccount() {
   const project = axis.project, destination = editTarget();
   if (!await syncAccount() || destination !== editTarget() || project !== axis.project || !build.value) return;
   try {
+    if (Object.values(accountCharacter.value?.equipment ?? {}).some(id => inventory.value.find(item => item.id === id)?.mona?.setIdentityPending)) throw new Error('实际装备存在套装身份待核对的物品，不能进入计算。');
     if (Object.values(accountCharacter.value?.equipment ?? {}).some(id => !inventory.value.some(item => item.id === id))) throw new Error('请先补全所有实际装备的真实词条，复制未执行。');
     if (axis.project.candidate.actors.some(actor => actor.realBuild?.artifacts.some(piece => build.value!.artifacts.some(item => item.id === piece.id && (piece.inventoryAccountId ?? actor.realBuild?.inventoryAccountId) === accounts.account.id)))) throw new Error('轴内队伍已占用所选实物，复制未执行。');
     axis.command(draft => { axis.actorId = addRealActor(draft, build.value!, accountCharacter.value?.name); });
@@ -138,20 +147,22 @@ const partsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技�
     <p v-if="notice" role="status">{{ notice }}</p><div v-if="error" role="alert">{{ localDataErrorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
     <p v-if="!catalog">正在加载本地资料库…</p>
     <template v-else>
-      <div class="real-fields"><label>游戏角色<select v-model="characterId" aria-label="游戏角色"><option v-for="entry in catalog.characters" :key="entry.id" :value="entry.id">{{ entry.name }}{{ entry.supported ? ' · 首批支持' : ' · 资料' }}</option></select></label><label>初始真实武器<select v-model="weaponId" aria-label="初始真实武器"><option v-for="entry in catalog.weapons" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select></label><button :disabled="loading" @click="create">{{ mode === 'account' ? '设置账号真实角色' : '添加真实角色到当前轴' }}</button></div>
+      <div v-if="modern && !build" class="real-fields"><CatalogPicker label="游戏角色" v-model="characterId" :options="catalog.characters" /><CatalogPicker label="初始武器" v-model="weaponId" :options="catalog.weapons" /><button :disabled="loading" @click="create">{{ mode === 'account' ? '设置账号真实角色' : '添加真实角色到当前轴' }}</button><p>按用户设定初始化为角色90级、突破6、天赋10级；武器等级取该武器上限。命座与精炼仍需自行设置，这些数值不是莫娜导出字段。</p></div>
+      <div v-else-if="!modern" class="real-fields"><label>游戏角色<select v-model="characterId" aria-label="游戏角色"><option v-for="entry in catalog.characters" :key="entry.id" :value="entry.id">{{ entry.name }}{{ entry.supported ? ' · 首批支持' : ' · 资料' }}</option></select></label><label>初始真实武器<select v-model="weaponId" aria-label="初始真实武器"><option v-for="entry in catalog.weapons" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select></label><button :disabled="loading" @click="create">{{ mode === 'account' ? '设置账号真实角色' : '添加真实角色到当前轴' }}</button></div>
       <details><summary>完整基础目录与支持范围</summary><p>角色 {{ catalog.characters.length }} 条 · 武器 {{ catalog.weapons.length }} 条 · 套装 {{ catalog.sets.length }} 条</p><div class="real-fields"><label>目录类型<select v-model="filter"><option value="characters">角色</option><option value="weapons">武器</option><option value="sets">套装</option></select></label><label>中文搜索<input v-model="search" aria-label="真实资料搜索"></label></div><ul><li v-for="entry in entries" :key="entry.id">{{ entry.name }}<span v-if="'supported' in entry"> · {{ entry.supported ? '首批可验算' : '仅资料 / 未核验机制' }}</span></li></ul><p>每次显示前 30 条，可搜索定位；未核验机制的伤害不会显示为完整结果。</p></details>
     </template>
     <template v-if="build && panel">
       <h3>{{ build.character.name }} · {{ build.weapon.name }} · {{ statusLabel(panel.status) }}</h3>
       <div class="real-fields"><label>角色等级<input type="number" min="1" max="90" aria-label="真实角色等级" :value="build.level" @change="edit(value => { value.level = numeric($event); })"></label><label>角色突破阶段<input type="number" min="0" max="6" aria-label="真实角色突破" :value="build.ascension" @change="edit(value => { value.ascension = numeric($event); })"></label><label>命座<input type="number" min="0" max="6" aria-label="真实角色命座" :value="build.constellation" @change="edit(value => { value.constellation = numeric($event); })"></label><label>战技天赋<input type="number" min="1" max="15" aria-label="真实战技天赋" :value="build.talents.skill" @change="edit(value => { value.talents.skill = numeric($event); })"></label><label>当前生命比例<input type="number" min="0" max="1" step="0.01" :value="build.hpRatio" @change="edit(value => { value.hpRatio = numeric($event); })"></label></div>
-      <div class="real-fields"><label>真实候选武器<select :value="build.weapon.id" aria-label="真实候选武器" :disabled="loading" @change="changeWeapon"><option v-for="entry in availableWeapons" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select></label><label>武器等级<input type="number" min="1" max="90" aria-label="真实武器等级" :value="build.weaponLevel" @change="edit(value => { value.weaponLevel = numeric($event); })"></label><label>武器突破<input type="number" min="0" max="6" aria-label="真实武器突破" :value="build.weaponAscension" @change="edit(value => { value.weaponAscension = numeric($event); })"></label><label>精炼<input type="number" min="1" max="5" aria-label="真实武器精炼" :value="build.refinement" @change="edit(value => { value.refinement = numeric($event); })"></label></div>
+      <div class="real-fields"><CatalogPicker v-if="modern" label="武器" :model-value="build.weapon.id" :options="availableWeapons" :disabled="loading" @update:model-value="changeWeapon({ target: { value: $event } } as unknown as Event)" /><label v-else>真实候选武器<select :value="build.weapon.id" aria-label="真实候选武器" :disabled="loading" @change="changeWeapon"><option v-for="entry in availableWeapons" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select></label><label>武器等级<input type="number" min="1" max="90" aria-label="真实武器等级" :value="build.weaponLevel" @change="edit(value => { value.weaponLevel = numeric($event); })"></label><label>武器突破<input type="number" min="0" max="6" aria-label="真实武器突破" :value="build.weaponAscension" @change="edit(value => { value.weaponAscension = numeric($event); })"></label><label>精炼<input type="number" min="1" max="5" aria-label="真实武器精炼" :value="build.refinement" @change="edit(value => { value.refinement = numeric($event); })"></label></div>
       <button v-if="mode === 'account'" @click="copyAccount">复制真实配装到轴</button>
-      <div v-else class="real-fields"><label v-for="slot in [{ id:'flower',name:'生之花' },{id:'plume',name:'死之羽'},{id:'sands',name:'时之沙'},{id:'goblet',name:'空之杯'},{id:'circlet',name:'理之冠'}]" :key="slot.id">候选{{ slot.name }}<select :aria-label="`真实候选${slot.name}`" :value="build.artifacts.find(item => item.slot === slot.id)?.id ?? ''" @change="equipCandidate(slot.id,$event)"><option value="">不装备</option><option v-for="item in inventory.filter(item => item.real?.slot === slot.id)" :key="item.id" :value="item.id">{{ item.name }}</option></select></label></div>
+      <div v-else-if="modern" class="modern-equipment"><button v-for="slot in accountSlots" :key="slot" @click="equipSlot = slot"><strong>{{ accountSlotLabels[slot] }}</strong><span>{{ build.artifacts.find(item => item.slot === slot) ? accounts.account.artifacts.find(item => item.id === build?.artifacts.find(piece => piece.slot === slot)?.id)?.name ?? '项目装备快照' : '未装备' }}</span><small>从库存更换 ›</small></button></div><div v-else class="real-fields"><label v-for="slot in [{ id:'flower',name:'生之花' },{id:'plume',name:'死之羽'},{id:'sands',name:'时之沙'},{id:'goblet',name:'空之杯'},{id:'circlet',name:'理之冠'}]" :key="slot.id">候选{{ slot.name }}<select :aria-label="`真实候选${slot.name}`" :value="build.artifacts.find(item => item.slot === slot.id)?.id ?? ''" @change="equipCandidate(slot.id,$event)"><option value="">不装备</option><option v-for="item in inventory.filter(item => item.real?.slot === slot.id)" :key="item.id" :value="item.id">{{ item.name }}</option></select></label></div>
+      <WorkbenchDialog v-if="equipSlot" :title="`更换${accountSlotLabels[equipSlot]}`" @close="equipSlot = undefined"><button @click="equipCandidate(equipSlot!, { target: { value: '' } } as unknown as Event); equipSlot = undefined">卸下该部位</button><ArtifactBrowser pick :slot="equipSlot" @select="equipCandidate(equipSlot!, { target: { value: $event.id } } as unknown as Event); equipSlot = undefined" /></WorkbenchDialog>
       <p>面板显示游戏百分比；编辑目标条件时 0.1 表示 10%。计算与文件保留原数值精度。</p>
       <dl class="real-stats"><template v-for="(value,key) in panel.stats" :key="key"><dt>{{ realStatLabel(String(key)) }}</dt><dd :data-testid="`real-stat-${key}`">{{ formatStat(String(key),value) }}</dd></template></dl>
       <p v-for="message in panel.diagnostics" :key="message" class="real-warning">{{ message }}</p>
       <details><summary>查看属性来源明细</summary><table><thead><tr><th>来源</th><th>属性</th><th>计算值</th></tr></thead><tbody><tr v-for="(entry,index) in panel.contributions" :key="index"><td>{{ sourceLabel(entry.source) }}</td><td>{{ realStatLabel(entry.stat) }}</td><td>{{ formatStat(entry.stat,entry.value) }}</td></tr></tbody></table></details>
-      <template v-if="mode === 'axis'">
+      <template v-if="mode === 'axis' && !modern">
         <h3>真实技能与目标条件</h3><div class="real-fields"><label>真实技能<select v-model="skillId" aria-label="真实技能"><option v-for="skill in build.character.skills" :key="skill.id" :value="skill.id">{{ skill.name }} · {{ realCategoryLabel(skill.category) }} · {{ skill.support.supported ? '首批支持' : '未核验' }}</option></select></label><label>命中时间（整数毫秒）<input v-model.number="hitTime" type="number" min="0" aria-label="真实命中时间"></label><label>新增命中暴击口径<select v-model="crit" aria-label="新增命中暴击口径"><option :value="null">未知，待确认</option><option value="noncritical">明确不暴击</option><option value="critical">明确暴击</option><option value="expected">静态暴击期望</option></select></label><button :disabled="!selectedSkill" @click="addHits">添加技能全部独立命中</button></div>
         <p v-if="selectedSkill">{{ selectedSkill.name }} · {{ selectedSkill.multipliers.length }} 段 · {{ realElementLabel(selectedSkill.element) }}伤害；{{ selectedSkill.support.reason }}</p>
         <div class="real-fields"><label>目标等级<input type="number" min="1" max="200" aria-label="真实目标等级" :value="axis.project.enemy?.level ?? 90" @change="target('level',$event)"></label><label>减防比例<input type="number" step="0.01" min="0" max="1" :value="axis.project.enemy?.defenseReduction ?? 0" @change="target('defenseReduction',$event)"></label><label>无视防御比例<input type="number" step="0.01" min="0" max="1" :value="axis.project.enemy?.defenseIgnore ?? 0" @change="target('defenseIgnore',$event)"></label><label v-for="element in realElements" :key="element">{{ realElementLabel(element) }}抗性<input type="number" step="0.01" :aria-label="`${realElementLabel(element)}抗性`" :value="axis.project.enemy?.resistances[element] ?? 0.1" @change="axis.command(draft => { draft.enemy ??= defaultRealEnemy(); draft.enemy.resistances[element] = numeric($event); })"></label></div>
@@ -164,5 +175,5 @@ const partsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技�
   </section>
 </template>
 <style scoped>
-.real-game-panel { margin:0 0 24px; border-bottom:1px solid var(--line); padding-bottom:24px; } p { font-size:12px; line-height:1.8; margin:10px 0; } h3 { margin:20px 0 10px; } .real-fields { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:14px 0; } label { display:grid; gap:7px; font-size:12px; min-width:120px; max-width:100%; } input,select { max-width:100%; min-width:0; } .real-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px 12px; font-size:12px; margin:16px 0; } dd { margin:0; font-variant-numeric:tabular-nums; } details { margin:14px 0; font-size:12px; overflow-wrap:anywhere; } table { width:100%; font-size:12px; text-align:left; } td { padding:6px 0; } .real-warning { color:#a45d29; } @media(max-width:700px) { .real-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.modern-equipment { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin:20px 0; }.modern-equipment button { display:grid; gap:12px; text-align:left; padding:16px; }.modern-equipment span { font-size:12px; }.modern-equipment small { color:#68786d; }.real-game-panel { margin:0 0 24px; border-bottom:1px solid var(--line); padding-bottom:24px; } p { font-size:12px; line-height:1.8; margin:10px 0; } h3 { margin:20px 0 10px; } .real-fields { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:14px 0; } label { display:grid; gap:7px; font-size:12px; min-width:120px; max-width:100%; } input,select { max-width:100%; min-width:0; } .real-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px 12px; font-size:12px; margin:16px 0; } dd { margin:0; font-variant-numeric:tabular-nums; } details { margin:14px 0; font-size:12px; overflow-wrap:anywhere; } table { width:100%; font-size:12px; text-align:left; } td { padding:6px 0; } .real-warning { color:#a45d29; } @media(max-width:700px) { .real-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 </style>

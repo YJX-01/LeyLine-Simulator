@@ -20,6 +20,8 @@
     "typecheck": "tsc --noEmit && vue-tsc --noEmit -p src/web/tsconfig.json",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:ui": "playwright test tests/e2e/u1-inventory.spec.ts --project=chromium --workers=1",
+    "test:ui:desktop": "node tools/scripts/test-u1-desktop.mjs",
     "perf:engine": "node --expose-gc tools/scripts/benchmark-engine.mjs",
     "build:check": "node tools/scripts/check-build.mjs",
     "build:subpath": "pnpm --filter @leyline/web build --base=/leyline/ --outDir=dist-subpath",

@@ -5,7 +5,7 @@ export const accountSlots = ['flower', 'plume', 'sands', 'goblet', 'circlet'] as
 export type AccountSlot = typeof accountSlots[number];
 export const accountSlotLabels: Record<AccountSlot, string> = { flower: '生之花', plume: '死之羽', sands: '时之沙', goblet: '空之杯', circlet: '理之冠' };
 export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>>; realBuild?: RealBuild }
-export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string } }
+export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string; equippedBy?: string; sourceSetName?: string; setIdentityPending?: boolean } }
 export interface LocalAccount { schemaVersion: 1; kind: 'account'; id: string; name: string; characters: AccountCharacter[]; artifacts: AccountArtifact[] }
 export const cloneAccount = (value: LocalAccount): LocalAccount => JSON.parse(JSON.stringify(value)) as LocalAccount;
 export function createAccount(name = '我的本地账号'): LocalAccount {
@@ -27,7 +27,8 @@ export function parseAccount(input: unknown): LocalAccount {
       if (!parsed.success || parsed.data.id !== artifact.id || parsed.data.slot !== artifact.slot) return fail();
       validateAccountArtifact(parsed.data);
     }
-    if (artifact.mona !== undefined && (!object(artifact.mona) || !attack(artifact.mona.mainValue) || typeof artifact.mona.omit !== 'boolean' || (artifact.mona.contentHash !== undefined && typeof artifact.mona.contentHash !== 'string'))) return fail();
+    if (artifact.mona !== undefined && (!object(artifact.mona) || !attack(artifact.mona.mainValue) || typeof artifact.mona.omit !== 'boolean' || (artifact.mona.contentHash !== undefined && typeof artifact.mona.contentHash !== 'string') || (artifact.mona.equippedBy !== undefined && !validText(artifact.mona.equippedBy)))) return fail();
+    if (object(artifact.mona) && ((artifact.mona.sourceSetName !== undefined && !validText(artifact.mona.sourceSetName)) || (artifact.mona.setIdentityPending !== undefined && typeof artifact.mona.setIdentityPending !== 'boolean'))) return fail();
   }
   const owners = new Set<string>();
   for (const character of input.characters) {

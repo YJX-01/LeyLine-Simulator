@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const directory = dirname(fileURLToPath(import.meta.url));
 const renderer = resolve(directory, 'renderer');
-const entry = 'leyline://app/index.html#axis';
+const entry = 'leyline://app/index.html';
 const maxBytes = 8 * 1024 * 1024;
 protocol.registerSchemesAsPrivileged([{ scheme: 'leyline', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } }]);
 app.setName('LeyLine');

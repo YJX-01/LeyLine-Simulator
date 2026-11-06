@@ -13,6 +13,8 @@ delete launchEnvironment.ELECTRON_RUN_AS_NODE;
 const application = await electron.launch({ executablePath: executable, args: ['--smoke', `--user-data-dir=${userData}`], env: launchEnvironment, timeout: 30000 });
 try {
   const page = await application.firstWindow();
+  const compatibility = new URL(page.url()); compatibility.hash = 'compatibility';
+  await page.goto(compatibility.href);
   page.setDefaultTimeout(10000);
   const errors = [], requests = [];
   page.on('pageerror', error => errors.push(error.message));

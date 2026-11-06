@@ -17,6 +17,7 @@ Use Node.js 22.12+ and pnpm 11.3.0; CI uses Node.js 24. Run from the repository 
 - `pnpm typecheck` / `pnpm test`: check types and run unit tests.
 - `pnpm build:check` / `pnpm perf:engine`: check size and performance budgets.
 - `pnpm test:e2e`: run browser tests after installing Playwright browsers.
+- `pnpm test:ui`: focused U1 real-inventory UI smoke check in Chromium with one worker. Use this for daily U1 iteration; `pnpm test:ui:desktop` checks the runnable desktop package when needed.
 
 Production/subpath checks and release prerequisites are documented in `docs/deployment.md`.
 
@@ -40,6 +41,8 @@ Keep dependencies declared in their owning manifests; commit lockfile and patch 
 
 
 ## Current Product Priority and Acceptance Rules
+
+User update on 2026-11-06: prioritize U1 UI and interaction work over exhaustive testing. During daily UI iteration, run only checks relevant to the changed operation; do not rerun all unit tests, all browsers, desktop, and both production paths after each edit. Avoid tests that merely mirror low-impact layout or text changes. Keep useful historical regressions available, but select them only when the affected behavior warrants it. Full stage acceptance and user experience review remain separate from these focused checks.
 
 The user revised the plan after P3: execute U1 (dedicated UI and interaction redesign), then P5, P6, P4, P7, and P8. Read `docs/planning/implementation-roadmap.md` and the current implementation prompt; do not restore the old P4-first dependency order. P5/P6 must include necessary condition, inventory, capability, cancellation, and budget checks even though the full probability system is deferred.
 

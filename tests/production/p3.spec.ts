@@ -5,7 +5,7 @@ for (const address of ['http://127.0.0.1:5175/', 'http://127.0.0.1:5176/leyline/
     const resources: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
     page.on('request', resource => resources.push(resource.url()));
-    await page.goto(address);
+    await page.goto(address + '#compatibility');
     await page.getByTestId('workspace-nav-projects').click();
     await page.getByTestId('p3-load-snapshot').click();
     await expect(page.getByTestId('workspace-objective')).toHaveText('6,900');

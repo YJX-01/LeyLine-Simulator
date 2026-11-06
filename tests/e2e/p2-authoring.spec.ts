@@ -6,7 +6,7 @@ test('shows Chinese account and definition save errors and folds native diagnost
   await page.addInitScript(() => {
     window.leylineDesktop = { openProject: async () => null, saveProject: async () => { throw new Error('ENOSPC: disk full'); } };
   });
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-characters').click();
   await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('账号保存失败');
@@ -18,7 +18,7 @@ test('shows Chinese account and definition save errors and folds native diagnost
 });
 
 test('authors an empty axis entirely in Chinese UI and reopens an agent-compatible file', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-projects').click();
   await page.getByRole('button', { name: '新建空轴', exact: true }).click();
   await page.getByTestId('workspace-nav-team').click();
@@ -55,7 +55,7 @@ test('authors an empty axis entirely in Chinese UI and reopens an agent-compatib
 });
 
 test('saves independent definitions and preserves the old axis when the library changes', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-definitions').click();
   await page.getByLabel('新定义名称', { exact: true }).fill('星海三倍率');
   await page.getByRole('button', { name: '创建定义', exact: true }).click();
@@ -82,7 +82,7 @@ test('saves independent definitions and preserves the old axis when the library 
 });
 
 test('persists account equipment and requires an explicit transfer without modifying the axis', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByLabel('圣遗物名称', { exact: true }).fill('独一花冠');
   await page.getByRole('button', { name: '添加实物圣遗物', exact: true }).click();

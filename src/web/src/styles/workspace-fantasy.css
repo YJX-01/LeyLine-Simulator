@@ -221,3 +221,18 @@
   .workspace-design .page-heading::after { left: 17px; bottom: 7px; width: 90px; height: 12px; }
   .workspace-design .design-sidebar::after { opacity: .2; }
 }
+
+/* U1: readable controls, task context and deliberate focus treatment. */
+.workspace-design { font-size:14px; }
+.workspace-design button, .workspace-design input, .workspace-design select { font-size:13px; min-height:36px; }
+.workspace-design button:focus-visible, .workspace-design input:focus-visible, .workspace-design select:focus-visible, .workspace-design summary:focus-visible { outline:2px solid #b38e43; outline-offset:3px; }
+.workspace-design .design-topbar { height:auto; min-height:72px; flex-wrap:wrap; padding-block:12px; gap:12px; }
+.workspace-design .topbar-actions { flex-wrap:wrap; }
+.workspace-design .page-heading p { font-size:13px; line-height:1.8; }
+.workspace-design .nav-group > button { font-size:14px; }
+.workspace-design .nav-group > p { font-size:12px; }
+.workspace-design .advanced-workspace { margin:24px 30px; border:1px solid #d7ccb3; padding:16px; border-radius:8px; }
+.workspace-design .record-inspector { align-self:start; position:sticky; top:16px; }
+.workspace-design .timeline-layout { align-items:start; }
+.workspace-design .workspace-body { min-width:0; }
+@media(max-width:700px) { .workspace-design .design-topbar { padding-inline:15px; }.workspace-design .header-objective { display:none; }.workspace-design .advanced-workspace { margin-inline:15px; }.workspace-design .record-inspector { position:static; } }

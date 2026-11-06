@@ -23,7 +23,7 @@ test('uses the real axis Worker and round trips edits through undo, redo, and re
   const errors: string[] = [];
   page.on('worker', worker => workers.push(worker.url()));
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await expect(page.getByTestId('workspace-total')).toHaveText('4,400');
   const attack = await team(page);
   await attack.fill('1100');
@@ -71,7 +71,7 @@ test('ignores queued real Worker replies after cancellation and project replacem
     }
     window.Worker = ControlledWorker as unknown as typeof Worker;
   });
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await expect(page.getByTestId('workspace-total')).toHaveText('4,400');
   const attack = await team(page);
   await page.evaluate(() => { (window as unknown as WorkerWindow).axisHoldReplies = true; });
@@ -114,7 +114,7 @@ test('preserves edits during native saving and after cancellation or failure', a
       },
     };
   });
-  await page.goto('/');
+  await page.goto('/#compatibility');
   const attack = await team(page);
   await attack.fill('1100');
   const save = page.getByRole('button', { name: '保存轴项目', exact: true });

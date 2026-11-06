@@ -1,6 +1,6 @@
 # 文档导航与交接
 
-当前实现基线：`1d9e72f`（P3）。P0/P1、D0、D1、P2、P2.5、P3 已完成，下一阶段为U1界面与交互重构；之后按P5 → P6 → P4 → P7 → P8推进，均未完成。P3历史功能验收不表示当前交互体验已获认可。新轴工作台和保留的自动模拟器各有实现，不能互相折算支持能力。
+历史P3实现基线：`1d9e72f`。当前U1增量见[实施记录](planning/u1-implementation.md)。P0/P1、D0、D1、P2、P2.5、P3 已完成，U1界面与交互重构已开始实施，尚未通过阶段验收；之后按P5 → P6 → P4 → P7 → P8推进，均未完成。P3历史功能验收不表示当前交互体验已获认可。新轴工作台和保留的自动模拟器各有实现，不能互相折算支持能力。
 
 ## 从哪里开始
 
@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | 当前阶段与下一步 | [实施路线](planning/implementation-roadmap.md) | 阶段状态的统一入口 |
 | 交给下一位 agent | [U1 实施 prompt](planning/implementation-agent-prompt.md) | 可直接执行的任务、阅读顺序、代码入口、验收与提交要求 |
+| U1当前增量 | [交互契约](planning/u1-interaction-contract.md)、[实施记录](planning/u1-implementation.md) | 账号优先、新库存与队伍/轴工作区、真实材料和待验收项目 |
 | 用户操作与桌面入口 | [桌面整合记录](planning/desktop-integration.md) | 当前共用界面、保存边界；末尾按阶段保留历史证据 |
 | 当前机制验收 | [P3验收记录](planning/p3-implementation.md) | 通用效果、属性捕获、历史依赖、来源修订和完整验收证据 |
 | 真实数据验收 | [P2.5 验收记录](planning/p2-5-implementation.md) | 从空轴建角色、配装、导入、保存重开及独立数值 |

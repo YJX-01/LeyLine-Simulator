@@ -212,13 +212,13 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     notice.value = '已加载独立验收样本，可以检查参考算式或继续编辑。';
   }
 
-  function createProject(id: string = crypto.randomUUID()): void {
+  function createProject(id: string = crypto.randomUUID(), preserveRecovery = false): void {
     const next = workbenchProjectSchema.parse({ schemaVersion: 1, rulesVersion: 'workbench-v1', id, revision: '1',
       definitions: [], candidate: { id: `${id}-candidate`, actors: [] }, conditions: {}, timeline: [], objective: {} });
     installProject(next);
     savedSnapshot.value = null;
-    notice.value = '已新建空轴，尚未保存。请在内容定义库与队伍页面准备定义和角色。';
-    persistRecovery();
+    notice.value = '已新建空轴，尚未保存。请先从账号选择队伍，再记录动作与伤害。';
+    if (!preserveRecovery) persistRecovery();
   }
 
   async function saveProject(): Promise<boolean> {
@@ -241,7 +241,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       const bridge = getDesktopBridge();
       if (bridge) {
         const saved = await bridge.saveProject(content);
-        if (!saved) return false;
+        if (!saved) { notice.value = '已取消轴项目保存，当前编辑保留。'; return false; }
         notice.value = '项目已保存，包含完整轴、定义、候选配装及未知条件。';
       } else {
         downloadJson(parsed.data, `${parsed.data.id}.json`);

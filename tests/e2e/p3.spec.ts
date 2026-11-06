@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { evaluateWorkbench } from '../../src/engine/src/workbench';
 
 test('edits captured and dynamic attributes through the Worker and round trips P3 files', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-projects').click();
   await page.getByTestId('p3-load-snapshot').click();
   await expect(page.getByTestId('workspace-objective')).toHaveText('6,900');
@@ -50,7 +50,7 @@ test('edits captured and dynamic attributes through the Worker and round trips P
 });
 
 test('edits a settlement, filters history and diagnoses a true self-cycle', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-projects').click();
   await page.getByTestId('p3-load-history').click();
   await expect(page.getByTestId('workspace-objective')).toHaveText('150');
@@ -79,7 +79,7 @@ test('edits a settlement, filters history and diagnoses a true self-cycle', asyn
 });
 
 test('creates an actual P3 effect on a real game build using the common forms', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-projects').click();
   await page.getByRole('button', { name: '新建空轴', exact: true }).click();
   await page.getByTestId('workspace-nav-team').click();

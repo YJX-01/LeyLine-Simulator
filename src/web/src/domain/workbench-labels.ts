@@ -26,6 +26,7 @@ export function actorLabel(project: WorkbenchProject, id: string): string {
 export function recordLabel(project: WorkbenchProject, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
+  if (record.kind === 'action') { const definition = project.definitions.find(entry => entry.id === record.definition); if (definition?.name) return definition.name; }
   if (record.realDamage) {
     const actor = project.candidate.actors.find(entry => entry.id === record.actor);
     const skill = actor?.realBuild?.character.skills.find(entry => entry.id === record.realDamage?.skillId);
@@ -45,7 +46,7 @@ export function effectLabel(project: WorkbenchProject, definitionId: string, id:
   const index = project.definitions.find(entry => entry.id === definitionId)?.effects.findIndex(entry => entry.id === id) ?? -1;
   return index < 0 ? '缺失效果' : id === 'opening-bonus' ? '开场伤害加成' : `效果${index + 1}`;
 }
-export const projectLabel = (project: WorkbenchProject) => project.id === 'ordinary-example' ? '普通伤害示例轴' : '当前轴项目';
+export const projectLabel = (project: WorkbenchProject) => project.name ?? (project.id === 'ordinary-example' ? '普通伤害示例轴' : '未命名轴项目');
 export const errorLabel = (message: string) => message.includes('JSON') ? '项目文件格式无法识别，请检查后重试。' : '操作未完成，请检查项目文件与计算规则。';
 
 export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(message) ? message : '资料操作未完成，请检查文件或存储位置后重试。';

@@ -1,0 +1,88 @@
+/* Light workspace tokens. A future dark theme can replace surfaces and ink independently. */
+.workspace-design {
+  --nav-surface:#f5f4ee;
+  --nav-ink:#45514d;
+  --nav-muted:#757d74;
+  --nav-border:#dcded3;
+  --nav-hover:#e8eae1;
+  --nav-active:#fffefb;
+  --account-surface:#e9f0e6;
+  --account-canvas:#f6f8f3;
+  --account-ink:#496a52;
+  --account-border:#c8d8c6;
+  --project-surface:#e8eef5;
+  --project-canvas:#f5f7fa;
+  --project-ink:#496882;
+  --project-border:#c7d4e1;
+  --content-surface:#efecf4;
+  --content-canvas:#f8f6fa;
+  --content-ink:#706084;
+  --content-border:#d6cde1;
+  --canvas:#f8f7f2;
+  background:var(--canvas);
+}
+.workspace-design[data-domain=account] { --canvas:var(--account-canvas); }
+.workspace-design[data-domain=project] { --canvas:var(--project-canvas); }
+.workspace-design[data-domain=content] { --canvas:var(--content-canvas); }
+.workspace-design .design-sidebar { background:var(--nav-surface); color:var(--nav-ink); border-color:var(--nav-border); box-shadow:inset -1px 0 #fff8; }
+.workspace-design .brand-symbol { background:#fff9e9; color:#77603a; border-color:#c7b68d; box-shadow:inset 0 0 0 3px #eee6d2; }
+.workspace-design .brand-symbol span { color:#a28c55; }
+.workspace-design .brand-copy strong { color:var(--nav-ink); }
+.workspace-design .brand-copy small { color:var(--nav-muted); }
+.workspace-design .nav-group { --group-surface:var(--nav-surface); --group-ink:var(--nav-ink); --group-border:var(--nav-border); background:var(--group-surface); border-radius:8px; padding:8px 0 4px; }
+.workspace-design .nav-group[data-domain=account] { --group-surface:var(--account-surface); --group-ink:var(--account-ink); --group-border:var(--account-border); }
+.workspace-design .nav-group[data-domain=project] { --group-surface:var(--project-surface); --group-ink:var(--project-ink); --group-border:var(--project-border); }
+.workspace-design .nav-group[data-domain=content] { --group-surface:var(--content-surface); --group-ink:var(--content-ink); --group-border:var(--content-border); }
+.workspace-design .nav-group > p { color:var(--group-ink); font-size:11px; letter-spacing:.04em; }
+.workspace-design .nav-group > button { color:var(--group-ink); background:transparent; border-color:transparent; }
+.workspace-design .nav-group > button:not(:disabled):hover { color:var(--group-ink); background:var(--nav-active); border-color:var(--group-border); }
+.workspace-design .nav-group > button.active { color:var(--group-ink); background:var(--nav-active); border-color:var(--group-border); box-shadow:inset 3px 0 var(--group-ink); }
+.workspace-design .nav-group > button.active svg { color:var(--group-ink); }
+.workspace-design .nav-count { color:var(--group-ink); border-color:var(--group-border); background:var(--group-surface); }
+.workspace-design .sidebar-bottom { border-color:var(--nav-border); }
+.workspace-design .sidebar-bottom > .sidebar-control { color:var(--nav-ink); background:transparent; }
+.workspace-design .sidebar-bottom > .sidebar-control:not(:disabled):hover { color:var(--nav-ink); background:var(--nav-hover); border-color:transparent; }
+.workspace-design .sidebar-bottom > .sidebar-control.active { color:var(--nav-ink); background:var(--nav-active); border-color:var(--nav-border); }
+.workspace-design .sidebar-version { color:var(--nav-muted); }
+
+/* Content starts at the tools, rather than below a repeated page heading. */
+.workspace-design .workspace-body { padding-block:16px; }
+.workspace-design .page-accessible-title { position:absolute; width:1px; height:1px; padding:0; margin:-1px; clip-path:inset(50%); overflow:hidden; white-space:nowrap; }
+.workspace-design .design-topbar { min-height:48px; height:auto; padding:6px 20px; margin:-16px 0 16px; gap:12px; flex-wrap:nowrap; background:#fffdf8; box-shadow:none; }
+.workspace-design .design-topbar button { min-height:32px; padding:6px 10px; }
+.workspace-design .topbar-context { flex:1; gap:10px; }
+.workspace-design .topbar-context strong { max-width:230px; overflow:hidden; text-overflow:ellipsis; }
+.workspace-design .topbar-actions { gap:8px; flex-wrap:nowrap; }
+.workspace-design .run-status { font-size:11px; color:var(--muted); white-space:nowrap; }
+.workspace-design .toolbar-more { position:relative; font-size:12px; }
+.workspace-design .toolbar-more > summary { cursor:pointer; padding:8px; white-space:nowrap; }
+.workspace-design .toolbar-more > div { position:absolute; right:0; top:100%; display:grid; min-width:160px; padding:8px; gap:6px; background:#fffdf8; border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 24px #28344918; z-index:10; }
+.workspace-design .shell-notices { margin:0 24px 12px; }
+.workspace-design .shell-notices > p { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0; font-size:12px; }
+.workspace-design .dismiss-notice { border:0; background:transparent; min-height:24px; padding:0 8px; color:var(--muted); }
+.workspace-design .account-library, .workspace-design .team-workspace, .workspace-design .timeline-layout, .workspace-design .analysis-layout, .workspace-design .project-library, .workspace-design .definition-library, .workspace-design .settings-page { margin-inline:20px; }
+.workspace-design .account-library.panel, .workspace-design .settings-page.panel { padding:18px 20px; }
+.workspace-design .account-library > [role=status] { margin-top:0; }
+.workspace-design .project-technical { margin:16px 20px; font-size:12px; }
+.workspace-design .settings-about { font-size:13px; }
+.workspace-design .settings-about > summary { cursor:pointer; color:var(--muted); }
+.workspace-design .settings-about .settings-grid { margin:16px 0; }
+.workspace-design .settings-about > h2, .workspace-design .settings-about > .section-eyebrow { display:none; }
+.workspace-design .mobile-page-label { font-size:14px; }
+@media(max-width:1000px) {
+  .workspace-design .design-topbar { flex-wrap:wrap; }
+  .workspace-design .run-status { display:none; }
+}
+@media(max-width:700px) {
+  .workspace-design .workspace-body { padding-block:12px; }
+  .workspace-design .design-topbar { margin-top:-12px; padding:4px 12px; min-height:40px; }
+  .workspace-design .design-topbar .mobile-menu { display:block; }
+  .workspace-design .topbar-actions { flex-wrap:wrap; }
+  .workspace-design .account-library, .workspace-design .team-workspace, .workspace-design .timeline-layout, .workspace-design .analysis-layout, .workspace-design .project-library, .workspace-design .definition-library, .workspace-design .settings-page { margin-inline:12px; }
+  .workspace-design .account-library.panel, .workspace-design .settings-page.panel { padding:16px; }
+  .workspace-design .shell-notices, .workspace-design .project-technical { margin-inline:12px; }
+}
+
+.workspace-design .timeline-main > .axis-tools { padding:8px 16px; min-height:44px; font-size:12px; color:var(--muted); }
+.workspace-design .axis-tools button { min-height:30px; padding:5px 10px; }
+.workspace-design .library-actions h2 { font-size:16px; }

@@ -8,7 +8,7 @@ for (const { label, origin, base } of [
     const resources: string[] = [];
     page.on('request', request => resources.push(request.url()));
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(origin + base);
+    await page.goto(origin + base + '#compatibility');
     await expect(page.getByRole('heading', { name: '时间轴', exact: true })).toBeVisible();
     await expect(page.getByTestId('workspace-objective')).toHaveText('4,400');
     const axisWorker = resources.find(url => /axis.worker-/.test(url));
@@ -38,7 +38,7 @@ for (const { label, origin, base } of [
     const resources: string[] = [], errors: string[] = [];
     page.on('request', request => resources.push(request.url()));
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(origin + base);
+    await page.goto(origin + base + '#compatibility');
     await page.getByTestId('workspace-nav-projects').click();
     await page.getByRole('button', { name: '新建空轴', exact: true }).click();
     await page.getByTestId('workspace-nav-team').click();

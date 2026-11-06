@@ -9,7 +9,7 @@ async function empty(page: import('@playwright/test').Page) {
 }
 
 test('uses three independent real-skill references in the actual Worker and preserves snapshots', async ({ page }, info) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   for (const [character, expected, hits] of [['jean',1549.2330752985004,1],['kaeya',990.790476932988,1],['xingqiu',2682.857029682754,2]] as const) {
     await empty(page);
     await page.getByLabel('游戏角色', { exact: true }).selectOption(character);
@@ -37,7 +37,7 @@ test('uses three independent real-skill references in the actual Worker and pres
 });
 
 test('keeps unknown facts partial, exposes multipliers, and changes weapon and enemy inputs', async ({ page }) => {
-  await page.goto('/'); await empty(page);
+  await page.goto('/#compatibility'); await empty(page);
   await page.getByRole('button', { name: '添加真实角色到当前轴', exact: true }).click();
   await page.getByRole('button', { name: '添加技能全部独立命中', exact: true }).click();
   await expect(page.getByTestId('workspace-total')).toHaveText('1,549.2331');
@@ -57,7 +57,7 @@ test('keeps unknown facts partial, exposes multipliers, and changes weapon and e
 });
 
 test('previews real Mona inventory and copies account equipment without linking the old axis', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByLabel('导入莫娜圣遗物文件', { exact: true }).setInputFiles('fixtures/mona/mona-v1.json');
   await page.getByRole('button', { name: '预览莫娜导入', exact: true }).click();
@@ -87,7 +87,7 @@ test('previews real Mona inventory and copies account equipment without linking 
 
 test('requires explicit confirmation for updated Mona instances and preserves equipment ownership', async ({ page }) => {
   const original = JSON.parse(await readFile('fixtures/mona/mona-v1.json','utf8'));
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-artifacts').click();
   const input = page.getByLabel('导入莫娜圣遗物文件', { exact:true });
   await input.setInputFiles('fixtures/mona/mona-v1.json');
@@ -116,7 +116,7 @@ test('does not insert an old asynchronous character selection into a replacement
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
   await page.route('**/real-data/characters-*.json*', async route => { await gate; await route.continue(); });
-  await page.goto('/'); await empty(page);
+  await page.goto('/#compatibility'); await empty(page);
   const [request] = await Promise.all([
     page.waitForRequest(request => /real-data\/characters-\d+\.json/.test(request.url())),
     page.getByRole('button', { name:'添加真实角色到当前轴', exact:true }).click(),

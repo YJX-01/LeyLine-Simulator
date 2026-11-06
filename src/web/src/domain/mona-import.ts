@@ -1,5 +1,5 @@
 import { realArtifactSchema, type RealStat } from '@leyline/schema';
-import { accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type LocalAccount } from './account';
+import { accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountSlot, type LocalAccount } from './account';
 import { accountMainStats, validateAccountArtifact } from './account-real';
 
 const maximumBytes = 8 * 1024 * 1024;
@@ -7,7 +7,8 @@ const slotMap = { flower: 'flower', feather: 'plume', plume: 'plume', sand: 'san
 const groups = ['flower', 'feather', 'sand', 'cup', 'head'] as const;
 const aliases: Record<string, string> = { feather: 'plume', sand: 'sands', cup: 'goblet', head: 'circlet' };
 const statMap: Record<string, RealStat> = { lifeStatic: 'hp', lifePercentage: 'hpPercent', attackStatic: 'attack', attackPercentage: 'attackPercent', defendStatic: 'defense', defendPercentage: 'defensePercent', critical: 'critRate', criticalDamage: 'critDamage', recharge: 'energyRecharge', elementalMastery: 'elementalMastery', windBonus: 'anemoBonus', rockBonus: 'geoBonus', thunderBonus: 'electroBonus', waterBonus: 'hydroBonus', fireBonus: 'pyroBonus', iceBonus: 'cryoBonus', dendroBonus: 'dendroBonus', physicalBonus: 'physicalBonus', cureEffect: 'healingBonus' };
-const setAliases: Record<string, string> = { gladiatorFinale: 'gladiatorsfinale', wandererTroupe: 'wandererstroupe', crimsonWitch: 'crimsonwitchofflames', defenderWill: 'defenderswill', exile: 'theexile', shimenawaReminiscence: 'shimenawasreminiscence', thunderSmoother: 'thundersoother' };
+// Community export names differ from genshin-db IDs; compare fixed local source names.
+const setAliases: Record<string, string> = { gladiatorFinale: 'gladiatorsfinale', wandererTroupe: 'wandererstroupe', crimsonWitch: 'crimsonwitchofflames', defenderWill: 'defenderswill', exile: 'theexile', shimenawaReminiscence: 'shimenawasreminiscence', thunderSmoother: 'thundersoother', SpinMoonSerenade: 'silkenmoonsserenade', RealmMirrorNight: 'nightoftheskysunveiling' };
 type SetEntry = { id: string; name: string };
 type MainTable = Record<RealStat, number[]>;
 function realContent(item: AccountArtifact['real']): string {
@@ -37,6 +38,7 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
   const preview: MonaImportPreview = { format: 'mona-v1', accountId: account.id, additions: [], updates: [], duplicates: 0, skipped: [], conflicts: [] };
   const occurrences = new Map<string, number>();
   const seenIds = new Set<string>();
+  const drafts: { path: string; item: Record<string, unknown>; set: SetEntry | undefined; slot: AccountSlot; primary: ReturnType<typeof stat>; substats: ReturnType<typeof stat>[]; level: number; setName: string }[] = [];
   let total = 0;
   for (const group of groups) {
     const alias = aliases[group];
@@ -49,9 +51,9 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
       if (!Number.isInteger(item.star) || (item.star as number) < 1 || (item.star as number) > 5) throw new Error(`${path}星级无效。`);
       if (item.star !== 5) { preview.skipped.push(`${path}：本阶段仅导入五星圣遗物。`); continue; }
       if (!text(item.setName) || !text(item.position) || !Object.hasOwn(slotMap, item.position) || slotMap[item.position as keyof typeof slotMap] !== slotMap[group]) throw new Error(`${path}套装或部位无效。`);
-      const setId = setAliases[item.setName] ?? item.setName.toLowerCase();
-      const set = sets.find(entry => entry.id === setId);
-      if (!set) throw new Error(`${path}套装未在当前游戏数据目录中找到。`);
+      // Preserve an unresolved export identity as a namespaced ID, never guess a catalog set.
+      const mappedSetId = setAliases[item.setName] ?? item.setName.toLowerCase();
+      const set = sets.find(entry => entry.id === mappedSetId);
       const primary = stat(item.mainTag);
       if (!Array.isArray(item.normalTags) || item.normalTags.length > 4) throw new Error(`${path}副词条列表无效。`);
       const substats = item.normalTags.map(stat);
@@ -63,26 +65,39 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
       const tolerance = ['hp', 'attack', 'defense', 'elementalMastery'].includes(primary.stat) ? 0.500000001 : 0.000500001;
       if (!Number.isFinite(expected) || Math.abs(primary.value - expected) > tolerance) throw new Error(`${path}主词条数值与五星等级表不符，请核对等级或百分比单位。`);
       if (item.id !== undefined && !(typeof item.id === 'number' && Number.isSafeInteger(item.id) && item.id >= 0) && !text(item.id)) throw new Error(`${path}实例标识无效。`);
-      const fingerprint = await digest(JSON.stringify({ setId, slot, level: item.level, main: primary, substats }));
-      const occurrence = (occurrences.get(fingerprint) ?? 0) + 1;
-      occurrences.set(fingerprint, occurrence);
-      const key = item.id === undefined ? `content:${fingerprint}:${occurrence}` : `id:${String(item.id)}`;
-      const id = `mona-${await digest(key)}`;
-      if (seenIds.has(id)) throw new Error(`${path}与本文件另一件圣遗物使用相同实例标识。`);
-      seenIds.add(id);
-      const real = realArtifactSchema.parse({ id, setId, slot, rarity: 5, level: item.level, mainStat: primary.stat, substats, source: { format: 'mona-v1', key, fingerprint } });
-      validateAccountArtifact(real);
-      const next: AccountArtifact = { id, name: `${set.name} · ${accountSlotLabels[slot]}`, slot, attack: 0, real,
-        mona: { mainValue: primary.value, omit: item.omit === true, ...(typeof item.contentHash === 'string' ? { contentHash: item.contentHash } : {}) } };
-      const existing = account.artifacts.find(entry => entry.id === id);
-      if (existing) {
-        if (existing.real?.source?.fingerprint === fingerprint && realContent(existing.real) === realContent(real)) preview.duplicates++;
-        else {
-          preview.conflicts.push(`${next.name}：相同来源标识的内容已经变化，默认不覆盖现有物品。`);
-          if (existing.real?.source?.format === 'mona-v1' && existing.slot === next.slot && existing.real.setId === real.setId) preview.updates.push({ item: { ...next, name: existing.name }, before: JSON.stringify(existing) });
-        }
-      } else preview.additions.push(next);
+      drafts.push({ path, item, set, slot, primary, substats, level: item.level, setName: item.setName });
     }
+  }
+  // Submit each hashing phase together. Serial native crypto round trips are slow in WebKit.
+  // Promise.all preserves source order, including the identity of equal no-ID physical items.
+  const fingerprinted = await Promise.all(drafts.map(async draft => {
+    const setId = draft.set?.id ?? `mona-unresolved-${await digest(draft.setName)}`;
+    const fingerprint = await digest(JSON.stringify({ setId, slot: draft.slot, level: draft.level, main: draft.primary, substats: draft.substats }));
+    return { ...draft, setId, fingerprint };
+  }));
+  const identified = await Promise.all(fingerprinted.map(async draft => {
+    const occurrence = (occurrences.get(draft.fingerprint) ?? 0) + 1;
+    occurrences.set(draft.fingerprint, occurrence);
+    const key = draft.item.id === undefined ? `content:${draft.fingerprint}:${occurrence}` : `id:${String(draft.item.id)}`;
+    return { ...draft, key, id: `mona-${await digest(key)}` };
+  }));
+  for (const draft of identified) {
+    const { path, item, set, slot, primary, substats, level, setName, setId, fingerprint, key, id } = draft;
+    const setIdentityPending = !set;
+    if (seenIds.has(id)) throw new Error(`${path}与本文件另一件圣遗物使用相同实例标识。`);
+    seenIds.add(id);
+    const real = realArtifactSchema.parse({ id, setId, slot, rarity: 5, level: level, mainStat: primary.stat, substats, source: { format: 'mona-v1', key, fingerprint } });
+    validateAccountArtifact(real);
+    const next: AccountArtifact = { id, name: `${set?.name ?? `${setName}（套装待核对）`} · ${accountSlotLabels[slot]}`, slot, attack: 0, real,
+      mona: { mainValue: primary.value, omit: item.omit === true, sourceSetName: setName, ...(setIdentityPending ? { setIdentityPending: true } : {}), ...(text(item.equip) ? { equippedBy: item.equip } : {}), ...(typeof item.contentHash === 'string' ? { contentHash: item.contentHash } : {}) } };
+    const existing = account.artifacts.find(entry => entry.id === id);
+    if (existing) {
+      if (existing.real?.source?.fingerprint === fingerprint && realContent(existing.real) === realContent(real)) preview.duplicates++;
+      else {
+        preview.conflicts.push(`${next.name}：相同来源标识的内容已经变化，默认不覆盖现有物品。`);
+        if (existing.real?.source?.format === 'mona-v1' && existing.slot === next.slot && existing.real.setId === real.setId) preview.updates.push({ item: { ...next, name: existing.name }, before: JSON.stringify(existing) });
+      }
+    } else preview.additions.push(next);
   }
   return preview;
 }

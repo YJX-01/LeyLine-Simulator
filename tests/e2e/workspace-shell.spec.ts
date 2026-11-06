@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { evaluateWorkbench } from '../../src/engine/src/workbench';
 
 test('opens the integrated workbench by default and preserves candidate changes between views', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await expect(page.getByRole('heading', { name: '时间轴', exact: true })).toBeVisible();
   await expect(page.getByText('设计预览 · 演示数据', { exact: true })).toHaveCount(0);
   await expect(page.getByTestId('workspace-objective')).toHaveText('4,400');
@@ -30,7 +30,7 @@ test('opens the integrated workbench by default and preserves candidate changes 
 });
 
 test('loads the four independent acceptance samples through the project view', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-projects').click();
   for (const [label, expected] of [
     ['武器甲 · 区间加成', '4,400'], ['武器乙 · 无加成', '4,000'],
@@ -43,7 +43,7 @@ test('loads the four independent acceptance samples through the project view', a
 });
 
 test('adds and removes recorded hits and actions without generating other damage', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByRole('button', { name: '添加伤害点', exact: true }).click();
   await expect(page.getByRole('button', { name: /^选择伤害点 / })).toHaveCount(3);
   const added = page.locator('button[data-record-id^="record-"]').last();
@@ -63,7 +63,7 @@ test('adds and removes recorded hits and actions without generating other damage
 });
 
 test('keeps the complete axis when changing the objective and locates analysis records', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.locator('button[data-record-id="hit-2"]').click();
   await page.getByRole('checkbox', { name: '计入当前目标', exact: true }).uncheck();
   await expect(page.getByTestId('workspace-objective')).toHaveText('2,000');
@@ -76,7 +76,7 @@ test('keeps the complete axis when changing the objective and locates analysis r
 });
 
 test('reads dynamic interval boundaries without rewriting the axis', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.locator('button[data-record-id="hit-2"]').click();
   await page.getByRole('spinbutton', { name: '命中时间（毫秒）', exact: true }).fill('0');
   await page.locator('button[data-record-id="hit-6"]').click();
@@ -88,7 +88,7 @@ test('reads dynamic interval boundaries without rewriting the axis', async ({ pa
 });
 
 test('distinguishes an unknown trigger from false and permits saving incomplete projects', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('checkbox', { name: '此效果需要额外触发条件', exact: true }).check();
   await expect(page.getByTestId('workspace-objective')).toHaveText('待确认');
@@ -107,7 +107,7 @@ test('distinguishes an unknown trigger from false and permits saving incomplete 
 });
 
 test('saves and reopens a full project using the same input contract as the agent evaluator', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('spinbutton', { name: '候选攻击力', exact: true }).fill('1100');
   await page.getByTestId('workspace-nav-timeline').click();
@@ -143,7 +143,7 @@ test('saves and reopens a full project using the same input contract as the agen
 });
 
 test('shares one project with the retained formula acceptance interface', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('spinbutton', { name: '候选攻击力', exact: true }).fill('1100');
   await page.evaluate(() => { window.location.hash = '#annotation'; });
@@ -156,7 +156,7 @@ test('shares one project with the retained formula acceptance interface', async 
 test('keeps inventory empty until the user creates real account items', async ({ page }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByTestId('workspace-nav-artifacts').click();
   await expect(page.getByText('库存共 0 件。相同属性的物品保留各自身份。', { exact: true })).toBeVisible();
   await page.getByLabel('圣遗物名称', { exact: true }).fill('本地花冠');
@@ -168,7 +168,7 @@ test('keeps inventory empty until the user creates real account items', async ({
 });
 
 test('collapses navigation and uses a drawer on narrow windows', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#compatibility');
   await page.getByRole('button', { name: '折叠侧栏', exact: true }).click();
   await expect(page.getByRole('button', { name: '展开侧栏', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '展开侧栏', exact: true }).click();
