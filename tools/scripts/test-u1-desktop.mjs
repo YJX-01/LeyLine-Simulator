@@ -23,7 +23,20 @@ try {
   await page.getByRole('button', { name: '确认导入 458 件五星圣遗物', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await page.getByLabel('搜索圣遗物', { exact: true }).fill('琴');
-  await expect(page.locator('.inventory-count')).toContainText('筛选结果 5 件');
+  await expect(page.locator('.inventory-count')).toContainText('筛选结果 0 件');
+  await page.getByLabel('搜索圣遗物', { exact: true }).fill('');
+  await page.getByRole('button', { name: '生之花', exact: true }).click();
+  await expect(page.locator('.inventory-count')).toContainText('筛选结果 86 件');
+  await expect.poll(() => page.locator('.inventory-card .game-icon > img').first().evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+  await page.locator('.inventory-card').first().click();
+  await expect(page.getByRole('dialog')).toContainText('4,780');
+  await page.getByRole('button', { name: '编辑圣遗物', exact: true }).click();
+  await page.getByLabel('强化等级', { exact: true }).fill('16');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.inventory-card').first()).toContainText('+20');
+  await page.getByRole('button', { name: '手动添加圣遗物', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('预览词条');
+  await page.keyboard.press('Escape');
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: resolve(directory, 'actual-inventory.png'), fullPage: true });
   const file = resolve(directory, 'actual-account.json');
@@ -33,6 +46,22 @@ try {
   await expect.poll(async () => JSON.parse(await readFile(file, 'utf8').catch(() => '{}')).artifacts?.length).toBe(458);
   await page.getByRole('button', { name: '打开 / 切换账号', exact: true }).click();
   await expect(page.getByLabel('账号管理', { exact: true })).toContainText('458 件圣遗物');
+  await page.getByTestId('workspace-nav-characters').click();
+  await page.getByRole('button', { name: '添加账号角色', exact: true }).click();
+  await page.getByRole('button', { name: '选择游戏角色', exact: true }).click();
+  for (const name of ['芙宁娜', '丝柯克']) {
+    await page.getByLabel('搜索游戏角色', { exact: true }).fill(name);
+    await expect.poll(() => page.locator('.catalog-options .game-icon > img').first().evaluate(image => {
+      if (!image.complete) return false;
+      const canvas = document.createElement('canvas'); canvas.width = 128; canvas.height = 128;
+      const context = canvas.getContext('2d'); context.drawImage(image,0,0,128,128);
+      const pixels = context.getImageData(0,0,128,128).data;
+      let opaque = false; for (let index = 3; index < pixels.length; index += 4) if (pixels[index] >= 128) { opaque = true; break; }
+      return image.naturalWidth === 128 && image.naturalHeight === 128 && opaque && image.src.includes('?v=');
+    })).toBe(true);
+  }
+  await page.screenshot({ path: resolve(directory, 'verified-portrait.png') });
+  await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('button', { name: '＋ 从账号选择队员', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('账号还没有角色资料');
@@ -41,6 +70,6 @@ try {
   await expect(page.getByLabel('剪辑式时间轴编辑', { exact: true })).toBeVisible();
   await page.screenshot({ path: resolve(directory, 'empty-axis.png'), fullPage: true });
   if (errors.length) throw new Error(JSON.stringify(errors));
-  await writeFile(resolve(directory, 'report.json'), JSON.stringify({ status: 'passed', executable, actualInventory: 458, checks: ['preview-before-import', 'source-note-filter', 'native-account-save-open', 'empty-account-no-invented-characters', 'empty-editing-desk'], gaps: ['complete character build and actual action records unavailable; no numerical or full-axis acceptance claimed'] }, null, 2));
+  await writeFile(resolve(directory, 'report.json'), JSON.stringify({ status: 'passed', executable, actualInventory: 458, checks: ['preview-before-import', 'current-owner-search-separate-from-source-note', 'slot-filter', 'packaged-offline-artifact-image', 'square-portrait-real-pixels', 'artifact-edit-cancel', 'manual-entry-visible', 'native-account-save-open', 'empty-account-no-invented-characters', 'empty-editing-desk'], gaps: ['complete character build and actual action records unavailable; no numerical or full-axis acceptance claimed'] }, null, 2));
   console.log('U1 desktop actual inventory tasks passed.');
 } finally { await app.close(); }

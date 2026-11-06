@@ -1,39 +1,34 @@
-/* Expanded and compact navigation share one icon rail and one vertical rhythm. */
+/* Both controls use the same state and preserve the navigation icon rail. */
 .workspace-design { --sidebar-width:232px; grid-template-columns:var(--sidebar-width) minmax(0,1fr); transition:grid-template-columns .18s ease; }
-.workspace-design.compact { --sidebar-width:76px; grid-template-columns:var(--sidebar-width) minmax(0,1fr); }
-.workspace-design .design-sidebar { box-sizing:border-box; width:var(--sidebar-width); height:100dvh; padding:20px 12px 12px; transition:width .18s ease, transform .18s ease; overflow:hidden; }
+.workspace-design.compact { --sidebar-width:76px; }
+.workspace-design .design-sidebar { box-sizing:border-box; width:var(--sidebar-width); height:100dvh; padding:12px 12px; transition:width .18s ease,transform .18s ease; overflow:hidden; }
 .workspace-design .design-sidebar::after { display:none; }
-.workspace-design .brand { height:48px; min-height:48px; padding:0 8px; gap:8px; overflow:hidden; }
-.workspace-design .brand-symbol { width:36px; height:36px; flex:0 0 36px; }
-.workspace-design .brand-copy { display:grid; min-width:0; white-space:nowrap; transition:opacity .12s ease; }
-.workspace-design .brand-copy strong { font-size:14px; }
-.workspace-design .nav-groups { margin-top:20px; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; }
+.workspace-design .sidebar-top { flex-shrink:0; }
+.workspace-design .nav-groups { margin-top:12px; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; }
 .workspace-design .nav-group { margin-bottom:16px; }
 .workspace-design .nav-group > p { height:20px; line-height:20px; padding:0 12px; margin:0 0 6px; white-space:nowrap; }
-.workspace-design .nav-group > button, .workspace-design .sidebar-bottom > .sidebar-control { display:grid; grid-template-columns:36px minmax(0,1fr) auto; align-items:center; gap:8px; box-sizing:border-box; width:100%; height:44px; min-height:44px; font-size:14px; padding:0 8px; margin:3px 0; border:1px solid transparent; border-radius:6px; text-align:left; overflow:hidden; }
-.workspace-design .nav-group svg, .workspace-design .sidebar-control svg { width:20px; height:20px; justify-self:center; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.workspace-design .nav-group > button,.workspace-design .sidebar-control { display:grid; grid-template-columns:36px minmax(0,1fr) auto; align-items:center; gap:8px; box-sizing:border-box; width:100%; height:44px; min-height:44px; font-size:14px; padding:0 8px; margin:3px 0; border:1px solid transparent; border-radius:6px; text-align:left; overflow:hidden; }
+.workspace-design .nav-group svg,.workspace-design .sidebar-control svg { width:20px; height:20px; justify-self:center; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 .workspace-design .nav-label { display:block; min-width:0; overflow:hidden; white-space:nowrap; transition:opacity .12s ease; }
-.workspace-design .sidebar-bottom { flex-shrink:0; padding:12px 0 0; }
-.workspace-design .sidebar-control { background:transparent; color:#c8cfda; font-size:13px; }
-.workspace-design .sidebar-control.active { background:#b99b5c24; border-color:#bca46e7a; color:#fff2cf; }
-.workspace-design .sidebar-version { display:flex; align-items:center; box-sizing:border-box; height:36px; padding:0 16px; gap:16px; white-space:nowrap; overflow:hidden; }
-.workspace-design .sidebar-version img { flex:0 0 20px; }
-.workspace-design .sidebar-version span { overflow:hidden; }
-.workspace-design.compact .brand-copy { display:grid; opacity:0; width:0; }
+.workspace-design .nav-utilities { padding-top:4px; }
+.workspace-design .sidebar-control { background:transparent; color:var(--nav-ink); }
+.workspace-design .sidebar-control:not(:disabled):hover { background:var(--nav-hover); }
+.workspace-design .sidebar-control.active { background:var(--nav-active); border-color:var(--nav-border); }
 .workspace-design.compact .nav-group > p { display:block; visibility:hidden; }
-.workspace-design.compact .nav-groups { margin-top:20px; }
-.workspace-design.compact .nav-group > button, .workspace-design.compact .sidebar-control { grid-template-columns:36px minmax(0,1fr); gap:0; padding:0 8px; justify-content:initial; }
-.workspace-design.compact .nav-group > button > .nav-label, .workspace-design.compact .sidebar-control > .nav-label { display:block; opacity:0; width:0; }
+.workspace-design.compact .nav-groups { margin-top:12px; }
+.workspace-design.compact .nav-group > button,.workspace-design.compact .sidebar-control { grid-template-columns:36px minmax(0,1fr); gap:0; padding:0 8px; justify-content:initial; }
+.workspace-design.compact .nav-group > button > .nav-label,.workspace-design.compact .sidebar-control > .nav-label { display:block; opacity:0; width:0; }
 .workspace-design.compact .nav-count { display:none; }
-.workspace-design.compact .sidebar-version { display:flex; }
-.workspace-design.compact .sidebar-version span { visibility:hidden; }
-.workspace-design .sidebar-toggle svg { transition:transform .18s ease; }
-.workspace-design.compact .sidebar-toggle svg { transform:rotate(180deg); }
+.workspace-design .sidebar-toggle svg,.workspace-design .sidebar-edge-toggle svg { transition:transform .18s ease; }
+.workspace-design.compact .sidebar-toggle svg,.workspace-design.compact .sidebar-edge-toggle svg { transform:rotate(180deg); }
+.workspace-design .sidebar-edge-toggle { position:fixed; top:50dvh; left:calc(var(--sidebar-width) - 10px); transform:translateY(-50%); z-index:25; display:grid; place-items:center; width:20px; min-width:20px; height:44px; min-height:44px; padding:0; border:1px solid var(--nav-border); border-radius:6px; color:var(--nav-muted); background:var(--nav-surface); box-shadow:0 2px 6px #344c3e12; transition:left .18s ease; }
+.workspace-design .sidebar-edge-toggle:hover { color:var(--nav-ink); background:var(--nav-active); }
+.workspace-design .sidebar-edge-toggle svg { width:12px; height:12px; fill:currentColor; }
 @media(max-width:700px) {
-  .workspace-design, .workspace-design.compact { grid-template-columns:minmax(0,1fr); }
+  .workspace-design,.workspace-design.compact { grid-template-columns:minmax(0,1fr); }
   .workspace-design .design-sidebar { width:232px; transform:translateX(-100%); visibility:hidden; }
   .workspace-design.mobile-open .design-sidebar { transform:translateX(0); visibility:visible; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .workspace-design, .workspace-design .design-sidebar, .workspace-design .brand-copy, .workspace-design .nav-label, .workspace-design .sidebar-toggle svg { transition:none; }
+  .workspace-design,.workspace-design .design-sidebar,.workspace-design .nav-label,.workspace-design .sidebar-toggle svg,.workspace-design .sidebar-edge-toggle,.workspace-design .sidebar-edge-toggle svg { transition:none; }
 }

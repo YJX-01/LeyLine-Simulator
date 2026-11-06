@@ -51,6 +51,7 @@ function confirm() {
   <section class="mona-import" aria-label="莫娜圣遗物导入">
     <h3>导入莫娜圣遗物</h3>
     <p>选择莫娜社区版圣遗物 JSON，自动检查后显示预览。确认前不会修改库存。仅导入圣遗物，保留穿戴备注；不会猜测角色等级、武器或天赋。</p>
+    <p>套装名称已按莫娜 7.2.02 核对。旧版待核对物品可重新导入原文件，预览并确认身份更新；当前手动修改不会自动覆盖。</p>
     <div class="import-actions"><button @click="fileInput?.click()">选择莫娜文件</button><button :disabled="busy || !content.trim()" @click="inspect">预览莫娜导入</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入莫娜圣遗物文件" hidden @change="readFile">
     <p v-if="filename">当前文件：{{ filename }}</p>

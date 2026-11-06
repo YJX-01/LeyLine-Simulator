@@ -45,6 +45,7 @@
 | [内容与反应](mechanics/content-reactions.md)、[五角色规则](mechanics/first-characters.md) | 原模拟器附着、反应、动作、天赋与命座限制 |
 | [装备规则](mechanics/supported-equipment.md)、[四人循环](mechanics/first-team-cycle.md) | 原模拟器武器/套装和固定循环独立依据 |
 | [琴点按验证](mechanics/jean-tap.md)、[内容数据审计](mechanics/content-audit.md) | 旧验证入口、数值来源、单位及已知冲突 |
+| [当前莫娜社区版](references/mona-community.md) | 7.2.02 来源、目录覆盖、套装身份与旧库存修复 |
 | [UI 素材](references/ui-assets.md) | 当前主题图片来源、许可说明、压缩与预算 |
 
 数据资料保持原路径：`constant/` 为 canonical，`characters/` 和 `unifiedname.txt` 为既有参考，`performance/*.json` 为对应阶段历史测量。角色资料存在不等于规则已验证；生成快照应与 canonical、版本及哈希一起审查。[固定来源清单](references/sources.json)保留外部 checkout 依据。

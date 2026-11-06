@@ -1,9 +1,10 @@
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { getArtifactMain, loadRealCatalog } from '../../src/game-data/src/real';
-import { createAccount, parseAccount } from '../../src/web/src/domain/account';
-import { confirmMonaImport, previewMonaImport } from '../../src/web/src/domain/mona-import';
+import { accountSlotLabels, cloneAccount, createAccount, parseAccount } from '../../src/web/src/domain/account';
+import { confirmMonaImport, previewMonaImport, previewMonaSetRepairs } from '../../src/web/src/domain/mona-import';
 import { organizeMonaWearNotes } from '../../src/web/src/domain/mona-wear-notes';
 
 // User-provided actual inventory, deliberately not copied into committed fixtures.
@@ -32,11 +33,37 @@ describe.skipIf(!existsSync(path))('user-provided Mona inventory (local evidence
       expect(item.real?.level).toBe(original.level);
     }
     expect(parseAccount(account)).toEqual(account);
-    const unresolved = account.artifacts.filter(item => item.mona?.setIdentityPending);
-    expect(unresolved).toHaveLength(1);
-    expect(unresolved[0].real?.source?.key).toBe('id:3648921719734070');
-    expect(unresolved[0].mona?.sourceSetName).toBe('HeavensGift');
-    expect(unresolved[0].real?.setId).not.toBe('celestialgift');
+    expect(account.artifacts.filter(item => item.mona?.setIdentityPending)).toHaveLength(0);
+    const heaven = account.artifacts.find(item => item.real?.source?.key === 'id:3648921719734070')!;
+    expect(heaven.mona?.sourceSetName).toBe('HeavensGift');
+    expect(heaven.real?.setId).toBe('celestialgift'); // Exact Chinese-name match in Mona 7.2.02.
+    // Reproduce only the old unresolved identity on this actual item, without inventing an inventory.
+    const previous = cloneAccount(account);
+    const prior = previous.artifacts.find(item => item.id === heaven.id)!;
+    prior.real!.setId = 'mona-unresolved-legacy-heavensgift';
+    prior.mona!.setIdentityPending = true;
+    prior.name = `HeavensGift（套装待核对） · ${accountSlotLabels[prior.slot]}`;
+    prior.real!.source!.fingerprint = createHash('sha256').update(JSON.stringify({ setId: prior.real!.setId, slot: prior.slot, level: prior.real!.level, main: { stat: prior.real!.mainStat, value: prior.mona!.mainValue }, substats: prior.real!.substats })).digest('hex');
+    const identityOnly = await previewMonaSetRepairs(previous, catalog.sets);
+    expect(identityOnly.updates).toHaveLength(1);
+    const repaired = cloneAccount(previous);
+    confirmMonaImport(repaired, identityOnly, true);
+    expect((await previewMonaImport(content, repaired, catalog.sets, main)).duplicates).toBe(458);
+    const repair = await previewMonaImport(content, previous, catalog.sets, main);
+    expect(repair.duplicates).toBe(457);
+    expect(repair.updates).toHaveLength(1);
+    expect(() => confirmMonaImport(previous, repair)).toThrow();
+    confirmMonaImport(previous, repair, true);
+    expect(previous.artifacts.find(item => item.id === heaven.id)?.real?.setId).toBe('celestialgift');
+    expect(previous.artifacts.find(item => item.id === heaven.id)?.real?.substats).toEqual(heaven.real?.substats);
+    const edited = cloneAccount(account);
+    const editedItem = edited.artifacts.find(item => item.id === heaven.id)!;
+    editedItem.real!.setId = 'mona-unresolved-legacy-heavensgift';
+    editedItem.mona!.setIdentityPending = true;
+    editedItem.real!.level -= 1;
+    const blocked = await previewMonaImport(content, edited, catalog.sets, main);
+    expect(blocked.updates).toHaveLength(0);
+    expect(() => confirmMonaImport(edited, blocked, true)).toThrow();
     const again = await previewMonaImport(content, account, catalog.sets, main);
     expect(again.duplicates).toBe(458);
     expect(again.additions).toEqual([]);

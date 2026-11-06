@@ -5,19 +5,39 @@
   "ignored": true,
   "repositories": [
     {
+      "id": "mona-current",
+      "kind": "git",
+      "url": "https://github.com/TwiceDrop/genshin_artifact",
+      "branch": "main",
+      "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+      "commitDate": "2026-10-31T11:12:02Z",
+      "release": "7.2.02",
+      "localPath": ".references/mona-current",
+      "purpose": "current pinned community Git checkout; catalog identity and verified image sources; upstream code is not executed",
+      "canonicalSnapshot": "docs/constant/mona-community/catalog.json",
+      "licenseFiles": [
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md"
+      ],
+      "shallow": true,
+      "submodulesInitialized": false
+    },
+    {
       "id": "mona-community",
       "kind": "git",
-      "url": "https://github.com/1803233552/genshin_artifact",
+      "url": "https://github.com/TwiceDrop/genshin_artifact",
       "branch": "main",
-      "commit": "beaced4d82619aa86920d0054ab6114b5fc5608f",
-      "commitDate": "2025-10-11T16:03:24+08:00",
+      "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+      "commitDate": "2026-10-31T11:12:02Z",
       "localPath": ".references/mona-community",
-      "purpose": "community artifact import, optimizer, buffs, custom target/DSL reference",
+      "purpose": "secondary current checkout; former origin retained as legacy remote",
       "shallow": true,
       "submodulesInitialized": false,
       "licenseFiles": [
-        "LICENSE"
-      ]
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md"
+      ],
+      "release": "7.2.02"
     },
     {
       "id": "genshin-db",

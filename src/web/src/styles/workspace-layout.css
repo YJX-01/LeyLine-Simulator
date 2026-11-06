@@ -25,10 +25,6 @@
 .workspace-design[data-domain=project] { --canvas:var(--project-canvas); }
 .workspace-design[data-domain=content] { --canvas:var(--content-canvas); }
 .workspace-design .design-sidebar { background:var(--nav-surface); color:var(--nav-ink); border-color:var(--nav-border); box-shadow:inset -1px 0 #fff8; }
-.workspace-design .brand-symbol { background:#fff9e9; color:#77603a; border-color:#c7b68d; box-shadow:inset 0 0 0 3px #eee6d2; }
-.workspace-design .brand-symbol span { color:#a28c55; }
-.workspace-design .brand-copy strong { color:var(--nav-ink); }
-.workspace-design .brand-copy small { color:var(--nav-muted); }
 .workspace-design .nav-group { --group-surface:var(--nav-surface); --group-ink:var(--nav-ink); --group-border:var(--nav-border); background:var(--group-surface); border-radius:8px; padding:8px 0 4px; }
 .workspace-design .nav-group[data-domain=account] { --group-surface:var(--account-surface); --group-ink:var(--account-ink); --group-border:var(--account-border); }
 .workspace-design .nav-group[data-domain=project] { --group-surface:var(--project-surface); --group-ink:var(--project-ink); --group-border:var(--project-border); }
@@ -39,11 +35,6 @@
 .workspace-design .nav-group > button.active { color:var(--group-ink); background:var(--nav-active); border-color:var(--group-border); box-shadow:inset 3px 0 var(--group-ink); }
 .workspace-design .nav-group > button.active svg { color:var(--group-ink); }
 .workspace-design .nav-count { color:var(--group-ink); border-color:var(--group-border); background:var(--group-surface); }
-.workspace-design .sidebar-bottom { border-color:var(--nav-border); }
-.workspace-design .sidebar-bottom > .sidebar-control { color:var(--nav-ink); background:transparent; }
-.workspace-design .sidebar-bottom > .sidebar-control:not(:disabled):hover { color:var(--nav-ink); background:var(--nav-hover); border-color:transparent; }
-.workspace-design .sidebar-bottom > .sidebar-control.active { color:var(--nav-ink); background:var(--nav-active); border-color:var(--nav-border); }
-.workspace-design .sidebar-version { color:var(--nav-muted); }
 
 /* Content starts at the tools, rather than below a repeated page heading. */
 .workspace-design .workspace-body { padding-block:16px; }

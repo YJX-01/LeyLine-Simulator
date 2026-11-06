@@ -16,7 +16,6 @@ import type { WorkbenchNode } from '@leyline/schema';
 import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { acceptanceCases, nextRecordId, removeProjectActor, removeTimelineRecord, setDamageSelected, type AcceptanceCase } from './domain/workbench-project';
 import { getDamagePresentation, formatWorkbenchExpression } from './domain/workbench-display';
-import anemoEmblem from './assets/genshin/element-anemo.webp';
 import geoEmblem from './assets/genshin/element-geo.webp';
 
 const P3Panel = defineAsyncComponent(() => import('./P3Panel.vue'));
@@ -159,14 +158,12 @@ function loadSample(id: AcceptanceCase) { workspace.loadSample(id); navigate('ti
   <div class="workspace-design" :data-domain="activeDomain" :class="{ compact: sidebarCompact, 'mobile-open': mobileOpen }" @click.capture="focusClickedControl">
     <button v-if="mobileOpen" class="drawer-shade" aria-label="关闭导航遮罩" @click="closeNavigation"></button>
     <nav id="workspace-navigation" ref="sidebar" class="design-sidebar" aria-label="工作台功能导航" :inert="narrow && !mobileOpen" @keydown.esc.prevent="closeNavigation">
-      <div class="brand"><span class="brand-symbol">地<span>·</span></span><div class="brand-copy"><strong>地脉</strong><small>轴与配装工作台</small></div></div>
-      <div class="nav-groups"><div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain"><p>{{ group.title }}</p><button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }" :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${item.name}`" :data-testid="`workspace-nav-${item.id}`" :title="item.name" @click="navigate(item.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg><span class="nav-label">{{ item.name }}</span><span v-if="item.id === 'timeline'" class="nav-count">{{ project.timeline.length }}</span></button></div></div>
-      <div class="sidebar-bottom">
-        <button class="sidebar-control" :class="{ active: page === 'settings' }" aria-label="导航 设置" title="设置" :aria-current="page === 'settings' ? 'page' : undefined" @click="navigate('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.settings" /></svg><span class="nav-label">设置</span></button>
-        <button class="sidebar-control sidebar-toggle" :aria-label="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :title="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="narrow ? mobileOpen : !collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.collapse" /></svg><span class="nav-label">{{ narrow ? '关闭导航' : '收起侧栏' }}</span></button>
-        <div class="sidebar-version"><img :src="anemoEmblem" alt="" width="20" height="20" class="element-emblem"><span>本地工作台 · v0.2</span></div>
+      <div class="sidebar-top">
+        <button class="sidebar-control sidebar-toggle" :aria-label="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :title="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="narrow ? mobileOpen : !collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.collapse" /></svg><span class="nav-label">{{ narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏' }}</span></button>
       </div>
+      <div class="nav-groups"><div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain"><p>{{ group.title }}</p><button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }" :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${item.name}`" :data-testid="`workspace-nav-${item.id}`" :title="item.name" @click="navigate(item.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg><span class="nav-label">{{ item.name }}</span><span v-if="item.id === 'timeline'" class="nav-count">{{ project.timeline.length }}</span></button></div><div class="nav-utilities"><button class="sidebar-control" :class="{ active: page === 'settings' }" aria-label="导航 设置" title="设置" :aria-current="page === 'settings' ? 'page' : undefined" @click="navigate('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.settings" /></svg><span class="nav-label">设置</span></button></div></div>
     </nav>
+    <button v-if="!narrow" class="sidebar-edge-toggle" :aria-label="collapsed ? '展开侧栏（边缘按钮）' : '收起侧栏（边缘按钮）'" :title="collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="!collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 7 12l8 7Z" /></svg></button>
 
     <div class="workspace-body" role="main" :aria-label="titles[page]" :inert="narrow && mobileOpen">
       <header v-if="isProjectPage || narrow" class="design-topbar" :class="{ 'mobile-only-bar': !isProjectPage }">

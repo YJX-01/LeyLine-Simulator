@@ -7,8 +7,10 @@ const slotMap = { flower: 'flower', feather: 'plume', plume: 'plume', sand: 'san
 const groups = ['flower', 'feather', 'sand', 'cup', 'head'] as const;
 const aliases: Record<string, string> = { feather: 'plume', sand: 'sands', cup: 'goblet', head: 'circlet' };
 const statMap: Record<string, RealStat> = { lifeStatic: 'hp', lifePercentage: 'hpPercent', attackStatic: 'attack', attackPercentage: 'attackPercent', defendStatic: 'defense', defendPercentage: 'defensePercent', critical: 'critRate', criticalDamage: 'critDamage', recharge: 'energyRecharge', elementalMastery: 'elementalMastery', windBonus: 'anemoBonus', rockBonus: 'geoBonus', thunderBonus: 'electroBonus', waterBonus: 'hydroBonus', fireBonus: 'pyroBonus', iceBonus: 'cryoBonus', dendroBonus: 'dendroBonus', physicalBonus: 'physicalBonus', cureEffect: 'healingBonus' };
-// Community export names differ from genshin-db IDs; compare fixed local source names.
-const setAliases: Record<string, string> = { gladiatorFinale: 'gladiatorsfinale', wandererTroupe: 'wandererstroupe', crimsonWitch: 'crimsonwitchofflames', defenderWill: 'defenderswill', exile: 'theexile', shimenawaReminiscence: 'shimenawasreminiscence', thunderSmoother: 'thundersoother', SpinMoonSerenade: 'silkenmoonsserenade', RealmMirrorNight: 'nightoftheskysunveiling' };
+// Identity mapping captured from TwiceDrop Mona 7.2.02, matched by exact Chinese catalog names.
+import monaSetAliases from '../assets/mona-set-aliases.json';
+const setAliases: Record<string, string> = monaSetAliases;
+
 type SetEntry = { id: string; name: string };
 type MainTable = Record<RealStat, number[]>;
 function realContent(item: AccountArtifact['real']): string {
@@ -18,6 +20,27 @@ const object = (value: unknown): value is Record<string, unknown> => typeof valu
 const text = (value: unknown): value is string => typeof value === 'string' && value.length > 0 && value.length <= 160;
 export interface MonaImportPreview {
   format: 'mona-v1'; accountId: string; additions: AccountArtifact[]; updates: { item: AccountArtifact; before: string }[]; duplicates: number; skipped: string[]; conflicts: string[];
+}
+/** Repair only proven, unedited legacy identities, without recreating a player export. */
+export async function previewMonaSetRepairs(account: LocalAccount, sets: SetEntry[]): Promise<MonaImportPreview> {
+  const preview: MonaImportPreview = { format: 'mona-v1', accountId: account.id, additions: [], updates: [], duplicates: 0, skipped: [], conflicts: [] };
+  for (const item of account.artifacts) {
+    if (!item.mona?.setIdentityPending || !item.real || item.real.source?.format !== 'mona-v1') continue;
+    const name = item.mona.sourceSetName ?? '';
+    const set = sets.find(set => set.id === setAliases[name]);
+    if (!set) { preview.skipped.push(`${name}：仍没有经过核对的套装映射。`); continue; }
+    const snapshot = JSON.stringify(item);
+    const content = { setId: item.real.setId, slot: item.real.slot, level: item.real.level, main: { stat: item.real.mainStat, value: item.mona.mainValue }, substats: item.real.substats };
+    if (await digest(JSON.stringify(content)) !== item.real.source.fingerprint) {
+      preview.skipped.push(`${item.name}：导入后词条已修改，请保留现有物品并核对原文件。`); continue;
+    }
+    const fingerprint = await digest(JSON.stringify({ ...content, setId: set.id }));
+    const originalName = `${name}（套装待核对） · ${accountSlotLabels[item.slot]}`;
+    preview.updates.push({ before: snapshot, item: { ...item,
+      name: item.name === originalName ? `${set.name} · ${accountSlotLabels[item.slot]}` : item.name,
+      real: { ...item.real, setId: set.id, source: { ...item.real.source, fingerprint } }, mona: { ...item.mona, setIdentityPending: false } } });
+  }
+  return preview;
 }
 async function digest(content: string): Promise<string> {
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
@@ -92,7 +115,15 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
       mona: { mainValue: primary.value, omit: item.omit === true, sourceSetName: setName, ...(setIdentityPending ? { setIdentityPending: true } : {}), ...(text(item.equip) ? { equippedBy: item.equip } : {}), ...(typeof item.contentHash === 'string' ? { contentHash: item.contentHash } : {}) } };
     const existing = account.artifacts.find(entry => entry.id === id);
     if (existing) {
-      if (existing.real?.source?.fingerprint === fingerprint && realContent(existing.real) === realContent(real)) preview.duplicates++;
+      const resolvedIdentity = existing.mona?.setIdentityPending && !setIdentityPending
+        && existing.mona.sourceSetName === setName && existing.real?.source?.key === key
+        && realContent({ ...existing.real, setId: real.setId }) === realContent(real);
+      if (resolvedIdentity) {
+        preview.conflicts.push(`${setName}：已核实为「${set!.name}」，确认更新后补全套装身份；词条与归属不变。`);
+        const originalName = `${setName}（套装待核对） · ${accountSlotLabels[slot]}`;
+        preview.updates.push({ item: { ...existing, name: existing.name === originalName ? next.name : existing.name,
+          real: { ...existing.real!, setId: real.setId, source: real.source }, mona: { ...existing.mona!, setIdentityPending: false } }, before: JSON.stringify(existing) });
+      } else if (existing.real?.source?.fingerprint === fingerprint && realContent(existing.real) === realContent(real)) preview.duplicates++;
       else {
         preview.conflicts.push(`${next.name}：相同来源标识的内容已经变化，默认不覆盖现有物品。`);
         if (existing.real?.source?.format === 'mona-v1' && existing.slot === next.slot && existing.real.setId === real.setId) preview.updates.push({ item: { ...next, name: existing.name }, before: JSON.stringify(existing) });

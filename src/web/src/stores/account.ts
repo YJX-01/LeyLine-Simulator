@@ -20,6 +20,10 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventoryStat = ref('');
   const inventoryOwner = ref('all');
   const inventoryPage = ref(1);
+  const inventorySet = ref('');
+  const inventorySubstat = ref('');
+  const inventoryLevel = ref('');
+  const inventorySort = ref('default');
   const previous = ref<LocalAccount>();
   try {
     const content = typeof localStorage === 'undefined' ? null : localStorage.getItem(`${storageKey}-previous`);
@@ -88,5 +92,5 @@ export const useAccountStore = defineStore('local-account', () => {
     catch { error.value = '账号文件无效或读取失败，现有账号保持不变。'; }
   }
   return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious,
-    selectedCharacterId, characterQuery, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage };
+    selectedCharacterId, characterQuery, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort };
 });
