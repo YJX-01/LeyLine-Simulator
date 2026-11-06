@@ -13,6 +13,7 @@
 | [分层实施路线](planning/implementation-roadmap.md) | 依赖顺序、可运行交付、阶段验收和产品目标对齐矩阵 |
 | [实施 Agent Prompt](planning/implementation-agent-prompt.md) | 桌面 UI 优先的交接范围、并行分工与验收边界 |
 | [桌面实施调整](planning/desktop-implementation.md) | 桌面与网页共用的方案、D0 → P2 → P3 顺序 |
+| [侧栏与功能分区讨论](planning/ui-navigation-discussion.md) | 参考莫娜的导航证据、D1 分区提案及待决事项 |
 | [桌面打开与验收](planning/desktop-delivery.md) | 双击入口、界面检查步骤、实际验证及剩余限制 |
 | [P0/P1 内核记录](planning/p0-p1-implementation.md) | v1 语义、普通算例、来源与诊断、无界面验证 |
 | [讨论提纲](planning/discussion-agenda.md) | 按依赖顺序讨论工作流、标注模型、Buff、公式和优化 |
