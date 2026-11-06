@@ -1,6 +1,6 @@
 # P0 + P1 实施记录与 v1 语义
 
-2026-11-06。仅完成无界面普通伤害闭环；原自动模拟器不迁移，P2–P8 未实施。
+2026-11-06。本文为 P0/P1 历史记录，描述当时无界面普通伤害切片、v1 语义与验收。此后的 P2/P2.5 扩展见[实施路线](implementation-roadmap.md)及[P2.5 记录](p2-5-implementation.md)，下文“未实现”和“下一步”均指当时阶段，不作为当前状态。
 
 公开入口为 `@leyline/engine` 的 `evaluateWorkbench(input: unknown)`；文件校验为 `@leyline/schema` 的 `workbenchProjectSchema`。最小样本见 `fixtures/workbench/ordinary.json`。本地调用：
 

@@ -1,10 +1,11 @@
-import type { WorkbenchProject } from '@leyline/schema';
+import { realArtifactSchema, realBuildSchema, type RealArtifact, type RealBuild, type WorkbenchProject } from '@leyline/schema';
+import { validateAccountArtifact } from './account-real';
 
 export const accountSlots = ['flower', 'plume', 'sands', 'goblet', 'circlet'] as const;
 export type AccountSlot = typeof accountSlots[number];
 export const accountSlotLabels: Record<AccountSlot, string> = { flower: '生之花', plume: '死之羽', sands: '时之沙', goblet: '空之杯', circlet: '理之冠' };
-export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>> }
-export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number }
+export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>>; realBuild?: RealBuild }
+export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string } }
 export interface LocalAccount { schemaVersion: 1; kind: 'account'; id: string; name: string; characters: AccountCharacter[]; artifacts: AccountArtifact[] }
 export const cloneAccount = (value: LocalAccount): LocalAccount => JSON.parse(JSON.stringify(value)) as LocalAccount;
 export function createAccount(name = '我的本地账号'): LocalAccount {
@@ -21,11 +22,18 @@ export function parseAccount(input: unknown): LocalAccount {
   for (const artifact of input.artifacts) {
     if (!object(artifact) || !validText(artifact.id) || ids.has(artifact.id) || !validText(artifact.name) || !accountSlots.includes(artifact.slot as AccountSlot) || !attack(artifact.attack)) return fail();
     ids.add(artifact.id);
+    if (artifact.real !== undefined) {
+      const parsed = realArtifactSchema.safeParse(artifact.real);
+      if (!parsed.success || parsed.data.id !== artifact.id || parsed.data.slot !== artifact.slot) return fail();
+      validateAccountArtifact(parsed.data);
+    }
+    if (artifact.mona !== undefined && (!object(artifact.mona) || !attack(artifact.mona.mainValue) || typeof artifact.mona.omit !== 'boolean' || (artifact.mona.contentHash !== undefined && typeof artifact.mona.contentHash !== 'string'))) return fail();
   }
   const owners = new Set<string>();
   for (const character of input.characters) {
     if (!object(character) || !validText(character.id) || ids.has(character.id) || !validText(character.name) || !attack(character.attack) || typeof character.weapon !== 'string' || character.weapon.length > 160 || !object(character.equipment)) return fail();
     ids.add(character.id);
+    if (character.realBuild !== undefined && !realBuildSchema.safeParse(character.realBuild).success) return fail();
     for (const [slot, artifactId] of Object.entries(character.equipment)) {
       const artifact = input.artifacts.find((entry: unknown) => object(entry) && entry.id === artifactId);
       if (!accountSlots.includes(slot as AccountSlot) || !object(artifact) || artifact.slot !== slot || typeof artifactId !== 'string' || owners.has(artifactId)) return fail();
@@ -51,6 +59,7 @@ export function equipArtifact(account: LocalAccount, characterId: string, artifa
 export function copyAccountCharacter(account: LocalAccount, characterId: string, project: WorkbenchProject, characterDefinition: string, weaponDefinition: string): string {
   parseAccount(account);
   const character = account.characters.find(entry => entry.id === characterId);
+  if (character && (character.realBuild || Object.values(character.equipment).some(id => account.artifacts.find(item => item.id === id)?.real))) throw new Error('真实角色或真实圣遗物请通过真实配装面板复制到当前轴，避免丢失技能、装备及数据快照。');
   if (!character || !project.definitions.some(entry => entry.id === characterDefinition) || !project.definitions.some(entry => entry.id === weaponDefinition)) throw new Error('请先选择账号角色和轴内角色、武器定义。');
   const artifacts = Object.values(character.equipment).map(item => ({ ...account.artifacts.find(entry => entry.id === item)! }));
   const occupied = new Set(project.candidate.actors.flatMap(actor => actor.accountSnapshot?.accountId === account.id ? actor.accountSnapshot.artifacts.map(item => item.id) : []));

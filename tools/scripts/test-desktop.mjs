@@ -138,10 +138,51 @@ try {
   await page.getByRole('button', { name: '打开账号资料', exact: true }).click();
   await expect(page.getByLabel('选择账号角色', { exact: true })).toContainText('桌面账号旅人');
   await expect(page.getByTestId('workspace-total')).toHaveText('2,000');
+  // P2.5: real static snapshots and the new axis engine in the packaged custom origin.
+  for (const [character, expected] of [['jean','1,549.2331'], ['kaeya','990.7905'], ['xingqiu','2,682.857']]) {
+    await page.getByTestId('workspace-nav-projects').click();
+    await page.getByRole('button', { name: '新建空轴', exact: true }).click();
+    await page.getByTestId('workspace-nav-team').click();
+    await page.getByLabel('游戏角色', { exact: true }).selectOption(character);
+    await page.getByRole('button', { name: '添加真实角色到当前轴', exact: true }).click();
+    await page.getByRole('button', { name: '添加技能全部独立命中', exact: true }).click();
+    await expect(page.getByTestId('workspace-total')).toHaveText(expected);
+    const realPath = resolve(directory, `real-${character}.json`);
+    await application.evaluate(({ dialog }, path) => {
+      dialog.showSaveDialog = async () => ({ canceled: false, filePath: path });
+      dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] });
+    }, realPath);
+    await page.getByRole('button', { name: '保存轴项目', exact: true }).click();
+    await expect(page.locator('.design-statusbar')).toContainText('当前无未保存修改');
+    await page.getByLabel('真实战技天赋', { exact: true }).fill('8');
+    await page.getByLabel('真实战技天赋', { exact: true }).press('Tab');
+    await page.getByRole('button', { name: '打开轴项目', exact: true }).click();
+    await expect(page.getByTestId('workspace-total')).toHaveText(expected);
+  }
+  await page.screenshot({ path: resolve(directory, 'real-game-team.png'), fullPage: true });
+  await page.getByTestId('workspace-nav-timeline').click();
+  await expect(page.getByRole('button', { name: /^选择伤害点 / })).toHaveCount(2);
+  await page.screenshot({ path: resolve(directory, 'real-game-timeline.png'), fullPage: true });
+  await page.getByTestId('workspace-nav-artifacts').click();
+  await page.getByLabel('导入莫娜圣遗物文件', { exact: true }).setInputFiles(resolve('fixtures/mona/mona-v1.json'));
+  await page.getByRole('button', { name: '预览莫娜导入', exact: true }).click();
+  await page.getByRole('button', { name: '确认导入 3 件五星圣遗物', exact: true }).click();
+  await expect(page.getByText('库存共 8 件。相同属性的物品保留各自身份。', { exact: true })).toBeVisible();
+  const realAccountPath = resolve(directory, 'real-account.json');
+  await application.evaluate(({ dialog }, path) => {
+    dialog.showSaveDialog = async () => ({ canceled: false, filePath: path });
+    dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] });
+  }, realAccountPath);
+  await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
+  await expect.poll(async () => JSON.parse(await readFile(realAccountPath,'utf8').catch(() => '{}')).artifacts?.filter(item => item.real).length).toBe(3);
+  await page.getByRole('button', { name: '新建账号', exact: true }).click();
+  await page.getByRole('button', { name: '打开账号资料', exact: true }).click();
+  await expect(page.getByText('库存共 8 件。相同属性的物品保留各自身份。', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,682.857');
   const security = await page.evaluate(() => ({ nodeAvailable: typeof window.require !== 'undefined', bridge: Boolean(window.leylineDesktop), origin: location.origin }));
   if (security.nodeAvailable || !security.bridge || security.origin !== 'leyline://app') throw new Error(`Unexpected renderer isolation: ${JSON.stringify(security)}`);
   const preferences = await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].webContents.getLastWebPreferences());
   if (!preferences.sandbox || !preferences.contextIsolation || preferences.nodeIntegration) throw new Error('Desktop security preferences changed');
   if (requests.some(url => /^https?:/.test(url)) || errors.length) throw new Error(JSON.stringify({ requests, errors }));
-  console.log(JSON.stringify({ status: 'passed', executable, checks: ['default-integrated-shell', '4400/4000/4840/2000', 'native-file-save-open', 'custom-axis-10560', 'invalid-file-preservation', 'unknown-vs-false', 'shared-project', 'local-images', 'isolated-renderer', 'empty-axis-ui', 'undo-redo-recovery', 'native-account-definition-files', 'axis-worker'], screenshot: resolve(directory, 'workspace-timeline.png') }, null, 2));
+  console.log(JSON.stringify({ status: 'passed', executable, checks: ['default-integrated-shell', '4400/4000/4840/2000', 'native-file-save-open', 'custom-axis-10560', 'invalid-file-preservation', 'unknown-vs-false', 'shared-project', 'local-images', 'isolated-renderer', 'empty-axis-ui', 'undo-redo-recovery', 'native-account-definition-files', 'axis-worker', 'real-three-character-references', 'real-snapshot-file-roundtrip', 'native-mona-import'], screenshot: resolve(directory, 'workspace-timeline.png') }, null, 2));
 } finally { await application.close(); }

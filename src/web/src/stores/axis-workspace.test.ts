@@ -16,6 +16,22 @@ function nativeBridge(overrides: Partial<DesktopBridge> = {}): DesktopBridge {
 }
 
 describe('shared axis workspace', () => {
+  it('marks a named project saved despite schema object ordering and restores its saved status', async () => {
+    const data = new Map<string, string>();
+    vi.stubGlobal('localStorage', { getItem: (key: string) => data.get(key) ?? null, setItem: (key: string, value: string) => data.set(key, value) });
+    try {
+      const store = useAxisWorkspaceStore();
+      store.project.definitions[0] = { name: '有名称的快照', ...store.project.definitions[0] };
+      adapters.bridge = nativeBridge();
+      expect(await store.saveProject()).toBe(true);
+      expect(store.dirty).toBe(false);
+      store.loadSample('weapon-b');
+      expect(store.recover()).toBe(true);
+      expect(store.project.definitions[0].name).toBe('有名称的快照');
+      expect(store.dirty).toBe(false);
+      expect(store.result.totalValue).toBe(4400);
+    } finally { vi.unstubAllGlobals(); }
+  });
   beforeEach(() => {
     pinia = createPinia();
     setActivePinia(pinia);

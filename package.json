@@ -8,7 +8,7 @@
     "clean:outputs": "node tools/scripts/clean.mjs",
     "clean:cache": "node tools/scripts/clean.mjs --cache",
     "architecture:check": "node tools/scripts/check-architecture.mjs",
-    "data:check": "node tools/scripts/convert-repo-data.mjs --check",
+    "data:check": "node tools/scripts/convert-repo-data.mjs --check && node tools/scripts/convert-real-game-data.mjs --check",
     "fixture:check": "node tools/scripts/create-team-example.mjs --check",
     "assets:check": "node tools/scripts/check-ui-assets.mjs",
     "dev": "pnpm --filter @leyline/web dev",

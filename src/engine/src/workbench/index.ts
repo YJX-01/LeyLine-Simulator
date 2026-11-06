@@ -1,4 +1,5 @@
 import { workbenchProjectSchema, type WorkbenchProject, type WorkbenchDiagnostic, type WorkbenchUnit } from '@leyline/schema';
+import { evaluateRealDamage, type RealDamageResult } from '../real-game';
 
 type Definition = WorkbenchProject['definitions'][number];
 type Quantity = { value: number; unit: WorkbenchUnit };
@@ -7,6 +8,7 @@ export interface WorkbenchPoint {
   value: number | null;
   formula: { definition: string; root: string | null; effects: { definition: string; effect: string; action: string | null }[] };
   sources: { path: string; definition: string; version: string; source: Definition['source'] }[];
+  real?: RealDamageResult;
 }
 export interface WorkbenchResult {
   status: 'complete' | 'partial' | 'invalid';
@@ -72,6 +74,8 @@ export function evaluateWorkbench(input: unknown): WorkbenchResult {
     const point: WorkbenchPoint = { id: record.id, value: null, formula: { definition: record.definition, root: definition?.damage ?? null, effects: [] }, sources: [] };
     points.push(point);
     if (!actor || !definition) continue;
+    let bonus = 0;
+    let gameDamageUsed = false;
     const source = (d: Definition, path: string) => {
       if (!point.sources.some(s => s.path === path)) point.sources.push({ path, definition: d.id, version: d.version, source: d.source });
     };
@@ -89,6 +93,13 @@ export function evaluateWorkbench(input: unknown): WorkbenchResult {
       if (!node) { report('missing-reference', path, id); return null; }
       const next = new Set(stack).add(id);
       switch (node.op) {
+        case 'game-damage': {
+          gameDamageUsed = true;
+          const real = evaluateRealDamage(actor?.realBuild, record.realDamage, project.enemy, bonus);
+          point.real = real;
+          for (const issue of real.issues) report(issue.code, path, issue.message);
+          return real.value === null ? null : { value: real.value, unit: 'damage' };
+        }
         case 'constant': return node.quantity;
         case 'input': {
           const q = actor && Object.hasOwn(actor.inputs, node.key) ? actor.inputs[node.key] : undefined;
@@ -123,9 +134,7 @@ export function evaluateWorkbench(input: unknown): WorkbenchResult {
       }
     }
     if (!definition.damage) { report('missing-reference', `timeline.${record.id}.damage`, 'Definition has no damage root'); continue; }
-    const base = evaluate(definition, definition.damage);
-    let bonus = 0;
-    let complete = base !== null;
+    let complete = true;
     for (const equipment of [actor.character, actor.weapon]) {
       const d = definitions.get(equipment);
       if (!d) { complete = false; continue; }
@@ -149,8 +158,15 @@ export function evaluateWorkbench(input: unknown): WorkbenchResult {
         }
       }
     }
+    const base = evaluate(definition, definition.damage);
+    if (base === null) complete = false;
+    if (!complete && point.real?.status === 'complete') {
+      const invalidEffect = diagnostics.some(issue => issue.path.startsWith(`timeline.${record.id}.`) && issue.code !== 'unknown' && issue.code !== 'unsupported');
+      point.real = { ...point.real, status: invalidEffect ? 'invalid' : 'partial', value: null,
+        diagnostics: [...point.real.diagnostics, '区间效果未能完整求值，伤害尚不能确认。'] };
+    }
     if (base && base.unit !== 'attack' && base.unit !== 'damage') { report('unit', `timeline.${record.id}`, 'Damage root requires attack or damage units'); complete = false; }
-    const value = base ? base.value * (1 + bonus) : NaN;
+    const value = base ? base.value * (gameDamageUsed ? 1 : 1 + bonus) : NaN;
     if (complete && Number.isFinite(value)) point.value = value;
     else if (complete) report('arithmetic', `timeline.${record.id}`, 'Non-finite damage result');
   }

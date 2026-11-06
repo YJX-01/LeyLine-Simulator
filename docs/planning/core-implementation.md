@@ -1,6 +1,6 @@
 # 核心模块代码实现方案
 
-2026-11-06 实施修订：P0/P1 内核、D0 桌面验收及 D1 正式界面整合已落地，基线 `72b7deb`。桌面与网页共用 Vue 页面和轴状态，Electron 仅作窗口及文件适配，CLI 保留供 agent 操作。下一阶段补齐 P2 编辑/资料闭环，统一状态见[实施路线](implementation-roadmap.md)与[整合记录](desktop-integration.md)。
+2026-11-06 实施修订：P0/P1、D0、D1、P2、P2.5 已完成，当前实现基线 `3315a09`。桌面与网页共用界面、轴状态和 engine；独立账号/定义/轴、Worker 与首批真实配装已接入。下一阶段为 P3，统一状态见[实施路线](implementation-roadmap.md)，现有代码入口和执行要求见[P3 prompt](implementation-agent-prompt.md)。
 
 日期：2026-11-06。状态：已实现最小切片，后续机制和通用 API 仍为实施提案。与[产品方向](product-direction.md)、[模块原则](module-design.md)及[总体设计](overall-design.md)配套；不能将下文未来接口视为已有公开 API。
 
@@ -116,7 +116,7 @@ type ValueResult<T> =
 
 ### 5.2 配装与属性
 
-从角色成长、武器、主副词条和套装得到基础属性节点，再应用效果产生的修饰。使用具名参数，在导入/数据转换边界隔离原始数组列号。现有 `loadout.ts` 的数学和来源记录可复用，但五角色校验、硬编码武器效果与新定义模型需要分离评估，不能直接作为新通用入口。
+P2.5 已由 `engine/src/real-game.ts` 的 `resolveRealBuild` / `evaluateRealDamage` 解析采用的真实快照，`workbench/index.ts` 的受控 `game-damage` 节点调用同一数学。P3 应将这些基础属性与通用效果/捕获/历史依赖衔接，不能复制第二套伤害公式。使用具名参数，在数据转换边界隔离原始数组列号。旧模拟器 `loadout.ts` 可供参考，其五角色校验和硬编码效果不能直接成为新通用入口。
 
 修饰需明确相加池、独立乘区、覆盖组、上下限和转换阶段。跨角色属性转换进入依赖图；不是先把每个人的最终面板全部算完，再尝试处理互相引用。
 

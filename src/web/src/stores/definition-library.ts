@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { parseDefinitionLibrary, type DefinitionLibraryFile } from '../domain/definition-library';
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
+import { fileSignature } from '../domain/file-signature';
 
 const storageKey = 'leyline-definition-library-v1';
 export const useDefinitionLibraryStore = defineStore('definition-library', () => {
@@ -11,7 +12,7 @@ export const useDefinitionLibraryStore = defineStore('definition-library', () =>
   const notice = ref('定义库独立保存；复制到轴后保留当时版本。');
   const busy = ref(false);
   const savedSnapshot = ref<string | null>(null);
-  const dirty = computed(() => JSON.stringify(library.value) !== savedSnapshot.value);
+  const dirty = computed(() => fileSignature(library.value) !== savedSnapshot.value);
   try {
     const saved = typeof localStorage === 'undefined' ? null : localStorage.getItem(storageKey);
     if (saved) library.value = parseDefinitionLibrary(JSON.parse(saved));
@@ -25,7 +26,7 @@ export const useDefinitionLibraryStore = defineStore('definition-library', () =>
     let input: unknown;
     try { input = JSON.parse(content); } catch { throw new Error('定义库文件无法识别，当前资料保持不变。'); }
     library.value = parseDefinitionLibrary(input);
-    savedSnapshot.value = JSON.stringify(library.value);
+    savedSnapshot.value = fileSignature(library.value);
     error.value = '';
     notice.value = '已打开独立内容定义库，当前轴快照保持原版本。';
   }
@@ -35,7 +36,7 @@ export const useDefinitionLibraryStore = defineStore('definition-library', () =>
     error.value = '';
     try {
       const parsed = parseDefinitionLibrary(library.value);
-      const snapshot = JSON.stringify(parsed);
+      const snapshot = fileSignature(parsed);
       if (new TextEncoder().encode(snapshot).byteLength > 8 * 1024 * 1024) throw new Error('定义库超过 8 MiB，未写入文件。');
       const bridge = getDesktopBridge();
       if (bridge) { if (!await bridge.saveProject(JSON.stringify(parsed, null, 2))) return false; }

@@ -1,6 +1,6 @@
 # Architecture and extension guidelines
 
-> This document describes the current implementation. The future product direction is a video timeline annotation and build optimization workbench; see [product direction](../planning/product-direction.md). Simulation-specific extension guidance below must be reconsidered during the redesign.
+> The default product is the shared desktop/web timeline workbench, implemented through P2.5 at `3315a09`. The preserved automatic simulator is a separate entry. See the [documentation index](../README.md), [stage roadmap](../planning/implementation-roadmap.md), and [P3 handoff](../planning/implementation-agent-prompt.md). Simulation-specific extension guidance below does not define new workbench behavior.
 
 ## Scope and ownership
 
@@ -21,11 +21,13 @@ Cross-workspace imports use declared package exports. Relative imports into sibl
 
 ## Application flow
 
-Vue components edit Pinia state. `composables/useTeamSimulation.ts` validates submitted configurations and manages `domain/team-task.ts`, which communicates with `attack.worker.ts`. The Worker calls engine entrypoints and returns versioned results. Charts and comparisons consume results without reconstructing combat rules. The editor also calls `resolveLoadout` synchronously for previews; full simulations run in the Worker.
+The default `WorkspaceShell.vue` and formula tool share `stores/axis-workspace.ts`. Pure edit operations live in web domain modules; `axis.worker.ts` calls `@leyline/engine.evaluateWorkbench` with session/revision/task isolation. The public contracts live in `schema/src/workbench/index.ts`; P2.5 real builds use `schema/src/real-game.ts` and `engine/src/real-game.ts`. Account, project and definition files remain independent. Proposed P3 APIs in planning documents are not existing exports.
+
+The preserved automatic simulator follows a separate flow: Vue components edit Pinia state. `composables/useTeamSimulation.ts` validates submitted configurations and manages `domain/team-task.ts`, which communicates with `attack.worker.ts`. The Worker calls engine entrypoints and returns versioned results. Charts and comparisons consume results without reconstructing combat rules. The editor also calls `resolveLoadout` synchronously for previews; full simulations run in the Worker.
 
 `domain/` owns nonvisual transformations and persistence validation; `stores/` owns reactive state; `composables/` coordinates lifecycle; `components/` owns reusable UI; `charts/` owns chart loading. Domain modules must not depend on Vue, Pinia, components, stores, or composables. Storage and Worker access use the existing `StoragePort` and `WorkerPort` interfaces.
 
-## Engine extension map
+## Preserved simulator extension map
 
 - Contracts: `schema/src/team.ts`, `combat.ts`, and `legacy.ts`. The latter still defines supported formula/developer-tool and Worker contracts; it is not dead Python code.
 - Attributes and equipment: `engine/src/loadout.ts`, `gear-runtime.ts`, and their tests.
@@ -37,7 +39,7 @@ For each new mechanic, document assumptions and unsupported cases, add independe
 
 ## Source data and generated output
 
-`docs/constant/*.json` remains the canonical generator input; `docs/characters/*.json` is supporting evidence. Run `node tools/scripts/convert-repo-data.mjs` after intentional source changes and review generated content and hashes in `src/game-data/src/generated/`. Never edit generated snapshots independently. `pnpm data:check` and `pnpm fixture:check` enforce consistency.
+`docs/constant/*.json` remains the canonical generator input; `docs/characters/*.json` is supporting evidence. Run `node tools/scripts/convert-repo-data.mjs` after intentional source changes and review generated content and hashes in `src/game-data/src/generated/`. Never edit generated snapshots independently. P2.5 canonical inputs in `docs/constant/real-game/` use `tools/scripts/convert-real-game-data.mjs` to produce `src/game-data/src/real-data/`, including hashes; ordinary generation does not read `.references`. `pnpm data:check` covers both generators; `pnpm fixture:check` validates generated scenarios.
 
 ## Enforcement and validation
 

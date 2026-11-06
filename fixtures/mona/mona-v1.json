@@ -1,0 +1,102 @@
+{
+  "version": "1",
+  "flower": [
+    {
+      "setName": "gladiatorFinale",
+      "position": "flower",
+      "star": 5,
+      "mainTag": {
+        "name": "lifeStatic",
+        "value": 4780
+      },
+      "normalTags": [
+        {
+          "name": "critical",
+          "value": 0.0311
+        },
+        {
+          "name": "criticalDamage",
+          "value": 0.0622
+        },
+        {
+          "name": "attackPercentage",
+          "value": 0.0525
+        },
+        {
+          "name": "attackStatic",
+          "value": 19.450000762939453
+        }
+      ],
+      "level": 20,
+      "omit": false,
+      "id": 42,
+      "contentHash": "fixture-flower-42"
+    },
+    {
+      "setName": "gladiatorFinale",
+      "position": "flower",
+      "star": 5,
+      "mainTag": {
+        "name": "lifeStatic",
+        "value": 4780
+      },
+      "normalTags": [
+        {
+          "name": "critical",
+          "value": 0.0311
+        },
+        {
+          "name": "criticalDamage",
+          "value": 0.0622
+        },
+        {
+          "name": "attackPercentage",
+          "value": 0.0525
+        },
+        {
+          "name": "attackStatic",
+          "value": 19.450000762939453
+        }
+      ],
+      "level": 20,
+      "omit": false,
+      "id": 43,
+      "contentHash": "fixture-flower-43"
+    }
+  ],
+  "feather": [],
+  "sand": [],
+  "cup": [
+    {
+      "setName": "heartOfDepth",
+      "position": "cup",
+      "star": 5,
+      "mainTag": {
+        "name": "waterBonus",
+        "value": 0.466
+      },
+      "normalTags": [
+        {
+          "name": "critical",
+          "value": 0.0389
+        },
+        {
+          "name": "criticalDamage",
+          "value": 0.0777
+        },
+        {
+          "name": "attackStatic",
+          "value": 23.34000015258789
+        },
+        {
+          "name": "recharge",
+          "value": 0.0583
+        }
+      ],
+      "level": 20,
+      "omit": true,
+      "id": 44
+    }
+  ],
+  "head": []
+}

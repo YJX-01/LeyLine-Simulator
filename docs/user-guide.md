@@ -1,12 +1,12 @@
-# 地脉模拟器使用指南
+# 保留的自动模拟器使用指南
 
-> 适用范围：本文说明当前自动模拟实现。未来的视频打轴与配装优化工作台仍在规划，见[产品方向](planning/product-direction.md)。
+> 本文只说明 `/#workbench` 的原自动模拟器。默认新轴工作台已完成至 P2.5；桌面打开方式和新轴操作见[整合记录](planning/desktop-integration.md)及[真实数据验收](planning/p2-5-implementation.md)。两者支持范围分别见[支持矩阵](architecture/content-support.md)。
 
 ## 开始使用
 
-源码运行：安装Node.js 22.12或更新版本及pnpm 11.3.0，执行 `pnpm install --frozen-lockfile`、`pnpm dev`，打开终端给出的本地地址。当前产品完全在浏览器和Web Worker运行，不需要Python。已有生产构建可用 `pnpm preview` 本地查看，不要直接双击index.html。
+源码运行：安装Node.js 22.12或更新版本及pnpm 11.3.0，执行 `pnpm install --frozen-lockfile`、`pnpm dev`，打开终端给出的本地地址。此旧入口在浏览器和 Web Worker 运行，不需要 Python；默认桌面工作台通过同一前端实现提供本地窗口。已有生产构建可用 `pnpm preview` 本地查看，不要直接双击index.html。
 
-默认示例是行秋、阿贝多、琴、胡桃的两轮24秒循环。保持种子1运行，可检查已验收示例的总伤害389,207.91及0条拒绝指令。更换装备、种子或动作后，须重新检查能量和拒绝原因。
+进入 `/#workbench` 后，默认示例是行秋、阿贝多、琴、胡桃的两轮24秒循环。保持种子1运行，可检查已验收示例的总伤害389,207.91及0条拒绝指令。更换装备、种子或动作后，须重新检查能量和拒绝原因。
 
 ## 编辑与计算
 

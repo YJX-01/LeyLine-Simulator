@@ -7,3 +7,4 @@ export { simulateCombat } from './combat';
 export { resolveLoadout } from './loadout';
 export { simulateTeam } from './team';
 export { evaluateWorkbench, type WorkbenchResult, type WorkbenchPoint } from './workbench';
+export { resolveRealBuild, evaluateRealDamage } from './real-game';

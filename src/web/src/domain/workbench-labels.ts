@@ -1,7 +1,7 @@
 import type { WorkbenchProject } from '@leyline/schema';
 
 const units: Record<string, string> = { scalar: '倍率', attack: '攻击力', damage: '伤害' };
-const operations: Record<string, string> = { constant: '常量', input: '输入属性', add: '相加', multiply: '相乘', divide: '相除', condition: '条件选择', unsupported: '尚未支持' };
+const operations: Record<string, string> = { constant: '常量', input: '输入属性', add: '相加', multiply: '相乘', divide: '相除', condition: '条件选择', unsupported: '尚未支持', 'game-damage': '真实技能伤害' };
 const diagnostics: Record<string, string> = { 'invalid-input': '输入格式有误', 'missing-reference': '引用内容缺失', 'duplicate-id': '标识重复', cycle: '公式存在循环引用', unit: '计算单位不匹配', unknown: '条件尚未确定', unsupported: '当前尚不支持此机制', arithmetic: '数值计算有误' };
 const lookup = (labels: Record<string, string>, value: string, fallback: string) => Object.hasOwn(labels, value) ? labels[value] : fallback;
 export const unitLabel = (value: string) => lookup(units, value, '未知单位');
@@ -26,6 +26,11 @@ export function actorLabel(project: WorkbenchProject, id: string): string {
 export function recordLabel(project: WorkbenchProject, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
+  if (record.realDamage) {
+    const actor = project.candidate.actors.find(entry => entry.id === record.actor);
+    const skill = actor?.realBuild?.character.skills.find(entry => entry.id === record.realDamage?.skillId);
+    return `${skill?.name ?? '真实技能'} · 第${record.realDamage.hitIndex + 1}段`;
+  }
   const index = project.timeline.filter(entry => entry.kind === record.kind).findIndex(entry => entry.id === id);
   return `${record.kind === 'damage' ? '命中' : '动作'}${index + 1}`;
 }
@@ -44,3 +49,8 @@ export const projectLabel = (project: WorkbenchProject) => project.id === 'ordin
 export const errorLabel = (message: string) => message.includes('JSON') ? '项目文件格式无法识别，请检查后重试。' : '操作未完成，请检查项目文件与计算规则。';
 
 export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(message) ? message : '资料操作未完成，请检查文件或存储位置后重试。';
+
+export const realStatLabels: Record<string, string> = { hp: '生命值', hpPercent: '生命值加成', attack: '攻击力', attackPercent: '攻击力加成', defense: '防御力', defensePercent: '防御力加成', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '元素充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
+export const realStatLabel = (key: string) => lookup(realStatLabels, key, '未识别属性');
+export const realElementLabel = (key: string) => lookup({ physical: '物理', anemo: '风', geo: '岩', electro: '雷', hydro: '水', pyro: '火', cryo: '冰', dendro: '草' }, key, '未知元素');
+export const realCategoryLabel = (key: string) => lookup({ normal: '普通攻击', skill: '元素战技', burst: '元素爆发' }, key, '未知技能类型');

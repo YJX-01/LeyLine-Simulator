@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createAccount, equipArtifact, parseAccount, copyAccountCharacter } from './account';
 import { createWorkbenchProject } from './workbench-project';
+import { getRealCharacter, getRealWeapon, getArtifactMain, REAL_DATA_VERSION } from '@leyline/game-data/real';
+import type { RealBuild } from '@leyline/schema';
 
 function populatedAccount() {
   const account = createAccount();
@@ -9,6 +11,23 @@ function populatedAccount() {
   return account;
 }
 describe('independent local account', () => {
+  it('roundtrips real game snapshots without sharing mutable data and blocks legacy copying of real gear', async () => {
+    const account = populatedAccount();
+    const build: RealBuild = { dataVersion: REAL_DATA_VERSION, character: await getRealCharacter('jean'), weapon: await getRealWeapon('favoniussword'), artifactMain: await getArtifactMain(), sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1, hpRatio: 1, artifacts: [] };
+    account.characters[0].realBuild = build;
+    account.artifacts[0].real = { id: 'flower-one', setId: 'none', slot: 'flower', rarity: 5, level: 20, mainStat: 'hp', substats: [{ stat: 'critRate', value: 0.0311 }] };
+    equipArtifact(account, 'one', 'flower-one');
+    const restored = parseAccount(JSON.parse(JSON.stringify(account)));
+    expect(restored.characters[0].realBuild?.character.id).toBe('jean');
+    expect(restored.artifacts[0].real?.substats[0].value).toBe(0.0311);
+    restored.characters[0].realBuild!.character.base.attack = 1;
+    expect(account.characters[0].realBuild.character.base.attack).toBe(18.62);
+    expect(() => copyAccountCharacter(account, 'one', createWorkbenchProject(), 'synthetic-character', 'weapon-a')).toThrow('真实配装面板');
+    delete account.characters[0].realBuild;
+    expect(() => copyAccountCharacter(account, 'one', createWorkbenchProject(), 'synthetic-character', 'weapon-a')).toThrow('真实配装面板');
+    restored.artifacts[0].real!.slot = 'plume';
+    expect(() => parseAccount(restored)).toThrow('账号文件');
+  });
   it('preserves instance identities and requires explicit transfer confirmation', () => {
     const account = populatedAccount();
     equipArtifact(account, 'one', 'flower-one');

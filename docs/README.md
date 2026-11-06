@@ -1,67 +1,47 @@
-# 文档导航
+# 文档导航与交接
 
-项目方向是**对照视频分层打轴，根据动作生成 Buff，结合伤害点构建公式，用于组队与配装优化**。P0/P1 普通伤害内核及桌面可操作验收已实现；桌面与网页共用界面，原自动战斗模拟器保留独立入口，复杂机制仍按阶段推进。
+当前实现基线：`3315a09`（P2.5）；文档整理提交在其后。P0/P1、D0、D1、P2、P2.5 已完成，下一阶段为 P3；P3–P8 未完成。新轴工作台和保留的自动模拟器各有实现，不能互相折算支持能力。
 
-## 规划与交接
+## 从哪里开始
 
-| 文档 | 用途 |
+| 用途 | 入口 | 内容边界 |
+| --- | --- | --- |
+| 当前阶段与下一步 | [实施路线](planning/implementation-roadmap.md) | 阶段状态的统一入口 |
+| 交给下一位 agent | [P3 实施 prompt](planning/implementation-agent-prompt.md) | 可直接执行的任务、阅读顺序、代码入口、验收与提交要求 |
+| 用户操作与桌面入口 | [桌面整合记录](planning/desktop-integration.md) | 当前共用界面、保存边界；末尾按阶段保留历史证据 |
+| 当前真实数据验收 | [P2.5 验收记录](planning/p2-5-implementation.md) | 从空轴建角色、配装、导入、保存重开及独立数值 |
+| 支持范围 | [内容支持矩阵](architecture/content-support.md) | 新轴与旧模拟器分开列出，目录数据不等于全部机制可算 |
+| 数据来源与精度 | [P2.5 数据记录](references/p2-5-data.md) | 固定 SHA、canonical、生成快照、单位、精度差异与许可 |
+| 构建与运行验证 | [部署及本地验证](deployment.md)、[性能说明](performance/README.md) | 本地包、根/子路径、预算和证据要求；不自动发布 |
+
+## 设计与实际实现
+
+[产品方向](planning/product-direction.md)记录用户目标，[模块设计](planning/module-design.md)记录已认可的边界；[总体设计](planning/overall-design.md)和[核心方案](planning/core-implementation.md)包含尚未实现的接口提案。实现能力以阶段验收、支持矩阵及代码为准，不把设计类型名当作现有 API。
+
+当前公开求值入口为 `@leyline/engine.evaluateWorkbench`；UI 保存的轴可由 `node tools/scripts/evaluate-workbench.mjs <项目.json>` 复算。当前格式为 `schemaVersion: 1` / `rulesVersion: workbench-v1`。P2.5 保存的游戏数据/定义版本快照，区别于 P3 将实现的战斗时刻属性捕获。
+
+## 历史记录与契约
+
+- [P0/P1 实施记录](planning/p0-p1-implementation.md)：普通伤害 v1 的初始语义和当时验收，不作为当前全部支持清单。
+- [独立算例](planning/p0-samples.md)：普通伤害已实现；快照6900/7020/6600、累计150/180是 P3 的待实现参考。
+- [P2 契约](planning/p2-local-contract.md)、[P2.5 契约](planning/p2-5-contract.md)：对应阶段冻结的最小契约、文件所有权与集成修订，不是 P3 已发布契约。
+- [莫娜调查](planning/p0-mona-investigation.md)、[视频调查](planning/p0-video-investigation.md)：固定来源的研究证据；调查不等于算法或视频功能接入。
+- [参考资料](references/README.md)：`.references/` 的来源索引。普通构建/运行不依赖该目录；只有显式数据维护使用固定 checkout。
+
+`architecture/event-time.md` 与 `mechanics/` 中的战斗调度说明主要描述旧模拟器。新轴采用 `(timeMs, order, id)`；P3 的捕获阶段、历史与同刻语义需要单独冻结，不能套用旧调度优先级。
+
+修改规则时同步维护阶段验收、支持矩阵及来源说明；历史结果保留阶段标签，避免出现多个互相冲突的“当前状态”。不为本次文档整理修改生产代码或提前宣称 P3 已完成。
+
+## 保留的模拟器与机制参考
+
+[旧模拟器使用指南](user-guide.md)说明 `/#workbench` 的配队、动作循环和结果对比；[架构说明](architecture/overview.md)区分两条执行入口。以下机制文档用于核对既有规则和独立算式，不代表新轴已支持其全部行为：
+
+| 参考 | 内容 |
 | --- | --- |
-| [产品方向](planning/product-direction.md) | 用户已明确的需求、目标流程，以及尚待确定的边界 |
-| [模块设计原则](planning/module-design.md) | 已认可的模块边界、扩展方式与计算契约原则 |
-| [总体设计草案](planning/overall-design.md) | 模块数据流、核心契约、求值流程、三个独立算例和范围划分 |
-| [核心代码方案](planning/core-implementation.md) | 模块目录、契约、表达式/效果/快照/概率/优化的实现方式 |
-| [分层实施路线](planning/implementation-roadmap.md) | 依赖顺序、可运行交付、阶段验收和产品目标对齐矩阵 |
-| [实施 Agent Prompt](planning/implementation-agent-prompt.md) | 唯一实施交接入口：P2 剩余范围、并行分工、中文优先及验收边界 |
-| [UI 素材来源与压缩](references/ui-assets.md) | 固定版本图片来源、版权记录、小尺寸 WebP 及体积预算 |
-| [侧栏工作台正式整合](planning/desktop-integration.md) | 当前正式入口、共享轴状态、真实文件操作、打包及支持边界 |
-| [P0/P1 内核记录](planning/p0-p1-implementation.md) | v1 语义、普通算例、来源与诊断、无界面验证 |
+| [直接伤害](mechanics/direct-hit.md)、[通用战斗规则](mechanics/combat-v1.md) | 原模拟器乘区、Buff、捕获、能量及结算 |
+| [内容与反应](mechanics/content-reactions.md)、[五角色规则](mechanics/first-characters.md) | 原模拟器附着、反应、动作、天赋与命座限制 |
+| [装备规则](mechanics/supported-equipment.md)、[四人循环](mechanics/first-team-cycle.md) | 原模拟器武器/套装和固定循环独立依据 |
+| [琴点按验证](mechanics/jean-tap.md)、[内容数据审计](mechanics/content-audit.md) | 旧验证入口、数值来源、单位及已知冲突 |
+| [UI 素材](references/ui-assets.md) | 当前主题图片来源、许可说明、压缩与预算 |
 
-文档各司其职：产品方向记录目标，模块文档记录原则，总体设计保存未来概念，核心方案保存技术提案，整合记录说明现状，路线维护阶段状态，交接指令是唯一实施入口。设计建议不能视为已实现能力。重复讨论和预览记录已合并删除，历史由 Git 保留。
-
-当前内置界面以中文为先；工作台和公式工具已使用集中中文展示映射，机器标识保留在协议与按需展开的技术详情中。P2 新增页面沿用此要求；远期可替换语言字典，当前不先建设完整国际化框架。
-
-## 当前实现
-
-以下文档用于理解、运行和核对现有代码，不是新产品的设计方案。
-
-| 文档 | 用途 |
-| --- | --- |
-| [使用指南](user-guide.md) | 现有配队、动作编辑、运行与结果对比 |
-| [架构与模块边界](architecture/overview.md) | 当前 workspace、依赖方向和模块职责 |
-| [内容支持矩阵](architecture/content-support.md) | 当前角色、装备与机制的支持范围 |
-| [事件时间约定](architecture/event-time.md) | 当前各验证入口的调度和时间边界 |
-| [构建与交付](deployment.md) | 当前构建、浏览器验证和本地交付流程 |
-| [性能基线](performance/README.md) | 已保存的测量方法、预算与报告；不是本次重新测量 |
-
-## 机制参考
-
-这些文档记录当前规则版本和计算假设。后续可以据此评估公式、属性解析和 Buff 等能力的复用价值，不能直接据此决定新产品也要自动推演所有战斗事件。
-
-| 文档 | 内容 |
-| --- | --- |
-| [直接伤害](mechanics/direct-hit.md) | 单次伤害计算及乘区 |
-| [通用战斗规则](mechanics/combat-v1.md) | 现有 Buff、快照、能量及战斗结算合同 |
-| [内容与反应](mechanics/content-reactions.md) | 现有附着和反应模型 |
-| [五角色规则](mechanics/first-characters.md) | 当前角色动作、天赋、命座及限制 |
-| [装备规则](mechanics/supported-equipment.md) | 当前武器与套装效果 |
-| [四人循环参考](mechanics/first-team-cycle.md) | 固定示例的独立计算依据 |
-| [琴点按验证](mechanics/jean-tap.md) | 保留验证入口的数据冲突与适用范围 |
-| [内容数据审计](mechanics/content-audit.md) | 数据来源、单位、转换与已知冲突 |
-
-## 数据资料
-
-本地外部参考见[来源与阅读指南](references/README.md)及[固定版本清单](references/sources.json)。源码和网页保存在被 Git 忽略的 `.references/`，不作为构建依赖。
-
-- `constant/`：数据转换脚本的规范输入，修改后需要重新生成并检查快照与哈希。
-- `characters/`：角色资料和来源参考；文件存在不代表机制已经验证或实现。
-- `unifiedname.txt`：既有命名对照资料。
-- `performance/*.json`：当前模拟实现的历史测量证据，与性能说明配套读取。
-
-数据资料保持原路径，避免影响生成脚本与已有引用。
-
-## 维护约定
-
-- 新的产品需求与讨论结论放入 `planning/`，明确区分已确认、建议与待讨论事项。
-- 当前实现说明放入 `architecture/`，规则与计算依据放入 `mechanics/`。
-- 旧重写计划、迁移流水账、阶段验收及旧专项审查已经删除，不再作为后续任务清单。
-- 测试数量和性能数字必须注明对应记录；历史通过不代表新版本已验证。
+数据资料保持原路径：`constant/` 为 canonical，`characters/` 和 `unifiedname.txt` 为既有参考，`performance/*.json` 为对应阶段历史测量。角色资料存在不等于规则已验证；生成快照应与 canonical、版本及哈希一起审查。[固定来源清单](references/sources.json)保留外部 checkout 依据。

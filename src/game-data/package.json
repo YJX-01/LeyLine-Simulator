@@ -1,1 +1,1 @@
-{ "name": "@leyline/game-data", "version": "0.1.0", "private": true, "type": "module", "exports": { ".": "./src/index.ts", "./content": "./src/content.ts" } }
+{ "name": "@leyline/game-data", "version": "0.1.0", "private": true, "type": "module", "exports": { ".": "./src/index.ts", "./content": "./src/content.ts", "./real": "./src/real.ts" } }

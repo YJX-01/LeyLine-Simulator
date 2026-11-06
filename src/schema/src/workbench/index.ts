@@ -1,10 +1,12 @@
 import { z } from 'zod';
+import { realBuildSchema, realDamageSchema, realEnemySchema } from '../real-game';
 
 const id = z.string().min(1).max(160);
 const ms = z.number().int().nonnegative().max(3600000);
 export const workbenchUnitSchema = z.enum(['scalar', 'attack', 'damage']);
 const quantity = z.object({ value: z.number().finite(), unit: workbenchUnitSchema }).strict();
 const node = z.discriminatedUnion('op', [
+  z.object({ id, op: z.literal('game-damage') }).strict(),
   z.object({ id, op: z.literal('constant'), quantity }).strict(),
   z.object({ id, op: z.literal('input'), key: id, unit: workbenchUnitSchema }).strict(),
   z.object({ id, op: z.enum(['add', 'multiply', 'divide']), left: id, right: id }).strict(),
@@ -24,23 +26,32 @@ export const workbenchProjectSchema = z.object({
   schemaVersion: z.literal(1), rulesVersion: z.literal('workbench-v1'), id, revision: id,
   definitions: z.array(definition).max(200),
   candidate: z.object({
-    id, actors: z.array(z.object({ id, name: id.optional(), character: id, weapon: id, inputs: z.record(id, quantity),
+    id, actors: z.array(z.object({ id, name: id.optional(), character: id, weapon: id, inputs: z.record(id, quantity), realBuild: realBuildSchema.optional(),
       accountSnapshot: z.object({ accountId: id, characterId: id, weapon: z.string().max(160),
         artifacts: z.array(z.object({ id, name: id, slot: z.enum(['flower', 'plume', 'sands', 'goblet', 'circlet']), attack: z.number().finite().nonnegative() }).strict()).max(5),
       }).strict().optional(),
     }).strict()).max(100),
   }).strict(),
   conditions: z.record(id, z.boolean().nullable()),
+  enemy: realEnemySchema.optional(),
   timeline: z.array(z.object({
     id, timeMs: ms, order: z.number().int().nonnegative(), actor: id,
-    kind: z.enum(['action', 'damage']), definition: id,
+    kind: z.enum(['action', 'damage']), definition: id, realDamage: realDamageSchema.optional(),
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(id).optional() }).strict(),
 }).strict().superRefine((project, context) => {
   const occupied = new Set<string>();
   project.candidate.actors.forEach((actor, index) => {
+    if (actor.realBuild) {
+      const accountId = actor.realBuild.inventoryAccountId ?? 'local-real-inventory';
+      actor.realBuild.artifacts.forEach((artifact, artifactIndex) => {
+        const key = JSON.stringify([artifact.inventoryAccountId ?? accountId, artifact.id]);
+        if (occupied.has(key)) context.addIssue({ code: 'custom', message: '同一账号的实物圣遗物不能在队伍中重复占用。', path: ['candidate','actors',index,'realBuild','artifacts',artifactIndex] });
+        occupied.add(key);
+      });
+    }
     const snapshot = actor.accountSnapshot;
-    if (!snapshot) return;
+    if (!snapshot || actor.realBuild) return;
     const slots = new Set<string>();
     snapshot.artifacts.forEach((artifact, artifactIndex) => {
       const key = JSON.stringify([snapshot.accountId, artifact.id]);

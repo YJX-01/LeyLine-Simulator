@@ -25,6 +25,7 @@ export function formatWorkbenchExpression(project: WorkbenchProject, definitionI
     if (!node) return '缺失节点';
     const next = new Set(path).add(id);
     switch (node.op) {
+      case 'game-damage': return '真实攻击力 × 技能倍率 × 增伤 × 暴击 × 防御 × 抗性';
       case 'constant': return `${node.quantity.value} [${unitLabel(node.quantity.unit)}]`;
       case 'input': return `${inputLabel(node.key)} [${unitLabel(node.unit)}]`;
       case 'add': case 'multiply': case 'divide': {

@@ -15,6 +15,7 @@ describe('definition library repository', () => {
     const store = useDefinitionLibraryStore();
     store.library.definitions.push(createDefinition('自定义公式'));
     expect(await store.save()).toBe(true);
+    expect(store.dirty).toBe(false);
     const saved = JSON.stringify(adapters.download.mock.calls[0][0]);
     store.library.definitions = [];
     store.importContent(saved);

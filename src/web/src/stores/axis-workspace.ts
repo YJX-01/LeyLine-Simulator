@@ -6,13 +6,14 @@ import { createWorkbenchProject, importWorkbenchProject, type AcceptanceCase } f
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 import { matchesAxisTask, pendingAxisResult, type AxisRequest, type AxisResponse } from '../domain/axis-task';
+import { fileSignature } from '../domain/file-signature';
 
 const maxProjectBytes = 8 * 1024 * 1024;
 const recoveryKey = 'leyline-axis-recovery-v1';
 
 export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const project = ref(createWorkbenchProject());
-  const savedSnapshot = ref<string | null>(JSON.stringify(project.value));
+  const savedSnapshot = ref<string | null>(fileSignature(project.value));
   const actorId = ref(project.value.candidate.actors[0]?.id ?? '');
   const selectedId = ref(project.value.timeline.find(record => record.kind === 'damage')?.id ?? '');
   const notice = ref('已加载普通伤害样本。修改参数会立即重新计算。');
@@ -161,7 +162,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       const input = JSON.parse(content);
       if (input.schemaVersion !== 1) throw new Error('恢复副本版本无法识别。');
       const next = workbenchProjectSchema.parse(input.project);
-      const previousSaved = typeof input.savedSnapshot === 'string' ? input.savedSnapshot : null;
+      const previousSaved = typeof input.savedSnapshot === 'string' ? fileSignature(JSON.parse(input.savedSnapshot)) : null;
       installProject(next);
       savedSnapshot.value = previousSaved;
       notice.value = '已恢复本地编辑副本，并重新计算；请保存项目文件。';
@@ -171,7 +172,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       return false;
     }
   }
-  const dirty = computed(() => savedSnapshot.value === null || JSON.stringify(project.value) !== savedSnapshot.value);
+  const dirty = computed(() => savedSnapshot.value === null || fileSignature(project.value) !== savedSnapshot.value);
   const actor = computed(() => project.value.candidate.actors.find(entry => entry.id === actorId.value));
 
   function installProject(next: WorkbenchProject) {
@@ -184,7 +185,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     run();
     if (!next.candidate.actors.some(entry => entry.id === actorId.value)) actorId.value = next.candidate.actors[0]?.id ?? '';
     if (!next.timeline.some(record => record.id === selectedId.value)) selectedId.value = next.timeline.find(record => record.kind === 'damage')?.id ?? next.timeline[0]?.id ?? '';
-    savedSnapshot.value = JSON.stringify(next);
+    savedSnapshot.value = fileSignature(next);
     error.value = '';
   }
 
@@ -228,7 +229,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       error.value = '请先修正非法数值、引用或计算规则再保存；未知条件可以保留。';
       return false;
     }
-    const snapshot = JSON.stringify(parsed.data);
+    const snapshot = fileSignature(parsed.data);
     const savingSession = session;
     const content = JSON.stringify(parsed.data, null, 2);
     if (new TextEncoder().encode(content).byteLength > maxProjectBytes) {

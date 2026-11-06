@@ -2,7 +2,7 @@
 
 轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。默认进入已整合的侧栏工作台，可编辑候选配装、动作与伤害点、条件及目标，查看公式来源，并保存、重新打开轴项目。原自动队伍模拟器保留在 `/#workbench`。
 
-产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。视频打轴、快照、累计和优化搜索仍为后续能力。工作台和公式工具已使用中文展示，P2 新增流程继续中文优先；文件字段与版本保持原值。
+文档总入口见[文档导航](docs/README.md)。P2.5 已完成，下一阶段为 P3；可将[实施 prompt](docs/planning/implementation-agent-prompt.md)交给下一位 agent。产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。视频打轴、快照、累计和优化搜索仍为后续能力。工作台和公式工具已使用中文展示，后续新增流程继续中文优先；文件字段与版本保持原值。
 
 ## 桌面打开与验收
 
@@ -10,7 +10,7 @@ Windows 本地构建的稳定双击入口为 `artifacts/desktop/Start-LeyLine.cm
 
 原神配色、凯尔特结纹和分组侧栏现为默认界面。项目页提供四个独立验收模板，参考目标为 4400、4000、4840、2000；队伍、时间轴、分析、定义快照及公式工具共用同一项目。详细步骤见[正式整合记录](docs/planning/desktop-integration.md)。
 
-账号资料、角色及圣遗物库存尚未接入，页面明确显示未支持；不能在这些页面保存真实账号。其 7 张示意图透明 WebP 合计约 22.8 KiB，来源与压缩记录见[素材说明](docs/references/ui-assets.md)；`pnpm assets:check` 校验图片哈希和体积预算。
+账号、轴与定义库已能独立保存重开，支持空轴创作、实物装备转移、撤销/重做、恢复和 Worker 求值。P2.5 新增固定真实游戏目录、琴/凯亚/行秋零命战技配装验算及莫娜第一版五星库存导入；目录完整性与机制支持分别标注。按[真实数据验收](docs/planning/p2-5-implementation.md)逐步操作，线上账号接口和完整角色机制仍待后续。7 张示意图透明 WebP 合计约 22.8 KiB，来源与压缩记录见[素材说明](docs/references/ui-assets.md)；`pnpm assets:check` 校验图片哈希和体积预算。
 
 开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收，`pnpm desktop:start` 打开最新程序。每次打包保留独立目录，成功后更新启动入口，不覆盖运行中的旧版本。程序为本地未签名便携版本，生成产物不纳入 Git。
 
@@ -54,7 +54,7 @@ archive/python/  旧 Python 实现及历史资料
 
 四个 workspace 由 `pnpm-workspace.yaml` 的 `src/*` 管理。依赖方向为 `web → engine/schema/game-data`、`engine → schema/game-data`；跨模块使用 `@leyline/*` 公共入口。`schema` 与 `game-data` 不依赖其他 workspace。
 
-`docs/constant/` 仍是数据生成输入，`docs/characters/` 保留数据依据；它们不属于废弃文件。生成数据位于 `src/game-data/src/generated/`，修改源数据后执行 `node tools/scripts/convert-repo-data.mjs`，不要单独手改生成结果。详见[架构与扩展指南](docs/architecture/overview.md)。
+`docs/constant/` 仍是数据生成输入，`docs/characters/` 保留数据依据；它们不属于废弃文件。生成数据位于 `src/game-data/src/generated/`，修改源数据后执行 `node tools/scripts/convert-repo-data.mjs`，不要单独手改生成结果。P2.5 canonical 在 `docs/constant/real-game/`，运行快照在 `src/game-data/src/real-data/`，通过 `node tools/scripts/convert-real-game-data.mjs` 再生成。详见[架构与扩展指南](docs/architecture/overview.md)与[真实数据来源](docs/references/p2-5-data.md)。
 
 ## 当前依赖
 

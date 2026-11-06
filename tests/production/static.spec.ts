@@ -34,6 +34,25 @@ for (const { label, origin, base } of [
     expect(errors).toEqual([]);
   });
 
+  test(`${label}: loads fixed real data and calculates a real skill through the production Worker`, async ({ page, request }) => {
+    const resources: string[] = [], errors: string[] = [];
+    page.on('request', request => resources.push(request.url()));
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto(origin + base);
+    await page.getByTestId('workspace-nav-projects').click();
+    await page.getByRole('button', { name: '新建空轴', exact: true }).click();
+    await page.getByTestId('workspace-nav-team').click();
+    await page.getByRole('button', { name: '添加真实角色到当前轴', exact: true }).click();
+    await page.getByRole('button', { name: '添加技能全部独立命中', exact: true }).click();
+    await expect(page.getByTestId('workspace-total')).toHaveText('1,549.2331');
+    const chunk = resources.find(url => /characters-\d+-/.test(url));
+    expect(chunk).toBeTruthy();
+    expect(new URL(chunk!).pathname.startsWith(base + 'assets/')).toBe(true);
+    expect((await request.get(chunk!)).headers()['content-type']).toContain('javascript');
+    expect((await request.get(chunk!)).headers()['cache-control']).toContain('immutable');
+    expect(errors).toEqual([]);
+  });
+
   test(`${label}: loads only needed chunks and runs a production worker`, async ({ page, request }) => {
     const errors: string[] = [], resources: string[] = [];
     page.on('pageerror', error => errors.push(error.message)); page.on('request', req => resources.push(req.url()));

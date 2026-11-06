@@ -2,7 +2,7 @@
 
 首次记录：2026-11-05。更新至：2026-11-06。
 
-本文记录用户提出的远期产品方向，作为后续重新设计的依据。本文描述目标产品，不代表这些功能已经实现；现有代码和历史验收文档描述的是当前或过去的自动模拟实现。
+本文记录用户提出的产品目标，不代表全部功能已经实现。新轴工作台已完成至 P2.5，保留的自动模拟器另有支持范围；当前阶段以[实施路线](implementation-roadmap.md)为准，文档用途见[导航](../README.md)。
 
 ## 已明确的产品定位
 
@@ -283,7 +283,7 @@ Buff 不属于无条件固定的模板结果。更换武器可能改变 Buff，�
 
 ## 当前工作状态
 
-P0/P1 普通伤害内核、D0 桌面可操作验收及 D1 侧栏主题整合已完成；P2 仅部分完成。已交付能力以[正式整合记录](desktop-integration.md)为准，剩余阶段与验收以[实施路线](implementation-roadmap.md)为准，下一位实施者统一从[交接指令](implementation-agent-prompt.md)进入。此前回退的自动模拟器重构不恢复。
+P0/P1、D0、D1、P2、P2.5 已完成；下一阶段为 P3。已交付能力见[正式整合记录](desktop-integration.md)和[P2.5 验收](p2-5-implementation.md)，剩余阶段以[实施路线](implementation-roadmap.md)为准，下一位实施者从[P3 prompt](implementation-agent-prompt.md)进入。此前回退的自动模拟器重构不恢复。
 
 ## 界面语言
 
