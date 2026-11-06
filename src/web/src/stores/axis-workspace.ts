@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, shallowRef, watch, onScopeDispose } from 'vue';
 import { evaluateWorkbench } from '@leyline/engine';
 import { workbenchProjectSchema, type WorkbenchProject } from '@leyline/schema';
 import { createWorkbenchProject, importWorkbenchProject, type AcceptanceCase } from '../domain/workbench-project';
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
+import { matchesAxisTask, pendingAxisResult, type AxisRequest, type AxisResponse } from '../domain/axis-task';
 
 const maxProjectBytes = 8 * 1024 * 1024;
+const recoveryKey = 'leyline-axis-recovery-v1';
 
 export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const project = ref(createWorkbenchProject());
@@ -16,12 +18,170 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const notice = ref('已加载普通伤害样本。修改参数会立即重新计算。');
   const error = ref('');
   const busy = ref(false);
-  const result = computed(() => evaluateWorkbench(project.value));
+  const workerResult = shallowRef(pendingAxisResult());
+  const workerEnabled = typeof Worker !== 'undefined';
+  const result = computed(() => workerEnabled ? workerResult.value : evaluateWorkbench(project.value));
+  const runState = ref('尚未计算');
+  const recoveryAvailable = ref(false);
+  const history = ref<string[]>([]);
+  const future = ref<string[]>([]);
+  const canUndo = computed(() => history.value.length > 0);
+  const canRedo = computed(() => future.value.length > 0);
+  let observed = JSON.stringify(project.value);
+  let suppressHistory = false;
+  let session = 0;
+  let revision = 0;
+  let taskId = 0;
+  let worker: Worker | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let currentRequest: AxisRequest | undefined;
+  try { recoveryAvailable.value = typeof localStorage !== 'undefined' && localStorage.getItem(recoveryKey) !== null; } catch { /* Storage may be disabled. File saving remains available. */ }
+
+  function stopWorker() {
+    if (timer !== undefined) clearTimeout(timer);
+    timer = undefined;
+    currentRequest = undefined;
+    worker?.terminate();
+    worker = undefined;
+  }
+
+  function run() {
+    stopWorker();
+    if (!workerEnabled) { runState.value = '计算完成'; return; }
+    workerResult.value = pendingAxisResult();
+    runState.value = '计算中';
+    timer = setTimeout(() => {
+      timer = undefined;
+      const request: AxisRequest = { taskId: ++taskId, session, revision, project: JSON.parse(JSON.stringify(project.value)) };
+      currentRequest = request;
+      try {
+        const active = new Worker(new URL('../axis.worker.ts', import.meta.url), { type: 'module' });
+        worker = active;
+        active.onmessage = (event: MessageEvent<AxisResponse>) => {
+          if (worker !== active || !currentRequest || !matchesAxisTask(event.data, currentRequest)) return;
+          workerResult.value = event.data.result;
+          runState.value = '计算完成';
+          stopWorker();
+        };
+        active.onerror = () => {
+          if (worker !== active) return;
+          stopWorker();
+          runState.value = '计算失败';
+          error.value = '计算进程未能完成，请重新计算。当前编辑内容已保留。';
+        };
+        active.postMessage(request);
+      } catch {
+        stopWorker();
+        runState.value = '计算失败';
+        error.value = '无法启动计算进程，请重新计算。当前编辑内容已保留。';
+      }
+    }, 0);
+  }
+
+  function cancelRun() {
+    stopWorker();
+    workerResult.value = pendingAxisResult();
+    runState.value = '已取消';
+  }
+
+  function persistRecovery() {
+    // Invalid editor drafts stay in memory; never overwrite the last recoverable input.
+    const parsed = workbenchProjectSchema.safeParse(project.value);
+    if (!parsed.success) return;
+    const content = JSON.stringify({ schemaVersion: 1, project: parsed.data, savedSnapshot: savedSnapshot.value });
+    if (new TextEncoder().encode(content).byteLength > maxProjectBytes) return;
+    try {
+      if (typeof localStorage === 'undefined') return;
+      localStorage.setItem(recoveryKey, content);
+      recoveryAvailable.value = true;
+    } catch { error.value = '本地恢复副本写入失败，请保存项目文件以保留修改。'; }
+  }
+
+  function repairSelection() {
+    if (!project.value.candidate.actors.some(entry => entry.id === actorId.value)) actorId.value = project.value.candidate.actors[0]?.id ?? '';
+    if (!project.value.timeline.some(record => record.id === selectedId.value)) selectedId.value = project.value.timeline.find(record => record.kind === 'damage')?.id ?? project.value.timeline[0]?.id ?? '';
+  }
+
+  watch(() => JSON.stringify(project.value), next => {
+    if (next === observed) return;
+    if (!suppressHistory) {
+      history.value.push(observed);
+      if (history.value.length > 100) history.value.shift();
+      future.value = [];
+    }
+    observed = next;
+    revision++;
+    run();
+    if (!suppressHistory) persistRecovery();
+  }, { flush: 'sync' });
+  run();
+  onScopeDispose(stopWorker);
+
+  /** Groups a multi-field edit into a single reversible command. */
+  function command(edit: (draft: WorkbenchProject) => void) {
+    const before = JSON.stringify(project.value);
+    suppressHistory = true;
+    try { edit(project.value); } finally { suppressHistory = false; }
+    if (before !== observed) {
+      history.value.push(before);
+      if (history.value.length > 100) history.value.shift();
+      future.value = [];
+      persistRecovery();
+    }
+  }
+
+  function undo() {
+    const previous = history.value.pop();
+    if (previous === undefined) return;
+    future.value.push(observed);
+    suppressHistory = true;
+    try { project.value = JSON.parse(previous); } finally { suppressHistory = false; }
+    repairSelection();
+    persistRecovery();
+    notice.value = '已撤销上一步编辑。';
+  }
+
+  function redo() {
+    const next = future.value.pop();
+    if (next === undefined) return;
+    history.value.push(observed);
+    suppressHistory = true;
+    try { project.value = JSON.parse(next); } finally { suppressHistory = false; }
+    repairSelection();
+    persistRecovery();
+    notice.value = '已重做编辑。';
+  }
+
+  function recover(): boolean {
+    try {
+      if (typeof localStorage === 'undefined') return false;
+      const content = localStorage.getItem(recoveryKey);
+      if (!content) return false;
+      if (new TextEncoder().encode(content).byteLength > maxProjectBytes) throw new Error('恢复副本超过大小限制。');
+      const input = JSON.parse(content);
+      if (input.schemaVersion !== 1) throw new Error('恢复副本版本无法识别。');
+      const next = workbenchProjectSchema.parse(input.project);
+      const previousSaved = typeof input.savedSnapshot === 'string' ? input.savedSnapshot : null;
+      installProject(next);
+      savedSnapshot.value = previousSaved;
+      notice.value = '已恢复本地编辑副本，并重新计算；请保存项目文件。';
+      return true;
+    } catch {
+      error.value = '恢复副本无法读取，当前项目保持不变。';
+      return false;
+    }
+  }
   const dirty = computed(() => savedSnapshot.value === null || JSON.stringify(project.value) !== savedSnapshot.value);
   const actor = computed(() => project.value.candidate.actors.find(entry => entry.id === actorId.value));
 
   function installProject(next: WorkbenchProject) {
-    project.value = next;
+    session++;
+    suppressHistory = true;
+    try { project.value = next; } finally { suppressHistory = false; }
+    history.value = [];
+    future.value = [];
+    // Equal-content project installs still invalidate any preceding task.
+    run();
     if (!next.candidate.actors.some(entry => entry.id === actorId.value)) actorId.value = next.candidate.actors[0]?.id ?? '';
     if (!next.timeline.some(record => record.id === selectedId.value)) selectedId.value = next.timeline.find(record => record.kind === 'damage')?.id ?? next.timeline[0]?.id ?? '';
     savedSnapshot.value = JSON.stringify(next);
@@ -56,18 +216,20 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       definitions: [], candidate: { id: `${id}-candidate`, actors: [] }, conditions: {}, timeline: [], objective: {} });
     installProject(next);
     savedSnapshot.value = null;
-    notice.value = '已新建空轴，尚未保存。角色与定义可通过项目导入准备。';
+    notice.value = '已新建空轴，尚未保存。请在内容定义库与队伍页面准备定义和角色。';
+    persistRecovery();
   }
 
   async function saveProject(): Promise<boolean> {
     if (busy.value) return false;
     error.value = '';
     const parsed = workbenchProjectSchema.safeParse(project.value);
-    if (!parsed.success || result.value.status === 'invalid') {
+    if (!parsed.success || evaluateWorkbench(parsed.data).status === 'invalid') {
       error.value = '请先修正非法数值、引用或计算规则再保存；未知条件可以保留。';
       return false;
     }
     const snapshot = JSON.stringify(parsed.data);
+    const savingSession = session;
     const content = JSON.stringify(parsed.data, null, 2);
     if (new TextEncoder().encode(content).byteLength > maxProjectBytes) {
       error.value = '项目超过 8 MiB，未写入文件。';
@@ -85,7 +247,10 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
         notice.value = '已导出项目文件。再次打开该文件即可重新求值。';
       }
       // Inputs may change while the native dialog is open. Only the written snapshot is saved.
-      savedSnapshot.value = snapshot;
+      if (savingSession === session) {
+        savedSnapshot.value = snapshot;
+        persistRecovery();
+      }
       return true;
     } catch (cause) {
       error.value = cause instanceof Error ? cause.message : '保存失败，当前项目保持不变。';
@@ -130,5 +295,6 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   }
 
   return { project, result, dirty, actorId, actor, selectedId, notice, error, busy,
-    replaceProject, importContent, loadSample, createProject, saveProject, openNativeProject, inputFile };
+    replaceProject, importContent, loadSample, createProject, saveProject, openNativeProject, inputFile,
+    undo, redo, canUndo, canRedo, recover, recoveryAvailable, cancelRun, runState, run, command };
 });

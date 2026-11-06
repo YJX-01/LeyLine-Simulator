@@ -1,5 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu, net, protocol, session } from 'electron';
-import { readFile, stat, writeFile } from 'node:fs/promises';
+import { readFile, stat, writeFile, rename, rm } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -28,7 +29,7 @@ app.whenReady().then(() => {
   } }));
   ipcMain.handle('project:open', async event => {
     trusted(event);
-    const result = await dialog.showOpenDialog(window, { title: '打开轴项目', filters: [{ name: 'LeyLine 项目', extensions: ['json'] }], properties: ['openFile'] });
+    const result = await dialog.showOpenDialog(window, { title: '打开本地资料文件', filters: [{ name: '地脉资料', extensions: ['json'] }], properties: ['openFile'] });
     if (result.canceled || !result.filePaths[0]) return null;
     if ((await stat(result.filePaths[0])).size > maxBytes) throw new Error('项目超过 8 MiB 限制');
     return readFile(result.filePaths[0], 'utf8');
@@ -36,10 +37,17 @@ app.whenReady().then(() => {
   ipcMain.handle('project:save', async (event, content) => {
     trusted(event);
     if (typeof content !== 'string' || Buffer.byteLength(content) > maxBytes) throw new Error('项目内容无效或超过 8 MiB');
-    JSON.parse(content);
-    const result = await dialog.showSaveDialog(window, { title: '保存轴项目', defaultPath: 'leyline-project.json', filters: [{ name: 'LeyLine 项目', extensions: ['json'] }] });
+    const parsed = JSON.parse(content);
+    const objectName = parsed.kind === 'account' ? '账号资料' : parsed.kind === 'definition-library' ? '内容定义库' : '轴项目';
+    const result = await dialog.showSaveDialog(window, { title: `保存${objectName}`, defaultPath: `地脉-${objectName}.json`, filters: [{ name: '地脉资料', extensions: ['json'] }] });
     if (result.canceled || !result.filePath) return false;
-    await writeFile(result.filePath, content, 'utf8');
+    const temporaryPath = `${result.filePath}.${randomUUID()}.tmp`;
+    try {
+      await writeFile(temporaryPath, content, { encoding: 'utf8', flag: 'wx' });
+      await rename(temporaryPath, result.filePath);
+    } finally {
+      await rm(temporaryPath, { force: true }).catch(() => {});
+    }
     return true;
   });
   function createWindow() {

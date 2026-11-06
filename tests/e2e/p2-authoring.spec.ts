@@ -1,0 +1,126 @@
+import { expect, test } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import { evaluateWorkbench } from '../../src/engine/src/workbench';
+
+test('shows Chinese account and definition save errors and folds native diagnostics', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.leylineDesktop = { openProject: async () => null, saveProject: async () => { throw new Error('ENOSPC: disk full'); } };
+  });
+  await page.goto('/');
+  await page.getByTestId('workspace-nav-characters').click();
+  await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('账号保存失败');
+  expect(await page.locator('.workspace-design').innerText()).not.toContain('ENOSPC');
+  await page.getByTestId('workspace-nav-definitions').click();
+  await page.getByRole('button', { name: '保存定义库', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('资料操作未完成');
+  expect(await page.locator('.workspace-design').innerText()).not.toContain('ENOSPC');
+});
+
+test('authors an empty axis entirely in Chinese UI and reopens an agent-compatible file', async ({ page }, testInfo) => {
+  await page.goto('/');
+  await page.getByTestId('workspace-nav-projects').click();
+  await page.getByRole('button', { name: '新建空轴', exact: true }).click();
+  await page.getByTestId('workspace-nav-team').click();
+  await page.getByLabel('新角色名称', { exact: true }).fill('星海旅人');
+  await page.getByRole('button', { name: '创建合成角色与基础定义', exact: true }).click();
+  await page.getByLabel('新条件名称', { exact: true }).fill('护盾存在');
+  await page.getByRole('button', { name: '添加条件', exact: true }).click();
+  await page.getByLabel('轴内条件 护盾存在', { exact: true }).selectOption('true');
+  await page.getByLabel('候选攻击力', { exact: true }).fill('1200');
+  await page.getByTestId('workspace-nav-timeline').click();
+  await page.getByRole('button', { name: '添加动作', exact: true }).click();
+  await page.getByRole('button', { name: '添加伤害点', exact: true }).click();
+  await page.getByLabel('命中时间（毫秒）', { exact: true }).fill('2000');
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,400');
+  const downloadEvent = page.waitForEvent('download');
+  await page.getByRole('button', { name: '保存轴项目', exact: true }).click();
+  const path = testInfo.outputPath('authored-axis.json');
+  await (await downloadEvent).saveAs(path);
+  const input = JSON.parse(await readFile(path, 'utf8'));
+  expect(input.conditions['护盾存在']).toBe(true);
+  expect(input.candidate.actors[0].name).toBe('星海旅人');
+  expect(evaluateWorkbench(input).totalValue).toBe(2400);
+  await page.getByTestId('workspace-nav-projects').click();
+  await page.getByRole('button', { name: '新建空轴', exact: true }).click();
+  await page.getByLabel('导入轴项目文件', { exact: true }).setInputFiles(path);
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,400');
+  await expect(page.getByRole('button', { name: /^选择动作 / })).toHaveCount(1);
+  await expect(page.getByRole('button', { name: /^选择伤害点 / })).toHaveCount(1);
+  await page.getByTestId('workspace-nav-team').click();
+  await page.getByRole('button', { name: '移除当前队员及其记录', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('0');
+  await page.getByRole('button', { name: '撤销', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,400');
+});
+
+test('saves independent definitions and preserves the old axis when the library changes', async ({ page }, testInfo) => {
+  await page.goto('/');
+  await page.getByTestId('workspace-nav-definitions').click();
+  await page.getByLabel('新定义名称', { exact: true }).fill('星海三倍率');
+  await page.getByRole('button', { name: '创建定义', exact: true }).click();
+  await page.getByLabel('节点2固定数值', { exact: true }).fill('3');
+  await page.getByRole('button', { name: '复制所选定义到当前轴', exact: true }).click();
+  await page.getByTestId('workspace-nav-timeline').click();
+  await page.locator('button[data-record-id="hit-2"]').click();
+  await page.getByLabel('记录定义', { exact: true }).selectOption({ label: '星海三倍率' });
+  await expect(page.getByTestId('workspace-total')).toHaveText('5,600');
+  await page.getByTestId('workspace-nav-definitions').click();
+  await page.getByLabel('编辑库内定义', { exact: true }).selectOption({ label: '星海三倍率' });
+  await page.getByLabel('节点2固定数值', { exact: true }).fill('4');
+  await page.getByLabel('定义使用版本', { exact: true }).fill('2');
+  await expect(page.getByTestId('workspace-total')).toHaveText('5,600');
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', { name: '保存定义库', exact: true }).click();
+  const path = testInfo.outputPath('definitions.json');
+  await (await downloaded).saveAs(path);
+  const input = JSON.parse(await readFile(path, 'utf8'));
+  expect(input.kind).toBe('definition-library');
+  expect(input.definitions[0].version).toBe('2');
+  await page.getByLabel('导入内容定义库文件', { exact: true }).setInputFiles(path);
+  await expect(page.getByTestId('workspace-total')).toHaveText('5,600');
+});
+
+test('persists account equipment and requires an explicit transfer without modifying the axis', async ({ page }, testInfo) => {
+  await page.goto('/');
+  await page.getByTestId('workspace-nav-artifacts').click();
+  await page.getByLabel('圣遗物名称', { exact: true }).fill('独一花冠');
+  await page.getByRole('button', { name: '添加实物圣遗物', exact: true }).click();
+  await page.getByLabel('攻击力增量 独一花冠', { exact: true }).fill('200');
+  await page.getByTestId('workspace-nav-characters').click();
+  for (const name of ['旅人甲', '旅人乙']) {
+    await page.getByLabel('新角色名称', { exact: true }).fill(name);
+    await page.getByRole('button', { name: '添加账号角色', exact: true }).click();
+    await page.getByLabel('库存圣遗物', { exact: true }).selectOption({ label: `独一花冠 · 生之花 · ${name === '旅人甲' ? '未装备' : '旅人甲'}` });
+    await page.getByRole('button', { name: '装备所选圣遗物', exact: true }).click();
+  }
+  await expect(page.getByRole('alert')).toContainText('旅人甲');
+  await expect(page.getByRole('alert')).toContainText('旅人乙');
+  await page.getByRole('button', { name: '确认转移装备', exact: true }).click();
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
+  const path = testInfo.outputPath('account.json');
+  await (await downloaded).saveAs(path);
+  const input = JSON.parse(await readFile(path, 'utf8'));
+  expect(input.kind).toBe('account');
+  expect(input.characters[0].equipment).toEqual({});
+  expect(input.characters[1].equipment.flower).toBe(input.artifacts[0].id);
+  await page.getByRole('button', { name: '新建账号', exact: true }).click();
+  await page.getByLabel('导入账号资料文件', { exact: true }).setInputFiles(path);
+  await page.getByLabel('选择账号角色', { exact: true }).selectOption({ label: '旅人乙' });
+  await expect(page.getByText('生之花：独一花冠', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('workspace-total')).toHaveText('4,400');
+  await page.getByLabel('账号复制角色定义', { exact: true }).selectOption('synthetic-character');
+  await page.getByLabel('账号复制武器定义', { exact: true }).selectOption('weapon-a');
+  await page.getByRole('button', { name: '复制角色到轴内候选', exact: true }).click();
+  await page.getByRole('button', { name: '复制角色到轴内候选', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('不能重复占用');
+  await page.getByLabel('账号基础攻击力', { exact: true }).fill('900');
+  await page.getByTestId('workspace-nav-team').click();
+  await expect(page.getByLabel('候选攻击力', { exact: true })).toHaveValue('1200');
+  await page.getByLabel('候选攻击力', { exact: true }).fill('1800');
+  await page.getByTestId('workspace-nav-characters').click();
+  await page.getByLabel('选择账号角色', { exact: true }).selectOption({ label: '旅人乙' });
+  await expect(page.getByLabel('账号基础攻击力', { exact: true })).toHaveValue('900');
+  await expect(page.getByTestId('workspace-total')).toHaveText('4,400');
+});

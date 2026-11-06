@@ -8,7 +8,8 @@ import { execFileSync } from 'node:child_process';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const require = createRequire(new URL('../../src/web/package.json', import.meta.url));
 const { createServer } = await import(pathToFileURL(require.resolve('vite')).href);
-const server = await createServer({ root, configFile: false, logLevel: 'silent', server: { middlewareMode: true } });
+const server = await createServer({ root, configFile: false, logLevel: 'silent',
+  optimizeDeps: { noDiscovery: true }, server: { middlewareMode: true, watch: null } });
 try {
   const { simulateTeam } = await server.ssrLoadModule('/src/engine/src/index.ts');
   const { performanceScenarios } = await server.ssrLoadModule('/fixtures/performance/scenarios.ts');

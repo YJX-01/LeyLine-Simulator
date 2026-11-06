@@ -11,11 +11,15 @@ export const statusLabel = (value: string) => lookup({ complete: '已完整计�
 export const capabilityLabel = (value: string) => lookup({ snapshot: '快照', history: '历史累计', probability: '概率' }, value, '未知机制');
 export const inputLabel = (value: string) => lookup({ attack: '攻击力', triggered: '触发条件' }, value, value);
 export function definitionLabel(project: WorkbenchProject, id: string): string {
+  const name = project.definitions.find(entry => entry.id === id)?.name;
+  if (name) return name;
   const known: Record<string, string> = { 'synthetic-character': '示例角色定义', 'weapon-a': '武器甲 · 区间加成', 'weapon-b': '武器乙 · 无加成', 'ordinary-hit': '普通伤害公式' };
   const index = project.definitions.findIndex(entry => entry.id === id);
   return index < 0 ? '缺失定义' : lookup(known, id, `定义${index + 1}`);
 }
 export function actorLabel(project: WorkbenchProject, id: string): string {
+  const name = project.candidate.actors.find(entry => entry.id === id)?.name;
+  if (name) return name;
   const index = project.candidate.actors.findIndex(entry => entry.id === id);
   return index < 0 ? '缺失角色' : id === 'actor' ? '示例角色' : `角色${index + 1}`;
 }
@@ -38,3 +42,5 @@ export function effectLabel(project: WorkbenchProject, definitionId: string, id:
 }
 export const projectLabel = (project: WorkbenchProject) => project.id === 'ordinary-example' ? '普通伤害示例轴' : '当前轴项目';
 export const errorLabel = (message: string) => message.includes('JSON') ? '项目文件格式无法识别，请检查后重试。' : '操作未完成，请检查项目文件与计算规则。';
+
+export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(message) ? message : '资料操作未完成，请检查文件或存储位置后重试。';

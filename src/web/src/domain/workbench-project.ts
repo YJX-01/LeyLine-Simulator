@@ -41,6 +41,13 @@ export function removeTimelineRecord(project: WorkbenchProject, id: string): voi
   if (project.objective.damageIds) project.objective.damageIds = project.objective.damageIds.filter(selected => selected !== id);
 }
 
+export function removeProjectActor(project: WorkbenchProject, id: string): void {
+  const removed = new Set(project.timeline.filter(record => record.actor === id).map(record => record.id));
+  project.timeline = project.timeline.filter(record => !removed.has(record.id));
+  project.candidate.actors = project.candidate.actors.filter(actor => actor.id !== id);
+  if (project.objective.damageIds) project.objective.damageIds = project.objective.damageIds.filter(record => !removed.has(record));
+}
+
 export function nextRecordId(project: WorkbenchProject): string {
   let index = project.timeline.length + 1;
   while (project.timeline.some(record => record.id === `record-${index}`)) index++;

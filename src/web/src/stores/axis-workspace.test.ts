@@ -3,6 +3,8 @@ import { createPinia, disposePinia, setActivePinia } from 'pinia';
 import { createWorkbenchProject } from '../domain/workbench-project';
 import type { DesktopBridge } from '../platform/desktop';
 import { useAxisWorkspaceStore } from './axis-workspace';
+import { evaluateWorkbench } from '@leyline/engine';
+import type { AxisRequest, AxisResponse } from '../domain/axis-task';
 
 const adapters = vi.hoisted(() => ({ bridge: undefined as DesktopBridge | undefined, download: vi.fn() }));
 vi.mock('../platform/desktop', () => ({ getDesktopBridge: () => adapters.bridge }));
@@ -21,6 +23,110 @@ describe('shared axis workspace', () => {
     adapters.download.mockReset();
   });
   afterEach(() => disposePinia(pinia));
+
+  it('round trips grouped commands and direct edits through undo and redo', () => {
+    const store = useAxisWorkspaceStore();
+    store.command(project => {
+      project.candidate.actors[0].inputs.attack.value = 1100;
+      project.objective.damageIds = ['hit-6'];
+    });
+    expect(store.result.objectiveValue).toBe(2200);
+    expect(store.canUndo).toBe(true);
+    store.undo();
+    expect(store.result.objectiveValue).toBe(4400);
+    expect(store.canUndo).toBe(false);
+    store.redo();
+    expect(store.result.objectiveValue).toBe(2200);
+    store.project.candidate.actors[0].inputs.attack.value = 1200;
+    store.undo();
+    expect(store.result.objectiveValue).toBe(2200);
+    store.project.candidate.actors[0].inputs.attack.value = 1500;
+    expect(store.canRedo).toBe(false);
+    store.createProject();
+    expect(store.canUndo).toBe(false);
+  });
+
+  it('restores only validated project inputs and recomputes the independent result', () => {
+    const data = new Map<string, string>();
+    vi.stubGlobal('localStorage', { getItem: (key: string) => data.get(key) ?? null, setItem: (key: string, value: string) => data.set(key, value) });
+    try {
+      const store = useAxisWorkspaceStore();
+      store.project.candidate.actors[0].inputs.attack.value = 1100;
+      expect(store.recoveryAvailable).toBe(true);
+      store.loadSample('weapon-b');
+      expect(store.recover()).toBe(true);
+      expect(store.result.totalValue).toBe(4840);
+      expect(store.dirty).toBe(true);
+      data.set('leyline-axis-recovery-v1', '{');
+      expect(store.recover()).toBe(false);
+      expect(store.result.totalValue).toBe(4840);
+    } finally { vi.unstubAllGlobals(); }
+  });
+
+  it('does not mark a new project saved when a previous project save completes', async () => {
+    const store = useAxisWorkspaceStore();
+    let finish!: (saved: boolean) => void;
+    adapters.bridge = nativeBridge({ saveProject: () => new Promise(resolve => { finish = resolve; }) });
+    const pending = store.saveProject();
+    store.createProject('next-axis');
+    finish(true);
+    expect(await pending).toBe(true);
+    expect(store.project.id).toBe('next-axis');
+    expect(store.dirty).toBe(true);
+  });
+
+  it('discards late worker replies after revisions, project switches, and cancellation', () => {
+    class TestWorker {
+      static instances: TestWorker[] = [];
+      onmessage: ((event: MessageEvent<AxisResponse>) => void) | null = null;
+      onerror: (() => void) | null = null;
+      request!: AxisRequest;
+      terminated = false;
+      constructor() { TestWorker.instances.push(this); }
+      postMessage(request: AxisRequest) { this.request = request; }
+      terminate() { this.terminated = true; }
+      reply() {
+        const { taskId, session, revision, project } = this.request;
+        this.onmessage?.({ data: { taskId, session, revision, result: evaluateWorkbench(project) } } as MessageEvent<AxisResponse>);
+      }
+    }
+    vi.useFakeTimers();
+    vi.stubGlobal('Worker', TestWorker);
+    try {
+      const store = useAxisWorkspaceStore();
+      expect(store.result.totalValue).toBeNull();
+      vi.runOnlyPendingTimers();
+      const first = TestWorker.instances.at(-1)!;
+      store.project.candidate.actors[0].inputs.attack.value = 1100;
+      expect(first.terminated).toBe(true);
+      first.reply();
+      expect(store.result.totalValue).toBeNull();
+      vi.runOnlyPendingTimers();
+      const second = TestWorker.instances.at(-1)!;
+      second.reply();
+      expect(store.result.totalValue).toBe(4840);
+      store.loadSample('weapon-b');
+      vi.runOnlyPendingTimers();
+      const third = TestWorker.instances.at(-1)!;
+      store.createProject('new-axis');
+      third.reply();
+      expect(store.result.totalValue).toBeNull();
+      vi.runOnlyPendingTimers();
+      const fourth = TestWorker.instances.at(-1)!;
+      store.cancelRun();
+      fourth.reply();
+      expect(store.result.totalValue).toBeNull();
+      expect(store.runState).toBe('已取消');
+      store.run();
+      vi.runOnlyPendingTimers();
+      TestWorker.instances.at(-1)!.reply();
+      expect(store.result.totalValue).toBe(0);
+      expect(store.runState).toBe('计算完成');
+    } finally {
+      vi.useRealTimers();
+      vi.unstubAllGlobals();
+    }
+  });
 
   it('loads independent sample values and resets the editing selection', () => {
     const store = useAxisWorkspaceStore();

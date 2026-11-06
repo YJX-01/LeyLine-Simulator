@@ -5,12 +5,20 @@ for (const { label, origin, base } of [
 ]) {
   test(`${label}: opens the integrated shell and shares its project with the formula tool`, async ({ page, request }) => {
     const errors: string[] = [];
+    const resources: string[] = [];
+    page.on('request', request => resources.push(request.url()));
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin + base);
     await expect(page.getByRole('heading', { name: '时间轴', exact: true })).toBeVisible();
     await expect(page.getByTestId('workspace-objective')).toHaveText('4,400');
+    const axisWorker = resources.find(url => /axis.worker-/.test(url));
+    expect(axisWorker).toBeTruthy();
+    expect(new URL(axisWorker!).pathname.startsWith(base + 'assets/')).toBe(true);
+    expect((await request.get(axisWorker!)).headers()['content-type']).toContain('javascript');
     await page.getByTestId('workspace-nav-artifacts').click();
-    const image = page.getByRole('img', { name: /图像示意$/ }).first();
+    await page.getByLabel('圣遗物名称', { exact: true }).fill('生产实物花冠');
+    await page.getByRole('button', { name: '添加实物圣遗物', exact: true }).click();
+    const image = page.getByRole('img', { name: /图示$/ }).first();
     await expect.poll(() => image.evaluate(element => element instanceof HTMLImageElement && element.complete && element.naturalWidth === 96)).toBe(true);
     const imageSource = await image.getAttribute('src');
     expect((await request.get(new URL(imageSource!, page.url()).href)).headers()['content-type']).toContain('image/webp');

@@ -32,7 +32,7 @@ try {
     dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] });
   }, savedPath);
   await page.getByRole('button', { name: '保存轴项目', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('项目已保存');
+  await expect(page.locator('.shell-notices > p[role="status"]')).toContainText('项目已保存');
   const saved = JSON.parse(await readFile(savedPath, 'utf8'));
   if (saved.candidate.actors[0].inputs.attack.value !== 1100) throw new Error('Native save lost edited input');
   await page.getByRole('spinbutton', { name: '候选攻击力', exact: true }).fill('900');
@@ -78,6 +78,11 @@ try {
   await page.getByTestId('workspace-nav-analysis').click();
   await page.screenshot({ path: resolve(directory, 'workspace-analysis.png'), fullPage: true });
   await page.getByTestId('workspace-nav-artifacts').click();
+  for (const slot of ['flower', 'plume', 'sands', 'goblet', 'circlet']) {
+    await page.getByLabel('圣遗物名称', { exact: true }).fill(`桌面实物${slot}`);
+    await page.getByLabel('新圣遗物部位', { exact: true }).selectOption(slot);
+    await page.getByRole('button', { name: '添加实物圣遗物', exact: true }).click();
+  }
   await expect.poll(() => page.locator('.artifact-art img').evaluateAll(elements => elements.length === 5 && elements.every(element => element.complete && element.naturalWidth === 96))).toBe(true);
   await page.screenshot({ path: resolve(directory, 'workspace-artifacts.png'), fullPage: true });
   await page.getByRole('button', { name: '导航 设置与帮助', exact: true }).click();
@@ -85,10 +90,58 @@ try {
   await page.getByRole('spinbutton', { name: /^攻击力/ }).fill('1100');
   await page.getByRole('link', { name: '返回工作台', exact: true }).click();
   await expect(page.getByTestId('workspace-objective')).toHaveText('4,840');
+  // Exercise P2 in the packaged application, including actual native file boundaries.
+  await page.getByTestId('workspace-nav-projects').click();
+  await page.getByRole('button', { name: '新建空轴', exact: true }).click();
+  await page.getByTestId('workspace-nav-team').click();
+  await page.getByRole('button', { name: '创建合成角色与基础定义', exact: true }).click();
+  await page.getByTestId('workspace-nav-timeline').click();
+  await page.getByRole('button', { name: '添加伤害点', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,000');
+  await page.getByRole('button', { name: '撤销', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('0');
+  await page.getByRole('button', { name: '重做', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,000');
+  await page.reload();
+  await page.getByRole('button', { name: '恢复上次编辑', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,000');
+  const authoredPath = resolve(directory, 'authored-project.json');
+  await application.evaluate(({ dialog }, path) => {
+    dialog.showSaveDialog = async () => ({ canceled: false, filePath: path });
+    dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] });
+  }, authoredPath);
+  await page.getByRole('button', { name: '保存轴项目', exact: true }).click();
+  await expect(page.locator('.design-statusbar')).toContainText('当前无未保存修改');
+  await page.getByRole('button', { name: '打开轴项目', exact: true }).click();
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,000');
+  await page.getByTestId('workspace-nav-definitions').click();
+  await page.getByRole('button', { name: '创建定义', exact: true }).click();
+  const definitionsPath = resolve(directory, 'definitions.json');
+  await application.evaluate(({ dialog }, path) => {
+    dialog.showSaveDialog = async () => ({ canceled: false, filePath: path });
+    dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] });
+  }, definitionsPath);
+  await page.getByRole('button', { name: '保存定义库', exact: true }).click();
+  await expect.poll(async () => JSON.parse(await readFile(definitionsPath, 'utf8').catch(() => '{}')).kind).toBe('definition-library');
+  await page.getByRole('button', { name: '打开定义库', exact: true }).click();
+  await page.getByTestId('workspace-nav-characters').click();
+  await page.getByLabel('新角色名称', { exact: true }).fill('桌面账号旅人');
+  await page.getByRole('button', { name: '添加账号角色', exact: true }).click();
+  const accountPath = resolve(directory, 'account.json');
+  await application.evaluate(({ dialog }, path) => {
+    dialog.showSaveDialog = async () => ({ canceled: false, filePath: path });
+    dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [path] });
+  }, accountPath);
+  await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
+  await expect.poll(async () => JSON.parse(await readFile(accountPath, 'utf8').catch(() => '{}')).kind).toBe('account');
+  await page.getByRole('button', { name: '新建账号', exact: true }).click();
+  await page.getByRole('button', { name: '打开账号资料', exact: true }).click();
+  await expect(page.getByLabel('选择账号角色', { exact: true })).toContainText('桌面账号旅人');
+  await expect(page.getByTestId('workspace-total')).toHaveText('2,000');
   const security = await page.evaluate(() => ({ nodeAvailable: typeof window.require !== 'undefined', bridge: Boolean(window.leylineDesktop), origin: location.origin }));
   if (security.nodeAvailable || !security.bridge || security.origin !== 'leyline://app') throw new Error(`Unexpected renderer isolation: ${JSON.stringify(security)}`);
   const preferences = await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].webContents.getLastWebPreferences());
   if (!preferences.sandbox || !preferences.contextIsolation || preferences.nodeIntegration) throw new Error('Desktop security preferences changed');
   if (requests.some(url => /^https?:/.test(url)) || errors.length) throw new Error(JSON.stringify({ requests, errors }));
-  console.log(JSON.stringify({ status: 'passed', executable, checks: ['default-integrated-shell', '4400/4000/4840/2000', 'native-file-save-open', 'custom-axis-10560', 'invalid-file-preservation', 'unknown-vs-false', 'shared-project', 'local-images', 'isolated-renderer'], screenshot: resolve(directory, 'workspace-timeline.png') }, null, 2));
+  console.log(JSON.stringify({ status: 'passed', executable, checks: ['default-integrated-shell', '4400/4000/4840/2000', 'native-file-save-open', 'custom-axis-10560', 'invalid-file-preservation', 'unknown-vs-false', 'shared-project', 'local-images', 'isolated-renderer', 'empty-axis-ui', 'undo-redo-recovery', 'native-account-definition-files', 'axis-worker'], screenshot: resolve(directory, 'workspace-timeline.png') }, null, 2));
 } finally { await application.close(); }

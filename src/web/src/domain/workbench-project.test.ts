@@ -1,8 +1,37 @@
 import { describe, expect, it } from 'vitest';
 import { evaluateWorkbench } from '@leyline/engine';
-import { acceptanceCases, createWorkbenchProject, importWorkbenchProject, nextRecordId, removeTimelineRecord, setDamageSelected } from './workbench-project';
+import { acceptanceCases, createWorkbenchProject, importWorkbenchProject, nextRecordId, removeTimelineRecord, removeProjectActor, setDamageSelected } from './workbench-project';
 
 describe('workbench editing and project files', () => {
+  it('removes a team member and dependent records and targets without dangling references', () => {
+    const project = createWorkbenchProject();
+    project.objective.damageIds = ['hit-2'];
+    removeProjectActor(project, 'actor');
+    expect(project.candidate.actors).toEqual([]);
+    expect(project.timeline).toEqual([]);
+    expect(project.objective.damageIds).toEqual([]);
+    expect(evaluateWorkbench(project).totalValue).toBe(0);
+    expect(evaluateWorkbench(project).diagnostics).toEqual([]);
+  });
+  it('preserves optional user names without changing stable identities or evaluation', () => {
+    const project = createWorkbenchProject();
+    project.definitions[0].name = '虚构旅人';
+    project.candidate.actors[0].name = '本地角色';
+    const reopened = importWorkbenchProject(JSON.stringify(project));
+    expect(reopened.definitions[0].name).toBe('虚构旅人');
+    expect(reopened.candidate.actors[0].id).toBe('actor');
+    expect(evaluateWorkbench(reopened).totalValue).toBe(4400);
+  });
+  it('retains equipment identities in files and rejects duplicate real inventory occupancy', () => {
+    const project = createWorkbenchProject();
+    project.candidate.actors[0].accountSnapshot = { accountId: 'local-account', characterId: 'local-character', weapon: '本地武器',
+      artifacts: [{ id: 'physical-flower', name: '实物花冠', slot: 'flower', attack: 100 }] };
+    const reopened = importWorkbenchProject(JSON.stringify(project));
+    expect(reopened.candidate.actors[0].accountSnapshot?.artifacts[0].id).toBe('physical-flower');
+    project.candidate.actors.push({ ...structuredClone(project.candidate.actors[0]), id: 'another-actor' });
+    expect(() => importWorkbenchProject(JSON.stringify(project))).toThrow('当前项目保持不变');
+    expect(evaluateWorkbench(project).status).toBe('invalid');
+  });
   it('loads independently specified acceptance cases without shared mutable state', () => {
     for (const entry of acceptanceCases) expect(evaluateWorkbench(createWorkbenchProject(entry.id)).objectiveValue).toBe(entry.expected);
     const changed = createWorkbenchProject();

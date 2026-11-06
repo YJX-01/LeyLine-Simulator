@@ -153,16 +153,16 @@ test('shares one project with the retained formula acceptance interface', async 
   await expect(page.getByTestId('workspace-objective')).toHaveText('5,280');
 });
 
-test('renders the small local images without presenting illustration inventory as persisted data', async ({ page }, testInfo) => {
+test('keeps inventory empty until the user creates real account items', async ({ page }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   await page.getByTestId('workspace-nav-artifacts').click();
-  await expect(page.getByText('账号资料尚未接入，本页仅展示布局示意。', { exact: true })).toBeVisible();
-  const images = page.getByRole('img', { name: /图像示意$/ });
-  await expect(images).toHaveCount(5);
-  await expect.poll(() => images.evaluateAll(elements => elements.every(element => element instanceof HTMLImageElement && element.complete && element.naturalWidth === 96))).toBe(true);
-  await expect(page.getByRole('button', { name: '导入圣遗物', exact: true })).toBeDisabled();
+  await expect(page.getByText('库存共 0 件。相同属性的物品保留各自身份。', { exact: true })).toBeVisible();
+  await page.getByLabel('圣遗物名称', { exact: true }).fill('本地花冠');
+  await page.getByRole('button', { name: '添加实物圣遗物', exact: true }).click();
+  await expect(page.getByText('库存共 1 件。相同属性的物品保留各自身份。', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('实物名称 本地花冠', { exact: true })).toHaveValue('本地花冠');
   await page.screenshot({ path: testInfo.outputPath('workspace-artifacts.png'), fullPage: true });
   expect(errors).toEqual([]);
 });

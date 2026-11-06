@@ -1,0 +1,90 @@
+import { workbenchProjectSchema, type WorkbenchProject, type WorkbenchNode } from '@leyline/schema';
+
+export type ContentDefinition = WorkbenchProject['definitions'][number];
+export interface DefinitionLibraryFile {
+  schemaVersion: 1;
+  kind: 'definition-library';
+  id: string;
+  name: string;
+  definitions: ContentDefinition[];
+}
+export const cloneDefinition = (definition: ContentDefinition): ContentDefinition => JSON.parse(JSON.stringify(definition));
+export function createDefinition(name: string, kind: 'damage' | 'equipment' | 'character' = 'damage'): ContentDefinition {
+  const definition: ContentDefinition = { id: crypto.randomUUID(), name: name.trim() || '自定义内容', version: '1',
+    source: { kind: 'user', reference: 'local', verified: false }, nodes: [], effects: [] };
+  if (kind === 'damage') {
+    definition.nodes = [{ id: 'attack', op: 'input', key: 'attack', unit: 'attack' },
+      { id: 'multiplier', op: 'constant', quantity: { value: 2, unit: 'scalar' } },
+      { id: 'base', op: 'multiply', left: 'attack', right: 'multiplier' }];
+    definition.damage = 'base';
+  }
+  return definition;
+}
+export function parseDefinitionLibrary(input: unknown): DefinitionLibraryFile {
+  if (!input || typeof input !== 'object') throw new Error('内容定义库格式无效，现有资料保持不变。');
+  const value = input as Partial<DefinitionLibraryFile>;
+  if (value.kind !== 'definition-library' || value.schemaVersion !== 1 || typeof value.id !== 'string' || !value.id || typeof value.name !== 'string' || !value.name.trim()
+    || Object.keys(value).some(key => !['kind', 'schemaVersion', 'id', 'name', 'definitions'].includes(key))) throw new Error('内容定义库格式或版本不受支持，现有资料保持不变。');
+  const parsed = workbenchProjectSchema.safeParse({ schemaVersion: 1, rulesVersion: 'workbench-v1', id: value.id,
+    revision: '1', definitions: value.definitions, candidate: { id: 'validation', actors: [] }, conditions: {}, timeline: [], objective: {} });
+  if (!parsed.success) throw new Error('内容定义包含非法数值或格式，现有资料保持不变。');
+  const definitions = parsed.data.definitions;
+  if (new Set(definitions.map(entry => entry.id)).size !== definitions.length) throw new Error('内容定义标识重复，现有资料保持不变。');
+  for (const definition of definitions) validateDefinitionReferences(definition, definitions);
+  return { schemaVersion: 1, kind: 'definition-library', id: value.id, name: value.name, definitions };
+}
+export function validateDefinitionReferences(definition: ContentDefinition, definitions: ContentDefinition[]): void {
+  const nodes = new Map(definition.nodes.map(node => [node.id, node]));
+  if (nodes.size !== definition.nodes.length || new Set(definition.effects.map(effect => effect.id)).size !== definition.effects.length) throw new Error('节点或效果标识重复。');
+  const references = (node: WorkbenchNode) => node.op === 'add' || node.op === 'multiply' || node.op === 'divide' ? [node.left, node.right] : node.op === 'condition' ? [node.yes, node.no] : [];
+  const visited = new Set<string>();
+  const visit = (id: string, path: Set<string>) => {
+    if (path.has(id)) throw new Error('公式包含循环引用，请修正后保存。');
+    if (visited.has(id)) return;
+    if (path.size > 128) throw new Error('公式过深，请简化后保存。');
+    const node = nodes.get(id);
+    if (!node) throw new Error('公式引用了不存在的节点，请修正后保存。');
+    for (const next of references(node)) visit(next, new Set(path).add(id));
+    visited.add(id);
+  };
+  for (const node of definition.nodes) visit(node.id, new Set());
+  if (definition.damage) visit(definition.damage, new Set());
+  for (const effect of definition.effects) {
+    visit(effect.value, new Set());
+    if (effect.action && !definitions.some(entry => entry.id === effect.action)) throw new Error('区间效果的动作定义缺失。');
+  }
+}
+/** Import is explicit and never replaces an existing snapshot, including a different version. */
+export function copyDefinitionToProject(project: WorkbenchProject, input: ContentDefinition, available: ContentDefinition[] = [input]): string {
+  const pending: ContentDefinition[] = [];
+  const seen = new Set<string>();
+  const collect = (definition: ContentDefinition) => {
+    if (seen.has(definition.id)) return;
+    seen.add(definition.id);
+    const existing = project.definitions.find(entry => entry.id === definition.id);
+    if (existing) {
+      if (JSON.stringify(existing) === JSON.stringify(definition)) return;
+      throw new Error('当前轴已有同一内容的快照。请保留旧轴，或先另建项目再使用新版。');
+    }
+    for (const effect of definition.effects) {
+      if (!effect.action) continue;
+      const dependency = available.find(entry => entry.id === effect.action) ?? project.definitions.find(entry => entry.id === effect.action);
+      if (!dependency) throw new Error('区间效果的动作定义缺失，未复制到当前轴。');
+      collect(dependency);
+    }
+    pending.push(cloneDefinition(definition));
+  };
+  collect(input);
+  project.definitions.push(...pending);
+  return input.id;
+}
+export function createSyntheticTeam(project: WorkbenchProject, name: string, attack: number): string {
+  if (!Number.isFinite(attack)) throw new Error('攻击力必须为有限数值。');
+  const character = createDefinition(`${name || '虚构角色'}定义`, 'character');
+  const weapon = createDefinition('自定义武器', 'equipment');
+  const damage = createDefinition('自定义伤害');
+  project.definitions.push(character, weapon, damage);
+  const id = crypto.randomUUID();
+  project.candidate.actors.push({ id, name: name.trim() || '虚构角色', character: character.id, weapon: weapon.id, inputs: { attack: { value: attack, unit: 'attack' } } });
+  return id;
+}
