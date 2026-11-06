@@ -1,16 +1,17 @@
 # 文档导航与交接
 
-当前实现基线：`1d9e72f`（P3）。P0/P1、D0、D1、P2、P2.5、P3 已完成，下一阶段为 P4；P4–P8 未完成。新轴工作台和保留的自动模拟器各有实现，不能互相折算支持能力。
+当前实现基线：`1d9e72f`（P3）。P0/P1、D0、D1、P2、P2.5、P3 已完成，下一阶段为U1界面与交互重构；之后按P5 → P6 → P4 → P7 → P8推进，均未完成。P3历史功能验收不表示当前交互体验已获认可。新轴工作台和保留的自动模拟器各有实现，不能互相折算支持能力。
 
 ## 从哪里开始
 
 | 用途 | 入口 | 内容边界 |
 | --- | --- | --- |
 | 当前阶段与下一步 | [实施路线](planning/implementation-roadmap.md) | 阶段状态的统一入口 |
-| 交给下一位 agent | [P4 实施 prompt](planning/implementation-agent-prompt.md) | 可直接执行的任务、阅读顺序、代码入口、验收与提交要求 |
+| 交给下一位 agent | [U1 实施 prompt](planning/implementation-agent-prompt.md) | 可直接执行的任务、阅读顺序、代码入口、验收与提交要求 |
 | 用户操作与桌面入口 | [桌面整合记录](planning/desktop-integration.md) | 当前共用界面、保存边界；末尾按阶段保留历史证据 |
 | 当前机制验收 | [P3验收记录](planning/p3-implementation.md) | 通用效果、属性捕获、历史依赖、来源修订和完整验收证据 |
 | 真实数据验收 | [P2.5 验收记录](planning/p2-5-implementation.md) | 从空轴建角色、配装、导入、保存重开及独立数值 |
+| 后续案例与验收 | [真实案例规范](planning/real-case-validation.md) | 禁止新增模拟例子；真实资料、独立期望与当前缺口 |
 | 支持范围 | [内容支持矩阵](architecture/content-support.md) | 新轴与旧模拟器分开列出，目录数据不等于全部机制可算 |
 | 数据来源与精度 | [P2.5 数据记录](references/p2-5-data.md) | 固定 SHA、canonical、生成快照、单位、精度差异与许可 |
 | 构建与运行验证 | [部署及本地验证](deployment.md)、[性能说明](performance/README.md) | 本地包、根/子路径、预算和证据要求；不自动发布 |

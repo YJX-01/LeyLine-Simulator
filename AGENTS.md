@@ -37,3 +37,16 @@ Edit canonical inputs in `docs/constant/`, regenerate with `node tools/scripts/c
 Use descriptive `feat:`, `fix:`, `refactor:`, `test:`, `perf:`, `docs:`, or `chore:` commits. PRs explain behavior, validation, linked issues, and screenshots for UI changes.
 
 Keep dependencies declared in their owning manifests; commit lockfile and patch changes together. Do not edit `node_modules/` manually or restore retired root directories. Use `pnpm clean:outputs` and `pnpm clean:cache` for generated files; preserve wanted release candidates and temporary patch edits first. Never commit generated outputs or import archived Python code.
+
+
+## Current Product Priority and Acceptance Rules
+
+The user revised the plan after P3: execute U1 (dedicated UI and interaction redesign), then P5, P6, P4, P7, and P8. Read `docs/planning/implementation-roadmap.md` and the current implementation prompt; do not restore the old P4-first dependency order. P5/P6 must include necessary condition, inventory, capability, cancellation, and budget checks even though the full probability system is deferred.
+
+From U1 onward, do not introduce or use simulated/synthetic examples to develop, demonstrate, benchmark, or accept new functionality. Use traceable actual game cases with real characters, equipment, mechanics, builds/inventory, and recorded conditions; derive expectations independently. Do not fabricate player exports, recordings, observations, inventories, or damage sequences. Missing evidence must remain an explicit gap. Follow `docs/planning/real-case-validation.md`.
+
+Keep existing synthetic fixtures/tests as historical compatibility regressions; they do not prove acceptance of later stages. New boundary/error/performance cases must derive transparently from real projects. A static game catalog, a constructed format fixture, or an automated desktop export must not be presented as actual player data.
+
+Preserve the approved theme and three data domains, but redesign the present interaction flow in U1. Functional automated checks and usability acceptance are separate; do not mark U1 complete or bypass it with P5/P6 product integration before actual task walkthroughs and user experience review. Provide the complete runnable redesign and evidence before requesting final experience review.
+
+Run desktop and browser acceptance serially with one worker. Manage only processes proven to belong to the current run; never terminate applications by name or disturb the user's existing desktop.

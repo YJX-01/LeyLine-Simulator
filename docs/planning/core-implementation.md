@@ -1,6 +1,6 @@
 # 核心模块代码实现方案
 
-2026-11-06 实施修订：P0/P1、D0、D1、P2、P2.5 已完成，当前实现基线 `3315a09`。桌面与网页共用界面、轴状态和 engine；独立账号/定义/轴、Worker 与首批真实配装已接入。下一阶段为 P3，统一状态见[实施路线](implementation-roadmap.md)，现有代码入口和执行要求见[P3 prompt](implementation-agent-prompt.md)。
+2026-11-06最新修订：当前功能实现至P3，下一阶段为U1交互重构；之后P5、P6提前于完整P4。实施以[最新路线](implementation-roadmap.md)、[真实案例规范](real-case-validation.md)及[U1提示](implementation-agent-prompt.md)为准。下文合成样本、测试替身和旧先后安排是历史提案，不能用于后续功能案例或阶段验收。
 
 日期：2026-11-06。状态：已实现最小切片，后续机制和通用 API 仍为实施提案。与[产品方向](product-direction.md)、[模块原则](module-design.md)及[总体设计](overall-design.md)配套；不能将下文未来接口视为已有公开 API。
 

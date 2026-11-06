@@ -1,6 +1,6 @@
 # 视频打轴与配装优化工作台：总体设计草案
 
-2026-11-06 实施修订：P0/P1、D0、D1、P2、P2.5 已完成，当前实现基线 `3315a09`。下一阶段为 P3 效果、快照与历史依赖；统一状态见[实施路线](implementation-roadmap.md)，真实数据验收见[P2.5 记录](p2-5-implementation.md)，执行入口见[P3 prompt](implementation-agent-prompt.md)。
+2026-11-06最新修订：功能实现至P3；当前交互体验未获认可，下一阶段为U1，随后P5 → P6 → P4 → P7 → P8。执行以[最新路线](implementation-roadmap.md)、[真实案例规范](real-case-validation.md)及[U1提示](implementation-agent-prompt.md)为准。下文旧合成算例、阶段次序与未实现接口保留为历史设计，不能授权后续继续使用模拟例子。
 
 日期：2026-11-06。状态：总体方案持续维护；已认可目标与已实现切片分开记录，下文快照、历史、概率和优化等未来接口仍为待逐项实现、验证的提案。
 
