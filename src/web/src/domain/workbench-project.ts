@@ -4,9 +4,9 @@ import ordinary from '../../../../fixtures/workbench/ordinary.json';
 
 export type AcceptanceCase = 'weapon-a' | 'weapon-b' | 'attack-1100' | 'second-hit';
 export const acceptanceCases: { id: AcceptanceCase; label: string; expected: number; calculation: string }[] = [
-  { id: 'weapon-a', label: '武器 A · 区间加成', expected: 4400, calculation: '1000 × 2 × 1.2 + 1000 × 2 = 4400' },
-  { id: 'weapon-b', label: '武器 B · 无加成', expected: 4000, calculation: '1000 × 2 + 1000 × 2 = 4000' },
-  { id: 'attack-1100', label: '武器 A · 攻击 1100', expected: 4840, calculation: '1100 × 2 × 1.2 + 1100 × 2 = 4840' },
+  { id: 'weapon-a', label: '武器甲 · 区间加成', expected: 4400, calculation: '1000 × 2 × 1.2 + 1000 × 2 = 4400' },
+  { id: 'weapon-b', label: '武器乙 · 无加成', expected: 4000, calculation: '1000 × 2 + 1000 × 2 = 4000' },
+  { id: 'attack-1100', label: '武器甲 · 攻击 1100', expected: 4840, calculation: '1100 × 2 × 1.2 + 1100 × 2 = 4840' },
   { id: 'second-hit', label: '只选第二次命中', expected: 2000, calculation: '目标：1000 × 2 = 2000；全轴仍为 4400' },
 ];
 

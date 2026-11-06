@@ -1,26 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { evaluateWorkbench } from '@leyline/engine';
-import { workbenchProjectSchema, type WorkbenchNode } from '@leyline/schema';
-import { downloadJson } from './domain/download';
+import { actorLabel, definitionLabel, recordLabel, nodeLabel, effectLabel, projectLabel, unitLabel, operationLabel, diagnosticLabel, statusLabel, inputLabel, capabilityLabel, errorLabel } from './domain/workbench-labels';
+
+import { storeToRefs } from 'pinia';
+import type { WorkbenchNode } from '@leyline/schema';
+import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { acceptanceCases, createWorkbenchProject, importWorkbenchProject, nextRecordId, removeTimelineRecord, setDamageSelected, type AcceptanceCase } from './domain/workbench-project';
 
-declare global {
-  interface Window {
-    leylineDesktop?: { openProject(): Promise<string | null>; saveProject(content: string): Promise<boolean> };
-  }
-}
-
-const project = ref(createWorkbenchProject());
+const workspace = useAxisWorkspaceStore();
+const { project, actorId, selectedId: selectedPoint, notice: message, error, busy, result } = storeToRefs(workspace);
 const currentCase = ref<AcceptanceCase>('weapon-a');
-const baseline = ref(JSON.stringify(project.value));
-const actorId = ref(project.value.candidate.actors[0]?.id ?? '');
-const selectedPoint = ref('hit-2');
-const message = ref('已加载普通伤害样本。修改参数会立即重新计算。');
-const error = ref('');
+const baseline = ref(JSON.stringify(createWorkbenchProject()));
 const fileInput = ref<HTMLInputElement>();
-const busy = ref(false);
-const result = computed(() => evaluateWorkbench(project.value));
 const actor = computed(() => project.value.candidate.actors.find(entry => entry.id === actorId.value));
 const weaponDefinition = computed(() => project.value.definitions.find(d => d.id === actor.value?.weapon));
 const damageRecords = computed(() => project.value.timeline.filter(record => record.kind === 'damage'));
@@ -38,7 +29,7 @@ const text = (event: Event) => (event.target as HTMLInputElement).value;
 const format = (value: number | null | undefined) => value === null || value === undefined ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 function constantNode(node: WorkbenchNode) { return node.op === 'constant' ? node.quantity : undefined; }
 function loadCase(id: AcceptanceCase) {
-  project.value = createWorkbenchProject(id);
+  workspace.loadSample(id);
   currentCase.value = id;
   baseline.value = JSON.stringify(project.value);
   actorId.value = project.value.candidate.actors[0]?.id ?? '';
@@ -68,61 +59,26 @@ function addRecord(kind: 'action' | 'damage') {
   if (kind === 'damage' && project.value.objective.damageIds) project.value.objective.damageIds.push(id);
   selectedPoint.value = id;
 }
-async function readProject(content: string) {
-  const imported = importWorkbenchProject(content);
-  project.value = imported;
-  actorId.value = imported.candidate.actors[0]?.id ?? '';
-  baseline.value = '';
-  selectedPoint.value = imported.timeline.find(record => record.kind === 'damage')?.id ?? '';
-  message.value = '项目已打开，并已按保存的定义和规则版本重新计算。';
-  error.value = '';
-}
 async function openProject() {
-  error.value = '';
-  if (!window.leylineDesktop) { fileInput.value?.click(); return; }
-  busy.value = true;
-  try {
-    const content = await window.leylineDesktop.openProject();
-    if (content !== null) await readProject(content);
-  } catch (cause) { error.value = cause instanceof Error ? cause.message : '打开失败，当前项目保持不变。'; }
-  finally { busy.value = false; }
+  if (!await workspace.openNativeProject()) fileInput.value?.click();
 }
 async function importFile(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
-  try {
-    if (file) {
-      if (file.size > 5_000_000) throw new Error('项目文件超过 5 MB，当前项目保持不变。');
-      await readProject(await file.text());
-    }
-  } catch (cause) { error.value = cause instanceof Error ? cause.message : '文件读取失败。'; }
-  finally { input.value = ''; }
+  if (file) await workspace.inputFile(file);
+  input.value = '';
 }
-async function saveProject() {
-  error.value = '';
-  if (!workbenchProjectSchema.safeParse(project.value).success || result.value.status === 'invalid') { error.value = '请先修正非法数值、引用或计算规则再保存；未知条件可以保留。'; return; }
-  busy.value = true;
-  try {
-    if (window.leylineDesktop) {
-      const saved = await window.leylineDesktop.saveProject(JSON.stringify(project.value, null, 2));
-      if (saved) message.value = '项目已保存，包含完整轴、定义、候选配装及未知条件。';
-    } else {
-      downloadJson(project.value, `${project.value.id}.json`);
-      message.value = '已导出项目文件。再次打开该文件即可重新求值。';
-    }
-  } catch (cause) { error.value = cause instanceof Error ? cause.message : '保存失败，请重试。'; }
-  finally { busy.value = false; }
-}
+async function saveProject() { await workspace.saveProject(); }
 </script>
 
 <template>
   <main class="annotation-workbench">
     <header class="workbench-header">
-      <div><p class="eyebrow">LEYLINE · WORKBENCH</p><h1>伤害轴工作台</h1><p class="subtitle">记录命中，替换配装，检查每一步计算。</p></div>
-      <div class="header-actions"><span class="environment">{{ isDesktop ? '桌面端' : '浏览器预览' }} · 离线计算</span><button class="secondary" :disabled="busy" @click="openProject">打开项目</button><button :disabled="busy" @click="saveProject">保存项目</button></div>
+      <div><p class="eyebrow">地脉 · 伤害轴工作台</p><h1>伤害轴工作台</h1><p class="subtitle">记录命中，替换配装，检查每一步计算。</p></div>
+      <div class="header-actions"><a href="#axis">返回工作台</a><span class="environment">{{ isDesktop ? '桌面端' : '浏览器' }} · 公式验收工具</span><button class="secondary" :disabled="busy" @click="openProject">打开项目</button><button :disabled="busy" @click="saveProject">保存项目</button></div>
     </header>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入项目文件" class="file-input" @change="importFile">
-    <p v-if="error" class="notice error-notice" role="alert">{{ error }}</p>
+    <div v-if="error" class="notice error-notice" role="alert">{{ errorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
     <p class="project-notice" role="status">{{ message }}</p>
     <div class="workbench-grid">
       <nav class="sample-sidebar" aria-label="验收样本">
@@ -134,44 +90,45 @@ async function saveProject() {
       </nav>
       <div class="editor-column">
         <section class="editor-card">
-          <div class="section-heading"><div><span class="section-kicker">01 · CANDIDATE</span><h2>候选配装与属性</h2></div><span class="chip">{{ project.rulesVersion }}</span></div>
+          <div class="section-heading"><div><span class="section-kicker">01 · 候选方案</span><h2>候选配装与属性</h2></div><span class="chip">规则快照</span></div>
           <div class="fields candidate-fields">
-            <label>当前角色<select v-model="actorId"><option v-for="entry in project.candidate.actors" :key="entry.id" :value="entry.id">{{ entry.id }}</option></select></label>
-            <label v-if="actor">武器方案<select v-model="actor.weapon"><option v-for="definition in project.definitions" :key="definition.id" :value="definition.id">{{ definition.id === 'weapon-a' ? '武器 A · 区间加成' : definition.id === 'weapon-b' ? '武器 B · 无加成' : definition.id }}</option></select></label>
-            <template v-if="actor"><label v-for="(quantity, key) in actor.inputs" :key="key">{{ key === 'attack' ? '攻击力' : key }}<input type="number" step="any" :value="quantity.value" @input="quantity.value = number($event)"><span class="field-hint">单位：{{ quantity.unit }}</span></label></template>
+            <label>当前角色<select v-model="actorId"><option v-for="entry in project.candidate.actors" :key="entry.id" :value="entry.id">{{ actorLabel(project, entry.id) }}</option></select></label>
+            <label v-if="actor">武器方案<select v-model="actor.weapon"><option v-for="definition in project.definitions" :key="definition.id" :value="definition.id">{{ definitionLabel(project, definition.id) }}</option></select></label>
+            <template v-if="actor"><label v-for="(quantity, key) in actor.inputs" :key="key">{{ key === 'attack' ? '攻击力' : key }}<input type="number" step="any" :value="quantity.value" @input="quantity.value = number($event)"><span class="field-hint">单位：{{ unitLabel(quantity.unit) }}</span></label></template>
           </div>
           <p v-if="!actor" class="muted">项目没有可编辑角色，请加载左侧样本开始验收。</p>
-          <div v-if="weaponDefinition" class="effect-editor"><div class="subheading"><h3>武器效果</h3><span>{{ weaponDefinition.id }}</span></div>
+          <div v-if="weaponDefinition" class="effect-editor"><div class="subheading"><h3>武器效果</h3><span>{{ definitionLabel(project, weaponDefinition.id) }}</span></div>
             <p v-if="!weaponDefinition.effects.length" class="empty-state">此方案没有区间效果，换装后不会沿用旧武器加成。</p>
             <div v-for="effect in weaponDefinition.effects" :key="effect.id" class="effect-block">
-              <div class="effect-title"><strong>{{ effect.id }}</strong><span>区间左闭右开 [起点, 终点)</span></div>
+              <div class="effect-title"><strong>{{ effectLabel(project, weaponDefinition.id, effect.id) }}</strong><span>区间左闭右开 [起点, 终点)</span></div>
               <div class="fields"><label>生效起点（毫秒）<input type="number" min="0" step="1" :value="effect.startMs" @input="effect.startMs = number($event)"></label><label>失效终点（毫秒）<input type="number" min="0" step="1" :value="effect.endMs" @input="effect.endMs = number($event)"></label>
                 <template v-for="node in weaponDefinition.nodes.filter(node => node.id === effect.value)" :key="node.id"><label v-if="node.op === 'constant'">伤害加成（%）<input type="number" step="any" :value="node.quantity.value * 100" @input="node.quantity.value = number($event) / 100"></label></template>
               </div>
               <label class="checkbox-label"><input type="checkbox" :checked="Boolean(effect.condition)" @change="toggleCondition(effect, ($event.target as HTMLInputElement).checked)">此效果需要额外触发条件</label>
-              <label v-if="effect.condition" class="condition-field">条件 {{ effect.condition }}<select :value="conditionValue(effect.condition)" @change="setCondition(effect.condition!, $event)"><option value="unknown">待确认（未知）</option><option value="true">明确满足</option><option value="false">明确不满足</option></select></label>
+              <label v-if="effect.condition" class="condition-field">条件 {{ inputLabel(effect.condition) }}<select :value="conditionValue(effect.condition)" @change="setCondition(effect.condition!, $event)"><option value="unknown">待确认（未知）</option><option value="true">明确满足</option><option value="false">明确不满足</option></select></label>
             </div>
           </div>
         </section>
         <section class="editor-card">
-          <div class="section-heading"><div><span class="section-kicker">02 · TIMELINE</span><h2>动作与伤害点</h2></div><div class="inline-actions"><button class="secondary small" :disabled="!actor" @click="addRecord('action')">添加动作</button><button class="secondary small" :disabled="!actor || !project.definitions.some(d => d.damage)" @click="addRecord('damage')">添加伤害点</button></div></div>
-          <div class="axis-preview" aria-label="伤害轴预览"><div class="axis-track"><span v-for="record in project.timeline" :key="record.id" :style="{ left: `${record.timeMs / totalTimelineMs * 100}%` }" class="axis-point" :class="{ action: record.kind === 'action' }" :title="`${record.id} · ${record.timeMs}ms`"></span></div><div class="axis-labels"><span>0s</span><span>{{ totalTimelineMs / 1000 }}s</span></div></div>
-          <div class="table-scroll"><table aria-label="时间轴记录"><thead><tr><th>目标</th><th>记录</th><th>时间 ms</th><th>同刻顺序</th><th>定义</th><th></th></tr></thead><tbody><tr v-for="record in project.timeline" :key="record.id"><td><input v-if="record.kind === 'damage'" type="checkbox" :aria-label="`目标 ${record.id}`" :checked="!project.objective.damageIds || project.objective.damageIds.includes(record.id)" @change="setDamageSelected(project, record.id, ($event.target as HTMLInputElement).checked)"><span v-else class="muted">—</span></td><td><span class="record-kind">{{ record.kind === 'action' ? '动作' : '伤害' }}</span><span class="record-id">{{ record.id }}</span></td><td><input type="number" min="0" step="1" :aria-label="`时间 ${record.id}`" :value="record.timeMs" @input="record.timeMs = number($event)"></td><td><input type="number" min="0" step="1" :aria-label="`顺序 ${record.id}`" :value="record.order" @input="record.order = number($event)"></td><td><select v-model="record.definition" :aria-label="`定义 ${record.id}`"><option v-for="definition in project.definitions.filter(d => record.kind === 'action' || d.damage)" :key="definition.id" :value="definition.id">{{ definition.id }}</option></select></td><td><button class="delete-button" :aria-label="`删除 ${record.id}`" @click="removeTimelineRecord(project, record.id)">移除</button></td></tr></tbody></table></div>
+          <div class="section-heading"><div><span class="section-kicker">02 · 时间轴</span><h2>动作与伤害点</h2></div><div class="inline-actions"><button class="secondary small" :disabled="!actor" @click="addRecord('action')">添加动作</button><button class="secondary small" :disabled="!actor || !project.definitions.some(d => d.damage)" @click="addRecord('damage')">添加伤害点</button></div></div>
+          <div class="axis-preview" aria-label="伤害轴预览"><div class="axis-track"><span v-for="record in project.timeline" :key="record.id" :style="{ left: `${record.timeMs / totalTimelineMs * 100}%` }" class="axis-point" :class="{ action: record.kind === 'action' }" :title="`${recordLabel(project, record.id)} · ${record.timeMs}毫秒`"></span></div><div class="axis-labels"><span>0秒</span><span>{{ totalTimelineMs / 1000 }}秒</span></div></div>
+          <div class="table-scroll"><table aria-label="时间轴记录"><thead><tr><th>目标</th><th>记录</th><th>时间（毫秒）</th><th>同刻顺序</th><th>定义</th><th></th></tr></thead><tbody><tr v-for="record in project.timeline" :key="record.id"><td><input v-if="record.kind === 'damage'" type="checkbox" :aria-label="`目标 ${recordLabel(project, record.id)}`" :checked="!project.objective.damageIds || project.objective.damageIds.includes(record.id)" @change="setDamageSelected(project, record.id, ($event.target as HTMLInputElement).checked)"><span v-else class="muted">—</span></td><td><span class="record-kind">{{ record.kind === 'action' ? '动作' : '伤害' }}</span><span class="record-id">{{ recordLabel(project, record.id) }}</span></td><td><input type="number" min="0" step="1" :aria-label="`时间 ${recordLabel(project, record.id)}`" :value="record.timeMs" @input="record.timeMs = number($event)"></td><td><input type="number" min="0" step="1" :aria-label="`顺序 ${recordLabel(project, record.id)}`" :value="record.order" @input="record.order = number($event)"></td><td><select v-model="record.definition" :aria-label="`定义 ${recordLabel(project, record.id)}`"><option v-for="definition in project.definitions.filter(d => record.kind === 'action' || d.damage)" :key="definition.id" :value="definition.id">{{ definitionLabel(project, definition.id) }}</option></select></td><td><button class="delete-button" :aria-label="`删除 ${recordLabel(project, record.id)}`" @click="removeTimelineRecord(project, record.id)">移除</button></td></tr></tbody></table></div>
           <p class="field-hint">勾选只改变目标统计范围；其他记录、效果及计算上下文始终保留。时间单位为整数毫秒。</p>
         </section>
         <section class="editor-card definition-card">
-          <div class="section-heading"><div><span class="section-kicker">03 · DEFINITIONS</span><h2>公式与定义快照</h2></div><span class="chip">预设 / 用户定义共用计算</span></div>
-          <details v-for="definition in project.definitions.filter(d => d.damage)" :key="definition.id" open><summary>{{ definition.id }} · v{{ definition.version }}</summary><div class="fields"><label>伤害根节点<select v-model="definition.damage"><option v-for="node in definition.nodes" :key="node.id" :value="node.id">{{ node.id }} · {{ node.op }}</option></select></label><label>内容来源<select v-model="definition.source.kind"><option value="user">用户定义</option><option value="preset">预设内容</option></select></label></div><div class="node-list"><div v-for="node in definition.nodes" :key="node.id" class="node-row"><code>{{ node.id }}</code><span class="node-op">{{ node.op }}</span><label v-if="constantNode(node)">数值<input type="number" step="any" :aria-label="`常量 ${node.id}`" :value="constantNode(node)?.value" @input="node.op === 'constant' && (node.quantity.value = number($event))"></label><span v-else-if="node.op === 'input'" class="muted">读取候选属性 {{ node.key }} · {{ node.unit }}</span><span v-else-if="node.op === 'multiply' || node.op === 'add' || node.op === 'divide'" class="muted">{{ node.left }} {{ node.op === 'add' ? '+' : node.op === 'multiply' ? '×' : '÷' }} {{ node.right }}</span><span v-else-if="node.op === 'condition'" class="muted">条件 {{ node.key }} → {{ node.yes }} / {{ node.no }}</span><span v-else-if="node.op === 'unsupported'" class="muted">尚未支持 {{ node.capability }}</span></div></div></details>
+          <div class="section-heading"><div><span class="section-kicker">03 · 公式定义</span><h2>公式与定义快照</h2></div><span class="chip">预设 / 用户定义共用计算</span></div>
+          <details v-for="definition in project.definitions.filter(d => d.damage)" :key="definition.id" open><summary>{{ definitionLabel(project, definition.id) }} · 版本{{ definition.version }}</summary><div class="fields"><label>伤害根节点<select v-model="definition.damage"><option v-for="node in definition.nodes" :key="node.id" :value="node.id">{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</option></select></label><label>内容来源<select v-model="definition.source.kind"><option value="user">用户定义</option><option value="preset">预设内容</option></select></label></div><div class="node-list"><div v-for="node in definition.nodes" :key="node.id" class="node-row"><code>{{ nodeLabel(project, definition.id, node.id) }}</code><span class="node-op">{{ operationLabel(node.op) }}</span><label v-if="constantNode(node)">数值<input type="number" step="any" :aria-label="`常量 ${nodeLabel(project, definition.id, node.id)}`" :value="constantNode(node)?.value" @input="node.op === 'constant' && (node.quantity.value = number($event))"></label><span v-else-if="node.op === 'input'" class="muted">读取候选属性 {{ inputLabel(node.key) }} · {{ unitLabel(node.unit) }}</span><span v-else-if="node.op === 'multiply' || node.op === 'add' || node.op === 'divide'" class="muted">{{ nodeLabel(project, definition.id, node.left) }} {{ node.op === 'add' ? '+' : node.op === 'multiply' ? '×' : '÷' }} {{ nodeLabel(project, definition.id, node.right) }}</span><span v-else-if="node.op === 'condition'" class="muted">条件 {{ inputLabel(node.key) }} → {{ nodeLabel(project, definition.id, node.yes) }} / {{ nodeLabel(project, definition.id, node.no) }}</span><span v-else-if="node.op === 'unsupported'" class="muted">尚未支持 {{ capabilityLabel(node.capability) }}</span></div></div></details>
           <p class="field-hint">当前样本明确排除暴击、反应及敌人减免；这里的合成公式不代表完整游戏伤害。</p>
         </section>
       </div>
       <aside class="results-column">
         <section class="result-card"><div class="section-heading"><h2>计算结果</h2><span class="result-state" :class="{ complete }">{{ complete ? '已完整计算' : result.status === 'partial' ? '部分待确认' : '输入需修正' }}</span></div><p class="small-label">所选目标伤害</p><p class="objective-number" data-testid="objective-value">{{ format(result.objectiveValue) }}</p><div class="result-meta"><span>全轴总伤害</span><strong data-testid="total-value">{{ format(result.totalValue) }}</strong></div><div class="result-meta"><span>保留伤害点</span><strong>{{ result.points.length }} / {{ damageRecords.length }}</strong></div><p class="live-hint"><span></span>每次编辑都重新绑定配装并求值</p></section>
-        <section class="result-card"><h3>逐点明细</h3><div v-if="!result.points.length" class="empty-state">添加伤害点后查看结果。</div><button v-for="entry in result.points" :key="entry.id" class="point-result" :class="{ selected: point?.id === entry.id }" @click="selectedPoint = entry.id"><span>{{ entry.id }}<small>{{ project.timeline.find(r => r.id === entry.id)?.timeMs }} ms</small></span><strong>{{ format(entry.value) }}</strong></button><p class="field-hint">点击伤害点查看公式引用与来源。</p></section>
-        <section v-if="point" class="result-card trace-card"><h3>{{ point.id }} · 公式与来源</h3><p class="formula-root"><code>{{ point.formula.definition }} / {{ point.formula.root }}</code></p><p>{{ point.formula.effects.length ? `读取 ${point.formula.effects.length} 个候选区间效果` : '没有区间效果参与此命中' }}</p><ul class="effect-sources"><li v-for="effect in point.formula.effects" :key="`${effect.definition}-${effect.effect}-${effect.action}`">{{ effect.definition }} / {{ effect.effect }}<span v-if="effect.action"> · 动作 {{ effect.action }}</span></li></ul><details><summary>来源轨迹（{{ point.sources.length }}）</summary><ul class="source-list"><li v-for="source in point.sources" :key="source.path"><strong>{{ source.definition }} · {{ source.version }}</strong><span>{{ source.source.kind === 'preset' ? '预设' : '用户定义' }} · {{ source.source.reference }}</span><code>{{ source.path }}</code></li></ul></details></section>
-        <section class="result-card diagnostics-card"><h3>条件与诊断</h3><p v-if="!result.diagnostics.length" class="clear-state">✓ 当前没有未知条件或计算错误</p><ul v-else class="diagnostics" aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}-${diagnostic.path}-${diagnostic.message}`"><strong>{{ diagnostic.code }}</strong><p>{{ diagnostic.message }}</p><code>{{ diagnostic.path }}</code></li></ul><p class="field-hint">未知条件不会被当作不满足。未确定的总值不显示为完整伤害。</p></section>
+        <section class="result-card"><h3>逐点明细</h3><div v-if="!result.points.length" class="empty-state">添加伤害点后查看结果。</div><button v-for="entry in result.points" :key="entry.id" class="point-result" :class="{ selected: point?.id === entry.id }" @click="selectedPoint = entry.id"><span>{{ recordLabel(project, entry.id) }}<small>{{ project.timeline.find(r => r.id === entry.id)?.timeMs }} 毫秒</small></span><strong>{{ format(entry.value) }}</strong></button><p class="field-hint">点击伤害点查看公式引用与来源。</p></section>
+        <section v-if="point" class="result-card trace-card"><h3>{{ recordLabel(project, point.id) }} · 公式与来源</h3><p class="formula-root"><code>{{ definitionLabel(project, point.formula.definition) }} / {{ nodeLabel(project, point.formula.definition, point.formula.root) }}</code></p><p>{{ point.formula.effects.length ? `读取 ${point.formula.effects.length} 个候选区间效果` : '没有区间效果参与此命中' }}</p><ul class="effect-sources"><li v-for="effect in point.formula.effects" :key="`${effect.definition}-${effect.effect}-${effect.action}`">{{ definitionLabel(project, effect.definition) }} / {{ effectLabel(project, effect.definition, effect.effect) }}<span v-if="effect.action"> · 动作 {{ recordLabel(project, effect.action) }}</span></li></ul><details><summary>技术详情：来源轨迹（{{ point.sources.length }}）</summary><ul class="source-list"><li v-for="source in point.sources" :key="source.path"><strong>{{ definitionLabel(project, source.definition) }} · {{ source.version }}</strong><span>{{ source.source.kind === 'preset' ? '预设' : '用户定义' }} · {{ source.source.reference }}</span><code>{{ source.path }}</code></li></ul></details></section>
+        <section class="result-card diagnostics-card"><h3>条件与诊断</h3><p v-if="!result.diagnostics.length" class="clear-state">✓ 当前没有未知条件或计算错误</p><ul v-else class="diagnostics" aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}-${diagnostic.path}-${diagnostic.message}`"><strong>{{ diagnosticLabel(diagnostic.code) }}</strong><details><summary>技术详情</summary><p>{{ diagnostic.message }}</p><code>{{ diagnostic.code }} · {{ diagnostic.path }}</code></details></li></ul><p class="field-hint">未知条件不会被当作不满足。未确定的总值不显示为完整伤害。</p></section>
       </aside>
     </div>
+    <details><summary>技术详情：项目原始数据</summary><pre>{{ JSON.stringify(project, null, 2) }}</pre></details>
   </main>
 </template>
 

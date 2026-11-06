@@ -3,14 +3,26 @@ for (const { label, origin, base } of [
   { label: 'root', origin: 'http://127.0.0.1:5175', base: '/' },
   { label: 'subpath', origin: 'http://127.0.0.1:5176', base: '/leyline/' },
 ]) {
-  test(`${label}: opens the shared annotation workbench and evaluates saved inputs`, async ({ page }) => {
+  test(`${label}: opens the integrated shell and shares its project with the formula tool`, async ({ page, request }) => {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin + base);
-    await expect(page.getByRole('heading', { name: '伤害轴工作台', exact: true })).toBeVisible();
-    await expect(page.getByTestId('objective-value')).toHaveText('4,400');
-    await page.getByRole('combobox', { name: '武器方案', exact: true }).selectOption('weapon-b');
+    await expect(page.getByRole('heading', { name: '时间轴', exact: true })).toBeVisible();
+    await expect(page.getByTestId('workspace-objective')).toHaveText('4,400');
+    await page.getByTestId('workspace-nav-artifacts').click();
+    const image = page.getByRole('img', { name: /图像示意$/ }).first();
+    await expect.poll(() => image.evaluate(element => element instanceof HTMLImageElement && element.complete && element.naturalWidth === 96)).toBe(true);
+    const imageSource = await image.getAttribute('src');
+    expect((await request.get(new URL(imageSource!, page.url()).href)).headers()['content-type']).toContain('image/webp');
+    await page.getByTestId('workspace-nav-team').click();
+    await page.getByRole('combobox', { name: '候选武器', exact: true }).selectOption('weapon-b');
+    await expect(page.getByTestId('workspace-objective')).toHaveText('4,000');
+    await page.getByRole('button', { name: '导航 设置与帮助', exact: true }).click();
+    await page.locator('a[href="#annotation"]').click();
     await expect(page.getByTestId('objective-value')).toHaveText('4,000');
+    await page.getByRole('spinbutton', { name: /^攻击力/ }).fill('1100');
+    await page.locator('a[href="#axis"]').click();
+    await expect(page.getByTestId('workspace-objective')).toHaveText('4,400');
     expect(errors).toEqual([]);
   });
 

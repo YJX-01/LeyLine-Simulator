@@ -1,14 +1,18 @@
 # LeyLine Simulator
 
-轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。当前默认进入 P0/P1 普通伤害可操作验收，可编辑候选配装、时间轴和目标，查看公式来源，并保存、重新打开项目。原自动队伍模拟器保留在 `/#workbench`。
+轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。默认进入已整合的侧栏工作台，可编辑候选配装、动作与伤害点、条件及目标，查看公式来源，并保存、重新打开轴项目。原自动队伍模拟器保留在 `/#workbench`。
 
-产品方向和交付顺序见[产品方向记录](docs/planning/product-direction.md)与[桌面实施方案](docs/planning/desktop-implementation.md)。视频打轴、快照、累计和优化搜索仍为后续能力。
+产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。视频打轴、快照、累计和优化搜索仍为后续能力。工作台和公式工具已使用中文展示，P2 新增流程继续中文优先；文件字段与版本保持原值。
 
 ## 桌面打开与验收
 
-本地生成的 Windows 程序为 `artifacts/desktop/LeyLine-win32-x64/LeyLine.exe`，双击即可运行，不需要启动 Vite、浏览器或终端。移动程序时保留整个目录。界面左侧有四个验收样本，参考值分别为 4400、4000、4840、2000；也可以直接修改输入控件检查。详细步骤见[桌面使用与验证记录](docs/planning/desktop-delivery.md)。
+Windows 本地构建的稳定双击入口为 `artifacts/desktop/Start-LeyLine.cmd`，不需要输入命令、启动 Vite 或浏览器。它指向最新构建的 `releases/build-*/LeyLine-win32-x64/LeyLine.exe`；也可直接打开该 exe，移动程序时保留整个所在目录。实际路径记录于 `artifacts/desktop/latest.json`。
 
-开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收。程序为本地未签名便携版本，生成产物不纳入 Git。
+原神配色、凯尔特结纹和分组侧栏现为默认界面。项目页提供四个独立验收模板，参考目标为 4400、4000、4840、2000；队伍、时间轴、分析、定义快照及公式工具共用同一项目。详细步骤见[正式整合记录](docs/planning/desktop-integration.md)。
+
+账号资料、角色及圣遗物库存尚未接入，页面明确显示未支持；不能在这些页面保存真实账号。其 7 张示意图透明 WebP 合计约 22.8 KiB，来源与压缩记录见[素材说明](docs/references/ui-assets.md)；`pnpm assets:check` 校验图片哈希和体积预算。
+
+开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收，`pnpm desktop:start` 打开最新程序。每次打包保留独立目录，成功后更新启动入口，不覆盖运行中的旧版本。程序为本地未签名便携版本，生成产物不纳入 Git。
 
 ## 快速开始
 
@@ -19,7 +23,9 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-打开终端显示的本地地址，默认进入与桌面共用的伤害轴工作台。原队伍工作区位于 `/#workbench`；其方案和草稿仍保存在当前浏览器中。开发验证页面位于 `/#tools`、`/#team` 和 `/#combat`。
+打开终端显示的本地地址，默认进入与桌面共用的伤害轴工作台。`/#axis` 为主入口，旧 `/#design` 兼容至同一界面；`/#annotation` 为共享当前项目的公式验收工具。原队伍工作区位于 `/#workbench`；其方案和草稿仍保存在当前浏览器中。开发验证页面位于 `/#tools`、`/#team` 和 `/#combat`。
+
+agent 可继续调用 `node tools/scripts/evaluate-workbench.mjs <轴项目.json>`，读取 UI 保存的相同 v1 项目，无需桌面窗口。
 
 ## 原自动模拟器支持范围
 

@@ -1,6 +1,10 @@
 # 生产构建与本地交付
 
-> 适用范围：本文说明当前自动模拟实现。未来的视频打轴与配装优化工作台仍在规划，见[产品方向](planning/product-direction.md)。
+> 适用范围：网页构建与原模拟器回归，以及已整合的侧栏桌面工作台。新轴内核的复杂机制仍按[产品方向](planning/product-direction.md)分阶段实施。
+
+## 桌面本地构建
+
+安装依赖后用 `pnpm exec install-electron` 准备匹配版本运行时，执行 `pnpm desktop:build` 和 `pnpm test:desktop`。最新产物清单在 `artifacts/desktop/latest.json`；Windows 的稳定双击入口是 `artifacts/desktop/Start-LeyLine.cmd`。每次打包生成独立 releases 目录，避免覆盖运行中的程序，不关闭用户已有窗口。详见[正式整合记录](planning/desktop-integration.md)。网页与桌面使用同一个 `WorkspaceShell`，桌面无需 Vite 服务。
 
 ## 构建和验证
 

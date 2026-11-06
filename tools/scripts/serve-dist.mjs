@@ -7,7 +7,7 @@ const option = (key, fallback) => process.argv.find(arg => arg.startsWith(`--${k
 const root = resolve(workspace, option('dir', 'src/web/dist'));
 const base = option('base', '/');
 if (!/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(base)) throw new Error('Base must be / or a slash-delimited path ending in /.');
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
 const server = createServer(async (request, response) => {
   response.setHeader('Cache-Control', 'no-store');
   try {

@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const directory = dirname(fileURLToPath(import.meta.url));
 const renderer = resolve(directory, 'renderer');
-const entry = 'leyline://app/index.html#annotation';
+const entry = 'leyline://app/index.html#axis';
 const maxBytes = 8 * 1024 * 1024;
 protocol.registerSchemesAsPrivileged([{ scheme: 'leyline', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } }]);
 app.setName('LeyLine');
@@ -44,7 +44,7 @@ app.whenReady().then(() => {
   });
   function createWindow() {
     window = new BrowserWindow({ width: 1440, height: 960, minWidth: 900, minHeight: 640, title: 'LeyLine · 轴与配装工作台',
-      show: !process.argv.includes('--smoke'), backgroundColor: '#f3f6f7',
+      show: !process.argv.includes('--smoke'), backgroundColor: '#f1ece2',
       webPreferences: { preload: resolve(directory, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true },
     });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));

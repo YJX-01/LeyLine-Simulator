@@ -2,7 +2,7 @@
 
 项目方向是**对照视频分层打轴，根据动作生成 Buff，结合伤害点构建公式，用于组队与配装优化**。P0/P1 普通伤害内核及桌面可操作验收已实现；桌面与网页共用界面，原自动战斗模拟器保留独立入口，复杂机制仍按阶段推进。
 
-## 规划讨论
+## 规划与交接
 
 | 文档 | 用途 |
 | --- | --- |
@@ -11,14 +11,14 @@
 | [总体设计草案](planning/overall-design.md) | 模块数据流、核心契约、求值流程、三个独立算例和范围划分 |
 | [核心代码方案](planning/core-implementation.md) | 模块目录、契约、表达式/效果/快照/概率/优化的实现方式 |
 | [分层实施路线](planning/implementation-roadmap.md) | 依赖顺序、可运行交付、阶段验收和产品目标对齐矩阵 |
-| [实施 Agent Prompt](planning/implementation-agent-prompt.md) | 桌面 UI 优先的交接范围、并行分工与验收边界 |
-| [桌面实施调整](planning/desktop-implementation.md) | 桌面与网页共用的方案、D0 → P2 → P3 顺序 |
-| [侧栏与功能分区讨论](planning/ui-navigation-discussion.md) | 参考莫娜的导航证据、D1 分区提案及待决事项 |
-| [桌面打开与验收](planning/desktop-delivery.md) | 双击入口、界面检查步骤、实际验证及剩余限制 |
+| [实施 Agent Prompt](planning/implementation-agent-prompt.md) | 唯一实施交接入口：P2 剩余范围、并行分工、中文优先及验收边界 |
+| [UI 素材来源与压缩](references/ui-assets.md) | 固定版本图片来源、版权记录、小尺寸 WebP 及体积预算 |
+| [侧栏工作台正式整合](planning/desktop-integration.md) | 当前正式入口、共享轴状态、真实文件操作、打包及支持边界 |
 | [P0/P1 内核记录](planning/p0-p1-implementation.md) | v1 语义、普通算例、来源与诊断、无界面验证 |
-| [讨论提纲](planning/discussion-agenda.md) | 按依赖顺序讨论工作流、标注模型、Buff、公式和优化 |
 
-先明确用户如何记录和使用数据，再确定架构与实现。设计建议不能视为已确认需求，历史实现也不构成新产品必须保留的约束。
+文档各司其职：产品方向记录目标，模块文档记录原则，总体设计保存未来概念，核心方案保存技术提案，整合记录说明现状，路线维护阶段状态，交接指令是唯一实施入口。设计建议不能视为已实现能力。重复讨论和预览记录已合并删除，历史由 Git 保留。
+
+当前内置界面以中文为先；工作台和公式工具已使用集中中文展示映射，机器标识保留在协议与按需展开的技术详情中。P2 新增页面沿用此要求；远期可替换语言字典，当前不先建设完整国际化框架。
 
 ## 当前实现
 
