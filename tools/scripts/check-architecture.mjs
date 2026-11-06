@@ -33,7 +33,7 @@ for (const workspace of workspaces) {
 function walk(directory) {
   return readdirSync(resolve(root, directory), { withFileTypes: true }).flatMap(entry => {
     const path = `${directory}/${entry.name}`;
-    return entry.isDirectory() ? walk(path) : /\.(ts|vue|mjs)$/.test(path) && !path.endsWith('.d.ts') ? [path] : [];
+    return entry.isDirectory() ? walk(path) : /\.(ts|vue|mjs|cjs)$/.test(path) && !path.endsWith('.d.ts') ? [path] : [];
   });
 }
 
@@ -83,7 +83,7 @@ function checkImport(from, specifier, runtime) {
   if (runtime && target && !test && !/\.(test|spec)\.ts$/.test(target)) graph.get(from)?.add(target);
 }
 
-const files = [...workspaces.flatMap(workspace => walk(`${workspace.directory}/src`)), ...walk('tools/scripts'), ...walk('tests')];
+const files = [...workspaces.flatMap(workspace => walk(`${workspace.directory}/src`)), ...walk('tools/scripts'), ...walk('tools/desktop'), ...walk('tests')];
 for (const path of files) graph.set(path, new Set());
 for (const path of files) {
   const content = readFileSync(resolve(root, path), 'utf8');
@@ -104,7 +104,7 @@ for (const path of files) {
       const argument = node.arguments[0];
       if (argument && ts.isStringLiteralLike(argument)) checkImport(path, argument.text, true);
       // Tooling resolves Vite from its owning workspace without hoisting it to the root.
-      else if (path === 'tools/scripts/benchmark-engine.mjs' && argument?.getText(ast) === "pathToFileURL(require.resolve('vite')).href") {
+      else if (['tools/scripts/benchmark-engine.mjs', 'tools/scripts/evaluate-workbench.mjs'].includes(path) && argument?.getText(ast) === "pathToFileURL(require.resolve('vite')).href") {
         checkImport(path, 'vite', true);
       } else fail(path, 'computed module imports require an explicit architecture-check rule');
     }

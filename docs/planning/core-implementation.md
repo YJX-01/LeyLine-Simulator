@@ -1,5 +1,7 @@
 # 核心模块代码实现方案
 
+2026-11-06 实施修订：P0/P1 内核已落地。当前按用户要求先完成桌面可操作验收；桌面与网页共用 Vue 页面，Electron 仅作窗口及文件适配，CLI 保留供 agent 操作。最新交付顺序及边界见[桌面实施方案](desktop-implementation.md)与[实施路线](implementation-roadmap.md)。下文尚未实现的接口仍为提案。
+
 日期：2026-11-06。状态：实施提案，尚未编码。与[产品方向](product-direction.md)、[模块原则](module-design.md)及[总体设计](overall-design.md)配套；搭建顺序与验收见[实施路线](implementation-roadmap.md)。
 
 可并行的内核、交互、外部适配和独立验证按[并行工作流](implementation-roadmap.md#11-并行工作流)推进，共享契约和文件所有权先明确，再各自实现并分批集成。

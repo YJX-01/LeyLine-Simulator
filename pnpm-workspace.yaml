@@ -3,5 +3,6 @@ packages:
 storeDir: .cache/pnpm-store
 allowBuilds:
   esbuild: true
+  electron: true
 patchedDependencies:
   '@vue/devtools-kit@8.2.1': tools/patches/@vue__devtools-kit@8.2.1.patch

@@ -4,6 +4,7 @@ node_modules/
 /.references/
 dist/
 /src/web/dist-subpath/
+/src/web/dist-desktop/
 
 # Validation and local delivery outputs
 /coverage/

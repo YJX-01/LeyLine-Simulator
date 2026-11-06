@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import example from '../../fixtures/scenarios/first-team.json' with { type: 'json' };
 
 test('edits equipment through forms and restores the draft after reload', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/#workbench');
   await expect(page.getByRole('heading', { name: '配队与装备', exact: true })).toBeVisible();
   await page.getByLabel('命座', { exact: true }).fill('2');
   await page.getByLabel('武器精炼', { exact: true }).fill('3');
@@ -22,7 +22,7 @@ test('edits equipment through forms and restores the draft after reload', async 
 
 test('keeps forms usable on a narrow viewport and explains summary output', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/#workbench');
   await expect(page.getByRole('heading', { name: '配队与装备', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('workbench-mobile.png'), fullPage: true });
@@ -35,7 +35,7 @@ test('keeps forms usable on a narrow viewport and explains summary output', asyn
 });
 
 test('recovers from invalid equipment and worker loading failures', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#workbench');
   await page.getByLabel('元素战技天赋', { exact: true }).fill('11');
   await expect(page.getByRole('button', { name: '运行模拟', exact: true })).toBeDisabled();
   await page.getByLabel('元素战技天赋', { exact: true }).fill('8');
@@ -49,7 +49,7 @@ test('recovers from invalid equipment and worker loading failures', async ({ pag
 
 test('does not overwrite corrupt storage and still permits JSON export', async ({ page }) => {
   await page.addInitScript(() => { localStorage.setItem('leyline.plans.v1', '{broken'); localStorage.setItem('leyline.draft.v1', '{broken'); });
-  await page.goto('/');
+  await page.goto('/#workbench');
   await expect(page.getByRole('status').filter({ hasText: '草稿无法读取' })).toBeVisible();
   await page.getByRole('button', { name: '方案管理', exact: true }).click();
   await page.getByRole('button', { name: '保存为新方案', exact: true }).click();

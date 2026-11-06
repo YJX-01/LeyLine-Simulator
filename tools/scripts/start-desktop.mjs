@@ -1,0 +1,10 @@
+import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+const executable = resolve(`artifacts/desktop/LeyLine-${process.platform}-${process.arch}/${process.platform === 'win32' ? 'LeyLine.exe' : 'LeyLine'}`);
+if (!existsSync(executable)) throw new Error('Desktop build missing. Run pnpm desktop:build first.');
+const launchEnvironment = { ...process.env };
+delete launchEnvironment.ELECTRON_RUN_AS_NODE;
+const child = spawn(executable, [], { stdio: 'inherit', env: launchEnvironment });
+child.on('error', error => { console.error(error.message); process.exitCode = 1; });
+child.on('exit', code => { process.exitCode = code ?? 1; });

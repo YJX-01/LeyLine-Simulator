@@ -4,7 +4,7 @@ import { performanceScenarios } from '../../fixtures/performance/scenarios';
 test('keeps large results paginated and releases cancelled workers', async ({ page }, testInfo) => {
   test.setTimeout(60000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/#workbench');
   await page.getByText('高级：配置 JSON', { exact: true }).click();
   await page.getByLabel('工作区 JSON', { exact: true }).fill(JSON.stringify(performanceScenarios()['2000-commands']));
   const started = await page.evaluate(() => performance.now());

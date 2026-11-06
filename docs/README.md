@@ -1,6 +1,6 @@
 # 文档导航
 
-项目后续方向是**对照视频分层打轴，根据动作生成 Buff，结合伤害点构建公式，用于组队与配装优化**。新架构尚在讨论，当前代码仍是自动战斗模拟器。
+项目方向是**对照视频分层打轴，根据动作生成 Buff，结合伤害点构建公式，用于组队与配装优化**。P0/P1 普通伤害内核及桌面可操作验收已实现；桌面与网页共用界面，原自动战斗模拟器保留独立入口，复杂机制仍按阶段推进。
 
 ## 规划讨论
 
@@ -11,7 +11,10 @@
 | [总体设计草案](planning/overall-design.md) | 模块数据流、核心契约、求值流程、三个独立算例和范围划分 |
 | [核心代码方案](planning/core-implementation.md) | 模块目录、契约、表达式/效果/快照/概率/优化的实现方式 |
 | [分层实施路线](planning/implementation-roadmap.md) | 依赖顺序、可运行交付、阶段验收和产品目标对齐矩阵 |
-| [实施 Agent Prompt](planning/implementation-agent-prompt.md) | 可直接交接的 P0 + P1 任务、并行分工与验收边界 |
+| [实施 Agent Prompt](planning/implementation-agent-prompt.md) | 桌面 UI 优先的交接范围、并行分工与验收边界 |
+| [桌面实施调整](planning/desktop-implementation.md) | 桌面与网页共用的方案、D0 → P2 → P3 顺序 |
+| [桌面打开与验收](planning/desktop-delivery.md) | 双击入口、界面检查步骤、实际验证及剩余限制 |
+| [P0/P1 内核记录](planning/p0-p1-implementation.md) | v1 语义、普通算例、来源与诊断、无界面验证 |
 | [讨论提纲](planning/discussion-agenda.md) | 按依赖顺序讨论工作流、标注模型、Buff、公式和优化 |
 
 先明确用户如何记录和使用数据，再确定架构与实现。设计建议不能视为已确认需求，历史实现也不构成新产品必须保留的约束。

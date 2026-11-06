@@ -10,7 +10,7 @@ for (const arg of args) {
 }
 const paths = args.has('--cache') ? ['.cache'] : [
   'artifacts', 'test-results', 'playwright-report', 'coverage',
-  'src/web/dist', 'src/web/dist-subpath',
+  'src/web/dist', 'src/web/dist-subpath', 'src/web/dist-desktop',
 ];
 
 // Validate every target before deleting anything. Never accept caller-supplied paths.

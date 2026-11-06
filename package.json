@@ -11,6 +11,9 @@
     "data:check": "node tools/scripts/convert-repo-data.mjs --check",
     "fixture:check": "node tools/scripts/create-team-example.mjs --check",
     "dev": "pnpm --filter @leyline/web dev",
+    "desktop:build": "pnpm --filter @leyline/web build --base=./ --outDir=dist-desktop && node tools/scripts/package-desktop.mjs",
+    "desktop:start": "node tools/scripts/start-desktop.mjs",
+    "test:desktop": "node tools/scripts/test-desktop.mjs",
     "build": "pnpm --filter @leyline/web build",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit -p src/web/tsconfig.json",
     "test": "vitest run",
@@ -24,8 +27,10 @@
     "release:verify": "node tools/scripts/verify-release.mjs"
   },
   "devDependencies": {
+    "@electron/packager": "^20.3.0",
     "@playwright/test": "^1.64.1",
     "@types/node": "^24.19.2",
+    "electron": "^45.2.3",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
     "vue-tsc": "^3.1.0"

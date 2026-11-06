@@ -1,8 +1,14 @@
 # LeyLine Simulator
 
-原神队伍战斗模拟器，使用 Vue 3 + TypeScript 构建。计算在浏览器 Web Worker 中运行，可配置角色与装备、编排动作、查看伤害与能量事件、对比运行结果，并通过 JSON 导入导出方案。当前应用无需 Python 或后端服务。
+轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。当前默认进入 P0/P1 普通伤害可操作验收，可编辑候选配装、时间轴和目标，查看公式来源，并保存、重新打开项目。原自动队伍模拟器保留在 `/#workbench`。
 
-远期方向已调整为视频打轴与配装优化工作台，详见[产品方向记录](docs/planning/product-direction.md)与[文档导航](docs/README.md)。下文介绍当前实现；后续架构将依据新方向重新设计。
+产品方向和交付顺序见[产品方向记录](docs/planning/product-direction.md)与[桌面实施方案](docs/planning/desktop-implementation.md)。视频打轴、快照、累计和优化搜索仍为后续能力。
+
+## 桌面打开与验收
+
+本地生成的 Windows 程序为 `artifacts/desktop/LeyLine-win32-x64/LeyLine.exe`，双击即可运行，不需要启动 Vite、浏览器或终端。移动程序时保留整个目录。界面左侧有四个验收样本，参考值分别为 4400、4000、4840、2000；也可以直接修改输入控件检查。详细步骤见[桌面使用与验证记录](docs/planning/desktop-delivery.md)。
+
+开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收。程序为本地未签名便携版本，生成产物不纳入 Git。
 
 ## 快速开始
 
@@ -13,9 +19,9 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-打开终端显示的本地地址。默认进入队伍工作区，加载行秋、阿贝多、琴、胡桃的两轮循环。方案和草稿保存在当前浏览器中，重要方案请导出备份。开发验证页面位于 `/#tools`、`/#team` 和 `/#combat`。
+打开终端显示的本地地址，默认进入与桌面共用的伤害轴工作台。原队伍工作区位于 `/#workbench`；其方案和草稿仍保存在当前浏览器中。开发验证页面位于 `/#tools`、`/#team` 和 `/#combat`。
 
-## 当前支持范围
+## 原自动模拟器支持范围
 
 支持琴、行秋、胡桃、阿贝多、雷电将军的选定技能与命座，1—90 级成长、突破、天赋、8 把武器及选定五星圣遗物效果。使用固定仓库数据快照，按明确的单目标规则计算；尚未覆盖全部角色、多目标传播、敌人攻击与位移、动作取消、草反应等机制。
 
@@ -30,6 +36,7 @@ src/
   schema/        输入校验、版本化合同与 Worker 消息类型
   game-data/     游戏内容定义和生成的数据快照
 tools/           开发工具（下列目录均位于 tools/）
+  desktop/       Electron 主进程与受限文件桥
   scripts/       数据转换、架构检查、构建验证、清理与交付
   patches/       需要随依赖安装应用的补丁
 tests/           开发及生产浏览器测试
@@ -61,6 +68,8 @@ archive/python/  旧 Python 实现及历史资料
 | 包 | 声明范围 | 锁定版本 | 用途 |
 | --- | --- | --- | --- |
 | `typescript` | `^5.9.3` | `5.9.3` | TypeScript 类型检查及源码解析 |
+| `electron` | `^45.2.3` | `45.2.3` | 桌面运行时 |
+| `@electron/packager` | `^20.3.0` | `20.3.0` | 桌面便携程序打包 |
 | `vite` | `^7.2.0` | `7.3.7` | 本地开发与生产构建 |
 | `@vitejs/plugin-vue` | `^6.0.0` | `6.0.10` | Vite 的 Vue 单文件组件支持 |
 | `vue-tsc` | `^3.1.0` | `3.3.14` | Vue 模板与脚本类型检查 |

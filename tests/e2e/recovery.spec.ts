@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('explains unavailable storage without preventing simulation or export', async ({ page }) => {
   await page.addInitScript(() => { Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('Storage denied', 'SecurityError'); } }); });
-  await page.goto('/');
+  await page.goto('/#workbench');
   await expect(page.getByRole('status').filter({ hasText: '草稿无法读取' })).toBeVisible();
   await page.getByRole('button', { name: '运行模拟', exact: true }).click();
   await expect(page.getByRole('heading', { name: /总伤害：/ })).toBeVisible();
@@ -15,7 +15,7 @@ test('explains unavailable storage without preventing simulation or export', asy
 
 test('offers a reload when a lazy page cannot load', async ({ page }) => {
   await page.route('**/src/Workbench.vue*', route => route.abort());
-  await page.goto('/');
+  await page.goto('/#workbench');
   await expect(page.getByRole('heading', { name: '页面未能加载' })).toBeVisible();
   await page.unroute('**/src/Workbench.vue*');
   await Promise.all([page.waitForEvent('load'), page.getByRole('button', { name: '重新加载页面', exact: true }).click()]);
@@ -24,7 +24,7 @@ test('offers a reload when a lazy page cannot load', async ({ page }) => {
 
 test('preserves numeric results when optional chart resources fail', async ({ page }) => {
   await page.route('**/src/charts/runtime.ts*', route => route.abort());
-  await page.goto('/');
+  await page.goto('/#workbench');
   await page.getByRole('button', { name: '运行模拟', exact: true }).click();
   await expect(page.getByRole('table', { name: '工作区角色结果' })).toBeVisible();
   await expect(page.getByRole('status').filter({ hasText: '图表无法加载' }).first()).toBeVisible();
