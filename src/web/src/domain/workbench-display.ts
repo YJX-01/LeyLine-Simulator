@@ -1,5 +1,5 @@
 import type { WorkbenchProject } from '@leyline/schema';
-import { actorLabel, definitionLabel, nodeLabel, unitLabel, inputLabel, capabilityLabel } from './workbench-labels';
+import { actorLabel, definitionLabel, nodeLabel, unitLabel, inputLabel, capabilityLabel, recordLabel } from './workbench-labels';
 
 export interface DamagePresentation {
   actorLabel: string;
@@ -25,6 +25,9 @@ export function formatWorkbenchExpression(project: WorkbenchProject, definitionI
     if (!node) return '缺失节点';
     const next = new Set(path).add(id);
     switch (node.op) {
+      case 'attribute': return `${node.actor ? actorLabel(project, node.actor) : '当前角色'}的${inputLabel(node.key)}${node.at ? `（${recordLabel(project, node.at)}时刻${node.phase === 'after' ? '之后' : '之前'}）` : '（动态）'}`;
+      case 'capture': return `捕获(${format(node.value, next, depth + 1)}，${recordLabel(project, node.at)}${node.phase === 'after' ? '之后' : '之前'})`;
+      case 'history': return `${node.mode === 'count' ? '命中计数' : '伤害累计'}[${node.startMs}, ${node.endMs})毫秒${node.resetAt?.length ? '，有重置' : ''}`;
       case 'game-damage': return '真实攻击力 × 技能倍率 × 增伤 × 暴击 × 防御 × 抗性';
       case 'constant': return `${node.quantity.value} [${unitLabel(node.quantity.unit)}]`;
       case 'input': return `${inputLabel(node.key)} [${unitLabel(node.unit)}]`;

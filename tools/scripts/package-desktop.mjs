@@ -16,6 +16,7 @@ await mkdir(resolve(root, 'artifacts/desktop/releases'), { recursive: true });
 const outputDirectory = preview ? resolve(root, 'artifacts/desktop-preview') : await mkdtemp(resolve(root, 'artifacts/desktop/releases/build-'));
 const output = await packager({ dir: stage, out: outputDirectory, name: 'LeyLine',
   platform: process.platform, arch: process.arch, electronVersion, overwrite: preview, asar: true, prune: false,
+  ...(process.env.LEYLINE_ELECTRON_ZIP_DIR ? { electronZipDir: resolve(process.env.LEYLINE_ELECTRON_ZIP_DIR) } : {}),
   appCopyright: 'LeyLine contributors', executableName: 'LeyLine',
 });
 if (!preview) {

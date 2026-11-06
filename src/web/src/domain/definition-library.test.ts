@@ -53,6 +53,21 @@ describe('independent content definitions', () => {
     if (base?.op === 'multiply') base.left = 'base';
     expect(() => parseDefinitionLibrary(file)).toThrow('循环');
   });
+  it('saves P3 definitions independently and requires an explicit rule choice before copying them', () => {
+    const definition = createDefinition('捕获公式');
+    definition.nodes.push({ id: 'capture', op: 'capture', at: 'cast', value: 'base' });
+    definition.damage = 'capture';
+    const file = { schemaVersion: 1, kind: 'definition-library', id: 'p3-library', name: '捕获库', definitions: [definition] };
+    expect(parseDefinitionLibrary(JSON.parse(JSON.stringify(file))).definitions[0]).toEqual(definition);
+    const project = empty();
+    expect(() => copyDefinitionToProject(project, definition)).toThrow('明确采用 P3');
+    expect(project.definitions).toEqual([]);
+    expect(project.rulesVersion).toBe('workbench-v1');
+    project.rulesVersion = 'workbench-p3';
+    copyDefinitionToProject(project, definition);
+    definition.version = '2';
+    expect(project.definitions[0].version).toBe('1');
+  });
   it('retains unknown conditions and unsupported capability nodes as partial input', () => {
     const project = empty();
     const actor = createSyntheticTeam(project, '角色', 1000);

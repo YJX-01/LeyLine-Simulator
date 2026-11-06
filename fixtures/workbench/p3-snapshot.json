@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "rulesVersion": "workbench-p3",
+  "id": "p3-snapshot",
+  "revision": "1",
+  "definitions": [
+    {
+      "id": "support-character",
+      "version": "1",
+      "name": "辅助属性转换",
+      "source": {
+        "kind": "user",
+        "reference": "p3-independent-sample",
+        "verified": true
+      },
+      "nodes": [
+        {
+          "id": "short-attack",
+          "op": "constant",
+          "quantity": {
+            "value": 500,
+            "unit": "attack"
+          }
+        },
+        {
+          "id": "support-attack",
+          "op": "attribute",
+          "key": "attack",
+          "unit": "attack"
+        },
+        {
+          "id": "conversion",
+          "op": "constant",
+          "quantity": {
+            "value": 0.2,
+            "unit": "scalar"
+          }
+        },
+        {
+          "id": "converted",
+          "op": "multiply",
+          "left": "support-attack",
+          "right": "conversion"
+        }
+      ],
+      "effects": [
+        {
+          "id": "short-attack",
+          "startMs": 0,
+          "endMs": 2000,
+          "value": "short-attack",
+          "attribute": "attack",
+          "unit": "attack"
+        },
+        {
+          "id": "transfer",
+          "startMs": 0,
+          "endMs": 7000,
+          "action": "buff-cast",
+          "value": "converted",
+          "recipient": "dealer",
+          "attribute": "attack",
+          "unit": "attack",
+          "captureAt": "source"
+        }
+      ]
+    },
+    {
+      "id": "dealer-character",
+      "version": "1",
+      "name": "输出角色",
+      "source": {
+        "kind": "user",
+        "reference": "p3-independent-sample",
+        "verified": true
+      },
+      "nodes": [
+        {
+          "id": "late-bonus",
+          "op": "constant",
+          "quantity": {
+            "value": 0.5,
+            "unit": "scalar"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "id": "late-bonus",
+          "startMs": 6000,
+          "endMs": 8000,
+          "value": "late-bonus"
+        }
+      ]
+    },
+    {
+      "id": "empty-weapon",
+      "version": "1",
+      "name": "无效果武器",
+      "source": {
+        "kind": "user",
+        "reference": "p3-independent-sample",
+        "verified": true
+      },
+      "nodes": [],
+      "effects": []
+    },
+    {
+      "id": "buff-cast",
+      "version": "1",
+      "name": "辅助施放",
+      "source": {
+        "kind": "user",
+        "reference": "p3-independent-sample",
+        "verified": true
+      },
+      "nodes": [],
+      "effects": []
+    },
+    {
+      "id": "skill-cast",
+      "version": "1",
+      "name": "输出施放",
+      "source": {
+        "kind": "user",
+        "reference": "p3-independent-sample",
+        "verified": true
+      },
+      "nodes": [],
+      "effects": []
+    },
+    {
+      "id": "snapshot-hit",
+      "version": "1",
+      "name": "捕获攻击伤害",
+      "source": {
+        "kind": "user",
+        "reference": "p3-independent-sample",
+        "verified": true
+      },
+      "nodes": [
+        {
+          "id": "attack",
+          "op": "attribute",
+          "key": "attack",
+          "unit": "attack"
+        },
+        {
+          "id": "captured-attack",
+          "op": "capture",
+          "at": "skill-cast",
+          "value": "attack"
+        },
+        {
+          "id": "multiplier",
+          "op": "constant",
+          "quantity": {
+            "value": 2,
+            "unit": "scalar"
+          }
+        },
+        {
+          "id": "damage",
+          "op": "multiply",
+          "left": "captured-attack",
+          "right": "multiplier"
+        }
+      ],
+      "effects": [],
+      "damage": "damage"
+    }
+  ],
+  "candidate": {
+    "id": "snapshot-candidate",
+    "actors": [
+      {
+        "id": "support",
+        "name": "辅助",
+        "character": "support-character",
+        "weapon": "empty-weapon",
+        "inputs": {
+          "attack": {
+            "value": 1000,
+            "unit": "attack"
+          }
+        }
+      },
+      {
+        "id": "dealer",
+        "name": "输出",
+        "character": "dealer-character",
+        "weapon": "empty-weapon",
+        "inputs": {
+          "attack": {
+            "value": 2000,
+            "unit": "attack"
+          }
+        }
+      }
+    ]
+  },
+  "conditions": {},
+  "timeline": [
+    {
+      "id": "buff-cast",
+      "timeMs": 1000,
+      "order": 0,
+      "actor": "support",
+      "definition": "buff-cast",
+      "kind": "action"
+    },
+    {
+      "id": "skill-cast",
+      "timeMs": 3000,
+      "order": 0,
+      "actor": "dealer",
+      "definition": "skill-cast",
+      "kind": "action"
+    },
+    {
+      "id": "snapshot-hit",
+      "timeMs": 7000,
+      "order": 0,
+      "actor": "dealer",
+      "definition": "snapshot-hit",
+      "kind": "damage"
+    }
+  ],
+  "objective": {}
+}

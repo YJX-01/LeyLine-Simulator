@@ -33,3 +33,5 @@
 工作流在Linux执行检查、三内核浏览器用例、两种路径构建、生产用例和候选打包，并保存 `artifacts/`、`test-results/` 为CI附件。此处配置已在本地验证对应命令，但没有push，因此没有宣称远端CI已运行。
 
 性能基线及预算见 `performance/README.md`。浏览器性能包含驱动往返且受机器和并发影响；Node堆差值不是浏览器内存，更不是长期无泄漏保证。Windows Playwright WebKit验收不等于真实Safari/iOS设备覆盖。
+
+离线桌面打包可将环境变量 `LEYLINE_ELECTRON_ZIP_DIR` 指向已有的 Electron ZIP 所在目录。文件名须为安装版本匹配的 `electron-v<版本>-<平台>-<架构>.zip`，packager按该版本查找；不设置时保持默认下载行为。不要将不同版本归档改名冒充当前版本。本轮本机使用已缓存的45.2.3归档，未下载或替换用户正在运行的旧程序。

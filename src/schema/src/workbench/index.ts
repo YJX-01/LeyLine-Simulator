@@ -6,6 +6,9 @@ const ms = z.number().int().nonnegative().max(3600000);
 export const workbenchUnitSchema = z.enum(['scalar', 'attack', 'damage']);
 const quantity = z.object({ value: z.number().finite(), unit: workbenchUnitSchema }).strict();
 const node = z.discriminatedUnion('op', [
+  z.object({ id, op: z.literal('attribute'), actor: id.optional(), key: id, unit: workbenchUnitSchema, at: id.optional(), phase: z.enum(['before', 'after']).optional() }).strict(),
+  z.object({ id, op: z.literal('capture'), at: id, value: id, phase: z.enum(['before', 'after']).optional() }).strict(),
+  z.object({ id, op: z.literal('history'), mode: z.enum(['sum', 'count']), startMs: ms, endMs: ms, actor: id.optional(), definition: id.optional(), initial: z.number().finite().optional(), cap: z.number().finite().nonnegative().optional(), resetAt: z.array(id).max(1000).optional(), includeCurrent: z.boolean().optional() }).strict(),
   z.object({ id, op: z.literal('game-damage') }).strict(),
   z.object({ id, op: z.literal('constant'), quantity }).strict(),
   z.object({ id, op: z.literal('input'), key: id, unit: workbenchUnitSchema }).strict(),
@@ -15,7 +18,9 @@ const node = z.discriminatedUnion('op', [
 ]);
 const effect = z.object({
   id, startMs: ms, endMs: ms, value: id, condition: id.optional(),
-  action: id.optional(),
+  action: id.optional(), recipient: id.optional(), attribute: id.optional(), unit: workbenchUnitSchema.optional(),
+  group: id.optional(), policy: z.enum(['add', 'replace', 'stack']).optional(), maxStacks: z.number().int().min(1).max(1000).optional(),
+  captureAt: z.enum(['dynamic', 'source']).optional(),
 }).strict().refine(e => e.endMs > e.startMs, 'Effect interval must be nonempty');
 const definition = z.object({
   id, version: id, name: id.optional(),
@@ -23,7 +28,7 @@ const definition = z.object({
   nodes: z.array(node).max(1000), damage: id.optional(), effects: z.array(effect).max(1000),
 }).strict();
 export const workbenchProjectSchema = z.object({
-  schemaVersion: z.literal(1), rulesVersion: z.literal('workbench-v1'), id, revision: id,
+  schemaVersion: z.literal(1), rulesVersion: z.enum(['workbench-v1', 'workbench-p3']), id, revision: id,
   definitions: z.array(definition).max(200),
   candidate: z.object({
     id, actors: z.array(z.object({ id, name: id.optional(), character: id, weapon: id, inputs: z.record(id, quantity), realBuild: realBuildSchema.optional(),
@@ -32,6 +37,7 @@ export const workbenchProjectSchema = z.object({
       }).strict().optional(),
     }).strict()).max(100),
   }).strict(),
+  effectRevisions: z.array(z.object({ instanceId: id.max(2000), disabled: z.boolean(), value: quantity.optional() }).strict()).max(10000).optional(),
   conditions: z.record(id, z.boolean().nullable()),
   enemy: realEnemySchema.optional(),
   timeline: z.array(z.object({
@@ -40,6 +46,16 @@ export const workbenchProjectSchema = z.object({
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(id).optional() }).strict(),
 }).strict().superRefine((project, context) => {
+  if (project.rulesVersion === 'workbench-v1') {
+    if (project.effectRevisions !== undefined || project.definitions.some(d => d.nodes.some(n => ['attribute', 'capture', 'history'].includes(n.op)) || d.effects.some(e => ['recipient', 'attribute', 'unit', 'group', 'policy', 'maxStacks', 'captureAt'].some(k => Object.hasOwn(e, k))))) {
+      context.addIssue({ code: 'custom', message: 'P3 能力须显式采用 workbench-p3，旧版规则不自动升级。', path: ['rulesVersion'] });
+    }
+  }
+  project.definitions.forEach((definition, definitionIndex) => {
+    definition.nodes.forEach((node, nodeIndex) => {
+      if (node.op === 'history' && node.endMs <= node.startMs) context.addIssue({ code: 'custom', message: '累计窗口必须为非空左闭右开区间。', path: ['definitions', definitionIndex, 'nodes', nodeIndex] });
+    });
+  });
   const occupied = new Set<string>();
   project.candidate.actors.forEach((actor, index) => {
     if (actor.realBuild) {
@@ -65,7 +81,7 @@ export type WorkbenchProject = z.infer<typeof workbenchProjectSchema>;
 export type WorkbenchNode = z.infer<typeof node>;
 export type WorkbenchUnit = z.infer<typeof workbenchUnitSchema>;
 export interface WorkbenchDiagnostic {
-  code: 'invalid-input' | 'missing-reference' | 'duplicate-id' | 'cycle' | 'unit' | 'unknown' | 'unsupported' | 'arithmetic';
+  code: 'invalid-input' | 'missing-reference' | 'duplicate-id' | 'cycle' | 'unit' | 'unknown' | 'unsupported' | 'arithmetic' | 'budget' | 'stale-revision';
   path: string;
   message: string;
 }

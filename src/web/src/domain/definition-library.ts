@@ -25,7 +25,7 @@ export function parseDefinitionLibrary(input: unknown): DefinitionLibraryFile {
   const value = input as Partial<DefinitionLibraryFile>;
   if (value.kind !== 'definition-library' || value.schemaVersion !== 1 || typeof value.id !== 'string' || !value.id || typeof value.name !== 'string' || !value.name.trim()
     || Object.keys(value).some(key => !['kind', 'schemaVersion', 'id', 'name', 'definitions'].includes(key))) throw new Error('内容定义库格式或版本不受支持，现有资料保持不变。');
-  const parsed = workbenchProjectSchema.safeParse({ schemaVersion: 1, rulesVersion: 'workbench-v1', id: value.id,
+  const parsed = workbenchProjectSchema.safeParse({ schemaVersion: 1, rulesVersion: 'workbench-p3', id: value.id,
     revision: '1', definitions: value.definitions, candidate: { id: 'validation', actors: [] }, conditions: {}, timeline: [], objective: {} });
   if (!parsed.success) throw new Error('内容定义包含非法数值或格式，现有资料保持不变。');
   const definitions = parsed.data.definitions;
@@ -36,7 +36,7 @@ export function parseDefinitionLibrary(input: unknown): DefinitionLibraryFile {
 export function validateDefinitionReferences(definition: ContentDefinition, definitions: ContentDefinition[]): void {
   const nodes = new Map(definition.nodes.map(node => [node.id, node]));
   if (nodes.size !== definition.nodes.length || new Set(definition.effects.map(effect => effect.id)).size !== definition.effects.length) throw new Error('节点或效果标识重复。');
-  const references = (node: WorkbenchNode) => node.op === 'add' || node.op === 'multiply' || node.op === 'divide' ? [node.left, node.right] : node.op === 'condition' ? [node.yes, node.no] : [];
+  const references = (node: WorkbenchNode) => node.op === 'add' || node.op === 'multiply' || node.op === 'divide' ? [node.left, node.right] : node.op === 'condition' ? [node.yes, node.no] : node.op === 'capture' ? [node.value] : [];
   const visited = new Set<string>();
   const visit = (id: string, path: Set<string>) => {
     if (path.has(id)) throw new Error('公式包含循环引用，请修正后保存。');
@@ -71,6 +71,9 @@ export function copyDefinitionToProject(project: WorkbenchProject, input: Conten
       const dependency = available.find(entry => entry.id === effect.action) ?? project.definitions.find(entry => entry.id === effect.action);
       if (!dependency) throw new Error('区间效果的动作定义缺失，未复制到当前轴。');
       collect(dependency);
+    }
+    if (project.rulesVersion === 'workbench-v1' && (definition.nodes.some(node => ['attribute', 'capture', 'history'].includes(node.op)) || definition.effects.some(effect => ['recipient', 'attribute', 'unit', 'group', 'policy', 'maxStacks', 'captureAt'].some(key => Object.hasOwn(effect, key))))) {
+      throw new Error('此定义需要 P3 规则。请先在队伍页明确采用 P3 规则，再复制定义；旧项目不会自动升级。');
     }
     pending.push(cloneDefinition(definition));
   };

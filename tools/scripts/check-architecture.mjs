@@ -104,7 +104,7 @@ for (const path of files) {
       const argument = node.arguments[0];
       if (argument && ts.isStringLiteralLike(argument)) checkImport(path, argument.text, true);
       // Tooling resolves Vite from its owning workspace without hoisting it to the root.
-      else if (['tools/scripts/benchmark-engine.mjs', 'tools/scripts/evaluate-workbench.mjs'].includes(path) && argument?.getText(ast) === "pathToFileURL(require.resolve('vite')).href") {
+      else if (['tools/scripts/benchmark-engine.mjs', 'tools/scripts/evaluate-workbench.mjs', 'tools/scripts/benchmark-workbench-p3.mjs'].includes(path) && argument?.getText(ast) === "pathToFileURL(require.resolve('vite')).href") {
         checkImport(path, 'vite', true);
       } else fail(path, 'computed module imports require an explicit architecture-check rule');
     }

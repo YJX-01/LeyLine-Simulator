@@ -128,10 +128,10 @@ export function resolveRealBuild(input: unknown): RealPanel {
 }
 
 /** Direct, non-reacting hit. The caller must explicitly choose the crit and reaction facts. */
-export function evaluateRealDamage(buildInput: unknown, damageInput: RealDamage | undefined, enemyInput: RealEnemy | undefined, extraBonus = 0): RealDamageResult {
+export function evaluateRealDamage(buildInput: unknown, damageInput: RealDamage | undefined, enemyInput: RealEnemy | undefined, extraBonus = 0, attackOverride?: number): RealDamageResult {
   const panel = resolveRealBuild(buildInput);
   const issues = [...panel.issues];
-  const parts: RealDamageResult['parts'] = { attack: panel.status === 'invalid' ? null : panel.stats.attack, multiplier: null, bonus: null, crit: null, defense: null, resistance: null };
+  const parts: RealDamageResult['parts'] = { attack: panel.status === 'invalid' ? null : attackOverride ?? panel.stats.attack, multiplier: null, bonus: null, crit: null, defense: null, resistance: null };
   const report = (code: RealIssue['code'], message: string) => { if (!issues.some(issue => issue.code === code && issue.message === message)) issues.push({ code, message }); };
   const finish = (): RealDamageResult => {
     const status = statusOf(issues);
@@ -140,6 +140,7 @@ export function evaluateRealDamage(buildInput: unknown, damageInput: RealDamage 
     if (product !== null && !Number.isFinite(product)) report('invalid-input', '伤害计算溢出。');
     return { status: statusOf(issues), value: status === 'complete' && product !== null && Number.isFinite(product) ? product : null, panel, parts, diagnostics: issues.map(issue => issue.message), issues };
   };
+  if (attackOverride !== undefined && (!Number.isFinite(attackOverride) || attackOverride < 0)) report('invalid-input', '效果修正后的攻击力必须为非负有限值。');
   const build = realBuildSchema.safeParse(buildInput);
   if (!build.success) return finish();
   const damage = damageInput === undefined ? undefined : realDamageSchema.safeParse(damageInput);

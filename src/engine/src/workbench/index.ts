@@ -1,3 +1,5 @@
+import { evaluateP3, type P3EffectInstance, type P3Read } from './p3';
+export type { P3EffectInstance, P3Read } from './p3';
 import { workbenchProjectSchema, type WorkbenchProject, type WorkbenchDiagnostic, type WorkbenchUnit } from '@leyline/schema';
 import { evaluateRealDamage, type RealDamageResult } from '../real-game';
 
@@ -17,6 +19,8 @@ export interface WorkbenchResult {
   totalValue: number | null;
   diagnostics: WorkbenchDiagnostic[];
   plan: WorkbenchProject | null;
+  effectInstances?: P3EffectInstance[];
+  reads?: P3Read[];
 }
 
 /** Pure v1 evaluation: each candidate rebuilds its effects; no simulation or shared run state. */
@@ -31,6 +35,7 @@ export function evaluateWorkbench(input: unknown): WorkbenchResult {
     diagnostics: parsed.error.issues.map(issue => ({ code: 'invalid-input', path: issue.path.join('.'), message: issue.message })),
   };
   const project = parsed.data;
+  if (project.rulesVersion === 'workbench-p3') return evaluateP3(project);
   const definitions = new Map(project.definitions.map(d => [d.id, d]));
   const actors = new Map(project.candidate.actors.map(a => [a.id, a]));
   function unique(ids: string[], path: string) {
@@ -93,6 +98,7 @@ export function evaluateWorkbench(input: unknown): WorkbenchResult {
       if (!node) { report('missing-reference', path, id); return null; }
       const next = new Set(stack).add(id);
       switch (node.op) {
+        case 'attribute': case 'capture': case 'history': report('unsupported', path, 'P3 节点需要 P3 规则'); return null;
         case 'game-damage': {
           gameDamageUsed = true;
           const real = evaluateRealDamage(actor?.realBuild, record.realDamage, project.enemy, bonus);

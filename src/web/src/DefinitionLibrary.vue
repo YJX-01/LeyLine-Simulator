@@ -32,6 +32,9 @@ function addNode() {
     : operation === 'input' ? { id, op: operation, key: 'attack', unit: 'attack' }
     : operation === 'condition' ? { id, op: operation, key: '触发条件', yes: first, no: first }
     : operation === 'unsupported' ? { id, op: operation, capability: 'snapshot' }
+    : operation === 'attribute' ? { id, op: operation, key: 'attack', unit: 'attack' }
+    : operation === 'capture' ? { id, op: operation, at: '待选择记录', value: first }
+    : operation === 'history' ? { id, op: operation, mode: 'sum', startMs: 0, endMs: 6000 }
     : operation === 'game-damage' ? { id, op: operation }
     : { id, op: operation, left: first, right: first };
   definition.nodes.push(node);
