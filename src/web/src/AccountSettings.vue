@@ -8,11 +8,13 @@ const fileInput = ref<HTMLInputElement>();
 function resetSelection() {
   store.selectedCharacterId = '';
   store.characterQuery = '';
+  store.characterElement = ''; store.characterWeapon = ''; store.characterProfile = ''; store.characterEquipment = ''; store.characterSort = 'name';
   store.inventoryQuery = '';
   store.inventorySlot = '';
   store.inventoryStat = '';
   store.inventoryOwner = 'all';
   store.inventoryPage = 1;
+  store.inventorySet = ''; store.inventorySubstat = ''; store.inventoryLevel = ''; store.inventorySort = 'default';
 }
 async function openAccount() {
   const before = store.account;
@@ -40,7 +42,7 @@ function replaceAccount(restore = false) {
     <p class="account-summary">{{ store.account.characters.length }} 位角色 · {{ store.account.artifacts.length }} 件圣遗物</p>
     <div class="account-file-actions"><button class="primary" :disabled="store.busy" @click="store.save()">保存账号资料</button><button :disabled="store.busy" @click="openAccount">打开 / 切换账号</button><button :disabled="store.busy" @click="replaceAccount()">新建账号</button><button v-if="store.previous" :disabled="store.busy" @click="replaceAccount(true)">恢复替换前账号</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入账号资料文件" hidden @change="importFile">
-    <p class="account-hint">切换前保留恢复副本，不更改已有轴。莫娜圣遗物导入在圣遗物页。</p>
+    <p class="account-hint">切换前保留恢复副本，不更改已有轴。莫娜 JSON 与 Enka 展柜导入在角色页，圣遗物文件也可在库存页导入。</p>
     <p v-if="store.notice" role="status">{{ store.notice }}</p>
     <div v-if="store.error" role="alert">{{ localDataErrorLabel(store.error) }}<details><summary>技术详情</summary>{{ store.error }}</details></div>
   </section>

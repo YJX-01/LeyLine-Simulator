@@ -11,8 +11,8 @@ import type { WorkbenchNode } from '@leyline/schema';
 import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { acceptanceCases, nextRecordId, removeProjectActor, removeTimelineRecord, setDamageSelected, type AcceptanceCase } from './domain/workbench-project';
 import { getDamagePresentation, formatWorkbenchExpression } from './domain/workbench-display';
-import anemoEmblem from './assets/genshin/element-anemo.webp';
-import geoEmblem from './assets/genshin/element-geo.webp';
+const anemoEmblem = `${import.meta.env.BASE_URL}game-icons/elements-anemo.webp`;
+const geoEmblem = `${import.meta.env.BASE_URL}game-icons/elements-geo.webp`;
 
 const P3Panel = defineAsyncComponent(() => import('./P3Panel.vue'));
 const RealGamePanel = defineAsyncComponent(() => import('./RealGamePanel.vue'));

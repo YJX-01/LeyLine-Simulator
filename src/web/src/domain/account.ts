@@ -4,7 +4,7 @@ import { validateAccountArtifact } from './account-real';
 export const accountSlots = ['flower', 'plume', 'sands', 'goblet', 'circlet'] as const;
 export type AccountSlot = typeof accountSlots[number];
 export const accountSlotLabels: Record<AccountSlot, string> = { flower: '生之花', plume: '死之羽', sands: '时之沙', goblet: '空之杯', circlet: '理之冠' };
-export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>>; realBuild?: RealBuild }
+export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>>; realBuild?: RealBuild; showcase?: { uid: string; avatarId: number; fetchedAt: string; rawHash: string; build: RealBuild } }
 export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string; equippedBy?: string; sourceSetName?: string; setIdentityPending?: boolean } }
 export interface LocalAccount { schemaVersion: 1; kind: 'account'; id: string; name: string; characters: AccountCharacter[]; artifacts: AccountArtifact[] }
 export const cloneAccount = (value: LocalAccount): LocalAccount => JSON.parse(JSON.stringify(value)) as LocalAccount;
@@ -35,6 +35,7 @@ export function parseAccount(input: unknown): LocalAccount {
     if (!object(character) || !validText(character.id) || ids.has(character.id) || !validText(character.name) || !attack(character.attack) || typeof character.weapon !== 'string' || character.weapon.length > 160 || !object(character.equipment)) return fail();
     ids.add(character.id);
     if (character.realBuild !== undefined && !realBuildSchema.safeParse(character.realBuild).success) return fail();
+    if (character.showcase !== undefined && (!object(character.showcase) || (typeof character.showcase.uid !== 'string' || !/^\d{9,10}$/.test(character.showcase.uid)) || !Number.isInteger(character.showcase.avatarId) || !validText(character.showcase.fetchedAt) || !validText(character.showcase.rawHash) || !/^[a-f0-9]{64}$/.test(character.showcase.rawHash) || !Number.isFinite(Date.parse(String(character.showcase.fetchedAt))) || !realBuildSchema.safeParse(character.showcase.build).success)) return fail();
     for (const [slot, artifactId] of Object.entries(character.equipment)) {
       const artifact = input.artifacts.find((entry: unknown) => object(entry) && entry.id === artifactId);
       if (!accountSlots.includes(slot as AccountSlot) || !object(artifact) || artifact.slot !== slot || typeof artifactId !== 'string' || owners.has(artifactId)) return fail();

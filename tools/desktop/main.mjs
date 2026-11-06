@@ -1,3 +1,4 @@
+import { lookupEnka } from './enka.mjs';
 import { app, BrowserWindow, dialog, ipcMain, Menu, net, protocol, session } from 'electron';
 import { readFile, stat, writeFile, rename, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
@@ -27,6 +28,7 @@ app.whenReady().then(() => {
     ...details.responseHeaders,
     'Content-Security-Policy': ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"],
   } }));
+  ipcMain.handle('account:enka', async (event, uid) => { trusted(event); return lookupEnka(uid); });
   ipcMain.handle('project:open', async event => {
     trusted(event);
     const result = await dialog.showOpenDialog(window, { title: '打开本地资料文件', filters: [{ name: '地脉资料', extensions: ['json'] }], properties: ['openFile'] });

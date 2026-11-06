@@ -1,4 +1,5 @@
 export interface DesktopBridge {
+  lookupEnka?(uid: string): Promise<string>;
   openProject(): Promise<string | null>;
   saveProject(content: string): Promise<boolean>;
 }

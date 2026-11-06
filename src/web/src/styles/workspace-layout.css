@@ -1,23 +1,23 @@
 /* Light workspace tokens. A future dark theme can replace surfaces and ink independently. */
 .workspace-design {
-  --nav-surface:#f5f4ee;
-  --nav-ink:#45514d;
-  --nav-muted:#757d74;
-  --nav-border:#dcded3;
+  --nav-surface:var(--neutral-canvas);
+  --nav-ink:var(--neutral-ink);
+  --nav-muted:var(--neutral-muted);
+  --nav-border:var(--neutral-line);
   --nav-hover:#e8eae1;
-  --nav-active:#fffefb;
-  --account-surface:#e9f0e6;
+  --nav-active:var(--neutral-surface);
+  --account-surface:var(--element-anemo-light);
   --account-canvas:#f6f8f3;
-  --account-ink:#496a52;
-  --account-border:#c8d8c6;
-  --project-surface:#e8eef5;
+  --account-ink:var(--element-anemo-deep);
+  --account-border:var(--element-anemo-primary);
+  --project-surface:var(--element-hydro-light);
   --project-canvas:#f5f7fa;
-  --project-ink:#496882;
-  --project-border:#c7d4e1;
-  --content-surface:#efecf4;
+  --project-ink:var(--element-hydro-deep);
+  --project-border:var(--element-hydro-primary);
+  --content-surface:var(--element-electro-light);
   --content-canvas:#f8f6fa;
-  --content-ink:#706084;
-  --content-border:#d6cde1;
+  --content-ink:var(--element-electro-deep);
+  --content-border:var(--element-electro-primary);
   --canvas:#f8f7f2;
   background:var(--canvas);
 }

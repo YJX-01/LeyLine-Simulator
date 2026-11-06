@@ -49,3 +49,8 @@
 | [UI 素材](references/ui-assets.md) | 当前主题图片来源、许可说明、压缩与预算 |
 
 数据资料保持原路径：`constant/` 为 canonical，`characters/` 和 `unifiedname.txt` 为既有参考，`performance/*.json` 为对应阶段历史测量。角色资料存在不等于规则已验证；生成快照应与 canonical、版本及哈希一起审查。[固定来源清单](references/sources.json)保留外部 checkout 依据。
+
+## 当前界面规范与新增输入
+
+- [视觉设计语言](design/visual-language.md)：七元素 21 色、语义分配、操作与状态规范；设置中可预览，v1 待体验反馈。
+- [Enka 导入说明](references/enka-import.md)：UID 公开展柜、来源固定版本、快照与实物边界、部署条件及真实验证。

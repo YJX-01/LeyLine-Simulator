@@ -55,5 +55,5 @@ function apply() { try { if (store.account !== originalAccount) throw new Error(
   </div>
 </template>
 <style scoped>
-.artifact-form { display:grid; gap:14px; color:var(--ink,#283449); } label { display:grid; gap:6px; font-size:13px; } input,select { width:100%; box-sizing:border-box; min-height:38px; }.sub-row { display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; } p { font-size:13px; line-height:1.7; } [role=alert] { color:#a62c36; }
+.artifact-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:13px; } input,select { width:100%; box-sizing:border-box; min-height:38px; }.sub-row { display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; } p { font-size:13px; line-height:1.7; } [role=alert] { color:var(--element-pyro-deep); }
 </style>

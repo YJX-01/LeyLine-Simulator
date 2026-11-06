@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick } from 'vue';
+const ThemePalette = defineAsyncComponent(() => import('./ThemePalette.vue'));
 const AccountSettings = defineAsyncComponent(() => import('./AccountSettings.vue'));
 const AccountLibrary = defineAsyncComponent(() => import('./AccountLibrary.vue'));
 const DefinitionLibrary = defineAsyncComponent(() => import('./DefinitionLibrary.vue'));
@@ -16,7 +17,7 @@ import type { WorkbenchNode } from '@leyline/schema';
 import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { acceptanceCases, nextRecordId, removeProjectActor, removeTimelineRecord, setDamageSelected, type AcceptanceCase } from './domain/workbench-project';
 import { getDamagePresentation, formatWorkbenchExpression } from './domain/workbench-display';
-import geoEmblem from './assets/genshin/element-geo.webp';
+const geoEmblem = `${import.meta.env.BASE_URL}game-icons/elements-geo.webp`;
 
 const P3Panel = defineAsyncComponent(() => import('./P3Panel.vue'));
 const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue'));
@@ -215,9 +216,9 @@ function loadSample(id: AcceptanceCase) { workspace.loadSample(id); navigate('ti
 
       <section v-else-if="page === 'definitions'" class="panel definition-library"><DefinitionLibrary /><div class="panel-heading"><div><h2>当前轴使用的定义快照</h2><p>这里调整轴内快照；不会自动回写独立定义库。</p></div><span class="subtle-tag">{{ project.definitions.length }} 个定义</span></div><div class="segmented definition-tabs"><button v-for="tab in [{ id: 'all', name: '全部定义' }, { id: 'preset', name: '内置预设' }, { id: 'user', name: '用户自定义' }]" :key="tab.id" :class="{ selected: definitionFilter === tab.id }" @click="definitionFilter = tab.id">{{ tab.name }}</button></div><article v-for="definition in visibleDefinitions" :key="definition.id" class="shell-definition-editor"><h3>{{ definitionLabel(project, definition.id) }} · 版本{{ definition.version }}</h3><div class="candidate-form"><label>内容来源<select v-model="definition.source.kind"><option value="user">用户定义</option><option value="preset">预设内容</option></select></label><label v-if="definition.damage">伤害根节点<select v-model="definition.damage"><option v-for="node in definition.nodes" :key="node.id" :value="node.id">{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</option></select></label></div><div v-for="node in definition.nodes" :key="node.id" class="shell-node-row"><code>{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</code><label v-if="constant(node)">常量 {{ nodeLabel(project, definition.id, node.id) }}<input :aria-label="`常量 ${nodeLabel(project, definition.id, node.id)}`" type="number" step="any" :value="constant(node)?.value" @input="node.op === 'constant' && (node.quantity.value = number($event))"><small>{{ unitLabel(constant(node)?.unit ?? '') }}</small></label><code v-else>{{ formatWorkbenchExpression(project, definition.id, node.id) }}</code></div></article><p v-if="!visibleDefinitions.length">暂无此类定义。</p></section>
 
-      <AccountLibrary v-else-if="isAccountPage" :page="page === 'characters' ? 'characters' : 'artifacts'" />
+      <AccountLibrary v-else-if="isAccountPage" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('settings')" />
 
-      <section v-else class="panel settings-page"><AccountSettings /><details class="settings-about"><summary>关于、支持范围与高级工具</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围与工具</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算与莫娜第一版圣遗物文件导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>线上角色接口、视频、概率和配装搜索。</p></div></div><p>游戏图像 © miHoYo / HoYoverse；本工具非官方作品。图像仅作示意，原创结纹与游戏图像分别登记来源。</p><div class="shell-tool-links"><a href="#annotation">公式验收工具</a><a href="#compatibility">历史兼容工作台（含旧合成样本）</a><a href="#workbench">原自动模拟器</a><a href="#tools">开发验证工具</a></div></details></section>
+      <section v-else class="panel settings-page"><AccountSettings /><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于、支持范围与高级工具</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围与工具</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><p>游戏图像 © miHoYo / HoYoverse；本工具非官方作品。图像仅作示意，原创结纹与游戏图像分别登记来源。</p><div class="shell-tool-links"><a href="#annotation">公式验收工具</a><a href="#compatibility">历史兼容工作台（含旧合成样本）</a><a href="#workbench">原自动模拟器</a><a href="#tools">开发验证工具</a></div></details></section>
 
       <section v-if="isProjectPage && result.diagnostics.length" class="panel shell-diagnostics"><h2>条件与诊断</h2><ul aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}/${diagnostic.path}/${diagnostic.message}`"><strong>{{ diagnosticLabel(diagnostic.code) }}</strong> · <details><summary>技术详情</summary>{{ diagnostic.message }}<code>{{ diagnostic.code }} · {{ diagnostic.path }}</code></details></li></ul></section>
       <details v-if="isProjectPage" class="project-technical"><summary>技术详情：项目原始数据</summary><pre>{{ JSON.stringify(project, null, 2) }}</pre></details>

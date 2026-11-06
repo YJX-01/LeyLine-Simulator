@@ -53,3 +53,9 @@ Keep existing synthetic fixtures/tests as historical compatibility regressions; 
 Preserve the approved theme and three data domains, but redesign the present interaction flow in U1. Functional automated checks and usability acceptance are separate; do not mark U1 complete or bypass it with P5/P6 product integration before actual task walkthroughs and user experience review. Provide the complete runnable redesign and evidence before requesting final experience review.
 
 Run desktop and browser acceptance serially with one worker. Manage only processes proven to belong to the current run; never terminate applications by name or disturb the user's existing desktop.
+
+## Current UI increment
+
+The user explicitly authorized Enka UID public showcase input as a bounded U1 addition. Preserve preview/confirmation and separate read-only showcase snapshots from physical inventory; do not infer matching physical items from equal stats or combine unrelated public and private accounts. This does not advance the stage to P5/P6. Follow `docs/references/enka-import.md`.
+
+New UI uses the semantic tokens and controls in `docs/design/visual-language.md` and `src/web/src/styles/palette.ts`. The seven-element 21-color v1 palette remains pending user experience feedback; dark mode is not implemented. Keep checks focused on changed real-data paths, as requested by the user.

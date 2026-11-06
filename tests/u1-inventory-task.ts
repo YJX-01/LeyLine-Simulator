@@ -88,6 +88,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '恢复替换前账号', exact: true }).click();
   await expect(page.getByLabel('账号管理', { exact: true })).toContainText('458 件圣遗物');
   await page.getByTestId('workspace-nav-characters').click();
+  await page.getByRole('button', { name: '莫娜 JSON', exact: true }).click();
   await page.getByRole('button', { name: '从穿戴备注整理角色', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('55 个角色穿戴备注');
   await page.getByRole('button', { name: '确认按备注整理', exact: true }).click();
@@ -111,7 +112,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '取消转移', exact: true }).click();
   await page.getByLabel('搜索账号角色', { exact: true }).fill('琴不存在');
   await expect(page.getByText('没有符合条件的角色，请调整搜索。', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: '添加账号角色', exact: true }).click();
+  await page.getByRole('button', { name: '手动添加', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('武器需自行选择');
   await expect(page.getByLabel('角色等级', { exact: true })).toHaveValue('90');
   await expect(page.getByRole('button', { name: '预览角色资料', exact: true })).toBeDisabled();

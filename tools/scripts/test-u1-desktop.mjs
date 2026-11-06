@@ -47,7 +47,7 @@ try {
   await page.getByRole('button', { name: '打开 / 切换账号', exact: true }).click();
   await expect(page.getByLabel('账号管理', { exact: true })).toContainText('458 件圣遗物');
   await page.getByTestId('workspace-nav-characters').click();
-  await page.getByRole('button', { name: '添加账号角色', exact: true }).click();
+  await page.getByRole('button', { name: '手动添加', exact: true }).click();
   await page.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   for (const name of ['芙宁娜', '丝柯克']) {
     await page.getByLabel('搜索游戏角色', { exact: true }).fill(name);
@@ -69,7 +69,23 @@ try {
   await page.getByTestId('workspace-nav-timeline').click();
   await expect(page.getByLabel('剪辑式时间轴编辑', { exact: true })).toBeVisible();
   await page.screenshot({ path: resolve(directory, 'empty-axis.png'), fullPage: true });
+  // The documented public showcase is a separate actual case, never mixed with the user's inventory.
+  await page.getByRole('button', { name: '导航 设置', exact: true }).click();
+  await page.getByRole('button', { name: '新建账号', exact: true }).click();
+  await page.getByTestId('workspace-nav-characters').click();
+  await page.getByRole('button', { name: '网络导入', exact: true }).click();
+  const enka = page.getByRole('dialog', { name: '从 Enka 展柜导入', exact: true });
+  await enka.getByLabel('游戏 UID', { exact: true }).fill('618285856');
+  await enka.getByRole('button', { name: '查询角色展柜', exact: true }).click();
+  await expect.poll(() => enka.locator('.import-row').count(), { timeout: 25000 }).toBeGreaterThan(0);
+  const imported = await enka.locator('.import-row input:checked').count();
+  await enka.getByRole('button', { name: `确认导入 ${imported} 位角色`, exact: true }).click();
+  await expect(enka).toHaveCount(0);
+  await expect(page.locator('.account-editor')).toContainText('公开展柜快照');
+  const networkAccount = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-v1')));
+  if (networkAccount.artifacts.length || networkAccount.characters.length !== imported) throw new Error('Showcase snapshots entered physical inventory');
+  await page.screenshot({ path: resolve(directory, 'enka-showcase.png'), fullPage: true });
   if (errors.length) throw new Error(JSON.stringify(errors));
-  await writeFile(resolve(directory, 'report.json'), JSON.stringify({ status: 'passed', executable, actualInventory: 458, checks: ['preview-before-import', 'current-owner-search-separate-from-source-note', 'slot-filter', 'packaged-offline-artifact-image', 'square-portrait-real-pixels', 'artifact-edit-cancel', 'manual-entry-visible', 'native-account-save-open', 'empty-account-no-invented-characters', 'empty-editing-desk'], gaps: ['complete character build and actual action records unavailable; no numerical or full-axis acceptance claimed'] }, null, 2));
+  await writeFile(resolve(directory, 'report.json'), JSON.stringify({ status: 'passed', executable, actualInventory: 458, enkaProfiles: imported, checks: ['preview-before-import', 'current-owner-search-separate-from-source-note', 'slot-filter', 'packaged-offline-artifact-image', 'square-portrait-real-pixels', 'artifact-edit-cancel', 'manual-entry-visible', 'native-account-save-open', 'empty-account-no-invented-characters', 'empty-editing-desk', 'desktop-live-enka-preview-confirm', 'showcase-inventory-isolation'], gaps: ['private Mona inventory has no verified matching UID; actual action records unavailable; no numerical or full-axis acceptance claimed'] }, null, 2));
   console.log('U1 desktop actual inventory tasks passed.');
 } finally { await app.close(); }

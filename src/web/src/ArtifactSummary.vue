@@ -19,8 +19,8 @@ onMounted(async () => { try { main.value = (await loadAccountGameData()).main; }
   </div>
 </template>
 <style scoped>
-.artifact-summary { color:var(--ink,#283449); min-width:0; }.summary-head { display:grid; gap:6px; }.summary-head strong { font-size:14px; overflow-wrap:anywhere; }.summary-head > span { font-size:12px; color:var(--muted,#66736c); }.summary-main { display:flex; justify-content:space-between; gap:12px; padding:12px 0; margin:8px 0; border-block:1px solid var(--line,#ddd7c7); font-size:13px; } dl { display:grid; grid-template-columns:1fr auto; gap:8px; font-size:13px; margin:12px 0; } dd { margin:0; } .pending { color:#91662f; font-size:12px; }.compact .summary-head strong { font-size:12px; }.compact dl { font-size:12px; gap:5px; }.compact .summary-main { font-size:12px; padding:8px 0; }
+.artifact-summary { color:var(--ink); min-width:0; }.summary-head { display:grid; gap:6px; }.summary-head strong { font-size:14px; overflow-wrap:anywhere; }.summary-head > span { font-size:12px; color:var(--muted); }.summary-main { display:flex; justify-content:space-between; gap:12px; padding:12px 0; margin:8px 0; border-block:1px solid var(--line,#ddd7c7); font-size:13px; } dl { display:grid; grid-template-columns:1fr auto; gap:8px; font-size:13px; margin:12px 0; } dd { margin:0; } .pending { color:var(--element-geo-deep); font-size:12px; }.compact .summary-head strong { font-size:12px; }.compact dl { font-size:12px; gap:5px; }.compact .summary-main { font-size:12px; padding:8px 0; }
 .summary-top { display:flex; align-items:center; gap:12px; min-height:76px; }.summary-head { flex:1; }.summary-head strong { font-weight:600; line-height:1.5; }.compact .summary-top { gap:8px; }.compact .summary-head strong { font-size:13px; }.compact .summary-head > span { font-size:11px; }
 @media(max-width:600px) { .compact .summary-top { flex-direction:column; align-items:flex-start; gap:8px; }.compact .summary-head strong { font-size:12px; } }
-.rarity { color:#bb9658; font-size:10px; letter-spacing:2px; line-height:1; }
+.rarity { color:var(--element-geo-deep); font-size:10px; letter-spacing:2px; line-height:1; }
 </style>

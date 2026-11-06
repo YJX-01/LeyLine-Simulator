@@ -43,7 +43,7 @@ async function apply(previewOnly = false) {
     if (invalid.length) throw new Error(invalid.map(issue => issue.message).join('；'));
     if (previewOnly) { preview.value = true; return; }
     const next = JSON.parse(JSON.stringify(store.account));
-    const entry: AccountCharacter = { id, name: realCharacter.name, attack: 0, weapon: weapon.name, equipment: { ...props.character?.equipment }, realBuild: build };
+    const entry: AccountCharacter = { id, name: realCharacter.name, attack: 0, weapon: weapon.name, equipment: { ...props.character?.equipment }, realBuild: build, ...(props.character?.showcase?.build.character.id === realCharacter.id ? { showcase: props.character.showcase } : {}) };
     const index = next.characters.findIndex((item: AccountCharacter) => item.id === id);
     if (index >= 0) next.characters[index] = entry; else next.characters.push(entry);
     store.account.characters = parseAccount(next).characters;
@@ -71,6 +71,6 @@ async function apply(previewOnly = false) {
   </div>
 </template>
 <style scoped>
-.character-form { display:grid; gap:14px; color:var(--ink,#283449); } label { display:grid; gap:6px; font-size:13px; } input { width:100%; min-height:38px; box-sizing:border-box; } p { font-size:13px; line-height:1.8; } [role=alert] { color:#a62c36; }
+.character-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:13px; } input { width:100%; min-height:38px; box-sizing:border-box; } p { font-size:13px; line-height:1.8; } [role=alert] { color:var(--element-pyro-deep); }
 .character-form { grid-template-columns:repeat(2,minmax(0,1fr)); }.character-form > p,.character-form > h3 { grid-column:1/-1; }@media(max-width:550px) { .character-form { grid-template-columns:1fr; } }
 </style>

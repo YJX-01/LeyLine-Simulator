@@ -5,11 +5,11 @@ import { accountSlots, accountSlotLabels, artifactOwner, equipArtifact, copyAcco
 import { useAccountStore } from './stores/account';
 import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { localDataErrorLabel, definitionLabel } from './domain/workbench-labels';
-import artifactFlower from './assets/genshin/artifact-flower.webp';
-import artifactPlume from './assets/genshin/artifact-plume.webp';
-import artifactSands from './assets/genshin/artifact-sands.webp';
-import artifactGoblet from './assets/genshin/artifact-goblet.webp';
-import artifactCirclet from './assets/genshin/artifact-circlet.webp';
+const artifactFlower = `${import.meta.env.BASE_URL}game-icons/artifacts-gladiatorsfinale-flower.webp`;
+const artifactPlume = `${import.meta.env.BASE_URL}game-icons/artifacts-gladiatorsfinale-plume.webp`;
+const artifactSands = `${import.meta.env.BASE_URL}game-icons/artifacts-gladiatorsfinale-sands.webp`;
+const artifactGoblet = `${import.meta.env.BASE_URL}game-icons/artifacts-gladiatorsfinale-goblet.webp`;
+const artifactCirclet = `${import.meta.env.BASE_URL}game-icons/artifacts-gladiatorsfinale-circlet.webp`;
 const MonaImport = defineAsyncComponent(() => import('./MonaImport.vue'));
 const ArtifactEditor = defineAsyncComponent(() => import('./ArtifactEditor.vue'));
 const RealGamePanel = defineAsyncComponent(() => import('./RealGamePanel.vue'));

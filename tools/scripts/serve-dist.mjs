@@ -1,3 +1,4 @@
+import { serveEnka } from '../desktop/enka.mjs';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
@@ -16,6 +17,8 @@ const server = createServer(async (request, response) => {
     if (base !== '/' && path === base.slice(0, -1)) { response.writeHead(308, { Location: base }); response.end(); return; }
     if (!path.startsWith(base)) { response.writeHead(404); response.end(); return; }
     const relative = path.slice(base.length) || 'index.html';
+    const enka = /^api\/enka\/(\d{9,10})$/.exec(relative);
+    if (enka) { await serveEnka(request, response, enka[1]); return; }
     if (relative.split(/[\\/]/).some(part => part.startsWith('.'))) { response.writeHead(404); response.end(); return; }
     const target = resolve(root, relative);
     if (!target.startsWith(root + sep)) { response.writeHead(404); response.end(); return; }

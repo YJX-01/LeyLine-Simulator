@@ -1,11 +1,11 @@
 /* Shared desktop/web theme. Ornament paths are original, lightweight SVG artwork. */
 .workspace-design {
-  --ink: #283449;
-  --muted: #6d7380;
-  --line: #ded6c5;
-  --green: #354b65;
-  --surface: #f1ece2;
-  --fantasy-gold: #b59a61;
+  --ink: var(--neutral-ink);
+  --muted: var(--neutral-muted);
+  --line: var(--neutral-line);
+  --green: var(--element-anemo-deep);
+  --surface: var(--neutral-surface);
+  --fantasy-gold: var(--element-geo-primary);
   color: var(--ink);
   background: radial-gradient(ellipse at 84% 0, #fff9e95e 0, transparent 45%), var(--surface);
 }
@@ -47,12 +47,12 @@
 .workspace-design h1, .workspace-design h2, .workspace-design h3 { color: #29374d; }
 .workspace-design h1 { font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, serif; letter-spacing: .05em; }
 .workspace-design a, .workspace-design .text-button { color: #4b6178; }
-.workspace-design button { background: #fffaf0; border-color: #d6cbb4; color: #37455c; }
-.workspace-design button:not(:disabled):hover { background: #eee4d1; border-color: #ac905b; color: #24374f; }
+.workspace-design button { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.workspace-design button:not(:disabled):hover { background: var(--element-anemo-light); border-color: var(--element-anemo-primary); color: var(--element-anemo-deep); }
 .workspace-design button:disabled { opacity: .58; }
-.workspace-design button:focus-visible, .workspace-design a:focus-visible, .workspace-design select:focus-visible, .workspace-design input:focus-visible { outline-color: #a58143; }
-.workspace-design input, .workspace-design select { color: #34445b; background: #fffdf7; border-color: #d8cdb9; }
-.workspace-design input[type=checkbox] { accent-color: #516a83; }
+.workspace-design button:focus-visible, .workspace-design a:focus-visible, .workspace-design select:focus-visible, .workspace-design input:focus-visible { outline-color: var(--focus); }
+.workspace-design input, .workspace-design select { color: var(--ink); background: var(--surface-raised); border-color: var(--line); }
+.workspace-design input[type=checkbox] { accent-color: var(--action); }
 .workspace-design .primary { color: #fff3d9; background: #34465e; border-color: #a68b54; box-shadow: inset 0 0 0 2px #34465e, inset 0 0 0 3px #c6ad6c38; }
 .workspace-design .primary:not(:disabled):hover { color: #fff5df; background: #24364e; border-color: #cfb16b; }
 .workspace-design .secondary { color: #4d5c70; background: #fcf8ee; }

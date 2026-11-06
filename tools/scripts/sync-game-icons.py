@@ -20,6 +20,9 @@ COMMIT = '589ac6919057709924c0c20d5a9d673fe9b0be1a'
 MONA_URL = f'https://raw.githubusercontent.com/TwiceDrop/genshin_artifact/{COMMIT}/'
 PLACEHOLDER = 'ae5d4d9be2e3ee89c0fc94a326aaefd8412c55d916bef6f7d28c88ebf771af7b'
 TRANSFORM = 'square-portrait-v1'
+WEAPON_TRANSFORM = 'full-weapon-square-hq-v2'
+ELEMENT_TRANSFORM = 'element-hq-v2'
+TRANSPARENT_AVATARS = {'manekin': 'UI_AvatarIcon_MannequinBoy', 'manekina': 'UI_AvatarIcon_MannequinGirl'}
 CACHE.mkdir(parents=True, exist_ok=True)
 OUTPUT.mkdir(parents=True, exist_ok=True)
 
@@ -50,7 +53,7 @@ previous = read(OUTPUT / 'manifest.json') if (OUTPUT / 'manifest.json').exists()
 existing = {(item['kind'], item['key']): item for item in previous['assets']}
 index = {'characters': {}, 'weapons': {}, 'artifacts': {}, 'elements': {}}
 tasks = []
-for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapons', 112), ('artifacts', 'sets', 96)]:
+for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapons', 256), ('artifacts', 'sets', 96)]:
     images = read(DB / f'image/{kind}.json')
     for entry in catalog[group]:
         community = metadata[kind].get(entry['name'], {})
@@ -75,16 +78,20 @@ for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapon
                 sources.append((None, fallback.replace('upload-os-bbs.mihoyo.com', 'upload-bbs.mihoyo.com')))
             if kind == 'characters' and image.get('hoyowiki_icon'):
                 sources.append((None, image['hoyowiki_icon']))
+            if kind == 'characters' and key in TRANSPARENT_AVATARS:
+                sources = [(None, f"https://enka.network/ui/{TRANSPARENT_AVATARS[key]}.png")]
+            if kind == 'weapons':
+                sources = [(None, f"https://enka.network/ui/{image['filename_gacha']}.png")]
             tasks.append((kind, key, entry, sources, size))
 for element in ['anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro']:
     path = MONA / f'src/images/misc/{element}.png'
-    tasks.append(('elements', element, {'id': element, 'name': element}, [(path, MONA_URL + path.relative_to(MONA).as_posix())], 40))
+    tasks.append(('elements', element, {'id': element, 'name': element}, [(path, MONA_URL + path.relative_to(MONA).as_posix())], 128))
 
 def convert(task):
     kind, key, entry, sources, size = task
     failures = []
     prior = existing.get((kind, key))
-    if prior and prior['sourceSha256'] != PLACEHOLDER and (kind != 'characters' or prior.get('transform') == TRANSFORM):
+    if prior and prior['sourceSha256'] != PLACEHOLDER and (kind != 'characters' or prior.get('transform') == ('square-transparent-v2' if key in TRANSPARENT_AVATARS else TRANSFORM)) and (kind != 'weapons' or prior.get('transform') == WEAPON_TRANSFORM) and (kind != 'elements' or prior.get('transform') == ELEMENT_TRANSFORM):
         path = OUTPUT / prior['file']
         if path.exists() and sha(path.read_bytes()) == prior['sha256']:
             try:
@@ -114,14 +121,23 @@ def convert(task):
                     image = image.crop((left, top, left + edge, top + edge))
                 image = ImageOps.fit(image, (size, size), Image.Resampling.LANCZOS, centering=(0.5, 0.3))
             else:
+                if kind == 'weapons':
+                    # Remove only transparent padding; never fit/crop the weapon into a square.
+                    bounds = image.getchannel('A').point(lambda alpha: 255 if alpha > 16 else 0).getbbox()
+                    if bounds:
+                        image = image.crop(bounds)
                 image.thumbnail((size, size), Image.Resampling.LANCZOS)
+                if kind == 'weapons':
+                    canvas = Image.new('RGBA', (size, size))
+                    canvas.paste(image, ((size - image.width) // 2, (size - image.height) // 2))
+                    image = canvas
             destination = OUTPUT / f'{kind}-{key}.webp'
-            image.save(destination, 'WEBP', quality=76, method=6, exact=True)
+            image.save(destination, 'WEBP', quality=90 if kind == 'elements' else 88 if kind == 'weapons' else 76, method=6, exact=True)
             content = destination.read_bytes()
             valid_image(content)
-            if len(content) > 16384:
-                raise ValueError('Compressed icon exceeds 16 KiB')
-            return {'kind': kind, 'key': key, 'id': entry['id'], 'name': entry['name'], 'element': entry.get('element'), 'file': destination.name, 'bytes': len(content), 'sha256': sha(content), 'sourceUrl': url, 'sourceSha256': sha(source), 'sourceBytes': len(source), 'sourceDimensions': original_size, 'dimensions': image.size, 'alphaMax': image.getchannel('A').getextrema()[1], **({'transform': TRANSFORM} if kind == 'characters' else {})}, None
+            if len(content) > 32768:
+                raise ValueError('Compressed icon exceeds 32 KiB')
+            return {'kind': kind, 'key': key, 'id': entry['id'], 'name': entry['name'], 'element': entry.get('element'), 'file': destination.name, 'bytes': len(content), 'sha256': sha(content), 'sourceUrl': url, 'sourceSha256': sha(source), 'sourceBytes': len(source), 'sourceDimensions': original_size, 'dimensions': image.size, 'alphaMax': image.getchannel('A').getextrema()[1], **({'transform': 'square-transparent-v2' if key in TRANSPARENT_AVATARS else TRANSFORM} if kind == 'characters' else {'transform': WEAPON_TRANSFORM} if kind == 'weapons' else {'transform': ELEMENT_TRANSFORM} if kind == 'elements' else {})}, None
         except Exception as error:
             failures.append(str(error))
     return None, {'kind': kind, 'key': key, 'reason': '; '.join(failures) or 'No image address in pinned reference'}
@@ -136,14 +152,14 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         else:
             missing.append(failure)
 total = sum(asset['bytes'] for asset in assets)
-if total > 4 * 1024 * 1024:
-    raise RuntimeError('Offline icon library exceeds 4 MiB')
+if total > 6 * 1024 * 1024:
+    raise RuntimeError('Offline icon library exceeds 6 MiB')
 # Invalid prior outputs must never remain in the application directory.
 kept = {asset['file'] for asset in assets}
 for path in OUTPUT.glob('*.webp'):
     if path.name not in kept:
         path.unlink()
-manifest = {'formatVersion': 1, 'sourceCommits': {'TwiceDrop/genshin_artifact': COMMIT, 'genshin-db': '8e5badd60b5d894284ccc927a56c9683529d2592', 'legacy-mona': 'beaced4d82619aa86920d0054ab6114b5fc5608f', 'legacy-PathOfGenshin/resources': '015a2493b5672b28576ab78ffbcffde2ea0c9844'}, 'rights': 'Game artwork © miHoYo / HoYoverse. Unofficial tool; code licenses do not grant artwork rights.', 'compression': {'format': 'WebP', 'quality': 76, 'method': 6, 'transparent': True, 'avatarTransform': TRANSFORM}, 'rejectedSourceHashes': [PLACEHOLDER], 'budgets': {'maxAssetBytes': 16384, 'maxTotalBytes': 4194304}, 'totalBytes': total, 'totalSourceBytes': sum(asset['sourceBytes'] for asset in assets), 'assets': assets, 'missing': missing}
+manifest = {'formatVersion': 1, 'sourceCommits': {'TwiceDrop/genshin_artifact': COMMIT, 'genshin-db': '8e5badd60b5d894284ccc927a56c9683529d2592', 'legacy-mona': 'beaced4d82619aa86920d0054ab6114b5fc5608f', 'legacy-PathOfGenshin/resources': '015a2493b5672b28576ab78ffbcffde2ea0c9844'}, 'rights': 'Game artwork © miHoYo / HoYoverse. Unofficial tool; code licenses do not grant artwork rights.', 'compression': {'format': 'WebP', 'quality': 76, 'method': 6, 'transparent': True, 'avatarTransform': TRANSFORM, 'weaponTransform': WEAPON_TRANSFORM, 'elementTransform': ELEMENT_TRANSFORM, 'elementQuality': 90, 'elementCanvas': [128, 128], 'weaponQuality': 88, 'weaponCanvas': [256, 256]}, 'rejectedSourceHashes': [PLACEHOLDER], 'budgets': {'maxAssetBytes': 32768, 'maxTotalBytes': 6291456}, 'totalBytes': total, 'totalSourceBytes': sum(asset['sourceBytes'] for asset in assets), 'assets': assets, 'missing': missing}
 (OUTPUT / 'manifest.json').write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode())
 (ROOT / 'src/web/src/assets/game-icon-index.json').write_bytes((json.dumps(index, ensure_ascii=False, separators=(',', ':')) + '\n').encode())
 print(json.dumps({'icons': len(assets), 'bytes': total, 'missing': missing}, ensure_ascii=True))

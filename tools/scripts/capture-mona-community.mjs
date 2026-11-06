@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
 const canonical = resolve(root, 'docs/constant/mona-community/catalog.json');
-const aliasesPath = resolve(root, 'src/web/src/assets/mona-set-aliases.json');
+const aliasesPath = resolve(root, 'src/web/src/domain/data/mona-set-aliases.json');
 if (process.argv.includes('--capture')) {
   const reference = resolve(root, '.references/mona-current');
   const expected = '589ac6919057709924c0c20d5a9d673fe9b0be1a';
