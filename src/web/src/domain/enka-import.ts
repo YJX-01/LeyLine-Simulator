@@ -22,6 +22,7 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
   const response = enkaResponseSchema.parse(input);
   if (response.uid !== undefined && String(response.uid) !== uid) throw new Error('响应 UID 与查询不一致，未读取。');
   const data = await loadAccountGameData();
+  const {recordedRolls}=await import('./artifact-rolls');
   const preview:EnkaPreview = { accountId:account.id,uid,nickname:response.playerInfo.nickname??'',ttl:Math.max(0,response.ttl??60),rows:[],skipped:[] };
   const rawHash = await hash(JSON.stringify(input));
   const seen = new Set<string>();
@@ -48,6 +49,7 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
         const piece:RealArtifact={id:`showcase:${uid}:${value.avatarId}:${slot}`,setId,slot,rarity:5,level:item.reliquary!.level-1,mainStat:primary.stat,
           substats:(item.flat.reliquarySubstats??[]).map(sub=>stat(sub.appendPropId??sub.appendPropID??'',sub.statValue??sub.propValue)),
           source:{format:'enka-showcase',key:`${uid}/${value.avatarId}/${slot}`,fingerprint:await hash(JSON.stringify(item))} };
+        recordedRolls(piece,item.reliquary!.appendPropIdList);
         validateAccountArtifact(piece); artifacts.push(piece);
       }
       const sets=await Promise.all([...new Set(artifacts.map(item=>item.setId))].map(id=>getRealSet(id)));

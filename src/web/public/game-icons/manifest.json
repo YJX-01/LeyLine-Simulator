@@ -57,7 +57,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -80,7 +81,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -103,7 +105,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -126,7 +129,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -149,7 +153,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -172,7 +177,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -195,7 +201,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -218,7 +225,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -241,7 +249,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -264,7 +273,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -287,7 +297,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -310,7 +321,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -333,7 +345,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -356,7 +369,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -379,7 +393,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -402,7 +417,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -425,7 +441,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -448,7 +465,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -471,7 +489,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -494,7 +513,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -517,7 +537,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -540,7 +561,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -563,7 +585,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -586,7 +609,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -609,7 +633,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -632,7 +657,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -655,7 +681,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -678,7 +705,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -701,7 +729,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -724,7 +753,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -747,7 +777,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -770,7 +801,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -793,7 +825,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -816,7 +849,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -839,7 +873,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -862,7 +897,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -885,7 +921,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -908,7 +945,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -931,7 +969,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -954,7 +993,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -977,7 +1017,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1000,7 +1041,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1023,7 +1065,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1046,7 +1089,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1069,7 +1113,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1092,7 +1137,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1115,7 +1161,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1138,7 +1185,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1161,7 +1209,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1184,7 +1233,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1207,7 +1257,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1230,7 +1281,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1253,7 +1305,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1276,7 +1329,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1299,7 +1353,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1322,7 +1377,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1345,7 +1401,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1368,7 +1425,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1391,7 +1449,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1414,7 +1473,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1437,7 +1497,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1460,7 +1521,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1483,7 +1545,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1506,7 +1569,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1529,7 +1593,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1552,7 +1617,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1575,7 +1641,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1598,7 +1665,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1621,7 +1689,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1644,7 +1713,8 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "square-transparent-v2"
+      "transform": "square-transparent-v2",
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1667,7 +1737,8 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "square-transparent-v2"
+      "transform": "square-transparent-v2",
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1690,7 +1761,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1713,7 +1785,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1736,7 +1809,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1759,7 +1833,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1782,7 +1857,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1805,7 +1881,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1828,7 +1905,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1851,7 +1929,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1874,7 +1953,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1897,7 +1977,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1920,7 +2001,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -1943,7 +2025,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1966,7 +2049,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -1989,7 +2073,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2012,7 +2097,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2035,7 +2121,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2058,7 +2145,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2081,7 +2169,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2104,7 +2193,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2127,7 +2217,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2150,7 +2241,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2173,7 +2265,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2196,7 +2289,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2219,7 +2313,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2242,7 +2337,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2265,7 +2361,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2288,7 +2385,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2311,7 +2409,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2334,7 +2433,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2357,7 +2457,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2380,7 +2481,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2403,7 +2505,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2426,7 +2529,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2449,7 +2553,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2472,7 +2577,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2495,7 +2601,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2518,7 +2625,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2541,7 +2649,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2564,7 +2673,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2587,7 +2697,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2610,7 +2721,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2633,7 +2745,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2656,7 +2769,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2679,7 +2793,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2702,7 +2817,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2725,7 +2841,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2748,7 +2865,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2771,7 +2889,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2794,7 +2913,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2817,7 +2937,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2840,7 +2961,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2863,7 +2985,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2886,7 +3009,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 4
     },
     {
       "kind": "characters",
@@ -2909,7 +3033,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "characters",
@@ -2932,7 +3057,8 @@
         128
       ],
       "transform": "square-portrait-v1",
-      "alphaMax": 255
+      "alphaMax": 255,
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -2955,7 +3081,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -2978,7 +3105,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3001,7 +3129,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3024,7 +3153,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3047,7 +3177,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3070,7 +3201,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3093,7 +3225,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 1
     },
     {
       "kind": "weapons",
@@ -3116,7 +3249,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3139,7 +3273,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3162,7 +3297,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3185,7 +3321,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3208,7 +3345,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3231,7 +3369,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3254,7 +3393,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3277,7 +3417,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3300,7 +3441,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3323,7 +3465,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3346,7 +3489,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3369,7 +3513,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3392,7 +3537,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 1
     },
     {
       "kind": "weapons",
@@ -3415,7 +3561,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3438,7 +3585,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3461,7 +3609,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3484,7 +3633,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3507,7 +3657,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3530,7 +3681,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3553,7 +3705,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3576,7 +3729,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -3599,7 +3753,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3622,7 +3777,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3645,7 +3801,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -3668,7 +3825,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3691,7 +3849,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3714,7 +3873,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3737,7 +3897,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3760,7 +3921,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3783,7 +3945,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3806,7 +3969,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3829,7 +3993,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3852,7 +4017,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3875,7 +4041,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -3898,7 +4065,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3921,7 +4089,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3944,7 +4113,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -3967,7 +4137,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -3990,7 +4161,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -4013,7 +4185,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4036,7 +4209,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4059,7 +4233,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -4082,7 +4257,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4105,7 +4281,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4128,7 +4305,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4151,7 +4329,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4174,7 +4353,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4197,7 +4377,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 1
     },
     {
       "kind": "weapons",
@@ -4220,7 +4401,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4243,7 +4425,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4266,7 +4449,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4289,7 +4473,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4312,7 +4497,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -4335,7 +4521,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4358,7 +4545,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4381,7 +4569,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4404,7 +4593,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4427,7 +4617,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4450,7 +4641,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4473,7 +4665,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4496,7 +4689,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4519,7 +4713,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4542,7 +4737,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4565,7 +4761,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4588,7 +4785,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4611,7 +4809,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4634,7 +4833,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -4657,7 +4857,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4680,7 +4881,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -4703,7 +4905,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4726,7 +4929,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4749,7 +4953,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4772,7 +4977,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4795,7 +5001,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4818,7 +5025,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4841,7 +5049,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4864,7 +5073,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4887,7 +5097,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4910,7 +5121,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4933,7 +5145,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -4956,7 +5169,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -4979,7 +5193,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5002,7 +5217,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5025,7 +5241,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5048,7 +5265,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5071,7 +5289,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5094,7 +5313,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5117,7 +5337,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -5140,7 +5361,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5163,7 +5385,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5186,7 +5409,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -5209,7 +5433,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5232,7 +5457,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 1
     },
     {
       "kind": "weapons",
@@ -5255,7 +5481,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5278,7 +5505,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5301,7 +5529,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5324,7 +5553,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 2
     },
     {
       "kind": "weapons",
@@ -5347,7 +5577,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5370,7 +5601,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5393,7 +5625,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5416,7 +5649,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5439,7 +5673,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5462,7 +5697,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5485,7 +5721,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5508,7 +5745,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5531,7 +5769,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5554,7 +5793,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5577,7 +5817,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5600,7 +5841,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5623,7 +5865,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5646,7 +5889,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5669,7 +5913,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5692,7 +5937,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5715,7 +5961,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5738,7 +5985,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -5761,7 +6009,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5784,7 +6033,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5807,7 +6057,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5830,7 +6081,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5853,7 +6105,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5876,7 +6129,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -5899,7 +6153,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5922,7 +6177,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -5945,7 +6201,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5968,7 +6225,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -5991,7 +6249,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6014,7 +6273,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6037,7 +6297,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6060,7 +6321,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6083,7 +6345,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6106,7 +6369,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6129,7 +6393,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6152,7 +6417,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 2
     },
     {
       "kind": "weapons",
@@ -6175,7 +6441,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -6198,7 +6465,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6221,7 +6489,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 2
     },
     {
       "kind": "weapons",
@@ -6244,7 +6513,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6267,7 +6537,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6290,7 +6561,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6313,7 +6585,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6336,7 +6609,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6359,7 +6633,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6382,7 +6657,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6405,7 +6681,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6428,7 +6705,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6451,7 +6729,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6474,7 +6753,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6497,7 +6777,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6520,7 +6801,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6543,7 +6825,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6566,7 +6849,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6589,7 +6873,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6612,7 +6897,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6635,7 +6921,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6658,7 +6945,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -6681,7 +6969,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -6704,7 +6993,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6727,7 +7017,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -6750,7 +7041,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6773,7 +7065,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6796,7 +7089,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6819,7 +7113,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6842,7 +7137,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6865,7 +7161,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6888,7 +7185,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6911,7 +7209,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6934,7 +7233,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6957,7 +7257,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -6980,7 +7281,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7003,7 +7305,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7026,7 +7329,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7049,7 +7353,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7072,7 +7377,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7095,7 +7401,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7118,7 +7425,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 2
     },
     {
       "kind": "weapons",
@@ -7141,7 +7449,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7164,7 +7473,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7187,7 +7497,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7210,7 +7521,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -7233,7 +7545,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7256,7 +7569,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7279,7 +7593,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 2
     },
     {
       "kind": "weapons",
@@ -7302,7 +7617,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -7325,7 +7641,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -7348,7 +7665,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7371,7 +7689,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7394,7 +7713,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7417,7 +7737,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7440,7 +7761,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7463,7 +7785,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -7486,7 +7809,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7509,7 +7833,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7532,7 +7857,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7555,7 +7881,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7578,7 +7905,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7601,7 +7929,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7624,7 +7953,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7647,7 +7977,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7670,7 +8001,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7693,7 +8025,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7716,7 +8049,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7739,7 +8073,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7762,7 +8097,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7785,7 +8121,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7808,7 +8145,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7831,7 +8169,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7854,7 +8193,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7877,7 +8217,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -7900,7 +8241,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7923,7 +8265,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7946,7 +8289,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7969,7 +8313,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -7992,7 +8337,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8015,7 +8361,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8038,7 +8385,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8061,7 +8409,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8084,7 +8433,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8107,7 +8457,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8130,7 +8481,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8153,7 +8505,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8176,7 +8529,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8199,7 +8553,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8222,7 +8577,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -8245,7 +8601,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8268,7 +8625,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8291,7 +8649,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8314,7 +8673,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8337,7 +8697,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -8360,7 +8721,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8383,7 +8745,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -8406,7 +8769,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8429,7 +8793,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8452,7 +8817,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8475,7 +8841,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8498,7 +8865,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8521,7 +8889,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8544,7 +8913,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 1
     },
     {
       "kind": "weapons",
@@ -8567,7 +8937,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8590,7 +8961,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8613,7 +8985,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8636,7 +9009,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -8659,7 +9033,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8682,7 +9057,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 3
     },
     {
       "kind": "weapons",
@@ -8705,7 +9081,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8728,7 +9105,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8751,7 +9129,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8774,7 +9153,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "weapons",
@@ -8797,7 +9177,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 5
     },
     {
       "kind": "weapons",
@@ -8820,7 +9201,8 @@
         256
       ],
       "alphaMax": 255,
-      "transform": "full-weapon-square-hq-v2"
+      "transform": "full-weapon-square-hq-v2",
+      "rarity": 4
     },
     {
       "kind": "artifacts",

@@ -9,6 +9,7 @@ const files = new Set();
 for (const asset of icons.assets) {
   const content = await readFile(new URL(asset.file, iconDirectory));
   if (asset.sourceSha256 === 'ae5d4d9be2e3ee89c0fc94a326aaefd8412c55d916bef6f7d28c88ebf771af7b' || !(asset.alphaMax >= 128)) throw new Error(`Placeholder or empty icon: ${asset.key}`);
+  if (['characters', 'weapons'].includes(asset.kind) && (!Number.isInteger(asset.rarity) || asset.rarity < 1 || asset.rarity > 5 || index[asset.kind]?.[asset.key]?.rarity !== asset.rarity)) throw new Error(`Missing rarity identity: ${asset.key}`);
   if (asset.kind === 'elements' && (asset.dimensions[0] !== 128 || asset.dimensions[1] !== 128 || asset.transform !== 'element-hq-v2')) throw new Error(`Low resolution element: ${asset.key}`);
   if (asset.kind === 'weapons' && (asset.transform !== 'full-weapon-square-hq-v2' || asset.dimensions[0] !== 256 || asset.dimensions[1] !== 256)) throw new Error(`Cropped weapon source: ${asset.key}`);
   if (asset.kind === 'characters' && (asset.dimensions[0] !== 128 || asset.dimensions[1] !== 128 || asset.transform !== (['manekin', 'manekina'].includes(asset.key) ? 'square-transparent-v2' : 'square-portrait-v1'))) throw new Error(`Inconsistent portrait dimensions: ${asset.key}`);

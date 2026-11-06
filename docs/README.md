@@ -54,3 +54,5 @@
 
 - [视觉设计语言](design/visual-language.md)：七元素 21 色、语义分配、操作与状态规范；设置中可预览，v1 待体验反馈。
 - [Enka 导入说明](references/enka-import.md)：UID 公开展柜、来源固定版本、快照与实物边界、部署条件及真实验证。
+
+- [圣遗物显示与强化次数](references/artifact-presentation.md)：游戏显示/保存精度的区别、精确档位来源与次数推断边界。

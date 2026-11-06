@@ -5,7 +5,7 @@ import { getRealSet } from '@leyline/game-data/real';
 import type { AccountCharacter } from './domain/account';
 import { useAccountStore } from './stores/account';
 import { accountStatLabels } from './domain/account-real';
-import { formatAccountStat } from './domain/account-presentation';
+import { formatGameStat } from './domain/account-presentation';
 import type { RealStat } from '@leyline/schema';
 const props = defineProps<{ character: AccountCharacter; showcase?: boolean }>();
 const store = useAccountStore();
@@ -29,5 +29,5 @@ watch(() => JSON.stringify({ character: props.character, showcase:props.showcase
   } catch (cause) { if (revision === current) message.value = cause instanceof Error ? cause.message : '面板加载失败。'; }
 }, { immediate: true });
 </script>
-<template><section v-if="character.realBuild" class="character-stats"><h3>{{ showcase ? '展柜快照面板' : '当前装备面板' }}</h3><p v-if="message">{{ message }}</p><dl><template v-for="stat in (['hp','attack','defense','elementalMastery','critRate','critDamage','energyRecharge'] as const)" :key="stat"><dt>{{ accountStatLabels[stat] }}</dt><dd>{{ formatAccountStat(stat,stats[stat]) }}</dd></template></dl></section></template>
+<template><section v-if="character.realBuild" class="character-stats"><h3>{{ showcase ? '展柜快照面板' : '当前装备面板' }}</h3><p v-if="message">{{ message }}</p><dl><template v-for="stat in (['hp','attack','defense','elementalMastery','critRate','critDamage','energyRecharge'] as const)" :key="stat"><dt>{{ accountStatLabels[stat] }}</dt><dd>{{ formatGameStat(stat,stats[stat]) }}</dd></template></dl></section></template>
 <style scoped>.character-stats { margin-block:20px; }h3 { font-size:14px; }dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr) auto); gap:10px 20px; font-size:13px; }dd { margin:0; }p { font-size:12px; }@media(max-width:500px){dl { grid-template-columns:1fr auto; }}</style>

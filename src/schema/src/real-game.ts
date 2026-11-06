@@ -24,7 +24,7 @@ export const realWeaponSchema = z.object({ id, name: id, weaponType: id, rarity:
 }).strict();
 export const realSetSchema = z.object({ id, name: id, effects: z.array(z.object({ pieces: z.number().int().min(1).max(5), modifiers: z.array(modifier).max(30), support }).strict()).max(5), source }).strict();
 export const realArtifactSchema = z.object({ id, inventoryAccountId: id.optional(), setId: id, slot: z.enum(['flower', 'plume', 'sands', 'goblet', 'circlet']), rarity: z.literal(5), level: z.number().int().min(0).max(20), mainStat: realStatSchema,
-  substats: z.array(z.object({ stat: realStatSchema, value: finite.nonnegative() }).strict()).max(4),
+  substats: z.array(z.object({ stat: realStatSchema, value: finite.nonnegative(), rolls: z.number().int().min(1).max(6).optional() }).strict()).max(4),
   source: z.object({ format: id, key: id, fingerprint: id }).strict().optional(),
 }).strict();
 export const realBuildSchema = z.object({ dataVersion: id, inventoryAccountId: id.optional(), character: realCharacterSchema, weapon: realWeaponSchema, sets: z.array(realSetSchema).max(100),

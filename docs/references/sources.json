@@ -83,6 +83,15 @@
       "localPath": ".references/enka",
       "canonicalSnapshot": "docs/constant/enka/skill-supplements.json",
       "purpose": "Five character release-page skill IDs matched to pinned genshin-db combat talent names; exact page URLs and hashes recorded per character; player exports are not mapping sources"
+    },
+    {
+      "id": "artifact-affix-values",
+      "kind": "pinned-files",
+      "url": "https://github.com/Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "localPath": ".references/enka/reliquary-affixes.json",
+      "canonicalSnapshot": "docs/constant/artifact-rolls.json",
+      "purpose": "Exact artifact substat tiers for UI enhancement count inference; affix identities cross-checked against pinned official Enka metadata; no reference code executed"
     }
   ],
   "webSources": [

@@ -146,8 +146,12 @@ assets, missing = [], []
 with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
     for asset, failure in pool.map(convert, tasks):
         if asset:
+            if asset['kind'] == 'characters':
+                asset['rarity'] = read(DB / f"English/characters/{asset['id']}.json")['rarity']
+            elif asset['kind'] == 'weapons':
+                asset['rarity'] = next(item['rarity'] for item in catalog['weapons'] if item['id'] == asset['id'])
             assets.append(asset)
-            index[asset['kind']][asset['key']] = {key: asset[key] for key in ['file', 'name', 'element'] if asset.get(key) is not None}
+            index[asset['kind']][asset['key']] = {key: asset[key] for key in ['file', 'name', 'element', 'rarity'] if asset.get(key) is not None}
             index[asset['kind']][asset['key']]['revision'] = asset['sha256'][:12]
         else:
             missing.append(failure)

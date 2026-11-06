@@ -33,7 +33,7 @@ try {
   await page.getByRole('button', { name: '编辑圣遗物', exact: true }).click();
   await page.getByLabel('强化等级', { exact: true }).fill('16');
   await page.keyboard.press('Escape');
-  await expect(page.locator('.inventory-card').first()).toContainText('+20');
+  await expect(page.locator('.inventory-card').first().locator('.artifact-level')).toHaveText('20');
   await page.getByRole('button', { name: '手动添加圣遗物', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('预览词条');
   await page.keyboard.press('Escape');
