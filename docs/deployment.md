@@ -1,10 +1,10 @@
 # 生产构建与本地交付
 
-> 适用范围：网页构建与原模拟器回归，以及已整合的侧栏桌面工作台。新轴内核的复杂机制仍按[产品方向](planning/product-direction.md)分阶段实施。
+> 适用范围：当前网页/桌面工作台与保留的引擎兼容回归。新轴内核的复杂机制仍按[产品方向](planning/product-direction.md)分阶段实施。
 
 ## 桌面本地构建
 
-安装依赖后用 `pnpm exec install-electron` 准备匹配版本运行时，执行 `pnpm desktop:build` 和 `pnpm test:desktop`。最新产物清单在 `artifacts/desktop/latest.json`；Windows 的稳定双击入口是 `artifacts/desktop/Start-LeyLine.cmd`。每次打包生成独立 releases 目录，避免覆盖运行中的程序，不关闭用户已有窗口。详见[正式整合记录](planning/desktop-integration.md)。网页与桌面使用同一个 `WorkspaceShell`，桌面无需 Vite 服务。
+安装依赖后用 `pnpm exec install-electron` 准备匹配版本运行时，执行 `pnpm desktop:build` 和 `pnpm test:desktop`。最新产物清单在 `artifacts/desktop/latest.json`；Windows 的稳定双击入口是 `artifacts/desktop/Start-LeyLine.cmd`。每次打包生成独立 releases 目录，避免覆盖运行中的程序，不关闭用户已有窗口。详见[正式整合记录](planning/desktop-integration.md)。网页与桌面使用同一个 `WorkspaceShell`，桌面无需 Vite 服务。`test:desktop` 现指向当前真实库存/文件流程，需本地已授权的 `.references/artifacts_mona.json`；没有资料时不能用合成账号替代验收。
 
 ## 构建和验证
 
@@ -23,7 +23,7 @@
 - 通过HTTPS或localhost提供页面，不能使用file协议。Web Worker必须能从同源资源地址加载，JavaScript使用正确MIME类型。
 - `index.html` 使用 `Cache-Control: no-cache`，使浏览器重新验证入口。`assets/`中带内容哈希的资源使用长期缓存和`immutable`；404/失败资源使用`no-store`，不要将不存在的JS回退为HTML。
 - 更新采用完整版本目录或原子切换，先上传新资源再切入口；保留上一版本资源一段时间，避免已经打开的旧页面找不到懒加载分块。回滚使用上一版完整站点，不能只回滚单个JS文件。
-- 页面使用hash导航，服务端无需把所有未知路径回退至首页。子路径构建必须部署在相同base，Worker、图表和开发工具分块均要保留。
+- 页面使用hash导航，服务端无需把所有未知路径回退至首页。子路径构建必须部署在相同base，当前 Worker 与页面分块均要保留；构建检查会拒绝旧工作台、旧 Worker 或旧图表入口。
 - 本地方案按浏览器origin保存，换域名、协议或端口会进入不同存储空间。更换发布地址前提醒使用者导出方案。
 
 仓库提供的 `serve-dist.mjs` 仅绑定127.0.0.1，用于验证与本地查看；它不代替线上托管服务。它拒绝目录/隐藏文件和未知资源，返回正确MIME及上述缓存头。`.vite/manifest.json` 只用于构建检查，不进入交付站点。

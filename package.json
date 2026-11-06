@@ -15,7 +15,7 @@
     "desktop:build": "pnpm --filter @leyline/web build --base=./ --outDir=dist-desktop && node tools/scripts/package-desktop.mjs",
     "desktop:preview:build": "pnpm --filter @leyline/web build --base=./ --outDir=dist-desktop && node tools/scripts/package-desktop.mjs --preview",
     "desktop:start": "node tools/scripts/start-desktop.mjs",
-    "test:desktop": "node tools/scripts/test-desktop.mjs",
+    "test:desktop": "node tools/scripts/test-u1-desktop.mjs",
     "build": "pnpm --filter @leyline/web build",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit -p src/web/tsconfig.json",
     "test": "vitest run",

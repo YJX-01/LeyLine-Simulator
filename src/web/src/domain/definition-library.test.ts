@@ -1,7 +1,8 @@
+import { createSyntheticTeam } from '../../../../tests/helpers/synthetic-team';
 import { describe, expect, it } from 'vitest';
 import { evaluateWorkbench } from '@leyline/engine';
 import { workbenchProjectSchema, type WorkbenchProject } from '@leyline/schema';
-import { createDefinition, createSyntheticTeam, copyDefinitionToProject, parseDefinitionLibrary } from './definition-library';
+import { createDefinition, copyDefinitionToProject, parseDefinitionLibrary } from './definition-library';
 
 function empty(): WorkbenchProject {
   return workbenchProjectSchema.parse({ schemaVersion: 1, rulesVersion: 'workbench-v1', id: 'empty', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });

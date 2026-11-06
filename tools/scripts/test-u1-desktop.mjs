@@ -6,7 +6,7 @@ import { desktopExecutable } from './desktop-location.mjs';
 const directory = resolve('artifacts/u1-desktop-validation');
 await mkdir(directory, { recursive: true });
 const userData = await mkdtemp(resolve(tmpdir(), 'leyline-u1-'));
-const executable = await desktopExecutable(false);
+const executable = await desktopExecutable(process.argv.includes('--preview'));
 const env = { ...process.env };
 delete env.ELECTRON_RUN_AS_NODE;
 const app = await electron.launch({ executablePath: executable, args: ['--smoke', `--user-data-dir=${userData}`], env, timeout: 30000 });
@@ -81,7 +81,7 @@ try {
   const imported = await enka.locator('.import-row input:checked').count();
   await enka.getByRole('button', { name: `确认导入 ${imported} 位角色`, exact: true }).click();
   await expect(enka).toHaveCount(0);
-  await expect(page.locator('.account-editor')).toContainText('公开展柜快照');
+  await expect(page.locator('.account-editor')).toContainText('展柜快照');
   const networkAccount = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-v1')));
   if (networkAccount.artifacts.length || networkAccount.characters.length !== imported) throw new Error('Showcase snapshots entered physical inventory');
   await page.screenshot({ path: resolve(directory, 'enka-showcase.png'), fullPage: true });

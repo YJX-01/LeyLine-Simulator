@@ -1,6 +1,6 @@
 # 内容支持矩阵
 
-> 适用范围：下表记录保留的自动模拟器；新轴 workbench-v1 / workbench-p3 单独列出，二者能力不能互相折算。见[产品方向](../planning/product-direction.md)。
+> 适用范围：下表记录历史自动模拟器内核的回归范围（其前端入口已删除）；新轴 workbench-v1 / workbench-p3 单独列出，二者能力不能互相折算。见[产品方向](../planning/product-direction.md)。
 
 “旧代码存在”与“新引擎支持”分别记录；新支持项均需注明来源和限制。
 

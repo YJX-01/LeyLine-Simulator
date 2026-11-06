@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, shallowRef, watch, onScopeDispose } from 'vue';
 import { evaluateWorkbench } from '@leyline/engine';
 import { workbenchProjectSchema, type WorkbenchProject } from '@leyline/schema';
-import { createWorkbenchProject, importWorkbenchProject, type AcceptanceCase } from '../domain/workbench-project';
+import { createEmptyWorkbenchProject, importWorkbenchProject } from '../domain/workbench-project';
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 import { matchesAxisTask, pendingAxisResult, type AxisRequest, type AxisResponse } from '../domain/axis-task';
@@ -12,11 +12,11 @@ const maxProjectBytes = 8 * 1024 * 1024;
 const recoveryKey = 'leyline-axis-recovery-v1';
 
 export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
-  const project = ref(createWorkbenchProject());
-  const savedSnapshot = ref<string | null>(fileSignature(project.value));
+  const project = ref(createEmptyWorkbenchProject());
+  const savedSnapshot = ref<string | null>(null);
   const actorId = ref(project.value.candidate.actors[0]?.id ?? '');
   const selectedId = ref(project.value.timeline.find(record => record.kind === 'damage')?.id ?? '');
-  const notice = ref('已加载普通伤害样本。修改参数会立即重新计算。');
+  const notice = ref('当前为空轴，请先准备队伍并记录动作。');
   const error = ref('');
   const busy = ref(false);
   const workerResult = shallowRef(pendingAxisResult());
@@ -204,17 +204,8 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     notice.value = '项目已打开，并已按保存的定义和规则版本重新计算。';
   }
 
-  function loadSample(variant: AcceptanceCase = 'weapon-a'): void {
-    const next = createWorkbenchProject(variant);
-    installProject(next);
-    actorId.value = next.candidate.actors[0]?.id ?? '';
-    selectedId.value = next.timeline.find(record => record.kind === 'damage')?.id ?? '';
-    notice.value = '已加载独立验收样本，可以检查参考算式或继续编辑。';
-  }
-
   function createProject(id: string = crypto.randomUUID(), preserveRecovery = false): void {
-    const next = workbenchProjectSchema.parse({ schemaVersion: 1, rulesVersion: 'workbench-v1', id, revision: '1',
-      definitions: [], candidate: { id: `${id}-candidate`, actors: [] }, conditions: {}, timeline: [], objective: {} });
+    const next = createEmptyWorkbenchProject(id);
     installProject(next);
     savedSnapshot.value = null;
     notice.value = '已新建空轴，尚未保存。请先从账号选择队伍，再记录动作与伤害。';
@@ -296,6 +287,6 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   }
 
   return { project, result, dirty, actorId, actor, selectedId, notice, error, busy,
-    replaceProject, importContent, loadSample, createProject, saveProject, openNativeProject, inputFile,
+    replaceProject, importContent, createProject, saveProject, openNativeProject, inputFile,
     undo, redo, canUndo, canRedo, recover, recoveryAvailable, cancelRun, runState, run, command };
 });

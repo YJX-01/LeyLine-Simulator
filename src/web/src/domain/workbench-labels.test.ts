@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createWorkbenchProject } from './workbench-project';
+import { createWorkbenchProject } from '../../../../tests/helpers/workbench-samples';
 import { actorLabel, definitionLabel, recordLabel, unitLabel, operationLabel, diagnosticLabel, statusLabel, inputLabel, errorLabel } from './workbench-labels';
 
 describe('Chinese workbench labels', () => {

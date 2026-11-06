@@ -1,6 +1,6 @@
 # Architecture and extension guidelines
 
-> The default product is the shared desktop/web timeline workbench, implemented through P2.5 at `3315a09`. The preserved automatic simulator is a separate entry. See the [documentation index](../README.md), [stage roadmap](../planning/implementation-roadmap.md), and [P3 handoff](../planning/implementation-agent-prompt.md). Simulation-specific extension guidance below does not define new workbench behavior.
+> The default product is the shared desktop/web timeline workbench, implemented through P2.5 at `3315a09`. Retired simulator, formula-tool and developer-tool frontends have been removed; only the current workspace ships. See the [documentation index](../README.md), [stage roadmap](../planning/implementation-roadmap.md), and [P3 handoff](../planning/implementation-agent-prompt.md). Simulation-specific extension guidance below does not define new workbench behavior.
 
 ## Scope and ownership
 
@@ -15,17 +15,17 @@ pnpm's isolated linker also generates workspace-local `node_modules/` links for 
 | `src/schema` | Input validation, versioned data and Worker contracts | None |
 | `src/game-data` | Fixed snapshots and content definitions | None |
 | `src/engine` | Calculation, scheduling, mechanics, content runtime | `schema`, `game-data` |
-| `src/web` | Forms, plans, persistence, charts, Worker lifecycle | `schema`, `game-data`, `engine` |
+| `src/web` | Account/project forms, persistence, Worker lifecycle | `schema`, `game-data`, `engine` |
 
 Cross-workspace imports use declared package exports. Relative imports into sibling packages and imports of private package files are forbidden. Shared packages do not import Vue, Pinia, browser adapters, or Node built-ins. Type-only imports count for boundary checks; cycle detection checks runtime imports only.
 
 ## Application flow
 
-The default `WorkspaceShell.vue` and formula tool share `stores/axis-workspace.ts`. Pure edit operations live in web domain modules; `axis.worker.ts` calls `@leyline/engine.evaluateWorkbench` with session/revision/task isolation. The public contracts live in `schema/src/workbench/index.ts`; P2.5 real builds use `schema/src/real-game.ts` and `engine/src/real-game.ts`. Account, project and definition files remain independent. Proposed P3 APIs in planning documents are not existing exports.
+The sole `WorkspaceShell.vue` uses `stores/axis-workspace.ts`; new sessions start with an empty project. Pure edit operations live in web domain modules; `axis.worker.ts` calls `@leyline/engine.evaluateWorkbench` with session/revision/task isolation. The public contracts live in `schema/src/workbench/index.ts`; P2.5 real builds use `schema/src/real-game.ts` and `engine/src/real-game.ts`. Account, project and definition files remain independent. P3 calculation capabilities remain governed by their published contracts; deleting old screens does not expand or retire engine mechanics.
 
-The preserved automatic simulator follows a separate flow: Vue components edit Pinia state. `composables/useTeamSimulation.ts` validates submitted configurations and manages `domain/team-task.ts`, which communicates with `attack.worker.ts`. The Worker calls engine entrypoints and returns versioned results. Charts and comparisons consume results without reconstructing combat rules. The editor also calls `resolveLoadout` synchronously for previews; full simulations run in the Worker.
+The current team loadout editor changes only the axis candidate. Removed account/simulator modes are not kept behind hidden flags. Legacy engine contracts and calculation regressions remain independent of any old frontend. Historical sample builders live under `tests/helpers/` and are not part of the production module graph.
 
-`domain/` owns nonvisual transformations and persistence validation; `stores/` owns reactive state; `composables/` coordinates lifecycle; `components/` owns reusable UI; `charts/` owns chart loading. Domain modules must not depend on Vue, Pinia, components, stores, or composables. Storage and Worker access use the existing `StoragePort` and `WorkerPort` interfaces.
+`domain/` owns nonvisual transformations and persistence validation; `stores/` owns reactive state; `components/` owns reusable UI. The retired simulator composables and chart loader have been removed. Domain modules must not depend on Vue, Pinia, components, stores, or composables. Storage and Worker access remain behind current platform adapters and the axis task protocol.
 
 ## Preserved simulator extension map
 

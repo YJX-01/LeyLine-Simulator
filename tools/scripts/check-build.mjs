@@ -7,7 +7,7 @@ const dist = resolve(root, process.argv.find(arg => arg.startsWith('--dist='))?.
 const manifest = JSON.parse(await readFile(resolve(dist, '.vite/manifest.json'), 'utf8'));
 const entry = Object.keys(manifest).find(key => manifest[key].isEntry);
 const shellEntry = Object.keys(manifest).find(key => key === 'src/WorkspaceShell.vue' || (manifest[key].name === 'WorkspaceShell' && manifest[key].isDynamicEntry));
-if (!entry || !manifest['src/Workbench.vue'] || !shellEntry || !manifest['src/AnnotationWorkbench.vue']) throw new Error('Missing application entries.');
+if (!entry || !shellEntry) throw new Error('Missing application entries.');
 function closure(key, seen = new Set()) {
   if (seen.has(key)) return seen;
   if (!manifest[key]) throw new Error(`Missing manifest dependency: ${key}`);
@@ -21,7 +21,8 @@ for (const file of await readdir(resolve(dist, 'assets'))) {
   files.push({ file: `assets/${file}`, bytes: buffer.length, gzipBytes: gzipSync(buffer).length });
 }
 const sum = keys => [...keys].reduce((total, key) => total + (files.find(file => file.file === manifest[key].file)?.gzipBytes ?? 0), 0);
-const boot = closure(entry), workbench = new Set([...closure(shellEntry), ...closure('src/AnnotationWorkbench.vue'), ...closure('src/Workbench.vue')]);
+const boot = closure(entry), workbench = closure(shellEntry);
+if(Object.keys(manifest).some(key=>/(?:LegacyWorkspaceShell|LegacyAccountLibrary|DeveloperTools|AnnotationWorkbench|(?:^|\/)Workbench|P3Panel|RealGamePanel|AxisCreation|attack\.worker|charts\/runtime)\.(?:vue|ts)/.test(key))) throw new Error('Retired UI entered the production build.');
 if ([...workbench].some(key => /chart-|charts\/runtime|DeveloperTools/.test(key))) throw new Error('Developer tools or charts entered the default static dependency graph.');
 const budgets = { largestJavaScriptBytes: 500_000, bootstrapGzipBytes: 50_000, workbenchGzipBytes: 150_000 };
 const report = { formatVersion: 1, budgets, bootstrapGzipBytes: sum(boot), workbenchGzipBytes: sum(workbench), files };

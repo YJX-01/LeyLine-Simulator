@@ -8,7 +8,7 @@ import { addRealActor } from './domain/real-project';
 import { removeProjectActor } from './domain/workbench-project';
 import CharacterEquipmentIcons from './components/CharacterEquipmentIcons.vue';
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
-const RealGamePanel = defineAsyncComponent(() => import('./RealGamePanel.vue'));
+const TeamLoadoutEditor = defineAsyncComponent(() => import('./TeamLoadoutEditor.vue'));
 const emit = defineEmits<{ timeline: []; account: [] }>();
 const accounts = useAccountStore();
 const axis = useAxisWorkspaceStore();
@@ -75,7 +75,7 @@ function remove(id: string) { axis.command(draft => removeProjectActor(draft, id
     <h3>已保存的队伍</h3><p v-if="!saved.teams.length">保存后可以从同一队伍创建不同的轴。已有轴始终保留自己的配装快照。</p>
     <div class="saved-teams"><article v-for="team in saved.teams" :key="team.id"><h4>{{ team.name }}</h4><p>{{ team.project.candidate.actors.map(actor => actor.name ?? actor.realBuild?.character.name).join(' / ') }}</p><button @click="pendingTeam = team">以此队伍新建轴</button></article></div><button v-if="saved.teams.length" @click="saved.exportTeams">导出队伍备份</button>
     <WorkbenchDialog v-if="picking" title="从账号选择队员" @close="picking = false"><p>只复制当前资料，之后的试配与账号独立。</p><p v-if="error" role="alert">{{ error }}</p><div class="saved-teams"><button v-for="character in characters" :key="character.id" @click="add(character.id)"><CharacterEquipmentIcons :build="character.realBuild" :name="character.name" :size="80" /><strong>{{ character.name }}</strong><p>{{ character.realBuild?.weapon.name ?? '资料待补全' }}</p></button></div><p v-if="!characters.length">账号还没有角色资料。</p><button @click="picking = false; emit('account')">前往账号角色页</button></WorkbenchDialog>
-    <WorkbenchDialog v-if="editing" title="修改所选队员配装" @close="editing = false"><RealGamePanel modern mode="axis" /></WorkbenchDialog>
+    <WorkbenchDialog v-if="editing" title="修改所选队员配装" @close="editing = false"><TeamLoadoutEditor /></WorkbenchDialog>
     <WorkbenchDialog v-if="pendingTeam" title="从保存队伍新建轴" @close="pendingTeam = undefined"><p>当前轴不会合并到新轴。请先保存当前编辑；新轴使用「{{ pendingTeam.name }}」的队伍快照。</p><button @click="axis.saveProject()">先保存当前轴</button><button @click="newAxis(pendingTeam)">确认新建独立轴</button></WorkbenchDialog>
   </section>
 </template>

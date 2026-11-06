@@ -11,7 +11,6 @@
     "@leyline/engine": "workspace:*",
     "@leyline/game-data": "workspace:*",
     "@leyline/schema": "workspace:*",
-    "echarts": "^6.1.0",
     "pinia": "^4.1.0",
     "vue": "^3.5.0"
   },

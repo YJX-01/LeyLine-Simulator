@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { workbenchProjectSchema } from '@leyline/schema';
-import { reviseEffect } from './p3-project';
+import { reviseEffect } from '../../../../tests/helpers/p3-compatibility';
 import snapshot from '../../../../fixtures/workbench/p3-snapshot.json';
 
 describe('source revision editing', () => {

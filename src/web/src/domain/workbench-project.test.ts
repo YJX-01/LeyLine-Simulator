@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { evaluateWorkbench } from '@leyline/engine';
-import { acceptanceCases, createWorkbenchProject, importWorkbenchProject, nextRecordId, removeTimelineRecord, removeProjectActor, setDamageSelected } from './workbench-project';
+import { importWorkbenchProject, nextRecordId, removeTimelineRecord, removeProjectActor, setDamageSelected } from './workbench-project';
+import { acceptanceCases, createWorkbenchProject } from '../../../../tests/helpers/workbench-samples';
 
 describe('workbench editing and project files', () => {
   it('removes a team member and dependent records and targets without dangling references', () => {

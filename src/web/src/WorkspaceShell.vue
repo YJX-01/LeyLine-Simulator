@@ -8,27 +8,21 @@ import WorkbenchDialog from './components/WorkbenchDialog.vue';
 import { defaultRealEnemy } from './domain/real-project';
 import { realElements } from '@leyline/schema';
 import { realElementLabel } from './domain/workbench-labels';
-const AxisCreation = defineAsyncComponent(() => import('./AxisCreation.vue'));
-import { useAccountStore } from './stores/account';
-import { actorLabel, definitionLabel, recordLabel, nodeLabel, effectLabel, projectLabel, unitLabel, operationLabel, diagnosticLabel, statusLabel, inputLabel, capabilityLabel, errorLabel } from './domain/workbench-labels';
+import { actorLabel, definitionLabel, recordLabel, nodeLabel, effectLabel, projectLabel, unitLabel, operationLabel, diagnosticLabel, statusLabel, errorLabel } from './domain/workbench-labels';
 
 import { storeToRefs } from 'pinia';
 import type { WorkbenchNode } from '@leyline/schema';
 import { useAxisWorkspaceStore } from './stores/axis-workspace';
-import { acceptanceCases, nextRecordId, removeProjectActor, removeTimelineRecord, setDamageSelected, type AcceptanceCase } from './domain/workbench-project';
+import { removeTimelineRecord, setDamageSelected } from './domain/workbench-project';
 import { getDamagePresentation, formatWorkbenchExpression } from './domain/workbench-display';
 const geoEmblem = `${import.meta.env.BASE_URL}game-icons/elements-geo.webp`;
 
-const P3Panel = defineAsyncComponent(() => import('./P3Panel.vue'));
 const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue'));
 const TeamWorkspace = defineAsyncComponent(() => import('./TeamWorkspace.vue'));
-const RealGamePanel = defineAsyncComponent(() => import('./RealGamePanel.vue'));
 const workspace = useAxisWorkspaceStore();
-const accountStore = useAccountStore();
-const { project, result, actor, actorId, selectedId, dirty, busy, notice, error } = storeToRefs(workspace);
+const { project, result, selectedId, dirty, busy, notice, error } = storeToRefs(workspace);
 type Page = 'characters' | 'artifacts' | 'projects' | 'team' | 'timeline' | 'analysis' | 'definitions' | 'settings';
 const page = ref<Page>(window.location.hash === '#axis' ? 'timeline' : 'characters');
-onMounted(() => { if (!window.location.hash && workspace.project.id === 'ordinary-example') workspace.createProject(undefined, true); });
 const collapsed = ref(false);
 const mobileOpen = ref(false);
 const mobileQuery = window.matchMedia('(max-width: 700px)');
@@ -47,16 +41,7 @@ function toggleNavigation() {
 }
 const targetOpen = ref(false);
 function openTarget() { if (!project.value.enemy) workspace.command(draft => { draft.enemy = defaultRealEnemy(); }); targetOpen.value = true; }
-const layer = ref('all');
 const definitionFilter = ref('all');
-const newCondition = ref('');
-const conditionKeys = computed(() => [...new Set([...Object.keys(project.value.conditions), ...project.value.definitions.flatMap(d => [...d.effects.flatMap(e => e.condition ? [e.condition] : []), ...d.nodes.flatMap(n => n.op === 'condition' ? [n.key] : [])])])]);
-function addCondition() {
-  const key = newCondition.value.trim();
-  if (!key || key.length > 160) { error.value = '请填写不超过 160 字的条件名称。'; return; }
-  if (!Object.hasOwn(project.value.conditions, key)) workspace.command(draft => { draft.conditions[key] = null; });
-  newCondition.value = '';
-}
 const fileInput = ref<HTMLInputElement>();
 const isAccountPage = computed(() => page.value === 'characters' || page.value === 'artifacts');
 const isProjectPage = computed(() => ['projects', 'team', 'timeline', 'analysis'].includes(page.value));
@@ -86,22 +71,9 @@ const selected = computed(() => project.value.timeline.find(r => r.id === select
 const selectedResult = computed(() => result.value.points.find(p => p.id === selectedId.value));
 const presentation = computed(() => getDamagePresentation(project.value, selectedId.value));
 const selectedTarget = computed(() => !project.value.objective.damageIds || project.value.objective.damageIds.includes(selectedId.value));
-const equipmentDefinitions = computed(() => project.value.definitions.filter(d => d.id === actor.value?.character || d.id === actor.value?.weapon));
-const effects = computed(() => project.value.candidate.actors.flatMap(owner => [owner.character, owner.weapon].flatMap(id => {
-  const definition = project.value.definitions.find(d => d.id === id);
-  return (definition?.effects ?? []).flatMap(effect => {
-    const triggers = effect.action ? actions.value.filter(a => a.actor === owner.id && a.definition === effect.action) : [null];
-    return triggers.map(trigger => ({ key: `${owner.id}/${id}/${effect.id}/${trigger?.id ?? 'axis'}`, owner: owner.id, definition: id,
-      effect: effect.id, condition: effect.condition, startMs: (trigger?.timeMs ?? 0) + effect.startMs,
-      endMs: (trigger?.timeMs ?? 0) + effect.endMs, expression: formatWorkbenchExpression(project.value, id, effect.value) }));
-  });
-})));
-const durationMs = computed(() => Math.max(8000, ...project.value.timeline.map(r => Number.isFinite(r.timeMs) ? r.timeMs + 1000 : 0), ...effects.value.map(e => Number.isFinite(e.endMs) ? e.endMs : 0)));
 const num = (value: number | null | undefined) => value === null || value === undefined || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 const realPartsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技能倍率',bonus:'增伤乘区',crit:'暴击乘区',defense:'防御乘区',resistance:'抗性乘区'};
 const number = (event: Event) => { const value = (event.target as HTMLInputElement).value; return value.trim() ? Number(value) : NaN; };
-const text = (event: Event) => (event.target as HTMLInputElement).value;
-const percent = (ms: number) => `${Number.isFinite(ms) ? Math.max(0, Math.min(100, ms / durationMs.value * 100)) : 0}%`;
 function navigate(target: Page) { page.value = target; mobileOpen.value = false; }
 function focusClickedControl(event: MouseEvent) {
   (event.target as Element).closest<HTMLButtonElement>('button')?.focus({ preventScroll: true });
@@ -109,38 +81,7 @@ function focusClickedControl(event: MouseEvent) {
 function openPoint(id: string) { selectedId.value = id; navigate('timeline'); }
 function updateTime(event: Event) { if (selected.value) selected.value.timeMs = number(event); }
 function updateTarget(event: Event) { if (selected.value?.kind === 'damage') workspace.command(draft => setDamageSelected(draft, selectedId.value, (event.target as HTMLInputElement).checked)); }
-function conditionState(key?: string) {
-  if (!key) return '无需额外条件';
-  return project.value.conditions[key] === true ? '明确满足' : project.value.conditions[key] === false ? '明确不满足' : '待确认';
-}
-function conditionValue(key: string) { return project.value.conditions[key] === true ? 'true' : project.value.conditions[key] === false ? 'false' : 'unknown'; }
-function setCondition(key: string, event: Event) { const value = text(event); project.value.conditions[key] = value === 'unknown' ? null : value === 'true'; }
-function toggleCondition(effect: { condition?: string }, event: Event) {
-  workspace.command(() => {
-  if ((event.target as HTMLInputElement).checked) {
-    effect.condition = effect.condition ?? 'triggered';
-    if (!Object.hasOwn(project.value.conditions, effect.condition)) project.value.conditions[effect.condition] = null;
-  } else delete effect.condition;
-  });
-}
 function constant(node: WorkbenchNode) { return node.op === 'constant' ? node.quantity : undefined; }
-function addRecord(kind: 'action' | 'damage') {
-  const owner = actor.value;
-  const definition = kind === 'damage' ? project.value.definitions.find(d => owner?.realBuild ? d.id === `${owner.id}-real-damage` : d.damage) : project.value.definitions.find(d => d.id === owner?.character);
-  if (!owner || !definition) return;
-  const id = nextRecordId(project.value);
-  workspace.command(draft => {
-    draft.timeline.push({ id, kind, actor: owner.id, definition: definition.id, ...(kind === 'damage' && owner.realBuild ? { realDamage: { skillId: owner.realBuild.character.skills.find(skill => skill.support.supported)?.id ?? '', hitIndex: 0, crit: 'noncritical' as const, reaction: 'none' as const } } : {}), timeMs: 0, order: Math.max(-1, ...draft.timeline.map(r => r.order)) + 1 });
-    if (kind === 'damage' && draft.objective.damageIds) draft.objective.damageIds.push(id);
-  });
-  selectedId.value = id;
-}
-function removeActor() {
-  const id = actorId.value;
-  workspace.command(draft => removeProjectActor(draft, id));
-  actorId.value = project.value.candidate.actors[0]?.id ?? '';
-  if (!project.value.timeline.some(record => record.id === selectedId.value)) selectedId.value = project.value.timeline[0]?.id ?? '';
-}
 function removeRecord(id: string) {
   workspace.command(draft => removeTimelineRecord(draft, id));
   if (selectedId.value === id) selectedId.value = project.value.timeline[0]?.id ?? '';
@@ -152,7 +93,6 @@ async function importFile(event: Event) {
   if (file) await workspace.inputFile(file);
   input.value = '';
 }
-function loadSample(id: AcceptanceCase) { workspace.loadSample(id); navigate('timeline'); }
 </script>
 
 <template>
@@ -186,21 +126,12 @@ function loadSample(id: AcceptanceCase) { workspace.loadSample(id); navigate('ti
         <div v-if="error" role="alert" class="shell-error">{{ errorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
       </div>
 
-      <details v-if="page === 'projects'" class="advanced-workspace"><summary>高级：规则与历史兼容工具</summary><P3Panel /></details>
       <div v-if="page === 'timeline'" class="timeline-layout">
         <section class="timeline-main panel">
           <div class="panel-heading axis-tools"><span>{{ damageRecords.length }} 个伤害点 · {{ actions.length }} 个动作</span><button @click="openTarget">目标条件</button></div>
           <WorkbenchDialog v-if="targetOpen && project.enemy" title="目标与计算条件" @close="targetOpen = false"><p>以下是手动输入条件，默认值不是游戏观测。请按实际目标核对等级、抗性与减防。</p><div class="candidate-form"><label>目标等级<input v-model.number="project.enemy.level" aria-label="目标等级" type="number" min="1" max="200"></label><label>减防比例<input v-model.number="project.enemy.defenseReduction" aria-label="减防比例" type="number" min="0" max="1" step="0.01"></label><label>无视防御比例<input v-model.number="project.enemy.defenseIgnore" aria-label="无视防御比例" type="number" min="0" max="1" step="0.01"></label><label v-for="element in realElements" :key="element">{{ realElementLabel(element) }}抗性<input v-model.number="project.enemy.resistances[element]" :aria-label="`${realElementLabel(element)}抗性`" type="number" step="0.01"></label></div><p>比例 0.1 表示 10%。每个伤害点的暴击和反应在右侧检查面板确认。</p></WorkbenchDialog>
-          <TimelineEditor v-if="project.candidate.actors.every(actor => actor.realBuild)" />
-          <details v-else open class="legacy-timeline"><summary>历史项目时间轴</summary>          <div class="timeline-toolbar"><div class="segmented" aria-label="时间轴信息层"><button v-for="tab in [{ id: 'all', name: '全部图层' }, { id: 'damage', name: '伤害' }, { id: 'effects', name: '效果' }]" :key="tab.id" :class="{ selected: layer === tab.id }" @click="layer = tab.id">{{ tab.name }}</button></div><div class="timeline-tools"><button :disabled="!actor" @click="addRecord('action')">添加动作</button><button :disabled="!actor || !project.definitions.some(d => d.damage)" @click="addRecord('damage')">添加伤害点</button></div></div>
-          <div class="tracks-scroller"><div class="tracks">
-            <div class="ruler"><span class="track-label">记录 / 时间</span><div class="ruler-marks"><span v-for="tick in 9" :key="tick" :style="{ left: `${(tick - 1) / 8 * 100}%` }">{{ num((tick - 1) * durationMs / 8000) }}<small>秒</small></span></div></div>
-            <div class="track-row action-track" :class="{ faded: layer !== 'all' }"><div class="track-label"><span class="track-dot slate"></span><strong>动作</strong><small>手动记录</small></div><div class="track-content"><div class="track-grid"></div><span v-if="!actions.length" class="empty-track">当前轴没有动作记录</span><button v-for="record in actions" :key="record.id" class="hit-marker" :style="{ left: percent(record.timeMs) }" :data-record-id="record.id" :aria-label="`选择动作 ${recordLabel(project, record.id)}`" @click="selectedId = record.id"><span class="marker-card"><small>{{ record.timeMs }}毫秒</small><strong>{{ recordLabel(project, record.id) }}</strong></span></button></div></div>
-            <div class="track-row damage-track" :class="{ faded: layer === 'effects' }"><div class="track-label"><span class="track-dot green"></span><strong>伤害点</strong><small>{{ damageRecords.length }} 条标注</small></div><div class="track-content"><div class="track-grid"></div><button v-for="record in damageRecords" :key="record.id" class="hit-marker" :class="{ chosen: selectedId === record.id }" :style="{ left: percent(record.timeMs) }" :data-record-id="record.id" :aria-label="`选择伤害点 ${recordLabel(project, record.id)}`" @click="selectedId = record.id"><span class="marker-stem"></span><span class="marker-card"><small>{{ record.timeMs / 1000 }}秒 · {{ recordLabel(project, record.id) }}</small><strong>{{ num(result.points.find(p => p.id === record.id)?.value) }}</strong></span><span class="marker-diamond"></span></button></div></div>
-            <div class="track-row effect-track" :class="{ faded: layer === 'damage' }"><div class="track-label"><span class="track-dot gold"></span><strong>区间效果</strong><small>候选装备推导</small></div><div class="track-content"><div class="track-grid"></div><div v-for="effect in effects" :key="effect.key" class="effect-bar" :style="{ left: percent(effect.startMs), width: percent(effect.endMs - effect.startMs) }" :title="`${actorLabel(project, effect.owner)} / ${effect.expression} / ${conditionState(effect.condition)}`"><span>{{ definitionLabel(project, effect.definition) }} · {{ effectLabel(project, effect.definition, effect.effect) }}</span><small>[{{ effect.startMs }}, {{ effect.endMs }}) · {{ conditionState(effect.condition) }}</small></div><span v-if="!effects.length" class="empty-track">当前配装没有推导出区间效果</span></div></div>
-            <div v-if="false" class="track-row future-track"><div class="track-label"><span class="track-dot pale"></span><strong>快照 / 历史</strong><small>尚未支持</small></div><div class="track-content"><div class="track-grid"></div><span class="future-track-note">当前只支持普通伤害与基础区间效果</span></div></div>
-          </div></div>
-</details>
+          <TimelineEditor />
+
           <div class="timeline-footer"><span>整数毫秒 · 区间左闭右开</span><p>选中记录后可修改时间、同刻顺序和目标归属。</p></div>
           <div class="axis-summary"><div><small>所选目标伤害</small><strong>{{ num(result.objectiveValue) }}</strong></div><div><small>全轴总伤害</small><strong>{{ num(result.totalValue) }}</strong></div><div class="summary-state">{{ !project.timeline.some(record => record.kind === 'damage') ? '尚未记录伤害' : result.status === 'complete' ? '已完整计算' : '存在未确定或非法输入' }}<button class="text-button" @click="navigate('analysis')">进入伤害分析 →</button></div></div>
           <details class="shell-record-list"><summary>记录列表（{{ sortedRecords.length }}）</summary><div v-for="record in sortedRecords" :key="record.id" class="shell-record-row"><button @click="selectedId = record.id">{{ recordLabel(project, record.id) }} · {{ record.kind === 'damage' ? '伤害' : '动作' }} · {{ record.timeMs }} 毫秒</button><button :aria-label="`删除记录 ${recordLabel(project, record.id)}`" @click="removeRecord(record.id)">移除</button></div><p v-if="!sortedRecords.length">当前轴没有记录。请先在队伍页准备角色，再添加动作与伤害点。</p></details>
@@ -208,17 +139,17 @@ function loadSample(id: AcceptanceCase) { workspace.loadSample(id); navigate('ti
         <aside class="record-inspector panel" aria-label="所选记录详情"><template v-if="selected"><div class="inspector-title"><span class="section-eyebrow">记录详情</span><span class="subtle-tag">{{ selected.kind === 'damage' ? '伤害点' : '动作' }}</span></div><h2>{{ recordLabel(project, selected.id) }}</h2><p class="monospace muted">{{ definitionLabel(project, selected.definition) }}</p><div v-if="selected.kind === 'damage'" class="inspector-damage">{{ num(selectedResult?.value) }}<small>计算伤害</small></div><div class="inspector-fields"><label>命中时间（毫秒）<input aria-label="命中时间（毫秒）" type="number" min="0" step="1" :value="selected.timeMs" @input="updateTime"></label><label>同刻顺序<input type="number" min="0" step="1" :value="selected.order" @input="selected.order = number($event)"></label><label>归属角色<select v-model="selected.actor" aria-label="归属角色"><option v-for="owner in project.candidate.actors" :key="owner.id" :value="owner.id">{{ actorLabel(project, owner.id) }}</option></select></label><label v-if="!selected.realDamage">记录定义<select v-model="selected.definition" aria-label="记录定义"><option v-for="definition in project.definitions.filter(d => selected?.kind === 'action' || d.damage)" :key="definition.id" :value="definition.id">{{ definitionLabel(project, definition.id) }}</option></select></label><label v-if="selected.kind === 'damage'" class="checkbox-line"><input aria-label="计入当前目标" type="checkbox" :checked="selectedTarget" @change="updateTarget">计入当前目标</label></div><div v-if="selected.kind === 'damage' && !selected.realDamage" class="inspector-section"><h3>基础计算关系</h3><div class="formula-box"><span>{{ presentation.definitionLabel }} / {{ presentation.rootLabel }}</span><strong>{{ presentation.expression }}</strong></div><p class="muted">实际结果同时读取当前候选条件与区间效果，不推断暴击或反应。</p></div><div v-if="selected.realDamage" class="inspector-section"><h3>命中条件</h3><label>暴击口径<select v-model="selected.realDamage.crit" aria-label="所选真实命中暴击"><option :value="null">待确认</option><option value="noncritical">明确不暴击</option><option value="critical">明确暴击</option><option value="expected">静态暴击期望</option></select></label><label>反应<select v-model="selected.realDamage.reaction" aria-label="所选真实命中反应"><option :value="null">待确认</option><option value="none">明确无反应</option></select></label></div><div v-if="selectedResult?.real" class="inspector-section"><h3>真实伤害乘区</h3><div v-for="(value,key) in selectedResult.real.parts" :key="key" class="field-line"><span>{{ realPartsLabels[key] }}</span><strong>{{ num(value) }}</strong></div><p v-for="message in selectedResult.real.diagnostics" :key="message" class="muted">{{ message }}</p></div><div class="inspector-section"><h3>候选效果与来源</h3><div v-for="source in selectedResult?.formula.effects" :key="`${source.definition}/${source.effect}/${source.action}`" class="source-pill"><strong>{{ definitionLabel(project, source.definition) }} / {{ effectLabel(project, source.definition, source.effect) }}</strong></div><p v-if="!selectedResult?.formula.effects.length" class="muted">此记录没有读取候选区间效果。</p><details><summary>技术详情：查看节点来源</summary><code v-for="source in selectedResult?.sources" :key="source.path" class="source-path">{{ source.path }}</code></details></div><button class="secondary" @click="removeRecord(selected.id)">删除所选记录</button></template><p v-else class="muted">选择一条记录查看明细。</p></aside>
       </div>
 
-      <section v-else-if="page === 'team'"><TeamWorkspace @timeline="navigate('timeline')" @account="navigate('characters')" /><details class="advanced-workspace"><summary>高级：旧版候选与规则编辑</summary><P3Panel />      <div  class="team-layout"><section class="panel"><RealGamePanel mode="axis" /><AxisCreation /><div class="shell-effect-group"><h3>轴内条件</h3><label>新条件名称<input v-model="newCondition" aria-label="新条件名称" maxlength="160"></label><button @click="addCondition">添加条件</button><label v-for="key in conditionKeys" :key="key">条件 {{ inputLabel(key) }}<select :aria-label="`轴内条件 ${inputLabel(key)}`" :value="conditionValue(key)" @change="setCondition(key, $event)"><option value="unknown">待确认（未知）</option><option value="true">明确满足</option><option value="false">明确不满足</option></select></label></div><div class="panel-heading"><div><h2>当前轴队伍</h2><p>编辑候选属性及效果，不覆盖账号实际装备。</p></div><span class="subtle-tag">{{ project.candidate.actors.length }} 位角色</span></div><label>当前轴角色<select v-model="actorId"><option v-for="owner in project.candidate.actors" :key="owner.id" :value="owner.id">{{ actorLabel(project, owner.id) }} / {{ definitionLabel(project, owner.character) }}</option></select></label><template v-if="actor"><button @click="removeActor">移除当前队员及其记录</button><details v-if="actor.accountSnapshot"><summary>技术详情：账号与实物来源快照</summary><p>{{ actor.accountSnapshot.accountId }} / {{ actor.accountSnapshot.characterId }}</p><p v-for="item in actor.accountSnapshot.artifacts" :key="item.id">{{ item.name }} · {{ item.id }}</p></details><div class="team-role-card"><span class="large-avatar">轴</span><div><h3>{{ actorLabel(project, actor.id) }}</h3><p>{{ definitionLabel(project, actor.character) }}</p></div><span class="snapshot-tag">项目快照</span></div><div v-if="!actor.realBuild" class="candidate-form"><label>候选武器<select v-model="actor.weapon"><option v-for="d in project.definitions" :key="d.id" :value="d.id">{{ definitionLabel(project, d.id) }}</option></select></label><label v-for="(quantity, key) in actor.inputs" :key="key">{{ key === 'attack' ? '候选攻击力' : `候选 ${key}` }}<input :aria-label="key === 'attack' ? '候选攻击力' : `候选 ${key}`" type="number" step="any" :value="quantity.value" @input="quantity.value = number($event)"><small>{{ unitLabel(quantity.unit) }}</small></label></div><div v-for="definition in equipmentDefinitions" v-show="!actor.realBuild" :key="definition.id" class="shell-effect-group"><h3>{{ definitionLabel(project, definition.id) }} · 效果</h3><p v-if="!definition.effects.length" class="muted">此定义没有区间效果。</p><div v-for="effect in definition.effects" :key="effect.id" class="shell-effect-editor"><strong>{{ effectLabel(project, definition.id, effect.id) }}</strong><div class="candidate-form"><label>生效起点（毫秒）<input type="number" min="0" :value="effect.startMs" @input="effect.startMs = number($event)"></label><label>失效终点（毫秒）<input type="number" min="0" :value="effect.endMs" @input="effect.endMs = number($event)"></label><template v-for="node in definition.nodes.filter(n => n.id === effect.value)" :key="node.id"><label v-if="node.op === 'constant' && node.quantity.unit === 'scalar'">伤害加成（%）<input type="number" step="any" :value="node.quantity.value * 100" @input="node.quantity.value = number($event) / 100"></label></template></div><label class="checkbox-line"><input type="checkbox" :checked="Boolean(effect.condition)" @change="toggleCondition(effect, $event)">此效果需要额外触发条件</label><label v-if="effect.condition">条件 {{ inputLabel(effect.condition) }}<select :value="conditionValue(effect.condition)" @change="setCondition(effect.condition!, $event)"><option value="unknown">待确认（未知）</option><option value="true">明确满足</option><option value="false">明确不满足</option></select></label></div></div></template><p v-else class="design-callout">当前轴没有角色。请在上方创建合成角色，或从定义库与账号准备队伍。</p></section><aside class="panel team-result"><span class="section-eyebrow">候选计算结果</span><h2>当前方案</h2><div class="inspector-damage">{{ num(result.totalValue) }}<small>全轴伤害</small></div><div class="field-line"><span>目标值</span><strong>{{ num(result.objectiveValue) }}</strong></div><button class="primary" @click="navigate('timeline')">查看时间轴 →</button><p class="muted">{{ actor?.realBuild ? '真实候选使用保存的角色、武器和圣遗物快照计算；未支持机制明确标示。' : '手动候选使用规范化属性；真实配装请使用上方真实角色面板。' }}</p></aside></div></details></section>
+      <section v-else-if="page === 'team'"><TeamWorkspace @timeline="navigate('timeline')" @account="navigate('characters')" /></section>
 
-      <div v-else-if="page === 'analysis'" class="analysis-layout"><section class="panel"><div class="panel-heading"><div><h2>伤害构成</h2><p>来自当前轴的真实求值结果；目标筛选不删除记录。</p></div><span class="subtle-tag">{{ statusLabel(result.status) }}</span></div><div class="analysis-stats"><div><small>全轴总伤害</small><strong>{{ num(result.totalValue) }}</strong></div><div><small>目标伤害</small><strong>{{ num(result.objectiveValue) }}</strong></div><div><small>伤害点</small><strong>{{ result.points.length }}</strong></div></div><h3 class="chart-title">逐点贡献 <span>点击定位到时间轴</span></h3><div class="contribution-chart"><div v-for="point in result.points" :key="point.id" class="shell-analysis-row"><label><input type="checkbox" :aria-label="`目标 ${recordLabel(project, point.id)}`" :checked="!project.objective.damageIds || project.objective.damageIds.includes(point.id)" @change="workspace.command(draft => setDamageSelected(draft, point.id, ($event.target as HTMLInputElement).checked))"></label><button :data-analysis-id="point.id" :aria-label="`分析定位 ${recordLabel(project, point.id)}`" @click="openPoint(point.id)"><span>{{ recordLabel(project, point.id) }}<small>{{ project.timeline.find(r => r.id === point.id)?.timeMs }} 毫秒</small></span><div class="contribution-track"><i :style="{ width: `${result.totalValue && point.value ? Math.max(0, Math.min(100, point.value / result.totalValue * 100)) : 0}%` }"></i></div><strong>{{ num(point.value) }}</strong><span class="chart-arrow">↗</span></button></div></div></section><aside class="panel"><h2>当前目标</h2><p class="muted">默认统计整条轴。勾选只改变目标集合，队友、条件和其他记录仍保留。</p><p class="design-callout">可在队伍页编辑效果、捕获及历史依赖；正式配装搜索和属性收益分析尚未支持。</p><button class="secondary" @click="navigate('team')">调整候选配装</button></aside></div>
+      <div v-else-if="page === 'analysis'" class="analysis-layout"><section class="panel"><div class="panel-heading"><div><h2>伤害构成</h2><p>来自当前轴的真实求值结果；目标筛选不删除记录。</p></div><span class="subtle-tag">{{ statusLabel(result.status) }}</span></div><div class="analysis-stats"><div><small>全轴总伤害</small><strong>{{ num(result.totalValue) }}</strong></div><div><small>目标伤害</small><strong>{{ num(result.objectiveValue) }}</strong></div><div><small>伤害点</small><strong>{{ result.points.length }}</strong></div></div><h3 class="chart-title">逐点贡献 <span>点击定位到时间轴</span></h3><div class="contribution-chart"><div v-for="point in result.points" :key="point.id" class="shell-analysis-row"><label><input type="checkbox" :aria-label="`目标 ${recordLabel(project, point.id)}`" :checked="!project.objective.damageIds || project.objective.damageIds.includes(point.id)" @change="workspace.command(draft => setDamageSelected(draft, point.id, ($event.target as HTMLInputElement).checked))"></label><button :data-analysis-id="point.id" :aria-label="`分析定位 ${recordLabel(project, point.id)}`" @click="openPoint(point.id)"><span>{{ recordLabel(project, point.id) }}<small>{{ project.timeline.find(r => r.id === point.id)?.timeMs }} 毫秒</small></span><div class="contribution-track"><i :style="{ width: `${result.totalValue && point.value ? Math.max(0, Math.min(100, point.value / result.totalValue * 100)) : 0}%` }"></i></div><strong>{{ num(point.value) }}</strong><span class="chart-arrow">↗</span></button></div></div></section><aside class="panel"><h2>当前目标</h2><p class="muted">默认统计整条轴。勾选只改变目标集合，队友、条件和其他记录仍保留。</p><p class="design-callout">正式配装搜索和属性收益分析尚未支持。</p><button class="secondary" @click="navigate('team')">调整候选配装</button></aside></div>
 
-      <section v-else-if="page === 'projects'" class="panel project-library"><div class="panel-heading"><div><h2>当前轴文件</h2><label>轴名称<input v-model="project.name" aria-label="轴名称" maxlength="160" placeholder="给这条轴命名"></label><p>{{ projectLabel(project) }} · 修订 {{ project.revision }} · 规则快照</p></div><button class="secondary" @click="workspace.createProject(); navigate('team')">新建空轴</button></div><p class="design-callout">项目保存轴、定义版本、候选配置和目标；不需要视频或账号在线。新建后前往队伍页准备角色和公式，在时间轴添加动作和伤害。</p><div class="shell-project-actions"><button :disabled="busy" @click="openProject">打开项目文件</button><button :disabled="busy" @click="workspace.saveProject()">保存当前轴文件</button></div><details><summary>历史兼容样本（不作为真实案例验收）</summary><div class="project-card-grid"><button v-for="sample in acceptanceCases" :key="sample.id" class="project-card" @click="loadSample(sample.id)"><h3>{{ sample.label }}</h3><p>{{ sample.calculation }}</p><strong>参考目标 {{ num(sample.expected) }}</strong><small>载入模板会替换当前轴，请先保存修改。</small></button></div></details></section>
+      <section v-else-if="page === 'projects'" class="panel project-library"><div class="panel-heading"><div><h2>当前轴文件</h2><label>轴名称<input v-model="project.name" aria-label="轴名称" maxlength="160" placeholder="给这条轴命名"></label><p>{{ projectLabel(project) }} · 修订 {{ project.revision }} · 规则快照</p></div><button class="secondary" @click="workspace.createProject(); navigate('team')">新建空轴</button></div><p class="design-callout">项目保存轴、定义版本、候选配置和目标；不需要视频或账号在线。新建后前往队伍页准备角色和公式，在时间轴添加动作和伤害。</p><div class="shell-project-actions"><button :disabled="busy" @click="openProject">打开项目文件</button><button :disabled="busy" @click="workspace.saveProject()">保存当前轴文件</button></div></section>
 
       <section v-else-if="page === 'definitions'" class="panel definition-library"><DefinitionLibrary /><div class="panel-heading"><div><h2>当前轴使用的定义快照</h2><p>这里调整轴内快照；不会自动回写独立定义库。</p></div><span class="subtle-tag">{{ project.definitions.length }} 个定义</span></div><div class="segmented definition-tabs"><button v-for="tab in [{ id: 'all', name: '全部定义' }, { id: 'preset', name: '内置预设' }, { id: 'user', name: '用户自定义' }]" :key="tab.id" :class="{ selected: definitionFilter === tab.id }" @click="definitionFilter = tab.id">{{ tab.name }}</button></div><article v-for="definition in visibleDefinitions" :key="definition.id" class="shell-definition-editor"><h3>{{ definitionLabel(project, definition.id) }} · 版本{{ definition.version }}</h3><div class="candidate-form"><label>内容来源<select v-model="definition.source.kind"><option value="user">用户定义</option><option value="preset">预设内容</option></select></label><label v-if="definition.damage">伤害根节点<select v-model="definition.damage"><option v-for="node in definition.nodes" :key="node.id" :value="node.id">{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</option></select></label></div><div v-for="node in definition.nodes" :key="node.id" class="shell-node-row"><code>{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</code><label v-if="constant(node)">常量 {{ nodeLabel(project, definition.id, node.id) }}<input :aria-label="`常量 ${nodeLabel(project, definition.id, node.id)}`" type="number" step="any" :value="constant(node)?.value" @input="node.op === 'constant' && (node.quantity.value = number($event))"><small>{{ unitLabel(constant(node)?.unit ?? '') }}</small></label><code v-else>{{ formatWorkbenchExpression(project, definition.id, node.id) }}</code></div></article><p v-if="!visibleDefinitions.length">暂无此类定义。</p></section>
 
       <AccountLibrary v-else-if="isAccountPage" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('settings')" />
 
-      <section v-else class="panel settings-page"><AccountSettings /><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于、支持范围与高级工具</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围与工具</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><p>游戏图像 © miHoYo / HoYoverse；本工具非官方作品。图像仅作示意，原创结纹与游戏图像分别登记来源。</p><div class="shell-tool-links"><a href="#annotation">公式验收工具</a><a href="#compatibility">历史兼容工作台（含旧合成样本）</a><a href="#workbench">原自动模拟器</a><a href="#tools">开发验证工具</a></div></details></section>
+      <section v-else class="panel settings-page"><AccountSettings /><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于与支持范围</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><p>游戏图像 © miHoYo / HoYoverse；本工具非官方作品。图像仅作示意，原创结纹与游戏图像分别登记来源。</p></details></section>
 
       <section v-if="isProjectPage && result.diagnostics.length" class="panel shell-diagnostics"><h2>条件与诊断</h2><ul aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}/${diagnostic.path}/${diagnostic.message}`"><strong>{{ diagnosticLabel(diagnostic.code) }}</strong> · <details><summary>技术详情</summary>{{ diagnostic.message }}<code>{{ diagnostic.code }} · {{ diagnostic.path }}</code></details></li></ul></section>
       <details v-if="isProjectPage" class="project-technical"><summary>技术详情：项目原始数据</summary><pre>{{ JSON.stringify(project, null, 2) }}</pre></details>

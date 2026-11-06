@@ -1,6 +1,6 @@
 # LeyLine Simulator
 
-轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。默认进入已整合的侧栏工作台，可编辑候选配装、动作与伤害点、条件及目标，查看公式来源，并保存、重新打开轴项目。原自动队伍模拟器保留在 `/#workbench`。
+轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。默认进入已整合的侧栏工作台，可编辑候选配装、动作与伤害点、条件及目标，查看公式来源，并保存、重新打开轴项目。旧模拟器、公式验收页和开发验证页已移除，产品只保留当前工作台。
 
 文档总入口见[文档导航](docs/README.md)。P2.5 已完成，下一阶段为 P3；可将[实施 prompt](docs/planning/implementation-agent-prompt.md)交给下一位 agent。产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。视频打轴、快照、累计和优化搜索仍为后续能力。工作台和公式工具已使用中文展示，后续新增流程继续中文优先；文件字段与版本保持原值。
 
@@ -8,9 +8,9 @@
 
 Windows 本地构建的稳定双击入口为 `artifacts/desktop/Start-LeyLine.cmd`，不需要输入命令、启动 Vite 或浏览器。它指向最新构建的 `releases/build-*/LeyLine-win32-x64/LeyLine.exe`；也可直接打开该 exe，移动程序时保留整个所在目录。实际路径记录于 `artifacts/desktop/latest.json`。
 
-原神配色、凯尔特结纹和分组侧栏现为默认界面。项目页提供四个独立验收模板，参考目标为 4400、4000、4840、2000；队伍、时间轴、分析、定义快照及公式工具共用同一项目。详细步骤见[正式整合记录](docs/planning/desktop-integration.md)。
+当前为 U1 界面迭代：先管理角色与圣遗物，再保存队伍和建立独立轴。角色卡打开详情，可直接编辑培养、选择武器与装备；支持莫娜五星库存和 Enka UID 公开展柜预览导入，展柜配装与背包实物保持分开。设置管理账号文件和七元素配色预览。当前流程见[使用指南](docs/user-guide.md)。
 
-账号、轴与定义库已能独立保存重开，支持空轴创作、实物装备转移、撤销/重做、恢复和 Worker 求值。P2.5 新增固定真实游戏目录、琴/凯亚/行秋零命战技配装验算及莫娜第一版五星库存导入；目录完整性与机制支持分别标注。按[真实数据验收](docs/planning/p2-5-implementation.md)逐步操作，线上账号接口和完整角色机制仍待后续。7 张示意图透明 WebP 合计约 22.8 KiB，来源与压缩记录见[素材说明](docs/references/ui-assets.md)；`pnpm assets:check` 校验图片哈希和体积预算。
+账号、轴、定义库独立保存重开，支持实物转移确认、撤销重做、恢复和 Worker 求值。目录覆盖与机制支持分别标注；支持范围以[内容支持矩阵](docs/architecture/content-support.md)为准。美术资源 688 张、约 4.82 MB，来源与压缩记录见[素材说明](docs/references/ui-assets.md)，`pnpm assets:check` 校验哈希和预算。
 
 开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收，`pnpm desktop:start` 打开最新程序。每次打包保留独立目录，成功后更新启动入口，不覆盖运行中的旧版本。程序为本地未签名便携版本，生成产物不纳入 Git。
 
@@ -23,21 +23,19 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-打开终端显示的本地地址，默认进入与桌面共用的伤害轴工作台。`/#axis` 为主入口，旧 `/#design` 兼容至同一界面；`/#annotation` 为共享当前项目的公式验收工具。原队伍工作区位于 `/#workbench`；其方案和草稿仍保存在当前浏览器中。开发验证页面位于 `/#tools`、`/#team` 和 `/#combat`。
+打开终端显示的本地地址，默认进入账号角色页；`/#axis` 直接进入当前时间轴。旧版地址不再加载其他界面，已有轴文件仍可在项目页打开，原文件不会因删除入口被清除。
 
 agent 可继续调用 `node tools/scripts/evaluate-workbench.mjs <轴项目.json>`，读取 UI 保存的相同 v1 项目，无需桌面窗口。
 
-## 原自动模拟器支持范围
+## 计算支持范围
 
-支持琴、行秋、胡桃、阿贝多、雷电将军的选定技能与命座，1—90 级成长、突破、天赋、8 把武器及选定五星圣遗物效果。使用固定仓库数据快照，按明确的单目标规则计算；尚未覆盖全部角色、多目标传播、敌人攻击与位移、动作取消、草反应等机制。
-
-详细范围和条件见[内容支持矩阵](docs/architecture/content-support.md)及[装备说明](docs/mechanics/supported-equipment.md)。
+角色/武器/套装有目录资料不表示全部效果已实现。当前按[内容支持矩阵](docs/architecture/content-support.md)声明范围；历史自动模拟器的机制、fixtures 和引擎回归保留作开发依据，其前端已删除。U1 仍待真实整轴与用户体验验收。
 
 ## 目录与架构
 
 ```text
 src/
-  web/           Vue 页面、状态、图表与 Worker 入口
+  web/           Vue 页面、状态与 Worker 入口
   engine/        战斗计算、事件调度及机制实现
   schema/        输入校验、版本化合同与 Worker 消息类型
   game-data/     游戏内容定义和生成的数据快照
@@ -66,7 +64,6 @@ archive/python/  旧 Python 实现及历史资料
 | --- | --- | --- | --- |
 | `vue` | `^3.5.0` | `3.5.44` | 页面组件与响应式状态 / web |
 | `pinia` | `^4.1.0` | `4.1.0` | 工作区、方案及结果状态 / web |
-| `echarts` | `^6.1.0` | `6.1.0` | 伤害、能量等结果图表 / web |
 | `zod` | `^4.1.0` | `4.6.7` | 配置与消息合同校验 / schema |
 
 ### 开发与验证依赖

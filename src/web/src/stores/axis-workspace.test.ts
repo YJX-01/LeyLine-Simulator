@@ -1,14 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, disposePinia, setActivePinia } from 'pinia';
-import { createWorkbenchProject } from '../domain/workbench-project';
+import { createWorkbenchProject } from '../../../../tests/helpers/workbench-samples';
 import type { DesktopBridge } from '../platform/desktop';
-import { useAxisWorkspaceStore } from './axis-workspace';
+import { useAxisWorkspaceStore as createWorkspaceStore } from './axis-workspace';
 import { evaluateWorkbench } from '@leyline/engine';
 import type { AxisRequest, AxisResponse } from '../domain/axis-task';
 
 const adapters = vi.hoisted(() => ({ bridge: undefined as DesktopBridge | undefined, download: vi.fn() }));
 vi.mock('../platform/desktop', () => ({ getDesktopBridge: () => adapters.bridge }));
 vi.mock('../domain/download', () => ({ downloadJson: adapters.download }));
+
+const initialized=new WeakSet<object>();
+function useAxisWorkspaceStore() { const store=createWorkspaceStore();if(!initialized.has(store)){initialized.add(store);store.replaceProject(createWorkbenchProject());}return store; }
 
 let pinia: ReturnType<typeof createPinia>;
 function nativeBridge(overrides: Partial<DesktopBridge> = {}): DesktopBridge {
@@ -25,7 +28,7 @@ describe('shared axis workspace', () => {
       adapters.bridge = nativeBridge();
       expect(await store.saveProject()).toBe(true);
       expect(store.dirty).toBe(false);
-      store.loadSample('weapon-b');
+      store.replaceProject(createWorkbenchProject('weapon-b'));
       expect(store.recover()).toBe(true);
       expect(store.project.definitions[0].name).toBe('有名称的快照');
       expect(store.dirty).toBe(false);
@@ -69,7 +72,7 @@ describe('shared axis workspace', () => {
       const store = useAxisWorkspaceStore();
       store.project.candidate.actors[0].inputs.attack.value = 1100;
       expect(store.recoveryAvailable).toBe(true);
-      store.loadSample('weapon-b');
+      store.replaceProject(createWorkbenchProject('weapon-b'));
       expect(store.recover()).toBe(true);
       expect(store.result.totalValue).toBe(4840);
       expect(store.dirty).toBe(true);
@@ -121,7 +124,7 @@ describe('shared axis workspace', () => {
       const second = TestWorker.instances.at(-1)!;
       second.reply();
       expect(store.result.totalValue).toBe(4840);
-      store.loadSample('weapon-b');
+      store.replaceProject(createWorkbenchProject('weapon-b'));
       vi.runOnlyPendingTimers();
       const third = TestWorker.instances.at(-1)!;
       store.createProject('new-axis');
@@ -144,20 +147,20 @@ describe('shared axis workspace', () => {
     }
   });
 
-  it('loads independent sample values and resets the editing selection', () => {
+  it('imports historical calculation cases while retaining a valid record selection', () => {
     const store = useAxisWorkspaceStore();
     expect(store.result.objectiveValue).toBe(4400);
     expect(store.dirty).toBe(false);
     store.project.candidate.actors[0].inputs.attack.value = 1500;
     store.selectedId = 'hit-6';
     expect(store.dirty).toBe(true);
-    store.loadSample('weapon-b');
+    store.replaceProject(createWorkbenchProject('weapon-b'));
     expect(store.result.objectiveValue).toBe(4000);
-    expect(store.selectedId).toBe('hit-2');
+    expect(store.selectedId).toBe('hit-6');
     expect(store.dirty).toBe(false);
-    store.loadSample('attack-1100');
+    store.replaceProject(createWorkbenchProject('attack-1100'));
     expect(store.result.objectiveValue).toBe(4840);
-    store.loadSample('second-hit');
+    store.replaceProject(createWorkbenchProject('second-hit'));
     expect(store.result.objectiveValue).toBe(2000);
     expect(store.result.totalValue).toBe(4400);
   });
@@ -235,7 +238,7 @@ describe('shared axis workspace', () => {
     expect(await store.saveProject()).toBe(true);
     expect(store.dirty).toBe(false);
     const saved = save.mock.calls[0][0];
-    store.loadSample();
+    store.replaceProject(createWorkbenchProject());
     expect(store.result.totalValue).toBe(4400);
     store.importContent(saved);
     expect(store.result.status).toBe('partial');
@@ -249,7 +252,7 @@ describe('shared axis workspace', () => {
     expect(await store.saveProject()).toBe(false);
     expect(adapters.download).not.toHaveBeenCalled();
     expect(store.error).toContain('非法');
-    store.loadSample('attack-1100');
+    store.replaceProject(createWorkbenchProject('attack-1100'));
     store.project.objective.damageIds = ['hit-6'];
     expect(await store.saveProject()).toBe(true);
     expect(adapters.download).toHaveBeenCalledTimes(1);
@@ -311,7 +314,7 @@ describe('shared axis workspace', () => {
     expect(await store.saveProject()).toBe(true);
     expect(store.dirty).toBe(false);
     const saved = save.mock.calls[0][0];
-    store.loadSample();
+    store.replaceProject(createWorkbenchProject());
     store.importContent(saved);
     expect(store.project.id).toBe('empty-axis');
     expect(store.actor).toBeUndefined();

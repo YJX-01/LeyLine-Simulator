@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-The TypeScript pnpm workspace lives under `src/`: `web` contains Vue components, Pinia stores, charts, and the Worker; `engine` owns simulation; `schema` owns validated contracts; `game-data` owns content snapshots. Each keeps implementation in its own `src/` directory.
+The TypeScript pnpm workspace lives under `src/`: `web` contains Vue components, Pinia stores, and the current Worker; `engine` owns simulation; `schema` owns validated contracts; `game-data` owns content snapshots. Each keeps implementation in its own `src/` directory.
 
 Colocated `*.test.ts` files use Vitest. Browser `*.spec.ts` files live in `tests/e2e/` and `tests/production/`. Scenarios belong in `fixtures/`, automation in `tools/scripts/`, dependency patches in `tools/patches/`, and references in `docs/`. `archive/python/` is historical material, excluded from the active build.
 
@@ -59,3 +59,7 @@ Run desktop and browser acceptance serially with one worker. Manage only process
 The user explicitly authorized Enka UID public showcase input as a bounded U1 addition. Preserve preview/confirmation and separate read-only showcase snapshots from physical inventory; do not infer matching physical items from equal stats or combine unrelated public and private accounts. This does not advance the stage to P5/P6. Follow `docs/references/enka-import.md`.
 
 New UI uses the semantic tokens and controls in `docs/design/visual-language.md` and `src/web/src/styles/palette.ts`. The seven-element 21-color v1 palette remains pending user experience feedback; dark mode is not implemented. Keep checks focused on changed real-data paths, as requested by the user.
+
+## Retired UI (user decision, 2026-11-07)
+
+Only the current WorkspaceShell ships. Do not restore LegacyWorkspaceShell, Workbench, AnnotationWorkbench, DeveloperTools, their old routes, old synthetic sample launchers, P3Panel, RealGamePanel mode switches, or the old simulation Worker/chart UI from historical documentation. Current candidate editing lives in TeamLoadoutEditor. Engine/core compatibility fixtures and regressions remain; historical sample builders belong only in tests/helpers. Removing obsolete UI must not delete user account/project files or browser storage.

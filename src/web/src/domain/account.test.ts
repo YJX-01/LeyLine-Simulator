@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createAccount, equipArtifact, parseAccount, copyAccountCharacter } from './account';
-import { createWorkbenchProject } from './workbench-project';
+import { createWorkbenchProject } from '../../../../tests/helpers/workbench-samples';
 import { getRealCharacter, getRealWeapon, getArtifactMain, REAL_DATA_VERSION } from '@leyline/game-data/real';
 import type { RealBuild } from '@leyline/schema';
 
