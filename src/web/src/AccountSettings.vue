@@ -8,7 +8,7 @@ const fileInput = ref<HTMLInputElement>();
 function resetSelection() {
   store.selectedCharacterId = '';
   store.characterQuery = '';
-  store.characterElement = ''; store.characterWeapon = ''; store.characterProfile = ''; store.characterEquipment = ''; store.characterSort = 'name';
+  store.characterElement = []; store.characterWeapon = []; store.characterProfile = []; store.characterEquipment = []; store.characterRarity = []; store.characterSort = 'release';
   store.inventoryQuery = '';
   store.inventorySlot = '';
   store.inventoryStat = '';

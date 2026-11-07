@@ -28,7 +28,7 @@
 - [Mona 社区版](https://github.com/TwiceDrop/genshin_artifact/tree/589ac6919057709924c0c20d5a9d673fe9b0be1a)：头像、圣遗物和元素；部分旧图片保留已核对的 Enka、HoYoLAB 和 PathOfGenshin 来源，精确地址以逐图清单为准。
 - [PathOfGenshin/resources](https://github.com/PathOfGenshin/resources/tree/015a2493b5672b28576ab78ffbcffde2ea0c9844/resources/gi/Sprite)：白色透明的原生振晶增益符号。29 张增益/反应符号的确切白名单和来源在 `docs/constant/ui-buff-sources.json`；新增前先抽看原图，排除照片式徽标、活动背景和装饰。
 
-面板属性改用固定 Genshin Optimizer 的 SVG 矢量轮廓，白名单、原始路径哈希和镂空配方见 `docs/constant/ui-stat-sources.json`。MIT 许可与署名保留在 `licenses/sources/genshin-optimizer/LICENSE`。暴击伤害使用独立 `CritDmgIcon`，不再复用暴击率图。
+面板属性改用固定 Genshin Optimizer 的 SVG 矢量轮廓，白名单、原始路径哈希和镂空配方见 `docs/constant/ui-stat-sources.json`。MIT 许可与署名保留在 `licenses/sources/genshin-optimizer/LICENSE`。暴击率和暴击伤害采用两个独立轮廓；按当前界面确认的图形对应关系，暴击率使用源 `CritDmgIcon`，暴击伤害使用源 `CritRateIcon`。生成器保留真实源文件名及哈希，面板和增益索引统一使用语义键。
 
 小攻击、小防御、小生命使用 `flatAttack`、`flatDefense`、`flatHp` 本地派生图标：小攻击只挖空剑身内部，剑柄与护手保持实心；小防御仅留盾牌外围，不保留中间分界线；小生命仅留水滴外围，不保留水面与高光。百分比与实数的语义由索引键和文字区分，不凭图标修改计算数据。`buffs` 的 `flat-attack`、`flat-defense`、`flat-hp`、`crit-damage` 等键直接复用这些 SVG，不再复制图片。
 

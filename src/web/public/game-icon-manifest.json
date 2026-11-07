@@ -51232,31 +51232,6 @@
       "name": "暴击率",
       "file": "stats/critRate.svg",
       "format": "SVG",
-      "bytes": 421,
-      "sha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283",
-      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
-      "sourceSha256": "1ee9d57245667d797015e3ad5624d5decdf3f2700742614541da62345fdcb96e",
-      "sourceBytes": 425,
-      "sourceDimensions": [
-        24,
-        24
-      ],
-      "dimensions": [
-        128,
-        128
-      ],
-      "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "docs/constant/stat-vectors/critRate.svg",
-      "vectorSha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283"
-    },
-    {
-      "kind": "stats",
-      "key": "critDamage",
-      "id": "critDamage",
-      "name": "暴击伤害",
-      "file": "stats/critDamage.svg",
-      "format": "SVG",
       "bytes": 969,
       "sha256": "198eeaf476c83ad3dfd50f2c8a47dd0cd6f2cd34c1fb51c7f5f9a52c1ef29a5d",
       "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritDmgIcon.tsx",
@@ -51272,8 +51247,33 @@
       ],
       "alphaMax": 255,
       "transform": "stat-vector-v4",
-      "vectorPath": "docs/constant/stat-vectors/critDamage.svg",
+      "vectorPath": "docs/constant/stat-vectors/critRate.svg",
       "vectorSha256": "198eeaf476c83ad3dfd50f2c8a47dd0cd6f2cd34c1fb51c7f5f9a52c1ef29a5d"
+    },
+    {
+      "kind": "stats",
+      "key": "critDamage",
+      "id": "critDamage",
+      "name": "暴击伤害",
+      "file": "stats/critDamage.svg",
+      "format": "SVG",
+      "bytes": 421,
+      "sha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
+      "sourceSha256": "1ee9d57245667d797015e3ad5624d5decdf3f2700742614541da62345fdcb96e",
+      "sourceBytes": 425,
+      "sourceDimensions": [
+        24,
+        24
+      ],
+      "dimensions": [
+        128,
+        128
+      ],
+      "alphaMax": 255,
+      "transform": "stat-vector-v4",
+      "vectorPath": "docs/constant/stat-vectors/critDamage.svg",
+      "vectorSha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283"
     },
     {
       "kind": "stats",

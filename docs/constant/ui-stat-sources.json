@@ -64,22 +64,22 @@
     {
       "id": "critRate",
       "name": "暴击率",
-      "sourceFilename": "CritRateIcon",
-      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
-      "sourceSha256": "1ee9d57245667d797015e3ad5624d5decdf3f2700742614541da62345fdcb96e",
-      "sourceBytes": 425,
-      "vectorPath": "docs/constant/stat-vectors/critRate.svg",
-      "vectorSha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283"
-    },
-    {
-      "id": "critDamage",
-      "name": "暴击伤害",
       "sourceFilename": "CritDmgIcon",
       "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritDmgIcon.tsx",
       "sourceSha256": "697868058426c22a0d78b14bb96928d06a2dff85cf5d476fc83283e0350d4c72",
       "sourceBytes": 1005,
-      "vectorPath": "docs/constant/stat-vectors/critDamage.svg",
+      "vectorPath": "docs/constant/stat-vectors/critRate.svg",
       "vectorSha256": "198eeaf476c83ad3dfd50f2c8a47dd0cd6f2cd34c1fb51c7f5f9a52c1ef29a5d"
+    },
+    {
+      "id": "critDamage",
+      "name": "暴击伤害",
+      "sourceFilename": "CritRateIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
+      "sourceSha256": "1ee9d57245667d797015e3ad5624d5decdf3f2700742614541da62345fdcb96e",
+      "sourceBytes": 425,
+      "vectorPath": "docs/constant/stat-vectors/critDamage.svg",
+      "vectorSha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283"
     },
     {
       "id": "energyRecharge",
@@ -222,5 +222,6 @@
       "stat": "hp",
       "name": "生命值%"
     }
-  ]
+  ],
+  "critDisplayMapping": "User-approved glyph correction: critRate uses CritDmgIcon geometry; critDamage uses CritRateIcon geometry."
 }

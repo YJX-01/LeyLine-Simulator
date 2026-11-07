@@ -15,11 +15,12 @@ export const useAccountStore = defineStore('local-account', () => {
   // Navigation context is session UI state, not part of the account file.
   const selectedCharacterId = ref('');
   const characterQuery = ref('');
-  const characterElement = ref('');
-  const characterWeapon = ref('');
-  const characterProfile = ref('');
-  const characterEquipment = ref('');
-  const characterSort = ref('name');
+  const characterElement = ref<string[]>([]);
+  const characterWeapon = ref<string[]>([]);
+  const characterProfile = ref<string[]>([]);
+  const characterEquipment = ref<string[]>([]);
+  const characterRarity = ref<string[]>([]);
+  const characterSort = ref('release');
   const inventoryQuery = ref('');
   const inventorySlot = ref('');
   const inventoryStat = ref('');
@@ -30,7 +31,7 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventoryLevel = ref('');
   const inventorySort = ref('default');
   watch(() => account.value.id, () => {
-    selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=''; characterWeapon.value=''; characterProfile.value=''; characterEquipment.value=''; characterSort.value='name';
+    selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterProfile.value=[]; characterEquipment.value=[]; characterRarity.value=[]; characterSort.value='release';
     inventoryQuery.value=''; inventorySlot.value=''; inventoryStat.value=''; inventoryOwner.value='all'; inventoryPage.value=1; inventorySet.value=''; inventorySubstat.value=''; inventoryLevel.value=''; inventorySort.value='default';
   });
   const previous = ref<LocalAccount>();
@@ -101,5 +102,5 @@ export const useAccountStore = defineStore('local-account', () => {
     catch { error.value = '账号文件无效或读取失败，现有账号保持不变。'; }
   }
   return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious,
-    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort };
+    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterRarity, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort };
 });

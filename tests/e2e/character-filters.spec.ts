@@ -1,0 +1,55 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { test, expect } from '@playwright/test';
+
+const source = '.references/enka/official-example.json';
+test.skip(!existsSync(source), 'Requires the saved actual Enka example showcase.');
+
+test('actual showcase: element shortcuts, combined selections and separate sorting', async ({ page }) => {
+  await page.route('**/api/enka/618285856', route => route.fulfill({ json: JSON.parse(readFileSync(source, 'utf8')) }));
+  await page.goto('/');
+  await page.getByRole('button', { name: '网络导入', exact: true }).click();
+  await page.getByLabel('游戏 UID', { exact: true }).fill('618285856');
+  await page.getByRole('button', { name: '查询角色展柜', exact: true }).click();
+  await page.getByRole('button', { name: '确认导入 4 位角色', exact: true }).click();
+  await page.keyboard.press('Escape');
+  const cards = page.locator('.character-card-header > strong');
+  const shortcuts = page.getByRole('group', { name: '按元素筛选' });
+  await expect(cards).toHaveText(['甘雨', '班尼特', '行秋', '安柏']);
+  await page.getByRole('button', { name: /^筛选/ }).click();
+  const rarity = page.getByRole('dialog', { name: '筛选角色' }).getByRole('region', { name: '星级' });
+  await rarity.getByRole('button', { name: '五星', exact: true }).click();
+  await page.getByRole('dialog', { name: '筛选角色' }).getByRole('button', { name: '完成', exact: true }).click();
+  await expect(cards).toHaveText(['甘雨']);
+  await page.getByRole('button', { name: /^筛选/ }).click();
+  await rarity.getByRole('button', { name: '四星', exact: true }).click();
+  await page.getByRole('dialog', { name: '筛选角色' }).getByRole('button', { name: '完成', exact: true }).click();
+  await expect(cards).toHaveCount(4);
+  await shortcuts.getByRole('button', { name: '清除筛选', exact: true }).click();
+  await page.getByRole('button', { name: '排序', exact: true }).click();
+  await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '名称', exact: true }).click();
+
+  await expect(shortcuts.locator('.elements')).toHaveCount(7);
+  await shortcuts.getByRole('button', { name: '火元素', exact: true }).click();
+  await expect(cards).toHaveText(['安柏', '班尼特']);
+  await shortcuts.getByRole('button', { name: '冰元素', exact: true }).click();
+  await expect(cards).toHaveText(['安柏', '班尼特', '甘雨']);
+  await page.getByRole('button', { name: /^筛选/ }).click();
+  const dialog = page.getByRole('dialog', { name: '筛选角色' });
+  const elements = dialog.getByRole('region', { name: '元素', exact: true });
+  await expect(elements.getByRole('button', { name: '火', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await elements.getByRole('button', { name: '水', exact: true }).click();
+  const weapons = dialog.getByRole('region', { name: '武器类型' });
+  await weapons.getByRole('button', { name: '单手剑', exact: true }).click();
+  await dialog.getByRole('button', { name: '完成', exact: true }).click();
+  await expect(cards).toHaveText(['班尼特', '行秋']);
+  await page.getByRole('button', { name: /^筛选/ }).click();
+  await weapons.getByRole('button', { name: '弓', exact: true }).click();
+  await dialog.getByRole('button', { name: '完成', exact: true }).click();
+  await expect(cards).toHaveCount(4);
+  await page.getByRole('button', { name: '排序', exact: true }).click();
+  await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级从高到低', exact: true }).click();
+  await shortcuts.getByRole('button', { name: '清除筛选', exact: true }).click();
+  await expect(cards).toHaveCount(4);
+  await page.getByRole('button', { name: '排序', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级从高到低', exact: true })).toHaveAttribute('aria-pressed', 'true');
+});
