@@ -30,6 +30,7 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventorySubstat = ref('');
   const inventoryLevel = ref('');
   const inventorySort = ref('default');
+  const inventoryDensity = ref<'relaxed' | 'compact'>('relaxed');
   watch(() => account.value.id, () => {
     selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterProfile.value=[]; characterEquipment.value=[]; characterRarity.value=[]; characterSort.value='release';
     inventoryQuery.value=''; inventorySlot.value=''; inventoryStat.value=''; inventoryOwner.value='all'; inventoryPage.value=1; inventorySet.value=''; inventorySubstat.value=''; inventoryLevel.value=''; inventorySort.value='default';
@@ -102,5 +103,5 @@ export const useAccountStore = defineStore('local-account', () => {
     catch { error.value = '账号文件无效或读取失败，现有账号保持不变。'; }
   }
   return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious,
-    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterRarity, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort };
+    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterRarity, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort, inventoryDensity };
 });

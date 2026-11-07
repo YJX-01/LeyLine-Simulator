@@ -13,10 +13,10 @@ export function loadAccountGameData(): Promise<AccountGameData> {
 export function artifactMainValue(item: AccountArtifact, main?: RealBuild['artifactMain']): number | undefined {
   return item.real ? main?.[item.real.mainStat]?.[item.real.level] : item.attack;
 }
-export function formatGameStat(stat: RealStat, value: number | undefined): string {
+export function formatGameStat(stat: RealStat, value: number | undefined, useGrouping = true): string {
   if (value === undefined || !Number.isFinite(value)) return '—';
   const percent=ratioStat(stat);
-  return `${(value*(percent?100:1)).toLocaleString('zh-CN',{minimumFractionDigits:percent?1:0,maximumFractionDigits:percent?1:0})}${percent?'%':''}`;
+  return `${(value*(percent?100:1)).toLocaleString('zh-CN',{useGrouping,minimumFractionDigits:percent?1:0,maximumFractionDigits:percent?1:0})}${percent?'%':''}`;
 }
 export function formatAccountStat(stat: RealStat, value: number | undefined, maximumFractionDigits = 1): string {
   if (value === undefined || !Number.isFinite(value)) return '—';

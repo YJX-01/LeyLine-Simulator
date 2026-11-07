@@ -20,6 +20,12 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(dialog).toHaveCount(0);
   await expect(page.locator('.inventory-card')).toHaveCount(30);
   await expect(page.locator('.inventory-count')).toContainText('共 458 件');
+  const initialCards=await page.locator('.inventory-card').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
+  await page.getByRole('group',{name:'卡片密度'}).getByRole('button',{name:'紧凑',exact:true}).click();
+  expect(await page.locator('.inventory-card').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')))).toEqual(initialCards);
+  await page.getByRole('group',{name:'卡片密度'}).getByRole('button',{name:'疏松',exact:true}).click();
+  await expect(page.locator('.inventory-card footer')).toHaveCount(0);
+
   // Derive the former unresolved representation from one actual item; never fabricate a player export.
   await page.evaluate(async () => {
     const account = JSON.parse(localStorage.getItem('leyline-account-v1')!);
@@ -44,7 +50,9 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByLabel('筛选主词条', { exact: true }).selectOption('');
   await page.locator('.inventory-card').first().click();
   await expect(page.getByRole('dialog')).toContainText('炉火融炼之心');
-  await expect(page.getByRole('dialog')).toContainText('4,780');
+  await expect(page.getByRole('dialog')).toContainText('4780');
+  await expect(page.getByRole('dialog').locator('.roll-count')).toHaveText(['1','2','2']);
+  await expect(page.getByRole('dialog').locator('dt > span:last-child')).toHaveText(['生命值','充能效率','暴击率','暴击伤害']);
   await page.getByRole('button', { name: '编辑圣遗物', exact: true }).click();
   await page.getByLabel('强化等级', { exact: true }).fill('16');
   await page.keyboard.press('Escape');
@@ -53,10 +61,10 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '编辑圣遗物', exact: true }).click();
   await page.getByLabel('强化等级', { exact: true }).fill('16');
   await page.getByRole('button', { name: '预览词条', exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('3,967');
+  await expect(page.getByRole('dialog')).toContainText('3967');
   await page.getByRole('button', { name: '应用修改', exact: true }).click();
   await expect(page.getByRole('dialog').locator('.artifact-level')).toHaveText('16');
-  await expect(page.getByRole('dialog')).toContainText('3,967');
+  await expect(page.getByRole('dialog')).toContainText('3967');
   await page.getByRole('dialog').getByText('来源与实物身份', { exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('id:8770563143816081');
   await page.keyboard.press('Escape');
@@ -166,9 +174,9 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   }
   await form.getByRole('button', { name: '预览词条', exact: true }).click();
   await expect(page.locator('.inventory-card')).toHaveCount(0);
-  await expect(form).toContainText('3,967');
+  await expect(form).toContainText('3967');
   await form.getByRole('button', { name: '确认入库', exact: true }).click();
   await expect(page.locator('.inventory-card')).toHaveCount(1);
-  await expect(page.locator('.inventory-card')).toContainText('3,967');
+  await expect(page.locator('.inventory-card')).toContainText('3967');
   expect(errors).toEqual([]);
 }

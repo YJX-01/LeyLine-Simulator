@@ -51,7 +51,7 @@ export const errorLabel = (message: string) => message.includes('JSON') ? '项�
 
 export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(message) ? message : '资料操作未完成，请检查文件或存储位置后重试。';
 
-export const realStatLabels: Record<string, string> = { hp: '生命值', hpPercent: '生命值加成', attack: '攻击力', attackPercent: '攻击力加成', defense: '防御力', defensePercent: '防御力加成', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '元素充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
+export const realStatLabels: Record<string, string> = { hp: '生命值', hpPercent: '生命值加成', attack: '攻击力', attackPercent: '攻击力加成', defense: '防御力', defensePercent: '防御力加成', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
 export const realStatLabel = (key: string) => lookup(realStatLabels, key, '未识别属性');
 export const realElementLabel = (key: string) => lookup({ physical: '物理', anemo: '风', geo: '岩', electro: '雷', hydro: '水', pyro: '火', cryo: '冰', dendro: '草' }, key, '未知元素');
 export const realCategoryLabel = (key: string) => lookup({ normal: '普通攻击', skill: '元素战技', burst: '元素爆发' }, key, '未知技能类型');

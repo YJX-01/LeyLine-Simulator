@@ -1,6 +1,6 @@
 import type { RealArtifact, RealStat } from '@leyline/schema';
 
-export const accountStatLabels: Record<RealStat, string> = { hp: '生命值', hpPercent: '生命值%', attack: '攻击力', attackPercent: '攻击力%', defense: '防御力', defensePercent: '防御力%', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '元素充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
+export const accountStatLabels: Record<RealStat, string> = { hp: '生命值', hpPercent: '生命值%', attack: '攻击力', attackPercent: '攻击力%', defense: '防御力', defensePercent: '防御力%', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
 export const ratioStat = (stat: RealStat) => !['hp', 'attack', 'defense', 'elementalMastery'].includes(stat);
 export const accountSubstats: RealStat[] = ['hp', 'hpPercent', 'attack', 'attackPercent', 'defense', 'defensePercent', 'critRate', 'critDamage', 'energyRecharge', 'elementalMastery'];
 const percentMain: RealStat[] = ['hpPercent', 'attackPercent', 'defensePercent', 'elementalMastery'];
