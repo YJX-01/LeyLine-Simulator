@@ -51,7 +51,7 @@ export function resolveRealBuild(input: unknown): RealPanel {
   const weapon = build.weapon;
   if (character.base.hp <= 0 || character.base.attack < 0 || character.base.defense < 0 || character.base.critRate < 0 || character.base.critDamage < 0 || weapon.baseAttack < 0 || weapon.baseStat < 0) report('invalid-input', '角色或武器基础属性不能为负值，基础生命必须大于零。');
   const validLevel = (level: number, ascension: number) => level >= minLevels[ascension] && level <= maxLevels[ascension];
-  if (!validLevel(build.level, build.ascension)) report('invalid-input', '角色等级与突破阶段不匹配。');
+  if (!(validLevel(build.level, build.ascension) || (build.ascension === 6 && (build.level === 95 || build.level === 100)))) report('invalid-input', '角色等级与突破阶段不匹配。');
   if (!validLevel(build.weaponLevel, build.weaponAscension) || build.weaponAscension >= weapon.promotion.length) report('invalid-input', '武器等级与突破阶段不匹配。');
   if (Object.values(build.talents).some(level => level > maxTalents[build.ascension])) report('invalid-input', '天赋等级超出角色突破阶段上限。');
   if (weapon.weaponType !== character.weaponType) report('invalid-input', '角色与武器类型不匹配。');
@@ -61,6 +61,7 @@ export function resolveRealBuild(input: unknown): RealPanel {
   const promotion = character.promotion[build.ascension];
   const weaponPromotion = weapon.promotion[build.weaponAscension];
   if (!promotion || weaponPromotion === undefined) { report('invalid-input', '成长或突破快照缺失。'); return finish(); }
+  if (['hp','attack','defense'].some(stat => !Number.isFinite(character.curves[stat as 'hp' | 'attack' | 'defense'][build.level]))) { report('invalid-input', '角色成长快照缺少该等级的数据。'); return finish(); }
   const baseHp = character.base.hp * character.curves.hp[build.level] + promotion.hp;
   const characterAttack = character.base.attack * character.curves.attack[build.level] + promotion.attack;
   const baseDefense = character.base.defense * character.curves.defense[build.level] + promotion.defense;

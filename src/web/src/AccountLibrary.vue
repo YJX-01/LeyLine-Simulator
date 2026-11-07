@@ -32,9 +32,9 @@ const artifactId = ref('');
 const equipmentSlot = ref<AccountSlot>('flower');
 const editingCharacter = ref(false);
 const detailOpen = ref(false);
-const panelOpen=ref(true);
+const panelOpen=ref(false);
 const detailMode=ref<'view'|'equipment'>('view');
-function openCharacter(id:string) { characterId.value=id; detailOpen.value=true;detailMode.value='view';panelOpen.value=true; }
+function openCharacter(id:string) { equipmentView.value='local'; characterId.value=id; detailOpen.value=true;detailMode.value='view';panelOpen.value=false; }
 function closeCharacter() { detailOpen.value=false; detailMode.value='view'; pending.value=undefined; }
 watch([()=>account.value.id,()=>props.page],()=>{detailOpen.value=false;modal.value='';pending.value=undefined;});
 const modal = ref<'import' | 'create' | 'equipment' | 'notes' | 'artifact' | 'repair' | 'network' | 'filters' | 'sort' | ''>('');
@@ -87,8 +87,8 @@ const filterGroups = computed(() => [
   { id:'equipment', title:'本地配装', options:equipmentOptions, selected:equipmentFilter.value },
 ]);
 const equipmentView=ref<'local'|'showcase'>('local');
-watch(()=>character.value?.id,() => { const entry=character.value; equipmentView.value=entry?.showcase&&!Object.keys(entry.equipment).length?'showcase':'local'; },{immediate:true});
-function showImportedCharacter(id:string) { query.value='';resetFilters();characterId.value=id;equipmentView.value=Object.keys(account.value.characters.find(item=>item.id===id)?.equipment??{}).length?'local':'showcase';modal.value='';detailMode.value='view';detailOpen.value=true; }
+watch(()=>character.value?.id,() => { equipmentView.value='local'; },{immediate:true});
+function showImportedCharacter(id:string) { query.value='';resetFilters();characterId.value=id;equipmentView.value='local';modal.value='';detailMode.value='view';panelOpen.value=false;detailOpen.value=true; }
 function equipmentItem(slot:AccountSlot) { return equipmentView.value==='showcase'&&character.value?showcaseArtifact(character.value,slot):account.value.artifacts.find(item=>item.id===character.value?.equipment[slot]); }
 
 const pending = ref<{ accountId: string; characterId: string; artifactId: string; message: string }>();
@@ -139,14 +139,14 @@ function confirmTransfer() {
       </div>
       <p v-if="!visibleCharacters.length" class="account-empty">{{ account.characters.length ? '没有符合条件的角色，请调整搜索或筛选。' : '还没有角色。使用上方的网络导入、莫娜 JSON 或手动添加建立自己的角色资料。' }}</p>
       <WorkbenchDialog v-if="modal === 'create'" :title="editingCharacter ? '编辑角色资料' : '添加账号角色'" @close="modal = ''"><CharacterForm :character="editingCharacter ? character : undefined" @saved="openCharacter($event)" @close="modal = ''" /></WorkbenchDialog>
-      <WorkbenchDialog class="character-detail-dialog" v-if="detailOpen && character" :title="`${character.name} · 角色详情`" @close="closeCharacter">
+      <WorkbenchDialog class="character-detail-dialog" v-if="detailOpen && character" :title="character.name" @close="closeCharacter">
+      <template #header-leading><div class="equipment-view-tabs"><button data-view="local" :aria-pressed="equipmentView==='local'" :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地配装</button><button v-if="character.showcase" data-view="showcase" :aria-pressed="equipmentView==='showcase'" :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜快照</button></div></template>
       <div class="account-editor">
         <div v-if="error" class="account-error" role="alert">{{ localDataErrorLabel(error) }}</div>
-        <div v-if="character.showcase" class="equipment-view-tabs"><button :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地配装</button><button :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜快照</button><span v-if="equipmentView==='showcase'">UID {{ character.showcase.uid }} · {{ new Date(character.showcase.fetchedAt).toLocaleDateString() }}</span></div>
-        <CharacterForm details :key="character.id" :character="character" @saved="characterId = $event; equipmentView = 'local'" />
-        <section class="detail-panel"><div class="inline-section-heading"><h3>角色面板</h3><button @click="panelOpen = !panelOpen">{{ panelOpen ? '收起面板' : '展开面板' }}</button></div><CharacterStats v-show="panelOpen" :character="character" :showcase="equipmentView === 'showcase'" /></section>
+
+        <CharacterForm details :key="`${character.id}-${equipmentView}`" :character="character" :showcase="equipmentView === 'showcase'" @saved="characterId = $event; equipmentView = 'local'" />
+        <section class="detail-panel"><div class="inline-section-heading"><h3>角色面板</h3><button class="ui-muted-button" :aria-expanded="panelOpen" @click="panelOpen = !panelOpen">{{ panelOpen ? '收起面板' : '展开面板' }}</button></div><CharacterStats v-if="panelOpen" :character="character" :showcase="equipmentView === 'showcase'" /></section>
         <section class="detail-artifacts"><div class="inline-section-heading"><h3>圣遗物</h3><button v-if="detailMode==='equipment'" @click="detailMode = 'view'">返回角色配装</button></div>
-        <p v-if="equipmentView==='showcase'" class="snapshot-note">展柜快照为独立记录；切换本地配装后可更换库存装备。</p>
         <section v-if="detailMode==='equipment'" class="inline-equipment"><h3>选择{{ accountSlotLabels[equipmentSlot] }}</h3><ArtifactBrowser inline pick :slot="equipmentSlot" :compare-to="account.artifacts.find(item => item.id === character?.equipment[equipmentSlot])" @select="artifactId = $event.id; equip(); detailMode = 'view'" /></section>
         <div v-else class="equipment-list"><article v-for="slot in accountSlots" :key="slot"><ArtifactSummary v-if="equipmentItem(slot)" :item="equipmentItem(slot)!" compact /><p v-else>{{ accountSlotLabels[slot] }} · 未装备</p><div v-if="equipmentView === 'local'" class="equipment-actions"><button :aria-label="`${character.equipment[slot] ? '更换' : '装备'}${accountSlotLabels[slot]}`" @click="equipmentSlot = slot; detailMode = 'equipment'">{{ character.equipment[slot] ? '更换' : '装备' }}</button><button v-if="character.equipment[slot]" @click="delete character.equipment[slot]">卸下</button></div></article></div>
         </section>
@@ -167,9 +167,9 @@ function confirmTransfer() {
 </template>
 
 <style scoped>
-.account-library .character-detail-dialog { width:min(1080px,calc(100vw - 40px)); }
+.account-library .character-detail-dialog { overflow-y:auto; scrollbar-gutter:stable both-edges; width:min(1000px,calc(100vw - 32px)); }
 .inline-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:16px 0; }.inline-section-heading h3 { margin:0; }
-.character-card-header { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; }.character-card-header > strong { font-size:14px; line-height:20px; }.character-card-status { display:flex; align-items:center; gap:6px; flex-shrink:0; }.character-card-status svg { width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
+.character-card-header { position:relative; display:grid; grid-template-columns:minmax(0,1fr) 104px minmax(0,1fr); align-items:center; gap:4px; width:100%; }.character-card-header > strong { grid-column:2; text-align:center; }.character-card-status { grid-column:3; justify-self:end; }.character-card-header > strong { font-size:16px; line-height:22px; }.character-card-status { display:flex; align-items:center; gap:6px; flex-shrink:0; }.character-card-status svg { width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
 .detail-panel { margin-top:16px; }.detail-panel :deep(.character-stats) { margin:0; padding:12px; border:1px solid var(--line); border-radius:10px; }.detail-panel :deep(.character-stats h3) { display:none; }.detail-artifacts { margin-top:18px; }
 .character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(308px,1fr)); gap:12px; margin:0; }
 .character-cards .character-card { display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; padding:10px 12px 12px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px #283a3605; transition:border-color .15s,box-shadow .15s,transform .15s; }
@@ -178,8 +178,8 @@ function confirmTransfer() {
 
 
 
-.character-card-state { padding:1px 5px; font-size:11px; line-height:18px; border-radius:4px; background:var(--element-anemo-light); color:var(--element-anemo-deep); }
-.character-card-state.showcase { background:var(--element-hydro-light); color:var(--element-hydro-deep); }.character-card-state.pending { background:var(--element-geo-light); color:var(--element-geo-deep); }
+.character-card-state { padding:1px 5px; font-size:11px; line-height:18px; border-radius:4px; background:var(--element-hydro-light); color:var(--element-hydro-deep); }
+.character-card-state.showcase { background:var(--element-electro-light); color:var(--element-electro-deep); }.character-card-state.pending { background:var(--element-geo-light); color:var(--element-geo-deep); }
 @media(prefers-reduced-motion:reduce){.character-cards .character-card { transition:none; }.character-cards .character-card:hover { transform:none; }}
 @media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:10px 12px 12px; }}
 
@@ -206,4 +206,17 @@ h2 { margin-top:7px; }.equipment-list article { background:linear-gradient(145de
 .filter-options button { display:inline-flex; align-items:center; gap:6px; }
 .character-filter-panel section + section { margin-top:20px; }
 @media(max-width:550px) { .element-shortcuts { gap:4px; }.element-shortcuts > button { padding:4px 6px; } }
+.character-detail-dialog :deep(header) { display:grid; grid-template-columns:1fr auto 1fr; padding:12px 20px; }
+.character-detail-dialog :deep(header h2) { grid-column:2; grid-row:1; text-align:center; font-size:24px; }
+.character-detail-dialog :deep(header > button) { grid-column:3; grid-row:1; justify-self:end; color:var(--element-pyro-deep); background:var(--element-pyro-light); border-color:transparent; font-size:15px; }
+.character-detail-dialog :deep(.dialog-content) { padding:16px 20px 20px; font-size:16px; }
+.character-detail-dialog .equipment-view-tabs { grid-column:1; grid-row:1; justify-content:flex-start; margin:0; gap:8px; }
+.character-detail-dialog .equipment-view-tabs button { font-size:15px; padding:7px 12px; }
+.character-detail-dialog .equipment-view-tabs button[data-view=local].active { color:var(--element-hydro-deep); background:var(--element-hydro-light); border-color:var(--element-hydro-primary); }
+.character-detail-dialog .equipment-view-tabs button[data-view=showcase].active { color:var(--element-electro-deep); background:var(--element-electro-light); border-color:var(--element-electro-primary); }
+.character-detail-dialog .detail-panel,.character-detail-dialog .detail-artifacts { padding:0; background:transparent; margin-top:14px; }.character-detail-dialog .inline-section-heading { margin:8px 0 12px; padding-bottom:10px; border-bottom:1px solid var(--line); }
+.character-detail-dialog .inline-section-heading h3 { font-size:17px; }
+.character-detail-dialog .inline-section-heading button { font-size:15px; }
+.character-detail-dialog .equipment-list article { padding:12px; min-width:0; }
+@media(max-width:550px) { .character-detail-dialog .equipment-view-tabs { grid-column:1/-1; grid-row:2; }.character-detail-dialog :deep(header) { row-gap:10px; }.character-card-header { grid-template-columns:minmax(0,1fr) 96px minmax(0,1fr); }.character-detail-dialog :deep(.dialog-content) { padding:12px; }.character-detail-dialog :deep(header) { padding:12px; }.character-detail-dialog :deep(header > button) { padding:6px; } }
 </style>

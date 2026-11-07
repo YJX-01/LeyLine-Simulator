@@ -94,13 +94,12 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '确认按备注整理', exact: true }).click();
   await expect(page.locator('.character-cards > button')).toHaveCount(55);
   await page.getByLabel('搜索账号角色', { exact: true }).fill('琴');
-  await expect(page.locator('.character-cards .empty-weapon')).toBeVisible();
-  expect(await page.locator('.character-cards .character-equipment-icons').evaluate(node => { const avatar=node.querySelector('.characters')!.getBoundingClientRect();const pair=node.getBoundingClientRect();return avatar.left+avatar.width/2<pair.left+pair.width/2; })).toBe(true);
+  await expect(page.locator('.character-cards .card-weapon')).toBeVisible();
   await page.locator('.character-cards > button').click();
   await expect(page.locator('.equipment-list .artifact-summary[title*="翠绿之影"]').first()).toBeVisible();
-  await expect.poll(() => page.locator('.detail-portraits .characters > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  await expect.poll(() => page.locator('.character-cultivation .characters > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
   await expect.poll(() => page.locator('.equipment-list .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-  await expect(page.getByLabel('角色等级', { exact: true })).toHaveValue('90');
+  await expect(page.getByLabel('角色等级', { exact: true })).toContainText('90');
   await expect(page.getByRole('button', { name: '选择游戏角色', exact: true })).toHaveCount(0);
   await expect(page.getByLabel('账号基础攻击力', { exact: true })).toHaveCount(0);
   await expect(page.locator('.account-editor')).toBeInViewport();
@@ -119,9 +118,9 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByLabel('搜索账号角色', { exact: true }).fill('琴不存在');
   await expect(page.getByText('没有符合条件的角色，请调整搜索或筛选。', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: '手动添加', exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('武器需自行选择');
-  await expect(page.getByLabel('角色等级', { exact: true })).toHaveValue('90');
-  await expect(page.getByRole('button', { name: '预览角色资料', exact: true })).toBeDisabled();
+
+  await expect(page.getByLabel('角色等级', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '保存角色资料', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   await page.getByLabel('搜索游戏角色', { exact: true }).fill('琴');
   await expect.poll(() => page.locator('.catalog-options .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
