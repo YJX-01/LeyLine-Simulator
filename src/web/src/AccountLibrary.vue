@@ -15,7 +15,7 @@ import { organizeMonaWearNotes } from './domain/mona-wear-notes';
 import CharacterForm from './CharacterForm.vue';
 import CharacterStats from './CharacterStats.vue';
 import ArtifactForm from './ArtifactForm.vue';
-import CharacterEquipmentIcons from './components/CharacterEquipmentIcons.vue';
+import CharacterCardPortraits from './components/CharacterCardPortraits.vue';
 import ArtifactSummary from './ArtifactSummary.vue';
 const EnkaImport = defineAsyncComponent(() => import('./EnkaImport.vue'));
 const MonaImport = defineAsyncComponent(() => import('./MonaImport.vue'));
@@ -111,9 +111,7 @@ function confirmTransfer() {
       <div class="character-cards">
         <button v-for="entry in visibleCharacters" :key="entry.id" class="character-card" :class="{ selected: characterId === entry.id }" :aria-label="`查看${entry.name}详情`" @click="openCharacter(entry.id)">
           <span class="character-card-header"><strong>{{ entry.name }}</strong><span class="character-card-status"><span class="character-card-state" :class="{pending:!entry.realBuild,showcase:entry.showcase && !Object.keys(entry.equipment).length}">{{ !entry.realBuild ? '待补全' : entry.showcase && !Object.keys(entry.equipment).length ? '展柜' : `配装 ${Object.keys(entry.equipment).length}/5` }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5H5v14h14v-3M13 5h6v6m0-6-9 9"/></svg></span></span>
-          <CharacterEquipmentIcons :build="entry.realBuild" :name="entry.name" :size="80" />
-          <span class="character-card-levels"><span>Lv.{{ entry.realBuild?.level ?? '—' }}</span><span>Lv.{{ entry.realBuild?.weaponLevel ?? '—' }}</span></span>
-          <span class="character-card-talents"><span>A <b>{{ entry.realBuild?.talents.normal ?? '—' }}</b></span><span>E <b>{{ entry.realBuild?.talents.skill ?? '—' }}</b></span><span>Q <b>{{ entry.realBuild?.talents.burst ?? '—' }}</b></span></span>
+          <CharacterCardPortraits :build="entry.realBuild" :name="entry.name" />
         </button>
       </div>
       <p v-if="!visibleCharacters.length" class="account-empty">{{ account.characters.length ? '没有符合条件的角色，请调整搜索或筛选。' : '还没有角色。使用上方的网络导入、莫娜 JSON 或手动添加建立自己的角色资料。' }}</p>
@@ -148,22 +146,19 @@ function confirmTransfer() {
 <style scoped>
 .account-library .character-detail-dialog { width:min(1080px,calc(100vw - 40px)); }
 .inline-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:16px 0; }.inline-section-heading h3 { margin:0; }
-.character-card-header { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; }.character-card-header > strong { font-size:15px; }.character-card-status { display:flex; align-items:center; gap:8px; flex-shrink:0; }.character-card-status svg { width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
-.character-card-levels { display:grid; grid-template-columns:80px 60px; gap:12px; padding-inline:2px; align-self:center; color:var(--muted); font-size:12px; text-align:center; font-variant-numeric:tabular-nums; }
-.character-card-talents { display:flex; justify-content:space-evenly; gap:12px; width:100%; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }.character-card-talents b { color:var(--ink); margin-left:4px; font-weight:600; }
+.character-card-header { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; }.character-card-header > strong { font-size:14px; line-height:20px; }.character-card-status { display:flex; align-items:center; gap:6px; flex-shrink:0; }.character-card-status svg { width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
 .detail-panel { margin-top:16px; }.detail-panel :deep(.character-stats) { margin:0; padding:12px; border:1px solid var(--line); border-radius:10px; }.detail-panel :deep(.character-stats h3) { display:none; }.detail-artifacts { margin-top:18px; }
-.character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; margin:0; }
-.character-cards .character-card { display:flex; flex-direction:column; align-items:flex-start; gap:12px; min-width:0; padding:22px 20px 16px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px #283a3605; transition:border-color .15s,box-shadow .15s,transform .15s; }
-.character-card > .character-equipment-icons { align-self:center; margin:4px 0 0; }
+.character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(308px,1fr)); gap:12px; margin:0; }
+.character-cards .character-card { display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; padding:10px 12px 12px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px #283a3605; transition:border-color .15s,box-shadow .15s,transform .15s; }
 .character-cards .character-card:hover { transform:translateY(-2px); border-color:var(--element-anemo-primary); box-shadow:0 8px 24px #283a3610; }
-.character-cards .character-card.selected { border-color:var(--element-anemo-primary); }
 
 
 
-.character-card-state { padding:4px 7px; border-radius:6px; background:var(--element-anemo-light); color:var(--element-anemo-deep); }
+
+.character-card-state { padding:1px 5px; font-size:11px; line-height:18px; border-radius:4px; background:var(--element-anemo-light); color:var(--element-anemo-deep); }
 .character-card-state.showcase { background:var(--element-hydro-light); color:var(--element-hydro-deep); }.character-card-state.pending { background:var(--element-geo-light); color:var(--element-geo-deep); }
 @media(prefers-reduced-motion:reduce){.character-cards .character-card { transition:none; }.character-cards .character-card:hover { transform:none; }}
-@media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:18px; }}
+@media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:10px 12px 12px; }}
 
 .account-empty { padding:40px 20px; border:1px dashed var(--line); border-radius:12px; text-align:center; }.legacy-inventory { margin-top:24px; }.account-library { margin: 0 30px; color: var(--text, var(--ink)); }
 .account-toolbar { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }

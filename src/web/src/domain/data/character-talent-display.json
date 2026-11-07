@@ -1,0 +1,3484 @@
+{
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "method": "ChineseSimplified talents combat1–3 names matched against constellation descriptions containing 技能等级提高3级"
+  },
+  "characters": {
+    "爱诺": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "aino-combat1",
+        "name": "敲打修理法",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "aino-combat2",
+        "name": "妙思捕手",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "aino-combat3",
+        "name": "精密水冷仪",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "阿贝多": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "albedo-combat1",
+        "name": "西风剑术·白",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "albedo-combat2",
+        "name": "创生法·拟造阳华",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "albedo-combat3",
+        "name": "诞生式·大地之潮",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "艾尔海森": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "alhaitham-combat1",
+        "name": "溯因反绎法",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "alhaitham-combat2",
+        "name": "共相·理式摹写",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "alhaitham-combat3",
+        "name": "殊境·显象缚结",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "埃洛伊": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "aloy-combat1",
+        "name": "快速射击",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "aloy-combat2",
+        "name": "冰尘雪野",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "aloy-combat3",
+        "name": "曙光预言",
+        "constellations": []
+      }
+    ],
+    "阿罗夏": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "alyosha-combat1",
+        "name": "角枪驰弋",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "alyosha-combat2",
+        "name": "伏袭霆击",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "alyosha-combat3",
+        "name": "守猎进踞",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "安柏": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "amber-combat1",
+        "name": "神射手",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "amber-combat2",
+        "name": "爆弹玩偶",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "amber-combat3",
+        "name": "箭雨",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "荒泷一斗": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "aratakiitto-combat1",
+        "name": "喧哗屋传说",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "aratakiitto-combat2",
+        "name": "魔杀绝技·赤牛发破！",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "aratakiitto-combat3",
+        "name": "最恶鬼王·一斗轰临！！",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "阿蕾奇诺": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "arlecchino-combat1",
+        "name": "斩首之邀",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "arlecchino-combat2",
+        "name": "万相化灰",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "arlecchino-combat3",
+        "name": "厄月将升",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "白术": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "baizhu-combat1",
+        "name": "金匮针解",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "baizhu-combat2",
+        "name": "太素诊要",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "baizhu-combat3",
+        "name": "愈气全形论",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "芭芭拉": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "barbara-combat1",
+        "name": "水之浅唱",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "barbara-combat2",
+        "name": "演唱，开始♪",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "barbara-combat3",
+        "name": "闪耀奇迹♪",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "北斗": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "beidou-combat1",
+        "name": "征涛",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "beidou-combat2",
+        "name": "捉浪",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "beidou-combat3",
+        "name": "斫雷",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "班尼特": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "bennett-combat1",
+        "name": "好运剑",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "bennett-combat2",
+        "name": "热情过载",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "bennett-combat3",
+        "name": "美妙旅程",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "坎蒂丝": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "candace-combat1",
+        "name": "流耀枪术·守势",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "candace-combat2",
+        "name": "圣仪·苍鹭庇卫",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "candace-combat3",
+        "name": "圣仪·灰鸰衒潮",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "夏洛蒂": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "charlotte-combat1",
+        "name": "冷色摄影律",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "charlotte-combat2",
+        "name": "取景·冰点构图法",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "charlotte-combat3",
+        "name": "定格·全方位确证",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "恰斯卡": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "chasca-combat1",
+        "name": "迷羽流击",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "chasca-combat2",
+        "name": "灵缰追影",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "chasca-combat3",
+        "name": "索魂命袭",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "夏沃蕾": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "chevreuse-combat1",
+        "name": "线列枪刺·改",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "chevreuse-combat2",
+        "name": "近迫式急促拦射",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "chevreuse-combat3",
+        "name": "圆阵掷弹爆轰术",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "千织": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "chiori-combat1",
+        "name": "心织刀流",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "chiori-combat2",
+        "name": "羽袖一触",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "chiori-combat3",
+        "name": "二刀之形·比翼",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "重云": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "chongyun-combat1",
+        "name": "灭邪四式",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "chongyun-combat2",
+        "name": "灵刃·重华叠霜",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "chongyun-combat3",
+        "name": "灵刃·云开星落",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "茜特菈莉": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "citlali-combat1",
+        "name": "宿灵捕影",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "citlali-combat2",
+        "name": "霜昼黑星",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "citlali-combat3",
+        "name": "诸曜饬令",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "克洛琳德": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "clorinde-combat1",
+        "name": "逐影之誓",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "clorinde-combat2",
+        "name": "狩夜之巡",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "clorinde-combat3",
+        "name": "残光将终",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "柯莱": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "collei-combat1",
+        "name": "祈颂射艺",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "collei-combat2",
+        "name": "拂花偈叶",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "collei-combat3",
+        "name": "猫猫秘宝",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "哥伦比娅": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "columbina-combat1",
+        "name": "月露泼降",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "columbina-combat2",
+        "name": "万古潮汐",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "columbina-combat3",
+        "name": "她的乡愁",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "赛诺": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "cyno-combat1",
+        "name": "七圣枪术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "cyno-combat2",
+        "name": "秘仪·律渊渡魂",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "cyno-combat3",
+        "name": "圣仪·煟煌随狼行",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "塔利雅": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "dahlia-combat1",
+        "name": "西风剑术·祭仪",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "dahlia-combat2",
+        "name": "圣浸的礼典",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "dahlia-combat3",
+        "name": "纯耀的祷咏",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "迪希雅": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "dehya-combat1",
+        "name": "拂金剑斗术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "dehya-combat2",
+        "name": "熔铁流狱",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "dehya-combat3",
+        "name": "炎啸狮子咬",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "迪卢克": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "diluc-combat1",
+        "name": "淬炼之剑",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "diluc-combat2",
+        "name": "逆焰之刃",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "diluc-combat3",
+        "name": "黎明",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "迪奥娜": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "diona-combat1",
+        "name": "猎人射术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "diona-combat2",
+        "name": "猫爪冻冻",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "diona-combat3",
+        "name": "最烈特调",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "多莉": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "dori-combat1",
+        "name": "妙显剑舞·改",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "dori-combat2",
+        "name": "镇灵之灯·烦恼解决炮",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "dori-combat3",
+        "name": "卡萨扎莱宫的无微不至",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "杜林": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "durin-combat1",
+        "name": "芒焰之翼斩",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "durin-combat2",
+        "name": "二元式·聚分熔炼",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "durin-combat3",
+        "name": "白化法·如光流变",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "艾梅莉埃": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "emilie-combat1",
+        "name": "逐影枪术·改",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "emilie-combat2",
+        "name": "撷萃调香",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "emilie-combat3",
+        "name": "香氛演绎",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "爱可菲": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "escoffier-combat1",
+        "name": "后厨手艺",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "escoffier-combat2",
+        "name": "低温烹饪",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "escoffier-combat3",
+        "name": "花刀技法",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "优菈": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "eula-combat1",
+        "name": "西风剑术·宗室",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "eula-combat2",
+        "name": "冰潮的涡旋",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "eula-combat3",
+        "name": "凝浪之光剑",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "珐露珊": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "faruzan-combat1",
+        "name": "迴身箭术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "faruzan-combat2",
+        "name": "非想风天",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "faruzan-combat3",
+        "name": "抟风秘道",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "菲谢尔": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "fischl-combat1",
+        "name": "罪灭之矢",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "fischl-combat2",
+        "name": "夜巡影翼",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "fischl-combat3",
+        "name": "至夜幻现",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "菲林斯": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "flins-combat1",
+        "name": "扈圣魔枪",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "flins-combat2",
+        "name": "古律·孤灯遗秘",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "flins-combat3",
+        "name": "旧仪·夜客致访",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "菲米尼": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "freminet-combat1",
+        "name": "洑流剑",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "freminet-combat2",
+        "name": "浮冰增压",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "freminet-combat3",
+        "name": "猎影潜袭",
+        "constellations": []
+      }
+    ],
+    "芙宁娜": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "furina-combat1",
+        "name": "独舞之邀",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "furina-combat2",
+        "name": "孤心沙龙",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "furina-combat3",
+        "name": "万众狂欢",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "嘉明": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "gaming-combat1",
+        "name": "刃爪悬星",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "gaming-combat2",
+        "name": "瑞兽登高楼",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "gaming-combat3",
+        "name": "璨焰金猊舞",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "甘雨": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "ganyu-combat1",
+        "name": "流天射术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "ganyu-combat2",
+        "name": "山泽麟迹",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "ganyu-combat3",
+        "name": "降众天华",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "五郎": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "gorou-combat1",
+        "name": "呲牙裂扇箭",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "gorou-combat2",
+        "name": "犬坂吠吠方圆阵",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "gorou-combat3",
+        "name": "兽牙逐突形胜战法",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "胡桃": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "hutao-combat1",
+        "name": "往生秘传枪法",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "hutao-combat2",
+        "name": "蝶引来生",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "hutao-combat3",
+        "name": "安神秘法",
+        "constellations": []
+      }
+    ],
+    "伊安珊": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "iansan-combat1",
+        "name": "负重锥击",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "iansan-combat2",
+        "name": "电掣雷驰",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "iansan-combat3",
+        "name": "力的三原理",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "伊法": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "ifa-combat1",
+        "name": "祛风妙仪",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "ifa-combat2",
+        "name": "空天疾护",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "ifa-combat3",
+        "name": "复合镇静域",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "叶洛亚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "illuga-combat1",
+        "name": "守誓枪术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "illuga-combat2",
+        "name": "衔莺破晓",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "illuga-combat3",
+        "name": "鉴照无影",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "伊涅芙": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "ineffa-combat1",
+        "name": "除尘旋刃",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "ineffa-combat2",
+        "name": "涤净模式·稳态载频",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "ineffa-combat3",
+        "name": "至高律令·全域扫灭",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "雅珂达": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "jahoda-combat1",
+        "name": "见机行矢",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "jahoda-combat2",
+        "name": "奇策·财富分配方案",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "jahoda-combat3",
+        "name": "秘器·猎人的七道具",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "琴": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "jean-combat1",
+        "name": "西风剑术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "jean-combat2",
+        "name": "风压剑",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "jean-combat3",
+        "name": "蒲公英之风",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "卡齐娜": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kachina-combat1",
+        "name": "嵴之啮咬",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kachina-combat2",
+        "name": "出击，冲天转转！",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kachina-combat3",
+        "name": "现在，认真时间！",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "枫原万叶": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kaedeharakazuha-combat1",
+        "name": "我流剑术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kaedeharakazuha-combat2",
+        "name": "千早振",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kaedeharakazuha-combat3",
+        "name": "万叶之一刀",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "凯亚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kaeya-combat1",
+        "name": "仪典剑术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kaeya-combat2",
+        "name": "霜袭",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kaeya-combat3",
+        "name": "凛冽轮舞",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "神里绫华": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kamisatoayaka-combat1",
+        "name": "神里流·倾",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kamisatoayaka-combat2",
+        "name": "神里流·冰华",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kamisatoayaka-combat3",
+        "name": "神里流·霜灭",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "神里绫人": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kamisatoayato-combat1",
+        "name": "神里流·转",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kamisatoayato-combat2",
+        "name": "神里流·镜花",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kamisatoayato-combat3",
+        "name": "神里流·水囿",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "卡维": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kaveh-combat1",
+        "name": "旋规设矩",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kaveh-combat2",
+        "name": "画则巧施",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kaveh-combat3",
+        "name": "繁绘隅穹",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "刻晴": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "keqing-combat1",
+        "name": "云来剑法",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "keqing-combat2",
+        "name": "星斗归位",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "keqing-combat3",
+        "name": "天街巡游",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "基尼奇": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kinich-combat1",
+        "name": "夜阳斗技",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kinich-combat2",
+        "name": "悬猎·游骋高狩",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kinich-combat3",
+        "name": "向伟大圣龙致意",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "绮良良": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kirara-combat1",
+        "name": "箱纸切削术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kirara-combat2",
+        "name": "呜喵町飞足",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kirara-combat3",
+        "name": "秘法·惊喜特派",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "可莉": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "klee-combat1",
+        "name": "砰砰",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "klee-combat2",
+        "name": "蹦蹦炸弹",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "klee-combat3",
+        "name": "轰轰火花",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "九条裟罗": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kujousara-combat1",
+        "name": "天狗传弓术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kujousara-combat2",
+        "name": "鸦羽天狗霆雷召咒",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kujousara-combat3",
+        "name": "煌煌千道镇式",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "久岐忍": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "kukishinobu-combat1",
+        "name": "忍流飞刃斩",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "kukishinobu-combat2",
+        "name": "越祓雷草之轮",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "kukishinobu-combat3",
+        "name": "御咏鸣神刈山祭",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "蓝砚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "lanyan-combat1",
+        "name": "玄鸾画水",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "lanyan-combat2",
+        "name": "凤缕随翦舞",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "lanyan-combat3",
+        "name": "鹍弦踏月出",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "菈乌玛": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "lauma-combat1",
+        "name": "林麓旅踏",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "lauma-combat2",
+        "name": "圣言述咏·终宵永眠",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "lauma-combat3",
+        "name": "圣言述咏·众心为月",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "莱依拉": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "layla-combat1",
+        "name": "熠辉轨度剑",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "layla-combat2",
+        "name": "垂裳端凝之夜",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "layla-combat3",
+        "name": "星流摇床之梦",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "莉奈娅": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "linnea-combat1",
+        "name": "捕获方案",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "linnea-combat2",
+        "name": "对策·露米呀吼吼！",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "linnea-combat3",
+        "name": "备忘·绝境生存指南",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "丽莎": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "lisa-combat1",
+        "name": "指尖雷暴",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "lisa-combat2",
+        "name": "苍雷",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "lisa-combat3",
+        "name": "蔷薇的雷光",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "洛恩": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "lohen-combat1",
+        "name": "西风枪术·破誓",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "lohen-combat2",
+        "name": "奇兵诡出",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "lohen-combat3",
+        "name": "裁罚遂成",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "琳妮特": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "lynette-combat1",
+        "name": "迅捷礼刺剑",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "lynette-combat2",
+        "name": "谜影障身法",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "lynette-combat3",
+        "name": "魔术·运变惊奇",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "林尼": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "lyney-combat1",
+        "name": "迫牌易位式",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "lyney-combat2",
+        "name": "眩惑光戏法",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "lyney-combat3",
+        "name": "大魔术·灵迹巡游",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "玛薇卡": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "mavuika-combat1",
+        "name": "以火织命",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "mavuika-combat2",
+        "name": "称名之刻",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "mavuika-combat3",
+        "name": "燔天之时",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "米卡": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "mika-combat1",
+        "name": "西风枪术·镝传",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "mika-combat2",
+        "name": "星霜的流旋",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "mika-combat3",
+        "name": "苍翎的颂愿",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "米提亚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "mitya-combat1",
+        "name": "链式反应",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "mitya-combat2",
+        "name": "律定·变量侦测",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "mitya-combat3",
+        "name": "解析·递变之理",
+        "constellations": []
+      }
+    ],
+    "莫娜": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "mona-combat1",
+        "name": "因果点破",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "mona-combat2",
+        "name": "水中幻愿",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "mona-combat3",
+        "name": "星命定轨",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "玛拉妮": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "mualani-combat1",
+        "name": "降温处理",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "mualani-combat2",
+        "name": "踏鲨破浪",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "mualani-combat3",
+        "name": "爆瀑飞弹",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "纳西妲": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "nahida-combat1",
+        "name": "行相",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "nahida-combat2",
+        "name": "所闻遍计",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "nahida-combat3",
+        "name": "心景幻成",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "娜维娅": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "navia-combat1",
+        "name": "直率的辞绝",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "navia-combat2",
+        "name": "典仪式晶火",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "navia-combat3",
+        "name": "如霰澄天的鸣礼",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "奈芙尔": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "nefer-combat1",
+        "name": "游虵吐信",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "nefer-combat2",
+        "name": "弈术·千夜一舞",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "nefer-combat3",
+        "name": "圣约·真眸幻戏",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "那维莱特": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "neuvillette-combat1",
+        "name": "如水从平",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "neuvillette-combat2",
+        "name": "泪水啊，我必偿还",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "neuvillette-combat3",
+        "name": "潮水啊，我已归来",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "尼可": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "nicole-combat1",
+        "name": "托喻",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "nicole-combat2",
+        "name": "圣言默示·未现之光",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "nicole-combat3",
+        "name": "圣言默示·天路历程",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "妮露": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "nilou-combat1",
+        "name": "弦月舞步",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "nilou-combat2",
+        "name": "七域舞步",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "nilou-combat3",
+        "name": "浮莲舞步·远梦聆泉",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "凝光": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "ningguang-combat1",
+        "name": "千金掷",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "ningguang-combat2",
+        "name": "璇玑屏",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "ningguang-combat3",
+        "name": "天权崩玉",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "诺艾尔": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "noelle-combat1",
+        "name": "西风剑术·女仆",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "noelle-combat2",
+        "name": "护心铠",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "noelle-combat3",
+        "name": "大扫除",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "奥黛塔": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "odette-combat1",
+        "name": "雪鹄变奏",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "odette-combat2",
+        "name": "柔板·幻灵夜舞",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "odette-combat3",
+        "name": "疾板·苍羽一梦",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "欧洛伦": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "ororon-combat1",
+        "name": "宿灵闪箭",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "ororon-combat2",
+        "name": "暝色缒索",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "ororon-combat3",
+        "name": "黯声回响",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "布伦妮": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "prune-combat1",
+        "name": "隆咚咚·破魔之锤",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "prune-combat2",
+        "name": "叮铃铃·猎魔之音",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "prune-combat3",
+        "name": "铃鸣·狩魔之刻",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "七七": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "qiqi-combat1",
+        "name": "云来古剑法",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "qiqi-combat2",
+        "name": "仙法·寒病鬼差",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "qiqi-combat3",
+        "name": "仙法·救苦度厄",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "雷电将军": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "raidenshogun-combat1",
+        "name": "源流",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "raidenshogun-combat2",
+        "name": "神变·恶曜开眼",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "raidenshogun-combat3",
+        "name": "奥义·梦想真说",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "雷泽": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "razor-combat1",
+        "name": "钢脊",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "razor-combat2",
+        "name": "利爪与苍雷",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "razor-combat3",
+        "name": "雷牙",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "罗莎莉亚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "rosaria-combat1",
+        "name": "教会枪术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "rosaria-combat2",
+        "name": "噬罪的告解",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "rosaria-combat3",
+        "name": "终命的圣礼",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "桑多涅": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "sandrone-combat1",
+        "name": "事象数式·自明演绎",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "sandrone-combat2",
+        "name": "事象数式·游衍解析",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "sandrone-combat3",
+        "name": "事象数式·万理证毕",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "珊瑚宫心海": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "sangonomiyakokomi-combat1",
+        "name": "水有常形",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "sangonomiyakokomi-combat2",
+        "name": "海月之誓",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "sangonomiyakokomi-combat3",
+        "name": "海人化羽",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "早柚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "sayu-combat1",
+        "name": "忍刀·终末番",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "sayu-combat2",
+        "name": "呜呼流·风隐急进",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "sayu-combat3",
+        "name": "呜呼流·影貉缭乱",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "赛索斯": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "sethos-combat1",
+        "name": "王家苇箭术",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "sethos-combat2",
+        "name": "古仪·鸣砂掣雷",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "sethos-combat3",
+        "name": "秘仪·瞑光贯影",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "申鹤": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "shenhe-combat1",
+        "name": "踏辰摄斗",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "shenhe-combat2",
+        "name": "仰灵威召将役咒",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "shenhe-combat3",
+        "name": "神女遣灵真诀",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "鹿野院平藏": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "shikanoinheizou-combat1",
+        "name": "不动流格斗术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "shikanoinheizou-combat2",
+        "name": "勠心拳",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "shikanoinheizou-combat3",
+        "name": "聚风蹴",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "希格雯": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "sigewinne-combat1",
+        "name": "靶向治疗",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "sigewinne-combat2",
+        "name": "弹跳水疗法",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "sigewinne-combat3",
+        "name": "过饱和心意注射",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "丝柯克": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "skirk-combat1",
+        "name": "极恶技·断",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "skirk-combat2",
+        "name": "极恶技·闪",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "skirk-combat3",
+        "name": "极恶技·灭",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "砂糖": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "sucrose-combat1",
+        "name": "简式风灵作成",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "sucrose-combat2",
+        "name": "风灵作成·陆叁零捌",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "sucrose-combat3",
+        "name": "禁·风灵作成·柒伍同构贰型",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "达达利亚": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "tartaglia-combat1",
+        "name": "断雨",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "tartaglia-combat2",
+        "name": "魔王武装·狂澜",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "tartaglia-combat3",
+        "name": "极恶技·尽灭闪",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "托马": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "thoma-combat1",
+        "name": "迅破枪势",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "thoma-combat2",
+        "name": "烈烧佑命之侍护",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "thoma-combat3",
+        "name": "真红炽火之大铠",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "提纳里": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "tighnari-combat1",
+        "name": "藏蕴破障",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "tighnari-combat2",
+        "name": "识果种雷",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "tighnari-combat3",
+        "name": "造生缠藤箭",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "旅行者 (风元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "traveleranemo-combat1",
+        "name": "异邦铁风",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "traveleranemo-combat2",
+        "name": "风涡剑",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "traveleranemo-combat3",
+        "name": "风息激荡",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "旅行者 (冰元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "travelercryo-combat1",
+        "name": "异邦寒芒",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "travelercryo-combat2",
+        "name": "冰雾剑",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "travelercryo-combat3",
+        "name": "聚冰成锋",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "旅行者 (草元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "travelerdendro-combat1",
+        "name": "异邦草翦",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "travelerdendro-combat2",
+        "name": "草缘剑",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "travelerdendro-combat3",
+        "name": "偃草若化",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "旅行者 (雷元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "travelerelectro-combat1",
+        "name": "异邦惊雷",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "travelerelectro-combat2",
+        "name": "雷影剑",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "travelerelectro-combat3",
+        "name": "雷轰电转",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "旅行者 (岩元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "travelergeo-combat1",
+        "name": "异邦岩锋",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "travelergeo-combat2",
+        "name": "星陨剑",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "travelergeo-combat3",
+        "name": "岩潮叠嶂",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "旅行者 (水元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "travelerhydro-combat1",
+        "name": "异邦激流",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "travelerhydro-combat2",
+        "name": "水纹剑",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "travelerhydro-combat3",
+        "name": "扬水制流",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "旅行者 (火元素)": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "travelerpyro-combat1",
+        "name": "异邦烈焰",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "travelerpyro-combat2",
+        "name": "流火剑",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "travelerpyro-combat3",
+        "name": "灼火燎原",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "瓦列里": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "valeriy-combat1",
+        "name": "近卫战法·盾剑攻斥",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "valeriy-combat2",
+        "name": "攻势防御·堡垒骤进",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "valeriy-combat3",
+        "name": "火力焦点·雷霰急袭",
+        "constellations": []
+      }
+    ],
+    "瓦雷莎": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "varesa-combat1",
+        "name": "角力搏摔",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "varesa-combat2",
+        "name": "夜虹逐跃",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "varesa-combat3",
+        "name": "闪烈降临！",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "法尔伽": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "varka-combat1",
+        "name": "西风剑术·流光之舞",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "varka-combat2",
+        "name": "烈风终坠",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "varka-combat3",
+        "name": "我即朔风",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "温迪": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "venti-combat1",
+        "name": "神代射术",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "venti-combat2",
+        "name": "高天之歌",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "venti-combat3",
+        "name": "风神之诗",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "薇斯纳": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "vesna-combat1",
+        "name": "巡风剑舞",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "vesna-combat2",
+        "name": "操典·制胜有道",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "vesna-combat3",
+        "name": "致礼·献予女皇陛下",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "沃雅妮莎": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "vodyanitsa-combat1",
+        "name": "水色咏叹",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "vodyanitsa-combat2",
+        "name": "宣叙·晨声纷流",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "vodyanitsa-combat3",
+        "name": "终奏·伴尔沉沦",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "流浪者": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "wanderer-combat1",
+        "name": "行幡鸣弦",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "wanderer-combat2",
+        "name": "羽画·风姿华歌",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "wanderer-combat3",
+        "name": "狂言·式乐五番",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "莱欧斯利": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "wriothesley-combat1",
+        "name": "迅烈倾霜拳",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "wriothesley-combat2",
+        "name": "冰牙突驰",
+        "constellations": []
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "wriothesley-combat3",
+        "name": "黑金狼噬",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "香菱": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "xiangling-combat1",
+        "name": "白案功夫",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "xiangling-combat2",
+        "name": "锅巴出击",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "xiangling-combat3",
+        "name": "旋火轮",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "闲云": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "xianyun-combat1",
+        "name": "清风散花词",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "xianyun-combat2",
+        "name": "朝起鹤云",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "xianyun-combat3",
+        "name": "暮集竹星",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "魈": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "xiao-combat1",
+        "name": "卷积微尘",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "xiao-combat2",
+        "name": "风轮两立",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "xiao-combat3",
+        "name": "靖妖傩舞",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "希诺宁": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "xilonen-combat1",
+        "name": "锐锋攫猎",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "xilonen-combat2",
+        "name": "音火锻淬",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "xilonen-combat3",
+        "name": "豹烈律动！",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "行秋": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "xingqiu-combat1",
+        "name": "古华剑法",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "xingqiu-combat2",
+        "name": "古华剑·画雨笼山",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "xingqiu-combat3",
+        "name": "古华剑·裁雨留虹",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "辛焱": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "xinyan-combat1",
+        "name": "炎舞",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "xinyan-combat2",
+        "name": "热情拂扫",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "xinyan-combat3",
+        "name": "叛逆刮弦",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "八重神子": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yaemiko-combat1",
+        "name": "狐灵食罪式",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yaemiko-combat2",
+        "name": "野干役咒·杀生樱",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yaemiko-combat3",
+        "name": "大密法·天狐显真",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "烟绯": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yanfei-combat1",
+        "name": "火漆制印",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yanfei-combat2",
+        "name": "丹书立约",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yanfei-combat3",
+        "name": "凭此结契",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "瑶瑶": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yaoyao-combat1",
+        "name": "颠扑连环枪",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yaoyao-combat2",
+        "name": "云台团团降芦菔",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yaoyao-combat3",
+        "name": "玉颗珊珊月中落",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "夜兰": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yelan-combat1",
+        "name": "潜形隐曜弓",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yelan-combat2",
+        "name": "萦络纵命索",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yelan-combat3",
+        "name": "渊图玲珑骰",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "宵宫": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yoimiya-combat1",
+        "name": "烟火打扬",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yoimiya-combat2",
+        "name": "焰硝庭火舞",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yoimiya-combat3",
+        "name": "琉金云间草",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "梦见月瑞希": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yumemizukimizuki-combat1",
+        "name": "梦我梦心",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yumemizukimizuki-combat2",
+        "name": "秋沙歌枕巡礼",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yumemizukimizuki-combat3",
+        "name": "安乐秘汤疗法",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "云堇": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "yunjin-combat1",
+        "name": "拂云出手",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "yunjin-combat2",
+        "name": "旋云开相",
+        "constellations": [
+          5
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "yunjin-combat3",
+        "name": "破嶂见旌仪",
+        "constellations": [
+          3
+        ]
+      }
+    ],
+    "钟离": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "zhongli-combat1",
+        "name": "岩雨",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "zhongli-combat2",
+        "name": "地心",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "zhongli-combat3",
+        "name": "天星",
+        "constellations": [
+          5
+        ]
+      }
+    ],
+    "兹白": [
+      {
+        "key": "normal",
+        "label": "A",
+        "icon": "zibai-combat1",
+        "name": "金铗点桂",
+        "constellations": []
+      },
+      {
+        "key": "skill",
+        "label": "E",
+        "icon": "zibai-combat2",
+        "name": "天地忽然身",
+        "constellations": [
+          3
+        ]
+      },
+      {
+        "key": "burst",
+        "label": "Q",
+        "icon": "zibai-combat3",
+        "name": "三垣威仪法",
+        "constellations": [
+          5
+        ]
+      }
+    ]
+  }
+}
