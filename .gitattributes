@@ -1,2 +1,7 @@
 # Unified diff context lines contain a required leading space before upstream tabs.
 tools/patches/*.patch -whitespace
+
+# Preserve upstream license and notice bytes across platforms.
+licenses/npm-LICENSES.txt -text -whitespace
+licenses/sources/** -text -whitespace
+licenses/tooling/** -text -whitespace

@@ -2,7 +2,9 @@
 
 轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。默认进入已整合的侧栏工作台，可编辑候选配装、动作与伤害点、条件及目标，查看公式来源，并保存、重新打开轴项目。旧模拟器、公式验收页和开发验证页已移除，产品只保留当前工作台。
 
-文档总入口见[文档导航](docs/README.md)。P2.5 已完成，下一阶段为 P3；可将[实施 prompt](docs/planning/implementation-agent-prompt.md)交给下一位 agent。产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。视频打轴、快照、累计和优化搜索仍为后续能力。工作台和公式工具已使用中文展示，后续新增流程继续中文优先；文件字段与版本保持原值。
+文档总入口见[文档导航](docs/README.md)。P3 已完成，当前推进 U1 界面与交互改进；可将[实施 prompt](docs/planning/implementation-agent-prompt.md)交给下一位 agent。产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。后续顺序为 P5、P6、P4、P7、P8。工作台和公式工具已使用中文展示，后续新增流程继续中文优先；文件字段与版本保持原值。
+
+依赖版本、协议和使用说明见 [第三方声明](THIRD_PARTY_NOTICES.md)、[完整依赖清单](licenses/DEPENDENCIES.md)及 [鸣谢](CREDITS.md)。应用内可在“设置 → 关于与支持范围 → 开源许可与鸣谢”查看。
 
 ## 桌面打开与验收
 

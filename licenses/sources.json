@@ -1,0 +1,107 @@
+{
+  "formatVersion": 1,
+  "sources": [
+    {
+      "id": "genshin-optimizer",
+      "name": "Genshin Optimizer / frzyc 与贡献者",
+      "url": "https://github.com/frzyc/genshin-optimizer",
+      "version": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
+      "license": "MIT（路径代码）；游戏图像权利另计",
+      "usage": "实际复用属性 SVG path 并制作三个本地镂空变体；部分装备、技能、命座、反应图使用该库镜像。",
+      "licenseFile": "licenses/sources/genshin-optimizer/LICENSE",
+      "licenseSha256": "6c51d31f2009cda50d5112c2870e4a4d37696f2d5b29fa601b5ef186f4a5d11c"
+    },
+    {
+      "id": "genshin-db",
+      "name": "genshin-db / theBowja 与贡献者",
+      "url": "https://github.com/theBowja/genshin-db",
+      "version": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "license": "MIT；游戏内容权利另计",
+      "usage": "实际提取角色、天赋、武器、套装、成长曲线、中文名称与图片文件名；保留转换、哈希与版本记录。",
+      "licenseFile": "licenses/sources/genshin-db/LICENSE",
+      "licenseSha256": "9b4edf56612dd31a97ade0d2d408154eb2e3dcf620f5b832fefec036ba9b50e1"
+    },
+    {
+      "id": "mona",
+      "name": "莫娜占卜铺 / wormtql、TwiceDrop 与社区贡献者",
+      "url": "https://github.com/TwiceDrop/genshin_artifact",
+      "version": "589ac6919057709924c0c20d5a9d673fe9b0be1a；早期图片与格式另见逐图清单",
+      "license": "MIT（代码/元数据）；游戏图像权利另计",
+      "usage": "参考莫娜 JSON 格式与交互，使用目录身份元数据及部分头像、圣遗物、元素图来源。",
+      "licenseFile": "licenses/sources/mona/LICENSE",
+      "licenseSha256": "ef3096c349dde56611cd40bf1cf8afd0b01d7c847c3df672baf6be1e514f0fd6"
+    },
+    {
+      "id": "path-of-genshin",
+      "name": "PathOfGenshin/resources",
+      "url": "https://github.com/PathOfGenshin/resources",
+      "version": "015a2493b5672b28576ab78ffbcffde2ea0c9844",
+      "license": "仓库代码 GPL-3.0；游戏图片权利另计",
+      "usage": "实际使用游戏图像镜像：原生增益/反应符号及部分旧图片。"
+    },
+    {
+      "id": "genshin-wiki-map",
+      "name": "GenshinWikiMap / CMHopeSunshine 与贡献者",
+      "url": "https://github.com/CMHopeSunshine/GenshinWikiMap",
+      "version": "7fafe2e18011008d47e347f0f68216d05da0c1f1",
+      "license": "仓库代码 GPL-3.0；游戏图片权利另计",
+      "usage": "实际使用五种通用普攻原始图像，各角色通过索引共用。"
+    },
+    {
+      "id": "enka",
+      "name": "Enka.Network / EnkaNetwork 与贡献者",
+      "url": "https://github.com/EnkaNetwork/API-docs",
+      "version": "b94bc40528941126590e0eefb0f03278e7a44ec8",
+      "license": "独立资料许可待补核；接口按上游规则使用",
+      "usage": "实际使用公开展柜服务、字段文档、角色/技能身份映射和少量图片地址；遵守其缓存 TTL 和请求约束。"
+    },
+    {
+      "id": "gachabase",
+      "name": "GachaBase",
+      "url": "https://gi.gachabase.net/",
+      "version": "逐角色页面 URL 与 SHA-256 见 docs/constant/enka/skill-supplements.json",
+      "license": "页面数据条款待核实",
+      "usage": "提取并核对五个角色的公开技能数字 ID 与名称。"
+    },
+    {
+      "id": "artifact-affixes",
+      "name": "Rafs-kk/LunaGC-6.6-res 与 Enka 元数据贡献者",
+      "url": "https://github.com/Rafs-kk/LunaGC-6.6-res",
+      "version": "b0501c5d89767ead5f647869a2412521447f7682",
+      "license": "独立游戏数据许可待核实",
+      "usage": "使用圣遗物词条档位数值与 ID，制作强化次数显示。"
+    },
+    {
+      "id": "kqm",
+      "name": "KeqingMains / Theorycrafting Library 社区",
+      "url": "https://github.com/KQM-git/TCL",
+      "version": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "license": "机制研究引用",
+      "usage": "机制依据与证据交叉核对；具体引用见 mechanics 和 references 文档。"
+    },
+    {
+      "id": "meropide",
+      "name": "梅信心 / Meropide 及资料贡献者",
+      "url": "https://meropide.cn/chs/",
+      "version": "原文快照与 URL 见 docs/references/sources.json",
+      "license": "机制研究引用",
+      "usage": "中文机制说明与数值交叉核对。"
+    },
+    {
+      "id": "hoyoverse",
+      "name": "miHoYo / HoYoverse",
+      "url": "https://genshin.hoyoverse.com/",
+      "version": "逐图 URL、源哈希与转换记录见 public/game-icon-manifest.json",
+      "license": "游戏内容版权归 miHoYo / HoYoverse 及相关权利人",
+      "usage": "角色、武器、圣遗物、元素、技能美术、游戏名称与资料。"
+    },
+    {
+      "id": "legacy-data",
+      "name": "仓库历史常量输入",
+      "url": null,
+      "version": "docs/constant/ 历史输入；见生成器与 mechanics 文档",
+      "license": "独立上游许可和作者记录待补核",
+      "usage": "历史常量用于兼容性与数值输入；"
+    }
+  ]
+}

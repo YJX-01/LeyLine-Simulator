@@ -1,0 +1,4522 @@
+{
+  "formatVersion": 1,
+  "inputs": {
+    "lockfile": "b8b7536fddbd3bacc4569d26df1919b2d7dc079fbbb5483378fd89d581ebc022",
+    "manifests": [
+      {
+        "path": "package.json",
+        "sha256": "0a20a9732decac076cf744f139fa426d09736a5becb5a223449902d108a6fb3f"
+      },
+      {
+        "path": "src/web/package.json",
+        "sha256": "4d1dfddf218c36eda00cb1ee987df595cf3160153e01cd31c9f618cd2a272fef"
+      },
+      {
+        "path": "src/schema/package.json",
+        "sha256": "44d031c9dfb88b165f5be2b772b1de9ad950cfc6110b06a7adfbd52687ecbb4f"
+      },
+      {
+        "path": "src/engine/package.json",
+        "sha256": "53d779c3ad13460da3a93de115decb5a9f430ce173c3f2a9d6465f827cc25a13"
+      },
+      {
+        "path": "src/game-data/package.json",
+        "sha256": "dbbb76ab4c89386dc76ee81b7e4a07ff1adcb0f5ca9e6a21c41321cdf752e7c5"
+      }
+    ],
+    "workspace": "df9b59709acc1e0522a6a33d468e6a162d87373498f39b7a485777bc36432631"
+  },
+  "scope": "pnpm installed dependency graph including development/optional platform packages; SPDX declarations from package.json; complete upstream notices are archived in npm-LICENSES.txt",
+  "archives": {
+    "npm-LICENSES.txt": "2531f6f5b995d5a71199571ff377d780e7d4e52d58f5a832b1f4a0693b2a7676"
+  },
+  "summary": {
+    "packages": 196,
+    "directPackages": 12,
+    "productionClosure": 33,
+    "licenseDeclarations": {
+      "MIT": 172,
+      "BSD-2-Clause": 4,
+      "Apache-2.0": 7,
+      "BlueOak-1.0.0": 5,
+      "ISC": 7,
+      "BSD-3-Clause": 1
+    },
+    "declarationOnly": [
+      "err-code@2.0.3",
+      "stackback@0.0.2"
+    ]
+  },
+  "packages": [
+    {
+      "id": "@babel/helper-string-parser@7.29.11",
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.11",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel",
+      "author": "The Babel Team (https://babel.dev/team)",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@babel/helper-validator-identifier@7.29.7",
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel",
+      "author": "The Babel Team (https://babel.dev/team)",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@babel/parser@7.29.12",
+      "name": "@babel/parser",
+      "version": "7.29.12",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel",
+      "author": "The Babel Team (https://babel.dev/team)",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "2e97627cb278aa7556fb9e8817368302301a595b6c7582512b8d74c57b773652"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@babel/types@7.29.11",
+      "name": "@babel/types",
+      "version": "7.29.11",
+      "license": "MIT",
+      "repository": "https://github.com/babel/babel",
+      "author": "The Babel Team (https://babel.dev/team)",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "117da2af0d4ce0fe1c8e19b5cff9dcd806adf973d328d27b11d4448c4ff24f76"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron-internal/extract-zip@1.0.8",
+      "name": "@electron-internal/extract-zip",
+      "version": "1.0.8",
+      "license": "MIT",
+      "repository": "https://github.com/electron/extract-zip",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "edab8abb78d9c5b36944c3e00aebf6a90eb32378993f49ac8a3904007029c629"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/asar@4.3.1",
+      "name": "@electron/asar",
+      "version": "4.3.1",
+      "license": "MIT",
+      "repository": "https://github.com/electron/asar",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "d5af8fc171f6f600c0ab4e7597dca398dda80dbe6821ce01cef78e859e7a00f8"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/get@5.1.0",
+      "name": "@electron/get",
+      "version": "5.1.0",
+      "license": "MIT",
+      "repository": "https://github.com/electron/get",
+      "author": "Samuel Attard",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "edab8abb78d9c5b36944c3e00aebf6a90eb32378993f49ac8a3904007029c629"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/notarize@3.1.2",
+      "name": "@electron/notarize",
+      "version": "3.1.2",
+      "license": "MIT",
+      "repository": "https://github.com/electron/notarize",
+      "author": "Samuel Attard",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "60e42db5f32611ac978f4be323cba0511d1375a1af10f32d2a8bba9b291d9de2"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/osx-sign@2.7.2",
+      "name": "@electron/osx-sign",
+      "version": "2.7.2",
+      "license": "BSD-2-Clause",
+      "repository": "https://github.com/electron/osx-sign",
+      "author": "electron",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "fe6ac932d2a16058886ab32ce601b50ce2b9d65925305b72227a184185552535"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/packager@20.3.0",
+      "name": "@electron/packager",
+      "version": "20.3.0",
+      "license": "BSD-2-Clause",
+      "repository": "https://github.com/electron/packager",
+      "author": "Mark Lee",
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d1c14be05d76cb7894e6a01815996b1ec96a196e9ea9552e1a46b215e9ca7994"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/universal@3.0.6",
+      "name": "@electron/universal",
+      "version": "3.0.6",
+      "license": "MIT",
+      "repository": "https://github.com/electron/universal",
+      "author": "Samuel Attard",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "edab8abb78d9c5b36944c3e00aebf6a90eb32378993f49ac8a3904007029c629"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@electron/windows-sign@2.1.0",
+      "name": "@electron/windows-sign",
+      "version": "2.1.0",
+      "license": "BSD-2-Clause",
+      "repository": "https://github.com/electron/windows-sign",
+      "author": "Felix Rieseberg",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "270871b2e9e4f2db0caa58205bac8453b469f993a4821676f712003cac63ef8b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@esbuild/aix-ppc64@0.28.2",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "aix"
+      ],
+      "cpu": [
+        "ppc64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/android-arm@0.28.2",
+      "name": "@esbuild/android-arm",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "android"
+      ],
+      "cpu": [
+        "arm"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/android-arm64@0.28.2",
+      "name": "@esbuild/android-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "android"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/android-x64@0.28.2",
+      "name": "@esbuild/android-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "android"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/darwin-arm64@0.28.2",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/darwin-x64@0.28.2",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/freebsd-arm64@0.28.2",
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "freebsd"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/freebsd-x64@0.28.2",
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "freebsd"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-arm@0.28.2",
+      "name": "@esbuild/linux-arm",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-arm64@0.28.2",
+      "name": "@esbuild/linux-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-ia32@0.28.2",
+      "name": "@esbuild/linux-ia32",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "ia32"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-loong64@0.28.2",
+      "name": "@esbuild/linux-loong64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "loong64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-mips64el@0.28.2",
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "mips64el"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-ppc64@0.28.2",
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "ppc64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-riscv64@0.28.2",
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "riscv64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-s390x@0.28.2",
+      "name": "@esbuild/linux-s390x",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "s390x"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/linux-x64@0.28.2",
+      "name": "@esbuild/linux-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/netbsd-arm64@0.28.2",
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "netbsd"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/netbsd-x64@0.28.2",
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "netbsd"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/openbsd-arm64@0.28.2",
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "openbsd"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/openbsd-x64@0.28.2",
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "openbsd"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/openharmony-arm64@0.28.2",
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "openharmony"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/sunos-x64@0.28.2",
+      "name": "@esbuild/sunos-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "sunos"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/win32-arm64@0.28.2",
+      "name": "@esbuild/win32-arm64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/win32-ia32@0.28.2",
+      "name": "@esbuild/win32-ia32",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "ia32"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@esbuild/win32-x64@0.28.2",
+      "name": "@esbuild/win32-x64",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "esbuild@0.28.2 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@jridgewell/sourcemap-codec@1.6.0",
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "license": "MIT",
+      "repository": "https://github.com/jridgewell/sourcemaps",
+      "author": "Justin Ridgewell <justin@ridgewell.name>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@malept/cross-spawn-promise@2.0.0",
+      "name": "@malept/cross-spawn-promise",
+      "version": "2.0.0",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/malept/cross-spawn-promise",
+      "author": "Mark Lee",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@playwright/test@1.64.1",
+      "name": "@playwright/test",
+      "version": "1.64.1",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/microsoft/playwright",
+      "author": "Microsoft Corporation",
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+        },
+        {
+          "name": "NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@rolldown/pluginutils@1.0.1",
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "license": "MIT",
+      "repository": "https://github.com/rolldown/plugins",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@rollup/rollup-android-arm-eabi@4.67.5",
+      "name": "@rollup/rollup-android-arm-eabi",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "android"
+      ],
+      "cpu": [
+        "arm"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-android-arm64@4.67.5",
+      "name": "@rollup/rollup-android-arm64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "android"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-android-x64@4.67.5",
+      "name": "@rollup/rollup-android-x64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "android"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-darwin-arm64@4.67.5",
+      "name": "@rollup/rollup-darwin-arm64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-darwin-x64@4.67.5",
+      "name": "@rollup/rollup-darwin-x64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "darwin"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-freebsd-arm64@4.67.5",
+      "name": "@rollup/rollup-freebsd-arm64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "freebsd"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-freebsd-x64@4.67.5",
+      "name": "@rollup/rollup-freebsd-x64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "freebsd"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-arm-gnueabihf@4.67.5",
+      "name": "@rollup/rollup-linux-arm-gnueabihf",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-arm-musleabihf@4.67.5",
+      "name": "@rollup/rollup-linux-arm-musleabihf",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-arm64-gnu@4.67.5",
+      "name": "@rollup/rollup-linux-arm64-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-arm64-musl@4.67.5",
+      "name": "@rollup/rollup-linux-arm64-musl",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-loong64-gnu@4.67.5",
+      "name": "@rollup/rollup-linux-loong64-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "loong64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-loong64-musl@4.67.5",
+      "name": "@rollup/rollup-linux-loong64-musl",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "loong64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-ppc64-gnu@4.67.5",
+      "name": "@rollup/rollup-linux-ppc64-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "ppc64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-ppc64-musl@4.67.5",
+      "name": "@rollup/rollup-linux-ppc64-musl",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "ppc64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-riscv64-gnu@4.67.5",
+      "name": "@rollup/rollup-linux-riscv64-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "riscv64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-riscv64-musl@4.67.5",
+      "name": "@rollup/rollup-linux-riscv64-musl",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "riscv64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-s390x-gnu@4.67.5",
+      "name": "@rollup/rollup-linux-s390x-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "s390x"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-x64-gnu@4.67.5",
+      "name": "@rollup/rollup-linux-x64-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-linux-x64-musl@4.67.5",
+      "name": "@rollup/rollup-linux-x64-musl",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-openbsd-x64@4.67.5",
+      "name": "@rollup/rollup-openbsd-x64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "openbsd"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-openharmony-arm64@4.67.5",
+      "name": "@rollup/rollup-openharmony-arm64",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "openharmony"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-win32-arm64-msvc@4.67.5",
+      "name": "@rollup/rollup-win32-arm64-msvc",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "arm64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-win32-ia32-msvc@4.67.5",
+      "name": "@rollup/rollup-win32-ia32-msvc",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "ia32"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-win32-x64-gnu@4.67.5",
+      "name": "@rollup/rollup-win32-x64-gnu",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@rollup/rollup-win32-x64-msvc@4.67.5",
+      "name": "@rollup/rollup-win32-x64-msvc",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Lukas Taegert-Atkinson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "win32"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeSource": "rollup@4.67.5 (same upstream repository/version; platform package omits a separate license file)",
+      "noticeStatus": "upstream-family-text"
+    },
+    {
+      "id": "@types/chai@5.2.3",
+      "name": "@types/chai",
+      "version": "5.2.3",
+      "license": "MIT",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@types/deep-eql@4.0.2",
+      "name": "@types/deep-eql",
+      "version": "4.0.2",
+      "license": "MIT",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@types/estree@1.0.10",
+      "name": "@types/estree",
+      "version": "1.0.10",
+      "license": "MIT",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@types/node@24.19.2",
+      "name": "@types/node",
+      "version": "24.19.2",
+      "license": "MIT",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+      "author": null,
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitejs/plugin-vue@6.0.10",
+      "name": "@vitejs/plugin-vue",
+      "version": "6.0.10",
+      "license": "MIT",
+      "repository": "https://github.com/vitejs/vite-plugin-vue",
+      "author": "Evan You",
+      "direct": [
+        {
+          "importer": "src/web/package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/expect@3.2.7",
+      "name": "@vitest/expect",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/mocker@3.2.7",
+      "name": "@vitest/mocker",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/pretty-format@3.2.7",
+      "name": "@vitest/pretty-format",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/runner@3.2.7",
+      "name": "@vitest/runner",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/snapshot@3.2.7",
+      "name": "@vitest/snapshot",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/spy@3.2.7",
+      "name": "@vitest/spy",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vitest/utils@3.2.7",
+      "name": "@vitest/utils",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@volar/language-core@2.4.30",
+      "name": "@volar/language-core",
+      "version": "2.4.30",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@volar/language-service@2.4.30",
+      "name": "@volar/language-service",
+      "version": "2.4.30",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@volar/source-map@2.4.30",
+      "name": "@volar/source-map",
+      "version": "2.4.30",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@volar/typescript@2.4.30",
+      "name": "@volar/typescript",
+      "version": "2.4.30",
+      "license": "MIT",
+      "repository": "https://github.com/volarjs/volar.js",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/compiler-core@3.5.44",
+      "name": "@vue/compiler-core",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/compiler-dom@3.5.44",
+      "name": "@vue/compiler-dom",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/compiler-sfc@3.5.44",
+      "name": "@vue/compiler-sfc",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/compiler-ssr@3.5.44",
+      "name": "@vue/compiler-ssr",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/devtools-api@8.2.1",
+      "name": "@vue/devtools-api",
+      "version": "8.2.1",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/devtools",
+      "author": "webfansplz",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d0ac09e8df2b54625ea1606dfae75d5b6af1cbc5d28a17eca1350be9c367175c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/devtools-kit@8.2.1",
+      "name": "@vue/devtools-kit",
+      "version": "8.2.1",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/devtools",
+      "author": "webfansplz",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d0ac09e8df2b54625ea1606dfae75d5b6af1cbc5d28a17eca1350be9c367175c"
+        }
+      ],
+      "modified": [
+        "tools/patches/@vue__devtools-kit@8.2.1.patch"
+      ],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/devtools-shared@8.2.1",
+      "name": "@vue/devtools-shared",
+      "version": "8.2.1",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/devtools",
+      "author": "webfansplz",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d0ac09e8df2b54625ea1606dfae75d5b6af1cbc5d28a17eca1350be9c367175c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/language-core@3.3.14",
+      "name": "@vue/language-core",
+      "version": "3.3.14",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/language-tools",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/reactivity@3.5.44",
+      "name": "@vue/reactivity",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/runtime-core@3.5.44",
+      "name": "@vue/runtime-core",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/runtime-dom@3.5.44",
+      "name": "@vue/runtime-dom",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/server-renderer@3.5.44",
+      "name": "@vue/server-renderer",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@vue/shared@3.5.44",
+      "name": "@vue/shared",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "@xmldom/xmldom@0.9.12",
+      "name": "@xmldom/xmldom",
+      "version": "0.9.12",
+      "license": "MIT",
+      "repository": "https://github.com/xmldom/xmldom",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "4da724fc305d81606b245b324d4d2586916b9d248b23d82183df753ace0fdf71"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "alien-signals@3.2.1",
+      "name": "alien-signals",
+      "version": "3.2.1",
+      "license": "MIT",
+      "repository": "https://github.com/stackblitz/alien-signals",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "75863f712f8f0603b0dba33edf4b725bab80fc858a51756e5905a3c4c8087169"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "assertion-error@2.0.1",
+      "name": "assertion-error",
+      "version": "2.0.1",
+      "license": "MIT",
+      "repository": "git@github.com:chaijs/assertion-error",
+      "author": "Jake Luer <jake@qualiancy.com> (http://qualiancy.com)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "2130216d5ab4c02134f8247f32999feda0abe1eaf028218baeac445c19ce4cea"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "balanced-match@4.0.4",
+      "name": "balanced-match",
+      "version": "4.0.4",
+      "license": "MIT",
+      "repository": "https://github.com/juliangruber/balanced-match",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "d408f38ffa3355c5faec517153295338892eb0f1ea43f57874bb23c6075979b5"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "base64-js@1.5.1",
+      "name": "base64-js",
+      "version": "1.5.1",
+      "license": "MIT",
+      "repository": "https://github.com/beatgammit/base64-js",
+      "author": "T. Jameson Little <t.jameson.little@gmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "5b37224c080cdcc97c871ada971c224e9926370fe74f11b539aa1cf9f3b1aca1"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "birpc@2.9.0",
+      "name": "birpc",
+      "version": "2.9.0",
+      "license": "MIT",
+      "repository": "https://github.com/antfu-collective/birpc",
+      "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "67cd5e903c1f908edfa27c25606fa806ce629d9a8ddb7d83019d9fd1f83f7fde"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "brace-expansion@5.0.12",
+      "name": "brace-expansion",
+      "version": "5.0.12",
+      "license": "MIT",
+      "repository": "https://github.com/juliangruber/brace-expansion",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "9c63a23124d68cd30cd316a94a1a0bca34f032786df6df69fc4b5f136bac8d2e"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "cac@6.7.14",
+      "name": "cac",
+      "version": "6.7.14",
+      "license": "MIT",
+      "repository": "egoist/cac",
+      "author": "egoist <0x142857@gmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "709131d7af352b81204ada2a3d812e245a83576e327b364f92ba24c578ba9408"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "chai@5.3.3",
+      "name": "chai",
+      "version": "5.3.3",
+      "license": "MIT",
+      "repository": "https://github.com/chaijs/chai",
+      "author": "Jake Luer <jake@alogicalparadox.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "b181da80336ff9dd1043fc8be1a764d7382363433319aa872e4d2cb5ce2a3066"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "check-error@2.1.3",
+      "name": "check-error",
+      "version": "2.1.3",
+      "license": "MIT",
+      "repository": "ssh://git@github.com/chaijs/check-error",
+      "author": "Jake Luer <jake@alogicalparadox.com> (http://alogicalparadox.com)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "e5aee0714b6ecc416454b968d1017570ef609f20d8722ab84b07acd550b78198"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "commander@9.5.0",
+      "name": "commander",
+      "version": "9.5.0",
+      "license": "MIT",
+      "repository": "https://github.com/tj/commander.js",
+      "author": "TJ Holowaychuk <tj@vision-media.ca>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "cross-spawn@7.0.6",
+      "name": "cross-spawn",
+      "version": "7.0.6",
+      "license": "MIT",
+      "repository": "git@github.com:moxystudio/node-cross-spawn",
+      "author": "André Cruz <andre@moxy.studio>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "aaa78451b6fecd1b9c4594c796c133c0e90cad100372ff8bc6de615e9ef9adf1"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "csstype@3.2.3",
+      "name": "csstype",
+      "version": "3.2.3",
+      "license": "MIT",
+      "repository": "https://github.com/frenic/csstype",
+      "author": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "debug@4.4.3",
+      "name": "debug",
+      "version": "4.4.3",
+      "license": "MIT",
+      "repository": "https://github.com/debug-js/debug",
+      "author": "Josh Junon (https://github.com/qix-)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "3a61c6c96caf5c1d9b623fb9b04c822b783dfcb78aa7e49c76a3f643e6ed7f95"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "deep-eql@5.0.2",
+      "name": "deep-eql",
+      "version": "5.0.2",
+      "license": "MIT",
+      "repository": "git@github.com:chaijs/deep-eql",
+      "author": "Jake Luer <jake@alogicalparadox.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "e5aee0714b6ecc416454b968d1017570ef609f20d8722ab84b07acd550b78198"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "electron@45.2.3",
+      "name": "electron",
+      "version": "45.2.3",
+      "license": "MIT",
+      "repository": "https://github.com/electron/electron",
+      "author": "Electron Community",
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": true,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "5154e165bd6c2cc0cfbcd8916498c7abab0497923bafcd5cb07673fe8480087d"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "entities@7.0.1",
+      "name": "entities",
+      "version": "7.0.1",
+      "license": "BSD-2-Clause",
+      "repository": "https://github.com/fb55/entities",
+      "author": "Felix Boehm <me@feedic.com>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "cb992345949ccd6e8394b2cd6c465f7b897c864f845937dbf64e8997f389e164"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "env-paths@3.0.0",
+      "name": "env-paths",
+      "version": "3.0.0",
+      "license": "MIT",
+      "repository": "sindresorhus/env-paths",
+      "author": "Sindre Sorhus",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "err-code@2.0.3",
+      "name": "err-code",
+      "version": "2.0.3",
+      "license": "MIT",
+      "repository": "https://github.com/IndigoUnited/js-err-code",
+      "author": "IndigoUnited <hello@indigounited.com> (http://indigounited.com)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [],
+      "modified": [],
+      "noticeStatus": "declaration-only"
+    },
+    {
+      "id": "es-module-lexer@1.7.0",
+      "name": "es-module-lexer",
+      "version": "1.7.0",
+      "license": "MIT",
+      "repository": "https://github.com/guybedford/es-module-lexer",
+      "author": "Guy Bedford",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "fecc38b5e10d889686b3862e7ade17e8b3e5c94b24b7256b05a354d8524b3274"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "esbuild@0.28.2",
+      "name": "esbuild",
+      "version": "0.28.2",
+      "license": "MIT",
+      "repository": "https://github.com/evanw/esbuild",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "estree-walker@2.0.2",
+      "name": "estree-walker",
+      "version": "2.0.2",
+      "license": "MIT",
+      "repository": "https://github.com/Rich-Harris/estree-walker",
+      "author": "Rich Harris",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "estree-walker@3.0.3",
+      "name": "estree-walker",
+      "version": "3.0.3",
+      "license": "MIT",
+      "repository": "https://github.com/Rich-Harris/estree-walker",
+      "author": "Rich Harris",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "expect-type@1.4.0",
+      "name": "expect-type",
+      "version": "1.4.0",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/mmkal/expect-type",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "7c6cc83c84eaa249a85bf12fe3eedd831bb50c696e8890b5248223ae68c7b408"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "fdir@6.5.0",
+      "name": "fdir",
+      "version": "6.5.0",
+      "license": "MIT",
+      "repository": "https://github.com/thecodrr/fdir",
+      "author": "thecodrr <thecodrr@protonmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "filename-reserved-regex@3.0.0",
+      "name": "filename-reserved-regex",
+      "version": "3.0.0",
+      "license": "MIT",
+      "repository": "sindresorhus/filename-reserved-regex",
+      "author": "Sindre Sorhus",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "filenamify@6.0.0",
+      "name": "filenamify",
+      "version": "6.0.0",
+      "license": "MIT",
+      "repository": "sindresorhus/filenamify",
+      "author": "Sindre Sorhus",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "flora-colossus@3.0.2",
+      "name": "flora-colossus",
+      "version": "3.0.2",
+      "license": "MIT",
+      "repository": "https://github.com/MarshallOfSound/flora-colossus",
+      "author": "Samuel Attard",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "4fc9f82d6b7f17c1ebe80270e09ee5a21e4c3c17f7020481df897e927348845f"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "fsevents@2.3.3",
+      "name": "fsevents",
+      "version": "2.3.3",
+      "license": "MIT",
+      "repository": "https://github.com/fsevents/fsevents",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": [
+        "darwin"
+      ],
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "2a8a5d6197bb97a018b8a190dd3ed853d750ca87c8e80c17aad41d6c6ff448e1"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "galactus@2.0.2",
+      "name": "galactus",
+      "version": "2.0.2",
+      "license": "MIT",
+      "repository": "https://github.com/MarshallOfSound/galactus",
+      "author": "Samuel Attard",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "7de64735d720d26ad552f65730c288c8710ebf7321a0befe99ca109eb69eb57a"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "glob@13.0.6",
+      "name": "glob",
+      "version": "13.0.6",
+      "license": "BlueOak-1.0.0",
+      "repository": "git@github.com:isaacs/node-glob",
+      "author": "Isaac Z. Schlueter <i@izs.me> (https://blog.izs.me/)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "a49c9ba464796f65b59fca3f1e6ca40912df1e859f575383223f7ec6c5baae09"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "graceful-fs@4.2.11",
+      "name": "graceful-fs",
+      "version": "4.2.11",
+      "license": "ISC",
+      "repository": "https://github.com/isaacs/node-graceful-fs",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "f65c5d9f22a317b2a10803bd1868461ce6499c2ed7217bc80c0cc772a748789c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "hookable@5.5.3",
+      "name": "hookable",
+      "version": "5.5.3",
+      "license": "MIT",
+      "repository": "unjs/hookable",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "3555f8c47cbff86d199d5a5033afd5ef9560e0095927296af670a886b8b1988d"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "isbinaryfile@4.0.10",
+      "name": "isbinaryfile",
+      "version": "4.0.10",
+      "license": "MIT",
+      "repository": "https://github.com/gjtorikian/isBinaryFile",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.txt",
+          "sha256": "2eedc70f2242aaf269e86e2c85eabeb875dc524d187d5953016b24091d26a843"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "isexe@2.0.0",
+      "name": "isexe",
+      "version": "2.0.0",
+      "license": "ISC",
+      "repository": "https://github.com/isaacs/isexe",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "js-tokens@9.0.1",
+      "name": "js-tokens",
+      "version": "9.0.1",
+      "license": "MIT",
+      "repository": "lydell/js-tokens",
+      "author": "Simon Lydell",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "33038d552d766f4501d8da25b66053ed217c61274ffce1c6bee413bb037c259c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "junk@4.0.1",
+      "name": "junk",
+      "version": "4.0.1",
+      "license": "MIT",
+      "repository": "sindresorhus/junk",
+      "author": "Sindre Sorhus",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "loupe@3.2.1",
+      "name": "loupe",
+      "version": "3.2.1",
+      "license": "MIT",
+      "repository": "https://github.com/chaijs/loupe",
+      "author": "Veselin Todorov <hi@vesln.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "592141f7b861426ceeff937d85ad04ada5f66e386c5a8696ed1bd680f2cdb552"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "lru-cache@11.5.3",
+      "name": "lru-cache",
+      "version": "11.5.3",
+      "license": "BlueOak-1.0.0",
+      "repository": "ssh://git@github.com/isaacs/node-lru-cache",
+      "author": "Isaac Z. Schlueter <i@izs.me>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "8a1af140fdfbf5afd3df27f7e662f989c5b963a300020dfafce42033cae9e004"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "magic-string@0.30.21",
+      "name": "magic-string",
+      "version": "0.30.21",
+      "license": "MIT",
+      "repository": "https://github.com/Rich-Harris/magic-string",
+      "author": "Rich Harris",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "minimatch@10.2.6",
+      "name": "minimatch",
+      "version": "10.2.6",
+      "license": "BlueOak-1.0.0",
+      "repository": "git@github.com:isaacs/minimatch",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "2c7c5d22ed5a8ee968c64757710979afcd77438c48b4a265b94e615babd8a901"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "minipass@7.1.3",
+      "name": "minipass",
+      "version": "7.1.3",
+      "license": "BlueOak-1.0.0",
+      "repository": "https://github.com/isaacs/minipass",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "8a1af140fdfbf5afd3df27f7e662f989c5b963a300020dfafce42033cae9e004"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "ms@2.1.3",
+      "name": "ms",
+      "version": "2.1.3",
+      "license": "MIT",
+      "repository": "vercel/ms",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license.md",
+          "sha256": "1662fae9b5314d11cf51284e2dcd1f006a354f7343f08712a730fcff9a359801"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "muggle-string@0.4.1",
+      "name": "muggle-string",
+      "version": "0.4.1",
+      "license": "MIT",
+      "repository": "https://github.com/johnsoncodehk/muggle-string",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "df52411dcd3c8f5897bbbec8c94e971519e13e75818c263e9a99a86255dd301b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "nanoid@3.3.20",
+      "name": "nanoid",
+      "version": "3.3.20",
+      "license": "MIT",
+      "repository": "ai/nanoid",
+      "author": "Andrey Sitnik <andrey@sitnik.ru>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "nostics@1.3.0",
+      "name": "nostics",
+      "version": "1.3.0",
+      "license": "MIT",
+      "repository": "https://github.com/vercel-labs/nostics",
+      "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "acf17aff719bfab70f6bec3a93f1ba82ce9fe27ab74f83c0f2e1efb1273fa220"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "path-browserify@1.0.1",
+      "name": "path-browserify",
+      "version": "1.0.1",
+      "license": "MIT",
+      "repository": "https://github.com/browserify/path-browserify",
+      "author": "James Halliday",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a22b9d5763f574e5db347c30acc0b33eaf4846767c03d2e27d012e864e79a824"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "path-key@3.1.1",
+      "name": "path-key",
+      "version": "3.1.1",
+      "license": "MIT",
+      "repository": "sindresorhus/path-key",
+      "author": "Sindre Sorhus",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "path-scurry@2.0.2",
+      "name": "path-scurry",
+      "version": "2.0.2",
+      "license": "BlueOak-1.0.0",
+      "repository": "https://github.com/isaacs/path-scurry",
+      "author": "Isaac Z. Schlueter <i@izs.me> (https://blog.izs.me)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "8a1af140fdfbf5afd3df27f7e662f989c5b963a300020dfafce42033cae9e004"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "pathe@2.0.3",
+      "name": "pathe",
+      "version": "2.0.3",
+      "license": "MIT",
+      "repository": "unjs/pathe",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "52e92576851154bad7737e90cc72818936f43665cb0e3f7428ed8edc8cc5709b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "pathval@2.0.1",
+      "name": "pathval",
+      "version": "2.0.1",
+      "license": "MIT",
+      "repository": "ssh://git@github.com/chaijs/pathval",
+      "author": "Veselin Todorov <hi@vesln.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "5d45910e7ed82fecc3e29b40a5b3a17ceb609fda19f860aa2ec180d87f4f9d4a"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "pe-library@1.0.1",
+      "name": "pe-library",
+      "version": "1.0.1",
+      "license": "MIT",
+      "repository": "https://github.com/jet2jet/pe-library-js",
+      "author": "jet",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ad05317184b8cd78a770c1f55e386f600fd23feb88596c797ceb3ccd49f7d6bc"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "perfect-debounce@2.1.0",
+      "name": "perfect-debounce",
+      "version": "2.1.0",
+      "license": "MIT",
+      "repository": "unjs/perfect-debounce",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "picocolors@1.1.1",
+      "name": "picocolors",
+      "version": "1.1.1",
+      "license": "ISC",
+      "repository": "alexeyraspopov/picocolors",
+      "author": "Alexey Raspopov",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "picomatch@4.0.7",
+      "name": "picomatch",
+      "version": "4.0.7",
+      "license": "MIT",
+      "repository": "micromatch/picomatch",
+      "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "pinia@4.1.0",
+      "name": "pinia",
+      "version": "4.1.0",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/pinia",
+      "author": "Eduardo San Martin Morote",
+      "direct": [
+        {
+          "importer": "src/web/package.json",
+          "group": "dependencies"
+        }
+      ],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "playwright-core@1.64.1",
+      "name": "playwright-core",
+      "version": "1.64.1",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/microsoft/playwright",
+      "author": "Microsoft Corporation",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+        },
+        {
+          "name": "NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+        },
+        {
+          "name": "ThirdPartyNotices.txt",
+          "sha256": "a549d329bad8806fe279f0ecae0fc0270dec7e7c2dc8ec10f90e394f7c32b144"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "playwright@1.64.1",
+      "name": "playwright",
+      "version": "1.64.1",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/microsoft/playwright",
+      "author": "Microsoft Corporation",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+        },
+        {
+          "name": "NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+        },
+        {
+          "name": "ThirdPartyNotices.txt",
+          "sha256": "b17ac0bd6f4b8207e440639cc8e0ba1bf1d9eaf9b12236764ab93b346c7abd8e"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "plist@3.1.1",
+      "name": "plist",
+      "version": "3.1.1",
+      "license": "MIT",
+      "repository": "https://github.com/TooTallNate/node-plist",
+      "author": "Nathan Rajlich <nathan@tootallnate.net>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "3677dc86e6e5f119b500c308cc24cf533e2eb44c41050ea64584e049e5b70161"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "postcss@8.5.32",
+      "name": "postcss",
+      "version": "8.5.32",
+      "license": "MIT",
+      "repository": "postcss/postcss",
+      "author": "Andrey Sitnik <andrey@sitnik.es>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "postject@1.0.0-alpha.6",
+      "name": "postject",
+      "version": "1.0.0-alpha.6",
+      "license": "MIT",
+      "repository": "git@github.com:nodejs/postject",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "6546657539feb5b454f400db317e71fa39ff5cd048fa5d78ae0ada2df72f1ea7"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "progress@2.0.3",
+      "name": "progress",
+      "version": "2.0.3",
+      "license": "MIT",
+      "repository": "https://github.com/visionmedia/node-progress",
+      "author": "TJ Holowaychuk <tj@vision-media.ca>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d7d2a7786de7c7cfd96f920c6f12927d74e1d2a861ca4498bf465c3bc3f4c21c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "promise-retry@2.0.1",
+      "name": "promise-retry",
+      "version": "2.0.1",
+      "license": "MIT",
+      "repository": "https://github.com/IndigoUnited/node-promise-retry",
+      "author": "IndigoUnited <hello@indigounited.com> (http://indigounited.com)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "b1344bd78ebcbf8a359225ec444d038a653c6a5f9ecf405a50d4a5c11fbf27d1"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "resedit@2.0.3",
+      "name": "resedit",
+      "version": "2.0.3",
+      "license": "MIT",
+      "repository": "https://github.com/jet2jet/resedit-js",
+      "author": "jet",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ad05317184b8cd78a770c1f55e386f600fd23feb88596c797ceb3ccd49f7d6bc"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "retry@0.12.0",
+      "name": "retry",
+      "version": "0.12.0",
+      "license": "MIT",
+      "repository": "https://github.com/tim-kos/node-retry",
+      "author": "Tim Koschützki <tim@debuggable.com> (http://debuggable.com/)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "License",
+          "sha256": "01ad164273e8e095abc9dbd1c21e194594a671af7d528cb43ee7b4c903ba7da3"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "rollup@4.67.5",
+      "name": "rollup",
+      "version": "4.67.5",
+      "license": "MIT",
+      "repository": "https://github.com/rollup/rollup",
+      "author": "Rich Harris",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "fa1bd040c5bdeefe65b3821cebf474f2733ce65df13089bd151dda1778e62fe8"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "semver@7.8.6",
+      "name": "semver",
+      "version": "7.8.6",
+      "license": "ISC",
+      "repository": "https://github.com/npm/node-semver",
+      "author": "GitHub Inc.",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "shebang-command@2.0.0",
+      "name": "shebang-command",
+      "version": "2.0.0",
+      "license": "MIT",
+      "repository": "kevva/shebang-command",
+      "author": "Kevin Mårtensson",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "69dee148a2cc470554dfa7142e830662062394d0fe67cddd379aba90dc60d6b3"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "shebang-regex@3.0.0",
+      "name": "shebang-regex",
+      "version": "3.0.0",
+      "license": "MIT",
+      "repository": "sindresorhus/shebang-regex",
+      "author": "Sindre Sorhus",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "siginfo@2.0.0",
+      "name": "siginfo",
+      "version": "2.0.0",
+      "license": "ISC",
+      "repository": "https://github.com/emilbayes/siginfo",
+      "author": "Emil Bay <github@tixz.dk>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "3bdddf0b9b08aaa2fe4365b803fc958ed32c0597ca0bd727be8d9fcb8b248d18"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "source-map-js@1.2.2",
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "license": "BSD-3-Clause",
+      "repository": "7rulnik/source-map-js",
+      "author": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
+      "direct": [],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "stackback@0.0.2",
+      "name": "stackback",
+      "version": "0.0.2",
+      "license": "MIT",
+      "repository": "https://github.com/shtylman/node-stackback",
+      "author": "Roman Shtylman <shtylman@gmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [],
+      "modified": [],
+      "noticeStatus": "declaration-only"
+    },
+    {
+      "id": "std-env@3.10.0",
+      "name": "std-env",
+      "version": "3.10.0",
+      "license": "MIT",
+      "repository": "unjs/std-env",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENCE",
+          "sha256": "a6f36438e46fb911859f3b9c4cad045ba64e1af3d8f4512c60258fa2d7552d28"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "strip-literal@3.1.0",
+      "name": "strip-literal",
+      "version": "3.1.0",
+      "license": "MIT",
+      "repository": "https://github.com/antfu/strip-literal",
+      "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "af32efdd008a371c77b13eef5010c81d6c5c2f67c054b6bb74317e13ac38c171"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "sumchecker@3.0.1",
+      "name": "sumchecker",
+      "version": "3.0.1",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/malept/sumchecker",
+      "author": "Mark Lee",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "tinybench@2.9.0",
+      "name": "tinybench",
+      "version": "2.9.0",
+      "license": "MIT",
+      "repository": "tinylibs/tinybench",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "cebc084d54e6dd99e53292ddb4bc1cdb63d9bfcd9ce438fe3aa6eb106d79e2ea"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "tinyexec@0.3.2",
+      "name": "tinyexec",
+      "version": "0.3.2",
+      "license": "MIT",
+      "repository": "https://github.com/tinylibs/tinyexec",
+      "author": "James Garbutt (https://github.com/43081j)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "f95f668fe64081ddb4153b322e34fdd719b991285ed08177d5ad7133b7988d92"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "tinyglobby@0.2.17",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "license": "MIT",
+      "repository": "https://github.com/SuperchupuDev/tinyglobby",
+      "author": "Superchupu",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "tinypool@1.1.1",
+      "name": "tinypool",
+      "version": "1.1.1",
+      "license": "MIT",
+      "repository": "https://github.com/tinylibs/tinypool",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "0d506ca1b2adc4ee63a9e2384a85d6cf9f014b4cf3d00c162cd60216450324fa"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "tinyrainbow@2.0.0",
+      "name": "tinyrainbow",
+      "version": "2.0.0",
+      "license": "MIT",
+      "repository": "https://github.com/tinylibs/tinyrainbow",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENCE",
+          "sha256": "cebc084d54e6dd99e53292ddb4bc1cdb63d9bfcd9ce438fe3aa6eb106d79e2ea"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "tinyspy@4.0.6",
+      "name": "tinyspy",
+      "version": "4.0.6",
+      "license": "MIT",
+      "repository": "https://github.com/tinylibs/tinyspy",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENCE",
+          "sha256": "cebc084d54e6dd99e53292ddb4bc1cdb63d9bfcd9ce438fe3aa6eb106d79e2ea"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "typescript@5.9.3",
+      "name": "typescript",
+      "version": "5.9.3",
+      "license": "Apache-2.0",
+      "repository": "https://github.com/microsoft/TypeScript",
+      "author": "Microsoft Corp.",
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
+        },
+        {
+          "name": "ThirdPartyNoticeText.txt",
+          "sha256": "1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "undici-types@7.24.6",
+      "name": "undici-types",
+      "version": "7.24.6",
+      "license": "MIT",
+      "repository": "https://github.com/nodejs/undici",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "undici@7.30.1",
+      "name": "undici",
+      "version": "7.30.1",
+      "license": "MIT",
+      "repository": "https://github.com/nodejs/undici",
+      "author": null,
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vite-node@3.2.4",
+      "name": "vite-node",
+      "version": "3.2.4",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "ddc110f3b89cc397cee99d3d64c4f746928b7a3bac02fed15101eb4d367079f6"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vite@7.3.7",
+      "name": "vite",
+      "version": "7.3.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitejs/vite",
+      "author": "Evan You",
+      "direct": [
+        {
+          "importer": "src/web/package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "a77a1c089806b39ad339535bdf3677f636c91d96693e8ad7b11fe733f650ea64"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vitest@3.2.7",
+      "name": "vitest",
+      "version": "3.2.7",
+      "license": "MIT",
+      "repository": "https://github.com/vitest-dev/vitest",
+      "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "6b861d7554fbc8488a08ee59e613bd488785a2e27bd87b80142e5125abec6f4c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vscode-jsonrpc@10.0.0",
+      "name": "vscode-jsonrpc",
+      "version": "10.0.0",
+      "license": "MIT",
+      "repository": "https://github.com/Microsoft/vscode-languageserver-node",
+      "author": "Microsoft Corporation",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "License.txt",
+          "sha256": "ec9ee83580841e8eb687aca9867f221503809ba6426c7f876ede17d91b9fcfd0"
+        },
+        {
+          "name": "thirdpartynotices.txt",
+          "sha256": "a89123562fe364dc8e969e85614eb6c1f8452afe131d6e42bd1314bb2d092b04"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vscode-languageserver-protocol@3.18.5",
+      "name": "vscode-languageserver-protocol",
+      "version": "3.18.5",
+      "license": "MIT",
+      "repository": "https://github.com/Microsoft/vscode-languageserver-node",
+      "author": "Microsoft Corporation",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "License.txt",
+          "sha256": "ec9ee83580841e8eb687aca9867f221503809ba6426c7f876ede17d91b9fcfd0"
+        },
+        {
+          "name": "thirdpartynotices.txt",
+          "sha256": "9265d27cf75775aa5ae19c5ba01846fb70ecd5121f8c39c81bef7e03f007072c"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vscode-languageserver-textdocument@1.0.16",
+      "name": "vscode-languageserver-textdocument",
+      "version": "1.0.16",
+      "license": "MIT",
+      "repository": "https://github.com/Microsoft/vscode-languageserver-node",
+      "author": "Microsoft Corporation",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "License.txt",
+          "sha256": "ec9ee83580841e8eb687aca9867f221503809ba6426c7f876ede17d91b9fcfd0"
+        },
+        {
+          "name": "thirdpartynotices.txt",
+          "sha256": "a89123562fe364dc8e969e85614eb6c1f8452afe131d6e42bd1314bb2d092b04"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vscode-languageserver-types@3.18.5",
+      "name": "vscode-languageserver-types",
+      "version": "3.18.5",
+      "license": "MIT",
+      "repository": "https://github.com/Microsoft/vscode-languageserver-node",
+      "author": "Microsoft Corporation",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "License.txt",
+          "sha256": "ec9ee83580841e8eb687aca9867f221503809ba6426c7f876ede17d91b9fcfd0"
+        },
+        {
+          "name": "thirdpartynotices.txt",
+          "sha256": "a89123562fe364dc8e969e85614eb6c1f8452afe131d6e42bd1314bb2d092b04"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vscode-uri@3.2.0",
+      "name": "vscode-uri",
+      "version": "3.2.0",
+      "license": "MIT",
+      "repository": "https://github.com/microsoft/vscode-uri",
+      "author": "Microsoft",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.md",
+          "sha256": "c669138cb1eb01fbb745e8e460b291e4f2869c14a40061390b6095d845ed4c82"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vue-tsc@3.3.14",
+      "name": "vue-tsc",
+      "version": "3.3.14",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/language-tools",
+      "author": null,
+      "direct": [
+        {
+          "importer": "package.json",
+          "group": "devDependencies"
+        }
+      ],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "a56351045b45475385a9479d7310208ff0be9489babdb4e635fcea5d7dc1fb02"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "vue@3.5.44",
+      "name": "vue",
+      "version": "3.5.44",
+      "license": "MIT",
+      "repository": "https://github.com/vuejs/core",
+      "author": "Evan You",
+      "direct": [
+        {
+          "importer": "src/web/package.json",
+          "group": "dependencies"
+        }
+      ],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "which@2.0.2",
+      "name": "which",
+      "version": "2.0.2",
+      "license": "ISC",
+      "repository": "https://github.com/isaacs/node-which",
+      "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "why-is-node-running@2.3.0",
+      "name": "why-is-node-running",
+      "version": "2.3.0",
+      "license": "MIT",
+      "repository": "https://github.com/mafintosh/why-is-node-running",
+      "author": "Mathias Buus (@mafintosh)",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "6a134e51aa31496c15a741592fc5d782b2dbf8d8b6b8524e15c8520ae0cd6374"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "xmlbuilder@15.1.1",
+      "name": "xmlbuilder",
+      "version": "15.1.1",
+      "license": "MIT",
+      "repository": "https://github.com/oozcitak/xmlbuilder-js",
+      "author": "Ozgur Ozcitak <oozcitak@gmail.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "e368bc4263b466cf98c225af15e300549e00da8859416a4536109e9654d434a8"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "yargs-parser@22.0.0",
+      "name": "yargs-parser",
+      "version": "22.0.0",
+      "license": "ISC",
+      "repository": "https://github.com/yargs/yargs-parser",
+      "author": "Ben Coe <ben@npmjs.com>",
+      "direct": [],
+      "productionDependencyClosure": false,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE.txt",
+          "sha256": "365496ca1f56da40b23c9815fc40fa9005847b2f8f8fd1c1a4929ef25ec8cd1d"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    },
+    {
+      "id": "zod@4.6.7",
+      "name": "zod",
+      "version": "4.6.7",
+      "license": "MIT",
+      "repository": "https://github.com/colinhacks/zod",
+      "author": "Colin McDonnell <zod@colinhacks.com>",
+      "direct": [
+        {
+          "importer": "src/schema/package.json",
+          "group": "dependencies"
+        }
+      ],
+      "productionDependencyClosure": true,
+      "desktopRuntime": false,
+      "os": null,
+      "cpu": null,
+      "licenseFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8"
+        }
+      ],
+      "modified": [],
+      "noticeStatus": "packaged-text"
+    }
+  ]
+}

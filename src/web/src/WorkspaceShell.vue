@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick } from 'vue';
+const ThirdPartyCredits = defineAsyncComponent(() => import('./ThirdPartyCredits.vue'));
+const creditsOpen = ref(false);
 const ThemePalette = defineAsyncComponent(() => import('./ThemePalette.vue'));
 const AccountSettings = defineAsyncComponent(() => import('./AccountSettings.vue'));
 const AccountLibrary = defineAsyncComponent(() => import('./AccountLibrary.vue'));
@@ -74,7 +76,7 @@ const selectedTarget = computed(() => !project.value.objective.damageIds || proj
 const num = (value: number | null | undefined) => value === null || value === undefined || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 const realPartsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技能倍率',bonus:'增伤乘区',crit:'暴击乘区',defense:'防御乘区',resistance:'抗性乘区'};
 const number = (event: Event) => { const value = (event.target as HTMLInputElement).value; return value.trim() ? Number(value) : NaN; };
-function navigate(target: Page) { page.value = target; mobileOpen.value = false; }
+function navigate(target: Page) { creditsOpen.value = false; page.value = target; mobileOpen.value = false; }
 function focusClickedControl(event: MouseEvent) {
   (event.target as Element).closest<HTMLButtonElement>('button')?.focus({ preventScroll: true });
 }
@@ -149,8 +151,9 @@ async function importFile(event: Event) {
 
       <AccountLibrary v-else-if="isAccountPage" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('settings')" />
 
-      <section v-else class="panel settings-page"><AccountSettings /><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于与支持范围</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><p>游戏图像 © miHoYo / HoYoverse；本工具非官方作品。图像仅作示意，原创结纹与游戏图像分别登记来源。</p></details></section>
+      <section v-else class="panel settings-page"><AccountSettings /><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于与支持范围</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><button @click="creditsOpen = true">开源许可与鸣谢</button><p>原神游戏内容 © miHoYo / HoYoverse。</p></details></section>
 
+      <WorkbenchDialog v-if="creditsOpen" title="开源许可与鸣谢" @close="creditsOpen = false"><ThirdPartyCredits /></WorkbenchDialog>
       <section v-if="isProjectPage && result.diagnostics.length" class="panel shell-diagnostics"><h2>条件与诊断</h2><ul aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}/${diagnostic.path}/${diagnostic.message}`"><strong>{{ diagnosticLabel(diagnostic.code) }}</strong> · <details><summary>技术详情</summary>{{ diagnostic.message }}<code>{{ diagnostic.code }} · {{ diagnostic.path }}</code></details></li></ul></section>
       <details v-if="isProjectPage" class="project-technical"><summary>技术详情：项目原始数据</summary><pre>{{ JSON.stringify(project, null, 2) }}</pre></details>
     </div>

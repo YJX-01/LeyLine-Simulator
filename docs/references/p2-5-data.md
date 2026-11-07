@@ -29,4 +29,4 @@ pnpm exec vitest run src/game-data/src/real.test.ts
 
 数据通过异步公共入口 `@leyline/game-data/real` 按块加载，角色每10条、武器每40条、套装每30条；基础目录和主词条表独立。getter返回深副本，用户修改不污染内置库和旧轴；产品运行、测试和普通构建不从 `.references` 导入或联网抓取。
 
-上游 MIT 许可原文保留在 `docs/constant/real-game/LICENSE.genshin-db.txt`。软件许可与游戏内容权利分别看待；游戏名称及数值权利归其原权利方。没有复制角色故事、长篇文章或上游可执行脚本，也没有安装或执行上游依赖。
+上游 MIT 许可原文保留在 `licenses/sources/genshin-db/LICENSE`。软件许可与游戏内容权利分别看待；游戏名称及数值权利归其原权利方。没有复制角色故事、长篇文章或上游可执行脚本，也没有安装或执行上游依赖。

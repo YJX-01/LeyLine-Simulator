@@ -35,3 +35,12 @@
 性能基线及预算见 `performance/README.md`。浏览器性能包含驱动往返且受机器和并发影响；Node堆差值不是浏览器内存，更不是长期无泄漏保证。Windows Playwright WebKit验收不等于真实Safari/iOS设备覆盖。
 
 离线桌面打包可将环境变量 `LEYLINE_ELECTRON_ZIP_DIR` 指向已有的 Electron ZIP 所在目录。文件名须为安装版本匹配的 `electron-v<版本>-<平台>-<架构>.zip`，packager按该版本查找；不设置时保持默认下载行为。不要将不同版本归档改名冒充当前版本。本轮本机使用已缓存的45.2.3归档，未下载或替换用户正在运行的旧程序。
+
+
+## 第三方许可分发
+
+许可原文维护在根目录 `licenses/`，概览和署名位于 `THIRD_PARTY_NOTICES.md`、`CREDITS.md`。修改依赖或补丁后运行 `pnpm licenses:capture`，日常校验使用 `pnpm licenses:check`。
+
+Vite 启动前同步分发副本到 `public/licenses/`，构建时按实际保留的模块生成 `licenses/bundled-packages.json`。根路径、子路径和桌面相对路径使用同一目录；设置页提供说明、原文、清单和鸣谢。
+
+网页交付复制完整静态输出（`.vite/` 除外），把许可、图片和索引纳入 SHA-256 清单。桌面渲染器带入相同许可目录，桌面根目录保留 Electron 的 LICENSE 与 LICENSES.chromium.html，打包器对照已安装原件校验哈希。

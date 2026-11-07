@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { packager } from '@electron/packager';
 import { cp, mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
@@ -19,6 +20,11 @@ const output = await packager({ dir: stage, out: outputDirectory, name: 'LeyLine
   ...(process.env.LEYLINE_ELECTRON_ZIP_DIR ? { electronZipDir: resolve(process.env.LEYLINE_ELECTRON_ZIP_DIR) } : {}),
   appCopyright: 'LeyLine contributors', executableName: 'LeyLine',
 });
+for (const directory of output) for (const name of ['LICENSE', 'LICENSES.chromium.html']) {
+  const original = await readFile(resolve(root, 'node_modules/electron/dist', name));
+  const bundled = await readFile(resolve(directory, name));
+  if (createHash('sha256').update(original).digest('hex') !== createHash('sha256').update(bundled).digest('hex')) throw new Error(`Desktop notice mismatch: ${name}`);
+}
 if (!preview) {
   const executable = resolve(output[0], process.platform === 'win32' ? 'LeyLine.exe' : 'LeyLine');
   const release = { formatVersion: 1, version, directory: relative(root, output[0]), executable: relative(root, executable) };

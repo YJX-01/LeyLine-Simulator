@@ -27,3 +27,6 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+
+# Derived distribution copy of the central license archive
+/src/web/public/licenses/

@@ -2,7 +2,7 @@
 
 ## 属性图标
 
-新增来源为 [Genshin Optimizer 的矢量属性库](https://github.com/frzyc/genshin-optimizer/tree/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats)，固定提交 `aa908fd1d3d9f64fcc11704c748915a109a8f3b8`。只提取静态 SVG path，不引入 React/MUI 或执行 JSX。路径代码的 MIT 许可和署名随图片放在 `public/stats/LICENSE-GENSHIN-OPTIMIZER.txt`。
+新增来源为 [Genshin Optimizer 的矢量属性库](https://github.com/frzyc/genshin-optimizer/tree/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats)，固定提交 `aa908fd1d3d9f64fcc11704c748915a109a8f3b8`。只提取静态 SVG path，不引入 React/MUI 或执行 JSX。路径代码的 MIT 许可和署名随图片放在 `public/licenses/sources/genshin-optimizer/LICENSE`。
 
 独立的 `CritDmgIcon` 替代此前共用暴击图标的做法。属性图均使用原始矢量轮廓，128×128 intrinsic size、24×24 viewBox；显示时继续通过 CSS mask 跟随语义文字色。
 

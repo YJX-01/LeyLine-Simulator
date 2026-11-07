@@ -28,7 +28,10 @@
     "test:production": "playwright test --config playwright.production.config.ts",
     "preview": "node tools/scripts/serve-dist.mjs",
     "release:prepare": "pnpm build && pnpm build:check && node tools/scripts/prepare-release.mjs",
-    "release:verify": "node tools/scripts/verify-release.mjs"
+    "release:verify": "node tools/scripts/verify-release.mjs",
+    "licenses:capture": "node tools/scripts/third-party-notices.mjs --capture",
+    "licenses:sync": "node tools/scripts/third-party-notices.mjs",
+    "licenses:check": "node tools/scripts/third-party-notices.mjs --check"
   },
   "devDependencies": {
     "@electron/packager": "^20.3.0",

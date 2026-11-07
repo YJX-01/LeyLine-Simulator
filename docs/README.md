@@ -6,6 +6,7 @@
 
 | 用途 | 入口 | 内容边界 |
 | --- | --- | --- |
+| 开源依赖与鸣谢 | [第三方声明](../THIRD_PARTY_NOTICES.md)、[许可归档](../licenses/README.md)、[鸣谢](../CREDITS.md) | 版本、协议、用途、原始许可与构建分发 |
 | 当前阶段与下一步 | [实施路线](planning/implementation-roadmap.md) | 阶段状态的统一入口 |
 | 交给下一位 agent | [U1 实施 prompt](planning/implementation-agent-prompt.md) | 可直接执行的任务、阅读顺序、代码入口、验收与提交要求 |
 | U1当前增量 | [交互契约](planning/u1-interaction-contract.md)、[实施记录](planning/u1-implementation.md) | 账号优先、新库存与队伍/轴工作区、真实材料和待验收项目 |

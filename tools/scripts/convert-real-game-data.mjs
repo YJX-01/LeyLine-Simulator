@@ -46,7 +46,8 @@ if (process.argv.includes('--capture')) {
     'artifact-main.json': upstream('docs/constant/ArtifactStat.json').main_stat['5'] };
   input['sources.json'] = { version: 'genshin-db-8e5badd-real-v1', repository: 'theBowja/genshin-db', commit: '8e5badd60b5d894284ccc927a56c9683529d2592', hashFormat: 'sha256-lf-normalized', hashes: originalHashes, scope: '固定本地数值快照；角色126、武器256、套装63。首批零命战技。' };
   for (const [name, value] of Object.entries(input)) writeFileSync(resolve(out, name), `${JSON.stringify(value)}\n`);
-  writeFileSync(resolve(out, 'LICENSE.genshin-db.txt'), readFileSync(resolve(root, '.references/genshin-db/LICENSE')));
+  mkdirSync(resolve(root, 'licenses/sources/genshin-db'), { recursive: true });
+  writeFileSync(resolve(root, 'licenses/sources/genshin-db/LICENSE'), readFileSync(resolve(root, '.references/genshin-db/LICENSE')));
 }
 
 const hashes = {};

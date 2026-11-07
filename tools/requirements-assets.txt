@@ -1,0 +1,2 @@
+# Offline icon preparation; not shipped as an application runtime.
+Pillow==12.3.0
