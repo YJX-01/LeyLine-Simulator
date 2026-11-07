@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import GameIcon from './components/GameIcon.vue';
 import { resolveRealBuild } from '@leyline/engine';
 import { getRealSet } from '@leyline/game-data/real';
 import type { AccountCharacter } from './domain/account';
@@ -29,5 +30,5 @@ watch(() => JSON.stringify({ character: props.character, showcase:props.showcase
   } catch (cause) { if (revision === current) message.value = cause instanceof Error ? cause.message : '面板加载失败。'; }
 }, { immediate: true });
 </script>
-<template><section v-if="character.realBuild" class="character-stats"><h3>{{ showcase ? '展柜快照面板' : '当前装备面板' }}</h3><p v-if="message">{{ message }}</p><dl><template v-for="stat in (['hp','attack','defense','elementalMastery','critRate','critDamage','energyRecharge'] as const)" :key="stat"><dt>{{ accountStatLabels[stat] }}</dt><dd>{{ formatGameStat(stat,stats[stat]) }}</dd></template></dl></section></template>
-<style scoped>.character-stats { margin-block:20px; }h3 { font-size:14px; }dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr) auto); gap:10px 20px; font-size:13px; }dd { margin:0; }p { font-size:12px; }@media(max-width:500px){dl { grid-template-columns:1fr auto; }}</style>
+<template><section v-if="character.realBuild" class="character-stats"><h3>{{ showcase ? '展柜快照面板' : '当前装备面板' }}</h3><p v-if="message">{{ message }}</p><dl><template v-for="stat in (['hp','attack','defense','elementalMastery','critRate','critDamage','energyRecharge'] as const)" :key="stat"><dt><GameIcon kind="stats" :id="stat" :size="16" /><span>{{ accountStatLabels[stat] }}</span></dt><dd>{{ formatGameStat(stat,stats[stat]) }}</dd></template></dl></section></template>
+<style scoped>.character-stats { margin-block:20px; }h3 { font-size:14px; }dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr) auto); gap:10px 20px; font-size:13px; }dt { display:flex; align-items:center; gap:6px; min-width:0; }dd { margin:0; }p { font-size:12px; }@media(max-width:500px){dl { grid-template-columns:1fr auto; }}</style>

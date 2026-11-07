@@ -15,7 +15,7 @@ import type { WorkbenchNode } from '@leyline/schema';
 import { useAxisWorkspaceStore } from './stores/axis-workspace';
 import { removeTimelineRecord, setDamageSelected } from './domain/workbench-project';
 import { getDamagePresentation, formatWorkbenchExpression } from './domain/workbench-display';
-const geoEmblem = `${import.meta.env.BASE_URL}game-icons/elements-geo.webp`;
+const geoEmblem = `${import.meta.env.BASE_URL}elements/geo.webp`;
 
 const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue'));
 const TeamWorkspace = defineAsyncComponent(() => import('./TeamWorkspace.vue'));

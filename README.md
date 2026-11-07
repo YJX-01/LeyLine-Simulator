@@ -10,7 +10,7 @@ Windows 本地构建的稳定双击入口为 `artifacts/desktop/Start-LeyLine.cm
 
 当前为 U1 界面迭代：先管理角色与圣遗物，再保存队伍和建立独立轴。角色卡打开详情，可直接编辑培养、选择武器与装备；支持莫娜五星库存和 Enka UID 公开展柜预览导入，展柜配装与背包实物保持分开。设置管理账号文件和七元素配色预览。当前流程见[使用指南](docs/user-guide.md)。
 
-账号、轴、定义库独立保存重开，支持实物转移确认、撤销重做、恢复和 Worker 求值。目录覆盖与机制支持分别标注；支持范围以[内容支持矩阵](docs/architecture/content-support.md)为准。美术资源 688 张、约 4.82 MB，来源与压缩记录见[素材说明](docs/references/ui-assets.md)，`pnpm assets:check` 校验哈希和预算。
+账号、轴、定义库独立保存重开，支持实物转移确认、撤销重做、恢复和 Worker 求值。目录覆盖与机制支持分别标注；支持范围以[内容支持矩阵](docs/architecture/content-support.md)为准。美术资源 2,045 张、约 9.41 MiB，按类别直接放在 public；来源与处理方法见[资源 README](src/web/public/README.md)，`pnpm assets:check` 校验哈希和预算。
 
 开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收，`pnpm desktop:start` 打开最新程序。每次打包保留独立目录，成功后更新启动入口，不覆盖运行中的旧版本。程序为本地未签名便携版本，生成产物不纳入 Git。
 
