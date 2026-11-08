@@ -11,7 +11,7 @@ import { useUnsavedChanges } from './composables/use-unsaved-changes';
 import CharacterForm from './CharacterForm.vue';
 import ArtifactBrowser from './ArtifactBrowser.vue';
 import ArtifactEquipmentGrid from './components/ArtifactEquipmentGrid.vue';
-import ConfirmationDialog from './components/ConfirmationDialog.vue';
+import UnsavedChangesDialog from './components/UnsavedChangesDialog.vue';
 import DisclosureHeading from './components/DisclosureHeading.vue';
 import StatLabel from './components/StatLabel.vue';
 const axis=useAxisWorkspaceStore(),accounts=useAccountStore();
@@ -24,7 +24,7 @@ function restore() { const current=axis.actor?.realBuild;baseline=JSON.stringify
 const slot=ref<AccountSlot>();
 restore();
 const dirty=computed(()=>cultivationDirty.value || JSON.stringify(draft.value)!==baseline);
-const {discardOpen,requestLeave,cancelDiscard,discardChanges}=useUnsavedChanges(dirty);
+const {discardOpen,requestLeave,cancelDiscard,discardChanges,saveAndLeave}=useUnsavedChanges(dirty);
 const character=computed<AccountCharacter|undefined>(()=>draft.value?{id:actorId,name:draft.value.character.name,attack:0,weapon:draft.value.weapon.name,equipment:{},realBuild:draft.value}:undefined);
 const panel=computed(()=>draft.value?resolveRealBuild(draft.value):undefined);
 const entries=computed(()=>accountSlots.map(slot=>{const real=draft.value?.artifacts.find(item=>item.slot===slot);const original=accounts.account.artifacts.find(item=>item.id===real?.id);return {slot,item:real?{id:real.id,name:original?.name ?? `${draft.value?.sets.find(set=>set.id===real.setId)?.name ?? '圣遗物'} · ${accountSlotLabels[slot]}`,slot,attack:0,real} as AccountArtifact:undefined};}));
@@ -40,16 +40,16 @@ async function equip(item?:AccountArtifact,part=slot.value) {
   }catch(cause){error.value=cause instanceof Error?cause.message:'换装失败。';}finally{busy.value=false;}
 }
 async function save() {
-  if(!draft.value||busy.value)return;
+  if(!draft.value||busy.value)return false;
   busy.value=true;error.value='';
   try {
     if(actorId!==axis.actorId || JSON.stringify(axis.actor?.realBuild)!==baseline)throw Error('轴内配装已变化，请还原后重新核对。');
-    const prepared=await form.value?.prepare();if(!prepared?.realBuild)return;
+    const prepared=await form.value?.prepare();if(!prepared?.realBuild)return false;
     const next=realBuildSchema.parse({...draft.value,...prepared.realBuild,artifacts:draft.value.artifacts,sets:draft.value.sets,inventoryAccountId:draft.value.inventoryAccountId});
     const issues=resolveRealBuild(next).issues.filter(issue=>issue.code==='invalid-input');if(issues.length)throw Error(issues.map(issue=>issue.message).join('；'));
     if(actorId!==axis.actorId || JSON.stringify(axis.actor?.realBuild)!==baseline)throw Error('编辑对象已变化，未保存。');
-    axis.command(project=>{const actor=project.candidate.actors.find(actor=>actor.id===actorId);if(actor)actor.realBuild=next;});restore();
-  }catch(cause){error.value=cause instanceof Error?cause.message:'保存失败。';}finally{busy.value=false;}
+    axis.command(project=>{const actor=project.candidate.actors.find(actor=>actor.id===actorId);if(actor)actor.realBuild=next;});restore();return true;
+  }catch(cause){error.value=cause instanceof Error?cause.message:'保存失败。';return false;}finally{busy.value=false;}
 }
 defineExpose({dirty,busy,save,restore,requestLeave});
 </script>
@@ -61,7 +61,7 @@ defineExpose({dirty,busy,save,restore,requestLeave});
       <section class="editor-section"><DisclosureHeading title="角色面板" label="面板" controls="team-character-panel" :expanded="panelOpen" @toggle="panelOpen=!panelOpen" /><div v-if="panelOpen" id="team-character-panel"><p v-if="cultivationDirty" class="editor-context">保存后更新培养面板。</p><template v-else><p v-for="(issue,index) in panel?.issues" :key="index">{{ issue.message }}</p><dl v-if="panel"><template v-for="(value,stat) in panel.stats" :key="stat"><dt><StatLabel :stat="stat as RealStat" /></dt><dd>{{ formatGameStat(stat as RealStat,value) }}</dd></template></dl></template></div></section>
       <section class="editor-section"><h3>圣遗物</h3><section v-if="slot"><div class="selection-toolbar"><h3>选择{{ accountSlotLabels[slot] }}</h3><button class="ui-action soft" data-accent="anemo" @click="slot=undefined">返回候选配装</button></div><ArtifactBrowser inline pick density="relaxed" :slot="slot" @select="equip" /></section><ArtifactEquipmentGrid v-else :entries="entries" :busy="busy" :wearers="[]" @change="slot=$event" @remove="equip(undefined,$event)" /></section>
     </template><p v-else>请先从队伍中选择已有角色。</p>
-    <ConfirmationDialog v-if="discardOpen" title="放弃未保存的修改？" confirm-label="放弃修改并退出" cancel-label="继续编辑" @cancel="cancelDiscard" @confirm="discardChanges"><p>退出将丢弃未保存的修改。</p></ConfirmationDialog>
+    <UnsavedChangesDialog v-if="discardOpen" :busy="busy" @save="saveAndLeave(save)" @continue="cancelDiscard" @discard="discardChanges" />
   </section>
 </template>
 <style scoped>

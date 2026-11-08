@@ -1,39 +1,57 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { useAccountStore } from './stores/account';
 import { fetchEnka, enkaErrorLabel } from './platform/enka';
 import { previewEnkaImport, confirmEnkaImport, type EnkaPreview } from './domain/enka-import';
+import ChoiceGroup from './components/ChoiceGroup.vue';
+import { cloneAccount } from './domain/account';
+import { planShowcaseInventory } from './domain/showcase-inventory';
 import CharacterEquipmentIcons from './components/CharacterEquipmentIcons.vue';
+import LibraryToolbar from './components/LibraryToolbar.vue';
 const emit = defineEmits<{ close:[]; imported:[id:string] }>();
-const store=useAccountStore(); const uid=ref(''); const busy=ref(false); const error=ref(''); const preview=ref<EnkaPreview>(); const selected=ref<string[]>([]);
+const store=useAccountStore(); const uid=ref(store.account.uid ?? ''); const busy=ref(false); const error=ref(''); const preview=ref<EnkaPreview>(); const selected=ref<string[]>([]);
+const importArtifacts=ref(false),search=ref('');let inventoryBaseline='';
+const visibleRows=computed(()=>preview.value?.rows.filter(row=>row.character.name.includes(search.value.trim())) ?? []);
+function selectAll(){selected.value=preview.value?.rows.map(row=>row.character.id) ?? [];}
+function toggleSelection(id:string){selected.value=selected.value.includes(id)?selected.value.filter(value=>value!==id):[...selected.value,id];}
+const artifactPlan=computed(()=>preview.value?planShowcaseInventory(store.account,preview.value.rows.filter(row=>selected.value.includes(row.character.id)).map(row=>row.character)):undefined);
 let revision=0; let controller:AbortController|undefined;
 onBeforeUnmount(()=>{revision++;controller?.abort();});
+watch(uid,()=>{preview.value=undefined;selected.value=[];error.value='';});
 async function query() {
   if (busy.value) return;
   const generation=++revision,owner=store.account;controller=new AbortController();busy.value=true;error.value='';preview.value=undefined;
   try {
-    const identifier=uid.value.trim(); const response=await fetchEnka(identifier,controller.signal); if (revision!==generation||owner!==store.account) return; const result=await previewEnkaImport(response,identifier,owner);
+    const identifier=uid.value.trim(); if(owner.uid && owner.uid!==identifier)throw new Error('UID 与当前账号绑定不一致，请在账号信息中修改或切换账号。'); const response=await fetchEnka(identifier,controller.signal); if (revision!==generation||owner!==store.account) return; const result=await previewEnkaImport(response,identifier,owner);
     if (revision!==generation||owner!==store.account) return;
-    preview.value=result;selected.value=result.rows.filter(row=>row.action!=='update').map(row=>row.character.id);
+    preview.value=result;search.value='';inventoryBaseline=JSON.stringify(owner.artifacts);importArtifacts.value=false;selected.value=result.rows.filter(row=>row.action!=='update').map(row=>row.character.id);
   } catch(cause) { if (revision===generation) error.value=enkaErrorLabel(cause); }
   finally { if (revision===generation) busy.value=false; }
 }
-function confirm() { try { if (!preview.value) return;const count=confirmEnkaImport(store.account,preview.value,selected.value);store.notice=`已导入 ${count} 位展柜角色；本地实物库存与穿戴关系保持。`;emit('imported',selected.value[0]);emit('close'); } catch(cause) { error.value=enkaErrorLabel(cause); } }
+function confirm() { try { if (!preview.value) return;if(importArtifacts.value && JSON.stringify(store.account.artifacts)!==inventoryBaseline)throw new Error('库存已变化，请重新查询后确认。');const next=cloneAccount(store.account);const count=confirmEnkaImport(next,preview.value,selected.value,importArtifacts.value);store.commitEdit(next);store.notice=importArtifacts.value?`已导入 ${count} 位角色及所选圣遗物，当前穿戴不变。`:`已导入 ${count} 位展柜角色；本地实物库存与穿戴关系保持。`;emit('imported',selected.value[0]);emit('close'); } catch(cause) { error.value=enkaErrorLabel(cause); } }
+const confirmLabel=computed(()=>`确认导入 ${selected.value.length} 位角色`);
+const canConfirm=computed(()=>!!preview.value && !!selected.value.length && !busy.value);
+defineExpose({confirm,confirmLabel,canConfirm,hasPreview:computed(()=>!!preview.value),busy});
 </script>
 <template>
   <div class="enka-import">
-    <p class="explanation">读取 UID 的公开角色展柜，无需登录。请在游戏中开启“显示角色详情”；未展示角色与背包库存无法通过此接口读取。未支持的数据会逐项提示，不使用默认数值填补。</p>
-    <p>当前培养范围为 1–90 级，圣遗物支持五星；未支持条目会在预览中列出原因。</p>
+    <p class="explanation">读取 UID 的公开角色展柜，无需登录。请在游戏中开启“显示角色详情”；未展示角色与背包库存无法通过此接口读取。</p>
     <form @submit.prevent="query"><label>游戏 UID<input v-model="uid" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="输入你的 UID" :disabled="busy"></label><button class="ui-action" data-accent="electro" :disabled="busy || !/^\d{9,10}$/.test(uid.trim())">{{ busy?'正在查询…':'查询角色展柜' }}</button></form>
     <p v-if="error" role="alert">{{ error }}</p>
-    <template v-if="preview"><div class="preview-title"><strong>{{ preview.nickname || '公开展柜' }}</strong><span>UID {{ preview.uid }} · 可读取 {{ preview.rows.length }} 位</span></div><p>装备保存为展柜快照，不作为背包实物重复入库。补全已有角色时保留本地穿戴；已有完整资料默认不勾选，选中后才更新培养和武器。</p>
-      <label v-for="row in preview.rows" :key="row.character.id" class="import-row"><input v-model="selected" type="checkbox" :value="row.character.id"><CharacterEquipmentIcons :build="row.character.realBuild" :name="row.character.name" :size="80" /><span class="import-character-info"><strong>{{ row.character.name }}</strong><small>{{ row.character.realBuild?.level }}级 · {{ row.character.realBuild?.constellation }}命 · {{ row.character.weapon }}</small></span><b>{{ row.action==='add'?'新增':row.action==='complete'?'补全资料':'更新资料' }}</b></label>
-      <p v-if="!preview.rows.length">没有可导入的角色。请确认展柜已公开详情；以下未支持条目不会用默认值替代。</p><details v-if="preview.skipped.length" class="skipped-characters" open><summary>{{ preview.skipped.length }} 位角色暂不能导入</summary><p v-for="message in preview.skipped" :key="message" class="skip">{{ message }}</p></details>
-      <button class="ui-action" data-accent="electro" :disabled="!selected.length" @click="confirm">确认导入 {{ selected.length }} 位角色</button>
+    <template v-if="preview">
+      <div class="preview-title"><strong>{{ preview.nickname || '公开展柜' }}</strong><span>UID {{ preview.uid }}</span><strong class="selection-total">已选 {{ selected.length }} / {{ preview.rows.length }} 位</strong></div>
+      <LibraryToolbar v-model="search" label="搜索展柜角色" placeholder="查找角色…" search-only><template #actions><button class="ui-action soft" data-accent="electro" data-size="md" :disabled="selected.length===preview.rows.length" @click="selectAll">全选</button><button class="ui-action soft" data-accent="electro" data-size="md" :disabled="!selected.length" @click="selected=[]">清空选择</button></template></LibraryToolbar>
+      <ChoiceGroup :model-value="importArtifacts?'inventory':'snapshot'" :options="[{value:'snapshot',label:'仅保存展柜'},{value:'inventory',label:'同时导入本地库'}]" label="展柜圣遗物处理" tone="electro" @update:model-value="importArtifacts=$event==='inventory'" />
+      <p v-if="importArtifacts && artifactPlan" role="status">圣遗物新增 {{ artifactPlan.added }} 件，匹配 {{ artifactPlan.matched }} 件。匹配包含副词条顺序，已有物品和穿戴关系保留。</p>
+      <div class="showcase-choices"><button v-for="row in visibleRows" :key="row.character.id" class="import-row" :class="{selected:selected.includes(row.character.id)}" :aria-label="`导入${row.character.name}`" :aria-pressed="selected.includes(row.character.id)" @click="toggleSelection(row.character.id)"><span class="showcase-portrait"><CharacterEquipmentIcons :build="row.character.realBuild" :name="row.character.name" :size="104" /><strong>{{ row.character.name }}</strong></span><span class="selection-symbol" aria-hidden="true"><svg v-if="selected.includes(row.character.id)" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg></span></button></div>
+      <p v-if="preview.rows.length && !visibleRows.length">没有匹配的角色。</p><p v-if="!preview.rows.length">没有可导入的角色，请核对展柜设置和以下提示。</p>
+      <details v-if="preview.skipped.length" class="skipped-characters" open><summary>{{ preview.skipped.length }} 位角色暂不能导入</summary><p v-for="message in preview.skipped" :key="message" class="skip">{{ message }}</p></details>
     </template>
-    <button class="ui-muted-button" @click="emit('close')">取消</button>
+
   </div>
 </template>
 <style scoped>
-.enka-import { display:grid; gap:14px; }p { color:var(--muted); font-size:var(--font-body); line-height:1.7; margin:0; }form { display:flex; align-items:end; gap:12px; margin:0; }form label { flex:1; font-size:var(--font-body); }input { min-width:0; }.preview-title { display:flex; gap:12px; align-items:center; }.preview-title span { font-size:var(--font-body); color:var(--muted); }.import-row { display:grid; grid-template-columns:16px auto minmax(0,1fr) auto; align-items:center; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; }.import-row input { width:16px; height:16px; }.import-row > .import-character-info { display:grid; flex:1; min-width:0; gap:6px; font-size:var(--font-body); }small,b { font-size:var(--font-body); }small { color:var(--muted); overflow-wrap:anywhere; }.import-row > b { flex-shrink:0; }.skipped-characters summary { color:var(--element-geo-deep); font-size:var(--font-body); cursor:pointer; }.skipped-characters p { margin-top:8px; }b { color:var(--element-hydro-deep); font-weight:500; }.skip { color:var(--element-geo-deep); }@media(max-width:550px){.import-row { grid-template-columns:16px minmax(0,1fr) auto; }.import-row > .character-equipment-icons { grid-column:2; }.import-row > .import-character-info { grid-column:2/-1; }.import-row > input { grid-row:1/3; }.import-row > b { grid-column:3; grid-row:1; }form { flex-wrap:wrap; }form label { min-width:100%; }}
+.enka-import { display:grid; gap:16px; }p { color:var(--muted); font-size:var(--font-control); line-height:1.7; margin:0; }.enka-import .ui-action { font-size:var(--font-control); font-weight:700; }form { display:flex; align-items:end; gap:12px; margin:0; }form label { flex:1; display:grid; gap:8px; font-weight:700; font-size:var(--font-control); }input { min-width:0; }.preview-title { display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding-top:16px; border-top:1px solid var(--line); font-size:var(--font-control); }.preview-title > span { color:var(--muted); }.selection-total { margin-left:auto; color:var(--element-electro-deep); }.showcase-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }.import-row { position:relative; min-width:0; display:grid; grid-template-columns:minmax(0,1fr) 24px; align-items:center; gap:8px; padding:12px; border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; color:var(--ink); background:var(--surface); text-align:left; }.import-row:hover { border-color:var(--line); border-top-color:var(--element-electro-primary); }.import-row.selected { border-top-color:var(--element-electro-deep); background:var(--element-electro-light); }.showcase-portrait { display:grid; justify-items:center; min-width:0; gap:10px; }.showcase-portrait strong { font-size:var(--font-control); font-weight:700; }.showcase-portrait :deep(.character-equipment-icons) { gap:8px; padding:0; }.selection-symbol { width:24px; height:24px; border:1px solid var(--line); border-radius:6px; background:var(--surface); box-sizing:border-box; }.selected .selection-symbol { color:white; border-color:var(--element-electro-deep); background:var(--element-electro-deep); }.selection-symbol svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2.5; }.explanation { color:var(--ink); }.skipped-characters { font-size:var(--font-control); color:var(--element-geo-deep); }.skipped-characters p { margin-top:8px; color:var(--element-geo-deep); }
+@media(max-width:1000px){.showcase-choices { grid-template-columns:repeat(2,minmax(0,1fr)); }}
+@media(max-width:620px){.showcase-choices { grid-template-columns:minmax(0,1fr); }form { flex-wrap:wrap; }form label { flex-basis:100%; }.selection-total { margin-left:0; }}
 </style>

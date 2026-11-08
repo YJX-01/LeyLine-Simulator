@@ -5,11 +5,26 @@ describe('fixed real game snapshot', () => {
   it('exposes the complete fixed catalog with honest support and Chinese names', async () => {
     const catalog = await loadRealCatalog();
     expect(catalog.version).toBe(REAL_DATA_VERSION);
-    expect([catalog.characters.length, catalog.weapons.length, catalog.sets.length]).toEqual([126, 256, 63]);
+    expect([catalog.characters.length, catalog.weapons.length, catalog.sets.length]).toEqual([140, 256, 63]);
     expect(catalog.characters.filter(entry => entry.supported).map(entry => entry.id).sort()).toEqual(['jean', 'kaeya', 'xingqiu']);
     expect(catalog.characters.find(entry => entry.id === 'jean')?.name).toBe('琴');
     expect(catalog.weapons.find(entry => entry.id === 'favoniussword')?.name).toBe('西风剑');
-    expect(new Set(catalog.characters.map(entry => entry.id)).size).toBe(126);
+    expect(new Set(catalog.characters.map(entry => entry.id)).size).toBe(140);
+  });
+  it('keeps seven traveler element forms separate without claiming supported mechanics', async () => {
+    const catalog=await loadRealCatalog();
+    for(const base of ['aether','lumine']) {
+      const forms=catalog.characters.filter(entry=>entry.id.startsWith(base+'-'));
+      expect(new Set(forms.map(entry=>entry.element))).toEqual(new Set(['anemo','geo','electro','dendro','hydro','pyro','cryo']));
+      for(const form of forms) {
+        const character=await getRealCharacter(form.id);
+        expect(character.skills).toHaveLength(3);
+        expect(character.skills[1].element).toBe(form.element);
+        expect(character.support.supported).toBe(false);
+        expect(character.base).toEqual((await getRealCharacter(base)).base);
+      }
+    }
+    expect((await getRealCharacter('aether-anemo')).skills.map(skill=>skill.name)).toEqual(['异邦铁风','风涡剑','风息激荡']);
   });
   it('keeps raw numeric curves and independent skill parameters and isolates mutable consumers', async () => {
     const jean = await getRealCharacter('jean');

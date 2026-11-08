@@ -1,3 +1,4 @@
+import { restoreRecordedNoteSetup } from '../helpers/recorded-note-setup';
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
@@ -98,9 +99,7 @@ test('actual inventory: viewport pages, multi-select matching, release order and
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(baseline);
   await page.setViewportSize({width:1280,height:900});
   await page.getByTestId('workspace-nav-characters').click();
-  await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
-  await page.getByRole('button',{name:'从穿戴备注整理角色',exact:true}).click();
-  await page.getByRole('button',{name:'确认按备注整理',exact:true}).click();
+  await restoreRecordedNoteSetup(page);
   await page.getByRole('button',{name:'查看琴详情',exact:true}).click();
   const role=page.getByRole('dialog',{name:'琴',exact:true});
   const placeholder=role.locator('.weapon-placeholder.add');

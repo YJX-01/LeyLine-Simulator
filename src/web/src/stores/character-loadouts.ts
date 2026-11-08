@@ -57,6 +57,24 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     }
     loadouts.value=next;
   }
+  function removeCharacter(accountId:string,characterId:string,commit:()=>void) {
+    if(error.value)throw new Error(error.value);
+    const preferenceId=`${accountId}/${characterId}`;
+    const next=loadouts.value.filter(item=>item.accountId!==accountId || item.characterId!==characterId);
+    const nextFavorites={...favorites.value},nextEffective={...effective.value};
+    delete nextFavorites[preferenceId];delete nextEffective[preferenceId];
+    const writes:[[string,unknown],[string,unknown],[string,unknown]]=[[key,next],['leyline-character-favorites-v1',nextFavorites],['leyline-effective-stats-v1',nextEffective]];
+    const previous=writes.map(([storageKey])=>[storageKey,localStorage.getItem(storageKey)] as const);
+    try{
+      for(const [storageKey,value] of writes)localStorage.setItem(storageKey,JSON.stringify(value));
+      commit();
+    }catch(cause){
+      try{for(const [storageKey,value] of previous)if(value===null)localStorage.removeItem(storageKey);else localStorage.setItem(storageKey,value);}
+      catch{error.value='角色删除回退失败，请保留当前资料并检查本地存储。';}
+      throw cause;
+    }
+    loadouts.value=next;favorites.value=nextFavorites;effective.value=nextEffective;
+  }
   function update(id:string,name:string,account:LocalAccount,character:AccountCharacter) {
     if(!name.trim() || name.length>160)throw new Error('请输入不超过 160 字的方案名称。');
     if(error.value)throw new Error(error.value);
@@ -95,5 +113,5 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     loadouts.value = next;
     return entry.id;
   }
-  return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, effectiveStats, setEffectiveStats };
+  return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, removeCharacter, effectiveStats, setEffectiveStats };
 });

@@ -6,6 +6,7 @@
   --font-badge:12px; --font-badge-mini:10px;
   --dialog-width-confirm:420px; --dialog-width-filter:560px; --dialog-width-content:920px; --dialog-width-editor:1000px;
   --control-height-lg:40px; --control-height-md:32px; --control-height-sm:24px;
+  --control-width-short:64px;
   --control-height:var(--control-height-lg); --control-radius:7px; --control-font-size:var(--font-control); --control-font-weight:700;
 }
 .ui-control { box-sizing:border-box; height:var(--control-height); min-height:var(--control-height); border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); font-size:var(--control-font-size); font-weight:var(--control-font-weight); }
@@ -53,3 +54,5 @@
 html { scrollbar-gutter:stable; }
 .workspace-design .library-toolbar .library-actions button { font-size:var(--font-control); font-weight:700; }
 .workspace-design .element-shortcuts > button,.workspace-design .slot-tabs > button,.workspace-design .inventory-count,.workspace-design .inventory-reset,.workspace-design .reset-filters { font-size:var(--font-control); font-weight:700; }
+
+.workspace-design button.ui-action[data-size=md][data-width=short] { min-width:var(--control-width-short); font-size:var(--font-control); font-weight:700; }

@@ -6,11 +6,12 @@ import talentDisplay from '../domain/data/character-talent-display.json';
 import GameIcon from './GameIcon.vue';
 import CornerBadge from './CornerBadge.vue';
 import WeaponPlaceholder from './WeaponPlaceholder.vue';
+import { travelerForm } from '../domain/traveler-forms';
 
 const props = defineProps<{ build?: RealBuild; name: string; artifacts: AccountArtifact[] }>();
 type Talent = { key: string; label: string; icon: string; name: string; constellations: number[] };
 const rows = computed(() => {
-  const source = (talentDisplay.characters as Record<string, Talent[]>)[props.name];
+  const source = (talentDisplay.characters as Record<string, Talent[]>)[travelerForm(props.build?.character.id)?.talentName ?? props.name];
   return (source ?? ['normal', 'skill', 'burst'].map((key, index) => ({ key, label: 'AEQ'[index], icon: '', name: '', constellations: [] }))).map(row => {
     const base = props.build?.talents[row.key as keyof RealBuild['talents']];
     const bonus = row.constellations.filter(rank => rank <= (props.build?.constellation ?? 0)).length * 3;

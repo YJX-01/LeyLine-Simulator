@@ -4,6 +4,7 @@ import { getRealCharacter, getRealWeapon, getRealSet } from '@leyline/game-data/
 import mapping from './data/enka-catalog.json';
 import { loadAccountGameData } from './account-presentation';
 import { accountSlotLabels, cloneAccount, parseAccount, type LocalAccount, type AccountCharacter, type AccountSlot } from './account';
+import { planShowcaseInventory } from './showcase-inventory';
 import { ratioStat, validateAccountArtifact } from './account-real';
 
 const stats: Record<string,RealStat> = { HP:'hp',HP_PERCENT:'hpPercent',ATTACK:'attack',ATTACK_PERCENT:'attackPercent',DEFENSE:'defense',DEFENSE_PERCENT:'defensePercent',CRITICAL:'critRate',CRITICAL_HURT:'critDamage',CHARGE_EFFICIENCY:'energyRecharge',ELEMENT_MASTERY:'elementalMastery',HEAL_ADD:'healingBonus',PHYSICAL_ADD_HURT:'physicalBonus',FIRE_ADD_HURT:'pyroBonus',ELEC_ADD_HURT:'electroBonus',WATER_ADD_HURT:'hydroBonus',GRASS_ADD_HURT:'dendroBonus',WIND_ADD_HURT:'anemoBonus',ROCK_ADD_HURT:'geoBonus',ICE_ADD_HURT:'cryoBonus' };
@@ -29,9 +30,11 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
   for (const raw of response.avatarInfoList??[]) {
     let label='展柜角色';
     try {
-      const value=enkaAvatarSchema.parse(raw); const entry=characterMap[String(value.avatarId)];
+      const value=enkaAvatarSchema.parse(raw);
+      const base=characterMap[String(value.avatarId)];
+      const entry=['aether','lumine'].includes(base?.id)?characterMap[`${value.avatarId}-${value.skillDepotId}`]:base;
       label=data.catalog.characters.find(character=>character.id===entry?.id)?.name??`角色 ${value.avatarId}`;
-      if (!entry) throw new Error('当前角色目录尚未收录，暂不能导入。');
+      if (!entry) throw new Error(['aether','lumine'].includes(base?.id)?'该旅行者元素形态尚缺可靠的展柜技能映射，暂不能导入。':'当前角色目录尚未收录，暂不能导入。');
       if (['aether','lumine','manekin','manekina'].includes(entry.id)) throw new Error('该角色的多元素形态暂未适配，暂不能导入。');
       if (entry.skillDepotId!==undefined && value.skillDepotId!==entry.skillDepotId) throw new Error('该角色的天赋形态与已核验资料不一致，暂不能导入。');
       if (entry.skills.length!==3) throw new Error('当前导入器尚缺该角色的天赋编号适配，暂不能导入；无需调整游戏内的展柜设置。');
@@ -69,20 +72,19 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
   }
   return preview;
 }
-export function confirmEnkaImport(account:LocalAccount,preview:EnkaPreview,selectedIds:string[]):number {
+export function confirmEnkaImport(account:LocalAccount,preview:EnkaPreview,selectedIds:string[],importArtifacts=false):number {
   if (account.id!==preview.accountId) throw new Error('账号已切换，请重新查询。');
-  const next=cloneAccount(account);let count=0;
+  if(account.uid && account.uid!==preview.uid)throw new Error('UID 与当前账号绑定不一致，请先修改账号信息或切换账号。');
+  const next=cloneAccount(account);next.uid=preview.uid;let count=0;
   for(const row of preview.rows.filter(row=>selectedIds.includes(row.character.id))) {
     const index=next.characters.findIndex(item=>item.id===row.character.id);
     if (row.before ? index<0||JSON.stringify(next.characters[index])!==row.before : index>=0||next.characters.some(item=>item.name===row.character.name)) throw new Error('预览后角色资料已变化，请重新查询。');
     if (index>=0) next.characters[index]=row.character;else next.characters.push(row.character);count++;
   }
   if (!count) throw new Error('请先选择要导入的角色。');
-  account.characters=parseAccount(next).characters;
+  if(importArtifacts)next.artifacts=planShowcaseInventory(next,next.characters.filter(character=>selectedIds.includes(character.id))).next.artifacts;
+  const valid=parseAccount(next);
+  account.characters=valid.characters;account.artifacts=valid.artifacts;account.uid=valid.uid;
   return count;
 }
-export function showcaseArtifact(character:AccountCharacter,slot:AccountSlot) {
-  const real=character.showcase?.build.artifacts.find(item=>item.slot===slot);
-  if (!real) return undefined;
-  return {id:real.id,slot,attack:0,real,name:`${character.showcase!.build.sets.find(set=>set.id===real.setId)?.name??'展柜装备'} · ${accountSlotLabels[slot]}`};
-}
+export { showcaseArtifact } from './showcase-inventory';

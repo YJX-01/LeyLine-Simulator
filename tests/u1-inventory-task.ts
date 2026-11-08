@@ -1,3 +1,4 @@
+import { restoreRecordedNoteSetup } from './helpers/recorded-note-setup';
 import { expect, type Page, type TestInfo } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 
@@ -26,13 +27,14 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.inventory-count')).toContainText('筛选结果 458 件');
   await page.getByRole('button',{name:'排序',exact:true}).click();
   const sortDialog=page.getByRole('dialog',{name:'圣遗物排序',exact:true});
+  await expect(sortDialog.getByRole('button',{name:'实装版本',exact:true})).toHaveAttribute('aria-pressed','true');
   await sortDialog.getByRole('button',{name:'等级',exact:true}).click();
   await sortDialog.getByRole('button',{name:'从低到高',exact:true}).click();
   await sortDialog.getByRole('button',{name:'完成',exact:true}).click();
   const visibleCount=await page.locator('.inventory-card').count();
   const expectedLevels=await page.evaluate(count=>JSON.parse(localStorage.getItem('leyline-account-v1')!).artifacts.map((item:{real:{level:number}})=>item.real.level).sort((a:number,b:number)=>a-b).slice(0,count).map(String),visibleCount);
   await expect(page.locator('.inventory-card .artifact-level')).toHaveText(expectedLevels);
-  await page.getByRole('button',{name:'排序',exact:true}).click();await sortDialog.getByRole('button',{name:'重置排序',exact:true}).click();await sortDialog.getByRole('button',{name:'完成',exact:true}).click();
+  await page.getByRole('button',{name:'排序',exact:true}).click();await sortDialog.getByRole('button',{name:'重置排序',exact:true}).click();await expect(sortDialog.getByRole('button',{name:'实装版本',exact:true})).toHaveAttribute('aria-pressed','true');await sortDialog.getByRole('button',{name:'导入顺序',exact:true}).click();await sortDialog.getByRole('button',{name:'完成',exact:true}).click();
 
   const initialCards=await page.locator('.inventory-card').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
   await page.getByRole('group',{name:'卡片密度'}).getByRole('button',{name:'紧凑',exact:true}).click();
@@ -52,6 +54,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   });
   await page.reload();
   await page.getByTestId('workspace-nav-artifacts').click();
+  await page.getByRole('button',{name:'排序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'导入顺序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await page.getByRole('button', { name: '核对已导入套装', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('天之美赐');
   await page.getByRole('button', { name: '确认补全 1 件套装身份', exact: true }).click();
@@ -79,6 +82,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.locator('.inventory-cards').screenshot({ path:'artifacts/artifact-icon-density.png' });
   await page.reload();
   await page.getByTestId('workspace-nav-artifacts').click();
+  await page.getByRole('button',{name:'排序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'导入顺序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await expect(page.getByRole('group', { name:'卡片密度' }).getByRole('button', { name:'紧凑', exact:true })).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button', { name:'生之花', exact:true }).click();
   await page.getByRole('group', { name:'卡片密度' }).getByRole('button', { name:'疏松', exact:true }).click();
@@ -103,7 +107,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.getByLabel('强化等级',{exact:true})).toBeFocused();
   await expect(page.getByLabel('强化等级',{exact:true})).toHaveValue('16');
   await page.keyboard.press('Escape');
-  await page.getByRole('button',{name:'放弃修改并退出',exact:true}).click();
+  await page.getByRole('button',{name:'放弃修改',exact:true}).click();
   await expect(page.locator('.inventory-card').first().locator('.artifact-level')).toHaveText('20');
   await page.locator('.inventory-card').first().click();
   await page.getByLabel('强化等级', { exact: true }).fill('16');
@@ -120,13 +124,12 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.inventory-card').first()).toBeVisible();
   const previousViewport=page.viewportSize();
   await page.setViewportSize({width:390,height:844});
-  const overflowingCards=await page.locator('.inventory-card').evaluateAll(cards=>cards.filter(card=>{
+  await expect.poll(()=>page.locator('.inventory-card').evaluateAll(cards=>cards.filter(card=>{
     const outer=card.getBoundingClientRect();
     return [...card.querySelectorAll('.artifact-values,.artifact-art')].some(part=>{
       const bounds=part.getBoundingClientRect();return bounds.left<outer.left+3 || bounds.right>outer.right-3;
     });
-  }).map(card=>card.getAttribute('aria-label')));
-  expect(overflowingCards).toEqual([]);
+  }).map(card=>card.getAttribute('aria-label')))).toEqual([]);
   await page.screenshot({path:'artifacts/artifact-goblets-readable-mobile.png',fullPage:true});
   if(previousViewport)await page.setViewportSize(previousViewport);
   await page.getByRole('button', { name: '全部部位', exact: true }).click();
@@ -146,6 +149,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   expect(account.characters).toHaveLength(0); // The inventory file cannot invent character builds.
   await page.reload();
   await page.getByTestId('workspace-nav-artifacts').click();
+  await page.getByRole('button',{name:'排序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'导入顺序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await expect(page.locator('.inventory-count')).toContainText('筛选结果 458 件');
   await page.getByRole('button', { name: '导航 账号', exact: true }).click();
   await page.getByLabel('导入账号资料文件', { exact: true }).setInputFiles(saved);
@@ -157,10 +161,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('group', { name:'卡片密度' }).getByRole('button', { name:'紧凑', exact:true }).click();
   await page.getByTestId('workspace-nav-characters').click();
-  await page.getByRole('button', { name: '莫娜导入', exact: true }).click();
-  await page.getByRole('button', { name: '从穿戴备注整理角色', exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('55 个角色穿戴备注');
-  await page.getByRole('button', { name: '确认按备注整理', exact: true }).click();
+  await restoreRecordedNoteSetup(page);
   await expect(page.locator('.character-cards > button')).toHaveCount(55);
   await expect(page.locator('.character-card [data-tone=electro]')).toHaveCount(0);
   await expect(page.locator('.character-card [data-state=missing]')).toHaveCount(55);
@@ -177,14 +178,17 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.screenshot({path:'artifacts/account-character-loadouts.png',fullPage:true});
   await page.getByRole('button',{name:'编辑琴首选配置',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'琴',exact:true})).toBeVisible();
-  await page.keyboard.press('Escape');
+  await page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'保存组合',exact:true}).click();
+  await expect(page.getByRole('dialog',{name:'保存组合',exact:true})).toBeVisible();
+  await page.getByRole('dialog',{name:'保存组合',exact:true}).getByRole('button',{name:'保存',exact:true}).click();await page.keyboard.press('Escape');
   await page.getByTestId('workspace-nav-combinations').click();
   await expect(page.getByRole('heading',{name:'圣遗物组合',exact:true,level:2})).toBeVisible();
   await page.getByLabel('搜索圣遗物组合',{exact:true}).fill('琴');
   await expect(page.locator('.combination-row')).toHaveCount(1);
-  await page.getByRole('button',{name:'展开装备明细',exact:true}).click();
-  await expect(page.locator('.combination-row .equipment-list > article')).toHaveCount(5);
-  await expect(page.locator('.combination-row .artifact-summary').first()).toBeVisible();
+  await expect(page.locator('.combination-row .equipment-strip > div')).toHaveCount(5);
+  await page.getByRole('button',{name:'编辑组合',exact:true}).click();
+  await expect(page.getByRole('dialog',{name:'编辑组合',exact:true}).locator('.equipment-list > article')).toHaveCount(5);
+  await page.keyboard.press('Escape');
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(beforeCollections);
   await page.screenshot({path:'artifacts/account-artifact-combinations.png',fullPage:true});
   const collectionViewport=page.viewportSize();
@@ -234,7 +238,6 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button',{name:'完成选择',exact:true}).click();
   await page.getByRole('dialog',{name:'筛选圣遗物',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await page.locator('.inventory-card').first().click();
-  await page.getByRole('button', { name: '选择这件圣遗物', exact: true }).click();
   await expect(page.getByRole('button', { name: '确认转移装备', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '取消转移', exact: true }).click();
   const originalRoleAccount = await page.evaluate(() => localStorage.getItem('leyline-account-v1'));
@@ -290,12 +293,12 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await unloadFlower();
   await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
   await page.getByRole('dialog',{name:'琴的配置',exact:true}).getByRole('button',{name:'选择琴首选配置',exact:true}).click();
-  await expect(page.getByRole('dialog',{name:'放弃未保存的修改？',exact:true})).toBeVisible();
+  await expect(page.getByRole('dialog',{name:'有未保存的修改',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'继续编辑',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'选择琴配置',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
   await page.getByRole('dialog',{name:'琴的配置',exact:true}).getByRole('button',{name:'选择琴首选配置',exact:true}).click();
-  await page.getByRole('button',{name:'放弃修改并退出',exact:true}).click();
+  await page.getByRole('button',{name:'放弃修改',exact:true}).click();
   await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'琴的配置',exact:true}).getByRole('button',{name:'选择琴首选配置',exact:true})).toBeDisabled();
   await page.keyboard.press('Escape');
@@ -307,14 +310,13 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
 
   await expect(page.getByLabel('角色等级', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: '保存角色资料', exact: true })).toHaveCount(0);
-  await page.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   await page.getByLabel('搜索游戏角色', { exact: true }).fill('琴');
-  await expect.poll(() => page.locator('.catalog-options .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  await expect.poll(() => page.locator('.catalog-browser-options .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
   await page.screenshot({ path: info.outputPath('u1-character-picker.png') });
   for (const name of ['芙宁娜', '丝柯克', '米提亚', '瓦列里']) {
     await page.getByLabel('搜索游戏角色', { exact: true }).fill(name);
-    await expect.poll(() => page.locator('.catalog-options .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-    await expect.poll(() => page.locator('.catalog-options .game-icon > img').first().evaluate((image: HTMLImageElement) => {
+    await expect.poll(() => page.locator('.catalog-browser-options .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await expect.poll(() => page.locator('.catalog-browser-options .game-icon > img').first().evaluate((image: HTMLImageElement) => {
       const canvas = document.createElement('canvas'); canvas.width = 128; canvas.height = 128;
       const context = canvas.getContext('2d')!; context.drawImage(image,0,0,128,128);
       const pixels = context.getImageData(0,0,128,128).data;

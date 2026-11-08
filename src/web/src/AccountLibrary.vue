@@ -2,7 +2,7 @@
 import { computed, ref, shallowRef, onMounted, watch, defineAsyncComponent, nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import type { RealStat } from '@leyline/schema';
-import { cloneAccount, parseAccount, accountSlots, accountSlotLabels, artifactOwner, equipArtifact, type AccountSlot, type AccountCharacter, type LocalAccount } from './domain/account';
+import { cloneAccount, parseAccount, accountSlots, accountSlotLabels, artifactOwner, equipArtifact, type AccountSlot, type AccountCharacter, type AccountArtifact, type LocalAccount } from './domain/account';
 import { useAccountStore } from './stores/account';
 import { localDataErrorLabel } from './domain/workbench-labels';
 import { loadAccountGameData } from './domain/account-presentation';
@@ -11,8 +11,11 @@ import { elementPalette } from './styles/palette';
 import type { RealCatalog } from '@leyline/game-data/real';
 import { previewMonaSetRepairs, confirmMonaImport, type MonaImportPreview } from './domain/mona-import';
 import ArtifactBrowser from './ArtifactBrowser.vue';
+import ArtifactPickerDialog from './components/ArtifactPickerDialog.vue';
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
-import { organizeMonaWearNotes } from './domain/mona-wear-notes';
+import ManualCharacterImport from './ManualCharacterImport.vue';
+import ImportActions from './components/ImportActions.vue';
+import ContextMenu from './components/ContextMenu.vue';
 import CharacterForm from './CharacterForm.vue';
 import CharacterStats from './CharacterStats.vue';
 import ArtifactForm from './ArtifactForm.vue';
@@ -34,12 +37,19 @@ import EditorActions from './components/EditorActions.vue';
 import ConfirmationDialog from './components/ConfirmationDialog.vue';
 import ArtifactEquipmentGrid from './components/ArtifactEquipmentGrid.vue';
 import { useLibraryScroll } from './composables/use-library-scroll';
+import UnsavedChangesDialog from './components/UnsavedChangesDialog.vue';
 import { useUnsavedChanges } from './composables/use-unsaved-changes';
 import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, configurationSignature } from './domain/character-loadout-name';
 import { useCharacterLoadoutsStore } from './stores/character-loadouts';
 import { hasLocalConfiguration, hasCharacterInformation, planClearedConfiguration } from './domain/account-configurations';
 import { releaseMetadata, compareReleaseNewest } from './domain/catalog-release';
+import { useArtifactCombinationsStore } from './stores/artifact-combinations';
+import { applyCombination, combinationSignature, type ArtifactCombination } from './domain/artifact-combinations';
+import { planShowcaseInventory } from './domain/showcase-inventory';
+import ArtifactCombinationLibrary from './ArtifactCombinationLibrary.vue';
+import ArtifactCombinationEditor from './ArtifactCombinationEditor.vue';
 const EnkaImport = defineAsyncComponent(() => import('./EnkaImport.vue'));
+const enkaImport=ref<InstanceType<typeof EnkaImport>>();
 const MonaImport = defineAsyncComponent(() => import('./MonaImport.vue'));
 const monaImport=ref<InstanceType<typeof MonaImport>>();
 
@@ -60,6 +70,28 @@ const draftAccount = ref<LocalAccount>();
 const editingAccount = computed(() => draftAccount.value ?? account.value);
 const character = computed(() => editingAccount.value.characters.find(entry => entry.id === characterId.value));
 const loadouts = useCharacterLoadoutsStore();
+const characterMenu=ref<{id:string;x:number;y:number}>(),deleteCharacterId=ref('');
+let deleteCharacterBaseline='';
+const deletingCharacter=computed(()=>account.value.characters.find(item=>item.id===deleteCharacterId.value));
+function openCharacterMenu(event:MouseEvent,id:string){
+  if(props.pick)return;event.preventDefault();const trigger=event.currentTarget as HTMLElement;trigger.focus();const bounds=trigger.getBoundingClientRect();
+  characterMenu.value={id,x:event.clientX || bounds.left+24,y:event.clientY || bounds.top+24};
+}
+function characterMenuAction(action:string){
+  const selected=characterMenu.value;if(!selected)return;characterMenu.value=undefined;
+  if(action==='details')openCharacter(selected.id);
+  else{deleteCharacterId.value=selected.id;deleteCharacterBaseline=JSON.stringify(account.value);}
+}
+function deleteCharacter(){
+  const target=deletingCharacter.value;if(!target)return;
+  try{
+    if(JSON.stringify(account.value)!==deleteCharacterBaseline)throw new Error('账号已变化，请重新核对后删除。');
+    const next=cloneAccount(account.value);next.characters=next.characters.filter(item=>item.id!==target.id);
+    loadouts.removeCharacter(account.value.id,target.id,()=>store.commitEdit(next));
+    if(characterId.value===target.id)characterId.value='';
+    deleteCharacterId.value='';error.value='';notice.value=`已彻底删除「${target.name}」，圣遗物保留在库中。`;
+  }catch(cause){error.value=cause instanceof Error?cause.message:'角色未删除。';deleteCharacterId.value='';}
+}
 const inventoryBrowser=ref<InstanceType<typeof ArtifactBrowser>>();
 const characterForm = ref<InstanceType<typeof CharacterForm>>();
 const cultivationDirty = ref(false);
@@ -116,8 +148,8 @@ function resetDraft() {
   detailError.value = ''; detailNotice.value = ''; selectedPreset.value = ''; pendingPreset.value = '';
 }
 async function saveDetail(asPreset = false) {
-  if (!draftAccount.value || !character.value || detailBusy.value) return;
-  if (pending.value) { detailError.value='请先确认或取消装备转移，再保存。'; return; }
+  if (!draftAccount.value || !character.value || detailBusy.value) return false;
+  if (pending.value) { detailError.value='请先确认或取消装备转移，再保存。'; return false; }
   const draft = draftAccount.value;
   detailBusy.value = true; detailError.value = '';
   try {
@@ -126,7 +158,7 @@ async function saveDetail(asPreset = false) {
     let entry = next.characters.find(item => item.id === characterId.value)!;
     if (cultivationDirty.value) {
       const prepared = await characterForm.value?.prepare();
-      if (!prepared) return;
+      if (!prepared) return false;
       entry = prepared;
       next.characters[next.characters.findIndex(item => item.id === entry.id)] = entry;
     }
@@ -140,7 +172,7 @@ async function saveDetail(asPreset = false) {
         closeCharacter();characterId.value='';
         await nextTick();document.querySelector<HTMLInputElement>('[aria-label="搜索账号角色"]')?.focus();
       } else {resetDraft();detailNotice.value=plan.promotedId?'已清除当前配置，备选已接替首选。':'已清除当前配置。';}
-      return;
+      return true;
     }
     if (asPreset || editingPresetId.value) {
       if(!effectiveStats.value.length)throw new Error('请选择用于命名的有效词条。');
@@ -148,11 +180,12 @@ async function saveDetail(asPreset = false) {
       if(asPreset)editingPresetId.value=loadouts.save(name,valid,entry);
       else loadouts.update(editingPresetId.value,name,valid,entry);
       selectedPreset.value=editingPresetId.value;draftAccount.value=valid;draftBaseline=JSON.stringify(valid);cultivationDirty.value=false;formRevision.value++;
-      saveAsOpen.value=false;previewConfiguration.value=undefined;detailNotice.value='已保存备选配装，首选和实际穿戴保持不变。';
+      saveAsOpen.value=false;previewConfiguration.value=undefined;detailNotice.value='';
     } else {
-      store.commitEdit(valid); resetDraft(); detailNotice.value = '已保存首选配置，展柜快照保持不变。';
+      store.commitEdit(valid); resetDraft();
     }
-  } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '保存失败，原配置保持不变。'; }
+    return true;
+  } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '保存失败，原配置保持不变。'; return false; }
   finally { detailBusy.value = false; }
 }
 function tryPreset(id: string, confirmed = false) {
@@ -181,16 +214,59 @@ function tryPreset(id: string, confirmed = false) {
     pendingPreset.value = ''; detailNotice.value = '正在查看备选配装；保存只更新此方案，设为首选才改变实际穿戴。';
   } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '方案未载入。'; selectedPreset.value = ''; }
 }
+const combinationStore=useArtifactCombinationsStore();
+const combinationPickerOpen=ref(false),combinationEditorId=ref('');
+const combinationSeed=ref<{items:AccountArtifact[];stats:RealStat[];referenceName:string}>(),combinationPendingArtifacts=ref<AccountArtifact[]>([]);
+const pendingCombination=ref<ArtifactCombination>(),combinationTransfers=ref<string[]>([]);
+let combinationBaseline='';
+function syncImportedArtifacts(){
+  if(!draftAccount.value)return;
+  const artifacts=cloneAccount(account.value).artifacts;
+  draftAccount.value.artifacts=artifacts;
+  const baseline=JSON.parse(draftBaseline) as LocalAccount;baseline.artifacts=artifacts;draftBaseline=JSON.stringify(baseline);baseSnapshot=JSON.stringify(account.value);
+}
+function saveCurrentCombination(){
+  if(!character.value)return;
+  detailError.value='';
+  try{
+    let items:AccountArtifact[],pending:AccountArtifact[]=[];
+    if(equipmentView.value==='showcase'){
+      if(JSON.stringify(account.value)!==baseSnapshot)throw new Error('账号已变化，请核对后还原草稿再保存组合。');
+      const plan=planShowcaseInventory(account.value,[character.value]);
+      items=plan.items[character.value.id];pending=items.filter(item=>!account.value.artifacts.some(current=>current.id===item.id));
+    }else items=accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];});
+    const stats=[...effectiveStats.value];
+    const existing=combinationStore.combinations.find(entry=>entry.accountId===account.value.id && combinationSignature(entry.items,entry.stats)===combinationSignature(items,stats));
+    combinationEditorId.value=existing?.id ?? '';combinationSeed.value=existing?undefined:{items,stats,referenceName:character.value.name};combinationPendingArtifacts.value=pending;
+    if(existing)detailNotice.value='已有相同组合，已打开。';
+  }catch(cause){detailError.value=cause instanceof Error?cause.message:'组合未打开。';}
+}
+function combinationSaved(id:string,duplicate:boolean){
+  if(combinationPendingArtifacts.value.length)syncImportedArtifacts();
+  combinationSeed.value=undefined;combinationPendingArtifacts.value=[];combinationEditorId.value=duplicate?id:'';
+  detailNotice.value=duplicate?'已有相同组合，已打开。':'组合已保存，穿戴不变。';
+}
+function closeCombination(){combinationSeed.value=undefined;combinationPendingArtifacts.value=[];combinationEditorId.value='';}
+function useCombination(combination:ArtifactCombination,confirmed=false){
+  if(!character.value || !draftAccount.value)return;
+  try{
+    if(confirmed && combinationBaseline!==JSON.stringify(draftAccount.value))throw new Error('草稿已变化，请重新选择组合。');
+    const plan=applyCombination(draftAccount.value,character.value.id,combination);
+    if(!confirmed && (plan.transfers.length || combination.items.length<5)){
+      pendingCombination.value=combination;combinationTransfers.value=plan.transfers;combinationBaseline=JSON.stringify(draftAccount.value);return;
+    }
+    draftAccount.value=plan.next;combinationPickerOpen.value=false;pendingCombination.value=undefined;
+    detailNotice.value='组合已应用到草稿，保存后生效。';
+  }catch(cause){detailError.value=cause instanceof Error?cause.message:'组合未应用。';pendingCombination.value=undefined;}
+}
 const artifactId = ref('');
 const equipmentSlot = ref<AccountSlot>('flower');
 const equipmentPickerOpen=ref(false);
-const equipmentBrowser=ref<InstanceType<typeof ArtifactBrowser>>();
-function closeEquipmentPicker() { if(equipmentBrowser.value)equipmentBrowser.value.requestLeave(()=>equipmentPickerOpen.value=false);else equipmentPickerOpen.value=false; }
 function openEquipmentPicker(slot:AccountSlot) { equipmentSlot.value=slot;equipmentPickerOpen.value=true; }
 function unequipCurrentSlot() { if(character.value)delete character.value.equipment[equipmentSlot.value];equipmentPickerOpen.value=false; }
 const editingCharacter = ref(false);
 const detailOpen = ref(false);
-const {discardOpen,requestLeave:protectDraft,cancelDiscard,discardChanges}=useUnsavedChanges(computed(()=>detailOpen.value && detailDirty.value));
+const {discardOpen,requestLeave:protectDraft,cancelDiscard,discardChanges,saveAndLeave}=useUnsavedChanges(computed(()=>detailOpen.value && detailDirty.value));
 const panelOpen=ref(false);
 function requestLeave(action: ()=>void) {
   if(detailOpen.value)protectDraft(action);
@@ -227,9 +303,9 @@ function clearShowcase() {
 }
 defineExpose({ requestLeave, openConfiguration });
 function openCharacter(id:string) { equipmentView.value='local'; characterId.value=id; resetDraft(); detailOpen.value=true;panelOpen.value=false; }
-function closeCharacter() { configurationPickerOpen.value=false;cancelDiscard();clearShowcaseOpen.value=false;draftAccount.value=undefined; cultivationDirty.value=false; saveAsOpen.value=false; pendingPreset.value=''; detailOpen.value=false; pending.value=undefined; }
-watch([()=>account.value.id,()=>props.page],()=>{closeCharacter();modal.value='';});
-const modal = ref<'import' | 'create' | 'equipment' | 'notes' | 'artifact' | 'repair' | 'network' | 'filters' | 'sort' | ''>('');
+function closeCharacter() { combinationPickerOpen.value=false;combinationEditorId.value='';combinationSeed.value=undefined;combinationPendingArtifacts.value=[];pendingCombination.value=undefined;configurationPickerOpen.value=false;cancelDiscard();clearShowcaseOpen.value=false;draftAccount.value=undefined; cultivationDirty.value=false; saveAsOpen.value=false; pendingPreset.value=''; detailOpen.value=false; pending.value=undefined; }
+watch([()=>account.value.id,()=>props.page],()=>{characterMenu.value=undefined;deleteCharacterId.value='';closeCharacter();modal.value='';});
+const modal = ref<'import' | 'create' | 'equipment' | 'artifact' | 'repair' | 'network' | 'filters' | 'sort' | ''>('');
 const repairPreview = ref<MonaImportPreview>();
 const checkingSets = ref(false);
 async function inspectSets() {
@@ -243,11 +319,6 @@ function repairSets() {
   if (!repairPreview.value) return;
   try { confirmMonaImport(account.value, repairPreview.value, true); notice.value = `已补全 ${repairPreview.value.updates.length} 件圣遗物的套装身份，词条和装备归属不变。`; modal.value = ''; }
   catch (cause) { error.value = String(cause); }
-}
-const noteNames = computed(() => [...new Set(account.value.artifacts.flatMap(item => item.mona?.equippedBy ? [item.mona.equippedBy] : []))]);
-function organizeNotes() {
-  try { const result = organizeMonaWearNotes(account.value); query.value = ''; resetFilters(); notice.value = `已根据原始穿戴备注新增 ${result.added} 位待补全角色。${result.conflicts.join('；')}请设置角色与武器，等级和天赋按用户指定的满级设定核对。`; modal.value = ''; }
-  catch (cause) { error.value = cause instanceof Error ? cause.message : '整理失败，现有资料保持不变。'; }
 }
 const catalog = shallowRef<RealCatalog>();
 onMounted(async () => { try { catalog.value = (await loadAccountGameData()).catalog; } catch { error.value = '目录加载失败，角色资料仍保留。'; } });
@@ -285,7 +356,7 @@ const filterGroups = computed(() => [
 ]);
 const equipmentView=ref<'local'|'showcase'>('local');
 watch(()=>character.value?.id,() => { equipmentView.value='local'; },{immediate:true});
-function showImportedCharacter(id:string) { query.value='';resetFilters();modal.value='';openCharacter(id); }
+function showImportedCharacter(id:string) { query.value='';resetFilters();modal.value='';characterId.value=id; }
 function equipmentItem(slot:AccountSlot) { return equipmentView.value==='showcase'&&character.value?showcaseArtifact(character.value,slot):editingAccount.value.artifacts.find(item=>item.id===character.value?.equipment[slot]); }
 
 function localConfigurationComplete(entry:AccountCharacter) { return configurationReady(account.value,entry); }
@@ -339,9 +410,9 @@ function confirmTransfer() {
       </div></WorkbenchDialog>
       <WorkbenchDialog v-if="modal === 'sort'" title="角色排序" size="filter" @close="modal = ''"><SortPanel :model-value="sort" v-model:direction="sortDirection" :options="sortOptions" @update:model-value="setSortKey" @reset="sort='release';sortDirection='desc'" @confirm="modal=''" /></WorkbenchDialog>
 
-      <WorkbenchDialog v-if="modal === 'notes'" title="从穿戴备注整理角色" @close="modal = ''"><p>文件中有 {{ noteNames.length }} 个角色穿戴备注：{{ noteNames.join('、') }}。</p><p>仅新增尚不存在的角色资料，并按没有冲突的原始备注登记装备。已有角色与装备不覆盖；武器、命座、等级和天赋不来自此文件，角色需继续补全后才能计算。</p><button @click="organizeNotes">确认按备注整理</button></WorkbenchDialog>
+
       <div class="character-cards">
-        <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)">
+        <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
           <span class="character-card-header">
             <span class="character-card-status">
               <StatusBadge :label="localConfigurationComplete(entry) ? '就绪' : '缺失'" :state="localConfigurationComplete(entry) ? 'complete' : 'missing'" :description="localConfigurationComplete(entry) ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全'" :accessible-name="`本地配置${localConfigurationComplete(entry) ? '就绪' : '缺失'}`" />
@@ -353,8 +424,10 @@ function confirmTransfer() {
           <CharacterCardPortraits :build="entry.realBuild" :name="entry.name" :artifacts="cardArtifacts(entry,entry.gallerySnapshot)" />
         </button>
       </div>
+      <ContextMenu v-if="characterMenu && !props.pick" :x="characterMenu.x" :y="characterMenu.y" label="角色操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'彻底删除',danger:true}]" @close="characterMenu=undefined" @select="characterMenuAction" />
+      <ConfirmationDialog v-if="deletingCharacter" title="彻底删除角色？" confirm-label="彻底删除" @cancel="deleteCharacterId=''" @confirm="deleteCharacter"><p>清除「{{ deletingCharacter.name }}」的本地、展柜、全部配装和收藏。</p><p>圣遗物保留在库中。</p></ConfirmationDialog>
       <LibraryEmptyState v-if="!visibleCharacters.length" :title="account.characters.length?'没有符合条件的角色':'角色库还是空的'" :description="account.characters.length?'清除搜索与筛选后重试。':'导入角色资料，或手动添加角色。'" :action="account.characters.length?'清除搜索与筛选':'手动添加角色'" @action="handleEmptyAction" />
-      <WorkbenchDialog v-if="modal === 'create'" :title="editingCharacter ? '编辑角色资料' : '添加账号角色'" @close="modal = ''"><CharacterForm :character="editingCharacter ? character : undefined" @saved="openCharacter($event)" @close="modal = ''" /></WorkbenchDialog>
+      <ManualCharacterImport v-if="modal==='create'" @saved="openCharacter" @close="modal=''" />
       <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name" @close="requestCloseCharacter">
       <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
       <template #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name" /><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftName.split(' · ').slice(1).join('|') }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
@@ -367,17 +440,20 @@ function confirmTransfer() {
         <CharacterForm ref="characterForm" v-show="equipmentView==='local'" details detached :key="`${character.id}-${formRevision}`" :character="character" @dirty-change="cultivationDirty=$event" />
         <CharacterForm v-if="equipmentView==='showcase'" details :character="character" showcase />
         <section class="detail-panel"><DisclosureHeading class="inline-section-heading" title="角色面板" label="面板" controls="character-stat-panel" :expanded="panelOpen" @toggle="panelOpen = !panelOpen" /><div id="character-stat-panel"><p v-if="panelOpen && cultivationDirty && equipmentView==='local'" class="detail-feedback">培养数值尚未保存，保存后更新面板。</p><CharacterStats v-else-if="panelOpen" :account="editingAccount" :character="character" :showcase="equipmentView === 'showcase'" /></div></section>
-        <section class="detail-artifacts"><div class="inline-section-heading"><h3>圣遗物</h3></div>
+        <section class="detail-artifacts"><div class="inline-section-heading"><h3>圣遗物</h3><div class="combination-detail-actions"><button v-if="equipmentView==='local'" class="ui-action soft" data-size="md" @click="combinationPickerOpen=true">应用组合</button><button class="ui-action soft" data-size="md" :data-accent="equipmentView==='showcase'?'electro':'anemo'" @click="saveCurrentCombination">保存组合</button></div></div>
         <ArtifactEquipmentGrid :entries="accountSlots.map(slot=>({slot,item:equipmentItem(slot)}))" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" popup :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.realBuild?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
         </section>
         <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :items="accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
         <div v-if="pending" class="transfer-confirm" role="alert"><p>{{ pending.message }}</p><button @click="confirmTransfer">确认转移装备</button><button @click="pending = undefined">取消转移</button></div>
       </div>
       </WorkbenchDialog>
-      <WorkbenchDialog v-if="equipmentPickerOpen && character && equipmentView==='local'" :title="`选择${accountSlotLabels[equipmentSlot]}`" @close="closeEquipmentPicker"><template #header-leading><button v-if="character.equipment[equipmentSlot]" class="ui-action soft" data-accent="pyro" data-size="md" @click="unequipCurrentSlot">卸下</button></template><ArtifactBrowser ref="equipmentBrowser" :effective-stats="effectiveStats" inline pick :account="editingAccount" density="relaxed" :slot="equipmentSlot" :compare-to="equipmentItem(equipmentSlot)" @select="artifactId=$event.id;equip();equipmentPickerOpen=false" /></WorkbenchDialog>
+      <ArtifactPickerDialog v-if="equipmentPickerOpen && character && equipmentView==='local'" :slot="equipmentSlot" :account="editingAccount" :current="equipmentItem(equipmentSlot)" :effective-stats="effectiveStats" @close="equipmentPickerOpen=false" @remove="unequipCurrentSlot" @select="artifactId=$event.id;equip();equipmentPickerOpen=false" />
+      <WorkbenchDialog v-if="combinationPickerOpen && character" title="选择圣遗物组合" @close="combinationPickerOpen=false"><ArtifactCombinationLibrary pick :stats="effectiveStats" :reference-name="character.name" @select="useCombination" /></WorkbenchDialog>
+      <ArtifactCombinationEditor v-if="combinationEditorId || combinationSeed" :key="combinationEditorId || 'seed'" :combination="combinationStore.combinations.find(item=>item.id===combinationEditorId)" :seed="combinationSeed" :pending-artifacts="combinationPendingArtifacts" @close="closeCombination" @saved="combinationSaved" />
+      <ConfirmationDialog v-if="pendingCombination" title="应用圣遗物组合？" :danger="false" confirm-label="应用到草稿" @cancel="pendingCombination=undefined" @confirm="useCombination(pendingCombination!,true)"><p v-for="message in combinationTransfers" :key="message">{{ message }}</p><p v-if="pendingCombination.items.length<5">组合未满五件，缺少的部位将卸下。</p><p>保存角色后生效，库存物品保留。</p></ConfirmationDialog>
       <WorkbenchDialog v-if="configurationPickerOpen && character" :title="`${character.name}的配置`" @close="configurationPickerOpen=false"><p v-if="detailDirty" class="detail-feedback">切换前会确认未保存的修改。</p><CharacterConfigurationList :character-id="character.id" selectable :current-preset-id="editingPresetId"  :before-adopt="guardPreferred" @adopted="resetDraft();configurationPickerOpen=false" @select="chooseConfiguration" /></WorkbenchDialog>
 
-      <ConfirmationDialog v-if="discardOpen" title="放弃未保存的修改？" confirm-label="放弃修改并退出" cancel-label="继续编辑" @cancel="cancelDiscard" @confirm="discardChanges"><p>退出将丢弃未保存的修改。</p></ConfirmationDialog>
+      <UnsavedChangesDialog v-if="discardOpen" :busy="detailBusy" @save="saveAndLeave(()=>saveDetail())" @continue="cancelDiscard" @discard="discardChanges" />
       <ConfirmationDialog v-if="clearShowcaseOpen" :title="clearTarget==='local'?'清除本地配装？':'清除展柜信息？'" confirm-label="确认清除" @cancel="clearShowcaseOpen=false" @confirm="clearShowcase"><p>{{ clearTarget==='local'?'清除本地培养与穿戴，圣遗物保留在库存。':'清除该角色的展柜信息。' }}</p><p v-if="clearPreview?.promotedId">保存后由下一套备选接替首选。</p><p v-if="clearPreview?.removedCharacter">已无其他配置及展柜，保存后移除角色。</p><p v-for="message in clearPreview?.transfers ?? []" :key="message">{{ message }}</p><p>保存后生效。</p></ConfirmationDialog>
       <WorkbenchDialog v-if="saveAsOpen" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="draftName" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名；首选配置和实际穿戴不变。</p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
       <WorkbenchDialog v-if="pendingPreset" title="确认试用配装方案" @close="pendingPreset=''; selectedPreset=''"><p v-for="message in presetTransfers" :key="message">{{ message }}</p><p>试用只修改草稿，保存时才转移实际穿戴，原装备保留在库存。</p><button @click="tryPreset(pendingPreset,true)">确认试用方案</button></WorkbenchDialog>
@@ -389,8 +465,8 @@ function confirmTransfer() {
 
       <WorkbenchDialog v-if="modal === 'artifact'" title="手动添加圣遗物" @close="modal = ''"><ArtifactForm @close="modal = ''" /></WorkbenchDialog>
     </template>
-    <WorkbenchDialog v-if="modal === 'network'" title="从 Enka 展柜导入" @close="modal = ''"><EnkaImport @imported="showImportedCharacter" @close="modal = ''" /></WorkbenchDialog>
-    <WorkbenchDialog v-if="modal === 'import'" :title="props.page==='characters' ? '从莫娜 JSON 添加角色' : '导入莫娜圣遗物'" sticky-footer @close="modal = ''"><MonaImport ref="monaImport" automatic @imported="modal = props.page==='characters' && noteNames.length ? 'notes' : ''" /><div v-if="props.page==='characters' && noteNames.length" class="existing-note-import"><p>库存有 {{ noteNames.length }} 个穿戴备注，可用于添加角色。</p><button class="ui-action soft" data-accent="electro" @click="modal = 'notes'">从穿戴备注整理角色</button></div><template #footer><div class="mona-import-footer"><button class="ui-action soft" :aria-label="monaImport?.hasPreview?'取消导入':'取消'" @click="modal=''">取消</button><button v-if="monaImport?.hasPreview" class="ui-action" :disabled="!monaImport.canConfirm" :aria-label="monaImport.confirmLabel" @click="monaImport.confirm()">{{ monaImport.confirmText }}</button></div></template></WorkbenchDialog>
+    <WorkbenchDialog v-if="modal === 'network'" title="从角色展柜导入" sticky-footer @close="modal = ''"><EnkaImport ref="enkaImport" @imported="showImportedCharacter" @close="modal = ''" /><template #footer><ImportActions tone="electro" :label="enkaImport?.confirmLabel" :ready="enkaImport?.canConfirm" :show-confirm="!!enkaImport?.hasPreview" :busy="enkaImport?.busy" @cancel="modal=''" @confirm="enkaImport?.confirm()" /></template></WorkbenchDialog>
+    <WorkbenchDialog v-if="modal === 'import'" title="导入莫娜圣遗物" sticky-footer @close="modal = ''"><MonaImport ref="monaImport" automatic @imported="modal=''" /><template #footer><ImportActions tone="hydro" :label="monaImport?.confirmLabel" :ready="monaImport?.canConfirm" :show-confirm="!!monaImport?.hasPreview" :busy="monaImport?.busy" @cancel="modal=''" @confirm="monaImport?.confirm()" /></template></WorkbenchDialog>
   </section>
 </template>
 
@@ -423,7 +499,7 @@ label { font-size:var(--font-body); display: grid; gap: 7px; } input, select { m
 @media(max-width:800px) {  }
 h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px solid var(--line); }
 .account-toolbar > button:last-child:not(:first-child) { background:var(--surface); color:var(--muted); border-color:var(--line); }.account-library > [role=status] { color:var(--neutral-muted); font-size:var(--font-body); padding:8px 12px; background:var(--element-dendro-light); border-radius:8px; margin-top:0; }
-.account-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:32px; margin-bottom:18px; }.account-heading-info { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }.account-name { display:flex; align-items:center; gap:8px; padding:0; border:0; min-height:var(--control-height-md); color:var(--ink); background:transparent; font-size:var(--font-body); font-weight:600; }.account-name svg { width:18px; height:18px; stroke:var(--muted); stroke-width:1.6; fill:none; }.account-count { display:flex; align-items:center; gap:10px; font-size:var(--font-body); color:var(--muted); }.account-count > span { opacity:.5; }.account-feedback { position:relative; flex-shrink:0; font-size:var(--font-body); }.account-feedback > summary,.local-status { display:flex; align-items:center; gap:6px; color:var(--element-anemo-deep); cursor:pointer; list-style:none; font-size:var(--font-body); }.account-feedback summary::-webkit-details-marker { display:none; }.account-feedback summary > span { margin-left:5px; color:var(--muted); font-size:var(--font-body); }.account-feedback i,.local-status i { width:6px; height:6px; border-radius:50%; background:var(--element-anemo-primary); }.account-feedback > div { position:absolute; top:28px; right:0; width:min(320px,70vw); padding:14px; background:var(--surface-raised); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 7.84%,transparent); z-index:5; }.account-feedback p { margin:0 0 10px; }.account-feedback button { font-size:var(--font-body); padding:6px 8px; margin-right:8px; }.character-toolbar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }.character-search { position:relative; flex:1; min-width:170px; max-width:320px; }.character-search > svg { position:absolute; width:16px; height:16px; top:12px; left:12px; stroke:var(--muted); stroke-width:1.6; fill:none; }.character-search input { height:40px; min-width:0; padding:0 12px 0 36px; background:var(--surface-raised); border-color:var(--line); font-size:var(--font-body); }.filter-trigger { height:40px; font-size:var(--font-body); padding:8px 12px; }.filter-trigger.applied { color:var(--element-anemo-deep); border-color:var(--element-anemo-primary); background:var(--element-anemo-light); }.filter-trigger > span { padding-left:6px; }.character-import-actions { margin-left:auto; display:flex; gap:8px; }.reset-filters { padding:0; border:0; background:none; color:inherit; font-size:var(--font-body); min-height:var(--control-height-md); }.reset-filters { padding:3px 7px; color:var(--muted); }.filter-options { display:flex; flex-wrap:wrap; gap:8px; }.filter-options button { height:var(--control-height-lg); padding:0 12px; --filter-light:var(--element-anemo-light); --filter-deep:var(--element-anemo-deep); color:var(--muted); background:var(--surface); border-color:var(--line); padding:9px 15px; font-size:var(--font-body); }.filter-options button.selected { background:var(--filter-light); color:var(--filter-deep); border-color:var(--filter-deep); }.filter-panel-actions { display:flex; justify-content:space-between; margin-top:24px; }.existing-note-import { border-top:1px solid var(--line); margin-top:16px; padding-top:12px; }.equipment-view-tabs { display:flex; gap:8px; align-items:center; margin-top:16px; }.equipment-view-tabs button { color:var(--muted); background:var(--surface); border-color:var(--line); padding:7px 12px; font-size:var(--font-body); }.equipment-view-tabs button.active { color:var(--element-hydro-deep); background:var(--element-hydro-light); border-color:var(--element-hydro-primary); }.equipment-view-tabs span { color:var(--muted); font-size:var(--font-body); }.snapshot-note { color:var(--element-hydro-deep); }
+.account-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:32px; margin-bottom:18px; }.account-heading-info { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }.account-name { display:flex; align-items:center; gap:8px; padding:0; border:0; min-height:var(--control-height-md); color:var(--ink); background:transparent; font-size:var(--font-body); font-weight:600; }.account-name svg { width:18px; height:18px; stroke:var(--muted); stroke-width:1.6; fill:none; }.account-count { display:flex; align-items:center; gap:10px; font-size:var(--font-body); color:var(--muted); }.account-count > span { opacity:.5; }.account-feedback { position:relative; flex-shrink:0; font-size:var(--font-body); }.account-feedback > summary,.local-status { display:flex; align-items:center; gap:6px; color:var(--element-anemo-deep); cursor:pointer; list-style:none; font-size:var(--font-body); }.account-feedback summary::-webkit-details-marker { display:none; }.account-feedback summary > span { margin-left:5px; color:var(--muted); font-size:var(--font-body); }.account-feedback i,.local-status i { width:6px; height:6px; border-radius:50%; background:var(--element-anemo-primary); }.account-feedback > div { position:absolute; top:28px; right:0; width:min(320px,70vw); padding:14px; background:var(--surface-raised); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 7.84%,transparent); z-index:5; }.account-feedback p { margin:0 0 10px; }.account-feedback button { font-size:var(--font-body); padding:6px 8px; margin-right:8px; }.character-toolbar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }.character-search { position:relative; flex:1; min-width:170px; max-width:320px; }.character-search > svg { position:absolute; width:16px; height:16px; top:12px; left:12px; stroke:var(--muted); stroke-width:1.6; fill:none; }.character-search input { height:40px; min-width:0; padding:0 12px 0 36px; background:var(--surface-raised); border-color:var(--line); font-size:var(--font-body); }.filter-trigger { height:40px; font-size:var(--font-body); padding:8px 12px; }.filter-trigger.applied { color:var(--element-anemo-deep); border-color:var(--element-anemo-primary); background:var(--element-anemo-light); }.filter-trigger > span { padding-left:6px; }.character-import-actions { margin-left:auto; display:flex; gap:8px; }.reset-filters { padding:0; border:0; background:none; color:inherit; font-size:var(--font-body); min-height:var(--control-height-md); }.reset-filters { padding:3px 7px; color:var(--muted); }.filter-options { display:flex; flex-wrap:wrap; gap:8px; }.filter-options button { height:var(--control-height-lg); padding:0 12px; --filter-light:var(--element-anemo-light); --filter-deep:var(--element-anemo-deep); color:var(--muted); background:var(--surface); border-color:var(--line); padding:9px 15px; font-size:var(--font-body); }.filter-options button.selected { background:var(--filter-light); color:var(--filter-deep); border-color:var(--filter-deep); }.filter-panel-actions { display:flex; justify-content:space-between; margin-top:24px; }.equipment-view-tabs { display:flex; gap:8px; align-items:center; margin-top:16px; }.equipment-view-tabs button { color:var(--muted); background:var(--surface); border-color:var(--line); padding:7px 12px; font-size:var(--font-body); }.equipment-view-tabs button.active { color:var(--element-hydro-deep); background:var(--element-hydro-light); border-color:var(--element-hydro-primary); }.equipment-view-tabs span { color:var(--muted); font-size:var(--font-body); }.snapshot-note { color:var(--element-hydro-deep); }
 @media(max-width:900px){}@media(max-width:620px){}
 @media(max-width:1000px){.character-import-actions { width:100%; margin-left:0; }.character-search { max-width:none; }}@media(max-width:550px){.account-heading { align-items:flex-start; }.account-heading-info { gap:3px; flex-direction:column; align-items:flex-start; }.account-feedback > summary > span { display:none; }.character-import-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }.character-import-actions .ui-action { padding:8px 6px; font-size:var(--font-body); gap:5px; }.character-import-actions svg { width:14px; height:14px; }.equipment-view-tabs { flex-wrap:wrap; }}
 .element-shortcuts { display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin:10px 0 14px; }
@@ -487,5 +563,9 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 </style>
 
 <style scoped>
-.mona-import-footer { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:12px; }.mona-import-footer .ui-action { font-size:var(--font-control); font-weight:700; }
+.mona-import-footer .ui-action { font-size:var(--font-control); font-weight:700; }
+</style>
+
+<style scoped>
+.combination-detail-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }.detail-artifacts > .inline-section-heading { flex-wrap:wrap; }
 </style>

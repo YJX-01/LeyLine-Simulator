@@ -79,7 +79,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await expect(dialog.getByRole('button',{name:'更换生之花',exact:true})).toHaveCSS('height','24px');
   await dialog.getByRole('button',{name:'精炼3阶',exact:true}).click();
   await page.keyboard.press('Escape');
-  const confirmation=page.getByRole('dialog',{name:'放弃未保存的修改？',exact:true});
+  const confirmation=page.getByRole('dialog',{name:'有未保存的修改',exact:true});
   expect(await confirmation.evaluate(node=>node.getBoundingClientRect().width)).toBeLessThanOrEqual(422);
   await page.getByRole('button',{name:'继续编辑',exact:true}).click();
   await dialog.getByRole('button',{name:'还原',exact:true}).click();
@@ -97,7 +97,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'精炼3阶',exact:true})).toHaveAttribute('aria-pressed','true');
   await dialog.getByRole('button',{name:'精炼4阶',exact:true}).click();await page.keyboard.press('Escape');
-  await page.getByRole('button',{name:'放弃修改并退出',exact:true}).click();
+  await page.getByRole('button',{name:'放弃修改',exact:true}).click();
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'精炼3阶',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.keyboard.press('Escape');

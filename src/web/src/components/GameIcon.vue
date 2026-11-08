@@ -11,6 +11,7 @@ function loadIcons(kind: string) {
 <script setup lang="ts">
 import { computed, shallowRef, ref, watch } from 'vue';
 import CornerBadge from './CornerBadge.vue';
+import { travelerForm } from '../domain/traveler-forms';
 const props = withDefaults(defineProps<{ kind: 'characters' | 'weapons' | 'artifacts' | 'artifactSlots' | 'elements' | 'skills' | 'constellations' | 'buffs' | 'stats'; id?: string; name?: string; size?: number; constellation?: number; refinement?: number; rarity?: number; level?: number; monochrome?: boolean }>(), { size: 48 });
 const icons = shallowRef<IconIndex>();
 const failed = ref(false);
@@ -18,6 +19,8 @@ const entry = computed(() => {
   const group = icons.value?.[props.kind];
   if (!group) return undefined;
   if (props.id && group[props.id]) return group[props.id];
+  const form=props.kind==='characters'?travelerForm(props.id):undefined;
+  if(form && group[form.baseId])return {...group[form.baseId],element:form.element};
   if (props.kind === 'artifacts' && props.id) return group[`${props.id}-flower`] ?? group[`${props.id}-circlet`];
   return props.kind === 'characters' && props.name ? Object.values(group).find(icon => icon.name === props.name) : undefined;
 });

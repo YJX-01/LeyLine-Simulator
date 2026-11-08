@@ -2,7 +2,6 @@ import { realArtifactSchema, type RealStat } from '@leyline/schema';
 import { accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountSlot, type LocalAccount } from './account';
 import { accountMainStats, validateAccountArtifact } from './account-real';
 
-const maximumBytes = 8 * 1024 * 1024;
 const slotMap = { flower: 'flower', feather: 'plume', plume: 'plume', sand: 'sands', sands: 'sands', cup: 'goblet', goblet: 'goblet', head: 'circlet', circlet: 'circlet' } as const;
 const groups = ['flower', 'feather', 'sand', 'cup', 'head'] as const;
 const aliases: Record<string, string> = { feather: 'plume', sand: 'sands', cup: 'goblet', head: 'circlet' };
@@ -53,7 +52,6 @@ function stat(tag: unknown): { stat: RealStat; value: number } {
 
 /** Ratios in the pinned Mona v1 export are already decimals, never divide them by 100. */
 export async function previewMonaImport(content: string, account: LocalAccount, sets: SetEntry[], main: MainTable): Promise<MonaImportPreview> {
-  if (new TextEncoder().encode(content).byteLength > maximumBytes) throw new Error('莫娜文件超过 8 MiB，未导入。');
   let input: unknown;
   try { input = JSON.parse(content); } catch { throw new Error('莫娜文件不是有效的 JSON，库存保持不变。'); }
   if (!object(input) || input.version !== '1') throw new Error('仅支持莫娜社区版第一版圣遗物导出文件，版本标记应为字符串“1”。');

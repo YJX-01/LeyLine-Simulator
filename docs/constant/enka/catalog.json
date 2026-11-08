@@ -972,6 +972,114 @@
           11505
         ],
         "skillDepotId": 15001
+      },
+      "10000005-502": {
+        "id": "aether-pyro",
+        "skills": [
+          100541,
+          10097,
+          10098
+        ],
+        "skillDepotId": 502
+      },
+      "10000005-503": {
+        "id": "aether-hydro",
+        "skills": [
+          100542,
+          10087,
+          10088
+        ],
+        "skillDepotId": 503
+      },
+      "10000005-504": {
+        "id": "aether-anemo",
+        "skills": [
+          100543,
+          10067,
+          10068
+        ],
+        "skillDepotId": 504
+      },
+      "10000005-506": {
+        "id": "aether-geo",
+        "skills": [
+          100545,
+          10077,
+          10078
+        ],
+        "skillDepotId": 506
+      },
+      "10000005-507": {
+        "id": "aether-electro",
+        "skills": [
+          100546,
+          10602,
+          10605
+        ],
+        "skillDepotId": 507
+      },
+      "10000005-508": {
+        "id": "aether-dendro",
+        "skills": [
+          100547,
+          10117,
+          10118
+        ],
+        "skillDepotId": 508
+      },
+      "10000007-702": {
+        "id": "lumine-pyro",
+        "skills": [
+          100551,
+          10097,
+          10098
+        ],
+        "skillDepotId": 702
+      },
+      "10000007-703": {
+        "id": "lumine-hydro",
+        "skills": [
+          100552,
+          10087,
+          10088
+        ],
+        "skillDepotId": 703
+      },
+      "10000007-704": {
+        "id": "lumine-anemo",
+        "skills": [
+          100553,
+          10067,
+          10068
+        ],
+        "skillDepotId": 704
+      },
+      "10000007-706": {
+        "id": "lumine-geo",
+        "skills": [
+          100555,
+          10077,
+          10078
+        ],
+        "skillDepotId": 706
+      },
+      "10000007-707": {
+        "id": "lumine-electro",
+        "skills": [
+          100556,
+          10602,
+          10605
+        ],
+        "skillDepotId": 707
+      },
+      "10000007-708": {
+        "id": "lumine-dendro",
+        "skills": [
+          100557,
+          10117,
+          10118
+        ],
+        "skillDepotId": 708
       }
     },
     "weapons": {

@@ -81,11 +81,11 @@ test('U1 character cards preserve actual showcase set composition and source iso
   const savedAccount = await page.evaluate(() => localStorage.getItem('leyline-account-v1'));
   await page.getByRole('button',{name:'降低普攻',exact:true}).click();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog',{name:'放弃未保存的修改？',exact:true})).toBeVisible();
+  await expect(page.getByRole('dialog',{name:'有未保存的修改',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'继续编辑',exact:true}).click();
   expect(await page.evaluate(() => localStorage.getItem('leyline-account-v1'))).toBe(savedAccount);
   await page.keyboard.press('Escape');
-  await page.getByRole('button',{name:'放弃修改并退出',exact:true}).click();
+  await page.getByRole('button',{name:'放弃修改',exact:true}).click();
   await expect(card).toBeFocused();
   await card.click();
   await expect(page.getByRole('button',{name:'有效词条攻击力',exact:true})).toHaveAttribute('aria-pressed','true');

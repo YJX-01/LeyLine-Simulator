@@ -4,7 +4,7 @@
   "path": "resources/meta-gs/artifact/artis-mark.js",
   "sha256": "130d2e5489d1427f7227764d06265d184b2daf16e6e6818154fbf0b041f06804",
   "license": "MIT",
-  "policy": "Nonzero default usefulAttr substat groups; no scoring weights or per-build custom rules applied.",
+  "policy": "Nonzero default usefulAttr substat groups; traveler uses explicit per-element artis.js rules, Manekin uses declared calc.js mainAttr. No dynamic per-build thresholds or scoring weights applied.",
   "characters": {
     "芭芭拉": [
       "hp",
@@ -206,6 +206,7 @@
       "attack",
       "critRate",
       "critDamage",
+      "elementalMastery",
       "energyRecharge"
     ],
     "重云": [
@@ -685,6 +686,144 @@
     "瓦列里": [
       "attack",
       "energyRecharge"
+    ],
+    "空（风）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧（风）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "空（岩）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "energyRecharge"
+    ],
+    "荧（岩）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "energyRecharge"
+    ],
+    "空（雷）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧（雷）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "空（草）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧（草）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "空（水）": [
+      "hp",
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧（水）": [
+      "hp",
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "空（火）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧（火）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "空（冰）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧（冰）": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "空": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "荧": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery",
+      "energyRecharge"
+    ],
+    "奇偶·男性": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery"
+    ],
+    "奇偶·女性": [
+      "attack",
+      "critRate",
+      "critDamage",
+      "elementalMastery"
     ]
-  }
+  },
+  "supplements": [
+    {
+      "path": "resources/meta-gs/character/旅行者/artis.js",
+      "sha256": "644e9254b1e9282fa0f1680ed2696cfa0ec9f6152d9f67f470e172d02a8a27cb"
+    },
+    {
+      "path": "resources/meta-gs/character/奇偶·男性/calc.js",
+      "sha256": "e35684a74b3bab5ac904da143c7ac842be306f510522e48235e16371ddbfa993"
+    },
+    {
+      "path": "resources/meta-gs/character/奇偶·女性/calc.js",
+      "sha256": "e35684a74b3bab5ac904da143c7ac842be306f510522e48235e16371ddbfa993"
+    }
+  ]
 }

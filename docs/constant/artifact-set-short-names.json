@@ -1,0 +1,242 @@
+{
+  "source": {
+    "url": "https://wiki.biligame.com/ys/黑话#XX套",
+    "accessedAt": "2026-11-08",
+    "section": "圣遗物相关 / XX套",
+    "method": "逐项核对社区简称；优先不歧义的名称，优先两字简称；没有已核对简称时使用全称。",
+    "additionalReference": "https://warpeas.github.io/genshin-artifact-lock/",
+    "fourStarReferences": [
+      "https://www.miyoushe.com/ys/article/36757199",
+      "https://www.taptap.cn/moment/400075122267918272",
+      "https://www.bilibili.com/video/BV1xf4y1G7hB/"
+    ],
+    "fourStarAccessedAt": "2026-11-09",
+    "userOverrides": "保留用户手动指定的shortName，包含尾部套字的名称也按原值使用。"
+  },
+  "sets": {
+    "archaicpetra": {
+      "name": "悠古的磐岩",
+      "shortName": "磐岩"
+    },
+    "blizzardstrayer": {
+      "name": "冰风迷途的勇士",
+      "shortName": "冰套"
+    },
+    "bloodstainedchivalry": {
+      "name": "染血的骑士道",
+      "shortName": "染血"
+    },
+    "crimsonwitchofflames": {
+      "name": "炽烈的炎之魔女",
+      "shortName": "魔女"
+    },
+    "deepwoodmemories": {
+      "name": "深林的记忆",
+      "shortName": "草套"
+    },
+    "desertpavilionchronicle": {
+      "name": "沙上楼阁史话",
+      "shortName": "楼阁"
+    },
+    "echoesofanoffering": {
+      "name": "来歆余响",
+      "shortName": "余响"
+    },
+    "emblemofseveredfate": {
+      "name": "绝缘之旗印",
+      "shortName": "绝缘"
+    },
+    "flowerofparadiselost": {
+      "name": "乐园遗落之花",
+      "shortName": "乐园"
+    },
+    "fragmentofharmonicwhimsy": {
+      "name": "谐律异想断章",
+      "shortName": "谐律"
+    },
+    "gildeddreams": {
+      "name": "饰金之梦",
+      "shortName": "饰金"
+    },
+    "gladiatorsfinale": {
+      "name": "角斗士的终幕礼",
+      "shortName": "角斗"
+    },
+    "goldentroupe": {
+      "name": "黄金剧团",
+      "shortName": "剧团"
+    },
+    "heartofdepth": {
+      "name": "沉沦之心",
+      "shortName": "沉沦"
+    },
+    "huskofopulentdreams": {
+      "name": "华馆梦醒形骸记",
+      "shortName": "华馆"
+    },
+    "lavawalker": {
+      "name": "渡过烈火的贤人",
+      "shortName": "渡火"
+    },
+    "maidenbeloved": {
+      "name": "被怜爱的少女",
+      "shortName": "少女"
+    },
+    "marechausseehunter": {
+      "name": "逐影猎人",
+      "shortName": "猎人"
+    },
+    "nighttimewhispersintheechoingwoods": {
+      "name": "回声之林夜话",
+      "shortName": "回声"
+    },
+    "noblesseoblige": {
+      "name": "昔日宗室之仪",
+      "shortName": "宗室"
+    },
+    "nymphsdream": {
+      "name": "水仙之梦",
+      "shortName": "水仙"
+    },
+    "obsidiancodex": {
+      "name": "黑曜秘典",
+      "shortName": "黑曜"
+    },
+    "oceanhuedclam": {
+      "name": "海染砗磲",
+      "shortName": "海染"
+    },
+    "paleflame": {
+      "name": "苍白之火",
+      "shortName": "苍白"
+    },
+    "retracingbolide": {
+      "name": "逆飞的流星",
+      "shortName": "逆飞"
+    },
+    "scrolloftheheroofcindercity": {
+      "name": "烬城勇者绘卷",
+      "shortName": "勇者"
+    },
+    "shimenawasreminiscence": {
+      "name": "追忆之注连",
+      "shortName": "追忆"
+    },
+    "songofdayspast": {
+      "name": "昔时之歌",
+      "shortName": "昔时"
+    },
+    "tenacityofthemillelith": {
+      "name": "千岩牢固",
+      "shortName": "千岩"
+    },
+    "thunderingfury": {
+      "name": "如雷的盛怒",
+      "shortName": "如雷"
+    },
+    "thundersoother": {
+      "name": "平息鸣雷的尊者",
+      "shortName": "平雷"
+    },
+    "unfinishedreverie": {
+      "name": "未竟的遐思",
+      "shortName": "遐思"
+    },
+    "vermillionhereafter": {
+      "name": "辰砂往生录",
+      "shortName": "辰砂"
+    },
+    "viridescentvenerer": {
+      "name": "翠绿之影",
+      "shortName": "风套"
+    },
+    "vourukashasglow": {
+      "name": "花海甘露之光",
+      "shortName": "花海"
+    },
+    "wandererstroupe": {
+      "name": "流浪大地的乐团",
+      "shortName": "乐团"
+    },
+    "longnightsoath": {
+      "name": "长夜之誓",
+      "shortName": "长夜"
+    },
+    "finaleofthedeepgalleries": {
+      "name": "深廊终曲",
+      "shortName": "深廊"
+    },
+    "nightoftheskysunveiling": {
+      "name": "穹境示现之夜",
+      "shortName": "穹境"
+    },
+    "silkenmoonsserenade": {
+      "name": "纺月的夜歌",
+      "shortName": "纺月"
+    },
+    "aubadeofmorningstarandmoon": {
+      "name": "晨星与月的晓歌",
+      "shortName": "晨星"
+    },
+    "adaycarvedfromrisingwinds": {
+      "name": "风起之日",
+      "shortName": "风起"
+    },
+    "disenchantmentindeepshadow": {
+      "name": "影中沉凝的幻灭",
+      "shortName": "幻灭"
+    },
+    "celestialgift": {
+      "name": "天之美赐",
+      "shortName": "天赐"
+    },
+    "heartofthefurnace": {
+      "name": "炉火融炼之心",
+      "shortName": "炉火"
+    },
+    "scarletproof": {
+      "name": "血红之证",
+      "shortName": "血红"
+    },
+    "instructor": {
+      "name": "教官",
+      "shortName": "教官"
+    },
+    "theexile": {
+      "name": "流放者",
+      "shortName": "流放"
+    },
+    "berserker": {
+      "name": "战狂",
+      "shortName": "战狂"
+    },
+    "gambler": {
+      "name": "赌徒",
+      "shortName": "赌徒"
+    },
+    "scholar": {
+      "name": "学士",
+      "shortName": "学士"
+    },
+    "martialartist": {
+      "name": "武人",
+      "shortName": "武人"
+    },
+    "braveheart": {
+      "name": "勇士之心",
+      "shortName": "勇士"
+    },
+    "resolutionofsojourner": {
+      "name": "行者之心",
+      "shortName": "行者"
+    },
+    "defenderswill": {
+      "name": "守护之心",
+      "shortName": "守护"
+    },
+    "tinymiracle": {
+      "name": "奇迹",
+      "shortName": "奇迹"
+    }
+  }
+}

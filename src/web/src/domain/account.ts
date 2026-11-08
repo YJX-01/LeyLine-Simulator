@@ -6,7 +6,7 @@ export type AccountSlot = typeof accountSlots[number];
 export const accountSlotLabels: Record<AccountSlot, string> = { flower: '生之花', plume: '死之羽', sands: '时之沙', goblet: '空之杯', circlet: '理之冠' };
 export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>>; realBuild?: RealBuild; showcase?: { uid: string; avatarId: number; fetchedAt: string; rawHash: string; build: RealBuild } }
 export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string; equippedBy?: string; sourceSetName?: string; setIdentityPending?: boolean } }
-export interface LocalAccount { schemaVersion: 1; kind: 'account'; id: string; name: string; characters: AccountCharacter[]; artifacts: AccountArtifact[] }
+export interface LocalAccount { schemaVersion: 1; kind: 'account'; id: string; name: string; uid?: string; characters: AccountCharacter[]; artifacts: AccountArtifact[] }
 export const cloneAccount = (value: LocalAccount): LocalAccount => JSON.parse(JSON.stringify(value)) as LocalAccount;
 export function createAccount(name = '我的本地账号'): LocalAccount {
   return { schemaVersion: 1, kind: 'account', id: crypto.randomUUID(), name, characters: [], artifacts: [] };
@@ -18,6 +18,7 @@ export function parseAccount(input: unknown): LocalAccount {
   const fail = (): never => { throw new Error('账号文件格式或装备归属无效，现有账号保持不变。'); };
   if (!object(input) || input.schemaVersion !== 1 || input.kind !== 'account' || !validText(input.id) || !validText(input.name)
     || !Array.isArray(input.characters) || !Array.isArray(input.artifacts) || input.characters.length > 1000 || input.artifacts.length > 10000) return fail();
+  if (input.uid !== undefined && (typeof input.uid !== 'string' || !/^\d{9,10}$/.test(input.uid))) return fail();
   const ids = new Set<string>();
   for (const artifact of input.artifacts) {
     if (!object(artifact) || !validText(artifact.id) || ids.has(artifact.id) || !validText(artifact.name) || !accountSlots.includes(artifact.slot as AccountSlot) || !attack(artifact.attack)) return fail();

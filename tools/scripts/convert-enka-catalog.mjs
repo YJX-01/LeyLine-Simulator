@@ -14,6 +14,11 @@ if(process.argv.includes('--capture')) {
   const weapons=read('docs/constant/real-game/weapons.json');
   const sets=read('docs/constant/real-game/sets.json');
   const characterMap=Object.fromEntries(Object.entries(characters).map(([id,item])=>[String(item.metadata.id),{id,skills:metadata[item.metadata.id]?.SkillOrder??[]}]));
+  const elements={Wind:'anemo',Rock:'geo',Electric:'electro',Grass:'dendro',Water:'hydro',Fire:'pyro',Ice:'cryo'};
+  for(const [key,item] of Object.entries(metadata))if(/^1000000[57]-\d+$/.test(key) && elements[item.Element]){
+    const [avatarId,depot]=key.split('-');
+    characterMap[key]={id:`${avatarId==='10000005'?'aether':'lumine'}-${elements[item.Element]}`,skills:item.SkillOrder??[],skillDepotId:Number(depot)};
+  }
   for(const [avatarId,item] of Object.entries(supplements.characters)) {
     const entry=characterMap[avatarId];
     if(!entry || entry.id!==item.id || item.skills.length!==3 || new Set(item.skills).size!==3) throw new Error(`Invalid supplemental skill identity: ${avatarId}`);

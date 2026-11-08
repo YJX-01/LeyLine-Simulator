@@ -1,0 +1,152 @@
+{
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "hashFormat": "sha256-lf-normalized",
+    "hashes": {
+      "src/data/ChineseSimplified/talents/traveleranemo.json": "04179a0bf977ef3e40b80b609fcf7fce37e17f60194923a9b20da64ed2475dc6",
+      "src/data/ChineseSimplified/talents/travelergeo.json": "05d71f22dc788657dfa9ae0eab75ed368d39b9d815d2ef691d069f8e1a1241a2",
+      "src/data/ChineseSimplified/talents/travelerelectro.json": "faf088a6f074548cc84d31a1c0373aa7d5975e3c2f5784dd6bc7c8501c4bc35e",
+      "src/data/ChineseSimplified/talents/travelerdendro.json": "b14502890a6236c59cf512e4d786340980401df4976f667706d1ad1d5c9a4df3",
+      "src/data/ChineseSimplified/talents/travelerhydro.json": "d3bac6a1e66a9b6d9705ba4ad07d2911e8f990beb2c09064e429202cbac9ec2e",
+      "src/data/ChineseSimplified/talents/travelerpyro.json": "150fa2ddc974f0fc64a15457d82f3a18317e3477a2508d8e44188844c02b7e32",
+      "src/data/ChineseSimplified/talents/travelercryo.json": "21f0c20204a61dabaaab1faebb1386514c7acf294baf59792c0ca366f42503cc"
+    },
+    "scope": "七元素名称与技能显示；基础成长分别沿用已核验空／荧资料，不声明机制支持。"
+  },
+  "forms": [
+    {
+      "element": "anemo",
+      "talentName": "旅行者 (风元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦铁风"
+        },
+        {
+          "key": "combat2",
+          "name": "风涡剑"
+        },
+        {
+          "key": "combat3",
+          "name": "风息激荡"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/traveleranemo.json"
+    },
+    {
+      "element": "geo",
+      "talentName": "旅行者 (岩元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦岩锋"
+        },
+        {
+          "key": "combat2",
+          "name": "星陨剑"
+        },
+        {
+          "key": "combat3",
+          "name": "岩潮叠嶂"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/travelergeo.json"
+    },
+    {
+      "element": "electro",
+      "talentName": "旅行者 (雷元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦惊雷"
+        },
+        {
+          "key": "combat2",
+          "name": "雷影剑"
+        },
+        {
+          "key": "combat3",
+          "name": "雷轰电转"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/travelerelectro.json"
+    },
+    {
+      "element": "dendro",
+      "talentName": "旅行者 (草元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦草翦"
+        },
+        {
+          "key": "combat2",
+          "name": "草缘剑"
+        },
+        {
+          "key": "combat3",
+          "name": "偃草若化"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/travelerdendro.json"
+    },
+    {
+      "element": "hydro",
+      "talentName": "旅行者 (水元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦激流"
+        },
+        {
+          "key": "combat2",
+          "name": "水纹剑"
+        },
+        {
+          "key": "combat3",
+          "name": "扬水制流"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/travelerhydro.json"
+    },
+    {
+      "element": "pyro",
+      "talentName": "旅行者 (火元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦烈焰"
+        },
+        {
+          "key": "combat2",
+          "name": "流火剑"
+        },
+        {
+          "key": "combat3",
+          "name": "灼火燎原"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/travelerpyro.json"
+    },
+    {
+      "element": "cryo",
+      "talentName": "旅行者 (冰元素)",
+      "skills": [
+        {
+          "key": "combat1",
+          "name": "异邦寒芒"
+        },
+        {
+          "key": "combat2",
+          "name": "冰雾剑"
+        },
+        {
+          "key": "combat3",
+          "name": "聚冰成锋"
+        }
+      ],
+      "sourcePath": "src/data/ChineseSimplified/talents/travelercryo.json"
+    }
+  ]
+}

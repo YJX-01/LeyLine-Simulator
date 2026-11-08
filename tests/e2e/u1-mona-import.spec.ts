@@ -22,14 +22,13 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   const confirm=dialog.getByRole('button',{name:'确认导入 458 件五星圣遗物',exact:true});
   await expect(confirm).toBeInViewport();
   await page.screenshot({path:'artifacts/mona-import-mobile.png',fullPage:false});
-  await dialog.getByRole('button',{name:'取消导入',exact:true}).click();
+  await dialog.getByRole('button',{name:'取消',exact:true}).click();
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(baseline);
   await page.setViewportSize({width:1280,height:900});await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   // An invalid-input boundary derived by truncating the recorded file, not invented player data.
   const bytes=readFileSync('.references/artifacts_mona.json');
   await dialog.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles({name:'truncated-mona.json',mimeType:'application/json',buffer:bytes.subarray(0,Math.floor(bytes.length/2))});
   await expect(dialog.getByRole('alert')).toBeVisible();
-  await dialog.getByRole('button',{name:'粘贴 JSON',exact:true}).click();
   await dialog.getByLabel('莫娜圣遗物 JSON',{exact:true}).fill(bytes.toString('utf8'));
   await dialog.getByRole('button',{name:'预览莫娜导入',exact:true}).click();
   await expect(dialog.getByRole('alert')).toHaveCount(0);
@@ -43,7 +42,7 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('已存在 458 件');
   await expect(dialog.getByRole('button',{name:'确认导入 0 件五星圣遗物',exact:true})).toBeDisabled();
   await page.screenshot({path:'artifacts/mona-import-duplicates.png',fullPage:false});
-  await dialog.getByRole('button',{name:'取消导入',exact:true}).click();
+  await dialog.getByRole('button',{name:'取消',exact:true}).click();
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(imported);
   await page.screenshot({path:'artifacts/library-nav-icons.png',fullPage:false});
 });

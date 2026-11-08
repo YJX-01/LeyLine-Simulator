@@ -90,6 +90,16 @@ const normalizedCharacters = Object.entries(characters).map(([id, data]) => {
     support: { supported, reason: supported ? '首批零命战技伤害验算；其他技能、命座与复杂机制未开放。' : '基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。' },
     source: source(`src/data/stats/characters.json#${id}`) };
 });
+const travelerForms=read('traveler-forms.json');
+for(const baseId of ['aether','lumine'])for(const form of travelerForms.forms){
+  const base=normalizedCharacters.find(character=>character.id===baseId);
+  if(!base || form.skills.length!==3)throw new Error('Invalid traveler form metadata.');
+  const id=`${baseId}-${form.element}`,label=form.talentName.match(/\((.+)元素\)/)?.[1];
+  if(!label || !elements.includes(form.element))throw new Error('Unknown traveler element.');
+  normalizedCharacters.push({...base,id,name:`${base.name}（${label}）`,element:form.element,
+    skills:form.skills.map((skill,index)=>({id:`${id}.${['normal','skill','burst'][index]}`,name:skill.name,category:['normal','skill','burst'][index],element:index===0?'physical':form.element,multipliers:[],support:{supported:false,reason:'独立元素形态资料已收录，伤害机制尚未核验。'}})),
+    source:{repository:travelerForms.source.repository,commit:travelerForms.source.commit,path:`${form.sourcePath};src/data/stats/characters.json#${baseId}`}});
+}
 const allowedWeapons = new Set(['dullblade', 'silversword', 'favoniussword', 'sacrificialsword', 'travelershandysword', 'harbingerofdawn', 'festeringdesire']);
 const normalizedWeapons = Object.entries(weapons).map(([id, data]) => {
   const { metadata: m, stats: s } = data;

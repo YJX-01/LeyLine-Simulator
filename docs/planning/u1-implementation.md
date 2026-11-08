@@ -626,3 +626,94 @@ base.css 收敛为浏览器重置；通用输入/下拉、按钮、字体和焦�
 浏览器四条相关流程通过：已记录真实安柏首选清除→备选接替→保留展柜→移除最后来源→刷新仍消失；原删除来源流程；真实458件库存与账号文件切换；侧栏底部定位、分组标题、独立账号管理和窄屏。三个真实资料单测通过，新增断言覆盖真实琴配置的重复首选快照移除、备选接替、最后角色移除以及单独删除备选不动首选。类型、架构、构建预算通过。
 
 最终桌面包 build-6MvnqO；角色保存/首选和实际库存账号入口检查使用隔离临时目录串行通过，桌面检查包含账号底部入口、分组标题和副词条方框红色。截图 artifacts/account-sidebar-packaged.png、unified-account.png、unified-account-mobile.png、role-equipment-and-roll-counts.png。未提交或推送，仍待用户体验验收。
+
+
+## 独立圣遗物组合与角色配置比较（2026-11-08，当前）
+
+本轮依据用户讨论后的确认实施。角色配置保留先选角色和纵向方案卡，新增搜索、首选／备选筛选、有效词条排序和两套比较；主页面与详情选择弹窗复用 CharacterConfigurationList。比较共用 LoadoutComparison，先列培养、武器和有效总词条，再列七类词条数及右侧增减、五部位是否相同。切换参考角色只改变临时比较口径，不保存或采用。
+
+圣遗物组合改为独立账号记录，不再从角色配置自动汇总；莫娜导入、备注整理、角色保存均不自动生成。支持新建、编辑、删除、搜索／筛选／排序、两组比较及单独导出。五部位和有效属性分别保存；从角色保存继承有效属性，独立创建可选参考角色并手动调整七类。名称采用套装构成、沙杯冠单字主词条和一位小数有效平均词条数，暴击率用“暴”、暴击伤害用“爆”。相同五部位实物ID与相同归一化有效属性再次保存打开已有项。组合修改不改变任何角色；缺失或已变动实物阻止直接应用。
+
+展柜预览新增“同时导入本地库”，默认仍为仅保存展柜。用户明确允许选择后按套装／部位／星级／等级／主词条及值／有序副词条精确匹配，匹配复用本地身份，不近似、不按无序集合匹配；未匹配则新增来源明确的本地物品，不自动装备。角色展柜“保存组合”需要新增物品时二次确认，取消库存与组合均不写；已经匹配则直接保存或打开已有项。组合保存与入库失败联动回退。角色本地“应用组合”只更新草稿，跨角色转移或未满五件时明确确认，角色保存后才生效。
+
+新增组件沿用现有 WorkbenchDialog、LibraryToolbar、FilterActions、SortPanel、ArtifactEquipmentGrid、ArtifactBrowser、EffectiveRollSummary、EditorActions、LibraryPagination 等。正文和提示至少14px，主要标题／按钮16px粗体，维持现行颜色与控件尺寸；组合编辑和比较不扩大角色详情红字高亮的范围。
+
+实际资料为 .references/enka/official-example.json 的四角色二十件展柜装备及 .references/artifacts_mona.json 的458件实际库存。按真实物品在界面临时选取五件和卸下一件的操作明确属于试配，不冒充玩家原始配装。独立期望采用固定主副词条平均档位手算命名有效总数；格式边界仅反转真实装备副词条顺序，验证不可匹配。
+
+最终检查：三项真实材料单测通过（默认不入库／精确有序匹配、命名独立计算与草稿转移、重复保存与失败回退）；五条串行 Chromium 流程通过，覆盖独立创建、还原、放弃未保存修改、删除、默认不入库、确认入库、重复识别、应用后显式保存、角色／组合比较和原库存流程。类型、架构209文件、构建预算通过。桌面包 build-MSqDIN 在隔离临时账号验证实际458件库存、组合新建／还原／放弃／删除和本地角色保存；实际内容视口376×807无横向溢出，无页面错误。网页与桌面检查串行运行，未改用户现有账号或桌面进程。
+
+证据：artifacts/u1-combinations-unit.log、u1-combinations-browser-final.log、u1-independent-combinations-desktop.json、u1-independent-combinations-budget.json；截图 independent-combination-library.png、independent-combination-comparison.png、character-configuration-comparison.png、packaged-independent-combination-editor.png、packaged-independent-combination-mobile.png。最新启动入口 artifacts/desktop/Start-LeyLine.cmd。未提交或推送；U1仍等待用户体验反馈，不表示P5/P6完成。
+
+
+## 导入入口统一、账号UID和旅行者形态（2026-11-08，当前）
+
+用户要求展柜页改名“从角色展柜导入”，常驻说明严格保留指定文本并调至16px；删除重复范围说明。新增ImportActions统一三种导入的底部取消／确认、40px控件、16px粗体及风／雷／水语义，沿用920px内容弹窗和红叉关闭。莫娜取消从穿戴备注整理角色的产品入口，不再导入后跳入该流程；粘贴JSON框始终呈现，与上方文件区左右对齐。取消MonaImport与领域解析器两处硬编码8MiB限制；保留真实格式、10000条记录、部位／数值、冲突与预览确认校验，不改账号文件或本地存储既有边界。
+
+账号契约新增可选uid，旧文件兼容，账号页可保存或清空。展柜默认填入当前UID，成功确认导入才绑定；查询或取消不绑定。绑定不一致时阻止混入并提示改账号资料或切换账号，UID输入变化使旧预览失效。账号文件和草稿均保留UID，新建账号不沿用上一账号。
+
+手动添加用ManualCharacterImport与CatalogBrowser分开列表／培养步骤，打开即列表，不再点击一次“选择游戏角色”。复用工具栏、筛选与SortPanel，默认实装版本从新到旧；返回保留列表条件，重选创建独立表单；有输入改动时返回和退出均确认，未选适配武器禁用保存。按公开示例实际安柏90级、6突破、6命、10/10/10、天空之翼90级6突破精2手工录入，保存一次后正确打开详情，不补造玩家装备。
+
+发现固定角色目录只有无元素空／荧，而七元素天赋资料已有。新增canonical traveler-forms.json及捕获脚本，来源为既有固定genshin-db提交，记录七文件hash；从基础空／荧成长派生各七个独立元素记录，技能名称和类别有来源，不引入猜测倍率。目录现140记录（原126基础记录加14形态），原无元素保留旧账号兼容；头像复用对应空／荧图片并采用元素角标，卡片与详情均对应元素天赋／命座图。现有Enka官方元数据的十二条风岩雷草水火avatarId+skillDepotId映射已接通；冰缺可靠展柜映射仍明确拒绝。没有实际旅行者玩家响应，本轮只证明目录与显示，不声称其展柜实际输入或伤害机制已验收。
+
+相关最终检查通过：类型、架构216文件、canonical数据及Enka生成一致性、8项针对性单测；四条导入浏览器流程（直接选角／返回与七形态、UID保存预填及新账号、真实莫娜内容仅追加JSON空白超过原8MiB仍预览、真实安柏手工保存）；莫娜取消／无效文件恢复／重复检查、完整458件库存流程、库页回归分别通过。旧备注资料仅作为历史测试准备从原实际文件派生，不再通过已删产品入口，更不填培养或武器。
+
+桌面包build-LTkPMw在独立临时profile串行核验真实安柏手工保存、UID重开与预填、新账号不继承UID、另一独立账号的458件莫娜导入、无自动角色和376px内容宽度无横向溢出；无页面错误。来源账号分开，没有将公开示例与私人莫娜库存拼接。构建预算通过。证据artifacts/u1-import-entry-browser-latest.log、u1-import-inventory-final.log、u1-import-library-regression.log、u1-import-entry-unit.log、u1-import-entry-desktop.json、u1-import-entry-budget.json；截图packaged-showcase-import-unified.png、packaged-mona-import-unified.png、packaged-mona-import-mobile.png、packaged-manual-character-import.png、manual-traveler-seven-forms.png。启动入口artifacts/desktop/Start-LeyLine.cmd。未提交或推送；U1继续等待用户体验反馈。
+
+
+## 文件取消、展柜选择和组合草稿修正（2026-11-09，当前）
+
+修复用户报告的三个实际问题。Mona文件框取消会触发冒泡cancel，旧WorkbenchDialog把任何cancel当自身Escape处理；现仅处理事件目标为自身dialog的取消，并阻止当前弹窗Escape继续影响父层。取消文件选择不关闭莫娜页、不清空既有预览和账号。
+
+展柜查询结果不再沿用原生小复选框，使用统一头像／武器、16px粗体姓名、圆角卡及雷色选中态；搜索、已选数量、全选和清空选择就地提供。保持查询前的一段说明与UID表单、共用底部确认，不新增一套模态框标准。
+
+“保存组合”先写入再打开编辑的实现撤销，替换为只准备未保存草稿。带装备和有效属性的新草稿可以直接点编辑器保存；还原只在内容改变时启用，恢复打开时的字段。只有点击左上保存才写组合；展柜需要新增本地物品的二次确认也延后到此时，取消确认保留草稿，放弃草稿不写库存或组合。已有完全相同组合打开既有编辑，保留原重复识别规则。库存与组合继续联动回退。
+
+新增可编辑组合名称和自动命名动作，旧记录无name仍采用默认名，手动名存入原记录并在刷新／导出／比较／选择页保持。默认改为“4血红-攻攻爆38.5词条”或“2染血+2苍白-攻物爆n词条”，移除【】并增加分隔线。资料来自BWIKI“黑话／XX套”社区表，当前46套五星简称逐项对应实际套装ID，canonical位于docs/constant/artifact-set-short-names.json，生成经convert-repo-data维护，不改变套装身份／机制；未核对条目回退全称，不自行截字。用户给定格式中的数字不是新增玩家案例。
+
+参考角色复用手动新建的CatalogBrowser和相同目录／筛选，包含138个可选记录（126基础加14旅行者形态减去两个未指定元素的旧身份）。不是缺少角色数据，原先使用了另一套仅文字搜索的CatalogPicker。现在具有搜索、元素筛选和实装版本排序；验证空的七种元素均可选。
+
+三项真实材料单测通过，包含实际安柏染血＋苍白命名和独立词条数计算、改名、重复保存与写入失败回退。六条针对性浏览器流程通过：原生文件cancel事件保留界面与预览、展柜全选／清空与参考角色复用、真实展柜组合草稿不提前写入／取消／改名／刷新、独立组合编辑、原完整458件库存流程与角色保存。共用EditorActions兼容未传独立保存条件的原角色页，相关保存流程已回归。类型、架构217文件、数据生成一致性和包体预算通过。
+
+最新桌面包build-1yrYFL，在独立临时profile串行验证真实458件莫娜库存、文件取消事件、新建组合不提前保存、显式保存、改名／还原／重开和窄屏；选取实际五件的界面试配明确不冒充玩家原配装，库存始终不变，无页面错误。网页和桌面检查串行，不改用户当前账号或桌面。证据artifacts/u1-combination-draft-unit.log、u1-combination-draft-browser.log（文件取消与选择流程通过；其中一次原保存回归失败已由后续结果替代）、u1-combination-draft-final-browser.log、u1-combination-draft-desktop.json、u1-combination-draft-budget.json。截图showcase-preview-unified.png、showcase-preview-unified-mobile.png、reference-character-picker-reused.png、combination-save-draft.png、packaged-combination-draft.png和packaged-combination-draft-mobile.png。未提交或推送；U1仍需用户体验反馈。
+
+
+## 展柜三列图像卡、角色右键与圣遗物默认版本排序（2026-11-09，当前）
+
+展柜选择改为104px角色、约87px武器，宽屏三列，图下只显示角色名，24px勾选在右侧；等级／命座／精炼仍用共用图像角标，窄屏改为两列／一列。组合参考角色标签与按钮同行，独立分割线后放“有效词条”及紧贴的七类点选框，避免标题误指参考角色。
+
+角色主页新增ContextMenu，只含查看详情和彻底删除，支持方向键、Escape、外部关闭与视口边缘约束。彻底删除二次确认，移除本地、展柜、全部配装、收藏与有效属性覆盖，实物留库、独立组合和轴快照保留；不执行备选接替。removeCharacter将三个关联存储与账号提交绑定，保存失败恢复原记录和界面状态。仅主角色库启用此危险操作，选择角色流程不提供删除。
+
+用户补充要求圣遗物默认按实装版本排序，主库和选装统一为版本从新到旧，排序重置和新建／切换账号也采用此规则。保留手动导入顺序；旧真实物品数值回归显式选导入顺序，以固定原文件实物身份，不让测试依赖产品默认值。
+
+用户手动修改了简称canonical，本轮保留已有46项原值，并增补教官、流放、战狂、赌徒、学士、武人、勇士、行者、守护、奇迹共10项四星简称；四星资料参考米游社、TapTap及补充社区名称，出处记录在canonical。生成器按原值使用shortName，包括用户指定的“风套”等尾字，不自动规范化。56项完整对照表与运行数据均从同一文件生成；未宣称四星库存导入或新机制已支持。
+
+检查通过：1项基于已记录真实展柜的删除事务单测，涵盖写入失败回退、保留其他角色与20件实物；5条串行浏览器检查涵盖3列与104px图、组合参考角色／词条间距、完整删除／取消／实际账号写入失败回退、实际458件库存的独立版本排序期望和重置、原库存完整保存／选装流程、文件取消与参考角色选择。视口分页测量等待实际布局完成后再断言，避免读取resize前的旧卡片位置。类型、架构221文件、数据生成和包体预算通过。
+
+桌面包build-xoyHRn在独立临时profile验证实际记录安柏的手工培养录入、角色右键／键盘／取消／删除、另一独立账号458件莫娜库存的默认实装版本排序、实际物品组合试配和窄屏排版，库存保持不变、无页面错误。浏览器与桌面串行，没有操作用户现有账号或桌面。证据artifacts/u1-character-menu-unit.log、u1-character-menu-browser-final.log、u1-character-menu-regression.log（文件取消／参考角色通过）、u1-character-menu-inventory-final.log、u1-character-menu-desktop.json和u1-character-menu-budget.json；截图showcase-three-column-preview.png、combination-reference-inline.png、character-context-menu.png、packaged-character-context-menu.png、packaged-combination-reference-inline.png。简称对照见docs/design/artifact-set-short-names.md，可编辑源为docs/constant/artifact-set-short-names.json。未提交或推送，U1仍待用户体验反馈。
+
+
+## 导入留在列表、统一单击选装与默认词条覆盖（2026-11-09，当前）
+
+取消Enka确认后自动打开首位角色，导入结束清除遮挡结果的筛选后留在角色库。角色普通保存与备选保存移除冗余成功说明，恢复按钮禁用状态表示保存完成；错误、清除与转移等实际反馈保留。
+
+ArtifactBrowser选择模式改为单击即发出选择事件，回到父编辑器草稿；不再进入准备装备和“选择这件圣遗物”二次确认。普通库存点击仍打开详情。跨角色转移仍由角色编辑器明确确认，角色保存前不提交穿戴。两处选择页统一复用ArtifactPickerDialog，920px、16px内距、疏松卡自然三列和64×32px卸下。根因是WorkbenchDialog的editor header/content选择器作用到嵌套对话框，现限定直接子元素，不以各页面额外样式修补。
+
+用户明确再次确认：角色有效属性跟随账号角色，首选／备选共用；组合选参考角色时带入一次，之后组合独立保存，不实时跟随。选择已有账号角色会带入该角色覆盖值，未拥有身份使用目录默认值；两者都复制到组合草稿。组合左下头像表示实际采用该组物品的角色，不是参考角色；图内佩戴者同理。没有改为全局同步，也不改写旧组合的有效属性。
+
+核对已有123项usefulAttr及同一固定miao-plugin提交的角色自定义文件，发现旅行者元素默认此前统一采用通用分支，漏掉多元素的精通和水元素生命，奇偶男女没有默认。新增capture-effective-stat-supplements.py只解析上游显式常量，不执行JS；七元素分别读取旅行者artis.js，奇偶分别读取自己的calc.js mainAttr，记录三个源路径及SHA。补后141命名条目覆盖目录全部140身份及通用旅行者；普通角色条件式面板阈值不随配装写入全局默认，手动角色覆盖保留。canonical和运行时副本由convert-repo-data同步，不改机制或伤害支持结论。
+
+通过1项覆盖单测（全部目录有默认，风雷草火冰精通、岩不选精通、水生命、奇偶属性及琴原默认独立核对）；5条串行Chromium流程覆盖导入不自动开详情、两处三列等宽与卸下宽度、单击回草稿、无冗余保存提示、跨配置有效属性共用、组合借入后独立保存及原组合／实际458库存完整保存和转移确认。类型、架构224文件、数据与包体预算通过。桌面build-bhpMbb在隔离profile验证实际458库存选装单击、草旅行者默认精通、窄卸下、组合保存／改名／还原和窄屏，无库存改变、无页面错误。
+
+证据artifacts/u1-single-pick-unit.log、u1-single-pick-browser.log、u1-single-pick-inventory.log、u1-single-pick-desktop.json、u1-single-pick-budget.json；截图role-single-click-picker.png、combination-single-click-picker.png、packaged-single-click-picker.png、packaged-single-pick-editor.png、packaged-single-pick-editor-mobile.png。玩家材料仍为已记录公开展柜和另一个独立账号的实际莫娜库存；选择实际物品的界面试配不冒充玩家导出，静态默认表也不冒充游戏观测。未提交或推送；U1继续待用户体验反馈。
+
+## 选装标题、三项退出保护与命座数字（2026-11-09，当前）
+
+ArtifactPickerDialog使用WorkbenchDialog的centerTitle对称三列布局，空槽与替换页均居中，窄屏同样保持居中。卸下保留32px中号高度，最小宽64px迁入共用短按钮变量与data-width规则。32px有用户确认的高度标准；64px原为实现选择，先前文档只是记录，并非独立的既定标准。现对照EditorActions的32px成组工具栏与FilterActions的104×40px确认按钮，明确短按钮适用范围、16px粗体、长文本按内容扩展，不能把64px推广成全部按钮的固定宽度。
+
+新增UnsavedChangesDialog，角色、圣遗物、组合、手动添加及轴内队员共用“保存／继续编辑／放弃修改”。保存成功才执行原关闭、返回或切换；失败保留草稿和错误；手动添加的保存后返回继续留在角色目录，不误开详情。展柜组合需要入库时继续等待明确确认，取消确认不写入、不退出草稿。浏览器刷新／关闭仍使用原生保护。
+
+连续Esc的回归发现原生dialog的关闭请求可能不可取消，造成底层详情在确认框打开时已被浏览器关闭。WorkbenchDialog改为在keydown处理Esc；内层消耗事件后不会传给外层。原生cancel仍只处理自身，文件选择器取消不会关闭导入页。CharacterForm的命座数字使用CornerBadge transparent，保留10px微型粗体，仅去除角标底色，不更改其他图片角标。
+
+5条新增Chromium流程通过，使用记录UID 618285856验证空槽／替换标题与窄屏、继续／放弃／保存、存储失败回退、圣遗物校验失败保留草稿、手动保存后返回、展柜组合延迟入库、轴候选保存与账号隔离。轴项目仅为记录展柜转换出的UI格式测试载体，不冒充玩家项目；精炼变化明确为界面试配。实际458件莫娜库存完整保存与重开、四条导入入口及原生文件取消回归通过。类型、架构226文件、包体预算及diff空白检查通过。
+
+桌面包build-ROFOKD在独立临时profile验证实际458件库存选装居中、卸下64×32px、三按钮16px／700／40px、连续Esc、保存／失败／继续／放弃、手工转录记录安柏的保存后返回、透明命座数字和窄屏。检查前后库存实物不变，无页面错误；浏览器与桌面串行，不操作用户现有账号或桌面。证据artifacts/u1-unsaved-complete-final.log、u1-unsaved-regression.log、u1-unsaved-browser-final.log、u1-unsaved-typecheck-final.log、u1-unsaved-architecture.log、u1-unsaved-desktop.json、u1-unsaved-budget.json；截图packaged-unsaved-picker.png、packaged-unsaved-actions.png、packaged-unsaved-actions-mobile.png、packaged-constellation-detail.png。未提交或推送；U1仍待用户体验反馈。

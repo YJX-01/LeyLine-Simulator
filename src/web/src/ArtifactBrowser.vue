@@ -9,7 +9,6 @@ import { releaseMetadata, compareReleaseNewest } from './domain/catalog-release'
 import { useViewportPage } from './composables/use-viewport-page';
 import { loadAccountGameData } from './domain/account-presentation';
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
-import ArtifactIdentity from './components/ArtifactIdentity.vue';
 import ArtifactDetail from './ArtifactDetail.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
 import MultiSelectPicker from './components/MultiSelectPicker.vue';
@@ -21,7 +20,7 @@ import StatFilterChoices from './components/StatFilterChoices.vue';
 import FilterActions from './components/FilterActions.vue';
 import SortPanel from './components/SortPanel.vue';
 import ArtifactSummary from './ArtifactSummary.vue';
-const props=defineProps<{slot?:AccountSlot;pick?:boolean;compareTo?:AccountArtifact;inline?:boolean;account?:LocalAccount;density?:'relaxed'|'compact';effectiveStats?:readonly RealStat[]}>();
+const props=defineProps<{slot?:AccountSlot;pick?:boolean;inline?:boolean;account?:LocalAccount;density?:'relaxed'|'compact';effectiveStats?:readonly RealStat[]}>();
 const emit=defineEmits<{select:[item:AccountArtifact]}>();
 const store=useAccountStore(),context=storeToRefs(store);
 const inventory=computed(()=>props.account ?? store.account);
@@ -33,8 +32,8 @@ const ownerFilter=props.pick?ref<string[]>([]):context.inventoryOwner;
 const setFilter=props.pick?ref<string[]>([]):context.inventorySet;
 const subFilter=props.pick?ref<string[]>([]):context.inventorySubstat;
 const levelFilter=props.pick?ref<string[]>([]):context.inventoryLevel;
-const sort=props.pick?ref('default'):context.inventorySort;
-const sortDirection=props.pick?ref<'asc'|'desc'>('asc'):context.inventorySortDirection;
+const sort=props.pick?ref('release'):context.inventorySort;
+const sortDirection=props.pick?ref<'asc'|'desc'>('desc'):context.inventorySortDirection;
 const subMatch=props.pick?ref('all'):context.inventorySubMatch;
 const storedPage=props.pick?ref(1):context.inventoryPage;
 const selectedId=ref(''),filterOpen=ref(false),sortOpen=ref(false);
@@ -85,7 +84,7 @@ watch([storedPage,pages],()=>{if(storedPage.value!==page.value)storedPage.value=
 <template>
   <section class="artifact-browser" aria-label="圣遗物库存浏览" :data-page-size="pageSize">
     <template v-if="!inline || !selected">
-      <LibraryToolbar v-model="query" label="搜索圣遗物" placeholder="查找圣遗物或装备角色" :filter-count="activeFilters" :sorted="sort!=='default' || sortDirection!=='asc'" @filter="filterOpen=true" @sort="sortOpen=true"><template v-if="$slots.actions" #actions><slot name="actions" /></template></LibraryToolbar>
+      <LibraryToolbar v-model="query" label="搜索圣遗物" placeholder="查找圣遗物或装备角色" :filter-count="activeFilters" :sorted="sort!=='release' || sortDirection!=='desc'" @filter="filterOpen=true" @sort="sortOpen=true"><template v-if="$slots.actions" #actions><slot name="actions" /></template></LibraryToolbar>
       <div class="inventory-options"><LibraryShortcuts v-if="!slot" v-model="slotFilter" class="slot-tabs" label="筛选圣遗物部位" all-label="全部部位" kind="artifactSlots" :mobile-columns="3" :options="accountSlots.map(slot=>({value:slot,label:accountSlotLabels[slot]}))" /><button v-if="activeFilters || query || slotFilter.length" class="inventory-reset" @click="resetFilters">清除筛选</button><span class="inventory-count" role="status">筛选结果 {{ filtered.length }} 件</span><ChoiceGroup v-if="!props.density" class="density-options" small joined tone="hydro" :model-value="density" :options="[{value:'relaxed',label:'疏松'},{value:'compact',label:'紧凑'}]" label="卡片密度" @update:model-value="store.inventoryDensity=$event==='compact'?'compact':'relaxed'" /></div>
       <WorkbenchDialog v-if="filterOpen" title="筛选圣遗物" size="filter" @close="filterOpen=false"><div class="artifact-filter-panel">
         <section><h3>套装</h3><MultiSelectPicker v-model="setFilter" label="筛选套装" :options="sets" image-kind="artifacts" searchable /></section>
@@ -94,16 +93,16 @@ watch([storedPage,pages],()=>{if(storedPage.value!==page.value)storedPage.value=
         <section><h3>强化等级</h3><ChoiceGroup :model-value="levelFilter" :options="[{value:'16',label:'+16'},{value:'20',label:'+20'}]" label="常用强化等级" @update:model-value="levelFilter=$event as string[]" /><MultiSelectPicker v-model="levelFilter" label="筛选强化等级" :options="levelOptions" /></section>
         <section><h3>装备占用</h3><MultiSelectPicker v-model="ownerFilter" label="指定角色或装备占用" :options="ownerOptions" image-kind="characters" searchable /></section>
       </div><template #footer><FilterActions flush @reset="resetFilters" @confirm="filterOpen=false" /></template></WorkbenchDialog>
-      <WorkbenchDialog v-if="sortOpen" title="圣遗物排序" size="filter" @close="sortOpen=false"><SortPanel :model-value="sort" v-model:direction="sortDirection" :options="[{value:'default',label:'导入顺序'},{value:'level',label:'等级'},{value:'release',label:'实装版本'}]" @update:model-value="setSortKey" @reset="sort='default';sortDirection='asc'" @confirm="sortOpen=false" /></WorkbenchDialog>
+      <WorkbenchDialog v-if="sortOpen" title="圣遗物排序" size="filter" @close="sortOpen=false"><SortPanel :model-value="sort" v-model:direction="sortDirection" :options="[{value:'default',label:'导入顺序'},{value:'level',label:'等级'},{value:'release',label:'实装版本'}]" @update:model-value="setSortKey" @reset="sort='release';sortDirection='desc'" @confirm="sortOpen=false" /></WorkbenchDialog>
       <LibraryPagination v-model:page="page" :pages="pages" always position="顶部" class="pagination-top" />
-      <div ref="grid" class="inventory-cards" :class="density"><button v-for="item in visible" :key="item.id" class="inventory-card artifact-item-card" :data-rarity="item.real?.rarity" :data-density="density" :aria-label="`${pick?'选择':'查看'} ${item.name} ${item.id.slice(-6)}`" @click="selectedId=item.id"><ArtifactSummary :account="inventory" :item="item" :variant="density" :effective-stats="props.effectiveStats" /></button></div>
+      <div ref="grid" class="inventory-cards" :class="density"><button v-for="item in visible" :key="item.id" class="inventory-card artifact-item-card" :data-rarity="item.real?.rarity" :data-density="density" :aria-label="`${pick?'选择':'查看'} ${item.name} ${item.id.slice(-6)}`" @click="props.pick?emit('select',item):selectedId=item.id"><ArtifactSummary :account="inventory" :item="item" :variant="density" :effective-stats="props.effectiveStats" /></button></div>
       <LibraryEmptyState v-if="!filtered.length" :title="inventory.artifacts.length?'没有符合条件的圣遗物':'圣遗物库还是空的'" :description="inventory.artifacts.length?'清除搜索与筛选后重试。':'导入莫娜文件，确认预览后浏览真实词条。'" :action="inventory.artifacts.length?'清除搜索与筛选':'返回导入入口'" @action="inventory.artifacts.length?resetFilters():scrollToTools()" />
       <LibraryPagination v-model:page="page" :pages="pages" always position="底部" />
-    </template><component :is="inline ? 'section' : WorkbenchDialog" v-if="selected && pick" :title="inline ? undefined : selected.name" @close="selectedId = ''"><button v-if="inline" class="ui-action soft" data-accent="anemo" @click="selectedId = ''">返回库存候选</button><div class="artifact-comparison"><section v-if="compareTo"><h3>当前装备</h3><ArtifactSummary :account="inventory" :item="compareTo" variant="relaxed" :effective-stats="props.effectiveStats" /></section><section><h3>准备装备</h3><ArtifactSummary :account="inventory" :item="selected" variant="relaxed" :effective-stats="props.effectiveStats" /></section></div><p>本地占用：{{ owner(selected) ?? '未装备' }}</p><p v-if="selected.mona?.equippedBy">原始穿戴备注：{{ selected.mona.equippedBy }}（与当前装备状态分开保存）</p><button class="ui-action" data-accent="anemo" @click="emit('select',selected); selectedId = ''">选择这件圣遗物</button><ArtifactIdentity :item="selected" /></component>
+    </template>
     <ArtifactDetail v-if="selected && !pick" ref="artifactDetail" :item="selected" :account="props.account" @close="selectedId=''" />
   </section>
 </template>
 <style scoped>
-.artifact-browser { min-width:0; }.inventory-options { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:12px 0; }.slot-tabs { display:flex; flex-wrap:wrap; gap:8px; }.slot-tabs button { display:flex; align-items:center; justify-content:center; gap:5px; height:40px; min-height:40px; padding:0 8px; font-size:var(--font-control); font-weight:700; white-space:nowrap; }.slot-tabs button[aria-pressed=true] { color:var(--element-anemo-deep); background:var(--element-anemo-light); border-color:var(--element-anemo-primary); }.slot-tabs :deep(.artifactSlots) { color:inherit; }.inventory-count { margin-left:auto; font-size:var(--font-control); font-weight:700; color:var(--muted); }.inventory-reset { border:0; padding:0 4px; min-height:32px; background:transparent; color:var(--muted); font-size:var(--font-control); font-weight:700; }.pagination-top { margin:8px 0 12px; }.inventory-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr)); gap:10px; }.inventory-cards.compact { grid-template-columns:repeat(auto-fill,minmax(min(100%,184px),1fr)); gap:8px; }.artifact-filter-panel { display:grid; gap:20px; }.artifact-filter-panel section { display:grid; gap:8px; }.artifact-filter-panel h3 { margin:0; font-size:var(--font-control); }.filter-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }.artifact-comparison { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:20px; margin-top:16px; }.artifact-comparison h3 { margin:0 0 12px; font-size:var(--font-control); }.density-options :deep(button) { font-size:var(--font-control); font-weight:700; }
+.artifact-browser { min-width:0; }.inventory-options { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:12px 0; }.slot-tabs { display:flex; flex-wrap:wrap; gap:8px; }.slot-tabs button { display:flex; align-items:center; justify-content:center; gap:5px; height:40px; min-height:40px; padding:0 8px; font-size:var(--font-control); font-weight:700; white-space:nowrap; }.slot-tabs button[aria-pressed=true] { color:var(--element-anemo-deep); background:var(--element-anemo-light); border-color:var(--element-anemo-primary); }.slot-tabs :deep(.artifactSlots) { color:inherit; }.inventory-count { margin-left:auto; font-size:var(--font-control); font-weight:700; color:var(--muted); }.inventory-reset { border:0; padding:0 4px; min-height:32px; background:transparent; color:var(--muted); font-size:var(--font-control); font-weight:700; }.pagination-top { margin:8px 0 12px; }.inventory-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr)); gap:10px; }.inventory-cards.compact { grid-template-columns:repeat(auto-fill,minmax(min(100%,184px),1fr)); gap:8px; }.artifact-filter-panel { display:grid; gap:20px; }.artifact-filter-panel section { display:grid; gap:8px; }.artifact-filter-panel h3 { margin:0; font-size:var(--font-control); }.filter-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }.density-options :deep(button) { font-size:var(--font-control); font-weight:700; }
 @media(max-width:600px) { .slot-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; gap:8px; }.slot-tabs button { min-width:0; padding-inline:4px; }.inventory-options { gap:8px; }.inventory-count { margin-left:0; margin-right:auto; }.density-options { margin-left:auto; } }
 </style>

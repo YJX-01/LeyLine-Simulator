@@ -14,7 +14,8 @@ import NumberStepper from './components/NumberStepper.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
 import CornerBadge from './components/CornerBadge.vue';
 import talentDisplay from './domain/data/character-talent-display.json';
-const props = defineProps<{ character?: AccountCharacter; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean }>();
+import { travelerForm } from './domain/traveler-forms';
+const props = defineProps<{ character?: AccountCharacter; initialCharacterId?: string; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean }>();
 const emit = defineEmits<{ close: []; saved: [id: string]; dirtyChange: [dirty: boolean] }>();
 const store = useAccountStore();
 const originalAccount = store.account;
@@ -22,8 +23,8 @@ let disposed = false;
 onUnmounted(() => { disposed = true; });
 const data = ref<Awaited<ReturnType<typeof loadAccountGameData>>>();
 const sourceBuild = computed(() => props.showcase ? props.character?.showcase?.build : props.character?.realBuild);
-const talentIcons = computed(() => (talentDisplay.characters as Record<string, { icon:string; key: 'normal' | 'skill' | 'burst'; label:string; name:string; constellations:number[] }[]>)[character.value?.name ?? props.character?.name ?? ''] ?? []);
-const characterId = ref(sourceBuild.value?.character.id ?? '');
+const talentIcons = computed(() => (talentDisplay.characters as Record<string, { icon:string; key: 'normal' | 'skill' | 'burst'; label:string; name:string; constellations:number[] }[]>)[travelerForm(characterId.value)?.talentName ?? character.value?.name ?? props.character?.name ?? ''] ?? []);
+const characterId = ref(sourceBuild.value?.character.id ?? props.initialCharacterId ?? '');
 const weaponId = ref(sourceBuild.value?.weapon.id ?? '');
 const ascension = ref(sourceBuild.value?.ascension ?? 6);
 const weaponLevel = ref(sourceBuild.value?.weaponLevel ?? 90);
@@ -70,24 +71,25 @@ async function prepare(): Promise<AccountCharacter | undefined> {
     return entry;
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '角色资料保存失败。'; return undefined; } finally { busy.value = false; }
 }
-async function apply() {
+async function apply(notify = true) {
   const entry = await prepare();
-  if (!entry) return;
+  if (!entry) return false;
   try {
     const next = JSON.parse(JSON.stringify(store.account));
     const index = next.characters.findIndex((item: AccountCharacter) => item.id === entry.id);
     if (index >= 0) next.characters[index] = entry; else next.characters.push(entry);
     store.commitEdit(parseAccount(next));
-    initialValues.value=signature(); emit('saved', entry.id); if(!props.details)emit('close');
-  } catch (cause) { error.value=cause instanceof Error?cause.message:'角色资料保存失败。'; }
+    initialValues.value=signature(); if(notify){emit('saved', entry.id); if(!props.details)emit('close');}return true;
+  } catch (cause) { error.value=cause instanceof Error?cause.message:'角色资料保存失败。'; return false; }
 }
 
-defineExpose({ prepare, reset });
+const canSave=computed(()=>!!character.value && weapons.value.some(item=>item.id===weaponId.value));
+defineExpose({ prepare, reset, apply, canSave });
 
 </script>
 <template>
   <div class="character-form" :class="{inline,details:true}">
-    <CatalogPicker v-if="!props.character" inline label="游戏角色" image-kind="characters" v-model="characterId" :options="data?.catalog.characters ?? []" @update:model-value="weaponId = ''" />
+    <CatalogPicker v-if="!props.character && !initialCharacterId" inline label="游戏角色" image-kind="characters" v-model="characterId" :options="data?.catalog.characters ?? []" @update:model-value="weaponId = ''" />
     <template v-if="characterId">
       <div class="cultivation-groups">
         <fieldset class="cultivation-group talent-group" aria-label="天赋" :disabled="showcase">
@@ -104,7 +106,7 @@ defineExpose({ prepare, reset });
 
         </fieldset>
           <fieldset class="constellation-row" :disabled="showcase"><strong>命座</strong><div class="constellation-strip" role="group" aria-label="命座" :style="elementStyle">
-            <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><CornerBadge small class="constellation-number">{{ rank-1 }}</CornerBadge></button>
+            <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><CornerBadge small transparent class="constellation-number">{{ rank-1 }}</CornerBadge></button>
           </div></fieldset>
           <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase" @update:model-value="refinement=Number($event)" /></fieldset>
       </div>

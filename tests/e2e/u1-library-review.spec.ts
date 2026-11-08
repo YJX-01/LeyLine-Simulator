@@ -1,3 +1,4 @@
+import { restoreRecordedNoteSetup } from '../helpers/recorded-note-setup';
 import { existsSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
@@ -10,9 +11,7 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles('.references/artifacts_mona.json');
   await page.getByRole('button',{name:'确认导入 458 件五星圣遗物',exact:true}).click();
   await page.getByTestId('workspace-nav-characters').click();
-  await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
-  await page.getByRole('button',{name:'从穿戴备注整理角色',exact:true}).click();
-  await page.getByRole('button',{name:'确认按备注整理',exact:true}).click();
+  await restoreRecordedNoteSetup(page);
   await expect(page.locator('.character-card')).toHaveCount(55);
   const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-v1'));
   await page.getByLabel('搜索账号角色',{exact:true}).fill('甘雨');
@@ -48,12 +47,9 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await page.keyboard.press('Escape');
   await page.getByTestId('workspace-nav-combinations').click();
   await page.getByLabel('搜索圣遗物组合',{exact:true}).fill('琴');
-  await expect(page.locator('.collection-tools')).toContainText('匹配 1 组 / 共 55 组');
-  await expect(page.locator('.combination-row .equipment-list')).toHaveCount(0);
-  await expect(page.locator('.combination-row .equipment-strip > div')).toHaveCount(5);
-  await page.getByRole('button',{name:'展开装备明细',exact:true}).click();
-  await expect(page.locator('.combination-row .equipment-list > article')).toHaveCount(5);
-  await page.getByRole('button',{name:'收起装备明细',exact:true}).click();
+  await expect(page.locator('.collection-tools')).toContainText('匹配 0 组 / 共 0 组');
+  await expect(page.locator('.combination-row')).toHaveCount(0);
+  await expect(page.getByRole('heading',{name:'还没有保存的组合',exact:true})).toBeVisible();
   await page.screenshot({path:'artifacts/library-combinations-after.png',fullPage:true});
   await page.setViewportSize({width:390,height:844});
   await page.screenshot({path:'artifacts/library-combinations-mobile-after.png',fullPage:true});

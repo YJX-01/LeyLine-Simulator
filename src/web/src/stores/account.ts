@@ -31,14 +31,14 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventorySubstat = ref<string[]>([]);
   const inventorySubMatch = ref('all');
   const inventoryLevel = ref<string[]>([]);
-  const inventorySort = ref('default');
-  const inventorySortDirection=ref<'asc'|'desc'>('asc');
+  const inventorySort = ref('release');
+  const inventorySortDirection=ref<'asc'|'desc'>('desc');
   const inventoryDensity = ref<'relaxed' | 'compact'>('relaxed');
   try { if (localStorage.getItem('leyline-inventory-density-v1') === 'compact') inventoryDensity.value = 'compact'; } catch { /* Keep the usable default when preferences cannot be read. */ }
   watch(inventoryDensity, value => { try { localStorage.setItem('leyline-inventory-density-v1', value); } catch { /* Display preferences never block editing. */ } });
   watch(() => account.value.id, () => {
     characterFavoriteFilter.value=[]; selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterRarity.value=[]; characterSort.value='release';characterSortDirection.value='desc';
-    inventoryQuery.value=''; inventorySlot.value=[]; inventoryStat.value=[]; inventoryOwner.value=[]; inventoryPage.value=1;inventoryPageSize.value=30; inventorySet.value=[]; inventorySubstat.value=[];inventorySubMatch.value='all'; inventoryLevel.value=[]; inventorySort.value='default';inventorySortDirection.value='asc';
+    inventoryQuery.value=''; inventorySlot.value=[]; inventoryStat.value=[]; inventoryOwner.value=[]; inventoryPage.value=1;inventoryPageSize.value=30; inventorySet.value=[]; inventorySubstat.value=[];inventorySubMatch.value='all'; inventoryLevel.value=[]; inventorySort.value='release';inventorySortDirection.value='desc';
   });
   const previous = ref<LocalAccount>();
   try {

@@ -13,7 +13,7 @@ export const effectiveStatGroups: {stat:RealStat;label:string;icon:string;member
   { stat:'critDamage', label:'暴击伤害', icon:'critDamage', members:['critDamage'] },
 ];
 export function defaultEffectiveStats(name:string):RealStat[] {
-  const groups=(metadata.characters as Record<string,string[]>)[name] ?? (name.startsWith('旅行者') ? metadata.characters['旅行者'] : []);
+  const groups=(metadata.characters as Record<string,string[]>)[name] ?? ((name.startsWith('旅行者') || /^[空荧]（[风岩雷草水火冰]）$/.test(name)) ? metadata.characters['旅行者'] : []);
   return effectiveStatGroups.filter(group=>groups.includes(group.stat)).flatMap(group=>group.members);
 }
 

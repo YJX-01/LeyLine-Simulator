@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useAccountStore } from './stores/account';
 import { localDataErrorLabel } from './domain/workbench-labels';
 
 const store = useAccountStore();
 const fileInput = ref<HTMLInputElement>();
+const uid = ref(store.account.uid ?? ''), uidError = ref('');
+watch(() => [store.account.id, store.account.uid], () => { uid.value = store.account.uid ?? ''; });
+function saveUid() {
+  const value = uid.value.trim();
+  if (value && !/^\d{9,10}$/.test(value)) { uidError.value = '请输入9至10位数字 UID。'; return; }
+  try { const next = JSON.parse(JSON.stringify(store.account)); if (value) next.uid = value; else delete next.uid; store.commitEdit(next); uidError.value = ''; }
+  catch (cause) { uidError.value = cause instanceof Error ? cause.message : 'UID 保存失败。'; }
+}
 function resetSelection() {
   store.selectedCharacterId = '';
   store.characterQuery = '';
@@ -14,7 +22,7 @@ function resetSelection() {
   store.inventoryStat = [];
   store.inventoryOwner = [];
   store.inventoryPage = 1;
-  store.inventorySet = []; store.inventorySubstat = []; store.inventoryLevel = []; store.inventorySort = 'default';store.inventorySortDirection='asc';
+  store.inventorySet = []; store.inventorySubstat = []; store.inventoryLevel = []; store.inventorySort = 'release';store.inventorySortDirection='desc';
 }
 async function openAccount() {
   const before = store.account;
@@ -39,6 +47,8 @@ function replaceAccount(restore = false) {
   <section class="account-settings" aria-label="账号管理">
     <header><h2>账号管理</h2><span class="account-save-state">{{ store.dirty ? '账号有未保存修改' : '账号文件已保存' }}</span></header>
     <label>当前账号名称<input v-model="store.account.name" aria-label="账号名称" maxlength="160"></label>
+    <label>游戏 UID<input v-model="uid" aria-label="账号游戏 UID" inputmode="numeric" maxlength="10" placeholder="绑定该账号的 UID" @change="saveUid" @keydown.enter.prevent="saveUid"></label>
+    <p v-if="uidError" role="alert">{{ uidError }}</p>
     <p class="account-summary">{{ store.account.characters.length }} 位角色 · {{ store.account.artifacts.length }} 件圣遗物</p>
     <div class="account-file-actions"><button class="ui-action" data-accent="anemo" :disabled="store.busy" @click="store.save()">保存账号资料</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="openAccount">打开 / 切换账号</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="replaceAccount()">新建账号</button><button class="ui-action soft" data-accent="anemo" v-if="store.previous" :disabled="store.busy" @click="replaceAccount(true)">恢复替换前账号</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入账号资料文件" hidden @change="importFile">

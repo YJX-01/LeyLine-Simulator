@@ -40,6 +40,7 @@ const characters = [
   () => import('./real-data/characters-10.json'),
   () => import('./real-data/characters-11.json'),
   () => import('./real-data/characters-12.json'),
+  () => import('./real-data/characters-13.json'),
 ];
 const weapons = [
   () => import('./real-data/weapons-0.json'),
