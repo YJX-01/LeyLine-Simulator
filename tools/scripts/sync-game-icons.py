@@ -60,7 +60,7 @@ metadata = {kind: {locale[item['nameLocale']]: item for item in generated(group)
 catalog = read(ROOT / 'src/game-data/src/real-data/catalog.json')
 previous = read(OUTPUT / 'game-icon-manifest.json') if (OUTPUT / 'game-icon-manifest.json').exists() else {'assets': []}
 existing = {(item['kind'], item['key']): item for item in previous['assets']}
-index = {kind: {} for kind in ['characters', 'weapons', 'artifacts', 'elements', 'skills', 'constellations', 'buffs', 'stats']}
+index = {kind: {} for kind in ['characters', 'weapons', 'artifacts', 'artifactSlots', 'elements', 'skills', 'constellations', 'buffs', 'stats']}
 
 SPRITES = read(ROOT / 'docs/constant/ui-icon-sources.json')
 
@@ -82,6 +82,8 @@ def expected_transform(kind, key, entry):
         return ARTIFACT_TRANSFORM
     if kind == 'elements':
         return ELEMENT_TRANSFORM
+    if kind == 'artifactSlots':
+        return 'artifact-slot-vector-v1'
     return 'combat-glyph-contain-v2' if kind in ['buffs', 'stats'] else 'transparent-contain-hq-v1'
 
 tasks = []
@@ -121,6 +123,9 @@ for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapon
 for element in ['anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro']:
     path = MONA / f'src/images/misc/{element}.png'
     tasks.append(('elements', element, {'id': element, 'name': element}, [(path, MONA_URL + path.relative_to(MONA).as_posix())], 128))
+
+for entry in read(ROOT / 'docs/constant/ui-artifact-slot-sources.json')['icons']:
+    tasks.append(('artifactSlots', entry['id'], entry, [(None, entry['sourceUrl'])], 128))
 
 
 SCOPE = read(ROOT / 'docs/constant/ui-icon-scope.json')
@@ -164,17 +169,17 @@ for entry in STAT_SOURCES['icons']:
 
 def convert(task):
     kind, key, entry, sources, size = task
-    if kind == 'stats':
+    if kind in ['stats', 'artifactSlots']:
         content = (ROOT / entry['vectorPath']).read_bytes()
         if sha(content) != entry['vectorSha256']:
             raise ValueError(f'Unverified canonical vector: {key}')
         svg = ET.fromstring(content)
         if svg.tag != '{http://www.w3.org/2000/svg}svg' or not svg.findall('.//{http://www.w3.org/2000/svg}path'):
             raise ValueError(f'Invalid canonical vector: {key}')
-        destination = OUTPUT / 'stats' / f'{key}.svg'
+        destination = OUTPUT / kind / f'{key}.svg'
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(content)
-        return {'kind': kind, 'key': key, 'id': key, 'name': entry['name'], 'file': destination.relative_to(OUTPUT).as_posix(), 'format': 'SVG', 'bytes': len(content), 'sha256': sha(content), 'sourceUrl': entry['sourceUrl'], 'sourceSha256': entry['sourceSha256'], 'sourceBytes': entry['sourceBytes'], 'sourceDimensions': [24, 24], 'dimensions': [128, 128], 'alphaMax': 255, 'transform': 'stat-vector-v4', 'vectorPath': entry['vectorPath'], 'vectorSha256': entry['vectorSha256'], **{field: entry[field] for field in ['aliases', 'derivedFrom', 'derivation'] if field in entry}}, None
+        return {'kind': kind, 'key': key, 'id': key, 'name': entry['name'], 'file': destination.relative_to(OUTPUT).as_posix(), 'format': 'SVG', 'bytes': len(content), 'sha256': sha(content), 'sourceUrl': entry['sourceUrl'], 'sourceSha256': entry['sourceSha256'], 'sourceBytes': entry['sourceBytes'], 'sourceDimensions': [24, 24], 'dimensions': [128, 128], 'alphaMax': 255, 'transform': 'stat-vector-v4' if kind == 'stats' else 'artifact-slot-vector-v1', 'vectorPath': entry['vectorPath'], 'vectorSha256': entry['vectorSha256'], **{field: entry[field] for field in ['aliases', 'derivedFrom', 'derivation'] if field in entry}}, None
     failures = []
     prior = existing.get((kind, key))
     if prior and prior['sourceSha256'] != PLACEHOLDER and prior.get('transform') == expected_transform(kind, key, entry):
@@ -223,11 +228,11 @@ def convert(task):
                         # Fallback to the upper decorative/guard region of full art.
                         edge = round(max(image.size) * 0.64)
                         image = image.crop((max(0, image.width - edge), 0, max(0, image.width - edge) + edge, edge))
-                if kind in ['buffs', 'stats']:
+                if kind in ['buffs', 'stats', 'artifactSlots']:
                     image = ImageOps.contain(image, (size, size), Image.Resampling.LANCZOS)
                 else:
                     image.thumbnail((size, size), Image.Resampling.LANCZOS)
-                if kind in ['weapons', 'artifacts', 'skills', 'constellations', 'buffs', 'stats']:
+                if kind in ['weapons', 'artifacts', 'artifactSlots', 'skills', 'constellations', 'buffs', 'stats']:
                     canvas = Image.new('RGBA', (size, size))
                     canvas.paste(image, ((size - image.width) // 2, (size - image.height) // 2))
                     image = canvas
@@ -276,6 +281,6 @@ if legacy.exists() and not any(legacy.iterdir()):
     legacy.rmdir()
 manifest = {'formatVersion': 2, 'sourceCommits': {**BUFF_SOURCES['sourceCommits'], 'TwiceDrop/genshin_artifact': COMMIT, SPRITES['repository']: SPRITES['commit'], SPRITES['normalAttackSource']['repository']: SPRITES['normalAttackSource']['commit'], 'genshin-db': '8e5badd60b5d894284ccc927a56c9683529d2592', 'legacy-mona': 'beaced4d82619aa86920d0054ab6114b5fc5608f', 'legacy-PathOfGenshin/resources': '015a2493b5672b28576ab78ffbcffde2ea0c9844'}, 'rights': 'Game artwork © miHoYo / HoYoverse. Unofficial tool; code licenses do not grant artwork rights.', 'compression': {'format': 'WebP + SVG stats', 'statTransform': 'stat-vector-v4', 'quality': 76, 'method': 6, 'transparent': True, 'avatarTransform': TRANSFORM, 'weaponTransform': WEAPON_TRANSFORM, 'catalystTransform': CATALYST_TRANSFORM, 'supplementQuality': 88, 'supplementCanvas': [128, 128], 'elementTransform': ELEMENT_TRANSFORM, 'elementQuality': 90, 'elementCanvas': [128, 128], 'weaponQuality': 88, 'weaponCanvas': [128, 128], 'artifactCanvas': [128, 128], 'artifactQuality': 88, 'artifactTransform': ARTIFACT_TRANSFORM}, 'rejectedSourceHashes': [PLACEHOLDER], 'budgets': {'maxAssetBytes': 32768, 'maxTotalBytes': 16777216}, 'totalBytes': total, 'totalSourceBytes': sum(asset['sourceBytes'] for asset in assets), 'assets': assets, 'missing': missing, 'excluded': excluded, 'sharedBuffStatIcons': STAT_SOURCES.get('buffAliases', [])}
 (OUTPUT / 'game-icon-manifest.json').write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode())
-for filename, groups in [('game-icon-index', ['characters', 'weapons', 'artifacts', 'elements', 'stats']), ('game-detail-icon-index', ['skills', 'constellations', 'buffs'])]:
+for filename, groups in [('game-icon-index', ['characters', 'weapons', 'artifacts', 'artifactSlots', 'elements', 'stats']), ('game-detail-icon-index', ['skills', 'constellations', 'buffs'])]:
     (ROOT / f'src/web/src/assets/{filename}.json').write_bytes((json.dumps({kind: index[kind] for kind in groups}, ensure_ascii=False, separators=(',', ':')) + '\n').encode())
 print(json.dumps({'icons': len(assets), 'bytes': total, 'missing': len(missing), 'excludedPassives': len(excluded), 'sharedNormalAttackIcons': len(normal_attacks)}, ensure_ascii=True))

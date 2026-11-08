@@ -2,15 +2,20 @@
   --ink:var(--neutral-ink); --text:var(--neutral-ink); --muted:var(--neutral-muted); --line:var(--neutral-line);
   --surface:var(--neutral-surface); --surface-raised:var(--neutral-raised); --surface-subtle:var(--neutral-canvas);
   --action:var(--element-anemo-deep); --focus:var(--element-hydro-deep);
+  --control-height:40px; --control-radius:7px; --control-font-size:16px; --control-font-weight:700;
 }
+.ui-control { box-sizing:border-box; height:var(--control-height); min-height:var(--control-height); border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); font-size:var(--control-font-size); font-weight:var(--control-font-weight); }
+.workspace-design .ui-control input,.workspace-design .ui-control button,.workspace-design select.ui-control { font-weight:var(--control-font-weight); }
 .workspace-design { --ink:var(--neutral-ink); --text:var(--neutral-ink); --muted:var(--neutral-muted); --line:var(--neutral-line); --surface:var(--neutral-surface); --green:var(--element-anemo-deep); --fantasy-gold:var(--element-geo-primary); }
 .workspace-design button { font-weight:500; }
 .workspace-design button:focus-visible,.workspace-design input:focus-visible,.workspace-design select:focus-visible,.workspace-design summary:focus-visible { outline:2px solid var(--focus); outline-offset:3px; }
 .workspace-design button.ui-action { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:38px; padding:8px 13px; border-radius:8px; border:1px solid var(--accent-deep); color:white; background:var(--accent-deep); font-size:13px; white-space:nowrap; }
+.workspace-design .ui-action[data-accent=pyro] { --accent-primary:var(--element-pyro-primary); --accent-light:var(--element-pyro-light); --accent-deep:var(--element-pyro-deep); }
 .workspace-design .ui-action[data-accent=anemo] { --accent-primary:var(--element-anemo-primary); --accent-light:var(--element-anemo-light); --accent-deep:var(--element-anemo-deep); }
 .workspace-design .ui-action[data-accent=hydro] { --accent-primary:var(--element-hydro-primary); --accent-light:var(--element-hydro-light); --accent-deep:var(--element-hydro-deep); }
 .workspace-design .ui-action[data-accent=electro] { --accent-primary:var(--element-electro-primary); --accent-light:var(--element-electro-light); --accent-deep:var(--element-electro-deep); }
 .workspace-design button.ui-action.soft { background:var(--accent-light); border-color:var(--accent-light); color:var(--accent-deep); }
+.workspace-design button.ui-action.soft:hover { background:var(--accent-light); color:var(--accent-deep); border-color:var(--accent-primary); }
 .workspace-design button.ui-action:hover { box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-primary) 20%,transparent); }
 .workspace-design .ui-action svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .workspace-design .ui-muted-button { color:var(--muted); background:transparent; border-color:var(--line); }

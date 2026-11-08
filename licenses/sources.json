@@ -102,6 +102,16 @@
       "version": "docs/constant/ 历史输入；见生成器与 mechanics 文档",
       "license": "独立上游许可和作者记录待补核",
       "usage": "历史常量用于兼容性与数值输入；"
+    },
+    {
+      "id": "miao-plugin",
+      "name": "miao-plugin / Yoimiya 与贡献者",
+      "url": "https://github.com/yoimiya-kokomi/miao-plugin",
+      "version": "9d8972c2b060ede67d1b0dc7565abb4fe39b3aa7",
+      "license": "MIT",
+      "usage": "从默认 usefulAttr 表提取非零有效副词条组；不采用评分权重或角色自定义规则。",
+      "licenseFile": "licenses/sources/miao-plugin/LICENSE",
+      "licenseSha256": "6c10db94c2446a85a25c2bbffc6d33c4db0f8f22ed4b19e7697736381eb62fb1"
     }
   ]
 }

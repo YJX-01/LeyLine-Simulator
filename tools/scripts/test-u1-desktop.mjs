@@ -73,7 +73,7 @@ try {
   await page.getByRole('button', { name: '导航 设置', exact: true }).click();
   await page.getByRole('button', { name: '新建账号', exact: true }).click();
   await page.getByTestId('workspace-nav-characters').click();
-  await page.getByRole('button', { name: '网络导入', exact: true }).click();
+  await page.getByRole('button', { name: '展柜导入', exact: true }).click();
   const enka = page.getByRole('dialog', { name: '从 Enka 展柜导入', exact: true });
   await enka.getByLabel('游戏 UID', { exact: true }).fill('618285856');
   await enka.getByRole('button', { name: '查询角色展柜', exact: true }).click();

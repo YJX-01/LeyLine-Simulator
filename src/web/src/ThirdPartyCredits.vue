@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import CloseButton from './components/CloseButton.vue';
 type Dependency = { id:string; license:string; productionDependencyClosure:boolean; desktopRuntime:boolean; direct:Array<{ importer:string; group:string }>; modified:string[]; noticeStatus:string };
 type Source = { id:string; name:string; url:string | null; license:string; usage:string };
 const packages = ref<Dependency[]>([]);
@@ -41,11 +42,11 @@ onMounted(async () => {
     <p v-if="packages.length">{{ directCount }} 个直接依赖 · {{ packages.length }} 个包版本 · {{ sources.length }} 项代码、素材与资料来源</p><p v-else>正在加载许可资料…</p>
     <div class="credit-actions"><button class="secondary" :disabled="loading" @click="showDocument('THIRD_PARTY_NOTICES.md', '使用与协议说明')">使用与协议说明</button><button class="secondary" :disabled="loading" @click="showDocument('CREDITS.md', '鸣谢')">鸣谢</button><button class="secondary" :disabled="loading" @click="showDocument('npm-LICENSES.txt', '依赖许可原文')">依赖许可原文</button><button class="secondary" :disabled="loading" @click="showDocument('tooling/Pillow/LICENSE', '素材处理工具许可')">素材处理工具许可</button></div>
     <p v-if="error" role="alert">{{ error }}</p>
-    <section v-if="documentTitle" class="license-reader"><div class="license-reader-heading"><h3>{{ documentTitle }}</h3><button class="secondary" @click="documentTitle = ''; documentText = ''">关闭原文</button></div><pre tabindex="0">{{ documentText }}</pre></section>
+    <section v-if="documentTitle" class="license-reader"><div class="license-reader-heading"><h3>{{ documentTitle }}</h3><CloseButton label="关闭原文" @click="documentTitle = ''; documentText = ''" /></div><pre tabindex="0">{{ documentText }}</pre></section>
     <details v-if="bundled.length"><summary>本次网页代码 · {{ bundled.length }} 个第三方包</summary><p v-for="pkg in bundled" :key="pkg.name">{{ pkg.name }}@{{ pkg.version }} · {{ pkg.license }}</p></details>
     <h3>软件依赖</h3><button class="secondary" @click="showAll = !showAll">{{ showAll ? '只看直接依赖' : '查看全部间接依赖' }}</button>
     <div class="credit-table"><table><thead><tr><th>包与版本</th><th>协议</th><th>用途</th></tr></thead><tbody><tr v-for="pkg in packages.filter(item => showAll || item.direct.length)" :key="pkg.id"><td>{{ pkg.id }}<small v-if="pkg.modified.length">本地存储兼容补丁</small><small v-if="pkg.noticeStatus === 'declaration-only'">安装包仅附协议声明</small></td><td>{{ pkg.license }}</td><td>{{ usage(pkg) }}</td></tr></tbody></table></div>
-    <h3>代码、素材与资料</h3><article v-for="source in sources" :key="source.id"><h4>{{ source.name }}</h4><p>{{ source.usage }}</p><small>{{ source.license }}</small><code v-if="source.url">{{ source.url }}</code><button class="secondary" v-if="['genshin-optimizer', 'genshin-db', 'mona'].includes(source.id)" @click="showDocument(`sources/${source.id}/LICENSE`, source.name + ' · 许可原文')">查看许可原文</button></article>
+    <h3>代码、素材与资料</h3><article v-for="source in sources" :key="source.id"><h4>{{ source.name }}</h4><p>{{ source.usage }}</p><small>{{ source.license }}</small><code v-if="source.url">{{ source.url }}</code><button class="secondary" v-if="['genshin-optimizer', 'genshin-db', 'mona', 'miao-plugin'].includes(source.id)" @click="showDocument(`sources/${source.id}/LICENSE`, source.name + ' · 许可原文')">查看许可原文</button></article>
     <p class="native-notices">桌面组件声明位于应用目录的 LICENSE 和 LICENSES.chromium.html。</p>
   </section>
 </template>

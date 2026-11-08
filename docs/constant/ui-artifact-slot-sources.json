@@ -1,0 +1,57 @@
+{
+  "sourceRepository": "frzyc/genshin-optimizer",
+  "sourceCommit": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
+  "license": "MIT",
+  "icons": [
+    {
+      "id": "flower",
+      "name": "生之花",
+      "sourceFilename": "FlowerIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/FlowerIcon.tsx",
+      "sourceSha256": "fc18adf2e976b6e9e39cfefe9d3401027bcb7177a0a477aa58cd0015c040631e",
+      "sourceBytes": 2259,
+      "vectorPath": "docs/constant/artifact-slot-vectors/flower.svg",
+      "vectorSha256": "e610828950fe568ee9fd23cf3df7428fe433d2a71178d098586b43802bf93e3d"
+    },
+    {
+      "id": "plume",
+      "name": "死之羽",
+      "sourceFilename": "PlumeIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/PlumeIcon.tsx",
+      "sourceSha256": "e2ba87e551d11525a429c6859f2b721a5f465abb395517cb818f4c6eb9dc7977",
+      "sourceBytes": 2013,
+      "vectorPath": "docs/constant/artifact-slot-vectors/plume.svg",
+      "vectorSha256": "16a2a5f607f5e5a25c52bcc821efae943b7acb1866255b352110605670783d8d"
+    },
+    {
+      "id": "sands",
+      "name": "时之沙",
+      "sourceFilename": "SandsIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/SandsIcon.tsx",
+      "sourceSha256": "38d8fdc117cefe7e5d3b6317c198c7eb5e20662ae1a453a04e1bd1e0f7cb7b7c",
+      "sourceBytes": 1814,
+      "vectorPath": "docs/constant/artifact-slot-vectors/sands.svg",
+      "vectorSha256": "b2cee525ba06cf0211af84fbac72f1da04cfe0e69ccefb33cc9b42747779dc05"
+    },
+    {
+      "id": "goblet",
+      "name": "空之杯",
+      "sourceFilename": "GobletIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/GobletIcon.tsx",
+      "sourceSha256": "baa2d66361a337d9a9089b63696e14569c5a79b16e1af72cba4636df475b7ee8",
+      "sourceBytes": 2043,
+      "vectorPath": "docs/constant/artifact-slot-vectors/goblet.svg",
+      "vectorSha256": "64b73421eabfed5b92c8c18bad8f0c81de6a7aab024fb93ae3a23baaafea8531"
+    },
+    {
+      "id": "circlet",
+      "name": "理之冠",
+      "sourceFilename": "CircletIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/CircletIcon.tsx",
+      "sourceSha256": "9a63eeb93806780888fa28bf12e4c1ee4d5a9668cff0a3b4bda2526cb7bb3898",
+      "sourceBytes": 1349,
+      "vectorPath": "docs/constant/artifact-slot-vectors/circlet.svg",
+      "vectorSha256": "d7e79cdf0856dffd010d18c9911ff6b621cf1fdfc3728a739dcedc19d93c3658"
+    }
+  ]
+}

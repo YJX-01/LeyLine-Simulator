@@ -58,6 +58,10 @@ app.whenReady().then(() => {
       webPreferences: { preload: resolve(directory, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true },
     });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    window.webContents.on('will-prevent-unload', event => {
+      const response=dialog.showMessageBoxSync(window,{type:'question',title:'存在未保存的修改',message:'当前页面有未保存的修改，是否放弃并离开？',buttons:['继续编辑','放弃修改并离开'],defaultId:0,cancelId:0});
+      if(response===1) event.preventDefault();
+    });
     window.webContents.on('will-navigate', event => event.preventDefault());
     window.webContents.on('will-attach-webview', event => event.preventDefault());
     window.loadURL(entry);

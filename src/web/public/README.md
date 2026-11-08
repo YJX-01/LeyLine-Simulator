@@ -1,12 +1,13 @@
 # 本地图片资源
 
-图片直接按用途放在本目录下。当前共 2,045 张，9,863,870 B（约 9.41 MiB）；其中通用普攻 5 张供 131 个角色索引共用，排除 113 个非战斗被动。Vite 会原样复制到网页及桌面包；运行时不请求外部图片服务器。图标文件名使用稳定目录 ID，对应目录中的明确身份。
+图片直接按用途放在本目录下。当前共 2,050 张，9,873,350 B（约 9.42 MiB）；其中通用普攻 5 张供 131 个角色索引共用，排除 113 个非战斗被动。Vite 会原样复制到网页及桌面包；运行时不请求外部图片服务器。图标文件名使用稳定目录 ID，对应目录中的明确身份。
 
 | 目录 | 内容与索引键 | 输出 |
 | --- | --- | --- |
 | `characters/` | 角色头像，角色 ID | 128×128 |
 | `weapons/` | 武器，武器 ID | 128×128 |
 | `artifacts/` | 圣遗物，`套装ID-部位` | 128×128 |
+| `artifactSlots/` | 通用圣遗物部位符号，`flower/plume/sands/goblet/circlet` | 128×128 |
 | `elements/` | 七元素，小写英文 ID | 128×128 |
 | `skills/` | 主动技能及战斗被动天赋，`角色ID-combat1/2/3`、`角色ID-passive1/2/3/4` | 128×128 |
 | `constellations/` | 六命座，`角色ID-c1` 至 `角色ID-c6` | 128×128 |
@@ -61,6 +62,12 @@ pnpm assets:check
 
 同步脚本要求已有固定版本的 `.references/mona-current/` 与 `.references/genshin-db/`，新增下载需要网络。复用有哈希验证的输出和原图缓存。要更新版本，先核对参考提交与图标文件名，再修改固定提交；用 `python tools/scripts/capture-ui-icon-sources.py` 从固定提交重新捕获文件名映射到 `docs/constant/ui-icon-sources.json`（已有捕获可加 `--from-cache` 离线核验）；重新生成并检查 `missing`、输出哈希、压缩大小及代表图的实际显示。通过生成器同步成品与清单。
 
-应用索引由脚本生成到 `src/web/src/assets/`：`game-icon-index.json` 对应角色、武器、圣遗物、元素和面板属性五类日常图片；`game-detail-icon-index.json` 对应技能、命座、增益，仅使用这些类型时加载。通过 `GameIcon` 的 `kind` 和 `id` 使用，组件统一处理网页根路径、子路径和桌面相对路径。素材覆盖与引擎机制覆盖分别记录。
+应用索引由脚本生成到 `src/web/src/assets/`：`game-icon-index.json` 对应角色、武器、圣遗物、元素、圣遗物部位和面板属性日常图片；`game-detail-icon-index.json` 对应技能、命座、增益，仅使用这些类型时加载。通过 `GameIcon` 的 `kind` 和 `id` 使用，组件统一处理网页根路径、子路径和桌面相对路径。素材覆盖与引擎机制覆盖分别记录。
 
 原神图像素材 © miHoYo / HoYoverse，其他权利归各自所有者。软件、数据和素材的许可与署名统一见根目录 THIRD_PARTY_NOTICES.md、CREDITS.md 和 licenses/。
+
+## 圣遗物部位图标（2026-11-08）
+
+五个通用符号取自与 stats 相同的固定 Genshin Optimizer 提交，`libs/gi/svgicons/src/icons/ArtifactSlot/`：FlowerIcon、PlumeIcon、SandsIcon、GobletIcon、CircletIcon，依次映射生之花、死之羽、时之沙、空之杯、理之冠。保留源路径，生成白色 SVG，128×128、viewBox 24×24；通过 CSS mask 使用界面语义色，不嵌入位图。原始路径在 `docs/constant/artifact-slot-vectors/`，源文件与路径哈希在 `docs/constant/ui-artifact-slot-sources.json`，逐图清单保留输出哈希。
+
+运行 `python tools/scripts/capture-stat-vectors.py --artifact-slots --offline` 后执行素材同步。组件通过 `<GameIcon kind="artifactSlots" id="flower" />` 使用。套装摘要继续使用对应套装的花图片，部位符号不代表具体套装。原黑色 WebP 已由同步器移出成品。

@@ -4,6 +4,7 @@ const ThirdPartyCredits = defineAsyncComponent(() => import('./ThirdPartyCredits
 const creditsOpen = ref(false);
 const ThemePalette = defineAsyncComponent(() => import('./ThemePalette.vue'));
 const AccountSettings = defineAsyncComponent(() => import('./AccountSettings.vue'));
+const accountLibrary = ref<{ requestLeave: (action:()=>void)=>void }>();
 const AccountLibrary = defineAsyncComponent(() => import('./AccountLibrary.vue'));
 const DefinitionLibrary = defineAsyncComponent(() => import('./DefinitionLibrary.vue'));
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
@@ -76,7 +77,7 @@ const selectedTarget = computed(() => !project.value.objective.damageIds || proj
 const num = (value: number | null | undefined) => value === null || value === undefined || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 const realPartsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技能倍率',bonus:'增伤乘区',crit:'暴击乘区',defense:'防御乘区',resistance:'抗性乘区'};
 const number = (event: Event) => { const value = (event.target as HTMLInputElement).value; return value.trim() ? Number(value) : NaN; };
-function navigate(target: Page) { creditsOpen.value = false; page.value = target; mobileOpen.value = false; }
+function navigate(target: Page) { const apply=()=>{creditsOpen.value=false;page.value=target;mobileOpen.value=false;}; if(accountLibrary.value && target!==page.value) accountLibrary.value.requestLeave(apply); else apply(); }
 function focusClickedControl(event: MouseEvent) {
   (event.target as Element).closest<HTMLButtonElement>('button')?.focus({ preventScroll: true });
 }
@@ -149,7 +150,7 @@ async function importFile(event: Event) {
 
       <section v-else-if="page === 'definitions'" class="panel definition-library"><DefinitionLibrary /><div class="panel-heading"><div><h2>当前轴使用的定义快照</h2><p>这里调整轴内快照；不会自动回写独立定义库。</p></div><span class="subtle-tag">{{ project.definitions.length }} 个定义</span></div><div class="segmented definition-tabs"><button v-for="tab in [{ id: 'all', name: '全部定义' }, { id: 'preset', name: '内置预设' }, { id: 'user', name: '用户自定义' }]" :key="tab.id" :class="{ selected: definitionFilter === tab.id }" @click="definitionFilter = tab.id">{{ tab.name }}</button></div><article v-for="definition in visibleDefinitions" :key="definition.id" class="shell-definition-editor"><h3>{{ definitionLabel(project, definition.id) }} · 版本{{ definition.version }}</h3><div class="candidate-form"><label>内容来源<select v-model="definition.source.kind"><option value="user">用户定义</option><option value="preset">预设内容</option></select></label><label v-if="definition.damage">伤害根节点<select v-model="definition.damage"><option v-for="node in definition.nodes" :key="node.id" :value="node.id">{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</option></select></label></div><div v-for="node in definition.nodes" :key="node.id" class="shell-node-row"><code>{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</code><label v-if="constant(node)">常量 {{ nodeLabel(project, definition.id, node.id) }}<input :aria-label="`常量 ${nodeLabel(project, definition.id, node.id)}`" type="number" step="any" :value="constant(node)?.value" @input="node.op === 'constant' && (node.quantity.value = number($event))"><small>{{ unitLabel(constant(node)?.unit ?? '') }}</small></label><code v-else>{{ formatWorkbenchExpression(project, definition.id, node.id) }}</code></div></article><p v-if="!visibleDefinitions.length">暂无此类定义。</p></section>
 
-      <AccountLibrary v-else-if="isAccountPage" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('settings')" />
+      <AccountLibrary ref="accountLibrary" v-else-if="isAccountPage" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('settings')" />
 
       <section v-else class="panel settings-page"><AccountSettings /><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于与支持范围</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；P3 属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><button @click="creditsOpen = true">开源许可与鸣谢</button><p>原神游戏内容 © miHoYo / HoYoverse。</p></details></section>
 

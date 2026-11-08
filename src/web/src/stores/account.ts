@@ -30,7 +30,12 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventorySubstat = ref('');
   const inventoryLevel = ref('');
   const inventorySort = ref('default');
+  const showCharacterLoadouts = ref(false);
+  try { showCharacterLoadouts.value=localStorage.getItem('leyline-show-character-loadouts-v1')==='true'; } catch {}
+  watch(showCharacterLoadouts,value=>{try{localStorage.setItem('leyline-show-character-loadouts-v1',String(value));}catch{}});
   const inventoryDensity = ref<'relaxed' | 'compact'>('relaxed');
+  try { if (localStorage.getItem('leyline-inventory-density-v1') === 'compact') inventoryDensity.value = 'compact'; } catch { /* Keep the usable default when preferences cannot be read. */ }
+  watch(inventoryDensity, value => { try { localStorage.setItem('leyline-inventory-density-v1', value); } catch { /* Display preferences never block editing. */ } });
   watch(() => account.value.id, () => {
     selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterProfile.value=[]; characterEquipment.value=[]; characterRarity.value=[]; characterSort.value='release';
     inventoryQuery.value=''; inventorySlot.value=''; inventoryStat.value=''; inventoryOwner.value='all'; inventoryPage.value=1; inventorySet.value=''; inventorySubstat.value=''; inventoryLevel.value=''; inventorySort.value='default';
@@ -45,6 +50,12 @@ export const useAccountStore = defineStore('local-account', () => {
     if (content) { account.value = parseAccount(JSON.parse(content)); notice.value = '已恢复上次本地账号草稿，请另存文件备份。'; }
   } catch { error.value = '本地账号草稿无法读取，未覆盖原始草稿。'; }
   const dirty = computed(() => saved.value !== JSON.stringify(account.value));
+  function commitEdit(input: LocalAccount) {
+    const next = parseAccount(input);
+    try { localStorage.setItem(storageKey, JSON.stringify(next)); }
+    catch { throw new Error('本地保存失败，请检查存储空间；原配置保持不变，当前草稿仍保留。'); }
+    account.value = next;
+  }
   watch(account, value => {
     try { if (typeof localStorage !== 'undefined') localStorage.setItem(storageKey, JSON.stringify(parseAccount(value))); }
     catch { error.value = '账号草稿未能自动保存，请检查输入并另存文件。'; }
@@ -102,6 +113,6 @@ export const useAccountStore = defineStore('local-account', () => {
     try { if (file.size > maximumBytes) throw new Error('文件过大'); importContent(await file.text()); }
     catch { error.value = '账号文件无效或读取失败，现有账号保持不变。'; }
   }
-  return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious,
-    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterRarity, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort, inventoryDensity };
+  return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious, commitEdit,
+    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterRarity, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort, inventoryDensity, showCharacterLoadouts };
 });

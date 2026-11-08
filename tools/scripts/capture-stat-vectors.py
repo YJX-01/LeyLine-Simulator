@@ -7,10 +7,11 @@ import re
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-CONFIG = ROOT / 'docs/constant/ui-stat-sources.json'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--offline', action='store_true')
+parser.add_argument('--artifact-slots', action='store_true', help='Capture the five artifact slot vectors instead of stat vectors')
 args = parser.parse_args()
+CONFIG = ROOT / ('docs/constant/ui-artifact-slot-sources.json' if args.artifact_slots else 'docs/constant/ui-stat-sources.json')
 config = json.loads(CONFIG.read_text(encoding='utf-8'))
 cache = ROOT / '.references/stat-vector-sources'
 cache.mkdir(parents=True, exist_ok=True)

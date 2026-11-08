@@ -3,13 +3,14 @@ import { computed, ref, watch } from 'vue';
 import GameIcon from './components/GameIcon.vue';
 import { resolveRealBuild } from '@leyline/engine';
 import { getRealSet } from '@leyline/game-data/real';
-import type { AccountCharacter } from './domain/account';
+import type { AccountCharacter, LocalAccount } from './domain/account';
 import { useAccountStore } from './stores/account';
 import { accountStatLabels } from './domain/account-real';
 import { formatGameStat } from './domain/account-presentation';
 import type { RealStat } from '@leyline/schema';
-const props = defineProps<{ character: AccountCharacter; showcase?: boolean }>();
+const props = defineProps<{ character: AccountCharacter; showcase?: boolean; account?: LocalAccount }>();
 const store = useAccountStore();
+const inventory = computed(() => props.account ?? store.account);
 const stats = ref<Partial<Record<RealStat, number>>>({});
 const message = ref('');
 const selectedBuild = computed(() => props.showcase ? props.character.showcase?.build : props.character.realBuild);
@@ -20,13 +21,13 @@ const columns = computed<readonly (readonly RealStat[])[]>(() => [
   ['critRate', 'critDamage', 'energyRecharge', damageStat.value],
 ]);
 let revision = 0;
-watch(() => JSON.stringify({ character: props.character, showcase:props.showcase, artifacts: store.account.artifacts.filter(item => Object.values(props.character.equipment).includes(item.id)) }), async () => {
+watch(() => JSON.stringify({ character: props.character, showcase:props.showcase, artifacts: inventory.value.artifacts.filter(item => Object.values(props.character.equipment).includes(item.id)) }), async () => {
   const current = ++revision;
   stats.value = {}; message.value = '';
   const build = props.showcase ? props.character.showcase?.build : props.character.realBuild;
   if (!build) return;
   try {
-    const items = Object.values(props.character.equipment).map(id => store.account.artifacts.find(item => item.id === id));
+    const items = Object.values(props.character.equipment).map(id => inventory.value.artifacts.find(item => item.id === id));
     if (!props.showcase && items.some(item => !item?.real || item.mona?.setIdentityPending)) throw new Error('装备词条或套装身份待补全，暂不展示计算面板。');
     const artifacts = props.showcase ? build.artifacts : items.map(item => item!.real!);
     const sets = props.showcase ? build.sets : await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => getRealSet(id)));
