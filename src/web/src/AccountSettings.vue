@@ -8,13 +8,13 @@ const fileInput = ref<HTMLInputElement>();
 function resetSelection() {
   store.selectedCharacterId = '';
   store.characterQuery = '';
-  store.characterElement = []; store.characterWeapon = []; store.characterProfile = []; store.characterEquipment = []; store.characterRarity = []; store.characterSort = 'release';
+  store.characterElement = []; store.characterWeapon = []; store.characterRarity = []; store.characterSort = 'release';store.characterSortDirection='desc';
   store.inventoryQuery = '';
   store.inventorySlot = '';
   store.inventoryStat = '';
   store.inventoryOwner = 'all';
   store.inventoryPage = 1;
-  store.inventorySet = ''; store.inventorySubstat = ''; store.inventoryLevel = ''; store.inventorySort = 'default';
+  store.inventorySet = ''; store.inventorySubstat = ''; store.inventoryLevel = ''; store.inventorySort = 'default';store.inventorySortDirection='asc';
 }
 async function openAccount() {
   const before = store.account;
@@ -40,7 +40,7 @@ function replaceAccount(restore = false) {
     <header><h2>账号管理</h2><span class="account-save-state">{{ store.dirty ? '账号有未保存修改' : '账号文件已保存' }}</span></header>
     <label>当前账号名称<input v-model="store.account.name" aria-label="账号名称" maxlength="160"></label>
     <p class="account-summary">{{ store.account.characters.length }} 位角色 · {{ store.account.artifacts.length }} 件圣遗物</p>
-    <div class="account-file-actions"><button class="primary" :disabled="store.busy" @click="store.save()">保存账号资料</button><button :disabled="store.busy" @click="openAccount">打开 / 切换账号</button><button :disabled="store.busy" @click="replaceAccount()">新建账号</button><button v-if="store.previous" :disabled="store.busy" @click="replaceAccount(true)">恢复替换前账号</button></div>
+    <div class="account-file-actions"><button class="ui-action" data-accent="anemo" :disabled="store.busy" @click="store.save()">保存账号资料</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="openAccount">打开 / 切换账号</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="replaceAccount()">新建账号</button><button class="ui-action soft" data-accent="anemo" v-if="store.previous" :disabled="store.busy" @click="replaceAccount(true)">恢复替换前账号</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入账号资料文件" hidden @change="importFile">
     <p class="account-hint">切换前保留恢复副本，不更改已有轴。莫娜 JSON 与 Enka 展柜导入在角色页，圣遗物文件也可在库存页导入。</p>
     <p v-if="store.notice" role="status">{{ store.notice }}</p>
@@ -49,11 +49,11 @@ function replaceAccount(restore = false) {
 </template>
 
 <style scoped>
-.account-settings { padding-bottom:26px; border-bottom:1px solid var(--line); margin-bottom:28px; }
+.account-settings { margin:0; }
 header { display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:16px; margin-bottom:12px; }
-h2 { font-size:16px; margin:0; } p { font-size:13px; line-height:1.8; margin:10px 0; }
-label { display:grid; gap:8px; max-width:400px; font-size:13px; } input { width:100%; box-sizing:border-box; }
+h2 { font-size:var(--font-dialog); margin:0; } p { font-size:var(--font-body); line-height:1.8; margin:10px 0; }
+label { display:grid; gap:8px; max-width:400px; font-size:var(--font-body); } input { width:100%; box-sizing:border-box; }
 .account-file-actions { display:flex; gap:12px; flex-wrap:wrap; margin:20px 0; }
-.account-save-state { font-size:12px; color:#725f36; background:#f0e8d7; border:1px solid #d8c8a5; border-radius:6px; padding:8px 12px; }
-.account-hint { color:#67736e; } [role=alert] { color:#a33b32; }
+.account-save-state { font-size:var(--font-body); color:var(--element-geo-deep); background:var(--element-geo-light); border:1px solid var(--neutral-line); border-radius:6px; padding:8px 12px; }
+.account-hint { color:var(--neutral-muted); } [role=alert] { color:var(--element-pyro-deep); }
 </style>

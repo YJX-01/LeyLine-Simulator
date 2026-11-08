@@ -1,5 +1,5 @@
 import type { RealStat } from '@leyline/schema';
-import type { AccountCharacter, LocalAccount } from './account';
+import type { AccountArtifact, AccountCharacter, LocalAccount } from './account';
 import { averageRollCount } from './artifact-rolls';
 import metadata from './character-effective-stats.json';
 
@@ -18,6 +18,17 @@ export function defaultEffectiveStats(name:string):RealStat[] {
 }
 
 export const effectiveStatOptions: RealStat[] = ['hp','hpPercent','attack','attackPercent','defense','defensePercent','elementalMastery','energyRecharge','critRate','critDamage'];
+export function effectiveRollBreakdown(items:readonly AccountArtifact[]) {
+  return effectiveStatGroups.map(group=>{
+    let value:number|undefined=0;
+    for(const item of items)for(const sub of item.real?.substats ?? []) {
+      if(!group.members.includes(sub.stat))continue;
+      const count=averageRollCount(sub.stat,sub.value,item.real!.rarity);
+      value=value===undefined || count===undefined ? undefined : value+count;
+    }
+    return {...group,value};
+  });
+}
 export function configurationSignature(character: AccountCharacter) {
   return JSON.stringify([character.attack,character.weapon,character.realBuild ?? null, Object.entries(character.equipment).sort(([a],[b])=>a.localeCompare(b))]);
 }

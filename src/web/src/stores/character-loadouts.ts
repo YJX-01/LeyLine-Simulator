@@ -9,6 +9,21 @@ const key = 'leyline-character-loadouts-v1';
 export const useCharacterLoadoutsStore = defineStore('character-loadouts', () => {
   const loadouts = ref<CharacterLoadout[]>([]);
   const error = ref('');
+  const favorites=ref<Record<string,number>>({});
+  try {
+    const raw=JSON.parse(localStorage.getItem('leyline-character-favorites-v1') ?? '{}');
+    if(raw && typeof raw==='object' && !Array.isArray(raw))for(const [id,level] of Object.entries(raw)) {
+      if(typeof level==='number' && Number.isInteger(level) && level>=1 && level<=3)favorites.value[id]=level;
+    }
+  }catch { /* Invalid preferences never replace account data. */ }
+  function favoriteLevel(accountId:string,characterId:string) { return favorites.value[`${accountId}/${characterId}`] ?? 0; }
+  function setFavorite(accountId:string,characterId:string,level:number) {
+    if(!Number.isInteger(level) || level<0 || level>3)throw new Error('收藏等级无效。');
+    const next={...favorites.value};
+    if(level)next[`${accountId}/${characterId}`]=level;else delete next[`${accountId}/${characterId}`];
+    localStorage.setItem('leyline-character-favorites-v1',JSON.stringify(next));favorites.value=next;
+  }
+
   const effective = ref<Record<string,RealStat[]>>({});
   try {
     const raw=JSON.parse(localStorage.getItem('leyline-effective-stats-v1') ?? '{}');
@@ -28,6 +43,19 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     const content=JSON.stringify(next);
     if(new TextEncoder().encode(content).byteLength>8*1024*1024)throw new Error('配装方案超过本地保存大小上限。');
     localStorage.setItem(key,content);loadouts.value=next;
+  }
+  function removeMany(ids:readonly string[],commit:()=>void) {
+    if(error.value)throw new Error(error.value);
+    const next=loadouts.value.filter(item=>!ids.includes(item.id));
+    if(next.length===loadouts.value.length){commit();return;}
+    const previous=JSON.stringify(loadouts.value);
+    localStorage.setItem(key,JSON.stringify(next));
+    try { commit(); }
+    catch(cause) {
+      try{localStorage.setItem(key,previous);}catch{error.value='配置保存回退失败，请保留账号备份并检查本地存储。';}
+      throw cause;
+    }
+    loadouts.value=next;
   }
   function update(id:string,name:string,account:LocalAccount,character:AccountCharacter) {
     if(!name.trim() || name.length>160)throw new Error('请输入不超过 160 字的方案名称。');
@@ -67,5 +95,5 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     loadouts.value = next;
     return entry.id;
   }
-  return { loadouts, error, save, update, effectiveStats, setEffectiveStats };
+  return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, effectiveStats, setEffectiveStats };
 });

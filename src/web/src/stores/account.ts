@@ -17,10 +17,9 @@ export const useAccountStore = defineStore('local-account', () => {
   const characterQuery = ref('');
   const characterElement = ref<string[]>([]);
   const characterWeapon = ref<string[]>([]);
-  const characterProfile = ref<string[]>([]);
-  const characterEquipment = ref<string[]>([]);
   const characterRarity = ref<string[]>([]);
   const characterSort = ref('release');
+  const characterSortDirection=ref<'asc'|'desc'>('desc');
   const inventoryQuery = ref('');
   const inventorySlot = ref('');
   const inventoryStat = ref('');
@@ -30,15 +29,13 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventorySubstat = ref('');
   const inventoryLevel = ref('');
   const inventorySort = ref('default');
-  const showCharacterLoadouts = ref(false);
-  try { showCharacterLoadouts.value=localStorage.getItem('leyline-show-character-loadouts-v1')==='true'; } catch {}
-  watch(showCharacterLoadouts,value=>{try{localStorage.setItem('leyline-show-character-loadouts-v1',String(value));}catch{}});
+  const inventorySortDirection=ref<'asc'|'desc'>('asc');
   const inventoryDensity = ref<'relaxed' | 'compact'>('relaxed');
   try { if (localStorage.getItem('leyline-inventory-density-v1') === 'compact') inventoryDensity.value = 'compact'; } catch { /* Keep the usable default when preferences cannot be read. */ }
   watch(inventoryDensity, value => { try { localStorage.setItem('leyline-inventory-density-v1', value); } catch { /* Display preferences never block editing. */ } });
   watch(() => account.value.id, () => {
-    selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterProfile.value=[]; characterEquipment.value=[]; characterRarity.value=[]; characterSort.value='release';
-    inventoryQuery.value=''; inventorySlot.value=''; inventoryStat.value=''; inventoryOwner.value='all'; inventoryPage.value=1; inventorySet.value=''; inventorySubstat.value=''; inventoryLevel.value=''; inventorySort.value='default';
+    selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterRarity.value=[]; characterSort.value='release';characterSortDirection.value='desc';
+    inventoryQuery.value=''; inventorySlot.value=''; inventoryStat.value=''; inventoryOwner.value='all'; inventoryPage.value=1; inventorySet.value=''; inventorySubstat.value=''; inventoryLevel.value=''; inventorySort.value='default';inventorySortDirection.value='asc';
   });
   const previous = ref<LocalAccount>();
   try {
@@ -114,5 +111,5 @@ export const useAccountStore = defineStore('local-account', () => {
     catch { error.value = '账号文件无效或读取失败，现有账号保持不变。'; }
   }
   return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious, commitEdit,
-    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterProfile, characterEquipment, characterRarity, characterSort, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort, inventoryDensity, showCharacterLoadouts };
+    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterRarity, characterSort, characterSortDirection, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventorySet, inventorySubstat, inventoryLevel, inventorySort, inventorySortDirection, inventoryDensity };
 });

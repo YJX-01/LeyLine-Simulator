@@ -52,7 +52,7 @@ function confirm() {
     <h3>导入莫娜圣遗物</h3>
     <p>选择莫娜社区版圣遗物 JSON，自动检查后显示预览。确认前不会修改库存。仅导入圣遗物，保留穿戴备注；不会猜测角色等级、武器或天赋。</p>
     <p>套装名称已按莫娜 7.2.02 核对。旧版待核对物品可重新导入原文件，预览并确认身份更新；当前手动修改不会自动覆盖。</p>
-    <div class="import-actions"><button @click="fileInput?.click()">选择莫娜文件</button><button :disabled="busy || !content.trim()" @click="inspect">预览莫娜导入</button></div>
+    <div class="import-actions"><button class="ui-action soft" data-accent="hydro" @click="fileInput?.click()">选择莫娜文件</button><button class="ui-action soft" data-accent="hydro" :disabled="busy || !content.trim()" @click="inspect">预览莫娜导入</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入莫娜圣遗物文件" hidden @change="readFile">
     <p v-if="filename">当前文件：{{ filename }}</p>
     <details><summary>或粘贴导出内容</summary><textarea v-model="content" aria-label="莫娜圣遗物 JSON" rows="4" @input="preview = undefined"></textarea></details>
@@ -64,10 +64,10 @@ function confirm() {
       <p v-if="preview.additions.some(item => item.mona?.setIdentityPending)">有 {{ preview.additions.filter(item => item.mona?.setIdentityPending).length }} 件物品套装身份待核对，保留原始名称与词条，暂不可用于计算。</p>
       <ul><li v-for="item in preview.additions" :key="item.id">{{ item.name }} · {{ accountSlotLabels[item.slot] }} · {{ item.real?.level }}级{{ item.mona?.equippedBy ? ` · 穿戴备注：${item.mona.equippedBy}` : '' }}{{ item.mona?.omit ? ' · 原文件标记忽略' : '' }}</li></ul>
       <p v-for="message in [...preview.skipped, ...preview.conflicts]" :key="message">{{ message }}</p>
-      <label v-if="preview.updates.length"><input v-model="allowUpdates" type="checkbox" aria-label="允许更新已存在的莫娜实物">明确更新 {{ preview.updates.length }} 件同来源实物（保留名称、实例和角色装备归属）</label><button :disabled="preview.conflicts.length > 0 && (!allowUpdates || preview.updates.length !== preview.conflicts.length)" @click="confirm">{{ allowUpdates ? `确认新增 ${preview.additions.length} 件并更新 ${preview.updates.length} 件五星圣遗物` : `确认导入 ${preview.additions.length} 件五星圣遗物` }}</button><button @click="preview = undefined">取消导入</button>
+      <label v-if="preview.updates.length"><input v-model="allowUpdates" type="checkbox" aria-label="允许更新已存在的莫娜实物">明确更新 {{ preview.updates.length }} 件同来源实物（保留名称、实例和角色装备归属）</label><button class="ui-action soft" data-accent="hydro" :disabled="preview.conflicts.length > 0 && (!allowUpdates || preview.updates.length !== preview.conflicts.length)" @click="confirm">{{ allowUpdates ? `确认新增 ${preview.additions.length} 件并更新 ${preview.updates.length} 件五星圣遗物` : `确认导入 ${preview.additions.length} 件五星圣遗物` }}</button><button class="ui-action soft" data-accent="hydro" @click="preview = undefined">取消导入</button>
     </div>
   </section>
 </template>
 <style scoped>
-.mona-import { border-block: 1px solid var(--line, #d8c9a8); padding: 18px 0; margin-bottom: 20px; } p, li { font-size: 12px; line-height: 1.8; } .import-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; } textarea { width: 100%; box-sizing: border-box; margin-top: 10px; } .import-preview { border: 1px solid var(--line, #d8c9a8); padding: 14px; margin-top: 12px; } .import-preview ul { max-height: 200px; overflow: auto; } button { margin-right: 8px; } details { font-size: 12px; overflow-wrap: anywhere; }
+.mona-import { border-block: 1px solid var(--line, var(--neutral-line)); padding: 18px 0; margin-bottom: 20px; } p, li { font-size:var(--font-body); line-height: 1.8; } .import-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; } textarea { width: 100%; box-sizing: border-box; margin-top: 10px; } .import-preview { border: 1px solid var(--line, var(--neutral-line)); padding: 14px; margin-top: 12px; } .import-preview ul { max-height: 200px; overflow: auto; } button { margin-right: 8px; } details { font-size:var(--font-body); overflow-wrap: anywhere; }
 </style>

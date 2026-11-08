@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch, useId } from 'vue';
 import { realArtifactSchema, type RealStat } from '@leyline/schema';
 import { accountSlots, accountSlotLabels, type AccountArtifact, type LocalAccount } from './domain/account';
 import { accountMainStats, accountSubstats, accountStatLabels, ratioStat, validateAccountArtifact } from './domain/account-real';
@@ -11,6 +11,7 @@ import NumberStepper from './components/NumberStepper.vue';
 const props = defineProps<{ item?: AccountArtifact; inline?: boolean; targetAccount?: LocalAccount; details?: boolean }>();
 const emit = defineEmits<{ close: []; dirtyChange: [dirty:boolean] }>();
 const store = useAccountStore();
+const levelInputId=useId();
 const originalAccount = props.targetAccount ?? store.account;
 const draft = ref<AccountArtifact>(props.item ? JSON.parse(JSON.stringify(props.item)) : { id: crypto.randomUUID(), name: '', slot: 'flower', attack: 0, real: { id: '', setId: '', slot: 'flower', rarity: 5, level: 20, mainStat: 'hp', substats: [] } });
 if (!draft.value.real) draft.value.real = { id: draft.value.id, setId: '', slot: draft.value.slot, rarity: 5, level: 20, mainStat: accountMainStats[draft.value.slot][0], substats: [] };
@@ -49,7 +50,7 @@ function apply() { try { if (!props.targetAccount && store.account !== originalA
       <label>部位<select class="ui-control" v-model="draft.slot" :disabled="!!item" @change="changeSlot"><option v-for="slot in accountSlots" :key="slot" :value="slot">{{ accountSlotLabels[slot] }}</option></select></label>
       <CatalogPicker :inline="inline" label="套装" image-kind="artifacts" v-model="draft.real.setId" :options="sets" :disabled="!!item?.mona?.setIdentityPending" />
       <p v-if="item?.mona?.setIdentityPending">原始套装 {{ item.mona.sourceSetName }} 尚待核对，暂不匹配图片或更改身份。</p>
-      <label>强化等级<NumberStepper v-model="draft.real.level" label="强化等级" :minimum="0" :maximum="20" /></label>
+      <div class="form-field"><label :for="levelInputId">强化等级</label><NumberStepper :input-id="levelInputId" v-model="draft.real.level" label="强化等级" :minimum="0" :maximum="20" /></div>
       <label>主词条<select class="ui-control" v-model="draft.real.mainStat"><option v-for="stat in available" :key="stat" :value="stat">{{ statLabel(stat) }}</option></select></label>
       <div v-for="(sub,index) in draft.real.substats" :key="index" class="sub-row">
         <label>副词条 {{ index + 1 }}<select class="ui-control" :aria-label="`副词条 ${index + 1}`" v-model="sub.stat" @change="sub.value = NaN; delete sub.rolls"><option v-for="stat in accountSubstats.filter(stat => stat !== draft.real?.mainStat)" :key="stat" :value="stat">{{ statLabel(stat as RealStat) }}</option></select></label>
@@ -63,7 +64,8 @@ function apply() { try { if (!props.targetAccount && store.account !== originalA
   </div>
 </template>
 <style scoped>
-.artifact-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:13px; } input,select { width:100%; box-sizing:border-box; min-height:38px; }.sub-row { display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; } p { font-size:13px; line-height:1.7; } [role=alert] { color:var(--element-pyro-deep); }
+.artifact-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:var(--font-body); } input,select { width:100%; box-sizing:border-box; min-height:var(--control-height-lg); }.sub-row { display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; } p { font-size:var(--font-body); line-height:1.7; } [role=alert] { color:var(--element-pyro-deep); }
 .artifact-form.details { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }.artifact-form.details .sub-row,.artifact-form.details .catalog-picker,.artifact-form.details > p { grid-column:1/-1; }.artifact-form.details > button { justify-self:start; }@media(max-width:600px) { .artifact-form.details { grid-template-columns:1fr; } }
-.artifact-form input.ui-control,.artifact-form select.ui-control { height:40px; min-height:40px; padding:0 10px; line-height:normal; font-size:16px; font-weight:700; border-radius:var(--control-radius); border-color:var(--line); color:var(--ink); background:var(--surface-raised); }.artifact-form label { font-size:14px; gap:7px; min-width:0; }.artifact-form.details { gap:14px 12px; }.artifact-form .sub-row { grid-template-columns:minmax(0,1fr) minmax(90px,.85fr) 32px; gap:8px; }.remove-substat { display:flex; align-items:center; justify-content:center; width:32px; height:40px; padding:6px; border:0; background:transparent; color:var(--element-pyro-deep); }.remove-substat svg { width:18px; height:18px; stroke:currentColor; fill:none; }.artifact-form.details :deep(.catalog-picker > button) { height:56px; box-sizing:border-box; padding:7px 10px; gap:10px; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); font-size:15px; font-weight:700; }
+.form-field { display:grid; align-content:start; gap:7px; min-width:0; font-size:var(--font-body); }
+.artifact-form input.ui-control,.artifact-form select.ui-control { height:40px; min-height:40px; padding:0 10px; line-height:normal; font-size:var(--font-control); font-weight:700; border-radius:var(--control-radius); border-color:var(--line); color:var(--ink); background:var(--surface-raised); }.artifact-form label { font-size:var(--font-body); gap:7px; min-width:0; }.artifact-form.details { gap:14px 12px; }.artifact-form .sub-row { grid-template-columns:minmax(0,1fr) minmax(90px,.85fr) 32px; gap:8px; }.remove-substat { display:flex; align-items:center; justify-content:center; width:32px; height:40px; padding:6px; border:0; background:transparent; color:var(--element-pyro-deep); }.remove-substat svg { width:18px; height:18px; stroke:currentColor; fill:none; }.artifact-form.details :deep(.catalog-picker > button) { height:56px; box-sizing:border-box; padding:7px 10px; gap:10px; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); font-size:var(--font-control); font-weight:700; }
 </style>

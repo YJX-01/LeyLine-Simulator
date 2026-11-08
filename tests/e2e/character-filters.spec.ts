@@ -27,6 +27,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await shortcuts.getByRole('button', { name: '清除筛选', exact: true }).click();
   await page.getByRole('button', { name: '排序', exact: true }).click();
   await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '名称', exact: true }).click();
+  await page.getByRole('dialog',{name:'角色排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
 
   await expect(shortcuts.locator('.elements')).toHaveCount(7);
   await shortcuts.getByRole('button', { name: '火元素', exact: true }).click();
@@ -47,15 +48,19 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await dialog.getByRole('button', { name: '完成', exact: true }).click();
   await expect(cards).toHaveCount(4);
   await page.getByRole('button', { name: '排序', exact: true }).click();
-  await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级从高到低', exact: true }).click();
+  await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级', exact: true }).click();
+  await page.getByRole('dialog',{name:'角色排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await shortcuts.getByRole('button', { name: '清除筛选', exact: true }).click();
   await expect(cards).toHaveCount(4);
   await page.getByRole('button', { name: '排序', exact: true }).click();
-  await expect(page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级从高到低', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: '查看甘雨详情', exact: true }).click();
   const detail = page.getByRole('dialog', { name: '甘雨', exact: true });
   await expect(detail.locator('header h2')).toHaveText('甘雨');
+  await detail.getByRole('button',{name:'选择甘雨配置',exact:true}).click();
+  await expect(page.getByRole('dialog',{name:'甘雨的配置',exact:true}).locator('.configuration-name')).toHaveText('甘雨 · 0.0词条 · 未配圣遗物 · 阿莫斯之弓');
+  await page.keyboard.press('Escape');
   await expect(detail.locator('.cultivation-group legend')).toHaveCount(0);
   await expect(detail.getByRole('button', { name: '展开面板', exact: true })).toHaveAttribute('aria-expanded', 'false');
   await expect(detail.locator('.character-stats')).toHaveCount(0);

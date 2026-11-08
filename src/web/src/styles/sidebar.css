@@ -1,16 +1,16 @@
 /* Both controls use the same state and preserve the navigation icon rail. */
 .workspace-design { --sidebar-width:232px; grid-template-columns:var(--sidebar-width) minmax(0,1fr); transition:grid-template-columns .18s ease; }
 .workspace-design.compact { --sidebar-width:76px; }
-.workspace-design .design-sidebar { box-sizing:border-box; width:var(--sidebar-width); height:100dvh; padding:12px 12px; transition:width .18s ease,transform .18s ease; overflow:hidden; }
+.workspace-design .design-sidebar { box-sizing:border-box; width:var(--sidebar-width); height:100dvh; display:flex; flex-direction:column; padding:12px 12px; transition:width .18s ease,transform .18s ease; overflow:hidden; }
 .workspace-design .design-sidebar::after { display:none; }
 .workspace-design .sidebar-top { flex-shrink:0; }
-.workspace-design .nav-groups { margin-top:12px; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; }
+.workspace-design .nav-groups { flex:1; margin-top:12px; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; }
 .workspace-design .nav-group { margin-bottom:16px; }
 .workspace-design .nav-group > p { height:20px; line-height:20px; padding:0 12px; margin:0 0 6px; white-space:nowrap; }
-.workspace-design .nav-group > button,.workspace-design .sidebar-control { display:grid; grid-template-columns:36px minmax(0,1fr) auto; align-items:center; gap:8px; box-sizing:border-box; width:100%; height:44px; min-height:44px; font-size:14px; padding:0 8px; margin:3px 0; border:1px solid transparent; border-radius:6px; text-align:left; overflow:hidden; }
+.workspace-design .nav-group > button,.workspace-design .sidebar-control { display:grid; grid-template-columns:36px minmax(0,1fr) auto; align-items:center; gap:8px; box-sizing:border-box; width:100%; height:var(--control-height-lg); min-height:var(--control-height-lg); font-size:var(--font-body); padding:0 8px; margin:3px 0; border:1px solid transparent; border-radius:6px; text-align:left; overflow:hidden; }
 .workspace-design .nav-group svg,.workspace-design .sidebar-control svg { width:20px; height:20px; justify-self:center; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 .workspace-design .nav-label { display:block; min-width:0; overflow:hidden; white-space:nowrap; transition:opacity .12s ease; }
-.workspace-design .nav-utilities { padding-top:4px; }
+.workspace-design .nav-utilities { flex:none; margin-top:auto; padding-top:12px; }
 .workspace-design .sidebar-control { background:transparent; color:var(--nav-ink); }
 .workspace-design .sidebar-control:not(:disabled):hover { background:var(--nav-hover); }
 .workspace-design .sidebar-control.active { background:var(--nav-active); border-color:var(--nav-border); }
@@ -21,7 +21,7 @@
 .workspace-design.compact .nav-count { display:none; }
 .workspace-design .sidebar-toggle svg,.workspace-design .sidebar-edge-toggle svg { transition:transform .18s ease; }
 .workspace-design.compact .sidebar-toggle svg,.workspace-design.compact .sidebar-edge-toggle svg { transform:rotate(180deg); }
-.workspace-design .sidebar-edge-toggle { position:fixed; top:50dvh; left:calc(var(--sidebar-width) - 10px); transform:translateY(-50%); z-index:25; display:grid; place-items:center; width:20px; min-width:20px; height:44px; min-height:44px; padding:0; border:1px solid var(--nav-border); border-radius:6px; color:var(--nav-muted); background:var(--nav-surface); box-shadow:0 2px 6px #344c3e12; transition:left .18s ease; }
+.workspace-design .sidebar-edge-toggle { position:fixed; top:50dvh; left:calc(var(--sidebar-width) - 10px); transform:translateY(-50%); z-index:25; display:grid; place-items:center; width:20px; min-width:20px; height:var(--control-height-lg); min-height:var(--control-height-lg); padding:0; border:1px solid var(--nav-border); border-radius:6px; color:var(--nav-muted); background:var(--nav-surface); box-shadow:0 2px 6px color-mix(in srgb,var(--neutral-ink) 7.06%,transparent); transition:left .18s ease; }
 .workspace-design .sidebar-edge-toggle:hover { color:var(--nav-ink); background:var(--nav-active); }
 .workspace-design .sidebar-edge-toggle svg { width:12px; height:12px; fill:currentColor; }
 @media(max-width:700px) {

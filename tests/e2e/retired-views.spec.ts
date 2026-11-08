@@ -6,7 +6,7 @@ test('retired URLs only open the current workspace and never load retired view c
   await page.goto('/'+hash);await expect(page.getByTestId('workspace-nav-characters')).toBeVisible();
   await expect.poll(()=>new URL(page.url()).hash).toBe('');
   await page.getByRole('button',{name:'导航 设置',exact:true}).click();
-  await expect(page.locator('a[href^="#"]')).toHaveCount(0);
+  await expect(page.locator('a[href^="#"]:not(.skip-link)')).toHaveCount(0);
  }
  await page.getByTestId('workspace-nav-projects').click();await expect(page.getByText('历史兼容样本（不作为真实案例验收）',{exact:true})).toHaveCount(0);
  await page.getByTestId('workspace-nav-team').click();await expect(page.locator('.advanced-workspace')).toHaveCount(0);

@@ -6,7 +6,7 @@ import { upgradeCounts, averageRollCount, confirmedUpgradeCounts, preferredUpgra
 import { loadAccountGameData } from '../../src/web/src/domain/account-presentation';
 import { previewMonaImport } from '../../src/web/src/domain/mona-import';
 import { formatGameStat } from '../../src/web/src/domain/account-presentation';
-import { defaultEffectiveStats, characterLoadoutName } from '../../src/web/src/domain/character-loadout-name';
+import { defaultEffectiveStats, characterLoadoutName, effectiveRollBreakdown } from '../../src/web/src/domain/character-loadout-name';
 const path='.references/enka/uid-107590923.json';
 describe.skipIf(!existsSync(path))('Actual showcase artifact presentation',()=>{
  it('keeps exact values, uses game display precision and counts recorded enhancement hits',async()=>{
@@ -53,6 +53,14 @@ describe.skipIf(!existsSync(monaPath))('Actual Mona inventory enhancement infere
     return value+(means[sub.stat]?sub.value/means[sub.stat]:0);
   },0),0);
   expect(characterLoadoutName(jean,organizedAccount,jeanStats,data.catalog.sets)).toContain(`琴 · ${expectedCount.toFixed(1)}词条`);
+  const jeanPieces=organizedAccount.artifacts.filter(item=>Object.values(jean.equipment).includes(item.id));
+  const breakdown=effectiveRollBreakdown(jeanPieces);
+  const referenceMeans:Record<string,number>={hp:253.94,hpPercent:.04955,attack:16.535,attackPercent:.04955,defense:19.675,defensePercent:.06195,elementalMastery:19.815,energyRecharge:.05505,critRate:.03305,critDamage:.06605};
+  const groups:Record<string,string[]>={hp:['hp','hpPercent'],attack:['attack','attackPercent'],defense:['defense','defensePercent'],elementalMastery:['elementalMastery'],energyRecharge:['energyRecharge'],critRate:['critRate'],critDamage:['critDamage']};
+  for(const [group,members] of Object.entries(groups)) {
+    const expected=jeanPieces.reduce((total,item)=>total+item.real!.substats.reduce((sum,sub)=>sum+(members.includes(sub.stat)?sub.value/referenceMeans[sub.stat]:0),0),0);
+    expect(breakdown.find(row=>row.stat===group)?.value).toBeCloseTo(expected,8);
+  }
   expect(confirmedUpgradeCounts(piece).map(count=>count?.min)).toEqual([0,1,2,2]);
   const ambiguous = preview.additions.find(item=>item.real?.source?.key==='id:3965604424477510')?.real;
   expect(ambiguous).toBeDefined();
@@ -62,5 +70,44 @@ describe.skipIf(!existsSync(monaPath))('Actual Mona inventory enhancement infere
   expect(selected).toEqual([1,4,0,0]);
   expect(selected.reduce((sum,count)=>sum!+count!,0)).toBe(5);
   upgradeCounts(ambiguous!).forEach((count,index)=>{if(count && count.min!==count.max) expect(confirmedUpgradeCounts(ambiguous!)[index]).toBeUndefined();});
+ });
+});
+
+
+describe.skipIf(!existsSync(monaPath))('Preferred configuration from actual inventory operations',()=>{
+ it('adopts an unequipped-flower draft without cloning inventory and rejects missing referenced physical items',async()=>{
+  const data=await loadAccountGameData();
+  const original=createAccount();
+  original.artifacts=(await previewMonaImport(readFileSync(monaPath,'utf8'),original,data.catalog.sets,data.main)).additions;
+  const {organizeMonaWearNotes}=await import('../../src/web/src/domain/mona-wear-notes');
+  const {preparePreferredConfiguration}=await import('../../src/web/src/domain/account-configurations');
+  organizeMonaWearNotes(original);
+  const before=JSON.stringify(original),jean=original.characters.find(item=>item.name==='琴')!;
+  // Derived UI boundary: the real five-piece record with its flower explicitly unequipped.
+  const snapshot=structuredClone(original),draft=snapshot.characters.find(item=>item.id===jean.id)!;
+  delete draft.equipment.flower;
+  snapshot.characters=[draft];snapshot.artifacts=snapshot.artifacts.filter(item=>Object.values(draft.equipment).includes(item.id));
+  const saved={id:'derived-unequip',presetId:'derived-unequip',character:draft,source:snapshot};
+  const prepared=preparePreferredConfiguration(original,saved);
+  expect(prepared.next.characters.find(item=>item.id===jean.id)!.equipment).toEqual(draft.equipment);
+  expect(prepared.next.artifacts).toEqual(original.artifacts);
+  expect(prepared.transfers).toEqual([]);expect(JSON.stringify(original)).toBe(before);
+  const missing=structuredClone(original);missing.artifacts=missing.artifacts.filter(item=>item.id!==draft.equipment.plume);
+  expect(()=>preparePreferredConfiguration(missing,saved)).toThrow('实物已缺失');
+  expect(JSON.stringify(original)).toBe(before);
+  const {planClearedConfiguration}=await import('../../src/web/src/domain/account-configurations');
+  const cleared=structuredClone(original),empty=cleared.characters.find(item=>item.id===jean.id)!;
+  delete empty.realBuild;delete empty.showcase;empty.attack=0;empty.weapon='';empty.equipment={};
+  const duplicate=structuredClone(original);duplicate.characters=[structuredClone(jean)];duplicate.artifacts=duplicate.artifacts.filter(item=>Object.values(jean.equipment).includes(item.id));
+  const alternatives=[{id:'old-current',accountId:original.id,characterId:jean.id,snapshot:duplicate},{id:'four-piece',accountId:original.id,characterId:jean.id,snapshot}];
+  const promoted=planClearedConfiguration(original,cleared,alternatives,jean.id);
+  expect(promoted.promotedId).toBe('four-piece');expect(promoted.removedIds).toEqual(['old-current','four-piece']);
+  expect(promoted.next.characters.find(item=>item.id===jean.id)!.equipment).toEqual(draft.equipment);
+  expect(promoted.next.artifacts).toEqual(original.artifacts);expect(promoted.removedCharacter).toBe(false);
+  const last=planClearedConfiguration(original,cleared,[],jean.id);
+  expect(last.removedCharacter).toBe(true);expect(last.next.characters.some(item=>item.id===jean.id)).toBe(false);
+  expect(last.next.characters).toEqual(original.characters.filter(item=>item.id!==jean.id));expect(last.next.artifacts).toEqual(original.artifacts);
+  const removeBackup=planClearedConfiguration(original,cleared,alternatives,jean.id,'four-piece');
+  expect(removeBackup.next).toEqual(original);expect(removeBackup.removedIds).toEqual(['four-piece']);
  });
 });

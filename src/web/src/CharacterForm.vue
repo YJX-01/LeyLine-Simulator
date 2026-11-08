@@ -10,8 +10,10 @@ import CatalogPicker from './components/CatalogPicker.vue';
 import GameIcon from './components/GameIcon.vue';
 import LevelPicker from './components/LevelPicker.vue';
 import NumberStepper from './components/NumberStepper.vue';
+import ChoiceGroup from './components/ChoiceGroup.vue';
+import CornerBadge from './components/CornerBadge.vue';
 import talentDisplay from './domain/data/character-talent-display.json';
-const props = defineProps<{ character?: AccountCharacter; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean }>();
+const props = defineProps<{ character?: AccountCharacter; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean }>();
 const emit = defineEmits<{ close: []; saved: [id: string]; dirtyChange: [dirty: boolean] }>();
 const store = useAccountStore();
 const originalAccount = store.account;
@@ -57,10 +59,10 @@ async function prepare(): Promise<AccountCharacter | undefined> {
     const lockedId=props.character?.realBuild?.character.id??data.value.catalog.characters.find(item=>item.name===props.character?.name)?.id;
     if(props.character && realCharacter.id!==lockedId)throw new Error('已有角色的身份不可更换。');
     const id = props.character?.id ?? crypto.randomUUID();
-    if (store.account.characters.some(item => item.id !== id && (item.realBuild?.character.id === characterId.value || item.name === realCharacter.name))) throw new Error('账号已有该角色，请在原角色资料上补全或编辑。');
+    if (!props.candidate && store.account.characters.some(item => item.id !== id && (item.realBuild?.character.id === characterId.value || item.name === realCharacter.name))) throw new Error('账号已有该角色，请在原角色资料上补全或编辑。');
     if (weaponAscension.value >= weapon.promotion.length) throw new Error(`所选武器最高突破为 ${weapon.promotion.length - 1}，请调整武器突破与等级。`);
     const promotion = weaponAscension.value;
-    const build = realBuildSchema.parse({ dataVersion: data.value.catalog.version, character: realCharacter, weapon, artifactMain: data.value.main, sets: [], level: level.value, ascension: ascension.value, constellation: constellation.value, talents: talents.value, weaponLevel: weaponLevel.value, weaponAscension: promotion, refinement: refinement.value, hpRatio: props.character?.realBuild?.hpRatio ?? 1, artifacts: [] });
+    const build = realBuildSchema.parse({ dataVersion: data.value.catalog.version, character: realCharacter, weapon, artifactMain: data.value.main, sets: props.candidate ? props.character?.realBuild?.sets ?? [] : [], level: level.value, ascension: ascension.value, constellation: constellation.value, talents: talents.value, weaponLevel: weaponLevel.value, weaponAscension: promotion, refinement: refinement.value, hpRatio: props.character?.realBuild?.hpRatio ?? 1, artifacts: props.candidate ? props.character?.realBuild?.artifacts ?? [] : [] });
     const invalid = resolveRealBuild(build).issues.filter(issue => issue.code === 'invalid-input');
     if (invalid.length) throw new Error(invalid.map(issue => issue.message).join('；'));
     const entry: AccountCharacter = { id, name: realCharacter.name, attack: 0, weapon: weapon.name, equipment: { ...props.character?.equipment }, realBuild: build, ...(props.character?.showcase?.build.character.id === realCharacter.id ? { showcase: props.character.showcase } : {}) };
@@ -101,12 +103,12 @@ defineExpose({ prepare, reset });
 
         </fieldset>
           <fieldset class="constellation-row" :disabled="showcase"><strong>命座</strong><div class="constellation-strip" role="group" aria-label="命座" :style="elementStyle">
-            <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><span class="constellation-number">{{ rank-1 }}</span></button>
+            <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><CornerBadge small class="constellation-number">{{ rank-1 }}</CornerBadge></button>
           </div></fieldset>
-          <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase"><div class="refinement-options" role="group" aria-label="武器精炼"><button v-for="rank in 5" :key="rank" :aria-label="`精炼${rank}阶`" :aria-pressed="refinement===rank" @click="refinement=rank">{{ rank }}</button></div></fieldset>
+          <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase" @update:model-value="refinement=Number($event)" /></fieldset>
       </div>
       <CatalogPicker v-if="!showcase" ref="weaponPicker" inline hide-trigger label="装备武器" image-kind="weapons" v-model="weaponId" :options="weapons" :disabled="!characterId" />
-      <div v-if="(dirty || !props.character) && !showcase && !detached" class="detail-save"><button :disabled="busy || !characterId || !weaponId" @click="apply()">{{ props.character ? '保存修改' : '保存角色资料' }}</button><button v-if="props.character" :disabled="busy" @click="reset">还原修改</button></div>
+      <div v-if="(dirty || !props.character) && !showcase && !detached" class="detail-save"><button class="ui-action" data-accent="anemo" :disabled="busy || !characterId || !weaponId" @click="apply()">{{ props.character ? '保存修改' : '保存角色资料' }}</button><button class="ui-action soft" data-accent="pyro" v-if="props.character" :disabled="busy" @click="reset">还原修改</button></div>
     </template>
     <p v-if="error" role="alert">{{ error }}</p>
   </div>
@@ -115,32 +117,32 @@ defineExpose({ prepare, reset });
 .character-form.details { display:block; padding:0; border:0; background:none; margin:0; }
 .cultivation-groups { display:grid; grid-template-columns:minmax(0,1fr) 180px minmax(0,1fr); gap:8px 20px; align-items:start; padding-bottom:10px; border-bottom:1px solid var(--line); }
 .cultivation-group { min-width:0; margin:0; padding:0; border:0; background:transparent; display:flex; flex-direction:column; gap:8px; }
-.talent-group { padding:16px 0 0; align-self:start; gap:8px; width:240px; max-width:100%; box-sizing:border-box; justify-self:start; }.talent-field { display:grid; grid-template-columns:32px 36px minmax(0,1fr); align-items:center; gap:6px; font-size:16px; font-weight:700; }
+.talent-group { padding:16px 0 0; align-self:start; gap:8px; width:240px; max-width:100%; box-sizing:border-box; justify-self:start; }.talent-field { display:grid; grid-template-columns:32px 36px minmax(0,1fr); align-items:center; gap:6px; font-size:var(--font-control); font-weight:700; }
 .character-cultivation,.weapon-cultivation { align-items:center; justify-self:center; width:160px; max-width:100%; box-sizing:border-box; }.cultivation-group .level-picker { width:160px; max-width:100%; }
 .portrait-control { display:flex; align-items:center; justify-content:center; padding:0; border:0; background:none; }.portrait-control:disabled { opacity:1; }
-.character-cultivation > .characters { width:104px !important; height:104px !important; }.weapon-portrait { position:relative; display:flex; align-items:center; justify-content:center; width:160px; max-width:100%; height:104px; }.weapon-portrait .portrait-control { width:88px; height:88px; }.weapon-portrait .game-icon { width:88px !important; height:88px !important; }.cultivation-label { font-size:16px; font-weight:700; color:var(--ink); line-height:20px; }.cultivation-group > .cultivation-label { margin-bottom:-6px; }.refinement-field { grid-column:3; grid-row:2; justify-self:center; align-self:center; min-width:0; margin:0; padding:0; border:0; width:160px; max-width:100%; display:grid; gap:5px; text-align:center; }.refinement-options { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); border:1px solid var(--line); border-radius:var(--control-radius); overflow:hidden; background:var(--surface-raised); box-sizing:border-box; height:var(--control-height); }.refinement-options button { min-width:0; height:calc(var(--control-height) - 2px); min-height:0; padding:0; border:0; border-right:1px solid var(--line); border-radius:0; background:transparent; color:var(--ink); font-size:var(--control-font-size); font-weight:700; }.refinement-options button:last-child { border-right:0; }.refinement-options button[aria-pressed=true] { background:var(--element-hydro-light); color:var(--element-hydro-deep); font-weight:700; }
+.weapon-portrait { position:relative; display:flex; align-items:center; justify-content:center; width:160px; max-width:100%; height:104px; }.weapon-portrait .portrait-control { width:88px; height:88px; }.cultivation-label { font-size:var(--font-control); font-weight:700; color:var(--ink); line-height:20px; }.cultivation-group > .cultivation-label { margin-bottom:-6px; }.refinement-field { grid-column:3; grid-row:2; justify-self:center; align-self:center; min-width:0; margin:0; padding:0; border:0; width:160px; max-width:100%; display:grid; gap:5px; text-align:center; }
 
 .weapon-empty { display:flex; width:88px; height:88px; align-items:center; justify-content:center; border:1px dashed var(--line); border-radius:7px; color:var(--muted); }
 .constellation-row { grid-column:1/span 2; grid-row:2; width:100%; min-width:0; box-sizing:border-box; margin:0; padding:0; border:0; display:grid; grid-template-columns:32px minmax(0,1fr); align-items:center; gap:6px; }
-.constellation-row > strong { grid-column:1; font-size:16px; font-weight:700; line-height:20px; }
+.constellation-row > strong { grid-column:1; font-size:var(--font-control); font-weight:700; line-height:20px; }
 .constellation-strip { grid-column:2; display:grid; grid-template-columns:repeat(7,40px); gap:6px; }
 .constellation-strip button { position:relative; display:flex; align-items:center; justify-content:center; box-sizing:border-box; width:40px; height:40px; min-height:40px; padding:3px; border:1px solid var(--line); border-radius:50%; background:var(--neutral-canvas); color:var(--muted); transition:box-shadow .15s,border-color .15s,color .15s; }
 .constellation-strip .game-icon,.constellation-strip svg { width:32px !important; height:32px !important; }.constellation-strip svg { fill:currentColor; }
-.constellation-strip button > span:last-child:not(.game-icon) { position:absolute; right:3px; bottom:2px; font-size:10px; }
+
 .constellation-strip button:not(.lit) > .game-icon { opacity:.3; }
 .constellation-strip button.lit { color:white; background:var(--constellation-ink); border:2px solid var(--constellation-tone); box-shadow:inset 0 0 5px color-mix(in srgb,var(--constellation-tone) 50%,transparent),0 0 5px color-mix(in srgb,var(--constellation-tone) 50%,transparent); }
 .constellation-strip button.lit::before { content:''; position:absolute; inset:3px; border:1px solid color-mix(in srgb,var(--constellation-tone) 75%,white); border-radius:50%; pointer-events:none; }
 .constellation-strip button.lit .game-icon { filter:drop-shadow(0 0 2px color-mix(in srgb,var(--constellation-tone) 35%,transparent)); }
 .constellation-strip button[aria-pressed=true] { outline:2px solid var(--constellation-tone); outline-offset:3px; }
 
-.constellation-strip .constellation-number { position:absolute; right:-1px; bottom:-2px; padding:0 2px; border-radius:3px; background:var(--surface); color:var(--ink); font-size:9px; line-height:12px; }
+.constellation-strip .constellation-number { position:absolute; right:-1px; bottom:-2px; }
 
-.constellation-strip button:disabled { opacity:1; }.detail-save { display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }.detail-save button { font-size:15px; }
+.constellation-strip button:disabled { opacity:1; }.detail-save { display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }.detail-save button { font-size:var(--font-control); }
 @media(max-width:700px) { .cultivation-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }.talent-group { grid-column:1/-1; width:min(240px,100%); justify-self:start; }.talent-group { padding-top:0; }.refinement-field { grid-column:2; grid-row:3; }.constellation-row { grid-column:1/-1; grid-row:4; } }
 
 
 .inline { padding:18px; border:1px solid var(--line); border-radius:12px; background:var(--surface); margin:12px 0; }.inline .catalog-picker { grid-column:1/-1; }
-.character-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:13px; } input { width:100%; min-height:38px; box-sizing:border-box; } p { font-size:13px; line-height:1.8; } [role=alert] { color:var(--element-pyro-deep); }
+.character-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:var(--font-body); } input { width:100%; min-height:38px; box-sizing:border-box; } p { font-size:var(--font-body); line-height:1.8; } [role=alert] { color:var(--element-pyro-deep); }
 .character-form { grid-template-columns:repeat(2,minmax(0,1fr)); }.character-form > p,.character-form > h3 { grid-column:1/-1; }@media(max-width:550px) { .character-form { grid-template-columns:1fr; } }
-@media(max-width:400px) { .constellation-strip { grid-template-columns:repeat(7,34px); gap:6px; }.constellation-strip button { width:34px; height:34px; min-height:34px; padding:2px; }.constellation-strip .game-icon,.constellation-strip svg { width:28px !important; height:28px !important; } }
+@media(max-width:400px) { .constellation-strip { grid-template-columns:repeat(7,32px); gap:6px; }.constellation-strip button { width:32px; height:32px; min-height:32px; padding:2px; }.constellation-strip .game-icon,.constellation-strip svg { width:28px !important; height:28px !important; } }
 </style>

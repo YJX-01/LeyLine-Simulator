@@ -4,6 +4,7 @@ import type { RealBuild } from '@leyline/schema';
 import type { AccountArtifact } from '../domain/account';
 import talentDisplay from '../domain/data/character-talent-display.json';
 import GameIcon from './GameIcon.vue';
+import CornerBadge from './CornerBadge.vue';
 
 const props = defineProps<{ build?: RealBuild; name: string; artifacts: AccountArtifact[] }>();
 type Talent = { key: string; label: string; icon: string; name: string; constellations: number[] };
@@ -41,7 +42,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
     <span class="card-sets" :class="{ paired: sets[0]?.badge === '2' }" :aria-label="setDescription" :title="setDescription">
       <span v-for="set in sets" :key="set.id" class="card-set" :data-rarity="set.rarity" :data-set-id="set.id" :data-count="set.badge">
         <GameIcon kind="artifacts" :id="set.id" :size="sets[0]?.badge === '2' ? 44 : 88" />
-        <b class="set-badge">{{ set.badge }}</b>
+        <CornerBadge class="set-badge" :small="sets.length > 1">{{ set.badge }}</CornerBadge>
       </span>
     </span>
     <GameIcon kind="characters" :id="build?.character.id" :name="name" :size="104" :constellation="build?.constellation" :level="build?.level" />
@@ -51,7 +52,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
     <span class="card-talents">
       <span v-for="row in rows" :key="row.key" class="talent-row" :aria-label="`${row.label} ${row.name} ${row.level}级`" :title="`${row.label} · ${row.name}${row.base === undefined ? ' · 待补全' : ` · 基础 ${row.base}${row.bonus ? ` + 命座 ${row.bonus}` : ''}`}`">
         <GameIcon kind="skills" :id="row.icon" :size="24" />
-        <b>{{ row.level }}<sup v-if="row.bonus && row.base !== undefined">*</sup></b>
+        <b>{{ row.level }}<sup data-ui-badge="mini" v-if="row.bonus && row.base !== undefined">*</sup></b>
       </span>
     </span>
   </span>
@@ -63,15 +64,15 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
 .card-set { position:absolute; inset:0; display:block; border-radius:7px; }
 .card-set[data-rarity="5"] { background:var(--element-geo-light); }.card-set[data-rarity="4"] { background:var(--element-electro-light); }
 .card-set :deep(.game-icon) { background:none; }
-.set-badge { position:absolute; top:0; left:0; min-width:20px; padding:1px 3px; border-radius:4px; text-align:center; background:var(--element-geo-light); color:var(--element-geo-deep); font-size:15px; line-height:22px; }
+.set-badge { position:absolute; top:0; left:0; background:var(--element-geo-light); color:var(--element-geo-deep); }
 .paired .card-set { inset:auto; top:0; left:0; width:50%; height:50%; }
 .paired .card-set:nth-child(2) { top:50%; left:50%; }
-.paired .set-badge { min-width:14px; font-size:12px; line-height:17px; }
+
 .card-weapon { width:88px; height:88px; justify-self:end; }
 .card-talents { grid-column:1/-1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:center; justify-self:center; width:210px; max-width:100%; gap:4px; color:var(--muted); }
 .talent-row { display:flex; justify-content:center; align-items:center; gap:6px; min-width:0; line-height:1; }
-.talent-row b { color:var(--ink); position:relative; font-size:14px; line-height:1; font-weight:700; font-variant-numeric:tabular-nums; }
-.talent-row sup { position:absolute; top:-2px; left:100%; margin-left:1px; color:var(--element-electro-deep); font-size:11px; }
+.talent-row b { color:var(--ink); position:relative; font-size:var(--font-body); line-height:1; font-weight:700; font-variant-numeric:tabular-nums; }
+.talent-row sup { font-size:var(--font-badge-mini); position:absolute; top:-2px; left:100%; margin-left:1px; color:var(--element-electro-deep);  }
 @media(max-width:400px) {
   .card-portraits { grid-template-columns:minmax(88px,1fr) 104px minmax(88px,1fr); column-gap:8px; }
   .card-portraits > .characters { width:104px !important; height:104px !important; }

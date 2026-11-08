@@ -58,7 +58,11 @@ Run desktop and browser acceptance serially with one worker. Manage only process
 
 The user explicitly authorized Enka UID public showcase input as a bounded U1 addition. Preserve preview/confirmation and separate read-only showcase snapshots from physical inventory; do not infer matching physical items from equal stats or combine unrelated public and private accounts. This does not advance the stage to P5/P6. Follow `docs/references/enka-import.md`.
 
-New UI uses the semantic tokens and controls in `docs/design/visual-language.md` and `src/web/src/styles/palette.ts`. The seven-element 21-color v1 palette remains pending user experience feedback; dark mode is not implemented. Keep checks focused on changed real-data paths, as requested by the user.
+New UI uses the semantic tokens and controls in `docs/design/visual-language.md` and `src/web/src/styles/palette.ts`. The current typography/control contract is 24/20/16/14px with a 14px minimum for ordinary text and hints, and 40/32/24px outer control heights. Only documented image/icon corner badges may use 12/10px via CornerBadge or data-ui-badge; primary card values and status labels are not badges. Reuse the shared metrics and components; resize or wrap layouts instead of shrinking text. Do not revive superseded size rules from planning history. The seven-element 21-color v1 palette remains pending user experience feedback; dark mode is not implemented. Keep checks focused on changed real-data paths, as requested by the user.
+
+## Frontend review aids
+
+When available, use `frontend-design`, `web-design-guidelines`, and `webapp-testing` for U1 visual/interaction reviews. The user-approved pages and `docs/design/visual-language.md` take precedence over generic skill defaults. Follow `docs/design/ui-review-workflow.md`; verify actual sequential typing (including constellation bonuses), label focus, keyboard navigation, modal boundaries, unsaved drafts, and narrow layouts, not only programmatic fill. Keep the existing pnpm/Playwright regressions as repository checks; optional skill tooling runs in an isolated ignored environment without adding project dependencies or synthetic acceptance data.
 
 ## Retired UI (user decision, 2026-11-07)
 
