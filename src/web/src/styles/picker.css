@@ -1,0 +1,4 @@
+.picker-trigger { position:relative; display:flex; align-items:center; justify-content:center; padding:0 28px; cursor:pointer; list-style:none; font-size:var(--font-control); font-weight:700; }
+.picker-trigger::-webkit-details-marker { display:none; }
+.picker-arrow { display:block; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--muted); }
+.picker-menu { position:absolute; top:calc(100% + 5px); left:0; width:100%; box-sizing:border-box; padding:8px; z-index:5; border:1px solid var(--line); border-radius:10px; background:var(--surface-raised); box-shadow:0 8px 24px #283a3624; }

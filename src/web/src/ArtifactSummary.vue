@@ -59,3 +59,7 @@ dl { display:grid; grid-template-columns:max-content max-content; column-gap:12p
 
 dt.effective-substat,dd.effective-substat { color:var(--element-pyro-deep); }.effective-substat .roll-count { color:var(--element-pyro-deep); background:var(--element-pyro-light); border-color:var(--element-pyro-primary); }.effective-substat .average-count { color:var(--element-pyro-deep); }
 </style>
+
+<style scoped>
+.compact .artifact-art .compact-main,.compact .artifact-art .artifact-level { background:transparent; }
+</style>

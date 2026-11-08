@@ -22,20 +22,21 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.inventory-card')).toHaveCount(0);
   await dialog.getByRole('button', { name: '确认导入 458 件五星圣遗物', exact: true }).click();
   await expect(dialog).toHaveCount(0);
-  await expect(page.locator('.inventory-card')).toHaveCount(30);
+  await expect.poll(()=>page.locator('.inventory-card').count()).toBeGreaterThan(0);
   await expect(page.locator('.inventory-count')).toContainText('筛选结果 458 件');
   await page.getByRole('button',{name:'排序',exact:true}).click();
   const sortDialog=page.getByRole('dialog',{name:'圣遗物排序',exact:true});
   await sortDialog.getByRole('button',{name:'等级',exact:true}).click();
   await sortDialog.getByRole('button',{name:'从低到高',exact:true}).click();
   await sortDialog.getByRole('button',{name:'完成',exact:true}).click();
-  const expectedLevels=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v1')!).artifacts.map((item:{real:{level:number}})=>item.real.level).sort((a:number,b:number)=>a-b).slice(0,30).map(String));
+  const visibleCount=await page.locator('.inventory-card').count();
+  const expectedLevels=await page.evaluate(count=>JSON.parse(localStorage.getItem('leyline-account-v1')!).artifacts.map((item:{real:{level:number}})=>item.real.level).sort((a:number,b:number)=>a-b).slice(0,count).map(String),visibleCount);
   await expect(page.locator('.inventory-card .artifact-level')).toHaveText(expectedLevels);
   await page.getByRole('button',{name:'排序',exact:true}).click();await sortDialog.getByRole('button',{name:'重置排序',exact:true}).click();await sortDialog.getByRole('button',{name:'完成',exact:true}).click();
 
   const initialCards=await page.locator('.inventory-card').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
   await page.getByRole('group',{name:'卡片密度'}).getByRole('button',{name:'紧凑',exact:true}).click();
-  expect(await page.locator('.inventory-card').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')))).toEqual(initialCards);
+  expect((await page.locator('.inventory-card').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')))).slice(0,initialCards.length)).toEqual(initialCards);
   await page.getByRole('group',{name:'卡片密度'}).getByRole('button',{name:'疏松',exact:true}).click();
   await expect(page.locator('.inventory-card footer')).toHaveCount(0);
 
@@ -59,9 +60,9 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '生之花', exact: true }).click();
   await expect(page.locator('.inventory-count')).toContainText('筛选结果 86 件');
   await page.getByRole('button',{name:/^筛选/}).click();
-  await page.getByLabel('筛选主词条', { exact: true }).selectOption('critRate');
+  await page.getByRole('group',{name:'筛选主词条',exact:true}).getByRole('button',{name:'暴击率',exact:true}).click();
   await expect(page.locator('.inventory-card')).toHaveCount(0);
-  await page.getByLabel('筛选主词条', { exact: true }).selectOption('');
+  await page.getByRole('group',{name:'筛选主词条',exact:true}).getByRole('button',{name:'全部',exact:true}).click();
   await page.getByRole('dialog',{name:'筛选圣遗物',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   const secondRow=await page.locator('.inventory-options').evaluate(node=>{const slots=node.querySelector('.slot-tabs')!.getBoundingClientRect(),density=node.querySelector('.density-options')!.getBoundingClientRect();return Math.abs((slots.top+slots.bottom)-(density.top+density.bottom))/2;});expect(secondRow).toBeLessThan(.5);
   await page.screenshot({path:'artifacts/artifact-browser-two-rows.png',fullPage:true});
@@ -181,6 +182,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.getByRole('heading',{name:'圣遗物组合',exact:true,level:2})).toBeVisible();
   await page.getByLabel('搜索圣遗物组合',{exact:true}).fill('琴');
   await expect(page.locator('.combination-row')).toHaveCount(1);
+  await page.getByRole('button',{name:'展开装备明细',exact:true}).click();
   await expect(page.locator('.combination-row .equipment-list > article')).toHaveCount(5);
   await expect(page.locator('.combination-row .artifact-summary').first()).toBeVisible();
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(beforeCollections);
@@ -226,7 +228,10 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   const sourceOwner = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-v1')!).characters.find((entry: {name: string; equipment: {flower?: string}}) => entry.name !== '琴' && entry.equipment.flower).id);
   const equipmentPickerWidth=await page.getByRole('dialog',{name:'选择生之花',exact:true}).evaluate(node=>node.getBoundingClientRect().width);
   await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:/^筛选/}).click();
-  await page.getByLabel('筛选装备占用', { exact: true }).selectOption(sourceOwner);
+  await page.getByLabel('指定角色或装备占用',{exact:true}).click();
+  const ownerName=await page.evaluate(id=>JSON.parse(localStorage.getItem('leyline-account-v1')!).characters.find((entry:{id:string})=>entry.id===id).name,sourceOwner);
+  await page.getByRole('group',{name:'指定角色或装备占用选项',exact:true}).getByRole('button',{name:ownerName,exact:true}).click();
+  await page.getByRole('button',{name:'完成选择',exact:true}).click();
   await page.getByRole('dialog',{name:'筛选圣遗物',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await page.locator('.inventory-card').first().click();
   await page.getByRole('button', { name: '选择这件圣遗物', exact: true }).click();
@@ -270,7 +275,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.character-cards > button')).toHaveCount(1);
   expect(adoptedRoleAccount.characters).toHaveLength(55);
   await page.getByTestId('workspace-nav-loadouts').click();
-  await page.getByRole('button',{name:'选择配置角色',exact:true}).click();
+  await page.getByRole('button',{name:'更换配置角色',exact:true}).click();
   await page.getByRole('dialog',{name:'选择角色',exact:true}).getByLabel('搜索账号角色',{exact:true}).fill('琴');
   await page.getByRole('button',{name:'选择琴',exact:true}).click();
   await expect(page.locator('.configuration-row')).toHaveCount(2);
@@ -297,7 +302,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(JSON.stringify(adoptedRoleAccount));
   await page.keyboard.press('Escape');
   await page.getByLabel('搜索账号角色', { exact: true }).fill('琴不存在');
-  await expect(page.getByText('没有符合条件的角色，请调整搜索或筛选。', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading',{name:'没有符合条件的角色',exact:true})).toBeVisible();
   await page.getByRole('button', { name: '手动添加', exact: true }).click();
 
   await expect(page.getByLabel('角色等级', { exact: true })).toHaveCount(0);

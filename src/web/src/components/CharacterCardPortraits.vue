@@ -5,6 +5,7 @@ import type { AccountArtifact } from '../domain/account';
 import talentDisplay from '../domain/data/character-talent-display.json';
 import GameIcon from './GameIcon.vue';
 import CornerBadge from './CornerBadge.vue';
+import WeaponPlaceholder from './WeaponPlaceholder.vue';
 
 const props = defineProps<{ build?: RealBuild; name: string; artifacts: AccountArtifact[] }>();
 type Talent = { key: string; label: string; icon: string; name: string; constellations: number[] };
@@ -48,6 +49,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
     <GameIcon kind="characters" :id="build?.character.id" :name="name" :size="104" :constellation="build?.constellation" :level="build?.level" />
     <span class="card-weapon">
       <GameIcon v-if="build" kind="weapons" :id="build.weapon.id" :size="88" :refinement="build.refinement" :level="build.weaponLevel" :rarity="build.weapon.rarity" />
+      <WeaponPlaceholder v-if="!build" />
     </span>
     <span class="card-talents">
       <span v-for="row in rows" :key="row.key" class="talent-row" :aria-label="`${row.label} ${row.name} ${row.level}级`" :title="`${row.label} · ${row.name}${row.base === undefined ? ' · 待补全' : ` · 基础 ${row.base}${row.bonus ? ` + 命座 ${row.bonus}` : ''}`}`">
@@ -68,6 +70,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
 .paired .card-set { inset:auto; top:0; left:0; width:50%; height:50%; }
 .paired .card-set:nth-child(2) { top:50%; left:50%; }
 
+
 .card-weapon { width:88px; height:88px; justify-self:end; }
 .card-talents { grid-column:1/-1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:center; justify-self:center; width:210px; max-width:100%; gap:4px; color:var(--muted); }
 .talent-row { display:flex; justify-content:center; align-items:center; gap:6px; min-width:0; line-height:1; }
@@ -81,5 +84,6 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
   .paired .card-set :deep(.game-icon) { width:44px !important; height:44px !important; }
 
 }
-@container(max-width:295.99px) { .card-portraits { grid-template-columns:minmax(88px,1fr) 104px; }.card-weapon { grid-column:1; grid-row:2; justify-self:start; }.card-talents { grid-row:3; } }
+@container(max-width:295.99px) { .card-portraits { grid-template-columns:minmax(88px,1fr) 104px; }
+.card-weapon { grid-column:1; grid-row:2; justify-self:start; }.card-talents { grid-row:3; } }
 </style>

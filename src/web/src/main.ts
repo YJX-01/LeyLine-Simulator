@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import './styles/base.css';
 import './styles/design-language.css';
+import './styles/picker.css';
 import './styles/artifact-cards.css';
 import { installPalette } from './styles/palette';
 installPalette();

@@ -48,3 +48,8 @@
 .workspace-design .skip-link:focus { transform:translateY(0); }
 .workspace-design :where(button,a,input,select,summary) { touch-action:manipulation; }
 @media(prefers-reduced-motion:reduce) { .workspace-design *, .workspace-design *::before, .workspace-design *::after { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }
+
+/* Reserve document scrollbar space so changing libraries never shifts columns. */
+html { scrollbar-gutter:stable; }
+.workspace-design .library-toolbar .library-actions button { font-size:var(--font-control); font-weight:700; }
+.workspace-design .element-shortcuts > button,.workspace-design .slot-tabs > button,.workspace-design .inventory-count,.workspace-design .inventory-reset,.workspace-design .reset-filters { font-size:var(--font-control); font-weight:700; }

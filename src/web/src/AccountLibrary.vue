@@ -20,6 +20,8 @@ import CharacterCardPortraits from './components/CharacterCardPortraits.vue';
 import CharacterConfigurationList from './CharacterConfigurationList.vue';
 import CharacterFavorite from './components/CharacterFavorite.vue';
 import LibraryToolbar from './components/LibraryToolbar.vue';
+import LibraryShortcuts from './components/LibraryShortcuts.vue';
+import LibraryEmptyState from './components/LibraryEmptyState.vue';
 import LibraryImportActions from './components/LibraryImportActions.vue';
 import FilterActions from './components/FilterActions.vue';
 import SortPanel from './components/SortPanel.vue';
@@ -31,19 +33,29 @@ import DisclosureHeading from './components/DisclosureHeading.vue';
 import EditorActions from './components/EditorActions.vue';
 import ConfirmationDialog from './components/ConfirmationDialog.vue';
 import ArtifactEquipmentGrid from './components/ArtifactEquipmentGrid.vue';
+import { useLibraryScroll } from './composables/use-library-scroll';
 import { useUnsavedChanges } from './composables/use-unsaved-changes';
-import { effectiveStatGroups, characterLoadoutName, configurationSignature } from './domain/character-loadout-name';
+import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, configurationSignature } from './domain/character-loadout-name';
 import { useCharacterLoadoutsStore } from './stores/character-loadouts';
 import { hasLocalConfiguration, hasCharacterInformation, planClearedConfiguration } from './domain/account-configurations';
 import { releaseMetadata, compareReleaseNewest } from './domain/catalog-release';
 const EnkaImport = defineAsyncComponent(() => import('./EnkaImport.vue'));
 const MonaImport = defineAsyncComponent(() => import('./MonaImport.vue'));
+const monaImport=ref<InstanceType<typeof MonaImport>>();
 
 const props = defineProps<{ page: 'characters' | 'artifacts'; pick?:boolean; selectedId?:string }>();
 const emit = defineEmits<{ settings:[]; select:[id:string] }>();
 const store = useAccountStore();
+useLibraryScroll(()=>props.page,!props.pick);
 const { account, error, notice } = storeToRefs(store);
-const { selectedCharacterId: characterId, characterQuery: query, characterElement:elementFilter, characterWeapon:weaponFilter, characterRarity:rarityFilter, characterSort:sort, characterSortDirection:sortDirection } = storeToRefs(store);
+const context = storeToRefs(store);
+const characterId = context.selectedCharacterId;
+const query = props.pick ? ref('') : context.characterQuery;
+const elementFilter = props.pick ? ref<string[]>([]) : context.characterElement;
+const weaponFilter = props.pick ? ref<string[]>([]) : context.characterWeapon;
+const rarityFilter = props.pick ? ref<string[]>([]) : context.characterRarity;
+const sort = props.pick ? ref('release') : context.characterSort;
+const sortDirection = props.pick ? ref<'asc'|'desc'>('desc') : context.characterSortDirection;
 const draftAccount = ref<LocalAccount>();
 const editingAccount = computed(() => draftAccount.value ?? account.value);
 const character = computed(() => editingAccount.value.characters.find(entry => entry.id === characterId.value));
@@ -62,7 +74,7 @@ const localViewTab = ref<HTMLButtonElement>();
 const saveAsName = ref('');
 const selectedPreset = ref('');
 const editingPresetId = ref('');
-const favoriteFilter=ref<string[]>([]);
+const favoriteFilter=props.pick?ref<string[]>([]):context.characterFavoriteFilter;
 watch(()=>account.value.id,()=>{favoriteFilter.value=[];});
 const previewConfiguration = ref<AccountCharacter>();
 let draftBaseline = '';
@@ -240,10 +252,15 @@ function organizeNotes() {
 const catalog = shallowRef<RealCatalog>();
 onMounted(async () => { try { catalog.value = (await loadAccountGameData()).catalog; } catch { error.value = '目录加载失败，角色资料仍保留。'; } });
 const weapons = [{id:'WEAPON_SWORD_ONE_HAND',name:'单手剑',icon:'dullblade'},{id:'WEAPON_CLAYMORE',name:'双手剑',icon:'wastergreatsword'},{id:'WEAPON_POLE',name:'长柄武器',icon:'beginnersprotector'},{id:'WEAPON_BOW',name:'弓',icon:'huntersbow'},{id:'WEAPON_CATALYST',name:'法器',icon:'apprenticesnotes'}];
-const sortOptions = [{value:'favorite',label:'收藏等级'},{value:'release',label:'实装版本'},{value:'name',label:'名称'},{value:'level',label:'等级'},{value:'constellation',label:'命座'},{value:'equipment',label:'装备数量'}];
+const sortOptions = [{value:'favorite',label:'收藏等级'},{value:'release',label:'实装版本'},{value:'name',label:'名称'},{value:'level',label:'等级'},{value:'constellation',label:'命座'},{value:'rolls',label:'有效词条数'}];
 function setSortKey(key:string) { if(sort.value!==key){sort.value=key;sortDirection.value=key==='name'?'asc':'desc';} }
 const metadata = (entry: typeof account.value.characters[number]) => entry.realBuild?.character ?? catalog.value?.characters.find(item => item.name === entry.name);
 const characterRelease = (entry: typeof account.value.characters[number]) => releaseMetadata('characters',entry.realBuild?.character.id,entry.name);
+function roleRolls(entry:AccountCharacter) {
+  const stats=loadouts.effectiveStats(account.value.id,entry.id,entry.name);
+  const items=account.value.artifacts.filter(item=>Object.values(entry.equipment).includes(item.id));
+  return effectiveRollBreakdown(items).filter(group=>group.members.some(stat=>stats.includes(stat))).reduce((sum,row)=>sum+(row.value ?? 0),0);
+}
 const visibleCharacters = computed(() => {
   const items = account.value.characters.filter(entry => {
     const meta=metadata(entry);
@@ -252,12 +269,13 @@ const visibleCharacters = computed(() => {
       && (!rarityFilter.value.length || rarityFilter.value.includes(String(characterRelease(entry)?.rarity)))
       && (!weaponFilter.value.length || (meta && weaponFilter.value.includes(meta.weaponType)));
   });
-  return items.sort((a,b) => (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.realBuild?.level??-1)-(a.realBuild?.level??-1) : sort.value==='constellation' ? (b.realBuild?.constellation??-1)-(a.realBuild?.constellation??-1) : sort.value==='equipment' ? Object.keys(b.equipment).length-Object.keys(a.equipment).length : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
+  return items.sort((a,b) => (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.realBuild?.level??-1)-(a.realBuild?.level??-1) : sort.value==='constellation' ? (b.realBuild?.constellation??-1)-(a.realBuild?.constellation??-1) : sort.value==='rolls' ? roleRolls(b)-roleRolls(a) : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
 });
 const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({...entry,presetId:'',galleryKey:entry.id,gallerySnapshot:account.value})));
 function openGallery(entry:{id:string;presetId:string}) { if(props.pick){emit('select',entry.id);return;}openCharacter(entry.id);if(entry.presetId)tryPreset(entry.presetId); }
 const activeFilters = computed(() => elementFilter.value.length + weaponFilter.value.length + rarityFilter.value.length + favoriteFilter.value.length);
 function toggleFilter(selected: string[], id: string) { const index = selected.indexOf(id); if (index < 0) selected.push(id); else selected.splice(index, 1); }
+function handleEmptyAction() { if(account.value.characters.length){query.value='';resetFilters();}else{editingCharacter.value=false;modal.value='create';} }
 function resetFilters() { elementFilter.value=[]; weaponFilter.value=[]; rarityFilter.value=[]; favoriteFilter.value=[]; }
 const filterGroups = computed(() => [
   { id:'elements', title:'元素', options:elementPalette.map(item => ({id:item.id,name:item.name,icon:item.id})), selected:elementFilter.value },
@@ -311,11 +329,7 @@ function confirmTransfer() {
 
     <template v-if="page === 'characters'">
       <LibraryToolbar v-model="query" label="搜索账号角色" placeholder="查找角色" :filter-count="activeFilters" :sorted="sort!=='release' || sortDirection!=='desc'" @filter="modal='filters'" @sort="modal='sort'"><template v-if="!props.pick" #actions><LibraryImportActions showcase @mona="modal='import'" @showcase="modal='network'" @create="editingCharacter=false;modal='create'" /></template></LibraryToolbar>
-      <div class="element-shortcuts" role="group" aria-label="按元素筛选">
-        <button :aria-pressed="!elementFilter.length" @click="elementFilter = []">全部</button>
-        <button v-for="element in elementPalette" :key="element.id" :aria-label="`${element.name}元素`" :aria-pressed="elementFilter.includes(element.id)" :style="{ '--filter-light':element.light,'--filter-deep':element.deep }" @click="toggleFilter(elementFilter, element.id)"><GameIcon kind="elements" :id="element.id" :size="24" /><span>{{ element.name }}</span></button>
-        <button v-if="activeFilters" class="reset-filters" @click="resetFilters">清除筛选</button>
-</div>
+      <div class="character-shortcut-row"><LibraryShortcuts v-model="elementFilter" label="按元素筛选" all-label="全部" kind="elements" :mobile-columns="4" :options="elementPalette.map(element=>({value:element.id,label:element.name,light:element.light,deep:element.deep}))" /><button v-if="activeFilters" class="reset-filters" @click="resetFilters">清除筛选</button></div>
       <WorkbenchDialog v-if="modal === 'filters'" title="筛选角色" size="filter" @close="modal = ''"><div class="character-filter-panel">
         <section v-for="group in filterGroups" :key="group.id" :aria-label="group.title"><h3>{{ group.title }}</h3><div class="filter-options">
           <button :aria-pressed="!group.selected.length" :class="{selected:!group.selected.length}" @click="group.selected.splice(0)">全部</button>
@@ -339,7 +353,7 @@ function confirmTransfer() {
           <CharacterCardPortraits :build="entry.realBuild" :name="entry.name" :artifacts="cardArtifacts(entry,entry.gallerySnapshot)" />
         </button>
       </div>
-      <p v-if="!visibleCharacters.length" class="account-empty">{{ account.characters.length ? '没有符合条件的角色，请调整搜索或筛选。' : '还没有角色。使用上方的莫娜导入、展柜导入 或手动添加建立自己的角色资料。' }}</p>
+      <LibraryEmptyState v-if="!visibleCharacters.length" :title="account.characters.length?'没有符合条件的角色':'角色库还是空的'" :description="account.characters.length?'清除搜索与筛选后重试。':'导入角色资料，或手动添加角色。'" :action="account.characters.length?'清除搜索与筛选':'手动添加角色'" @action="handleEmptyAction" />
       <WorkbenchDialog v-if="modal === 'create'" :title="editingCharacter ? '编辑角色资料' : '添加账号角色'" @close="modal = ''"><CharacterForm :character="editingCharacter ? character : undefined" @saved="openCharacter($event)" @close="modal = ''" /></WorkbenchDialog>
       <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name" @close="requestCloseCharacter">
       <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
@@ -356,7 +370,7 @@ function confirmTransfer() {
         <section class="detail-artifacts"><div class="inline-section-heading"><h3>圣遗物</h3></div>
         <ArtifactEquipmentGrid :entries="accountSlots.map(slot=>({slot,item:equipmentItem(slot)}))" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" popup :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.realBuild?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
         </section>
-        <section v-if="equipmentView==='local'" class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :items="accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
+        <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :items="accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
         <div v-if="pending" class="transfer-confirm" role="alert"><p>{{ pending.message }}</p><button @click="confirmTransfer">确认转移装备</button><button @click="pending = undefined">取消转移</button></div>
       </div>
       </WorkbenchDialog>
@@ -376,7 +390,7 @@ function confirmTransfer() {
       <WorkbenchDialog v-if="modal === 'artifact'" title="手动添加圣遗物" @close="modal = ''"><ArtifactForm @close="modal = ''" /></WorkbenchDialog>
     </template>
     <WorkbenchDialog v-if="modal === 'network'" title="从 Enka 展柜导入" @close="modal = ''"><EnkaImport @imported="showImportedCharacter" @close="modal = ''" /></WorkbenchDialog>
-    <WorkbenchDialog v-if="modal === 'import'" :title="props.page==='characters' ? '从莫娜 JSON 添加角色' : '导入莫娜圣遗物'" @close="modal = ''"><MonaImport automatic @imported="modal = props.page==='characters' && noteNames.length ? 'notes' : ''" /><div v-if="props.page==='characters' && noteNames.length" class="existing-note-import"><p>当前库存已有 {{ noteNames.length }} 个穿戴备注，可整理为待补全角色。</p><button class="ui-action soft" data-accent="electro" @click="modal = 'notes'">从穿戴备注整理角色</button></div></WorkbenchDialog>
+    <WorkbenchDialog v-if="modal === 'import'" :title="props.page==='characters' ? '从莫娜 JSON 添加角色' : '导入莫娜圣遗物'" sticky-footer @close="modal = ''"><MonaImport ref="monaImport" automatic @imported="modal = props.page==='characters' && noteNames.length ? 'notes' : ''" /><div v-if="props.page==='characters' && noteNames.length" class="existing-note-import"><p>库存有 {{ noteNames.length }} 个穿戴备注，可用于添加角色。</p><button class="ui-action soft" data-accent="electro" @click="modal = 'notes'">从穿戴备注整理角色</button></div><template #footer><div class="mona-import-footer"><button class="ui-action soft" :aria-label="monaImport?.hasPreview?'取消导入':'取消'" @click="modal=''">取消</button><button v-if="monaImport?.hasPreview" class="ui-action" :disabled="!monaImport.canConfirm" :aria-label="monaImport.confirmLabel" @click="monaImport.confirm()">{{ monaImport.confirmText }}</button></div></template></WorkbenchDialog>
   </section>
 </template>
 
@@ -385,8 +399,8 @@ function confirmTransfer() {
 .inline-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:16px 0; }.inline-section-heading h3 { margin:0; }
 .character-card-header { position:relative; display:grid; grid-template-columns:minmax(88px,1fr) 104px minmax(88px,1fr); align-items:center; gap:8px; width:100%; }.character-card-header > strong { grid-column:2; grid-row:1; text-align:center; }.character-card-status { grid-column:1; grid-row:1; justify-self:start; }.character-card-header > strong { font-size:var(--font-control); line-height:22px; }.character-card-status { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; width:88px; }.character-card-open { grid-column:3; grid-row:1; justify-self:end; width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
 .detail-panel { margin-top:16px; }.detail-panel :deep(.character-stats) { margin:0; padding:12px; border:1px solid var(--line); border-radius:10px; }.detail-panel :deep(.character-stats h3) { display:none; }.detail-artifacts { margin-top:18px; }
-.character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(312px,1fr)); gap:8px; margin:0; }
-.character-cards .character-card { container-type:inline-size; display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px color-mix(in srgb,var(--neutral-ink) 1.96%,transparent); transition:border-color .15s,box-shadow .15s,transform .15s; }
+.character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,312px),1fr)); justify-content:center; gap:12px; margin:0; }
+.character-cards .character-card { container-type:inline-size; width:100%; max-width:360px; justify-self:center; display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px color-mix(in srgb,var(--neutral-ink) 1.96%,transparent); transition:border-color .15s,box-shadow .15s,transform .15s; }
 .character-cards .character-card:hover { transform:translateY(-2px); border-color:var(--element-anemo-primary); box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 6.27%,transparent); }
 
 
@@ -466,4 +480,12 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 .character-filter-panel { display:grid; gap:20px; }.character-filter-panel :deep(.filter-actions) { margin:0; }.character-filter-panel h3 { margin:0 0 10px; font-size:var(--font-control); font-weight:700; }.character-filter-panel .filter-options { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }.character-filter-panel .filter-options button { display:flex; align-items:center; justify-content:center; gap:5px; padding:0 6px; height:40px; font-size:var(--font-body); font-weight:700; }.character-filter-panel .filter-options svg { width:18px; height:18px; color:var(--element-geo-deep); }.character-filter-panel .filter-panel-actions { margin:0; }
 .character-filter-panel [aria-label=收藏] .filter-options { grid-template-columns:repeat(5,minmax(0,1fr)); }.character-filter-panel [aria-label=星级] .filter-options,.character-filter-panel [aria-label=武器类型] .filter-options { grid-template-columns:repeat(3,minmax(0,1fr)); }
 @media(max-width:500px) { .character-filter-panel .filter-options { grid-template-columns:repeat(3,minmax(0,1fr)); }.character-filter-panel [aria-label=收藏] .filter-options,.character-filter-panel [aria-label=武器类型] .filter-options { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+</style>
+
+<style scoped>
+.character-shortcut-row { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin:12px 0; }.character-shortcut-row .reset-filters { font-size:var(--font-control); font-weight:700; }.character-header-tools { flex-wrap:wrap; }
+</style>
+
+<style scoped>
+.mona-import-footer { display:flex; justify-content:flex-end; align-items:center; flex-wrap:wrap; gap:12px; }.mona-import-footer .ui-action { font-size:var(--font-control); font-weight:700; }
 </style>

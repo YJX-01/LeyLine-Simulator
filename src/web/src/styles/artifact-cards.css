@@ -11,7 +11,10 @@
 .artifact-item-card[data-rarity='5'] { border-top: 3px solid var(--element-geo-primary); }
 .artifact-item-card[data-rarity='4'] { border-top: 3px solid var(--element-electro-primary); }
 .artifact-item-card[data-density] { padding: 8px; }
-button.artifact-item-card { transition: border-color .12s, box-shadow .12s; }
-button.artifact-item-card:hover { border-color: var(--element-anemo-primary); box-shadow: 0 8px 22px #354b4514; }
+.artifact-item-card { transition:border-top-color .12s; }
+.artifact-item-card:hover { border-top-color:var(--element-anemo-primary); }
+.workspace-design button.artifact-item-card:not(:disabled):hover { border-color:var(--line); border-top-color:var(--element-anemo-primary); }
 
 .artifact-item-card[data-density='compact'] { padding:6px; }
+
+.workspace-design .artifact-item-card { border-radius:10px; }

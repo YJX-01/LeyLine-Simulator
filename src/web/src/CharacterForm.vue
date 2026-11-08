@@ -8,6 +8,7 @@ import { loadAccountGameData } from './domain/account-presentation';
 import { useAccountStore } from './stores/account';
 import CatalogPicker from './components/CatalogPicker.vue';
 import GameIcon from './components/GameIcon.vue';
+import WeaponPlaceholder from './components/WeaponPlaceholder.vue';
 import LevelPicker from './components/LevelPicker.vue';
 import NumberStepper from './components/NumberStepper.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
@@ -98,7 +99,7 @@ defineExpose({ prepare, reset });
           <LevelPicker :level="level" :ascension="ascension" label="角色等级" :maximum="100" :disabled="showcase" @change="setCharacterLevel" />
         </fieldset>
         <fieldset class="cultivation-group weapon-cultivation" aria-label="武器培养" :disabled="showcase">
-          <span class="weapon-portrait"><button class="portrait-control" aria-label="更换武器" :title="weapons.find(item=>item.id===weaponId)?.name ?? '更换武器'" @click="weaponPicker?.show()"><GameIcon v-if="weaponId" kind="weapons" :id="weaponId" :size="88" :refinement="refinement" :level="weaponLevel" :rarity="weapons.find(item=>item.id===weaponId)?.rarity" /><span v-else class="weapon-empty">＋</span></button></span>
+          <span class="weapon-portrait"><button class="portrait-control" aria-label="更换武器" :title="weapons.find(item=>item.id===weaponId)?.name ?? '更换武器'" @click="weaponPicker?.show()"><GameIcon v-if="weaponId" kind="weapons" :id="weaponId" :size="88" :refinement="refinement" :level="weaponLevel" :rarity="weapons.find(item=>item.id===weaponId)?.rarity" /><WeaponPlaceholder v-else add /></button></span>
           <LevelPicker :level="weaponLevel" :ascension="weaponAscension" label="武器等级" :disabled="showcase" :maximum="(weapons.find(item=>item.id===weaponId)?.rarity ?? 5) < 3 ? 70 : 90" @change="setWeaponLevel" />
 
         </fieldset>
@@ -122,7 +123,7 @@ defineExpose({ prepare, reset });
 .portrait-control { display:flex; align-items:center; justify-content:center; padding:0; border:0; background:none; }.portrait-control:disabled { opacity:1; }
 .weapon-portrait { position:relative; display:flex; align-items:center; justify-content:center; width:160px; max-width:100%; height:104px; }.weapon-portrait .portrait-control { width:88px; height:88px; }.cultivation-label { font-size:var(--font-control); font-weight:700; color:var(--ink); line-height:20px; }.cultivation-group > .cultivation-label { margin-bottom:-6px; }.refinement-field { grid-column:3; grid-row:2; justify-self:center; align-self:center; min-width:0; margin:0; padding:0; border:0; width:160px; max-width:100%; display:grid; gap:5px; text-align:center; }
 
-.weapon-empty { display:flex; width:88px; height:88px; align-items:center; justify-content:center; border:1px dashed var(--line); border-radius:7px; color:var(--muted); }
+
 .constellation-row { grid-column:1/span 2; grid-row:2; width:100%; min-width:0; box-sizing:border-box; margin:0; padding:0; border:0; display:grid; grid-template-columns:32px minmax(0,1fr); align-items:center; gap:6px; }
 .constellation-row > strong { grid-column:1; font-size:var(--font-control); font-weight:700; line-height:20px; }
 .constellation-strip { grid-column:2; display:grid; grid-template-columns:repeat(7,40px); gap:6px; }
@@ -144,5 +145,5 @@ defineExpose({ prepare, reset });
 .inline { padding:18px; border:1px solid var(--line); border-radius:12px; background:var(--surface); margin:12px 0; }.inline .catalog-picker { grid-column:1/-1; }
 .character-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:var(--font-body); } input { width:100%; min-height:38px; box-sizing:border-box; } p { font-size:var(--font-body); line-height:1.8; } [role=alert] { color:var(--element-pyro-deep); }
 .character-form { grid-template-columns:repeat(2,minmax(0,1fr)); }.character-form > p,.character-form > h3 { grid-column:1/-1; }@media(max-width:550px) { .character-form { grid-template-columns:1fr; } }
-@media(max-width:400px) { .constellation-strip { grid-template-columns:repeat(7,32px); gap:6px; }.constellation-strip button { width:32px; height:32px; min-height:32px; padding:2px; }.constellation-strip .game-icon,.constellation-strip svg { width:28px !important; height:28px !important; } }
+@media(max-width:400px) { .constellation-row { grid-template-columns:minmax(0,1fr); gap:8px; }.constellation-strip { grid-column:1; grid-template-columns:repeat(7,32px); justify-content:space-between; gap:0; }.constellation-strip button { width:32px; height:32px; min-height:32px; padding:2px; }.constellation-strip .game-icon,.constellation-strip svg { width:28px !important; height:28px !important; } }
 </style>

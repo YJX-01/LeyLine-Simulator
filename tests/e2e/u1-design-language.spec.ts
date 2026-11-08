@@ -105,14 +105,14 @@ test('shared real-character editor protects team drafts and keeps account indepe
     await page.setViewportSize({width:1280,height:720});
     if(target==='settings')await page.getByRole('button',{name:'导航 设置',exact:true}).click();else await page.getByTestId(`workspace-nav-${target}`).click();
     if(target==='definitions')await expect(page.getByRole('heading',{name:'独立内容定义库',exact:true})).toBeVisible();
-    if(target==='loadouts' || target==='combinations')await expect(page.getByRole('heading',{name:target==='loadouts'?'角色配置':'圣遗物组合',level:2,exact:true})).toBeVisible();
+    if(target==='loadouts' || target==='combinations')await expect(page.getByRole('region',{name:target==='loadouts'?'角色配置':'圣遗物组合',exact:true})).toBeVisible();
     if(target==='loadouts') {
       await page.getByRole('button',{name:'选择配置角色',exact:true}).click();
       const picker=page.getByRole('dialog',{name:'选择角色',exact:true});
       await expect(picker.locator('.character-card')).toHaveCount(4);
       await picker.getByRole('button',{name:'选择安柏',exact:true}).click();
       await expect(page.locator('.configuration-row')).toHaveCount(1);
-      await page.getByRole('button',{name:'查看装备明细',exact:true}).click();
+      await page.getByRole('button',{name:'展开装备明细',exact:true}).click();
       await expect(page.locator('.configuration-row .equipment-list > article')).toHaveCount(5);
     }
     if(target==='settings')await page.getByText('界面配色 · 七元素三阶',{exact:true}).click();

@@ -26,7 +26,7 @@ test('real showcase: character favorites persist, filter and sort independently 
   const picker=role.getByRole('button',{name:'选择甘雨配置',exact:true});await expect(picker).toContainText('|');
   for(const width of [900,760,390]) {
     await page.setViewportSize({width,height:900});
-    expect(await role.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);
+    await expect.poll(()=>role.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);
     const centered=await role.evaluate(node=>{const header=node.querySelector('header')!.getBoundingClientRect(),title=node.querySelector('header h2')!.getBoundingClientRect();return Math.abs((header.left+header.right)-(title.left+title.right))/2;});
     expect(centered).toBeLessThan(.5);
     const overlap=await role.locator('header').evaluate(header=>{

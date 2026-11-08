@@ -10,11 +10,11 @@ function resetSelection() {
   store.characterQuery = '';
   store.characterElement = []; store.characterWeapon = []; store.characterRarity = []; store.characterSort = 'release';store.characterSortDirection='desc';
   store.inventoryQuery = '';
-  store.inventorySlot = '';
-  store.inventoryStat = '';
-  store.inventoryOwner = 'all';
+  store.inventorySlot = [];
+  store.inventoryStat = [];
+  store.inventoryOwner = [];
   store.inventoryPage = 1;
-  store.inventorySet = ''; store.inventorySubstat = ''; store.inventoryLevel = ''; store.inventorySort = 'default';store.inventorySortDirection='asc';
+  store.inventorySet = []; store.inventorySubstat = []; store.inventoryLevel = []; store.inventorySort = 'default';store.inventorySortDirection='asc';
 }
 async function openAccount() {
   const before = store.account;

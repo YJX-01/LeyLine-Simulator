@@ -21,9 +21,9 @@ function liveInput(event:Event) {
 </script>
 <template>
   <span class="number-stepper ui-control" :title="`基础 ${modelValue}${bonus ? ` + 命座 ${bonus}` : ''}`">
-    <button type="button" :aria-label="`提高${label}`" :disabled="modelValue >= maximum" @click="step(1)">+</button>
-    <span class="number-value"><input :id="inputId" type="number" :name="label" autocomplete="off" :aria-label="label" :value="modelValue + bonus" :min="minimum + bonus" :max="maximum + bonus" @input="liveInput" @change="input" @keydown.up.prevent="step(1)" @keydown.down.prevent="step(-1)"><sup data-ui-badge="mini" v-if="bonus">*</sup></span>
     <button type="button" :aria-label="`降低${label}`" :disabled="modelValue <= minimum" @click="step(-1)">−</button>
+    <span class="number-value"><input :id="inputId" type="number" :name="label" autocomplete="off" :aria-label="label" :value="modelValue + bonus" :min="minimum + bonus" :max="maximum + bonus" @input="liveInput" @change="input" @keydown.up.prevent="step(1)" @keydown.down.prevent="step(-1)"><sup data-ui-badge="mini" v-if="bonus">*</sup></span>
+    <button type="button" :aria-label="`提高${label}`" :disabled="modelValue >= maximum" @click="step(1)">+</button>
   </span>
 </template>
 <style scoped>

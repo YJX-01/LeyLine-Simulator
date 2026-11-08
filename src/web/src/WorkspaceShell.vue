@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LibraryNavIcon from './components/LibraryNavIcon.vue';
 import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
 const ThirdPartyCredits = defineAsyncComponent(() => import('./ThirdPartyCredits.vue'));
 const creditsOpen = ref(false);
@@ -62,10 +63,6 @@ const groups: { title: string; domain: string; items: { id: Page; name: string; 
   { title: '自定义', domain: 'content', items: [{ id: 'definitions', name: '内容定义库', icon: 'layers' }] },
 ];
 const icons: Record<string, string> = {
-  equipment:'M4 3h5l3 4 3-4h5l-2 7-3-1v12H9V9l-3 1-2-7Z',
-  pieces:'M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z',
-  person: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M20 8v6 M17 11h6',
-  diamond: 'M12 3 21 12 12 21 3 12 12 3 M8 8l8 8 M16 8l-8 8',
   folder: 'M3 7V5h6l2 2h10v13H3V7Z',
   team: 'M3 20v-2a4 4 0 0 1 4-4h3a4 4 0 0 1 4 4v2 M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M16 4a4 4 0 0 1 0 7 M18 14a4 4 0 0 1 3 4v2',
   timeline: 'M3 6h18 M3 12h18 M3 18h18 M7 3v6 M16 9v6 M10 15v6',
@@ -121,7 +118,7 @@ async function importFile(event: Event) {
       <div class="sidebar-top">
         <button class="sidebar-control sidebar-toggle" :aria-label="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :title="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="narrow ? mobileOpen : !collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.collapse" /></svg><span class="nav-label">{{ narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏' }}</span></button>
       </div>
-      <div class="nav-groups"><div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain"><p>{{ group.title }}</p><button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }" :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${item.name}`" :data-testid="`workspace-nav-${item.id}`" :title="item.name" @click="navigate(item.id)"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg><span class="nav-label">{{ item.name }}</span><span v-if="item.id === 'timeline'" class="nav-count">{{ project.timeline.length }}</span></button></div></div><div class="nav-utilities"><button class="sidebar-control" :class="{active:page==='account'}" aria-label="导航 账号" data-testid="workspace-nav-account" title="账号" :aria-current="page==='account'?'page':undefined" @click="navigate('account')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 21v-2a7 7 0 0 1 14 0v2"/></svg><span class="nav-label">账号</span></button><button class="sidebar-control" :class="{ active: page === 'settings' }" aria-label="导航 设置" title="设置" :aria-current="page === 'settings' ? 'page' : undefined" @click="navigate('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.settings" /></svg><span class="nav-label">设置</span></button></div>
+      <div class="nav-groups"><div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain"><p>{{ group.title }}</p><button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }" :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${item.name}`" :data-testid="`workspace-nav-${item.id}`" :title="item.name" @click="navigate(item.id)"><LibraryNavIcon v-if="group.domain==='account'" :kind="item.icon" /><svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg><span class="nav-label">{{ item.name }}</span><span v-if="item.id === 'timeline'" class="nav-count">{{ project.timeline.length }}</span></button></div></div><div class="nav-utilities"><button class="sidebar-control" :class="{active:page==='account'}" aria-label="导航 账号" data-testid="workspace-nav-account" title="账号" :aria-current="page==='account'?'page':undefined" @click="navigate('account')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 21v-2a7 7 0 0 1 14 0v2"/></svg><span class="nav-label">账号</span></button><button class="sidebar-control" :class="{ active: page === 'settings' }" aria-label="导航 设置" title="设置" :aria-current="page === 'settings' ? 'page' : undefined" @click="navigate('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.settings" /></svg><span class="nav-label">设置</span></button></div>
     </nav>
     <button v-if="!narrow" class="sidebar-edge-toggle" :aria-label="collapsed ? '展开侧栏（边缘按钮）' : '收起侧栏（边缘按钮）'" :title="collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="!collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 7 12l8 7Z" /></svg></button>
 
