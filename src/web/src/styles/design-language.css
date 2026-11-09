@@ -7,6 +7,7 @@
   --dialog-width-confirm:420px; --dialog-width-filter:560px; --dialog-width-content:920px; --dialog-width-editor:1000px;
   --control-height-lg:40px; --control-height-md:32px; --control-height-sm:24px;
   --control-width-short:64px;
+  --library-page-margin:20px; --library-page-padding:20px;
   --control-height:var(--control-height-lg); --control-radius:7px; --control-font-size:var(--font-control); --control-font-weight:700;
 }
 .ui-control { box-sizing:border-box; height:var(--control-height); min-height:var(--control-height); border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); font-size:var(--control-font-size); font-weight:var(--control-font-weight); }
@@ -29,7 +30,7 @@
 .workspace-design :where(input:not([type=checkbox]):not([type=radio]):not([type=file]),select) { height:var(--control-height); min-height:var(--control-height); padding:0 10px; line-height:normal; }
 .workspace-design textarea { padding:10px; min-height:120px; line-height:1.6; }
 .workspace-design :where(input[type=checkbox],input[type=radio]) { width:16px; height:16px; margin:0; accent-color:var(--element-anemo-deep); }
-.workspace-design button.ui-action { --accent-primary:var(--element-anemo-primary); --accent-light:var(--element-anemo-light); --accent-deep:var(--element-anemo-deep); display:inline-flex; align-items:center; justify-content:center; gap:8px; height:var(--control-height-lg); min-height:var(--control-height-lg); padding:0 12px; border-radius:var(--control-radius); border:1px solid var(--accent-deep); color:white; background:var(--accent-deep); font-size:var(--font-body); white-space:nowrap; }
+.workspace-design button.ui-action { --accent-primary:var(--element-anemo-primary); --accent-light:var(--element-anemo-light); --accent-deep:var(--element-anemo-deep); display:inline-flex; align-items:center; justify-content:center; gap:8px; height:var(--control-height-lg); min-height:var(--control-height-lg); padding:0 12px; border-radius:var(--control-radius); border:1px solid var(--accent-deep); color:white; background:var(--accent-deep); font-size:var(--font-control); font-weight:700; white-space:nowrap; }
 .workspace-design .ui-action[data-accent=pyro] { --accent-primary:var(--element-pyro-primary); --accent-light:var(--element-pyro-light); --accent-deep:var(--element-pyro-deep); }
 .workspace-design .ui-action[data-accent=anemo] { --accent-primary:var(--element-anemo-primary); --accent-light:var(--element-anemo-light); --accent-deep:var(--element-anemo-deep); }
 .workspace-design .ui-action[data-accent=hydro] { --accent-primary:var(--element-hydro-primary); --accent-light:var(--element-hydro-light); --accent-deep:var(--element-hydro-deep); }
@@ -39,7 +40,7 @@
 .workspace-design button.ui-action:hover { box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-primary) 20%,transparent); }
 .workspace-design .ui-action svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 .workspace-design button.ui-action[data-size=md] { height:var(--control-height-md); min-height:var(--control-height-md); padding:0 8px; }
-.workspace-design button.ui-action[data-size=sm] { height:var(--control-height-sm); min-height:var(--control-height-sm); padding:0 4px; }
+.workspace-design button.ui-action[data-size=sm] { font-size:var(--font-body); height:var(--control-height-sm); min-height:var(--control-height-sm); padding:0 4px; }
 .workspace-design .ui-muted-button { height:var(--control-height-md); min-height:var(--control-height-md); padding:0 8px; color:var(--muted); background:transparent; border-color:var(--line); }
 .workspace-design [role=alert] { color:var(--element-pyro-deep); }
 .workspace-design .theme-settings { margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
@@ -56,3 +57,6 @@ html { scrollbar-gutter:stable; }
 .workspace-design .element-shortcuts > button,.workspace-design .slot-tabs > button,.workspace-design .inventory-count,.workspace-design .inventory-reset,.workspace-design .reset-filters { font-size:var(--font-control); font-weight:700; }
 
 .workspace-design button.ui-action[data-size=md][data-width=short] { min-width:var(--control-width-short); font-size:var(--font-control); font-weight:700; }
+
+.workspace-design .workspace-body > .panel.library-page { margin:0 var(--library-page-margin); padding:var(--library-page-padding); min-width:0; }
+@media(max-width:700px) { .workspace-design .workspace-body > .panel.library-page { --library-page-margin:12px; --library-page-padding:18px; } }

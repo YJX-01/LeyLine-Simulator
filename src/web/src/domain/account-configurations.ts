@@ -1,3 +1,4 @@
+import {artifactValueSignature} from './showcase-inventory';
 import { cloneAccount, parseAccount, equipArtifact, artifactOwner, accountSlots, type AccountCharacter, type LocalAccount } from './account';
 import { configurationSignature } from './character-loadout-name';
 
@@ -41,7 +42,7 @@ export function preparePreferredConfiguration(account:LocalAccount,configuration
   if(!current)throw new Error('角色已不存在，请重新打开。');
   for(const item of configuration.source.artifacts) {
     const physical=account.artifacts.find(candidate=>candidate.id===item.id);
-    if(!physical || JSON.stringify(physical.real)!==JSON.stringify(item.real))throw new Error('方案实物已缺失或词条已变化，请核对库存。');
+    if(!physical || artifactValueSignature(physical)!==artifactValueSignature(item))throw new Error('方案实物已缺失或词条已变化，请核对库存。');
   }
   const next=cloneAccount(account),snapshot=JSON.parse(JSON.stringify(configuration.character)) as AccountCharacter;
   const equipment={...snapshot.equipment};snapshot.equipment={};snapshot.showcase=current.showcase;
@@ -82,4 +83,16 @@ export function planClearedConfiguration(before:LocalAccount,draft:LocalAccount,
   const removedCharacter=!hasCharacterInformation(current);
   if(removedCharacter)base.characters=base.characters.filter(item=>item.id!==characterId);
   return {next:parseAccount(base),removedIds:removedCharacter?belongs.map(item=>item.id):removedIds,promotedId:'',transfers:[] as string[],removedCharacter};
+}
+
+/** Removing a preset never changes equipped items; removing the preferred config may promote an alternative. */
+export function planConfigurationRemoval(account:LocalAccount,saved:readonly SavedConfiguration[],characterId:string,presetId='') {
+  if(presetId){
+    if(!saved.some(item=>item.id===presetId && item.accountId===account.id && item.characterId===characterId))throw new Error('配置已不存在，请重新打开。');
+    return {next:account,removedIds:[presetId],promotedId:'',transfers:[] as string[],removedCharacter:false,accountChanged:false};
+  }
+  const draft=cloneAccount(account),character=draft.characters.find(item=>item.id===characterId);
+  if(!character || !hasLocalConfiguration(character))throw new Error('本地配置已不存在，请重新打开。');
+  delete character.realBuild;character.attack=0;character.weapon='';character.equipment={};
+  return {...planClearedConfiguration(account,draft,saved,characterId),accountChanged:true};
 }

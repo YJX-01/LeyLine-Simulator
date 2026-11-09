@@ -18,11 +18,11 @@ function choose(value:Value) {
 .choice-group { --choice-ink:var(--element-anemo-deep); --choice-light:var(--element-anemo-light); --choice-border:var(--element-anemo-primary); display:flex; flex-wrap:wrap; gap:8px; }
 .choice-group[data-tone=hydro] { --choice-ink:var(--element-hydro-deep); --choice-light:var(--element-hydro-light); --choice-border:var(--element-hydro-primary); }
 .choice-group[data-tone=electro] { --choice-ink:var(--element-electro-deep); --choice-light:var(--element-electro-light); --choice-border:var(--element-electro-primary); }
-.choice-group > button { display:flex; align-items:center; justify-content:center; gap:6px; box-sizing:border-box; height:var(--control-height-lg); min-height:var(--control-height-lg); padding:0 10px; border:1px solid var(--line); border-radius:var(--control-radius); color:var(--muted); background:var(--surface-raised); font-size:var(--font-body); font-weight:700; }
+.choice-group > button { display:flex; align-items:center; justify-content:center; gap:6px; box-sizing:border-box; height:var(--control-height-lg); min-height:var(--control-height-lg); padding:0 10px; border:1px solid var(--line); border-radius:var(--control-radius); color:var(--muted); background:var(--surface-raised); font-size:var(--font-control); font-weight:700; }
 .choice-group > button[aria-pressed=true] { color:var(--choice-ink); background:var(--choice-light); border-color:var(--choice-border); box-shadow:inset 0 0 0 1px var(--choice-border); }
 .choice-group :deep(.stats) { color:inherit; }
 .choice-group.joined { display:grid; grid-template-columns:repeat(var(--choice-count),minmax(0,1fr)); gap:0; height:var(--control-height-lg); border:1px solid var(--line); border-radius:var(--control-radius); overflow:hidden; }
 .choice-group.joined > button { height:calc(var(--control-height-lg) - 2px); min-height:0; padding:0 8px; border:0; border-right:1px solid var(--line); border-radius:0; font-size:var(--font-control); }
 .choice-group.joined > button:last-child { border-right:0; }.choice-group.joined > button[aria-pressed=true] { box-shadow:none; }
-.choice-group.small > button { min-height:var(--control-height-md); height:var(--control-height-md); font-size:var(--font-body); padding:5px 8px; }.choice-group.joined.small { height:var(--control-height-md); }.choice-group.joined.small > button { height:calc(var(--control-height-md) - 2px); min-height:0; }
+.choice-group.small > button { min-height:var(--control-height-md); height:var(--control-height-md); font-size:var(--font-control); padding:5px 8px; }.choice-group.joined.small { height:var(--control-height-md); }.choice-group.joined.small > button { height:calc(var(--control-height-md) - 2px); min-height:0; }
 </style>

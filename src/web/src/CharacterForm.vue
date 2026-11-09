@@ -14,6 +14,7 @@ import NumberStepper from './components/NumberStepper.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
 import CornerBadge from './components/CornerBadge.vue';
 import talentDisplay from './domain/data/character-talent-display.json';
+import {buildRollBasis} from './domain/effective-roll-basis';
 import { travelerForm } from './domain/traveler-forms';
 const props = defineProps<{ character?: AccountCharacter; initialCharacterId?: string; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean }>();
 const emit = defineEmits<{ close: []; saved: [id: string]; dirtyChange: [dirty: boolean] }>();
@@ -83,8 +84,24 @@ async function apply(notify = true) {
   } catch (cause) { error.value=cause instanceof Error?cause.message:'角色资料保存失败。'; return false; }
 }
 
+const rollBasis=ref(buildRollBasis(sourceBuild.value));
+let basisRequest=0;
+async function getRollBasis(){
+  const request=++basisRequest;
+  const values={characterId:characterId.value,weaponId:weaponId.value,level:level.value,ascension:ascension.value,weaponLevel:weaponLevel.value,weaponAscension:weaponAscension.value};
+  let result=buildRollBasis();
+  try{
+    if(values.characterId && values.weaponId){
+      const [char,weapon]=await Promise.all([getRealCharacter(values.characterId),getRealWeapon(values.weaponId)]);
+      result=buildRollBasis({character:char,weapon,...values});
+    }
+  }catch{ /* Missing reference data uses the documented default basis. */ }
+  if(!disposed && request===basisRequest)rollBasis.value=result;
+  return result;
+}
+watch([characterId,weaponId,level,ascension,weaponLevel,weaponAscension],()=>{void getRollBasis();},{immediate:true});
 const canSave=computed(()=>!!character.value && weapons.value.some(item=>item.id===weaponId.value));
-defineExpose({ prepare, reset, apply, canSave });
+defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis });
 
 </script>
 <template>
@@ -110,7 +127,7 @@ defineExpose({ prepare, reset, apply, canSave });
           </div></fieldset>
           <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase" @update:model-value="refinement=Number($event)" /></fieldset>
       </div>
-      <CatalogPicker v-if="!showcase" ref="weaponPicker" inline hide-trigger label="装备武器" image-kind="weapons" v-model="weaponId" :options="weapons" :disabled="!characterId" />
+      <CatalogPicker v-if="!showcase" ref="weaponPicker" hide-trigger label="装备武器" image-kind="weapons" v-model="weaponId" :options="weapons" :disabled="!characterId" />
       <div v-if="(dirty || !props.character) && !showcase && !detached" class="detail-save"><button class="ui-action" data-accent="anemo" :disabled="busy || !characterId || !weaponId" @click="apply()">{{ props.character ? '保存修改' : '保存角色资料' }}</button><button class="ui-action soft" data-accent="pyro" v-if="props.character" :disabled="busy" @click="reset">还原修改</button></div>
     </template>
     <p v-if="error" role="alert">{{ error }}</p>

@@ -24,7 +24,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await dialog.getByRole('button', { name: '确认导入 458 件五星圣遗物', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expect.poll(()=>page.locator('.inventory-card').count()).toBeGreaterThan(0);
-  await expect(page.locator('.inventory-count')).toContainText('筛选结果 458 件');
+  await expect(page.locator('.artifact-browser .library-result-count')).toContainText('458 件圣遗物');
   await page.getByRole('button',{name:'排序',exact:true}).click();
   const sortDialog=page.getByRole('dialog',{name:'圣遗物排序',exact:true});
   await expect(sortDialog.getByRole('button',{name:'实装版本',exact:true})).toHaveAttribute('aria-pressed','true');
@@ -61,7 +61,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.getByRole('button', { name: '核对已导入套装', exact: true })).toHaveCount(0);
 
   await page.getByRole('button', { name: '生之花', exact: true }).click();
-  await expect(page.locator('.inventory-count')).toContainText('筛选结果 86 件');
+  await expect(page.locator('.artifact-browser .library-result-count')).toContainText('86 件圣遗物');
   await page.getByRole('button',{name:/^筛选/}).click();
   await page.getByRole('group',{name:'筛选主词条',exact:true}).getByRole('button',{name:'暴击率',exact:true}).click();
   await expect(page.locator('.inventory-card')).toHaveCount(0);
@@ -76,10 +76,10 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   expect(await page.locator('.inventory-card .stat-label').evaluateAll(nodes => nodes.some(node => node.textContent?.includes('%')))).toBe(false);
   await page.getByRole('group', { name:'卡片密度' }).getByRole('button', { name:'紧凑', exact:true }).click();
   await expect(firstFlower.locator('.compact-main[data-stat=hp] img')).toHaveAttribute('src', /stats\/flatHp\.svg/);
-  await expect(firstFlower.locator('.compact-entry [data-stat=hpPercent] img')).toHaveAttribute('src', /stats\/hp\.svg/);
-  await expect(firstFlower.locator('.average-count')).toHaveText(['1.2', '2.0', '3.3', '2.7']);
+  await expect(firstFlower.locator('.compact-entry')).toHaveText(['生命值+5.8%', '充能效率+11.0%', '暴击率+10.9%', '暴击伤害+17.9%']);
+  await expect(firstFlower.locator('.compact-entry img, .average-count, .roll-count')).toHaveCount(0);
   await expect(firstFlower.locator('dd, .summary-main, .artifact-wearers')).toHaveCount(0);
-  await page.locator('.inventory-cards').screenshot({ path:'artifacts/artifact-icon-density.png' });
+  await page.locator('.inventory-cards').screenshot({ path:'artifacts/artifact-compact-text-density.png' });
   await page.reload();
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button',{name:'排序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'导入顺序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
@@ -100,8 +100,9 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.getByRole('dialog')).toContainText('炉火融炼之心');
   await page.screenshot({ path:'artifacts/artifact-detail-editor.png', fullPage:true });
   await expect(page.getByRole('dialog')).toContainText('4780');
-  await expect(page.getByRole('dialog').locator('.roll-count')).toHaveText(['1','2','2']);
-  await expect(page.getByRole('dialog').locator('dt > span:last-child')).toHaveText(['生命值','充能效率','暴击率','暴击伤害']);
+  await expect(page.getByRole('dialog').locator('.roll-count')).toHaveText(['0','1','2','2']);
+  await expect(page.getByRole('dialog').locator('.sub-row')).toHaveCount(4);
+  await expect(page.getByRole('dialog').getByLabel('主词条数值',{exact:true})).toHaveText('4780');
   await page.getByLabel('强化等级', { exact: true }).fill('16');
   await page.getByText('强化等级',{exact:true}).click();
   await expect(page.getByLabel('强化等级',{exact:true})).toBeFocused();
@@ -112,7 +113,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.locator('.inventory-card').first().click();
   await page.getByLabel('强化等级', { exact: true }).fill('16');
   await page.getByRole('dialog').getByRole('button',{name:'保存',exact:true}).click();
-  await expect(page.getByRole('dialog').locator('.artifact-level')).toHaveText('16');
+  await expect(page.getByRole('dialog').locator('.artifact-portrait > .artifact-level')).toHaveText('16');
   await expect(page.getByRole('dialog')).toContainText('3967');
   await page.getByRole('dialog').getByText('来源与实物身份', { exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('id:8770563143816081');
@@ -134,7 +135,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   if(previousViewport)await page.setViewportSize(previousViewport);
   await page.getByRole('button', { name: '全部部位', exact: true }).click();
   await page.getByLabel('搜索圣遗物', { exact: true }).fill('琴');
-  await expect(page.locator('.inventory-count')).toContainText('筛选结果 0 件'); // Original wearer remarks are separate from current equipment.
+  await expect(page.locator('.artifact-browser .library-result-count')).toContainText('0 件圣遗物'); // Original wearer remarks are separate from current equipment.
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: info.outputPath('u1-actual-inventory.png'), fullPage: true });
   await page.getByLabel('搜索圣遗物', { exact: true }).fill('');
@@ -150,7 +151,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.reload();
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button',{name:'排序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'导入顺序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
-  await expect(page.locator('.inventory-count')).toContainText('筛选结果 458 件');
+  await expect(page.locator('.artifact-browser .library-result-count')).toContainText('458 件圣遗物');
   await page.getByRole('button', { name: '导航 账号', exact: true }).click();
   await page.getByLabel('导入账号资料文件', { exact: true }).setInputFiles(saved);
   await expect(page.getByLabel('账号管理', { exact: true })).toContainText('458 件圣遗物');
@@ -170,23 +171,23 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByTestId('workspace-nav-characters').click();
   const beforeCollections=await page.evaluate(()=>localStorage.getItem('leyline-account-v1'));
   await page.getByTestId('workspace-nav-loadouts').click();
-  await expect(page.getByRole('heading',{name:'角色配置',exact:true,level:2})).toBeVisible();
-  await page.getByRole('button',{name:'选择配置角色',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'角色配置',exact:true,level:2})).toHaveCount(0);
+  await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
   await page.getByRole('dialog',{name:'选择角色',exact:true}).getByLabel('搜索账号角色',{exact:true}).fill('琴');
   await page.getByRole('button',{name:'选择琴',exact:true}).click();
   await expect(page.locator('.configuration-row')).toHaveCount(1);
   await page.screenshot({path:'artifacts/account-character-loadouts.png',fullPage:true});
-  await page.getByRole('button',{name:'编辑琴首选配置',exact:true}).click();
+  await page.getByRole('button',{name:'查看琴首选配置',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'琴',exact:true})).toBeVisible();
   await page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'保存组合',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'保存组合',exact:true})).toBeVisible();
   await page.getByRole('dialog',{name:'保存组合',exact:true}).getByRole('button',{name:'保存',exact:true}).click();await page.keyboard.press('Escape');
   await page.getByTestId('workspace-nav-combinations').click();
-  await expect(page.getByRole('heading',{name:'圣遗物组合',exact:true,level:2})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'圣遗物组合',exact:true,level:2})).toHaveCount(0);
   await page.getByLabel('搜索圣遗物组合',{exact:true}).fill('琴');
   await expect(page.locator('.combination-row')).toHaveCount(1);
-  await expect(page.locator('.combination-row .equipment-strip > div')).toHaveCount(5);
-  await page.getByRole('button',{name:'编辑组合',exact:true}).click();
+  await expect(page.locator('.combination-row .equipment-strip-items > .artifact-item-card')).toHaveCount(5);
+  await page.getByRole('button',{name:/^查看组合：/}).click();
   await expect(page.getByRole('dialog',{name:'编辑组合',exact:true}).locator('.equipment-list > article')).toHaveCount(5);
   await page.keyboard.press('Escape');
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(beforeCollections);
@@ -214,7 +215,9 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(editingRole.locator('.effective-stat-picker [data-roll-stat]')).toHaveCount(7);
   await expect(editingRole.locator('.effective-stat-picker .choice-group')).toHaveCount(0);
   await expect(editingRole.getByRole('button',{name:'有效词条攻击力',exact:true})).toHaveCSS('font-weight','700');
-  await expect(editingRole.locator('.effective-stat-picker [data-roll-stat=attack] dd')).toHaveText('6.4 条');
+  // Recorded Jean notes: ATK 8.2%+5.3%, flat ATK60. No cultivation/weapon was recorded; use white ATK750.
+  const jeanAttackEntries=((.082+.053+60/750)/.04955).toFixed(1);
+  await expect(editingRole.locator('.effective-stat-picker [data-roll-stat=attack] dd')).toHaveText(`${jeanAttackEntries} 条`);
   await expect(editingRole.locator('.effective-stat-picker [data-roll-stat=critRate] dd')).toHaveText('13.1 条');
   await expect(editingRole.locator('.equipment-actions')).toHaveCount(0);
   const highlighted=await editingRole.locator('dt.effective-substat .stat-label').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-stat')));
@@ -226,7 +229,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.screenshot({path:'artifacts/role-equipment-and-roll-counts.png',fullPage:true});
   await page.screenshot({ path: info.outputPath('u1-role-detail.png'), fullPage: true });
   await page.getByRole('button', { name: '管理生之花', exact: true }).click();
-  await expect(page.getByRole('dialog').getByLabel('圣遗物库存浏览')).toContainText('筛选结果 86 件');
+  await expect(page.getByRole('dialog').getByLabel('圣遗物库存浏览')).toContainText('86 件圣遗物');
   await expect(page.getByRole('dialog').getByRole('group',{name:'卡片密度'})).toHaveCount(0);
   await expect(page.getByRole('dialog').locator('.inventory-card .artifact-summary.compact')).toHaveCount(0);
   const sourceOwner = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-v1')!).characters.find((entry: {name: string; equipment: {flower?: string}}) => entry.name !== '琴' && entry.equipment.flower).id);
@@ -278,15 +281,16 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.character-cards > button')).toHaveCount(1);
   expect(adoptedRoleAccount.characters).toHaveLength(55);
   await page.getByTestId('workspace-nav-loadouts').click();
-  await page.getByRole('button',{name:'更换配置角色',exact:true}).click();
+  await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
   await page.getByRole('dialog',{name:'选择角色',exact:true}).getByLabel('搜索账号角色',{exact:true}).fill('琴');
   await page.getByRole('button',{name:'选择琴',exact:true}).click();
   await expect(page.locator('.configuration-row')).toHaveCount(2);
+  await page.getByRole('button',{name:'查看琴备选配置',exact:true}).click();
+  await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
   await page.getByRole('button',{name:'设琴此配置为首选',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'设为首选配置？',exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'取消',exact:true}).click();
+  await page.getByRole('button',{name:'取消',exact:true}).click();await page.keyboard.press('Escape');
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(JSON.stringify(adoptedRoleAccount));
-  await page.getByRole('button',{name:'编辑琴备选配置',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'选择琴配置',exact:true})).toBeVisible();
   await expect(page.getByRole('dialog',{name:'琴',exact:true}).locator('.equipment-list .artifact-summary')).toHaveCount(5);
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(JSON.stringify(adoptedRoleAccount));
@@ -304,6 +308,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.keyboard.press('Escape');
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v1'))).toBe(JSON.stringify(adoptedRoleAccount));
   await page.keyboard.press('Escape');
+  await page.getByTestId('workspace-nav-characters').click();
   await page.getByLabel('搜索账号角色', { exact: true }).fill('琴不存在');
   await expect(page.getByRole('heading',{name:'没有符合条件的角色',exact:true})).toBeVisible();
   await page.getByRole('button', { name: '手动添加', exact: true }).click();
@@ -347,10 +352,12 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await form.getByLabel('强化等级', { exact: true }).fill(String(actual.real.level));
   for (let index = 0; index < actual.real.substats.length; index++) {
     const sub = actual.real.substats[index];
-    await form.getByRole('button', { name: '添加副词条', exact: true }).click();
-    await form.getByLabel(`副词条 ${index + 1}`, { exact: true }).selectOption(sub.stat);
+
+    await form.getByLabel(`副词条 ${index+1}`,{exact:true}).click();
+    const statName=({hp:'生命值（固定）',hpPercent:'生命值（比例）',attack:'攻击力（固定）',attackPercent:'攻击力（比例）',defense:'防御力（固定）',defensePercent:'防御力（比例）',elementalMastery:'元素精通',energyRecharge:'充能效率',critRate:'暴击率',critDamage:'暴击伤害'} as Record<string,string>)[sub.stat];
+    await form.getByRole('group',{name:`副词条 ${index+1}选项`,exact:true}).getByRole('button',{name:statName,exact:true}).click();
     const percentage = !['hp','attack','defense','elementalMastery'].includes(sub.stat);
-    await form.getByLabel(percentage ? '数值（%）' : '数值', { exact: true }).last().fill(String(sub.value * (percentage ? 100 : 1)));
+    await form.getByLabel(`副词条 ${index+1} 数值`,{exact:true}).fill(String(sub.value * (percentage ? 100 : 1)));
   }
   await form.getByRole('button', { name: '预览词条', exact: true }).click();
   await expect(page.locator('.inventory-card')).toHaveCount(0);

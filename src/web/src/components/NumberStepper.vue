@@ -21,14 +21,14 @@ function liveInput(event:Event) {
 </script>
 <template>
   <span class="number-stepper ui-control" :title="`基础 ${modelValue}${bonus ? ` + 命座 ${bonus}` : ''}`">
-    <button type="button" :aria-label="`降低${label}`" :disabled="modelValue <= minimum" @click="step(-1)">−</button>
+    <button type="button" :aria-label="`降低${label}`" :disabled="modelValue <= minimum" @click="step(-1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
     <span class="number-value"><input :id="inputId" type="number" :name="label" autocomplete="off" :aria-label="label" :value="modelValue + bonus" :min="minimum + bonus" :max="maximum + bonus" @input="liveInput" @change="input" @keydown.up.prevent="step(1)" @keydown.down.prevent="step(-1)"><sup data-ui-badge="mini" v-if="bonus">*</sup></span>
-    <button type="button" :aria-label="`提高${label}`" :disabled="modelValue >= maximum" @click="step(1)">+</button>
+    <button type="button" :aria-label="`提高${label}`" :disabled="modelValue >= maximum" @click="step(1)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
   </span>
 </template>
 <style scoped>
 .number-stepper { display:grid; grid-template-columns:32px minmax(36px,1fr) 32px; align-items:center;  overflow:hidden; }
-.number-stepper button { padding:0; min-height:0; height:calc(var(--control-height) - 2px); border:0; border-radius:0; color:var(--ink); background:transparent; font-size:var(--font-title); }
-.number-value { position:relative; min-width:0; }.number-value input { box-sizing:border-box; width:100%; min-width:0; height:calc(var(--control-height) - 2px); min-height:0; padding:0 8px; border:0; background:transparent; text-align:center; color:var(--ink); font-size:var(--control-font-size); font-weight:var(--control-font-weight); appearance:textfield; -moz-appearance:textfield; }
+.number-stepper button { display:flex; align-items:center; justify-content:center; line-height:1; align-self:stretch; padding:0; min-height:0; height:calc(var(--control-height) - 2px); border:0; border-radius:0; color:var(--ink); background:transparent; font-size:var(--font-title); }
+.number-stepper button svg { display:block; width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }.number-value { position:relative; display:flex; align-items:center; justify-content:center; min-width:0; }.number-value input { box-sizing:border-box; width:100%; min-width:0; height:calc(var(--control-height) - 2px); min-height:0; padding:0; line-height:normal; border:0; background:transparent; text-align:center; color:var(--ink); font-size:var(--control-font-size); font-weight:var(--control-font-weight); appearance:textfield; -moz-appearance:textfield; }
 input::-webkit-inner-spin-button,input::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }sup { position:absolute; top:4px; right:4px; color:var(--element-electro-deep); font-size:var(--font-badge-mini); pointer-events:none; }
 </style>

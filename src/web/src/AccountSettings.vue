@@ -20,7 +20,7 @@ function resetSelection() {
   store.inventoryQuery = '';
   store.inventorySlot = [];
   store.inventoryStat = [];
-  store.inventoryOwner = [];
+  store.inventoryOwner = [];store.inventoryFavoriteFilter=[];
   store.inventoryPage = 1;
   store.inventorySet = []; store.inventorySubstat = []; store.inventoryLevel = []; store.inventorySort = 'release';store.inventorySortDirection='desc';
 }
@@ -49,7 +49,7 @@ function replaceAccount(restore = false) {
     <label>当前账号名称<input v-model="store.account.name" aria-label="账号名称" maxlength="160"></label>
     <label>游戏 UID<input v-model="uid" aria-label="账号游戏 UID" inputmode="numeric" maxlength="10" placeholder="绑定该账号的 UID" @change="saveUid" @keydown.enter.prevent="saveUid"></label>
     <p v-if="uidError" role="alert">{{ uidError }}</p>
-    <p class="account-summary">{{ store.account.characters.length }} 位角色 · {{ store.account.artifacts.length }} 件圣遗物</p>
+    <p class="account-summary">{{ store.account.characters.length }} 位角色 · {{ store.account.artifacts.filter(item=>item.inventoryId!==null).length }} 件圣遗物</p>
     <div class="account-file-actions"><button class="ui-action" data-accent="anemo" :disabled="store.busy" @click="store.save()">保存账号资料</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="openAccount">打开 / 切换账号</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="replaceAccount()">新建账号</button><button class="ui-action soft" data-accent="anemo" v-if="store.previous" :disabled="store.busy" @click="replaceAccount(true)">恢复替换前账号</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入账号资料文件" hidden @change="importFile">
     <p class="account-hint">切换前保留恢复副本，不更改已有轴。莫娜 JSON 与 Enka 展柜导入在角色页，圣遗物文件也可在库存页导入。</p>

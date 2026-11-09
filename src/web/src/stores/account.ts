@@ -25,6 +25,7 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventorySlot = ref<string[]>([]);
   const inventoryStat = ref<string[]>([]);
   const inventoryOwner = ref<string[]>([]);
+  const inventoryFavoriteFilter=ref<string[]>([]);
   const inventoryPage = ref(1);
   const inventoryPageSize = ref(30);
   const inventorySet = ref<string[]>([]);
@@ -38,7 +39,7 @@ export const useAccountStore = defineStore('local-account', () => {
   watch(inventoryDensity, value => { try { localStorage.setItem('leyline-inventory-density-v1', value); } catch { /* Display preferences never block editing. */ } });
   watch(() => account.value.id, () => {
     characterFavoriteFilter.value=[]; selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterRarity.value=[]; characterSort.value='release';characterSortDirection.value='desc';
-    inventoryQuery.value=''; inventorySlot.value=[]; inventoryStat.value=[]; inventoryOwner.value=[]; inventoryPage.value=1;inventoryPageSize.value=30; inventorySet.value=[]; inventorySubstat.value=[];inventorySubMatch.value='all'; inventoryLevel.value=[]; inventorySort.value='release';inventorySortDirection.value='desc';
+    inventoryFavoriteFilter.value=[];inventoryQuery.value=''; inventorySlot.value=[]; inventoryStat.value=[]; inventoryOwner.value=[]; inventoryPage.value=1;inventoryPageSize.value=30; inventorySet.value=[]; inventorySubstat.value=[];inventorySubMatch.value='all'; inventoryLevel.value=[]; inventorySort.value='release';inventorySortDirection.value='desc';
   });
   const previous = ref<LocalAccount>();
   try {
@@ -114,5 +115,5 @@ export const useAccountStore = defineStore('local-account', () => {
     catch { error.value = '账号文件无效或读取失败，现有账号保持不变。'; }
   }
   return { account, dirty, error, notice, busy, create, save, open, importContent, inputFile, previous, restorePrevious, commitEdit,
-    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterRarity, characterFavoriteFilter, characterSort, characterSortDirection, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryPage, inventoryPageSize, inventorySet, inventorySubstat, inventorySubMatch, inventoryLevel, inventorySort, inventorySortDirection, inventoryDensity };
+    selectedCharacterId, characterQuery, characterElement, characterWeapon, characterRarity, characterFavoriteFilter, characterSort, characterSortDirection, inventoryQuery, inventorySlot, inventoryStat, inventoryOwner, inventoryFavoriteFilter, inventoryPage, inventoryPageSize, inventorySet, inventorySubstat, inventorySubMatch, inventoryLevel, inventorySort, inventorySortDirection, inventoryDensity };
 });

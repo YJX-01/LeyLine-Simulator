@@ -5,7 +5,8 @@ export const accountSlots = ['flower', 'plume', 'sands', 'goblet', 'circlet'] as
 export type AccountSlot = typeof accountSlots[number];
 export const accountSlotLabels: Record<AccountSlot, string> = { flower: '生之花', plume: '死之羽', sands: '时之沙', goblet: '空之杯', circlet: '理之冠' };
 export interface AccountCharacter { id: string; name: string; attack: number; weapon: string; equipment: Partial<Record<AccountSlot, string>>; realBuild?: RealBuild; showcase?: { uid: string; avatarId: number; fetchedAt: string; rawHash: string; build: RealBuild } }
-export interface AccountArtifact { id: string; name: string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string; equippedBy?: string; sourceSetName?: string; setIdentityPending?: boolean } }
+// id remains the local record key. A detached snapshot has no inventory identity.
+export interface AccountArtifact { id: string; inventoryId?:null; isCopy?:true; rollSource?:'inferred'|'showcase'|'manual'; name: string; alias?:string; slot: AccountSlot; attack: number; real?: RealArtifact; mona?: { mainValue: number; omit: boolean; contentHash?: string; equippedBy?: string; sourceSetName?: string; setIdentityPending?: boolean } }
 export interface LocalAccount { schemaVersion: 1; kind: 'account'; id: string; name: string; uid?: string; characters: AccountCharacter[]; artifacts: AccountArtifact[] }
 export const cloneAccount = (value: LocalAccount): LocalAccount => JSON.parse(JSON.stringify(value)) as LocalAccount;
 export function createAccount(name = '我的本地账号'): LocalAccount {
@@ -22,6 +23,10 @@ export function parseAccount(input: unknown): LocalAccount {
   const ids = new Set<string>();
   for (const artifact of input.artifacts) {
     if (!object(artifact) || !validText(artifact.id) || ids.has(artifact.id) || !validText(artifact.name) || !accountSlots.includes(artifact.slot as AccountSlot) || !attack(artifact.attack)) return fail();
+    if(artifact.alias!==undefined && !validText(artifact.alias))return fail();
+    if(artifact.isCopy!==undefined && artifact.isCopy!==true)return fail();
+    if(artifact.inventoryId!==undefined && artifact.inventoryId!==null)return fail();
+    if(artifact.rollSource!==undefined && !['inferred','showcase','manual'].includes(String(artifact.rollSource)))return fail();
     ids.add(artifact.id);
     if (artifact.real !== undefined) {
       const parsed = realArtifactSchema.safeParse(artifact.real);

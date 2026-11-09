@@ -67,7 +67,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
 .card-set { position:absolute; inset:0; display:block; border-radius:7px; }
 .card-set[data-rarity="5"] { background:var(--element-geo-light); }.card-set[data-rarity="4"] { background:var(--element-electro-light); }
 .card-set :deep(.game-icon) { background:none; }
-.set-badge { position:absolute; top:0; left:0; background:var(--element-geo-light); color:var(--element-geo-deep); }
+.set-badge { position:absolute; top:0; left:0; background:transparent; color:var(--element-geo-deep); }
 .paired .card-set { inset:auto; top:0; left:0; width:50%; height:50%; }
 .paired .card-set:nth-child(2) { top:50%; left:50%; }
 

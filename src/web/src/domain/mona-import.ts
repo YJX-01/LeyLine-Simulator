@@ -1,3 +1,4 @@
+import {persistArtifactRolls} from './artifact-rolls';
 import { realArtifactSchema, type RealStat } from '@leyline/schema';
 import { accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountSlot, type LocalAccount } from './account';
 import { accountMainStats, validateAccountArtifact } from './account-real';
@@ -13,7 +14,7 @@ const setAliases: Record<string, string> = monaSetAliases;
 type SetEntry = { id: string; name: string };
 type MainTable = Record<RealStat, number[]>;
 function realContent(item: AccountArtifact['real']): string {
-  return JSON.stringify(item && { id: item.id, setId: item.setId, slot: item.slot, rarity: item.rarity, level: item.level, mainStat: item.mainStat, substats: item.substats });
+  return JSON.stringify(item && { id: item.id, setId: item.setId, slot: item.slot, rarity: item.rarity, level: item.level, mainStat: item.mainStat, substats: item.substats.map(({stat,value})=>({stat,value})) });
 }
 const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 const text = (value: unknown): value is string => typeof value === 'string' && value.length > 0 && value.length <= 160;
@@ -124,7 +125,7 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
       } else if (existing.real?.source?.fingerprint === fingerprint && realContent(existing.real) === realContent(real)) preview.duplicates++;
       else {
         preview.conflicts.push(`${next.name}：相同来源标识的内容已经变化，默认不覆盖现有物品。`);
-        if (existing.real?.source?.format === 'mona-v1' && existing.slot === next.slot && existing.real.setId === real.setId) preview.updates.push({ item: { ...next, name: existing.name }, before: JSON.stringify(existing) });
+        if (existing.real?.source?.format === 'mona-v1' && existing.slot === next.slot && existing.real.setId === real.setId) preview.updates.push({ item: { ...next, name: existing.name, ...(existing.alias?{alias:existing.alias}:{}) }, before: JSON.stringify(existing) });
       }
     } else preview.additions.push(next);
   }
@@ -149,6 +150,7 @@ export function confirmMonaImport(account: LocalAccount, preview: MonaImportPrev
     if (index < 0 || JSON.stringify(next.artifacts[index]) !== update.before) throw new Error('预览后库存已变化，请重新预览，现有物品保持不变。');
     next.artifacts[index] = JSON.parse(JSON.stringify(update.item)) as AccountArtifact;
   }
+  for(const item of next.artifacts)persistArtifactRolls(item);
   parseAccount(next);
   const added = next.artifacts.length - account.artifacts.length;
   account.artifacts = next.artifacts;

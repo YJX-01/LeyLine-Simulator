@@ -44,6 +44,11 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     if(new TextEncoder().encode(content).byteLength>8*1024*1024)throw new Error('配装方案超过本地保存大小上限。');
     localStorage.setItem(key,content);loadouts.value=next;
   }
+  function replaceAll(next:CharacterLoadout[],commit:()=>void) {
+    if(error.value)throw new Error(error.value);
+    const before=loadouts.value;persist(next);
+    try{commit();}catch(cause){persist(before);throw cause;}
+  }
   function removeMany(ids:readonly string[],commit:()=>void) {
     if(error.value)throw new Error(error.value);
     const next=loadouts.value.filter(item=>!ids.includes(item.id));
@@ -113,5 +118,5 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     loadouts.value = next;
     return entry.id;
   }
-  return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, removeCharacter, effectiveStats, setEffectiveStats };
+  return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, removeCharacter, replaceAll, effectiveStats, setEffectiveStats };
 });

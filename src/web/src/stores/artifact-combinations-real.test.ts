@@ -5,7 +5,7 @@ import { useArtifactCombinationsStore } from './artifact-combinations';
 import { createAccount,cloneAccount,parseAccount } from '../domain/account';
 import { previewEnkaImport,confirmEnkaImport } from '../domain/enka-import';
 import { planShowcaseInventory } from '../domain/showcase-inventory';
-import { applyCombination,combinationName,combinationSignature,normalizeEffectiveStats } from '../domain/artifact-combinations';
+import { applyCombination,combinationName,usesAutomaticCombinationName,combinationSignature,normalizeEffectiveStats } from '../domain/artifact-combinations';
 import { defaultEffectiveStats } from '../domain/character-loadout-name';
 import { loadAccountGameData } from '../domain/account-presentation';
 const path='.references/enka/official-example.json';
@@ -37,8 +37,12 @@ describe.skipIf(!existsSync(path))('recorded showcase to independent local combi
   expect(transfer.next.characters[0].equipment).toEqual({});expect(Object.values(transfer.next.characters[1].equipment)).toHaveLength(5);
   const data=await loadAccountGameData();const name=combinationName(combination,data.catalog.sets);
   const means:Record<string,number>={hp:253.94,hpPercent:.04955,attack:16.535,attackPercent:.04955,defense:19.675,defensePercent:.06195,elementalMastery:19.815,energyRecharge:.05505,critRate:.03305,critDamage:.06605};
-  const expected=items.reduce((sum,item)=>sum+item.real!.substats.reduce((value,sub)=>value+(stats.includes(sub.stat)?sub.value/means[sub.stat]:0),0),0);
+  const expected=items.reduce((sum,item)=>sum+item.real!.substats.reduce((value,sub)=>value+(stats.includes(sub.stat)?(['hp','attack','defense'].includes(sub.stat)?sub.value/({hp:14000,attack:750,defense:700}[sub.stat as 'hp'|'attack'|'defense'])/means[sub.stat+'Percent']:sub.value/means[sub.stat]):0),0),0);
   expect(name).toMatch(/^2染血\+2苍白-攻物爆/);expect(name.endsWith(expected.toFixed(1)+'词条')).toBe(true);expect(name).not.toContain('undefined');expect(name).not.toContain('NaN');
+  const legacy={...combination,name};expect(usesAutomaticCombinationName(legacy)).toBe(true);
+  const changedMask={...legacy,stats:['critDamage'] as const};expect(combinationName({...changedMask,stats:[...changedMask.stats]},data.catalog.sets)).not.toBe(name);
+  expect(combinationName({...legacy,nameMode:'custom'},data.catalog.sets)).toBe(name);
+  expect(usesAutomaticCombinationName({...legacy,name:'安柏物伤组合'})).toBe(false);
   expect(combinationSignature(items,stats)).toBe(combinationSignature([...items].reverse(),[...stats].reverse()));
   expect(normalizeEffectiveStats(['attackPercent'])).toEqual(['attack','attackPercent']);
   const changed=cloneAccount(plan.next);changed.artifacts.find(item=>item.id===items[0].id)!.real!.level--;
@@ -61,4 +65,22 @@ describe.skipIf(!existsSync(path))('recorded showcase to independent local combi
   }finally{vi.unstubAllGlobals();}
  });
 
+ it('explicit Save As preserves the original; clearing or changing the reference stays independent',async()=>{
+  const memory=new Map<string,string>();
+  vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key) ?? null,setItem:(key:string,value:string)=>memory.set(key,value)});
+  try{
+    setActivePinia(createPinia());const store=useArtifactCombinationsStore();
+    const account=createAccount(),preview=await previewEnkaImport(JSON.parse(readRecordedReference(path)),'618285856',account);confirmEnkaImport(account,preview,preview.rows.map(row=>row.character.id));
+    const plan=planShowcaseInventory(account,account.characters),character=account.characters[0],items=plan.items[character.id],stats=defaultEffectiveStats(character.name),inventory=JSON.stringify(plan.next);
+    const original=store.save(plan.next,items,stats,character.name).id,before=JSON.stringify(store.combinations[0]);
+    const copied=store.save(plan.next,items,stats,character.name,original,undefined,undefined,undefined,true);
+    expect(copied.duplicate).toBe(false);expect(copied.id).not.toBe(original);expect(store.combinations).toHaveLength(2);expect(JSON.stringify(store.combinations[0])).toBe(before);
+    store.save(plan.next,items,stats,character.name,original,undefined,'保留原件的名称');
+    expect(store.combinations.find(item=>item.id===original)!.name).toBe('保留原件的名称');expect(store.combinations.find(item=>item.id===copied.id)!.name).toBeUndefined();
+    const anonymous=store.save(plan.next,items,stats,'');expect(anonymous.duplicate).toBe(false);expect(store.combinations.find(item=>item.id===anonymous.id)!.referenceName).toBe('');
+    const snapshot=JSON.stringify(store.combinations);
+    expect(()=>store.save(plan.next,items,stats,'',original,()=>{throw new Error('write failed');},undefined,undefined,true)).toThrow('write failed');
+    expect(JSON.stringify(store.combinations)).toBe(snapshot);expect(JSON.stringify(plan.next)).toBe(inventory);
+  }finally{vi.unstubAllGlobals();}
+ });
 });

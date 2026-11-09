@@ -78,3 +78,9 @@ for(const [name,groups] of Object.entries(effectiveDefaults.characters))if(!name
 const effectiveText=JSON.stringify(effectiveDefaults,null,2)+'\n',effectiveTarget=resolve(root,'src/web/src/domain/character-effective-stats.json');
 if(process.argv.includes('--check')) { if(readFileSync(effectiveTarget,'utf8').replace(/\r\n/g,'\n')!==effectiveText)throw new Error('Effective stat defaults need regeneration.'); }
 else writeFileSync(effectiveTarget,effectiveText);
+
+const effectiveBasis=JSON.parse(readFileSync(resolve(root,'docs/constant/effective-roll-basis.json'),'utf8'));
+for(const value of Object.values(effectiveBasis.defaults))if(!Number.isFinite(value) || value<=0)throw new Error('Invalid effective roll fallback.');
+const basisText=JSON.stringify(effectiveBasis,null,2)+'\n',basisTarget=resolve(root,'src/web/src/domain/data/effective-roll-basis.json');
+if(process.argv.includes('--check')) { if(readFileSync(basisTarget,'utf8').replace(/\r\n/g,'\n')!==basisText)throw new Error('Effective roll basis needs regeneration.'); }
+else writeFileSync(basisTarget,basisText);

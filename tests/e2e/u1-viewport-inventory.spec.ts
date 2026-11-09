@@ -21,8 +21,8 @@ test('actual inventory: viewport pages, multi-select matching, release order and
   await expect(page.getByRole('spinbutton',{name:'顶部页码',exact:true})).toHaveValue('1');
   await stepper.getByRole('button').last().click();
   await expect(page.getByRole('spinbutton',{name:'顶部页码',exact:true})).toHaveValue('2');
-  await expect(page.getByRole('navigation',{name:'底部列表分页',exact:true}).getByRole('spinbutton')).toHaveCount(0);
-  await expect(page.getByRole('navigation',{name:'顶部列表分页',exact:true}).getByRole('button',{name:'上一页',exact:true})).toHaveCount(0);
+  await expect(page.getByRole('navigation',{name:'底部列表分页',exact:true}).getByRole('spinbutton')).toHaveCount(1);
+  await expect(page.getByRole('navigation',{name:'顶部列表分页',exact:true}).getByRole('button',{name:'上一页',exact:true})).toHaveCount(1);
   await expect(page.locator('.inventory-card').first()).not.toHaveAttribute('aria-label',first!);
   await page.getByRole('button',{name:'紧凑',exact:true}).click();
   await expect.poll(()=>page.locator('.inventory-card').count()).toBeGreaterThan(relaxed);
@@ -51,9 +51,9 @@ test('actual inventory: viewport pages, multi-select matching, release order and
     const items=JSON.parse(localStorage.getItem('leyline-account-v1')!).artifacts;
     return {all:items.filter((item:any)=>['critRate','critDamage'].every(stat=>item.real.substats.some((sub:any)=>sub.stat===stat))).length,any:items.filter((item:any)=>item.real.substats.some((sub:any)=>['critRate','critDamage'].includes(sub.stat))).length};
   });
-  await expect(page.locator('.inventory-count')).toContainText(`筛选结果 ${expected.all} 件`);
+  await expect(page.locator('.artifact-browser .library-result-count')).toContainText(`${expected.all} 件圣遗物`);
   await filter.getByRole('group',{name:'副词条匹配方式',exact:true}).getByRole('button',{name:'任一',exact:true}).click();
-  await expect(page.locator('.inventory-count')).toContainText(`筛选结果 ${expected.any} 件`);
+  await expect(page.locator('.artifact-browser .library-result-count')).toContainText(`${expected.any} 件圣遗物`);
   await filter.getByRole('button',{name:'重置筛选',exact:true}).click();
   await filter.getByLabel('筛选套装',{exact:true}).click();
   const setChoices=filter.getByRole('group',{name:'筛选套装选项',exact:true}).getByRole('button');

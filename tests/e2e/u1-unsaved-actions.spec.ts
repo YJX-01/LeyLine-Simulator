@@ -5,7 +5,7 @@ test.skip(!existsSync(recorded),'Requires the recorded public showcase.');
 async function importShowcase(page:Page,local=true){
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(recorded,'utf8'))}));
   await page.goto('/');await page.getByRole('button',{name:'展柜导入',exact:true}).click();await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();
-  if(local)await page.getByRole('button',{name:'同时导入本地库',exact:true}).click();
+  await page.getByRole('button',{name:local?'同时导入本地库':'仅保存展柜',exact:true}).click();
   await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();
 }
 async function centered(picker:Locator){
@@ -32,10 +32,9 @@ test('empty and occupied pickers center titles; role exit continues, rejects fai
 });
 
 test('artifact exit validation keeps draft; Save persists then closes',async({page})=>{
-  await importShowcase(page);await page.getByTestId('workspace-nav-artifacts').click();await page.locator('.inventory-card').first().click();const detail=page.locator('.artifact-detail-dialog');const name=detail.getByLabel('圣遗物名称',{exact:true});const initial=await name.inputValue(),before=await account(page);
-  await name.fill('');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toBeVisible();await expect(detail.getByText('请填写圣遗物名称。',{exact:true})).toBeVisible();expect(await account(page)).toBe(before);
-  // Rename this recorded item as a UI trial; its numeric content stays unchanged.
-  await name.fill(initial+'·试改');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toHaveCount(0);expect(JSON.parse((await account(page))!).artifacts.some((item:{name:string})=>item.name===initial+'·试改')).toBe(true);
+  await importShowcase(page);await page.getByTestId('workspace-nav-artifacts').click();await page.locator('.inventory-card').first().click();const detail=page.locator('.artifact-detail-dialog'),value=detail.locator('.sub-row input').first(),initial=await value.inputValue(),before=await account(page);
+  await value.fill('');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toBeVisible();await expect(detail.getByText('圣遗物副词条无效，不能重复或与主词条相同。',{exact:true})).toBeVisible();expect(await account(page)).toBe(before);
+  await value.fill(initial);await detail.getByLabel('圣遗物别名',{exact:true}).fill('界面别名试改');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toHaveCount(0);expect(JSON.parse((await account(page))!).artifacts.some((item:{alias?:string})=>item.alias==='界面别名试改')).toBe(true);
 });
 
 test('manual Save on return records actual Amber and returns to the same character list',async({page})=>{
