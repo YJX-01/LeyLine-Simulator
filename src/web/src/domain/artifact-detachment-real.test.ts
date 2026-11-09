@@ -3,8 +3,8 @@ import {createPinia,setActivePinia} from 'pinia';
 import {hasRecordedReference,readRecordedReference} from '../../../../tests/helpers/recorded-reference';
 import {previewEnkaImport,confirmEnkaImport} from './enka-import';
 import {createAccount,equipArtifact,parseAccount} from './account';
-import {planShowcaseInventory} from './showcase-inventory';
-import {copyArtifact} from './artifact-references';
+import {planShowcaseInventory,showcaseArtifact} from './showcase-inventory';
+import {copyArtifact,detachArtifact} from './artifact-references';
 import {persistArtifactRolls,preferredUpgradeCounts} from './artifact-rolls';
 import {useAccountStore} from '../stores/account';
 import {useCharacterLoadoutsStore} from '../stores/character-loadouts';
@@ -14,6 +14,23 @@ import {useInventoryHistoryMerge} from '../composables/use-inventory-history-mer
 const path='.references/enka/official-example.json';
 describe.skipIf(!hasRecordedReference(path))('observed artifact identity and persisted history',()=>{
   async function recorded(){const account=createAccount(),preview=await previewEnkaImport(JSON.parse(readRecordedReference(path)),'618285856',account);confirmEnkaImport(account,preview,preview.rows.map(row=>row.character.id),true);return account;}
+  it('shows showcase items as unstored after inventory deletion without changing their snapshot',async()=>{
+    const account=await recorded(),role=account.characters[0],before=JSON.stringify(role.showcase),raw=showcaseArtifact(role,'flower')!,physical=planShowcaseInventory(account,[role],['flower']).items[role.id][0];
+    expect(physical.id).not.toBe(raw.id);
+    expect(showcaseArtifact(role,'flower',account)?.inventoryId).toBeUndefined();
+    account.artifacts=[];
+    expect(showcaseArtifact(role,'flower',account)?.inventoryId).toBeNull();
+    // A detached worn snapshot and an explicit copy of that observed item are not inventory matches.
+    account.artifacts=[detachArtifact(physical),copyArtifact(physical)];
+    expect(showcaseArtifact(role,'flower',account)?.inventoryId).toBeNull();
+    // A boundary derived by reversing only the recorded substat order must not match.
+    const reordered=structuredClone(physical);reordered.real!.substats.reverse();account.artifacts.push(reordered);
+    expect(showcaseArtifact(role,'flower',account)?.inventoryId).toBeNull();
+    account.artifacts.push(structuredClone(physical));
+    const resolved=showcaseArtifact(role,'flower',account)!;
+    expect(resolved.inventoryId).toBeUndefined();expect(resolved.id).toBe(raw.id);
+    expect(JSON.stringify(role.showcase)).toBe(before);
+  });
   it('persists inference then replaces only ordered exact matches with observed showcase history',async()=>{
     const account=await recorded(),source=JSON.parse(JSON.stringify(account)),item=account.artifacts[0],sourceItem=source.artifacts[0];
     for(const sub of item.real!.substats)delete sub.rolls;delete item.rollSource;

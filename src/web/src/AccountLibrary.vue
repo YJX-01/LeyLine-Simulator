@@ -381,7 +381,7 @@ function resetFilters() { elementFilter.value=[]; weaponFilter.value=[]; rarityF
 const equipmentView=ref<'local'|'showcase'>('local');
 watch(()=>character.value?.id,() => { equipmentView.value='local'; },{immediate:true});
 function showImportedCharacter(id:string) { query.value='';resetFilters();modal.value='';characterId.value=id; }
-function equipmentItem(slot:AccountSlot) { return equipmentView.value==='showcase'&&character.value?showcaseArtifact(character.value,slot):editingAccount.value.artifacts.find(item=>item.id===character.value?.equipment[slot]); }
+function equipmentItem(slot:AccountSlot) { return equipmentView.value==='showcase'&&character.value?showcaseArtifact(character.value,slot,account.value):editingAccount.value.artifacts.find(item=>item.id===character.value?.equipment[slot]); }
 
 function localConfigurationComplete(entry:AccountCharacter) { return configurationReady(account.value,entry); }
 async function openConfiguration(id:string,presetId='') {

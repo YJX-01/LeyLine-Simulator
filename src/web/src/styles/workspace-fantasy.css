@@ -45,7 +45,7 @@
   .workspace-design .shell-record-row { flex-wrap: wrap; }
 }
 .workspace-design h1, .workspace-design h2, .workspace-design h3 { color: var(--neutral-ink); }
-.workspace-design h1 { font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, serif; letter-spacing: .05em; }
+.workspace-design h1 { letter-spacing: .05em; }
 .workspace-design a, .workspace-design .text-button { color: var(--element-cryo-deep); }
 
 

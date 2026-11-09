@@ -1,6 +1,8 @@
-:root { font-family:system-ui,sans-serif; color:var(--ink,#283A36); background:var(--neutral-canvas,#F5F7F2); }
+:root { --font-ui:'Microsoft YaHei','Microsoft YaHei UI',sans-serif; font-family:var(--font-ui); color:var(--ink,#283A36); background:var(--neutral-canvas,#F5F7F2); }
 body { margin:0; }
 *,*::before,*::after { box-sizing:border-box; }
 button,input,select,textarea { font:inherit; }
 button { cursor:pointer; }
 button:disabled { cursor:default; }
+
+pre,code,kbd,samp { font-family:var(--font-ui); }

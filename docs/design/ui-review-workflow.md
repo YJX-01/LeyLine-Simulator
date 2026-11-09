@@ -149,3 +149,50 @@ ArtifactSetFilter统一两页的完整套装目录和MultiSelectPicker，保留�
 5项实际记录组合单测、两项相关浏览器流程通过，类型、架构273文件、素材、构建预算及差异空白检查通过。新增浏览器用例首次误用不在该四人记录内的琴，修正为记录中的班尼特后通过，没有增造玩家记录。通过UI为记录中的安柏和班尼特明确保存独立组合，验证收藏刷新、编辑保留、按等级排序、多选与重置、两页选项完全同序、四星底色以及四库大屏／390px截图。
 
 桌面包build-jluYrf在隔离临时目录串行复测相同步骤；仅在该测试实例内的Enka IPC回放原始已记录响应，不声称本轮重新在线读取。库存全文前后相同，页面异常为空。报告artifacts/u1-combination-favorites-desktop.json；截图combination-favorites-list.png、combination-favorites-set-filter.png、library-corners-*.png及packaged-combination-favorites-*.png、packaged-library-corners-*.png已查看。最新稳定入口artifacts/desktop/Start-LeyLine.cmd；未提交，U1整体体验验收仍未完成。
+
+
+## 内置思源黑体（2026-11-10）
+
+按用户指定D:/fish/SourceHanSansSC-Normal.otf复制完整原文件到web资产，2.005、Normal／内部字重350，16,525,388字节；SHA-256与用户文件完全一致，记录于licenses/sources.json。fonts.css集中声明字体与--font-ui，HTML预加载，正文、控件和h1／h2／h3使用同一字体；保留现行字号字重层级与代码等宽字体，粗体由浏览器合成。归档Adobe官方OFL-1.1许可并同步分发。
+
+使用实际458件莫娜库存，通过浏览器CDP确认大标题、主按钮、主词条数字、详情标题和表单标签的isCustomFont=true、postScriptName=SourceHanSansSC-Normal，未以CSS字体栈字符串代替实际字形检查。网页字体只请求一次；普通及粗体截图、390px已查看。真实展柜弹窗规格回归、类型、架构273文件、许可和构建预算通过。
+
+新包build-u5SO5y在独立临时资料目录串行复查上述实际字形与离线加载，包内读取字体哈希与原文件一致，页面异常为空。桌面leyline自定义协议未提供ResourceTiming字体条目，首次计数断言不适用，已改为实际字形加原字节哈希检查；窄屏等待重排稳定后拍实际视口。报告artifacts/u1-source-han-font-browser.json、artifacts/u1-source-han-font-desktop.json；截图source-han-font-*.png与source-han-font-packaged-*.png已查看。启动入口artifacts/desktop/Start-LeyLine.cmd，未提交，U1整体体验验收保持后续独立进行。
+
+
+## 补齐真实Bold字重（2026-11-10）
+
+按用户指定SourceHanSansSC-Bold.otf内置同版本2.005原始文件，内部字重700，16,963,428字节；哈希df2b90f5bcc6d01dfc964cec5f6d535d6b6aebd26ed7fd79a9c1b3f2112fcb6b与用户文件一致。fonts.css新增700字面，保留350 Normal，HTML分别预加载两份字体；源记录、署名、许可分发及现行视觉规范同步。已有CSS字号／字重值保持，700及原750主词条值均实际匹配Bold，500普通导航匹配Normal。
+
+实际458件库存浏览器及隔离桌面CDP复查了标题、主按钮、主词条数值、副词条数值、详情标题与表单标签的真实PostScript字面，以及普通导航的Normal；初始检查误将原本700的副词条dd当作普通字重样本，已按实际CSS改为Bold并另选500导航核验Normal。网页两份字体各请求一次，桌面两份文件哈希均与原文件一致。普通／粗体及390px截图已查看，页面异常为空。
+
+现有真实展柜弹窗规格回归、类型、许可、构建预算及差异空白检查通过。桌面包build-B55Pqd，启动入口artifacts/desktop/Start-LeyLine.cmd；报告artifacts/u1-source-han-bold-browser.json、artifacts/u1-source-han-bold-desktop.json，截图source-han-bold-*.png与source-han-bold-packaged-*.png。未提交，U1整体体验验收仍待后续。
+
+
+## 展柜库存状态与左下角标（2026-11-10）
+
+用户反馈删除本地圣遗物后，展柜仍显示头像而未标未入库。原因是展柜wrapper未带库存状态，卡片只识别inventoryId=null，且头像由角色页强制传入。showcaseArtifact新增可选只读库存上下文，与入库共用精确有序匹配，排除脱库快照及副本；角色展柜使用当前已提交账号判断，不依赖旧编辑草稿库存。没有匹配时复用既有未入库角标，ArtifactSummary原有条件自动隐藏头像；有匹配时保留展柜角色头像。显示匹配不采用本地ID、不改快照、不创建或穿戴实物。
+
+9项实际记录单测、3项相关Chromium流程通过，覆盖有库存时无角标、删掉五件后五个角标且零头像、配装仍保留五件脱库内容、单件入库变为四角标一头像、本地脱库装备不自动重连、只读详情标记、刷新及390px。单测另核验有序副词条反转、另存副本和脱库快照不能误判原件，快照JSON保持。类型、架构274文件、构建预算及差异空白检查通过。
+
+桌面包build-pQcUMF在隔离临时资料目录串行复测同样流程；仅在该实例的Enka IPC回放原始记录，没有新造玩家数据。报告artifacts/u1-showcase-inventory-status-desktop.json；截图showcase-inventory-*.png及packaged-showcase-inventory-missing.png、packaged-showcase-inventory-imported.png已查看，异常为空。稳定入口artifacts/desktop/Start-LeyLine.cmd，未提交，U1整体体验验收仍待后续。
+
+
+## 修正卡片小字笔画粘连（2026-11-10）
+
+用户确认问题位于圣遗物卡片属性名的“素”“值”。实际库存文字为14px／700，放大对照14px粗体、同字号Normal及16px粗体，确认小尺寸Bold的字内留白很窄。对照板取自实际莫娜库存的生命值／元素精通，首次文字选择包含了图像角标，已限定artifact-values内的真实文字后重新截图。
+
+fonts.css增加--font-weight-regular=350，ArtifactSummary仅对疏松和紧凑卡的属性名使用该token；保留14px、行高、列宽、数值及强化次数的Bold，以及控件16px／700。共用组件使角色详情、选装、配置和组合自动采用同一规则。颜色与高亮不改。
+
+真实458件库存的浏览器及隔离桌面CDP确认：生命值、元素精通和紧凑属性名均使用SourceHanSansSC-Normal 350，数值及标题仍使用真实Bold。普通大小、放大对照、疏松／紧凑及390px截图已查看；页面异常为空。已有真实展柜弹窗规格回归、类型、构建预算和差异空白检查通过。新包build-55CC4c，稳定入口artifacts/desktop/Start-LeyLine.cmd；报告artifacts/u1-source-han-readable-browser.json、artifacts/u1-source-han-readable-desktop.json。未提交，U1体验验收保持后续独立进行。
+
+
+## 全部文字统一微软雅黑（2026-11-10，现行规则）
+
+用户决定停止思源黑体试用，并明确所有字体统一微软雅黑。base.css集中定义--font-ui，正文、标题、中英文、数字、控件、代码、公式及许可原文共用同一字体栈；删除原衬线标题与等宽字体例外。ArtifactSummary移除Normal350例外，疏松及紧凑属性名恢复既有700粗体。此决定覆盖上述思源黑体与小字Normal试验，不改变字号、控件规格或展柜未入库修复。
+
+移除项目内两份OTF、fonts.css、预加载及其来源／许可分发记录；用户D:/fish下的原始字体文件保持。当前构建没有字体二进制，历史候选包作为旧审阅记录保留。
+
+实际458件莫娜库存的浏览器和隔离桌面CDP确认：中文属性名、标题、中英文及数字的粗体使用MicrosoftYaHei-Bold，普通文字和代码／许可原文使用MicrosoftYaHei，均非自定义字体；窄屏页头另行确认同样使用微软雅黑。字体加载列表及网页字体请求为空，页面异常为空。已查看大屏详情、疏松／紧凑卡片及390px截图。现有真实展柜弹窗规格回归、类型、许可同步检查及构建预算通过。
+
+新包build-DiGF2O，稳定入口artifacts/desktop/Start-LeyLine.cmd；报告artifacts/u1-yahei-browser.json、artifacts/u1-yahei-desktop.json，截图yahei-*.png及yahei-packaged-*.png。仍在ui/design，未提交，U1整体体验验收保持后续独立进行。

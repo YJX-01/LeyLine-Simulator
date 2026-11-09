@@ -867,3 +867,39 @@ EquipmentStrip改为复用同一紧凑ArtifactSummary，覆盖组合列表、应
 - 组合移除完整度筛选，添加三级收藏、右键默认一级、详情循环、收藏筛选和排序；存储兼容旧记录，编辑保留，另存独立。
 - 关闭箭杆加粗至2.2；四库主页共用40px四角藤结。
 - 5项实际记录单测、两项相关Chromium流程、类型、架构、素材和构建预算通过；桌面隔离复测通过，新包build-jluYrf，启动入口artifacts/desktop/Start-LeyLine.cmd。证据见ui-review-workflow.md；仍在ui/design，未提交。
+
+
+## 内置用户指定思源黑体（2026-11-10）
+
+- 内置SourceHanSansSC-Normal.otf 2.005原文件，集中fonts.css与--font-ui，正文、控件、各级标题统一；保留代码等宽字体和现行字号字重标准。
+- 网页预加载同一字体，记录字节哈希并归档OFL-1.1。实际458件库存的浏览器／隔离桌面CDP字形和窄屏复查通过，包内字体哈希与用户文件一致；真实展柜弹窗规格、类型、架构、许可与构建预算通过。
+- 桌面包build-u5SO5y，稳定入口artifacts/desktop/Start-LeyLine.cmd；仍在ui/design，未提交。
+
+
+## 补齐思源黑体Bold（2026-11-10）
+
+- 内置用户提供的SC Bold 2.005原始OTF，700字重使用真实Bold；Normal与Bold分别声明、预加载，保留既有字号及其他字重匹配。
+- 实际458件库存浏览器／隔离桌面确认粗体和普通文字分别命中Bold／Normal，包内两份字体哈希与原文件一致；真实展柜弹窗规格、类型、许可与构建预算通过。
+- 新包build-B55Pqd，稳定入口artifacts/desktop/Start-LeyLine.cmd；仍在ui/design，未提交。
+
+
+## 修正展柜未入库角标（2026-11-10）
+
+- 展柜卡片与只读详情依据当前本地库精确有序内容匹配展示库存状态；无原件时显示未入库、隐藏左下头像，单件入库后只更新对应部位。与原合并复用匹配规则，脱库快照及副本不当作原件，展柜快照及穿戴保持。
+- 9项实际记录单测、3项相关Chromium流程、类型、架构及预算通过；隔离桌面复查删空库存、单件入库、只读详情与刷新通过。
+- 新包build-pQcUMF，启动入口artifacts/desktop/Start-LeyLine.cmd；仍在ui/design，未提交。
+
+
+## 卡片属性名笔画可读性（2026-11-10）
+
+- 用户定位到卡片属性名“素”“值”。将共用ArtifactSummary的14px属性名改用Normal350 token，数值、强化次数与标题继续Bold；疏松、紧凑及各引用页一致。
+- 实际458件库存浏览器／隔离桌面核验真实字形并查看大屏、窄屏及像素对照；现有真实展柜弹窗规格、类型和构建预算通过。
+- 新包build-55CC4c，启动入口artifacts/desktop/Start-LeyLine.cmd；仍在ui/design，未提交。
+
+
+## 全部文字统一微软雅黑（2026-11-10，覆盖前述字体试验）
+
+- 用户最终指定所有文字使用微软雅黑，包含标题、中英文、数字和代码／许可原文；共用--font-ui，卡片属性名恢复粗体，沿用原字号与控件规格。
+- 移除项目两份思源黑体OTF、字体加载及来源／许可记录；保留用户原始文件、历史候选包和展柜未入库修复。
+- 实际458件库存浏览器／隔离桌面CDP确认普通和粗体真实字形均为微软雅黑，无嵌入字体与字体请求；详情、两种密度和390px截图已查看，真实展柜弹窗规格、类型、许可及构建预算通过。
+- 新包build-DiGF2O，启动入口artifacts/desktop/Start-LeyLine.cmd，报告artifacts/u1-yahei-browser.json、artifacts/u1-yahei-desktop.json；仍在ui/design，未提交，U1整体体验验收仍待后续。

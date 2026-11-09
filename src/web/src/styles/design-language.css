@@ -18,7 +18,7 @@
 .workspace-design h1,.workspace-design h2,.workspace-design h3,.workspace-design p { margin:0; }
 .workspace-design h1 { font-size:var(--font-title); font-weight:700; }.workspace-design h2 { font-size:var(--font-dialog); font-weight:700; }.workspace-design h3 { font-size:var(--font-control); font-weight:700; }
 .workspace-design p { font-size:var(--font-body); line-height:1.7; }.workspace-design small { font-size:var(--font-body); }.workspace-design label { display:grid; gap:7px; font-size:var(--font-body); }
-.workspace-design a { color:var(--element-hydro-deep); text-decoration:none; }.workspace-design code,.monospace { font-family:'Cascadia Code',Consolas,monospace; }
+.workspace-design a { color:var(--element-hydro-deep); text-decoration:none; }.workspace-design code,.monospace { font-family:var(--font-ui); }
 .workspace-design svg { fill:none; stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round; }
 .workspace-design section { padding:0; background:none; border-radius:0; }.workspace-design aside { line-height:normal; }.workspace-design .panel { background:var(--surface-raised); border:1px solid var(--line); border-radius:12px; min-width:0; padding:20px; }
 .workspace-design button { font:inherit; font-weight:500; padding:8px 12px; border:1px solid var(--line); border-radius:var(--control-radius); color:var(--ink); background:var(--surface-raised); }
