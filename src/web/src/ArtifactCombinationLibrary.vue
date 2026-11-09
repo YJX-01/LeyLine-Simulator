@@ -4,7 +4,6 @@ import type { RealStat } from '@leyline/schema';
 import { accountSlots } from './domain/account';
 import { combinationName, effectiveTotal, validateCombinationItems, type ArtifactCombination } from './domain/artifact-combinations';
 import { loadAccountGameData } from './domain/account-presentation';
-import { downloadJson } from './domain/download';
 import { useAccountStore } from './stores/account';
 import { useArtifactCombinationsStore } from './stores/artifact-combinations';
 import { useLibraryViewStore } from './stores/library-view';
@@ -19,6 +18,7 @@ import EffectiveRollSummary from './components/EffectiveRollSummary.vue';
 import MultiSelectPicker from './components/MultiSelectPicker.vue';
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
+import FilterPanel from './components/FilterPanel.vue';
 import FilterActions from './components/FilterActions.vue';
 import SortPanel from './components/SortPanel.vue';
 import ConfirmationDialog from './components/ConfirmationDialog.vue';
@@ -61,13 +61,12 @@ function open(combination:ArtifactCombination){if(props.pick){if(!stale(combinat
 function openMenu(event:MouseEvent,combination:ArtifactCombination){(event.currentTarget as HTMLElement).querySelector<HTMLButtonElement>('.combination-open')?.focus({preventScroll:true});menu.value={combination,x:event.clientX,y:event.clientY};}
 function menuKey(event:KeyboardEvent,combination:ArtifactCombination){if(event.key==='ContextMenu' || event.shiftKey && event.key==='F10'){event.preventDefault();const box=(event.currentTarget as HTMLElement).getBoundingClientRect();menu.value={combination,x:box.left+12,y:box.top+12};}}
 function menuAction(action:string){const combination=menu.value?.combination;menu.value=undefined;if(!combination)return;if(action==='details'){editor.value=combination;creating.value=false;}else{deleteFocus=Array.from(library.value?.querySelectorAll<HTMLElement>('.combination-row') ?? []).find(row=>row.dataset.combinationId===combination.id)?.querySelector<HTMLButtonElement>('.combination-open') ?? undefined;deleteId.value=combination.id;}}
-function exportFile(){downloadJson({schemaVersion:1,kind:'artifact-combinations',accountId:account.account.id,combinations:all.value},'圣遗物组合.json');}
 function cancelDelete(){deleteId.value='';nextTick(()=>{if(deleteFocus?.isConnected)deleteFocus.focus({preventScroll:true});});}
 function remove(){try{store.remove(account.account.id,deleteId.value);deleteId.value='';nextTick(()=>library.value?.querySelector<HTMLInputElement>('input[name=library-search]')?.focus({preventScroll:true}));}catch(cause){error.value=cause instanceof Error?cause.message:'删除失败。';}}
 </script>
 <template>
   <section ref="library" class="combination-library" aria-label="圣遗物组合库">
-    <LibraryToolbar v-model="query" label="搜索圣遗物组合" placeholder="查找组合或参考角色…" :filter-count="selectedSets.length+(complete!=='all'?1:0)" :sorted="sort!=='rolls' || direction!=='desc'" @filter="filterOpen=true" @sort="sortOpen=true" @reset="selectedSets=[];complete='all';sort='rolls';direction='desc'"><template #actions><button v-if="!pick" class="ui-action soft" @click="exportFile">导出组合</button><button class="ui-action" aria-label="新建组合" @click="creating=true;editor=undefined"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新建组合</button></template></LibraryToolbar>
+    <LibraryToolbar v-model="query" label="搜索圣遗物组合" placeholder="查找组合或参考角色…" :filter-count="selectedSets.length+(complete!=='all'?1:0)" :sorted="sort!=='rolls' || direction!=='desc'" @filter="filterOpen=true" @sort="sortOpen=true" @reset="selectedSets=[];complete='all';sort='rolls';direction='desc'"><template #actions><button class="ui-action library-primary-action" aria-label="新建组合" @click="creating=true;editor=undefined"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新建组合</button></template></LibraryToolbar>
     <LibraryListHeader v-model:page="page" :pages="pages" :count="shown.length" :total="all.length" unit="组组合" />
     <p v-if="pick && referenceName" class="pick-reference">按{{ referenceName }}统计</p>
     <p v-if="error || store.error" role="alert">{{ error || store.error }}</p><p v-if="notice" role="status">{{ notice }}</p>
@@ -80,14 +79,14 @@ function remove(){try{store.remove(account.account.id,deleteId.value);deleteId.v
     <LibraryEmptyState v-if="!shown.length" :title="all.length?'没有匹配的组合':'还没有保存的组合'" :description="all.length?'清除筛选后重试。':'新建组合，或在角色详情中保存当前装备。'" :action="all.length?'清除筛选':'新建组合'" @action="emptyAction" />
     <LibraryPagination v-model:page="page" :pages="pages" always position="底部" full />
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="组合操作" :options="pick?[{id:'details',label:'查看详情'}]:[{id:'details',label:'查看详情'},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
-    <WorkbenchDialog v-if="filterOpen" title="筛选组合" size="filter" @close="filterOpen=false"><div class="combination-filters"><h3>套装</h3><MultiSelectPicker v-model="selectedSets" label="组合套装" :options="sets" image-kind="artifacts" searchable /><h3>完整度</h3><ChoiceGroup v-model="complete" :options="[{value:'all',label:'全部'},{value:'complete',label:'完整五件'},{value:'partial',label:'未满五件'}]" label="组合完整度" /></div><template #footer><FilterActions flush @reset="selectedSets=[];complete='all'" @confirm="filterOpen=false" /></template></WorkbenchDialog>
+    <WorkbenchDialog v-if="filterOpen" title="筛选组合" size="filter" @close="filterOpen=false"><FilterPanel><section><h3>套装</h3><MultiSelectPicker v-model="selectedSets" label="组合套装" :options="sets" image-kind="artifacts" searchable /></section><section><h3>完整度</h3><ChoiceGroup stretch v-model="complete" :options="[{value:'all',label:'全部'},{value:'complete',label:'完整五件'},{value:'partial',label:'未满五件'}]" label="组合完整度" /></section></FilterPanel><template #footer><FilterActions flush @reset="selectedSets=[];complete='all'" @confirm="filterOpen=false" /></template></WorkbenchDialog>
     <WorkbenchDialog v-if="sortOpen" title="组合排序" size="filter" @close="sortOpen=false"><SortPanel v-model="sort" v-model:direction="direction" :options="[{value:'rolls',label:'有效词条数'},{value:'pieces',label:'装备件数'},{value:'saved',label:'保存顺序'}]" @reset="sort='rolls';direction='desc'" @confirm="sortOpen=false" /></WorkbenchDialog>
     <ArtifactCombinationEditor ref="editorView" v-if="creating || editor" :key="editor?.id ?? 'new'" :combination="editor" @close="creating=false;editor=undefined;emit('closed')" @saved="saved" />
     <ConfirmationDialog v-if="deleteId" title="删除组合？" confirm-label="删除" @cancel="cancelDelete" @confirm="remove"><p>只删除保存的组合，库存和角色穿戴不变。</p></ConfirmationDialog>
   </section>
 </template>
 <style scoped>
-.combination-library { display:grid; gap:12px; min-width:0; }.combination-list { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }.combination-row { position:relative; display:grid; gap:12px; min-width:0; padding:16px; border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; background:var(--surface); }.combination-heading { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }.combination-heading h3 { flex:1; min-width:0; font-size:var(--font-control); margin:0; overflow-wrap:anywhere; }.combination-heading > span,.pick-reference { font-size:var(--font-body); }.stale { color:var(--element-pyro-deep); }.combination-reference { display:flex; align-items:center; margin-left:auto; }.combination-filters { display:grid; gap:12px; }.combination-filters h3 { margin:0; font-size:var(--font-control); }
+.combination-library { display:grid; gap:12px; min-width:0; }.combination-list { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }.combination-row { position:relative; display:grid; gap:12px; min-width:0; padding:16px; border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; background:var(--surface); }.combination-heading { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }.combination-heading h3 { flex:1; min-width:0; font-size:var(--font-control); margin:0; overflow-wrap:anywhere; }.combination-heading > span,.pick-reference { font-size:var(--font-body); }.stale { color:var(--element-pyro-deep); }.combination-reference { display:flex; align-items:center; margin-left:auto; }
 .combination-open { position:absolute; inset:0; z-index:1; width:100%; height:100%; min-height:0; border:0; border-radius:inherit; background:transparent; padding:0; cursor:pointer; }.combination-open:hover { background:transparent; box-shadow:none; }.combination-open:disabled { opacity:1; cursor:default; }.combination-open:focus-visible { outline:2px solid var(--element-hydro-deep); outline-offset:2px; }
 @media(max-width:600px) { .combination-row { padding:12px; } }
 </style>

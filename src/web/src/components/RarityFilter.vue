@@ -1,0 +1,10 @@
+<script setup lang="ts">
+import {computed} from 'vue';
+const props=defineProps<{modelValue:string[];rarities:readonly number[];label?:string}>();
+const emit=defineEmits<{'update:modelValue':[value:string[]]}>();
+const options=computed(()=>[...new Set(props.rarities)].filter(value=>value>=1 && value<=5).sort((a,b)=>b-a));
+const labels=['','一星','二星','三星','四星','五星'];
+function toggle(value:number){const key=String(value);emit('update:modelValue',props.modelValue.includes(key)?props.modelValue.filter(item=>item!==key):[...props.modelValue,key]);}
+</script>
+<template><div class="rarity-filter" role="group" :aria-label="label ?? '星级'"><button type="button" :aria-pressed="!modelValue.length" @click="emit('update:modelValue',[])">全部</button><button v-for="value in options" :key="value" type="button" class="rarity-option" :data-rarity="value" :aria-pressed="modelValue.includes(String(value))" :style="{'--rarity-background':`var(--rarity-${value}-background)`,'--rarity-ink':`var(--rarity-${value}-ink)`,'--rarity-border':`var(--rarity-${value}-border)`}" @click="toggle(value)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/></svg>{{ labels[value] }}</button></div></template>
+<style scoped>.rarity-filter { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }.rarity-filter button { display:flex; align-items:center; justify-content:center; gap:5px; min-width:0; height:40px; padding:0 6px; font-size:var(--font-control); font-weight:700; }.rarity-option { color:var(--rarity-ink); }.rarity-option svg { color:var(--rarity-border); width:18px; height:18px; fill:currentColor; stroke:currentColor; }.rarity-filter button[aria-pressed=true] { border-color:var(--element-anemo-primary); background:var(--element-anemo-light); }.rarity-option[aria-pressed=true] { color:var(--rarity-ink); border-color:var(--rarity-border); background:var(--rarity-background); }@media(max-width:500px) { .rarity-filter { grid-template-columns:repeat(2,minmax(0,1fr)); } }</style>

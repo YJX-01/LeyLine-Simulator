@@ -11,6 +11,7 @@ import GameIcon from './components/GameIcon.vue';
 import LibraryToolbar from './components/LibraryToolbar.vue';
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
+import FilterPanel from './components/FilterPanel.vue';
 import SortPanel from './components/SortPanel.vue';
 import FilterActions from './components/FilterActions.vue';
 import LibraryPagination from './components/LibraryPagination.vue';
@@ -107,7 +108,7 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="配置操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
     <ConfirmationDialog v-if="deleting" title="清除配置？" confirm-label="确认清除" @cancel="cancelDelete" @confirm="confirmDelete"><p>清除「{{ deleting.character.name }}」的{{ deleting.presetId?'这份备选':'首选' }}配置。</p><p v-if="deletePlan?.promotedId">下一份备选将接替首选。</p><p v-for="message in deletePlan?.transfers ?? []" :key="message">{{ message }}</p><p>圣遗物库存与展柜信息保留。</p></ConfirmationDialog>
     <ConfirmationDialog v-if="pendingPreferred" title="设为首选配置？" :danger="false" confirm-label="确认设为首选" @cancel="pendingPreferred=undefined" @confirm="confirmPreferred"><p>采用此配置，原首选保留为备选。</p><p v-for="message in transfers" :key="message">{{ message }}</p></ConfirmationDialog>
-    <WorkbenchDialog v-if="filterOpen" title="筛选角色配置" size="filter" @close="filterOpen=false"><ChoiceGroup v-model="filter" label="配置类型" :options="[{value:'all',label:'全部'},{value:'preferred',label:'首选'},{value:'alternate',label:'备选'}]" /><template #footer><FilterActions flush @reset="filter='all'" @confirm="filterOpen=false" /></template></WorkbenchDialog>
+    <WorkbenchDialog v-if="filterOpen" title="筛选角色配置" size="filter" @close="filterOpen=false"><FilterPanel><section><h3>配置类型</h3><ChoiceGroup stretch v-model="filter" label="配置类型" :options="[{value:'all',label:'全部'},{value:'preferred',label:'首选'},{value:'alternate',label:'备选'}]" /></section></FilterPanel><template #footer><FilterActions flush @reset="filter='all'" @confirm="filterOpen=false" /></template></WorkbenchDialog>
     <WorkbenchDialog v-if="sortOpen" title="配置排序" size="filter" @close="sortOpen=false"><SortPanel v-model="sort" v-model:direction="direction" :options="[{value:'default',label:'首选优先'},{value:'rolls',label:'有效词条数'}]" @reset="sort='rolls';direction='desc'" @confirm="sortOpen=false" /></WorkbenchDialog>
   </div>
 </template>

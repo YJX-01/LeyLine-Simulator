@@ -140,7 +140,7 @@ for (const [key, values] of Object.entries(main)) {
 const catalog = { version: sources.version,
   characters: normalizedCharacters.map(({ id, name, element, weaponType, support }) => ({ id, name, element, weaponType, ...support })),
   weapons: normalizedWeapons.map(({ id, name, weaponType, rarity, support }) => ({ id, name, weaponType, rarity, ...support })),
-  sets: normalizedSets.map(({ id, name }) => ({ id, name })) };
+  sets: normalizedSets.map(({ id, name }) => ({ id, name, rarity: Math.max(...sets[id].rarityList) })) };
 const outputs = { 'catalog.json': catalog, 'artifact-main.json': artifactMain };
 for (const [category, entries, size] of [['characters', normalizedCharacters, 10], ['weapons', normalizedWeapons, 40], ['sets', normalizedSets, 30]]) {
   for (let start = 0; start < entries.length; start += size) outputs[`${category}-${start / size}.json`] = entries.slice(start, start + size);

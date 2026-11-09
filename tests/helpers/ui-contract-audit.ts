@@ -2,7 +2,7 @@ import {expect,type Locator} from '@playwright/test';
 
 /** Reviewed visual contract: read computed layout, including page-specific overrides. */
 export async function auditActions(root:Locator) {
-  const issues=await root.locator('button.ui-action,button.library-filter,button.configuration-title-button,.choice-group:not(.joined) > button').evaluateAll(buttons=>buttons.filter(button=>!!button.getClientRects().length).flatMap(button=>{
+  const issues=await root.locator('button.ui-action,button.library-filter,button.configuration-title-button,button.catalog-trigger,summary.picker-trigger,.rarity-filter button,.favorite-filter button,.artifact-level-filter > button,.artifact-level-presets > button,.choice-group:not(.joined) > button').evaluateAll(buttons=>buttons.filter(button=>!!button.getClientRects().length).flatMap(button=>{
     const style=getComputedStyle(button),size=(button as HTMLElement).dataset.size,height=size==='md' || button.matches('.configuration-title-button,.choice-group.small > button')?32:size==='sm'?24:40,font=size==='sm'?14:16;
     const prefix=(button.textContent ?? '').trim(),issues:string[]=[];
     if(Math.abs(button.getBoundingClientRect().height-height)>.6)issues.push(`${prefix}: height ${button.getBoundingClientRect().height}, expected ${height}`);
@@ -27,8 +27,9 @@ export async function auditDialog(dialog:Locator,kind:'editor'|'content'|'filter
     const width={editor:1000,content:920,filter:560,confirm:420}[kind],expected=Math.min(width,viewportWidth-40),issues:string[]=[];
     if(Math.abs(node.getBoundingClientRect().width-expected)>.7)issues.push(`width ${node.getBoundingClientRect().width}, expected ${expected}`);
     const title=node.querySelector(':scope > header > h2');
-    if(title){const box=title.getBoundingClientRect();for(const button of node.querySelectorAll(':scope > header button')){const b=button.getBoundingClientRect();if(b.width && Math.min(b.right,box.right)-Math.max(b.left,box.left)>1 && Math.min(b.bottom,box.bottom)-Math.max(b.top,box.top)>1)issues.push(`Header button overlaps title: ${button.getAttribute('aria-label') ?? button.textContent?.trim()}`);}}
+    if(title){const box=title.getBoundingClientRect(),header=node.querySelector(':scope > header')!.getBoundingClientRect();if(Math.abs((header.left+header.right-box.left-box.right)/2)>1)issues.push('Title is not horizontally centered');for(const button of node.querySelectorAll(':scope > header button')){const b=button.getBoundingClientRect();if(b.width && Math.min(b.right,box.right)-Math.max(b.left,box.left)>1 && Math.min(b.bottom,box.bottom)-Math.max(b.top,box.top)>1)issues.push(`Header button overlaps title: ${button.getAttribute('aria-label') ?? button.textContent?.trim()}`);}}
     if(!title || getComputedStyle(title).fontSize!=='20px' || Number(getComputedStyle(title).fontWeight)<700)issues.push('Title must be 20px bold');
+    for(const action of node.querySelectorAll(':scope > header button.ui-action,:scope > header button.configuration-title-button'))if(action.getClientRects().length && Math.abs(action.getBoundingClientRect().height-32)>.6)issues.push(`Header action must be 32px: ${action.textContent?.trim()}`);
     const close=node.querySelector(':scope > header .ui-close');
     if(!close || Math.abs(close.getBoundingClientRect().width-32)>.6 || Math.abs(close.getBoundingClientRect().height-32)>.6)issues.push('Close must be 32px square');
     if(close?.textContent?.trim())issues.push('Close must contain only the cross icon');

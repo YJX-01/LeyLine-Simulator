@@ -449,7 +449,8 @@ function confirmTransfer() {
       </template>
       <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name" @close="requestCloseCharacter">
       <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
-      <template #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name" /><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftName.split(' · ').slice(1).join('|') }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
+      <template #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name" /></template>
+      <template #header-secondary><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftName.split(' · ').slice(1).join('|') }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
       <template #header-leading><div class="character-header-tools"><div class="equipment-view-tabs" role="group" aria-label="角色资料来源"><button ref="localViewTab" data-view="local" :aria-pressed="equipmentView==='local'" :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地</button><button v-if="character.showcase" data-view="showcase" :aria-pressed="equipmentView==='showcase'" :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜</button></div><EditorActions v-if="equipmentView==='local'" :dirty="detailDirty" :busy="detailBusy" allow-save-as @save="saveDetail()" @save-as="openSaveAs" @restore="restoreConfiguration" /><button class="clear-showcase ui-action soft" data-size="md" data-accent="pyro" @click="requestClearShowcase">删除</button></div></template>
       <div class="account-editor">
         <p v-if="detailError || loadouts.error" role="alert">{{ detailError || loadouts.error }}</p><p v-if="detailNotice" class="detail-feedback" role="status">{{ detailNotice }}</p>
@@ -486,7 +487,7 @@ function confirmTransfer() {
       <WorkbenchDialog v-if="modal === 'repair' && repairPreview" title="核对已导入套装" @close="modal = ''"><p>根据莫娜 7.2.02 核实套装身份，仅补全未经手动修改的物品，不改变词条或穿戴关系。</p><p v-for="update in repairPreview.updates" :key="update.item.id">{{ update.item.mona?.sourceSetName }} → {{ update.item.name }}</p><p v-for="message in repairPreview.skipped" :key="message">{{ message }}</p><p v-if="!repairPreview.updates.length">没有可以直接补全的物品。</p><button :disabled="!repairPreview.updates.length" @click="repairSets">确认补全 {{ repairPreview.updates.length }} 件套装身份</button></WorkbenchDialog>
       <ArtifactBrowser ref="inventoryBrowser"><template #actions><LibraryImportActions create-label="手动添加圣遗物" @mona="modal='import'" @create="modal='artifact'" /><button v-if="account.artifacts.some(item => item.mona?.setIdentityPending)" class="ui-muted-button" :disabled="checkingSets" @click="inspectSets">核对已导入套装</button></template></ArtifactBrowser>
 
-      <WorkbenchDialog v-if="modal === 'artifact'" title="手动添加圣遗物" @close="modal = ''"><ArtifactForm @close="modal = ''" /></WorkbenchDialog>
+      <WorkbenchDialog v-if="modal === 'artifact'" class="manual-artifact-dialog" title="手动添加圣遗物" @close="modal = ''"><ArtifactForm @close="modal = ''" /></WorkbenchDialog>
     </template>
     <WorkbenchDialog v-if="modal === 'network'" title="从角色展柜导入" sticky-footer @close="modal = ''"><EnkaImport ref="enkaImport" @imported="showImportedCharacter" @close="modal = ''" /><template #footer><ImportActions tone="electro" :label="enkaImport?.confirmLabel" :ready="enkaImport?.canConfirm" :show-confirm="!!enkaImport?.hasPreview" :busy="enkaImport?.busy" @cancel="modal=''" @confirm="enkaImport?.confirm()" /></template></WorkbenchDialog>
     <WorkbenchDialog v-if="modal === 'import'" title="导入莫娜圣遗物" sticky-footer @close="modal = ''"><MonaImport ref="monaImport" automatic @imported="modal=''" /><template #footer><ImportActions tone="hydro" :label="monaImport?.confirmLabel" :ready="monaImport?.canConfirm" :show-confirm="!!monaImport?.hasPreview" :busy="monaImport?.busy" @cancel="modal=''" @confirm="monaImport?.confirm()" /></template></WorkbenchDialog>
@@ -548,7 +549,7 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 @media(max-width:400px) { .character-card-header { grid-template-columns:minmax(88px,1fr) 104px minmax(88px,1fr); } }
 @container(max-width:295.99px) { .character-card-header { grid-template-columns:88px minmax(0,1fr) 88px; } }
 
-.character-header-tools .equipment-view-tabs { grid-column:auto; grid-row:auto; display:flex; align-items:center; gap:4px; }.character-header-tools { display:flex; align-items:center; gap:8px; min-width:0; white-space:nowrap; }.detail-feedback { color:var(--element-anemo-deep); font-size:var(--font-body); margin-bottom:8px; }
+.character-header-tools .equipment-view-tabs { grid-column:auto; grid-row:auto; display:flex; align-items:center; gap:4px; }.character-header-tools { display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-width:0; width:100%; }.detail-feedback { color:var(--element-anemo-deep); font-size:var(--font-body); margin-bottom:8px; }
 .equipment-view-tabs button.active { outline:1px solid currentColor; outline-offset:1px; }.confirmation-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
 @media(max-width:550px) { .character-header-tools { grid-column:1/-1; grid-row:2; justify-content:flex-start; } }
 
@@ -563,16 +564,7 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 .character-detail-dialog .character-header-tools .equipment-view-tabs button.active[data-view=local] { background:var(--element-hydro-light); color:var(--element-hydro-deep); box-shadow:0 1px 3px #283a3620; }
 .character-detail-dialog .character-header-tools .equipment-view-tabs button.active[data-view=showcase] { background:var(--element-electro-light); color:var(--element-electro-deep); box-shadow:0 1px 3px #283a3620; }
 .character-header-tools .equipment-view-tabs button:focus-visible { outline:2px solid var(--element-hydro-deep); outline-offset:1px; }
-@media(max-width:850px) {
-  .character-detail-dialog :deep(header) { grid-template-columns:32px minmax(0,1fr) 32px; gap:8px; }
-  .character-detail-dialog .configuration-title { grid-column:2; grid-row:1; justify-content:center; }
-  .character-detail-dialog :deep(header > .dialog-trailing) { display:contents; }
-  .character-detail-dialog :deep(.dialog-trailing > .character-favorite) { grid-column:1; grid-row:1; }
-  .character-detail-dialog .configuration-title-button { grid-column:1/-1; grid-row:2; width:100%; max-width:none; }
-  .character-detail-dialog :deep(.dialog-trailing > .ui-close) { grid-column:3; grid-row:1; }
-  .account-library .character-detail-dialog .character-header-tools { grid-column:1/-1; grid-row:3; justify-content:center; }
-  .character-detail-dialog { scroll-padding-top:152px; }
-}
+
 .card-favorite { display:inline-flex; align-items:center; gap:2px; margin-left:4px; color:var(--element-geo-deep); font-size:var(--font-body); font-weight:700; }
 .character-card-trailing { grid-column:3; grid-row:1; display:flex; align-items:center; justify-self:end; gap:8px; }.card-favorite { margin:0; }
 .character-filter-panel { display:grid; gap:20px; }.character-filter-panel :deep(.filter-actions) { margin:0; }.character-filter-panel h3 { margin:0 0 10px; font-size:var(--font-control); font-weight:700; }.character-filter-panel .filter-options { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }.character-filter-panel .filter-options button { display:flex; align-items:center; justify-content:center; gap:5px; padding:0 6px; height:40px; font-size:var(--font-control); font-weight:700; }.character-filter-panel .filter-options svg { width:18px; height:18px; color:var(--element-geo-deep); }.character-filter-panel .filter-panel-actions { margin:0; }
@@ -591,3 +583,5 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 <style scoped>
 .combination-detail-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }.detail-artifacts > .inline-section-heading { flex-wrap:wrap; }
 </style>
+
+<style scoped>.manual-artifact-dialog :deep(.artifact-form) { width:100%; max-width:640px; margin-inline:auto; }</style>

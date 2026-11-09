@@ -10,6 +10,9 @@ describe('fixed real game snapshot', () => {
     expect(catalog.characters.find(entry => entry.id === 'jean')?.name).toBe('琴');
     expect(catalog.weapons.find(entry => entry.id === 'favoniussword')?.name).toBe('西风剑');
     expect(new Set(catalog.characters.map(entry => entry.id)).size).toBe(140);
+    expect(catalog.sets.find(entry=>entry.id==='instructor')?.rarity).toBe(4);
+    expect(catalog.sets.find(entry=>entry.id==='gladiatorsfinale')?.rarity).toBe(5);
+    expect(catalog.sets.find(entry=>entry.id==='adventurer')?.rarity).toBe(3);
   });
   it('keeps seven traveler element forms separate without claiming supported mechanics', async () => {
     const catalog=await loadRealCatalog();

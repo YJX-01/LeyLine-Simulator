@@ -1,0 +1,11 @@
+.workspace-design .import-flow { --import-primary:var(--element-hydro-primary); --import-light:var(--element-hydro-light); --import-deep:var(--element-hydro-deep); display:grid; gap:16px; min-width:0; color:var(--ink); font-size:var(--font-control); }
+.workspace-design .import-flow[data-import-tone=electro] { --import-primary:var(--element-electro-primary); --import-light:var(--element-electro-light); --import-deep:var(--element-electro-deep); }
+.workspace-design .import-flow p { margin:0; color:var(--ink); font-size:var(--font-control); line-height:1.7; }
+.workspace-design .import-flow .import-intro { color:var(--ink); }
+.workspace-design .import-flow .import-field { display:grid; gap:8px; font-size:var(--font-control); font-weight:700; color:var(--ink); }
+.workspace-design .import-flow .import-entry { padding:16px; border:1px solid var(--line); border-radius:10px; background:var(--import-light); }
+.workspace-design .import-flow .import-note { color:var(--muted); }
+.workspace-design .import-flow .import-warning,.workspace-design .import-flow .import-issues,.workspace-design .import-flow .import-issues p { color:var(--element-geo-deep); }
+.workspace-design .import-flow [role=alert],.workspace-design .import-flow .import-error p { color:var(--element-pyro-deep); }
+
+.workspace-design .import-flow .ui-action:not([data-accent]) { --accent-primary:var(--import-primary); --accent-light:var(--import-light); --accent-deep:var(--import-deep); }

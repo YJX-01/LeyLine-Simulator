@@ -13,13 +13,10 @@ export const rankPalette = rankElements.map((element, rank) => {
   const tone = elementPalette.find(item => item.id === element);
   return { rank, background: tone?.light ?? (rank === 0 ? neutralPalette.line : neutralPalette.raised), ink: tone?.deep ?? neutralPalette.ink, border: tone?.primary ?? neutralPalette.line };
 });
-export const rarityPalette = [
-  { rarity: 1, background: neutralPalette.line },
-  { rarity: 2, background: elementPalette.find(item => item.id === 'dendro')!.light },
-  { rarity: 3, background: elementPalette.find(item => item.id === 'hydro')!.light },
-  { rarity: 4, background: elementPalette.find(item => item.id === 'electro')!.light },
-  { rarity: 5, background: elementPalette.find(item => item.id === 'geo')!.light },
-];
+export const rarityPalette = [undefined,'dendro','hydro','electro','geo'].map((element,index)=>{
+  const tone=elementPalette.find(item=>item.id===element);
+  return {rarity:index+1,background:tone?.light ?? neutralPalette.line,ink:tone?.deep ?? neutralPalette.muted,border:tone?.primary ?? neutralPalette.muted};
+});
 const luminance = (hex: string) => {
   const parts = hex.replace('#', '').match(/../g)!.map(part => parseInt(part, 16) / 255).map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
   return parts[0] * 0.2126 + parts[1] * 0.7152 + parts[2] * 0.0722;
@@ -29,6 +26,6 @@ export function installPalette(): void {
   const style = document.documentElement.style;
   for (const element of elementPalette) for (const shade of ['primary', 'light', 'deep'] as const) style.setProperty(`--element-${element.id}-${shade}`, element[shade]);
   for (const tone of rankPalette) for (const property of ['background', 'ink', 'border'] as const) style.setProperty(`--rank-${tone.rank}-${property}`, tone[property]);
-  for (const tone of rarityPalette) style.setProperty(`--rarity-${tone.rarity}-background`, tone.background);
+  for (const tone of rarityPalette) for(const property of ['background','ink','border'] as const)style.setProperty(`--rarity-${tone.rarity}-${property}`,tone[property]);
   for (const [name, value] of Object.entries(neutralPalette)) style.setProperty(`--neutral-${name}`, value);
 }

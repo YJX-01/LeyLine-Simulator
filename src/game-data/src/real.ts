@@ -23,7 +23,7 @@ export interface RealCatalog {
   version: string;
   characters: { id: string; name: string; element: RealElement; weaponType: string; supported: boolean; reason: string }[];
   weapons: { id: string; name: string; weaponType: string; rarity: number; supported: boolean; reason: string }[];
-  sets: { id: string; name: string }[];
+  sets: { id: string; name: string; rarity: number }[];
 }
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const characters = [

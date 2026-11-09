@@ -115,8 +115,8 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('dialog').getByRole('button',{name:'保存',exact:true}).click();
   await expect(page.getByRole('dialog').locator('.artifact-portrait > .artifact-level')).toHaveText('16');
   await expect(page.getByRole('dialog')).toContainText('3967');
-  await page.getByRole('dialog').getByText('来源与实物身份', { exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('id:8770563143816081');
+  await expect(page.getByRole('dialog').getByText('来源与实物身份', { exact: true })).toHaveCount(0);
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v1')!).artifacts.some((item:{real?:{source?:{key?:string}}})=>item.real?.source?.key==='id:8770563143816081'))).toBe(true);
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.locator('.inventory-card').first()).toBeFocused();
@@ -344,7 +344,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '手动添加圣遗物', exact: true }).click();
   const form = page.getByRole('dialog', { name: '手动添加圣遗物', exact: true });
   const actual = account.artifacts[0];
-  await form.getByLabel('圣遗物名称', { exact: true }).fill(actual.name);
+  await expect(form.getByLabel('圣遗物名称',{exact:true})).toHaveCount(0);
   await form.getByRole('button', { name: '选择套装', exact: true }).click();
   const setName = actual.name.split(' · ')[0];
   await page.getByLabel('搜索套装', { exact: true }).fill(setName);
