@@ -65,6 +65,40 @@ describe.skipIf(!existsSync(path))('recorded showcase to independent local combi
   }finally{vi.unstubAllGlobals();}
  });
 
+ it('persists combination favorite levels independently of item edits, copies and inventory',async()=>{
+  const memory=new Map<string,string>();
+  vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key) ?? null,setItem:(key:string,value:string)=>memory.set(key,value)});
+  try{
+    setActivePinia(createPinia());let store=useArtifactCombinationsStore();
+    const account=createAccount(),preview=await previewEnkaImport(JSON.parse(readRecordedReference(path)),'618285856',account);
+    confirmEnkaImport(account,preview,preview.rows.map(row=>row.character.id));
+    const plan=planShowcaseInventory(account,account.characters),character=account.characters[0],items=plan.items[character.id],stats=defaultEffectiveStats(character.name),inventory=JSON.stringify(plan.next);
+    const original=store.save(plan.next,items,stats,character.name).id;
+    expect(store.combinations[0].favorite ?? 0).toBe(0);
+    setActivePinia(createPinia());store=useArtifactCombinationsStore();
+    expect(store.error).toBe('');expect(store.combinations[0].favorite ?? 0).toBe(0);
+    for(const level of [1,2,3])store.setFavorite(account.id,original,level);
+    setActivePinia(createPinia());store=useArtifactCombinationsStore();
+    expect(store.error).toBe('');expect(store.combinations[0].favorite).toBe(3);
+    store.save(plan.next,items,stats,character.name,original,undefined,'安柏收藏组合');
+    expect(store.combinations[0].favorite).toBe(3);
+    const copy=store.save(plan.next,items,stats,character.name,original,undefined,undefined,undefined,true).id;
+    expect(store.combinations.find(item=>item.id===copy)?.favorite ?? 0).toBe(0);
+    const before=JSON.stringify(store.combinations),raw=memory.get('leyline-artifact-combinations-v1');
+    expect(()=>store.setFavorite('another-account',original,1)).toThrow('组合已不存在');
+    expect(()=>store.setFavorite(account.id,original,4)).toThrow('收藏等级无效');
+    vi.spyOn(localStorage,'setItem').mockImplementationOnce(()=>{throw new Error('storage full');});
+    expect(()=>store.setFavorite(account.id,original,0)).toThrow('storage full');
+    expect(JSON.stringify(store.combinations)).toBe(before);expect(memory.get('leyline-artifact-combinations-v1')).toBe(raw);
+    store.setFavorite(account.id,original,0);expect(store.combinations.find(item=>item.id===original)?.favorite).toBe(0);
+    expect(JSON.stringify(plan.next)).toBe(inventory);
+    const invalid=JSON.parse(memory.get('leyline-artifact-combinations-v1')!);invalid[0].favorite=4;
+    memory.set('leyline-artifact-combinations-v1',JSON.stringify(invalid));setActivePinia(createPinia());store=useArtifactCombinationsStore();
+    expect(store.error).toContain('无法读取');expect(()=>store.setFavorite(account.id,original,1)).toThrow();
+    expect(memory.get('leyline-artifact-combinations-v1')).toBe(JSON.stringify(invalid));
+  }finally{vi.restoreAllMocks();vi.unstubAllGlobals();}
+ });
+
  it('explicit Save As preserves the original; clearing or changing the reference stays independent',async()=>{
   const memory=new Map<string,string>();
   vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key) ?? null,setItem:(key:string,value:string)=>memory.set(key,value)});

@@ -2,7 +2,6 @@
 .workspace-design { --sidebar-width:232px; grid-template-columns:var(--sidebar-width) minmax(0,1fr); transition:grid-template-columns .18s ease; }
 .workspace-design.compact { --sidebar-width:76px; }
 .workspace-design .design-sidebar { box-sizing:border-box; width:var(--sidebar-width); height:100dvh; display:flex; flex-direction:column; padding:12px 12px; transition:width .18s ease,transform .18s ease; overflow:hidden; }
-.workspace-design .design-sidebar::after { display:none; }
 .workspace-design .sidebar-top { flex-shrink:0; }
 .workspace-design .nav-groups { flex:1; margin-top:12px; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; }
 .workspace-design .nav-group { margin-bottom:16px; }

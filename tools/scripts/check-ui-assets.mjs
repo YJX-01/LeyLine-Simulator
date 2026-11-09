@@ -35,10 +35,11 @@ const normalAttackIcons = icons.assets.filter(asset => asset.kind === 'skills' &
 if (new Set(normalAttackIcons.map(asset => asset.sourceSha256)).size !== normalAttackIcons.length || normalAttackIcons.some(asset => !asset.aliases?.length)) throw new Error('Normal attack images must be shared by aliases');
 for (const omitted of icons.excluded ?? []) if (index[omitted.kind]?.[omitted.key]) throw new Error(`Excluded utility passive entered the library: ${omitted.key}`);
 if (iconBytes !== icons.totalBytes || iconBytes > icons.budgets.maxTotalBytes) throw new Error('Offline icon library exceeds declared budget');
-const ornamentPaths = ['knot-corner.svg', 'knot-divider.svg'];
+const ornamentPaths = ['knot-corner.svg', 'close-arrows.svg'];
 let ornamentBytes = 0;
 for (const name of ornamentPaths) ornamentBytes += (await readFile(new URL(`../../src/web/src/assets/ornaments/${name}`, import.meta.url))).length;
-if (ornamentBytes > 5120) throw new Error('SVG ornament budget exceeded');
+// The user-approved CC0 vine corner retains its full curve paths (~7 KiB).
+if (ornamentBytes > 10240) throw new Error('SVG ornament budget exceeded');
 console.log(JSON.stringify({ ornamentBytes,
   catalogIcons: icons.assets.length, iconBytes, missingIcons: icons.missing.length,
   sharedNormalAttackIcons: normalAttackIcons.length, excludedUtilityPassives: icons.excluded?.length ?? 0,

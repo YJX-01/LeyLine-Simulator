@@ -20,4 +20,6 @@ Vue / Evan You 与 Vue 团队；Pinia / Eduardo San Martin Morote 与贡献者�
 - **KeqingMains Theorycrafting Library、梅信心 / Meropide 及研究贡献者**：机制解释、测试证据和交叉核对。
 - **miHoYo / HoYoverse 及相关权利人**：原神游戏美术、名称和内容。
 
-账号材料用于本地核验。结纹 SVG、布局和交互为项目自行实现。详细版本与用途见 [第三方声明](THIRD_PARTY_NOTICES.md)。
+- **Anonymous / Openclipart**：celtic vine corner 页角藤结，CC0；已适配为单色透明 SVG。
+
+账号材料用于本地核验。其余结纹 SVG、布局和交互为项目自行实现。详细版本与用途见 [第三方声明](THIRD_PARTY_NOTICES.md)。

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LibraryCornerOrnaments from './components/LibraryCornerOrnaments.vue';
 import {artifactValueSignature} from './domain/showcase-inventory';
 import {buildRollBasis,type EffectiveRollBasis} from './domain/effective-roll-basis';
 import { computed, ref, shallowRef, onMounted, watch, defineAsyncComponent, nextTick } from 'vue';
@@ -421,6 +422,7 @@ function confirmTransfer() {
 
 <template>
   <section class="account-library panel" :class="{'pick-mode':props.pick,'configuration-detail-host':props.configurationDetail,'library-page':!props.pick && !props.configurationDetail}">
+    <LibraryCornerOrnaments v-if="!props.pick && !props.configurationDetail" />
 
     <div v-if="error" class="account-error" role="alert">{{ localDataErrorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
 

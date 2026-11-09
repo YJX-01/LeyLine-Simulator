@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>关闭B：四角外缘水平竖直，两个相同双头箭无断线重叠</title><defs><path id="square-arrow" d="M4 4H7L6.277817 4.722183L19.277817 17.722183L20 17V20H17L17.722183 19.277817L4.722183 6.277817L4 7Z"/></defs><g fill="currentColor"><use href="#square-arrow"/><use href="#square-arrow" transform="rotate(90 12 12)"/></g></svg>

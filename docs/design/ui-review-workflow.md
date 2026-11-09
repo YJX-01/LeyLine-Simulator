@@ -2,6 +2,10 @@
 
 2026-11-08。用户调整过的角色详情、圣遗物卡及详情页和 [现行视觉规范](visual-language.md) 是项目基准。技能用于补充检查，不覆盖已确认的主题、14px 正文下限、40/32/24px 控件及 12/10px 角标规则。
 
+## 当前交付状态（2026-11-10）
+
+用户已于2026-11-09认可方形外缘关闭B、藤结corner和圆弧三角，并明确批准应用到仓库和打包；divider取消。此前各轮“等待审核、不打包”为当时的历史状态，不再作为当前暂停条件。2026-11-10继续按用户指示加粗关闭图标、统一套装筛选、添加组合收藏及四角装饰。
+
 ## 可用技能
 
 | 技能 | 来源 | 用途 |
@@ -96,3 +100,52 @@ ui-contract-audit扩展为所有受检弹窗检查标题水平居中和头部动
 所有库筛选，包括角色配置和目录，使用FilterPanel及共用底部动作；强化为等宽全部／16／20与完整等级多选，收藏使用FavoriteFilter与既有FavoriteMark。桌面复测发现MultiSelectPicker在关闭状态仍拦Escape，已按是否展开处理：第一次关闭下拉，随后可关闭筛选弹窗。新增u1-import-filter-consistency.spec.ts覆盖数字列、逐键输入、两类实际资料预览、空搜索操作颜色、四库筛选、星内等级、强化多选、窄屏及Escape传递；规格快检覆盖新增控件。
 
 本轮7项相关浏览器流程最终通过，含实际458件莫娜库存、收藏筛选和共享选人。并行构建时有一次开发页异步模块未在7秒内挂载，trace仍见模块请求未完成；构建结束后独立规格检查通过。类型、架构269文件、差异空白和构建预算通过。最终包build-uMX1DA已在独立临时账号串行验证，报告artifacts/u1-filter-import-desktop.json、截图filter-import-packaged-*.png已查看，页面异常为空。公开UID618285856只回放原始记录作预览并取消，没有与莫娜库存确认混入；不声称本轮重新在线读取展柜。未新增commit，U1仍实施中。
+
+
+## 凯尔特三角与回环装饰复查（2026-11-09）
+
+读取用户新增archive/1.webp、2.png、3.png，按连续织带、交替穿插和尖叶回环重绘。侧栏CelticKnot为单闭合路径，三处核心交叉及组合版六处环交叉用透明luminance遮罩；useId确保同时显示两图时不冲突。角饰与分隔纹样也重绘为回环，CSS mask继承统一金色，参考图片不进入运行包。
+
+本轮为低影响矢量美术修改，未新增镜像实现的单测。使用实际458件莫娜库存进行浏览器和桌面截图复查：20／24px预览、展开／折叠／390px导航、两个遮罩ID、实际角饰颜色、打包资源加载和不拦截点击均通过；浏览器与桌面串行，结束关闭本次自建服务及实例。类型、架构270文件、差异空白及构建预算通过。最终包build-wsUn9Y，报告artifacts/u1-celtic-browser.json与u1-celtic-desktop.json；celtic-icons-reviewed.png、celtic-ornaments-reviewed.png及celtic-packaged-*.png已查看。用户三张原图保持原样，未新增commit，U1仍实施中。
+
+
+## Line图标与三角收藏（2026-11-09后续）
+
+按用户选择，侧栏默认改为Line；组合为Line三角叠完整内圆，再加整体外圆，圆不参与编织或断线。Ribbon保留组件变体和两份独立SVG素材供后续中图标使用。FavoriteMark统一改为扁平三瓣三角，无数字、无穿插；上／左下／右下依次填充表示1／2／3级。收藏存储、循环、排序、筛选及可访问名称不改。旧星内数字的现行规范已清理。
+
+相关6项Chromium流程通过，覆盖真实记录的收藏循环、卡片同步、过滤、编辑和引用；更新已有等级断言，不以星形数字作为状态依据。实际458件库存生成Line／双圆和四态收藏预览，浏览器及隔离桌面均核对。类型、架构270文件及预算通过。最终包build-kUvlIT；报告artifacts/u1-line-favorite-preview.json、u1-line-favorite-desktop.json；line-favorite-icons-reviewed.png和line-favorite-packaged-*.png已查看。未提交，U1仍实施中。
+
+
+用户认可圆弧三角复原后，第二轮审核稿将中心留白略增、组合内圆加入交替穿插，外圆保留完整；分隔带改为参考图的浅底／深回环结构。新增双头交错箭的三款关闭SVG，保留32px按钮／20px图标红色规格，等待选定后通过CloseButton统一替换。v2全部SVG解析与静态浏览器检查通过，遮罩无圆形挖孔；本轮未改正式素材、未打包，原桌面入口不变。
+
+
+## 装饰 SVG 审核约束（2026-11-09后续）
+
+用户要求先审核再打包，后续装饰迭代先存独立SVG与大图／实际尺寸预览，不改正式素材和桌面入口。最新审核稿位于artifacts/design-review/celtic-arcs-v4/index.html。divider按连续弧形流线重画，放弃上一稿的硬折块；关闭B按最新指示简化为两根相同双头箭直接重叠，无断线、遮罩或深浅差，保留此前收细30%的尺寸。此决定替代前稿的关闭交织方案。
+
+corner新增Anonymous的celtic vine corner单色透明适配，保留下载原稿和来源记录；来源https://openclipart.org/detail/12699/celtic-vine-corner-by-anonymous-12699，许可见https://openclipart.org/share（CC0）。复杂藤结在现有25px下丢失细节，审核页同时提供较大尺寸对照，尺寸尚未写成正式规范。静态SVG解析与图片加载检查通过，截图已查看；本轮未构建、未打包，不作为U1体验验收。
+
+
+用户选用corner并停止divider制作后，已将认可的藤结轮廓适配到正式knot-corner.svg，保留既有占位尺寸与CSS金色遮罩，补充中央来源、署名及分发副本。完整矢量约7KiB，两份现有装饰合计8177字节，因此装饰预算由5KiB调整为10KiB以容纳选定的原始曲线，并保留预算检查。
+
+关闭B的新审核稿位于artifacts/design-review/celtic-arcs-v5/index.html：每个箭头外侧两条边分别水平和竖直，四个直角贴合同一方形边线；两根相同路径旋转90度重叠，无断线和遮罩。浏览器测量边界(4,4,16,16)，放大辅助线及20px实际尺寸已查看；正式CloseButton仍待审核，不替换。首次file协议CSSmask预览受资源限制为空，改用浏览器拦截的同源HTTP静态资源复查后藤结正常显现；不是以空截图验收。assets:check、licenses:check与差异空白检查通过。未构建、未打包，桌面latest仍为build-kUvlIT。
+
+
+## 已认可装饰落地与打包（2026-11-09）
+
+用户明确批准改入本地仓库并打包，结束前述等待审核状态。CloseButton统一采用close-arrows.svg，保持32px按钮和20px红色图标，两个相同双头箭的外缘形成正方形四角。CelticKnot的Line分支同步已认可的152°圆弧稿和组合交织内圆，useId隔离三处遮罩；Ribbon素材保留。corner沿用已选藤结；divider的SVG和侧栏／标题／响应式CSS引用全部移除，素材检查改为corner与关闭图标。
+
+类型、架构270文件、素材及许可检查、现有真实展柜弹窗规格回归通过。独立Chromium以实际458件莫娜库存检查关闭点击、收藏循环、圆弧遮罩、侧栏与390px；已查看截图。桌面构建预算通过，包build-d4KbYo在独立临时资料目录串行复查同样路径，关闭红叉正常、corner从打包资源加载、divider无引用、页面异常为空。隐藏测试窗口首次截图超时，改用本次实例的showInactive完成截图，不抢用户焦点；窄屏初次截图落在侧栏过渡帧，加入展开位置稳定条件后重拍并查看。
+
+报告artifacts/u1-approved-celtic-preview.json、artifacts/u1-approved-celtic-desktop.json；截图approved-celtic-icons-reviewed.png与approved-celtic-packaged-detail.png、approved-celtic-packaged-close.png、approved-celtic-packaged-mobile.png。最新桌面入口artifacts/desktop/Start-LeyLine.cmd已更新到build-d4KbYo。未提交，U1整体体验验收仍待后续。
+
+
+## 套装筛选、组合收藏与四角装饰（2026-11-10）
+
+ArtifactSetFilter统一两页的完整套装目录和MultiSelectPicker，保留最高星级并按星级降序／版本降序／实装ID降序排列，旧版未知身份追加在末尾；通用下拉把星级传给图标，四星紫底正确。组合移除完整度，新增0–3级收藏持久化、详情循环、单项右键收藏、收藏多选筛选与排序。旧记录无字段仍可读取；保存编辑保留当前等级，另存独立为未收藏，写入失败不改内存，收藏不回写库存与穿戴。
+
+关闭箭杆1.82→2.2，正方形四角和32／20px外部规格不变。四库主面板共用LibraryCornerOrnaments，各角40px、内缩7px、透明度.32，不响应点击；选择弹窗和详情不新增四角。
+
+5项实际记录组合单测、两项相关浏览器流程通过，类型、架构273文件、素材、构建预算及差异空白检查通过。新增浏览器用例首次误用不在该四人记录内的琴，修正为记录中的班尼特后通过，没有增造玩家记录。通过UI为记录中的安柏和班尼特明确保存独立组合，验证收藏刷新、编辑保留、按等级排序、多选与重置、两页选项完全同序、四星底色以及四库大屏／390px截图。
+
+桌面包build-jluYrf在隔离临时目录串行复测相同步骤；仅在该测试实例内的Enka IPC回放原始已记录响应，不声称本轮重新在线读取。库存全文前后相同，页面异常为空。报告artifacts/u1-combination-favorites-desktop.json；截图combination-favorites-list.png、combination-favorites-set-filter.png、library-corners-*.png及packaged-combination-favorites-*.png、packaged-library-corners-*.png已查看。最新稳定入口artifacts/desktop/Start-LeyLine.cmd；未提交，U1整体体验验收仍未完成。

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import GameIcon from './GameIcon.vue';
-const props=defineProps<{modelValue:string[];label:string;options:{id:string;name:string;icon?:string}[];imageKind?:'characters'|'artifacts'|'stats';searchable?:boolean;placeholder?:string}>();
+const props=defineProps<{modelValue:string[];label:string;options:{id:string;name:string;icon?:string;rarity?:number}[];imageKind?:'characters'|'artifacts'|'stats';searchable?:boolean;placeholder?:string}>();
 const emit=defineEmits<{'update:modelValue':[value:string[]]}>();
 const menu=ref<HTMLDetailsElement>(),search=ref('');
 const options=computed(()=>props.options.filter(option=>option.name.includes(search.value.trim())));
@@ -16,8 +16,8 @@ onBeforeUnmount(()=>document.removeEventListener('click',outside));
 </script>
 <template>
   <details ref="menu" class="multi-select-picker" @toggle="opened" @keydown.esc="escape">
-    <summary class="picker-trigger ui-control" :aria-label="label"><GameIcon v-if="imageKind && selected.length===1" :kind="imageKind" :id="selected[0].icon ?? selected[0].id" :name="selected[0].name" :size="24" /><span>{{ selected.length?selected.length===1?selected[0].name:`已选 ${selected.length} 项`:(placeholder ?? '全部') }}</span><svg class="picker-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></summary>
-    <div class="picker-menu"><input v-if="searchable" v-model="search" :aria-label="`搜索${label}`" placeholder="输入名称…" autocomplete="off"><div class="picker-options" role="group" :aria-label="`${label}选项`"><button v-for="option in options" :key="option.id" :aria-label="option.name" :aria-pressed="modelValue.includes(option.id)" @click="toggle(option.id)"><GameIcon v-if="imageKind && !['free','equipped'].includes(option.id)" :kind="imageKind" :id="option.icon ?? option.id" :name="option.name" :size="24" /><span>{{ option.name }}</span></button><p v-if="!options.length">没有匹配项</p></div><div class="picker-actions"><button class="ui-action soft" data-size="md" @click="emit('update:modelValue',[])">清除</button><button class="ui-action" data-size="md" @click="close">完成选择</button></div></div>
+    <summary class="picker-trigger ui-control" :aria-label="label"><GameIcon v-if="imageKind && selected.length===1" :kind="imageKind" :id="selected[0].icon ?? selected[0].id" :name="selected[0].name" :rarity="selected[0].rarity" :size="24" /><span>{{ selected.length?selected.length===1?selected[0].name:`已选 ${selected.length} 项`:(placeholder ?? '全部') }}</span><svg class="picker-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></summary>
+    <div class="picker-menu"><input v-if="searchable" v-model="search" :aria-label="`搜索${label}`" placeholder="输入名称…" autocomplete="off"><div class="picker-options" role="group" :aria-label="`${label}选项`"><button v-for="option in options" :key="option.id" type="button" :data-option-id="option.id" :data-rarity="option.rarity" :aria-label="option.name" :aria-pressed="modelValue.includes(option.id)" @click="toggle(option.id)"><GameIcon v-if="imageKind && !['free','equipped'].includes(option.id)" :kind="imageKind" :id="option.icon ?? option.id" :name="option.name" :rarity="option.rarity" :size="24" /><span>{{ option.name }}</span></button><p v-if="!options.length">没有匹配项</p></div><div class="picker-actions"><button class="ui-action soft" data-size="md" @click="emit('update:modelValue',[])">清除</button><button class="ui-action" data-size="md" @click="close">完成选择</button></div></div>
   </details>
 </template>
 <style scoped>

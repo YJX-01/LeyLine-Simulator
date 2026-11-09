@@ -6,7 +6,7 @@ import { accountSlots, cloneAccount, parseAccount, equipArtifact, artifactOwner,
 import { effectiveRollBreakdown, effectiveStatGroups } from './character-loadout-name';
 
 export interface ArtifactCombination {
-  id:string; accountId:string; items:AccountArtifact[]; stats:RealStat[]; referenceName:string; name?:string; nameMode?:'auto'|'custom'; basis?:EffectiveRollBasis;
+  id:string; accountId:string; items:AccountArtifact[]; stats:RealStat[]; referenceName:string; name?:string; nameMode?:'auto'|'custom'; basis?:EffectiveRollBasis; favorite?:number;
 }
 export function normalizeEffectiveStats(stats:readonly RealStat[]) {
   return effectiveStatGroups.filter(group=>group.members.some(stat=>stats.includes(stat))).flatMap(group=>group.members);

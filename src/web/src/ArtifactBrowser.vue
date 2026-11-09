@@ -12,6 +12,7 @@ import WorkbenchDialog from './components/WorkbenchDialog.vue';
 import ArtifactDetail from './ArtifactDetail.vue';
 import ChoiceGroup from './components/ChoiceGroup.vue';
 import MultiSelectPicker from './components/MultiSelectPicker.vue';
+import ArtifactSetFilter from './components/ArtifactSetFilter.vue';
 import LibraryToolbar from './components/LibraryToolbar.vue';
 import LibraryShortcuts from './components/LibraryShortcuts.vue';
 import LibraryEmptyState from './components/LibraryEmptyState.vue';
@@ -62,9 +63,9 @@ const artifactDetail=ref<InstanceType<typeof ArtifactDetail>>();
 function requestLeave(action:()=>void) { if(artifactDetail.value)artifactDetail.value.requestLeave(action);else action(); }
 function scrollToTools() { document.querySelector<HTMLElement>('.library-actions button')?.focus();window.scrollTo({top:0}); }
 defineExpose({requestLeave});
-const catalogSets=shallowRef<{id:string;name:string}[]>([]);
+const catalogSets=shallowRef<{id:string;name:string;rarity:number}[]>([]);
 onMounted(async()=>{try {catalogSets.value=(await loadAccountGameData()).catalog.sets;}catch {store.error='套装目录加载失败，请重新打开库存。';}});
-const sets=computed(()=>[...new Set(inventoryItems.value.map(item=>item.real?.setId ?? 'legacy'))].map(id=>({id,name:catalogSets.value.find(set=>set.id===id)?.name ?? (id.startsWith('mona-unresolved-')?'套装身份待核对':'旧版 / 散件')})).sort((a,b)=>compareReleaseNewest(releaseMetadata('artifacts',a.id),releaseMetadata('artifacts',b.id))));
+const sets=computed(()=>[...catalogSets.value,...[...new Set(inventoryItems.value.map(item=>item.real?.setId ?? 'legacy'))].filter(id=>!catalogSets.value.some(set=>set.id===id)).map(id=>({id,name:id.startsWith('mona-unresolved-')?'套装身份待核对':'旧版 / 散件',rarity:0}))]);
 const ownerOptions=computed(()=>[{id:'free',name:'未装备'},{id:'equipped',name:'已装备'},...inventory.value.characters.map(character=>({id:character.id,name:character.name,icon:character.realBuild?.character.id}))]);
 const selected=computed(()=>inventory.value.artifacts.find(item=>item.id===selectedId.value));
 const owner=(item:AccountArtifact)=>artifactOwner(inventory.value,item.id)?.name;
@@ -112,7 +113,7 @@ watch(()=>inventory.value.id,()=>{menu.value=undefined;deleting.value=undefined;
       <LibraryToolbar v-model="query" label="搜索圣遗物" placeholder="查找圣遗物或装备角色" :filter-count="activeFilters+slotFilter.length" :sorted="sort!=='release' || sortDirection!=='desc'" @filter="filterOpen=true" @sort="sortOpen=true" @reset="clearConditions"><template v-if="$slots.actions" #actions><slot name="actions" /></template></LibraryToolbar>
       <div class="inventory-options"><LibraryShortcuts v-if="!slot" v-model="slotFilter" class="slot-tabs" label="筛选圣遗物部位" all-label="全部部位" kind="artifactSlots" :mobile-columns="3" :options="accountSlots.map(slot=>({value:slot,label:accountSlotLabels[slot]}))" /><button v-if="activeFilters || query || slotFilter.length" class="inventory-reset" @click="resetFilters">清除筛选</button><ArtifactDensitySwitch v-if="!props.density" class="density-options" :model-value="density" @update:model-value="store.inventoryDensity=$event" /></div>
       <WorkbenchDialog v-if="filterOpen" title="筛选圣遗物" size="filter" @close="filterOpen=false"><FilterPanel class="artifact-filter-panel">
-        <section><h3>套装</h3><MultiSelectPicker v-model="setFilter" label="筛选套装" :options="sets" image-kind="artifacts" searchable /></section>
+        <section><h3>套装</h3><ArtifactSetFilter v-model="setFilter" label="筛选套装" :options="sets" /></section>
         <section><h3>主词条</h3><StatFilterChoices v-model="statFilter" label="筛选主词条" :options="mainOptions" /></section>
         <section><div class="filter-heading"><h3>副词条</h3><ChoiceGroup v-model="subMatch" small joined :options="[{value:'any',label:'任一'},{value:'all',label:'全部'}]" label="副词条匹配方式" /></div><StatFilterChoices v-model="subFilter" label="筛选副词条" :options="subOptions" /></section>
         <section><h3>强化等级</h3><ArtifactLevelFilter v-model="levelFilter" /></section>

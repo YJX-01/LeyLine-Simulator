@@ -838,3 +838,32 @@ EquipmentStrip改为复用同一紧凑ArtifactSummary，覆盖组合列表、应
 - 莫娜／展柜导入共用16px说明、16px粗体标签及相同入口结构，保留蓝／紫来源色，错误统一火色。
 - 四库和目录筛选共用FilterPanel；强化等宽全部／16／20，加完整等级多选；收藏共用星内数字。补齐角色配置筛选，修正收起下拉后的Escape传递。
 - 7项相关浏览器流程最终通过，实际458件库存、类型、架构269文件及预算通过。桌面build-uMX1DA隔离串行验证，报告artifacts/u1-filter-import-desktop.json，来源及暂时开发加载等待记录见ui-review-workflow.md。入口artifacts/desktop/Start-LeyLine.cmd；本轮未提交。
+
+
+## 凯尔特织带与装饰重绘（2026-11-09）
+
+- 按archive三张用户参考图，以CelticKnot统一三角闭合织带、透明交替穿插与组合编织环；原三花瓣叠加移除。
+- 页角／分隔改尖叶回环，CSS mask统一金色；保留已有装饰位置和隐藏规则，不引入参考位图。
+- 真实458件库存浏览器及隔离桌面复查通过，20／24px、折叠及390px已查看；类型、架构270文件及构建预算通过。最终包build-wsUn9Y，报告artifacts/u1-celtic-desktop.json，仍在ui/design，未提交。
+
+
+## Line默认与扁平三角收藏（2026-11-09后续）
+
+- 侧栏采用Line；圣遗物组合为不做交织断线的内圆加整体外圆。Ribbon保留可复用变体和两份SVG素材。
+- 共用FavoriteMark采用三瓣扁平三角，按上／左下／右下依次实色填角，不再有星形和数字；存储与过滤、排序不变。
+- 六项相关浏览器流程、类型、架构270文件和预算通过，实际458件库存及隔离桌面验证收藏循环、卡片同步、过滤与小尺寸。最终包build-kUvlIT，证据artifacts/u1-line-favorite-desktop.json；未提交。
+
+
+## 装饰审核稿应用（2026-11-09后续）
+
+- 用户批准落地并打包：统一方形四角双头箭关闭图标、圆弧Line及交织内圆、已选藤结corner；保留扁平三角收藏与Ribbon素材。
+- 删除divider素材和全部运行引用，视觉规范同步最终方案。
+- 实际458件库存浏览器／独立桌面串行复查及真实展柜弹窗规格回归通过，类型、架构、素材、许可和构建预算通过。桌面包build-d4KbYo，稳定入口artifacts/desktop/Start-LeyLine.cmd。详情及截图见ui-review-workflow.md；仍在ui/design，未提交。
+
+
+## 组合收藏和套装筛选统一（2026-11-10）
+
+- 套装筛选抽为ArtifactSetFilter：两页完整目录、图文及星级底色统一，高星优先，同星级按实装版本从新到旧。
+- 组合移除完整度筛选，添加三级收藏、右键默认一级、详情循环、收藏筛选和排序；存储兼容旧记录，编辑保留，另存独立。
+- 关闭箭杆加粗至2.2；四库主页共用40px四角藤结。
+- 5项实际记录单测、两项相关Chromium流程、类型、架构、素材和构建预算通过；桌面隔离复测通过，新包build-jluYrf，启动入口artifacts/desktop/Start-LeyLine.cmd。证据见ui-review-workflow.md；仍在ui/design，未提交。

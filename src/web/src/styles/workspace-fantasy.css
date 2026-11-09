@@ -1,4 +1,4 @@
-/* Shared desktop/web theme. Ornament paths are original, lightweight SVG artwork. */
+/* Shared desktop/web theme. Corner source and adaptation are recorded in licenses/sources.json. */
 .workspace-design {
   --ink: var(--neutral-ink);
   --muted: var(--neutral-muted);
@@ -58,7 +58,7 @@
 
 .workspace-design .panel { background: var(--neutral-surface); border-color: var(--neutral-line); box-shadow: 0 3px 12px color-mix(in srgb,var(--neutral-ink) 2.75%,transparent), inset 0 0 0 3px color-mix(in srgb,var(--element-geo-light) 36.86%,transparent); }
 .workspace-design .panel:not(.timeline-main) { position: relative; }
-.workspace-design .panel:not(.timeline-main)::after { content: ''; position: absolute; right: 7px; top: 7px; width: 25px; height: 25px; transform: rotate(90deg); background: url('../assets/ornaments/knot-corner.svg') center / contain no-repeat; opacity: .32; pointer-events: none; }
+.workspace-design .panel:not(.timeline-main):not(.library-page)::after { content: ''; position: absolute; right: 7px; top: 7px; width: 25px; height: 25px; transform: rotate(90deg); background: var(--fantasy-gold); mask: url('../assets/ornaments/knot-corner.svg') center / contain no-repeat; opacity: .32; pointer-events: none; }
 .workspace-design .muted, .workspace-design .library-note, .workspace-design .panel-heading p, .workspace-design .page-heading p { color: var(--neutral-muted); }
 .workspace-design .section-eyebrow, .workspace-design .context-label, .workspace-design .save-context { color: var(--neutral-muted); }
 .workspace-design .subtle-tag, .workspace-design .snapshot-tag { color: var(--neutral-muted); background: var(--element-pyro-light); border-color: var(--neutral-line); }
@@ -66,7 +66,6 @@
 
 /* A dark, quiet navigation rail, with gold only used for orientation and ornament. */
 .workspace-design .design-sidebar { color:var(--muted); background: linear-gradient(165deg, var(--neutral-ink) 0, var(--neutral-ink) 60%, var(--neutral-ink) 100%); border-color: color-mix(in srgb,var(--element-geo-primary) 40.00%,transparent); box-shadow: inset -1px 0 color-mix(in srgb,var(--neutral-raised) 3.14%,transparent); }
-.workspace-design .design-sidebar::after { content: ''; position: absolute; left: 23px; right: 23px; height: 34px; bottom: 113px; background: url('../assets/ornaments/knot-divider.svg') center / contain no-repeat; opacity: .28; pointer-events: none; }
 .workspace-design .brand-symbol { color: var(--element-geo-light); background: var(--element-anemo-deep); border: 1px solid var(--element-geo-primary); box-shadow: inset 0 0 0 3px var(--neutral-ink); }
 .workspace-design .brand-symbol span { color:var(--element-geo-deep); }
 .workspace-design .brand-copy strong { color: var(--element-geo-light); letter-spacing: .17em; }
@@ -90,16 +89,14 @@
 .workspace-design .sidebar-bottom > button:not(:disabled):hover { color: var(--element-geo-light); background: color-mix(in srgb,var(--neutral-line) 4.31%,transparent); border-color: transparent; }
 .workspace-design .sidebar-version { color:var(--element-cryo-deep); }
 .workspace-design .sidebar-version i { background: var(--element-geo-primary); }
-.workspace-design.compact .design-sidebar::after { display: none; }
 
-/* Paper surfaces and small, original corner ornaments keep the work area calm. */
+/* Paper surfaces and the approved Celtic vine corner. */
 .workspace-design .design-topbar { background: var(--neutral-canvas); border-color: var(--neutral-line); box-shadow: 0 1px 0 var(--neutral-surface); }
 .workspace-design .breadcrumb-slash { color:var(--element-geo-deep); }
 .workspace-design .topbar-actions a { color: var(--neutral-muted); }
 .workspace-design .header-objective { color: var(--neutral-muted); }
 .workspace-design .header-objective strong { color: var(--element-cryo-deep); }
 .workspace-design .page-heading { position: relative; }
-.workspace-design .page-heading::after { content: ''; position: absolute; left: 30px; bottom: 10px; width: 118px; height: 15px; background: url('../assets/ornaments/knot-divider.svg') center / cover no-repeat; opacity: .5; pointer-events: none; }
 .workspace-design .project-context { background: var(--neutral-canvas); border-color: var(--neutral-line); }
 .workspace-design .mini-avatar, .workspace-design .role-avatar { color: var(--neutral-muted); background: var(--element-anemo-light); border: 1px solid var(--neutral-line); }
 .workspace-design .large-avatar { color: var(--neutral-muted); background: linear-gradient(135deg, var(--element-anemo-light), var(--neutral-line)); border: 1px solid var(--neutral-line); }
@@ -212,14 +209,10 @@
 .workspace-design .design-statusbar { color: var(--neutral-muted); }
 .workspace-design .statusbar-separator { color:var(--element-geo-deep); }
 
-@media (max-width: 1250px) {
-  .workspace-design .page-heading::after { left: 22px; }
-}
+
 @media (max-width: 700px) {
   .workspace-design .mobile-menu { color: var(--element-cryo-deep); }
   .workspace-design .drawer-shade { background: color-mix(in srgb,var(--neutral-ink) 60.00%,transparent); }
-  .workspace-design .page-heading::after { left: 17px; bottom: 7px; width: 90px; height: 12px; }
-  .workspace-design .design-sidebar::after { opacity: .2; }
 }
 
 /* U1: readable controls, task context and deliberate focus treatment. */

@@ -13,6 +13,7 @@ import { useArtifactCombinationsStore } from './stores/artifact-combinations';
 import { useUnsavedChanges } from './composables/use-unsaved-changes';
 import WorkbenchDialog from './components/WorkbenchDialog.vue';
 import EditorActions from './components/EditorActions.vue';
+import FavoriteControl from './components/FavoriteControl.vue';
 import ArtifactEquipmentGrid from './components/ArtifactEquipmentGrid.vue';
 import EffectiveRollSummary from './components/EffectiveRollSummary.vue';
 import EffectiveReferencePicker from './components/EffectiveReferencePicker.vue';
@@ -45,6 +46,8 @@ const guard=useUnsavedChanges(dirty);
 defineExpose({requestLeave:guard.requestLeave});
 const inventory=computed(()=>{const next=cloneAccount(account.account);next.artifacts.push(...(props.pendingArtifacts ?? []).filter(item=>!next.artifacts.some(current=>current.id===item.id)));return next;});
 const imports=computed(()=>draft.value.items.filter(item=>item.inventoryId!==null && !account.account.artifacts.some(current=>current.id===item.id)));
+const favorite=computed(()=>combinations.combinations.find(item=>item.id===props.combination?.id && item.accountId===owner)?.favorite ?? 0);
+function setFavorite(value:number){try{if(props.combination)combinations.setFavorite(owner,props.combination.id,value);error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'收藏未保存。';}}
 function close(){guard.requestLeave(()=>emit('close'));}
 function restore(){draft.value=JSON.parse(baseline);error.value='';}
 function chooseReference(name:string){draft.value.referenceName=name;const character=account.account.characters.find(item=>item.name===name);if(name)draft.value.stats=character?loadouts.effectiveStats(owner,character.id,name):defaultEffectiveStats(name);draft.value.basis=buildRollBasis(character?.realBuild);}
@@ -70,7 +73,7 @@ function cancelImport(){importOpen.value=false;guard.cancelDiscard();}
 function select(item:AccountArtifact){draft.value.items=[...draft.value.items.filter(entry=>entry.slot!==item.slot),JSON.parse(JSON.stringify(item))];pickerOpen.value=false;}
 </script>
 <template>
-  <WorkbenchDialog editor :title="combination?'编辑组合':seed?'保存组合':'新建组合'" @close="close"><template #header-leading><EditorActions :dirty="modified" :can-save="canSave" :allow-save-as="!!combination" :can-save-as="canGenerateName" @save-as="save(false,true)" @save="save()" @restore="restore" /></template>
+  <WorkbenchDialog editor :title="combination?'编辑组合':seed?'保存组合':'新建组合'" @close="close"><template #header-leading><EditorActions :dirty="modified" :can-save="canSave" :allow-save-as="!!combination" :can-save-as="canGenerateName" @save-as="save(false,true)" @save="save()" @restore="restore" /></template><template v-if="combination" #header-trailing><FavoriteControl :level="favorite" label="设置组合收藏" @change="setFavorite" /></template>
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="combination-name-row"><label>组合名称<input :value="draft.name ?? automaticName" aria-label="组合名称" maxlength="160" @input="draft.name=($event.target as HTMLInputElement).value"></label><button class="ui-action soft" data-size="md" :aria-pressed="draft.name===undefined" :disabled="!canGenerateName" @click="draft.name=undefined">自动命名</button></div>
     <ArtifactEquipmentGrid density="compact" :effective-stats="draft.stats" :entries="accountSlots.map(slot=>({slot,item:draft.items.find(item=>item.slot===slot)}))" :account="inventory" popup context-menu inspect-primary @inspect="inspect" @menu="equipmentContext" @change="slot=$event;pickerOpen=true" />

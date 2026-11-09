@@ -34,6 +34,7 @@
 | Enka.Network | 公开展柜服务、接口文档、身份映射 | 接口规则见上游文档；固定资料的独立许可待补核 |
 | GachaBase | 技能数字 ID 与名称核对 | 页面数据条款待补核 |
 | LunaGC 数值资料 | 圣遗物档位与 ID | 独立数据许可待补核 |
+| Anonymous / Openclipart #12699 | celtic vine corner 页角藤结，单色与透明镂空适配 | [CC0 / public domain](https://openclipart.org/share)；[素材来源](https://openclipart.org/detail/12699/celtic-vine-corner-by-anonymous-12699) |
 | KQM TCL、梅信心 / Meropide | 机制研究和证据交叉核对 | 研究引用，具体链接见机制文档 |
 
 固定提交、用途及来源文件见 [sources.json](licenses/sources.json)。逐图 URL、源哈希和转换记录见素材清单及 `public/README.md`。
