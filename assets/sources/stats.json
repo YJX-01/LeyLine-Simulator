@@ -1,0 +1,199 @@
+{
+  "sourceRepository": "frzyc/genshin-optimizer",
+  "sourceCommit": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
+  "license": "MIT",
+  "icons": [
+    {
+      "id": "hp",
+      "name": "生命值",
+      "sourceFilename": "HpIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/HpIcon.tsx",
+      "sourceBytes": 1298,
+      "vectorPath": "assets/sources/vectors/stats/hp.svg",
+      "aliases": [
+        {
+          "key": "hpPercent",
+          "name": "生命值%"
+        }
+      ]
+    },
+    {
+      "id": "attack",
+      "name": "攻击力",
+      "sourceFilename": "AtkIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/AtkIcon.tsx",
+      "sourceBytes": 1073,
+      "vectorPath": "assets/sources/vectors/stats/attack.svg",
+      "aliases": [
+        {
+          "key": "attackPercent",
+          "name": "攻击力%"
+        }
+      ]
+    },
+    {
+      "id": "defense",
+      "name": "防御力",
+      "sourceFilename": "DefIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/DefIcon.tsx",
+      "sourceBytes": 812,
+      "vectorPath": "assets/sources/vectors/stats/defense.svg",
+      "aliases": [
+        {
+          "key": "defensePercent",
+          "name": "防御力%"
+        }
+      ]
+    },
+    {
+      "id": "elementalMastery",
+      "name": "元素精通",
+      "sourceFilename": "EleMasIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/EleMasIcon.tsx",
+      "sourceBytes": 2102,
+      "vectorPath": "assets/sources/vectors/stats/elementalMastery.svg"
+    },
+    {
+      "id": "critRate",
+      "name": "暴击率",
+      "sourceFilename": "CritDmgIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritDmgIcon.tsx",
+      "sourceBytes": 1005,
+      "vectorPath": "assets/sources/vectors/stats/critRate.svg"
+    },
+    {
+      "id": "critDamage",
+      "name": "暴击伤害",
+      "sourceFilename": "CritRateIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
+      "sourceBytes": 425,
+      "vectorPath": "assets/sources/vectors/stats/critDamage.svg"
+    },
+    {
+      "id": "energyRecharge",
+      "name": "元素充能效率",
+      "sourceFilename": "EnerRechIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/EnerRechIcon.tsx",
+      "sourceBytes": 1003,
+      "vectorPath": "assets/sources/vectors/stats/energyRecharge.svg"
+    },
+    {
+      "id": "healingBonus",
+      "name": "治疗加成",
+      "sourceFilename": "HealingBonusIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/HealingBonusIcon.tsx",
+      "sourceBytes": 772,
+      "vectorPath": "assets/sources/vectors/stats/healingBonus.svg"
+    },
+    {
+      "id": "physicalDamage",
+      "name": "物理伤害",
+      "sourceFilename": "PhysicalIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Element/PhysicalIcon.tsx",
+      "sourceBytes": 1289,
+      "vectorPath": "assets/sources/vectors/stats/physicalDamage.svg",
+      "aliases": [
+        {
+          "key": "physicalBonus",
+          "name": "物理伤害加成"
+        }
+      ]
+    },
+    {
+      "id": "cooldownReduction",
+      "name": "冷却缩减",
+      "sourceFilename": "CdRedIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CdRedIcon.tsx",
+      "sourceBytes": 733,
+      "vectorPath": "assets/sources/vectors/stats/cooldownReduction.svg"
+    },
+    {
+      "id": "shieldStrength",
+      "name": "护盾强效",
+      "sourceFilename": "ShieldStrIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/ShieldStrIcon.tsx",
+      "sourceBytes": 804,
+      "vectorPath": "assets/sources/vectors/stats/shieldStrength.svg"
+    },
+    {
+      "sourceFilename": "AtkIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/AtkIcon.tsx",
+      "sourceBytes": 1073,
+      "id": "flatAttack",
+      "name": "攻击力（数值）",
+      "vectorPath": "assets/sources/vectors/stats/flatAttack.svg",
+      "derivedFrom": "attack",
+      "derivation": {
+        "method": "blade-only-cutout",
+        "cutoutPath": "M 13.1 8.4 L 15.6 10.9 L 4.6 21.9 L 2.1 21.9 L 2.1 19.4 Z",
+        "notes": "只挖空剑身内部；剑柄与护手完整实心，保持原始外轮廓。"
+      }
+    },
+    {
+      "sourceFilename": "DefIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/DefIcon.tsx",
+      "sourceBytes": 812,
+      "id": "flatDefense",
+      "name": "防御力（数值）",
+      "vectorPath": "assets/sources/vectors/stats/flatDefense.svg",
+      "derivedFrom": "defense",
+      "derivation": {
+        "method": "outer-silhouette-stroke",
+        "strokeWidth": 5,
+        "notes": "只保留盾牌外围；删除中间分界线和内部填充。"
+      }
+    },
+    {
+      "sourceFilename": "HpIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/HpIcon.tsx",
+      "sourceBytes": 1298,
+      "id": "flatHp",
+      "name": "生命值（数值）",
+      "vectorPath": "assets/sources/vectors/stats/flatHp.svg",
+      "derivedFrom": "hp",
+      "derivation": {
+        "method": "drop-outline-only",
+        "outlineStart": "M 12 24 C",
+        "notes": "保留原水滴外框及其内轮廓；删除内部水面和高光。"
+      }
+    }
+  ],
+  "buffAliases": [
+    {
+      "key": "crit-damage",
+      "stat": "critDamage",
+      "name": "暴击伤害"
+    },
+    {
+      "key": "flat-attack",
+      "stat": "flatAttack",
+      "name": "攻击力（数值）"
+    },
+    {
+      "key": "flat-defense",
+      "stat": "flatDefense",
+      "name": "防御力（数值）"
+    },
+    {
+      "key": "flat-hp",
+      "stat": "flatHp",
+      "name": "生命值（数值）"
+    },
+    {
+      "key": "attack-percent",
+      "stat": "attack",
+      "name": "攻击力%"
+    },
+    {
+      "key": "defense-percent",
+      "stat": "defense",
+      "name": "防御力%"
+    },
+    {
+      "key": "hp-percent",
+      "stat": "hp",
+      "name": "生命值%"
+    }
+  ],
+  "critDisplayMapping": "User-approved glyph correction: critRate uses CritDmgIcon geometry; critDamage uses CritRateIcon geometry."
+}

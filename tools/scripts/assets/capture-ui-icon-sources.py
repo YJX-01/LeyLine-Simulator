@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 import urllib.request
 
-ROOT = Path(__file__).resolve().parents[2]
-TARGET = ROOT / 'docs/constant/ui-icon-sources.json'
+ROOT = Path(__file__).resolve().parents[3]
+TARGET = ROOT / 'assets/sources/sprites.json'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--from-cache', action='store_true', help='Use the captured .references trees without network access')
 args = parser.parse_args()

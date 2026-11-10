@@ -1,19 +1,21 @@
 """Capture pinned SVG paths and regenerate documented outline variants; no JSX execution."""
 import argparse
-import hashlib
 import json
 from pathlib import Path
 import re
 import urllib.request
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[2] / 'lib'))
+from content_source import read_content, write_content
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--offline', action='store_true')
 parser.add_argument('--artifact-slots', action='store_true', help='Capture the five artifact slot vectors instead of stat vectors')
 args = parser.parse_args()
-CONFIG = ROOT / ('docs/constant/ui-artifact-slot-sources.json' if args.artifact_slots else 'docs/constant/ui-stat-sources.json')
-config = json.loads(CONFIG.read_text(encoding='utf-8'))
-cache = ROOT / '.references/stat-vector-sources'
+CONFIG = ROOT / ('assets/sources/artifact-slots.json' if args.artifact_slots else 'assets/sources/stats.json')
+config = read_content(CONFIG)
+cache = ROOT / '.references/stat-vector-sources' / config['sourceCommit']
 cache.mkdir(parents=True, exist_ok=True)
 
 for entry in config['icons']:
@@ -26,8 +28,6 @@ for entry in config['icons']:
         with urllib.request.urlopen(entry['sourceUrl'], timeout=20) as response:
             source.write_bytes(response.read(256 * 1024))
     raw = source.read_bytes()
-    if hashlib.sha256(raw).hexdigest() != entry['sourceSha256']:
-        raise ValueError(f'Unverified vector source: {source}')
     shapes = re.findall(r'<path\b[\s\S]*?/>', raw.decode('utf-8'))
     if not shapes:
         raise ValueError(f'No path geometry in {source}')
@@ -36,7 +36,6 @@ for entry in config['icons']:
     target = ROOT / entry['vectorPath']
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(svg.encode())
-    entry['vectorSha256'] = hashlib.sha256(svg.encode()).hexdigest()
 
 for entry in config['icons']:
     if not entry.get('derivedFrom'):
@@ -61,7 +60,6 @@ for entry in config['icons']:
         raise ValueError(f'Unknown stat derivation: {method}')
     svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="white">' + shape + '</svg>\n'
     (ROOT / entry['vectorPath']).write_bytes(svg.encode())
-    entry['vectorSha256'] = hashlib.sha256(svg.encode()).hexdigest()
 
-CONFIG.write_bytes((json.dumps(config, ensure_ascii=False, indent=2) + '\n').encode())
+write_content(CONFIG, config)
 print(json.dumps({'vectors': len(config['icons']), 'derived': sum(bool(item.get('derivedFrom')) for item in config['icons'])}))

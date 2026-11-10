@@ -1,0 +1,271 @@
+{
+  "purpose": "Verified missing character artwork; filenames match adopted character and skill configuration. No permanent content hashes.",
+  "icons": [
+    {
+      "kind": "constellations",
+      "key": "mitya-c1",
+      "name": "缺位寻踪的观察者",
+      "sourceFilename": "UI_Talent_S_Mitya_01",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_01.png",
+      "character": "mitya",
+      "slot": "c1"
+    },
+    {
+      "kind": "constellations",
+      "key": "mitya-c2",
+      "name": "惰性之外的沉寂物",
+      "sourceFilename": "UI_Talent_S_Mitya_02",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_02.png",
+      "character": "mitya",
+      "slot": "c2"
+    },
+    {
+      "kind": "constellations",
+      "key": "mitya-c3",
+      "name": "拓扑不变的扭结弦",
+      "sourceFilename": "UI_Talent_U_Mitya_01",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_U_Mitya_01.png",
+      "character": "mitya",
+      "slot": "c3"
+    },
+    {
+      "kind": "constellations",
+      "key": "mitya-c4",
+      "name": "衰变相生的同位素",
+      "sourceFilename": "UI_Talent_S_Mitya_03",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_03.png",
+      "character": "mitya",
+      "slot": "c4"
+    },
+    {
+      "kind": "constellations",
+      "key": "mitya-c5",
+      "name": "勘定万物的周期律",
+      "sourceFilename": "UI_Talent_U_Mitya_02",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_U_Mitya_02.png",
+      "character": "mitya",
+      "slot": "c5"
+    },
+    {
+      "kind": "constellations",
+      "key": "mitya-c6",
+      "name": "元素阶跃的理之门",
+      "sourceFilename": "UI_Talent_S_Mitya_04",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_04.png",
+      "character": "mitya",
+      "slot": "c6"
+    },
+    {
+      "kind": "constellations",
+      "key": "valeriy-c1",
+      "name": "持续压制的时序",
+      "sourceFilename": "UI_Talent_S_Valeriy_01",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_01.png",
+      "character": "valeriy",
+      "slot": "c1"
+    },
+    {
+      "kind": "constellations",
+      "key": "valeriy-c2",
+      "name": "伴随冲阵的队型",
+      "sourceFilename": "UI_Talent_S_Valeriy_02",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_02.png",
+      "character": "valeriy",
+      "slot": "c2"
+    },
+    {
+      "kind": "constellations",
+      "key": "valeriy-c3",
+      "name": "白刃对决的戒备",
+      "sourceFilename": "UI_Talent_U_Valeriy_01",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_U_Valeriy_01.png",
+      "character": "valeriy",
+      "slot": "c3"
+    },
+    {
+      "kind": "constellations",
+      "key": "valeriy-c4",
+      "name": "不惧折损的韧性",
+      "sourceFilename": "UI_Talent_S_Valeriy_03",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_03.png",
+      "character": "valeriy",
+      "slot": "c4"
+    },
+    {
+      "kind": "constellations",
+      "key": "valeriy-c5",
+      "name": "分割歼灭的专意",
+      "sourceFilename": "UI_Talent_U_Valeriy_02",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_U_Valeriy_02.png",
+      "character": "valeriy",
+      "slot": "c5"
+    },
+    {
+      "kind": "constellations",
+      "key": "valeriy-c6",
+      "name": "穿透敌阵的威能",
+      "sourceFilename": "UI_Talent_S_Valeriy_04",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_04.png",
+      "character": "valeriy",
+      "slot": "c6"
+    },
+    {
+      "kind": "skills",
+      "key": "manekin-combat2",
+      "name": "戒惩轰击",
+      "sourceFilename": "Skill_S_LittleIdol_01",
+      "sourceUrl": "https://enka.network/ui/Skill_S_LittleIdol_01.png",
+      "character": "manekin",
+      "slot": "combat2",
+      "aliases": [
+        {
+          "key": "manekina-combat2",
+          "name": "戒惩轰击",
+          "character": "manekina",
+          "slot": "combat2"
+        }
+      ]
+    },
+    {
+      "kind": "skills",
+      "key": "manekin-combat3",
+      "name": "禁入限区",
+      "sourceFilename": "Skill_E_LittleIdol_01",
+      "sourceUrl": "https://enka.network/ui/Skill_E_LittleIdol_01.png",
+      "character": "manekin",
+      "slot": "combat3",
+      "aliases": [
+        {
+          "key": "manekina-combat3",
+          "name": "禁入限区",
+          "character": "manekina",
+          "slot": "combat3"
+        }
+      ]
+    },
+    {
+      "kind": "skills",
+      "key": "manekin-passive1",
+      "name": "战域重划",
+      "sourceFilename": "UI_Talent_S_LittleIdol_05",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_LittleIdol_05.png",
+      "character": "manekin",
+      "slot": "passive1",
+      "aliases": [
+        {
+          "key": "manekina-passive1",
+          "name": "战域重划",
+          "character": "manekina",
+          "slot": "passive1"
+        }
+      ]
+    },
+    {
+      "kind": "skills",
+      "key": "manekin-passive2",
+      "name": "交战持备",
+      "sourceFilename": "UI_Talent_S_LittleIdol_06",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_LittleIdol_06.png",
+      "character": "manekin",
+      "slot": "passive2",
+      "aliases": [
+        {
+          "key": "manekina-passive2",
+          "name": "交战持备",
+          "character": "manekina",
+          "slot": "passive2"
+        }
+      ]
+    },
+    {
+      "kind": "skills",
+      "key": "mitya-combat2",
+      "name": "律定·变量侦测",
+      "sourceFilename": "Skill_S_Mitya_01",
+      "sourceUrl": "https://enka.network/ui/Skill_S_Mitya_01.png",
+      "character": "mitya",
+      "slot": "combat2"
+    },
+    {
+      "kind": "skills",
+      "key": "mitya-combat3",
+      "name": "解析·递变之理",
+      "sourceFilename": "Skill_E_Mitya_01_HD",
+      "sourceUrl": "https://enka.network/ui/Skill_E_Mitya_01_HD.png",
+      "character": "mitya",
+      "slot": "combat3"
+    },
+    {
+      "kind": "skills",
+      "key": "mitya-passive1",
+      "name": "基准承压测验",
+      "sourceFilename": "UI_Talent_S_Mitya_05",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_05.png",
+      "character": "mitya",
+      "slot": "passive1"
+    },
+    {
+      "kind": "skills",
+      "key": "mitya-passive2",
+      "name": "超限易爆试剂",
+      "sourceFilename": "UI_Talent_S_Mitya_06",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_06.png",
+      "character": "mitya",
+      "slot": "passive2"
+    },
+    {
+      "kind": "skills",
+      "key": "mitya-passive3",
+      "name": "星耀祝礼·极密协议",
+      "sourceFilename": "UI_Talent_S_Mitya_07",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Mitya_07.png",
+      "character": "mitya",
+      "slot": "passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "valeriy-combat2",
+      "name": "攻势防御·堡垒骤进",
+      "sourceFilename": "Skill_S_Valeriy_01",
+      "sourceUrl": "https://enka.network/ui/Skill_S_Valeriy_01.png",
+      "character": "valeriy",
+      "slot": "combat2"
+    },
+    {
+      "kind": "skills",
+      "key": "valeriy-combat3",
+      "name": "火力焦点·雷霰急袭",
+      "sourceFilename": "Skill_E_Valeriy_01_HD",
+      "sourceUrl": "https://enka.network/ui/Skill_E_Valeriy_01_HD.png",
+      "character": "valeriy",
+      "slot": "combat3"
+    },
+    {
+      "kind": "skills",
+      "key": "valeriy-passive1",
+      "name": "与徐进弹幕为伴",
+      "sourceFilename": "UI_Talent_S_Valeriy_05",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_05.png",
+      "character": "valeriy",
+      "slot": "passive1"
+    },
+    {
+      "kind": "skills",
+      "key": "valeriy-passive2",
+      "name": "向防线缺口突击",
+      "sourceFilename": "UI_Talent_S_Valeriy_06",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_06.png",
+      "character": "valeriy",
+      "slot": "passive2"
+    },
+    {
+      "kind": "skills",
+      "key": "valeriy-passive3",
+      "name": "极寒应变惯性",
+      "sourceFilename": "UI_Talent_S_Valeriy_08",
+      "sourceUrl": "https://enka.network/ui/UI_Talent_S_Valeriy_08.png",
+      "character": "valeriy",
+      "slot": "passive3"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "sourceRepository": "frzyc/genshin-optimizer",
+  "sourceCommit": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
+  "license": "MIT",
+  "icons": [
+    {
+      "id": "flower",
+      "name": "生之花",
+      "sourceFilename": "FlowerIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/FlowerIcon.tsx",
+      "sourceBytes": 2259,
+      "vectorPath": "assets/sources/vectors/artifact-slots/flower.svg"
+    },
+    {
+      "id": "plume",
+      "name": "死之羽",
+      "sourceFilename": "PlumeIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/PlumeIcon.tsx",
+      "sourceBytes": 2013,
+      "vectorPath": "assets/sources/vectors/artifact-slots/plume.svg"
+    },
+    {
+      "id": "sands",
+      "name": "时之沙",
+      "sourceFilename": "SandsIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/SandsIcon.tsx",
+      "sourceBytes": 1814,
+      "vectorPath": "assets/sources/vectors/artifact-slots/sands.svg"
+    },
+    {
+      "id": "goblet",
+      "name": "空之杯",
+      "sourceFilename": "GobletIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/GobletIcon.tsx",
+      "sourceBytes": 2043,
+      "vectorPath": "assets/sources/vectors/artifact-slots/goblet.svg"
+    },
+    {
+      "id": "circlet",
+      "name": "理之冠",
+      "sourceFilename": "CircletIcon",
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/ArtifactSlot/CircletIcon.tsx",
+      "sourceBytes": 1349,
+      "vectorPath": "assets/sources/vectors/artifact-slots/circlet.svg"
+    }
+  ]
+}

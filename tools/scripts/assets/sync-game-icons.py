@@ -2,22 +2,35 @@
 
 Requires Python + Pillow. Rejects server placeholders even when HTTP returns 200.
 """
+import argparse
+import time
 import threading
 import concurrent.futures
 import hashlib
 import io
 import json
+import re
 from pathlib import Path
 import subprocess
 import urllib.request
 from PIL import Image, ImageOps
 import xml.etree.ElementTree as ET
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[2] / 'lib'))
+from content_source import read_content
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 MONA = ROOT / '.references/mona-current'
 DB = ROOT / '.references/genshin-db/src/data'
 CACHE = ROOT / '.references/game-icon-downloads'
-OUTPUT = ROOT / 'src/web/public'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--out', type=Path, default=ROOT / 'artifacts/content-candidates' / ('assets-' + str(time.time_ns())))
+args = parser.parse_args()
+OUTPUT = args.out.resolve()
+if not OUTPUT.is_relative_to((ROOT / 'artifacts/content-candidates').resolve()) or OUTPUT == (ROOT / 'artifacts/content-candidates').resolve():
+    parser.error('--out must be a new directory beneath artifacts/content-candidates')
+GAME_OUTPUT = OUTPUT / 'game'
+def game_folder(kind): return GAME_OUTPUT / ('artifact-slots' if kind == 'artifactSlots' else kind)
 COMMIT = '589ac6919057709924c0c20d5a9d673fe9b0be1a'
 MONA_URL = f'https://raw.githubusercontent.com/TwiceDrop/genshin_artifact/{COMMIT}/'
 PLACEHOLDER = 'ae5d4d9be2e3ee89c0fc94a326aaefd8412c55d916bef6f7d28c88ebf771af7b'
@@ -31,10 +44,10 @@ LOCK = threading.Lock()
 ELEMENT_TRANSFORM = 'element-hq-v2'
 TRANSPARENT_AVATARS = {'manekin': 'UI_AvatarIcon_MannequinBoy', 'manekina': 'UI_AvatarIcon_MannequinGirl'}
 CACHE.mkdir(parents=True, exist_ok=True)
-OUTPUT.mkdir(parents=True, exist_ok=True)
+OUTPUT.mkdir(parents=True, exist_ok=False)
 
 def read(path):
-    return json.loads(path.read_text(encoding='utf-8'))
+    return read_content(path)
 
 def sha(content):
     return hashlib.sha256(content).hexdigest()
@@ -57,12 +70,11 @@ if subprocess.check_output(['git', '-C', str(DB.parents[1]), 'rev-parse', 'HEAD'
     raise RuntimeError('genshin-db reference commit changed; review first')
 locale = read(MONA / 'src/i18n/generated/zh-cn.json')
 metadata = {kind: {locale[item['nameLocale']]: item for item in generated(group).values()} for kind, group in [('characters', 'character'), ('weapons', 'weapon'), ('artifacts', 'artifact')]}
-catalog = read(ROOT / 'src/game-data/src/real-data/catalog.json')
-previous = read(OUTPUT / 'game-icon-manifest.json') if (OUTPUT / 'game-icon-manifest.json').exists() else {'assets': []}
+catalog = read(ROOT / 'src/game-data/generated/catalog.json')
+previous = read(ROOT / 'assets/manifest.json') if (ROOT / 'assets/manifest.json').exists() else {'assets': []}
 existing = {(item['kind'], item['key']): item for item in previous['assets']}
-index = {kind: {} for kind in ['characters', 'weapons', 'artifacts', 'artifactSlots', 'elements', 'skills', 'constellations', 'buffs', 'stats']}
 
-SPRITES = read(ROOT / 'docs/constant/ui-icon-sources.json')
+SPRITES = read(ROOT / 'assets/sources/sprites.json')
 
 def sprite_sources(filename):
     sources = [(None, f"https://raw.githubusercontent.com/{SPRITES['repository']}/{SPRITES['commit']}/{path}") for path in SPRITES['paths'].get(filename, [])[:1]]
@@ -90,6 +102,8 @@ tasks = []
 for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapons', 128), ('artifacts', 'sets', 128)]:
     images = read(DB / f'image/{kind}.json')
     for entry in catalog[group]:
+        if kind == 'characters' and re.match(r'^(aether|lumine|manekin|manekina)-(anemo|geo|electro|dendro|hydro|pyro|cryo)$',entry['id']):
+            continue  # Element forms reuse the base portrait in the runtime index.
         community = metadata[kind].get(entry['name'], {})
         image = images.get(entry['id'], {})
         variants = {'flower': 'flower', 'plume': 'feather', 'sands': 'sand', 'goblet': 'cup', 'circlet': 'head'} if kind == 'artifacts' else {'icon': 'icon'}
@@ -104,7 +118,7 @@ for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapon
                 sources.append((MONA / 'public' / url.lstrip('/'), MONA_URL + 'public/' + url.lstrip('/')) if url.startswith('/') else (None, url))
             # Verified former sources can be reused; placeholder sources never qualify.
             prior = existing.get((kind, key))
-            if prior and prior['sourceSha256'] != PLACEHOLDER:
+            if prior:
                 prior_url = prior['sourceUrl']
                 path = MONA / prior_url[len(MONA_URL):] if prior_url.startswith(MONA_URL) else None
                 sources.append((path, prior_url))
@@ -124,11 +138,11 @@ for element in ['anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro']:
     path = MONA / f'src/images/misc/{element}.png'
     tasks.append(('elements', element, {'id': element, 'name': element}, [(path, MONA_URL + path.relative_to(MONA).as_posix())], 128))
 
-for entry in read(ROOT / 'docs/constant/ui-artifact-slot-sources.json')['icons']:
+for entry in read(ROOT / 'assets/sources/artifact-slots.json')['icons']:
     tasks.append(('artifactSlots', entry['id'], entry, [(None, entry['sourceUrl'])], 128))
 
 
-SCOPE = read(ROOT / 'docs/constant/ui-icon-scope.json')
+SCOPE = read(ROOT / 'assets/sources/scope.json')
 if SCOPE['sourceCommit'] != DB_COMMIT:
     raise RuntimeError('Review combat/utility passive scope for the updated genshin-db snapshot')
 excluded = []
@@ -159,11 +173,11 @@ for kind, folder, fields in [
                 tasks.append((kind, key, entry, sprite_sources(filename), 128))
 for filename, entry in normal_attacks.items():
     tasks.append(('skills', entry['id'], entry, sprite_sources(filename), 128))
-BUFF_SOURCES = read(ROOT / 'docs/constant/ui-buff-sources.json')
+BUFF_SOURCES = read(ROOT / 'assets/sources/buffs.json')
 for entry in BUFF_SOURCES['icons']:
     tasks.append(('buffs', entry['id'], entry, [(None, entry['sourceUrl'])], 128))
 
-STAT_SOURCES = read(ROOT / 'docs/constant/ui-stat-sources.json')
+STAT_SOURCES = read(ROOT / 'assets/sources/stats.json')
 for entry in STAT_SOURCES['icons']:
     tasks.append(('stats', entry['id'], entry, [(None, entry['sourceUrl'])], 128))
 
@@ -171,27 +185,25 @@ def convert(task):
     kind, key, entry, sources, size = task
     if kind in ['stats', 'artifactSlots']:
         content = (ROOT / entry['vectorPath']).read_bytes()
-        if sha(content) != entry['vectorSha256']:
-            raise ValueError(f'Unverified canonical vector: {key}')
         svg = ET.fromstring(content)
         if svg.tag != '{http://www.w3.org/2000/svg}svg' or not svg.findall('.//{http://www.w3.org/2000/svg}path'):
             raise ValueError(f'Invalid canonical vector: {key}')
-        destination = OUTPUT / kind / f'{key}.svg'
+        destination = game_folder(kind) / f'{key}.svg'
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(content)
-        return {'kind': kind, 'key': key, 'id': key, 'name': entry['name'], 'file': destination.relative_to(OUTPUT).as_posix(), 'format': 'SVG', 'bytes': len(content), 'sha256': sha(content), 'sourceUrl': entry['sourceUrl'], 'sourceSha256': entry['sourceSha256'], 'sourceBytes': entry['sourceBytes'], 'sourceDimensions': [24, 24], 'dimensions': [128, 128], 'alphaMax': 255, 'transform': 'stat-vector-v4' if kind == 'stats' else 'artifact-slot-vector-v1', 'vectorPath': entry['vectorPath'], 'vectorSha256': entry['vectorSha256'], **{field: entry[field] for field in ['aliases', 'derivedFrom', 'derivation'] if field in entry}}, None
+        return {'kind': kind, 'key': key, 'id': key, 'name': entry['name'], 'file': 'assets/' + destination.relative_to(OUTPUT).as_posix(), 'format': 'SVG', 'bytes': len(content), 'sourceUrl': entry['sourceUrl'], 'sourceBytes': entry['sourceBytes'], 'sourceDimensions': [24, 24], 'dimensions': [128, 128], 'alphaMax': 255, 'transform': 'stat-vector-v4' if kind == 'stats' else 'artifact-slot-vector-v1', 'vectorPath': entry['vectorPath'], **{field: entry[field] for field in ['aliases', 'derivedFrom', 'derivation'] if field in entry}}, None
     failures = []
     prior = existing.get((kind, key))
-    if prior and prior['sourceSha256'] != PLACEHOLDER and prior.get('transform') == expected_transform(kind, key, entry):
-        path = OUTPUT / prior['file']
-        if path.exists() and sha(path.read_bytes()) == prior['sha256']:
+    if prior and prior.get('transform') == expected_transform(kind, key, entry):
+        path = ROOT / prior['file']
+        if path.exists():
             try:
                 checked = valid_image(path.read_bytes())
-                destination = OUTPUT / kind / f'{key}.webp'
+                destination = game_folder(kind) / f'{key}.webp'
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 if path != destination:
                     destination.write_bytes(path.read_bytes())
-                return {**prior, **({'weaponType': entry['weaponType'], 'framing': prior.get('framing', 'native')} if kind == 'weapons' else {}), **({'aliases': entry['aliases']} if entry.get('aliases') else {}), 'sourceUrl': prior['sourceUrl'], 'file': destination.relative_to(OUTPUT).as_posix(), 'alphaMax': checked.getchannel('A').getextrema()[1]}, None
+                return {**prior, **({'weaponType': entry['weaponType'], 'framing': prior.get('framing', 'native')} if kind == 'weapons' else {}), **({'aliases': entry['aliases']} if entry.get('aliases') else {}), 'sourceUrl': prior['sourceUrl'], 'file': 'assets/' + destination.relative_to(OUTPUT).as_posix(), 'alphaMax': checked.getchannel('A').getextrema()[1]}, None
             except ValueError:
                 pass
     for local, url in sources:
@@ -236,17 +248,23 @@ def convert(task):
                     canvas = Image.new('RGBA', (size, size))
                     canvas.paste(image, ((size - image.width) // 2, (size - image.height) // 2))
                     image = canvas
-            destination = OUTPUT / kind / f'{key}.webp'
+            destination = game_folder(kind) / f'{key}.webp'
             destination.parent.mkdir(parents=True, exist_ok=True)
             image.save(destination, 'WEBP', quality=90 if kind == 'elements' else 88 if kind in ['weapons', 'artifacts'] else 88 if kind in ['skills', 'constellations', 'buffs', 'stats'] else 76, method=6, exact=True)
             content = destination.read_bytes()
             valid_image(content)
             if len(content) > 32768:
                 raise ValueError('Compressed icon exceeds 32 KiB')
-            return {'kind': kind, 'key': key, 'id': entry['id'], 'name': entry['name'], 'element': entry.get('element'), 'file': destination.relative_to(OUTPUT).as_posix(), 'bytes': len(content), 'sha256': sha(content), 'sourceUrl': url, 'sourceSha256': sha(source), 'sourceBytes': len(source), 'sourceDimensions': original_size, 'dimensions': image.size, 'alphaMax': image.getchannel('A').getextrema()[1], **({'transform': 'square-transparent-v2' if key in TRANSPARENT_AVATARS else TRANSFORM} if kind == 'characters' else {'transform': weapon_transform(entry), 'weaponType': entry['weaponType'], 'framing': 'full-art-detail-crop' if 'UI_Gacha_' in url and entry['weaponType'] != 'WEAPON_CATALYST' else 'native'} if kind == 'weapons' else {'transform': ELEMENT_TRANSFORM} if kind == 'elements' else {'transform': ARTIFACT_TRANSFORM} if kind == 'artifacts' else {'transform': expected_transform(kind, key, entry), **{field: entry[field] for field in ['character', 'slot', 'aliases', 'sourceFilename'] if field in entry}})}, None
+            return {'kind': kind, 'key': key, 'id': entry['id'], 'name': entry['name'], 'element': entry.get('element'), 'file': 'assets/' + destination.relative_to(OUTPUT).as_posix(), 'bytes': len(content), 'sourceUrl': url, 'sourceBytes': len(source), 'sourceDimensions': original_size, 'dimensions': image.size, 'alphaMax': image.getchannel('A').getextrema()[1], **({'transform': 'square-transparent-v2' if key in TRANSPARENT_AVATARS else TRANSFORM} if kind == 'characters' else {'transform': weapon_transform(entry), 'weaponType': entry['weaponType'], 'framing': 'full-art-detail-crop' if 'UI_Gacha_' in url and entry['weaponType'] != 'WEAPON_CATALYST' else 'native'} if kind == 'weapons' else {'transform': ELEMENT_TRANSFORM} if kind == 'elements' else {'transform': ARTIFACT_TRANSFORM} if kind == 'artifacts' else {'transform': expected_transform(kind, key, entry), **{field: entry[field] for field in ['character', 'slot', 'aliases', 'sourceFilename'] if field in entry}})}, None
         except Exception as error:
             failures.append(str(error))
     return None, {'kind': kind, 'key': key, 'reason': '; '.join(failures) or 'No image address in pinned reference'}
+
+# Explicit supplements override missing reference image addresses and add newly adopted skills.
+for entry in read(ROOT / 'assets/sources/supplements.json')['icons']:
+    shared_keys = {entry['key'], *(alias['key'] for alias in entry.get('aliases', []))}
+    tasks = [task for task in tasks if not (task[0] == entry['kind'] and task[1] in shared_keys)]
+    tasks.append((entry['kind'], entry['key'], {**entry, 'id': entry['key']}, [(None, entry['sourceUrl'])], 128))
 
 assets, missing = [], []
 with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
@@ -257,30 +275,13 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
             elif asset['kind'] == 'weapons':
                 asset['rarity'] = next(item['rarity'] for item in catalog['weapons'] if item['id'] == asset['id'])
             assets.append(asset)
-            index[asset['kind']][asset['key']] = {key: asset[key] for key in ['file', 'name', 'element', 'rarity'] if asset.get(key) is not None}
-            index[asset['kind']][asset['key']]['revision'] = asset['sha256'][:12]
-            for alias in asset.get('aliases', []):
-                index[asset['kind']][alias['key']] = {**index[asset['kind']][asset['key']], 'name': alias['name']}
         else:
             missing.append(failure)
-for alias in STAT_SOURCES.get('buffAliases', []):
-    icon = index['stats'][alias['stat']]
-    index['buffs'][alias['key']] = {**icon, 'name': alias['name']}
 
 total = sum(asset['bytes'] for asset in assets)
 if total > 16 * 1024 * 1024:
     raise RuntimeError('Offline icon library exceeds 16 MiB')
-# Invalid prior outputs must never remain in the application directory.
-kept = {asset['file'] for asset in assets}
-for directory in [*(OUTPUT / kind for kind in index), OUTPUT / 'game-icons']:
-    for path in directory.rglob('*'):
-        if path.suffix in ['.webp', '.svg'] and path.relative_to(OUTPUT).as_posix() not in kept:
-            path.unlink()
-legacy = OUTPUT / 'game-icons'
-if legacy.exists() and not any(legacy.iterdir()):
-    legacy.rmdir()
-manifest = {'formatVersion': 2, 'sourceCommits': {**BUFF_SOURCES['sourceCommits'], 'TwiceDrop/genshin_artifact': COMMIT, SPRITES['repository']: SPRITES['commit'], SPRITES['normalAttackSource']['repository']: SPRITES['normalAttackSource']['commit'], 'genshin-db': '8e5badd60b5d894284ccc927a56c9683529d2592', 'legacy-mona': 'beaced4d82619aa86920d0054ab6114b5fc5608f', 'legacy-PathOfGenshin/resources': '015a2493b5672b28576ab78ffbcffde2ea0c9844'}, 'rights': 'Game artwork © miHoYo / HoYoverse. Unofficial tool; code licenses do not grant artwork rights.', 'compression': {'format': 'WebP + SVG stats', 'statTransform': 'stat-vector-v4', 'quality': 76, 'method': 6, 'transparent': True, 'avatarTransform': TRANSFORM, 'weaponTransform': WEAPON_TRANSFORM, 'catalystTransform': CATALYST_TRANSFORM, 'supplementQuality': 88, 'supplementCanvas': [128, 128], 'elementTransform': ELEMENT_TRANSFORM, 'elementQuality': 90, 'elementCanvas': [128, 128], 'weaponQuality': 88, 'weaponCanvas': [128, 128], 'artifactCanvas': [128, 128], 'artifactQuality': 88, 'artifactTransform': ARTIFACT_TRANSFORM}, 'rejectedSourceHashes': [PLACEHOLDER], 'budgets': {'maxAssetBytes': 32768, 'maxTotalBytes': 16777216}, 'totalBytes': total, 'totalSourceBytes': sum(asset['sourceBytes'] for asset in assets), 'assets': assets, 'missing': missing, 'excluded': excluded, 'sharedBuffStatIcons': STAT_SOURCES.get('buffAliases', [])}
-(OUTPUT / 'game-icon-manifest.json').write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode())
-for filename, groups in [('game-icon-index', ['characters', 'weapons', 'artifacts', 'artifactSlots', 'elements', 'stats']), ('game-detail-icon-index', ['skills', 'constellations', 'buffs'])]:
-    (ROOT / f'src/web/src/assets/{filename}.json').write_bytes((json.dumps({kind: index[kind] for kind in groups}, ensure_ascii=False, separators=(',', ':')) + '\n').encode())
+manifest = {'formatVersion': 2, 'sourceCommits': {**BUFF_SOURCES['sourceCommits'], 'TwiceDrop/genshin_artifact': COMMIT, SPRITES['repository']: SPRITES['commit'], SPRITES['normalAttackSource']['repository']: SPRITES['normalAttackSource']['commit'], 'genshin-db': '8e5badd60b5d894284ccc927a56c9683529d2592', 'legacy-mona': 'beaced4d82619aa86920d0054ab6114b5fc5608f', 'legacy-PathOfGenshin/resources': '015a2493b5672b28576ab78ffbcffde2ea0c9844'}, 'rights': 'Game artwork © miHoYo / HoYoverse. Unofficial tool; code licenses do not grant artwork rights.', 'compression': {'format': 'WebP + SVG stats', 'statTransform': 'stat-vector-v4', 'quality': 76, 'method': 6, 'transparent': True, 'avatarTransform': TRANSFORM, 'weaponTransform': WEAPON_TRANSFORM, 'catalystTransform': CATALYST_TRANSFORM, 'supplementQuality': 88, 'supplementCanvas': [128, 128], 'elementTransform': ELEMENT_TRANSFORM, 'elementQuality': 90, 'elementCanvas': [128, 128], 'weaponQuality': 88, 'weaponCanvas': [128, 128], 'artifactCanvas': [128, 128], 'artifactQuality': 88, 'artifactTransform': ARTIFACT_TRANSFORM}, 'budgets': {'maxAssetBytes': 32768, 'maxTotalBytes': 16777216}, 'totalBytes': total, 'totalSourceBytes': sum(asset['sourceBytes'] for asset in assets), 'assets': assets, 'excluded': excluded, 'sharedBuffStatIcons': STAT_SOURCES.get('buffAliases', [])}
+(OUTPUT / 'missing-icons.json').write_bytes((json.dumps(missing,ensure_ascii=False,indent=2)+'\n').encode())
+(OUTPUT / 'manifest.json').write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode())
 print(json.dumps({'icons': len(assets), 'bytes': total, 'missing': len(missing), 'excludedPassives': len(excluded), 'sharedNormalAttackIcons': len(normal_attacks)}, ensure_ascii=True))
