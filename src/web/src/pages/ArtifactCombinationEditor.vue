@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {buildRollBasis,defaultRollBasis,rollBasisTitle,type EffectiveRollBasis} from '../domain/effective-roll-basis';
+import {buildRollBasis,defaultRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
 import { computed, ref, onMounted } from 'vue';
 import type { AccountArtifact, AccountSlot } from '../domain/account';
 import { accountSlots, accountSlotLabels, cloneAccount } from '../domain/account';
@@ -77,7 +77,7 @@ function select(item:AccountArtifact){draft.value.items=[...draft.value.items.fi
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="combination-name-row"><label>组合名称<input :value="draft.name ?? automaticName" aria-label="组合名称" maxlength="160" @input="draft.name=($event.target as HTMLInputElement).value"></label><button class="ui-action soft" data-size="md" :aria-pressed="draft.name===undefined" :disabled="!canGenerateName" @click="draft.name=undefined">自动命名</button></div>
     <ArtifactEquipmentGrid density="compact" :effective-stats="draft.stats" :entries="accountSlots.map(slot=>({slot,item:draft.items.find(item=>item.slot===slot)}))" :account="inventory" popup context-menu inspect-primary @inspect="inspect" @menu="equipmentContext" @change="slot=$event;pickerOpen=true" />
-    <div class="combination-effective"><div class="combination-reference-row"><EffectiveReferencePicker :name="draft.referenceName" @select="chooseReference" /><span v-if="draft.basis.source==='build'" :title="rollBasisTitle(draft.basis)">武器：{{ draft.basis.weaponName }}</span></div><section class="combination-rolls" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="draft.basis" :items="draft.items" :selected-stats="draft.stats" selectable @toggle="toggle" /></section></div>
+    <div class="combination-effective"><div class="combination-reference-row"><EffectiveReferencePicker :name="draft.referenceName" @select="chooseReference" /></div><section class="combination-rolls" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="draft.basis" :items="draft.items" :selected-stats="draft.stats" selectable @toggle="toggle" /></section></div>
     <ComparisonPanel kind="组合" :current="{title:draft.name ?? automaticName,items:draft.items,basis:draft.basis}" :options="comparisonOptions" :stats="draft.stats" :reference-name="draft.referenceName" />
     <ContextMenu v-if="equipmentMenu" :x="equipmentMenu.x" :y="equipmentMenu.y" label="组合圣遗物操作" :options="[{id:'details',label:'查看详情'},{id:'replace',label:'替换'}]" @close="equipmentMenu=undefined" @select="equipmentAction" />
     <ArtifactDetail v-if="detailItem" :item="detailItem" readonly @close="detailItem=undefined" />
@@ -88,4 +88,4 @@ function select(item:AccountArtifact){draft.value.items=[...draft.value.items.fi
 </template>
 <style scoped>
 .combination-name-row { display:flex; align-items:end; flex-wrap:wrap; gap:12px; margin:0 0 20px; }.combination-name-row label { display:grid; flex:1; min-width:200px; gap:8px; font-size:var(--font-control); font-weight:700; }.combination-name-row input { width:100%; height:40px; box-sizing:border-box; font-size:var(--font-control); font-weight:700; }.combination-effective { display:grid; gap:12px; margin-top:20px; border-top:1px solid var(--line); padding-top:16px; }.combination-rolls { display:grid; gap:8px; border-top:1px solid var(--line); padding-top:16px; }.combination-effective h3 { font-size:var(--font-control); margin:0; }
-.combination-reference-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; }.combination-reference-row > span { font-size:var(--font-body); color:var(--muted); }</style>
+.combination-reference-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; }</style>

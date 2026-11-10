@@ -33,7 +33,7 @@ const view=computed(()=>views.forAccount(account.account.id)),localQuery=ref('')
 const query=computed({get:()=>props.pick?localQuery.value:view.value.query,set:value=>{if(props.pick)localQuery.value=value;else view.value.query=value;page.value=1;}});
 const storedPage=computed({get:()=>props.pick?localPage.value:view.value.page,set:value=>{if(props.pick)localPage.value=value;else view.value.page=value;}});
 const characters=ref<{id:string;name:string}[]>([]);
-const sets=ref<{id:string;name:string;rarity:number}[]>([]),error=ref(''),notice=ref('');
+const sets=ref<{id:string;name:string;rarity:number}[]>([]),error=ref('');
 const editor=ref<ArtifactCombination>(),creating=ref(false),deleteId=ref(''),filterOpen=ref(false),sortOpen=ref(false);
 const selectedSets=ref<string[]>([]),favoriteFilter=ref<string[]>([]),sort=ref('rolls'),direction=ref<'asc'|'desc'>('desc');
 const pageSize=5,library=ref<HTMLElement>();
@@ -54,7 +54,7 @@ watch(()=>account.account.id,()=>{editor.value=undefined;creating.value=false;de
 onMounted(async()=>{try{const data=await loadAccountGameData();sets.value=data.catalog.sets;characters.value=data.catalog.characters;}catch{error.value='套装目录加载失败，请重新打开。';}});
 function clearFilters(){query.value='';selectedSets.value=[];favoriteFilter.value=[];}
 function emptyAction(){if(all.value.length)clearFilters();else creating.value=true;}
-function saved(id:string,duplicate:boolean){creating.value=false;editor.value=duplicate?store.combinations.find(item=>item.id===id):undefined;notice.value=duplicate?'已有相同组合，已打开。':'组合已保存，角色穿戴不变。';if(!duplicate)emit('closed');}
+function saved(id:string,duplicate:boolean){creating.value=false;editor.value=duplicate?store.combinations.find(item=>item.id===id):undefined;if(!duplicate)emit('closed');}
 function stale(combination:ArtifactCombination){try{validateCombinationItems(account.account,combination.items);return false;}catch{return true;}}
 function referenceId(combination:ArtifactCombination){return characters.value.find(character=>character.name===combination.referenceName)?.id;}
 const menu=ref<{combination:ArtifactCombination;x:number;y:number}>();
@@ -70,7 +70,7 @@ function remove(){try{store.remove(account.account.id,deleteId.value);deleteId.v
     <LibraryToolbar v-model="query" label="搜索圣遗物组合" placeholder="查找组合或参考角色…" :filter-count="selectedSets.length+favoriteFilter.length" :sorted="sort!=='rolls' || direction!=='desc'" @filter="filterOpen=true" @sort="sortOpen=true" @reset="selectedSets=[];favoriteFilter=[];sort='rolls';direction='desc'"><template #actions><button class="ui-action library-primary-action" aria-label="新建组合" @click="creating=true;editor=undefined"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新建组合</button></template></LibraryToolbar>
     <LibraryListHeader v-model:page="page" :pages="pages" :count="shown.length" :total="all.length" unit="组组合" />
     <p v-if="pick && referenceName" class="pick-reference">按{{ referenceName }}统计</p>
-    <p v-if="error || store.error" role="alert">{{ error || store.error }}</p><p v-if="notice" role="status">{{ notice }}</p>
+    <p v-if="error || store.error" role="alert">{{ error || store.error }}</p>
     <div class="combination-list"><article v-for="combination in visible" :key="combination.id" class="combination-row" :data-combination-id="combination.id" @contextmenu.prevent="openMenu($event,combination)">
       <div class="combination-heading"><h3>{{ name(combination) }}</h3><span v-if="stale(combination)" class="stale">{{ combination.items.some(item=>item.inventoryId===null)?'含未入库':'库存已变化' }}</span><span v-if="combination.referenceName" class="combination-reference" role="img" :title="`参考角色：${combination.referenceName}`" :aria-label="`参考角色：${combination.referenceName}`"><GameIcon kind="characters" :id="referenceId(combination)" :name="combination.referenceName" :size="32" /></span><span v-if="combination.favorite" class="combination-favorite" :title="`${combination.favorite}级收藏`" :aria-label="`${combination.favorite}级收藏`"><FavoriteMark :level="combination.favorite" /></span></div>
       <EquipmentStrip :effective-stats="stats(combination)" :entries="accountSlots.map(slot=>({slot,item:combination.items.find(item=>item.slot===slot)}))" />

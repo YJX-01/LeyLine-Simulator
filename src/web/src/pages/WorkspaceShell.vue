@@ -20,7 +20,6 @@ const pendingAccountConfiguration=ref<{characterId:string;presetId:string}>();
 const AccountLibrary = defineAsyncComponent(() => import('./AccountLibrary.vue'));
 const DefinitionLibrary = defineAsyncComponent(() => import('./DefinitionLibrary.vue'));
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
-import CloseButton from '../components/CloseButton.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { defaultEnemy } from '../domain/real-project';
 import { elements } from '@leyline/schema';
@@ -37,7 +36,7 @@ const geoEmblem = `${import.meta.env.BASE_URL}assets/game/elements/geo.webp`;
 const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue'));
 const TeamWorkspace = defineAsyncComponent(() => import('./TeamWorkspace.vue'));
 const workspace = useAxisWorkspaceStore();
-const { project, result, selectedId, dirty, busy, notice, error } = storeToRefs(workspace);
+const { project, result, selectedId, dirty, busy, error } = storeToRefs(workspace);
 type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'projects' | 'team' | 'timeline' | 'analysis' | 'definitions' | 'account' | 'settings';
 const page = ref<Page>(window.location.hash === '#axis' ? 'timeline' : 'characters');
 const collapsed = ref(false);
@@ -154,8 +153,7 @@ async function importFile(event: Event) {
       </header>
       <h1 class="page-accessible-title">{{ titles[page] }}</h1>
       <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入轴项目文件" class="shell-file-input" @change="importFile">
-      <div v-if="isProjectPage && (notice || error)" class="shell-notices">
-        <p v-if="notice" role="status">{{ notice }}<CloseButton class="dismiss-notice" label="关闭操作提示" @click="workspace.notice = ''" /></p>
+      <div v-if="isProjectPage && error" class="shell-notices">
         <div v-if="error" role="alert" class="shell-error">{{ errorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
       </div>
 

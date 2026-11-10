@@ -26,7 +26,3 @@ export function readRollBasis(value:unknown):EffectiveRollBasis {
   for(const key of ['level','weaponLevel'] as const)if(basis[key]!==undefined && (!Number.isInteger(basis[key]) || basis[key]!<1 || basis[key]!>100))throw new Error('组合折算基准无效。');
   return {...basis};
 }
-export function rollBasisTitle(basis?:EffectiveRollBasis) {
-  const value=basis ?? defaultRollBasis();
-  return `${value.source==='build'?`${value.weaponName ?? '创建时武器'} · ${value.weaponLevel ?? ''}级`:'默认折算基准'}；白值生命 ${value.hp.toFixed(2)}，攻击 ${value.attack.toFixed(2)}，防御 ${value.defense.toFixed(2)}`;
-}

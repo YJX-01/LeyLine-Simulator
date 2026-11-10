@@ -46,6 +46,7 @@ import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, equipmentConfigurationName, configurationSignature } from '../domain/character-loadout-name';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
 import { hasLocalConfiguration, hasCharacterInformation, planClearedConfiguration } from '../domain/account-configurations';
+import { characterListGroup } from '../domain/elemental-forms';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
 import { useArtifactCombinationsStore } from '../stores/artifact-combinations';
 import { applyCombination, combinationSignature, type ArtifactCombination } from '../domain/artifact-combinations';
@@ -101,7 +102,6 @@ const characterForm = ref<InstanceType<typeof CharacterForm>>();
 const cultivationDirty = ref(false);
 const formRevision = ref(0);
 const detailError = ref('');
-const detailNotice = ref('');
 const detailBusy = ref(false);
 const saveAsOpen = ref(false);
 const configurationPickerOpen=ref(false);
@@ -148,7 +148,7 @@ function resetDraft() {
   baseSnapshot = JSON.stringify(account.value);
   draftAccount.value = cloneAccount(account.value);draftBaseline=JSON.stringify(draftAccount.value);editingPresetId.value='';previewConfiguration.value=undefined;
   cultivationDirty.value = false; formRevision.value++; artifactId.value='';
-  detailError.value = ''; detailNotice.value = ''; selectedPreset.value = '';
+  detailError.value = '';  selectedPreset.value = '';
 }
 async function saveDetail(asPreset = false) {
   if (!draftAccount.value || !character.value || detailBusy.value) return false;
@@ -173,7 +173,7 @@ async function saveDetail(asPreset = false) {
       if(plan.removedCharacter) {
         closeCharacter();characterId.value='';
         await nextTick();document.querySelector<HTMLInputElement>('[aria-label="搜索账号角色"]')?.focus();
-      } else {resetDraft();detailNotice.value=plan.promotedId?'已清除当前配置，备选已接替首选。':'已清除当前配置。';}
+      } else {resetDraft();}
       return true;
     }
     if (asPreset || editingPresetId.value) {
@@ -182,7 +182,7 @@ async function saveDetail(asPreset = false) {
       if(asPreset)editingPresetId.value=loadouts.save(name,valid,entry);
       else loadouts.update(editingPresetId.value,name,valid,entry);
       selectedPreset.value=editingPresetId.value;draftAccount.value=valid;draftBaseline=JSON.stringify(valid);cultivationDirty.value=false;formRevision.value++;
-      saveAsOpen.value=false;previewConfiguration.value=undefined;detailNotice.value='';
+      saveAsOpen.value=false;previewConfiguration.value=undefined;
     } else {
       store.commitEdit(valid); resetDraft();
     }
@@ -211,7 +211,7 @@ function tryPreset(id: string) {
     next.characters[next.characters.findIndex(item => item.id === snapshot.id)] = snapshot;
     for (const artifact of Object.values(equipment)) equipArtifact(next, snapshot.id, artifact!);
     draftAccount.value = parseAccount(next);draftBaseline=JSON.stringify(draftAccount.value);editingPresetId.value=id;selectedPreset.value=id;formRevision.value++;cultivationDirty.value=false;
-    detailNotice.value = '正在查看备选配装；保存只更新此方案，设为首选才改变实际穿戴。';
+
   } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '方案未载入。'; selectedPreset.value = ''; }
 }
 const combinationStore=useArtifactCombinationsStore();
@@ -241,13 +241,12 @@ async function saveCurrentCombination(){
     if(!detailOpen.value || target!==character.value || source!==account.value || sourceView!==equipmentView.value || form!==characterForm.value)return;
     const existing=combinationStore.combinations.find(entry=>entry.accountId===account.value.id && combinationSignature(entry.items,entry.stats,entry.basis,entry.referenceName)===combinationSignature(items,stats,basis,character.value!.name));
     combinationEditorId.value=existing?.id ?? '';combinationSeed.value=existing?undefined:{items,stats,referenceName:character.value.name,basis};combinationPendingArtifacts.value=pending;
-    if(existing)detailNotice.value='已有相同组合，已打开。';
   }catch(cause){detailError.value=cause instanceof Error?cause.message:'组合未打开。';}
 }
 function combinationSaved(id:string,duplicate:boolean){
   if(combinationPendingArtifacts.value.length)syncImportedArtifacts();
   combinationSeed.value=undefined;combinationPendingArtifacts.value=[];combinationEditorId.value=duplicate?id:'';
-  detailNotice.value=duplicate?'已有相同组合，已打开。':'组合已保存，穿戴不变。';
+
 }
 function closeCombination(){combinationSeed.value=undefined;combinationPendingArtifacts.value=[];combinationEditorId.value='';}
 function useCombination(combination:ArtifactCombination,confirmed=false){
@@ -259,7 +258,7 @@ function useCombination(combination:ArtifactCombination,confirmed=false){
       pendingCombination.value=combination;combinationBaseline=JSON.stringify(draftAccount.value);return;
     }
     draftAccount.value=plan.next;combinationPickerOpen.value=false;pendingCombination.value=undefined;
-    detailNotice.value='组合已应用到草稿，保存后生效。';
+
   }catch(cause){detailError.value=cause instanceof Error?cause.message:'组合未应用。';pendingCombination.value=undefined;}
 }
 const artifactId = ref('');
@@ -287,7 +286,7 @@ function equipmentAction(action:string){const slot=equipmentMenu.value?.slot;equ
 function importShowcasePiece(){try{
   if(!character.value || !importingSlot.value)return;
   if(JSON.stringify(account.value)!==importPieceBaseline)throw new Error('库存已变化，请重新确认。');
-  const plan=planShowcaseInventory(account.value,[character.value],[importingSlot.value]);commitMergedInventory(plan.next);syncImportedArtifacts();detailNotice.value=plan.added?'圣遗物已入库，穿戴不变。':'已合并相同圣遗物，优先采用展柜强化次数。';importingSlot.value=undefined;
+  const plan=planShowcaseInventory(account.value,[character.value],[importingSlot.value]);commitMergedInventory(plan.next);syncImportedArtifacts();importingSlot.value=undefined;
 }catch(cause){detailError.value=cause instanceof Error?cause.message:'未入库，请重试。';importingSlot.value=undefined;}}
 function openEquipmentPicker(slot:AccountSlot) { equipmentSlot.value=slot;equipmentPickerOpen.value=true; }
 function unequipCurrentSlot() { if(character.value)delete character.value.equipment[equipmentSlot.value];equipmentPickerOpen.value=false; }
@@ -326,7 +325,7 @@ function clearShowcase() {
     cultivationDirty.value=false;formRevision.value++;
   }
   equipmentView.value='local';clearShowcaseOpen.value=false;nextTick(()=>localViewTab.value?.focus());
-  detailNotice.value=clearTarget.value==='showcase'?'展柜已清除，保存后生效。':'本地配装已清除，保存后生效。';
+
 }
 defineExpose({ requestLeave, openConfiguration });
 function openCharacter(id:string) { equipmentView.value='local'; characterId.value=id; resetDraft(); detailOpen.value=true;panelOpen.value=false; }
@@ -365,7 +364,7 @@ const visibleCharacters = computed(() => {
       && (!rarityFilter.value.length || rarityFilter.value.includes(String(characterRelease(entry)?.rarity)))
       && (!weaponFilter.value.length || (meta && weaponFilter.value.includes(meta.weaponType)));
   });
-  return items.sort((a,b) => (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.build?.level??-1)-(a.build?.level??-1) : sort.value==='constellation' ? (b.build?.constellation??-1)-(a.build?.constellation??-1) : sort.value==='rolls' ? roleRolls(b)-roleRolls(a) : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
+  return items.sort((a,b) => characterListGroup(a.build?.character.id ?? catalog.value?.characters.find(item=>item.name===a.name)?.id)-characterListGroup(b.build?.character.id ?? catalog.value?.characters.find(item=>item.name===b.name)?.id) || (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.build?.level??-1)-(a.build?.level??-1) : sort.value==='constellation' ? (b.build?.constellation??-1)-(a.build?.constellation??-1) : sort.value==='rolls' ? roleRolls(b)-roleRolls(a) : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
 });
 const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({...entry,presetId:'',galleryKey:entry.id,gallerySnapshot:account.value})));
 function openGallery(entry:{id:string;presetId:string}) { if(props.pick){emit('select',entry.id);return;}openCharacter(entry.id);if(entry.presetId)tryPreset(entry.presetId); }
@@ -411,8 +410,7 @@ function equip() {
 
     <template v-if="page === 'characters'">
       <template v-if="!props.configurationDetail">
-      <CharacterLibraryTools v-model:query="query" v-model:elements="elementFilter" v-model:weapons="weaponFilter" v-model:rarities="rarityFilter" v-model:favorites="favoriteFilter" v-model:sort="sort" v-model:direction="sortDirection" label="搜索账号角色" :sort-options="sortOptions"><template v-if="!props.pick" #actions><LibraryImportActions showcase @mona="modal='import'" @showcase="modal='network'" @create="editingCharacter=false;modal='create'" /></template></CharacterLibraryTools>
-
+      <CharacterLibraryTools v-model:query="query" v-model:elements="elementFilter" v-model:weapons="weaponFilter" v-model:rarities="rarityFilter" v-model:favorites="favoriteFilter" v-model:sort="sort" v-model:direction="sortDirection" label="搜索账号角色" :sort-options="sortOptions"><template v-if="!props.pick" #actions><LibraryImportActions :mona="false" showcase @showcase="modal='network'" @create="editingCharacter=false;modal='create'" /></template></CharacterLibraryTools>
 
       <div class="character-cards">
         <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
@@ -438,7 +436,7 @@ function equip() {
       <template #header-secondary><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftName.split(' · ').slice(1).join('|') }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
       <template #header-leading><div class="character-header-tools"><div class="equipment-view-tabs" role="group" aria-label="角色资料来源"><button ref="localViewTab" data-view="local" :aria-pressed="equipmentView==='local'" :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地</button><button v-if="character.showcase" data-view="showcase" :aria-pressed="equipmentView==='showcase'" :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜</button></div><EditorActions v-if="equipmentView==='local'" :dirty="detailDirty" :busy="detailBusy" allow-save-as @save="saveDetail()" @save-as="openSaveAs" @restore="restoreConfiguration" /><button class="clear-showcase ui-action soft" data-size="md" data-accent="pyro" @click="requestClearShowcase">删除</button></div></template>
       <div class="account-editor">
-        <p v-if="detailError || loadouts.error" role="alert">{{ detailError || loadouts.error }}</p><p v-if="detailNotice" class="detail-feedback" role="status">{{ detailNotice }}</p>
+        <p v-if="detailError || loadouts.error" role="alert">{{ detailError || loadouts.error }}</p>
 
         <div v-if="error" class="account-error" role="alert">{{ localDataErrorLabel(error) }}</div>
 
@@ -487,9 +485,6 @@ function equip() {
 .character-cards .character-card { container-type:inline-size; width:100%; max-width:360px; justify-self:center; display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px color-mix(in srgb,var(--neutral-ink) 1.96%,transparent); transition:border-color .15s,box-shadow .15s,transform .15s; }
 .character-cards .character-card:hover { transform:translateY(-2px); border-color:var(--element-anemo-primary); box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 6.27%,transparent); }
 
-
-
-
 @media(prefers-reduced-motion:reduce){.character-cards .character-card { transition:none; }.character-cards .character-card:hover { transform:none; }}
 @media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:10px 7px 12px; }}
 
@@ -497,7 +492,6 @@ function equip() {
 .account-toolbar { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
 .account-toolbar label { min-width: 160px; }.account-toolbar span, p { font-size:var(--font-body); line-height: 1.8; }
 label { font-size:var(--font-body); display: grid; gap: 7px; } input, select { min-width: 0; width: 100%; box-sizing: border-box; }
-
 
 .account-copy { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 12px; }
 .account-note { display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin:0 0 16px; }.account-note strong { font-size:var(--font-body); }.account-note span { color:var(--muted); }.account-error { color: var(--element-pyro-deep); }
@@ -516,9 +510,6 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 .filter-options button { display:inline-flex; align-items:center; gap:6px; }
 
 @media(max-width:550px) { .element-shortcuts { gap:4px; }.element-shortcuts > button { padding:4px 6px; } }
-
-
-
 
 .character-detail-dialog .equipment-view-tabs { grid-column:1; grid-row:1; justify-content:flex-start; margin:0; gap:8px; }
 .character-detail-dialog .equipment-view-tabs button { height:32px; min-height:32px; font-size:var(--font-body); padding:5px 8px; }

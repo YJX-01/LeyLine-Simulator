@@ -78,7 +78,7 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   const name = panel.getByLabel('角色元数据名称', { exact: true });
   await name.clear(); await name.pressSequentially('行秋 · 自定义保存核对');
   await panel.getByRole('button', { name: '应用到所选队员', exact: true }).click();
-  await expect(panel.getByRole('status')).toContainText('已应用');
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-axis-recovery-v2')!).project.candidate.actors[0].build.character.id)).toMatch(/^custom-/);
   const before = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v2')!).project);
   expect(before.candidate.actors[0].build.character.id).toMatch(/^custom-/);
   await page.getByTestId('workspace-nav-team').click();

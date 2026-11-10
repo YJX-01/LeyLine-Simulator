@@ -8,7 +8,6 @@ import { loadAccountGameData } from '../domain/account-presentation';
 import { useAccountStore } from '../stores/account';
 import CatalogPicker from '../components/CatalogPicker.vue';
 import GameIcon from '../components/GameIcon.vue';
-import CharacterMetadataPanel from '../components/CharacterMetadataPanel.vue';
 import WeaponPlaceholder from '../components/WeaponPlaceholder.vue';
 import LevelPicker from '../components/LevelPicker.vue';
 import NumberStepper from '../components/NumberStepper.vue';
@@ -136,15 +135,13 @@ defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis });
 
         </fieldset>
           <fieldset class="constellation-row" :disabled="showcase"><strong>命座</strong><div class="constellation-strip" role="group" aria-label="命座" :style="elementStyle">
-            <button v-for="rank in 7" :key="rank" :disabled="showcase || (rank>1 && selectedDefinition?.origin==='builtin' && !selectedDefinition.constellations.length)" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else-if="selectedDefinition?.constellations.some(item=>item.rank===rank-1)" kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><span v-else aria-hidden="true">—</span><CornerBadge small transparent class="constellation-number">{{ rank-1 }}</CornerBadge></button>
+            <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><CornerBadge small transparent class="constellation-number">{{ rank-1 }}</CornerBadge></button>
           </div></fieldset>
           <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase" @update:model-value="refinement=Number($event)" /></fieldset>
       </div>
-      <p v-if="constellation>0 && selectedDefinition && selectedDefinition.constellations.length<6">当前快照未收录命座天赋加级，天赋显示基础等级。</p>
       <CatalogPicker v-if="!showcase" ref="weaponPicker" hide-trigger label="装备武器" image-kind="weapons" v-model="weaponId" :options="weapons" :disabled="!characterId" />
       <div v-if="(dirty || !props.character) && !showcase && !detached" class="detail-save"><button class="ui-action" data-accent="anemo" :disabled="busy || !characterId || !weaponId" @click="apply()">{{ props.character ? '保存修改' : '保存角色资料' }}</button><button class="ui-action soft" data-accent="pyro" v-if="props.character" :disabled="busy" @click="reset">还原修改</button></div>
     </template>
-    <CharacterMetadataPanel v-if="selectedDefinition" :character="selectedDefinition" :talents="talents" :constellation="constellation" />
     <p v-if="error" role="alert">{{ error }}</p>
   </div>
 </template>
@@ -178,6 +175,6 @@ defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis });
 
 .inline { padding:18px; border:1px solid var(--line); border-radius:12px; background:var(--surface); margin:12px 0; }.inline .catalog-picker { grid-column:1/-1; }
 .character-form { display:grid; gap:14px; color:var(--ink); } label { display:grid; gap:6px; font-size:var(--font-body); } input { width:100%; min-height:38px; box-sizing:border-box; } p { font-size:var(--font-body); line-height:1.8; } [role=alert] { color:var(--element-pyro-deep); }
-.character-form { grid-template-columns:repeat(2,minmax(0,1fr)); }.character-form > .character-metadata-panel,.character-form > p,.character-form > h3 { grid-column:1/-1; }@media(max-width:550px) { .character-form { grid-template-columns:1fr; } }
+.character-form { grid-template-columns:repeat(2,minmax(0,1fr)); }.character-form > p,.character-form > h3 { grid-column:1/-1; }@media(max-width:550px) { .character-form { grid-template-columns:1fr; } }
 @media(max-width:400px) { .constellation-row { grid-template-columns:minmax(0,1fr); gap:8px; }.constellation-strip { grid-column:1; grid-template-columns:repeat(7,32px); justify-content:space-between; gap:0; }.constellation-strip button { width:32px; height:32px; min-height:32px; padding:2px; }.constellation-strip .game-icon,.constellation-strip svg { width:28px !important; height:28px !important; } }
 </style>

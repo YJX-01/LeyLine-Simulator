@@ -49,8 +49,6 @@
 .workspace-design .toolbar-more > summary { cursor:pointer; padding:8px; white-space:nowrap; }
 .workspace-design .toolbar-more > div { position:absolute; right:0; top:100%; display:grid; min-width:160px; padding:8px; gap:6px; background:var(--neutral-surface); border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 9.41%,transparent); z-index:10; }
 .workspace-design .shell-notices { margin:0 24px 12px; }
-.workspace-design .shell-notices > p { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0; font-size:var(--font-body); }
-.workspace-design .dismiss-notice { border:0; background:transparent; min-height:24px; padding:0 8px; color:var(--muted); }
 .workspace-design .account-library, .workspace-design .team-workspace, .workspace-design .timeline-layout, .workspace-design .analysis-layout, .workspace-design .project-library, .workspace-design .definition-library, .workspace-design .settings-page, .workspace-design .account-page { margin-inline:20px; }
 .workspace-design .settings-page.panel, .workspace-design .account-page.panel { padding:18px 20px; }
 .workspace-design .account-library > [role=status] { margin-top:0; }

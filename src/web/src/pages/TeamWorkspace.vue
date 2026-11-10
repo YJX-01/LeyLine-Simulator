@@ -23,7 +23,6 @@ const picking = ref(false);
 const adding = ref(false);
 const editing = ref(false);
 const name = ref('');
-const message = ref('');
 const error = ref('');
 const pendingTeam = ref<SavedTeam>();
 const characters = computed(() => accounts.account.characters);
@@ -51,12 +50,12 @@ async function add(id: string) {
     const build = buildSchema.parse({ ...character.build, artifacts, sets, inventoryAccountId: account.id });
     axis.command(draft => { axis.actorId = addActorFromBuild(draft, build, character.name); });
     picking.value = false;
-    message.value = '已复制账号配装到当前队伍，后续试配独立保存。';
+
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '添加失败。'; }
   finally { adding.value = false; }
 }
 function save() {
-  try { saved.save(name.value, axis.project); message.value = `已保存队伍「${name.value}」，可用于新建多条轴。`; error.value = ''; }
+  try { saved.save(name.value, axis.project);  error.value = ''; }
   catch (cause) { error.value = cause instanceof Error ? cause.message : '队伍保存失败。'; }
 }
 function newAxis(team: SavedTeam) {
@@ -75,7 +74,7 @@ function remove(id: string) { axis.command(draft => removeProjectActor(draft, id
 <template>
   <section class="team-workspace panel">
     <header><span class="team-count">当前队伍 · {{ axis.project.candidate.actors.length }} / 4</span><button class="ui-action" data-accent="anemo" @click="picking = true">＋ 从账号选择队员</button></header>
-    <p v-if="message" role="status">{{ message }}</p><p v-if="error || saved.error" role="alert">{{ error || saved.error }}</p>
+    <p v-if="error || saved.error" role="alert">{{ error || saved.error }}</p>
     <div class="team-cards"><article v-for="actor in axis.project.candidate.actors" :key="actor.id" :class="{ active: axis.actorId === actor.id }"><button class="actor-select" @click="axis.actorId = actor.id"><CharacterEquipmentIcons :build="actor.build" :name="actor.name" :size="88" /><strong>{{ actor.name ?? actor.build?.character.identity.name }}</strong><small>{{ actor.build?.weapon.name ?? '旧版配装' }}</small><small>{{ actor.build?.artifacts.length ?? 0 }} 件试配圣遗物</small></button><button class="ui-action soft" data-accent="anemo" @click="axis.actorId = actor.id; editing = true">查看与修改配装</button><button class="ui-action soft" data-accent="pyro" @click="pendingRemoval=actor.id">移除队员</button></article><button v-if="axis.project.candidate.actors.length < 4" class="empty-slot" @click="picking = true">＋<br>选择队员</button></div>
     <div class="team-save"><label>队伍名称<input v-model="name" aria-label="保存队伍名称" maxlength="160" placeholder="为这套队伍与试配命名"></label><button class="ui-action soft" data-accent="anemo" @click="save">保存为新队伍</button><button class="ui-action" data-accent="anemo" :disabled="!axis.project.candidate.actors.length" @click="emit('timeline')">进入当前轴 →</button></div>
     <h3>已保存的队伍</h3><p v-if="!saved.teams.length">保存后可以从同一队伍创建不同的轴。已有轴始终保留自己的配装快照。</p>

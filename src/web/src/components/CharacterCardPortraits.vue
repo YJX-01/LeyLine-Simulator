@@ -15,8 +15,7 @@ const rows = computed(() => {
   return (source ?? ['normal', 'skill', 'burst'].map((key, index) => ({ key, label: 'AEQ'[index], icon: '', name: '', constellations: [] }))).map(row => {
     const base = props.build?.talents[row.key as keyof Build['talents']];
     const bonus = row.constellations.filter(rank => rank <= (props.build?.constellation ?? 0)).length * 3;
-    const bonusKnown=!props.build || props.build.constellation===0 || props.build.character.constellations.length===6;
-    return { ...row, base, bonus, bonusKnown, level: base === undefined ? '—' : bonusKnown ? base + bonus : `${base}+?` };
+    return { ...row, base, bonus, level: base === undefined ? '—' : base + bonus };
   });
 });
 const sets = computed(() => {
@@ -54,7 +53,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
       <WeaponPlaceholder v-if="!build" />
     </span>
     <span class="card-talents">
-      <span v-for="row in rows" :key="row.key" class="talent-row" :aria-label="`${row.label} ${row.name} ${row.level}级`" :title="`${row.label} · ${row.name}${row.base === undefined ? ' · 待补全' : ` · 基础 ${row.base}${!row.bonusKnown ? ' · 命座加级未收录' : row.bonus ? ` + 命座 ${row.bonus}` : ''}`}`">
+      <span v-for="row in rows" :key="row.key" class="talent-row" :aria-label="`${row.label} ${row.name} ${row.level}级`" :title="`${row.label} · ${row.name}${row.base === undefined ? ' · 待补全' : ` · 基础 ${row.base}${row.bonus ? ` + 命座 ${row.bonus}` : ''}`}`">
         <GameIcon kind="skills" :id="row.icon" :size="24" />
         <b>{{ row.level }}<sup data-ui-badge="mini" v-if="row.bonus && row.base !== undefined">*</sup></b>
       </span>

@@ -1,7 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 test('recorded showcase files use the current contract and retired local accounts are ignored',async({page})=>{
+  test.skip(!existsSync('.references/enka/official-example.json'),'Requires the original public showcase in .references.');
   const raw=JSON.parse(readFileSync('.references/enka/official-example.json','utf8'));
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:raw}));
   await page.goto('/');
@@ -64,8 +65,7 @@ test('base traveler and Manekin metadata expose real texts, parameters and eleme
   const manual=page.getByRole('dialog',{name:'手动添加角色',exact:true});
   await manual.getByLabel('搜索游戏角色',{exact:true}).fill('奇偶·女性（水）');
   await manual.getByRole('button',{name:'选择奇偶·女性（水）',exact:true}).click();
-  await expect(manual.getByRole('button',{name:'1命',exact:true})).toBeDisabled();
-  await manual.getByText('角色介绍与技能说明',{exact:true}).click();
-  await expect(manual.getByRole('heading',{name:/戒惩轰击/})).toBeVisible();
-  await expect(manual.getByRole('heading',{name:/禁入限区/})).toBeVisible();
+  await expect(manual.getByRole('button',{name:'1命',exact:true})).toBeEnabled();
+  await expect(manual.getByText('角色介绍与技能说明',{exact:true})).toHaveCount(0);
+  await expect(manual.locator('.talent-field')).toHaveCount(3);
 });

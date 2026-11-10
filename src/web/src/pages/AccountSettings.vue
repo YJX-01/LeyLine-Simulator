@@ -52,8 +52,8 @@ function replaceAccount(restore = false) {
     <p class="account-summary">{{ store.account.characters.length }} 位角色 · {{ store.account.artifacts.filter(item=>item.inventoryId!==null).length }} 件圣遗物</p>
     <div class="account-file-actions"><button class="ui-action" data-accent="anemo" :disabled="store.busy" @click="store.save()">保存账号资料</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="openAccount">打开 / 切换账号</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="replaceAccount()">新建账号</button><button class="ui-action soft" data-accent="anemo" v-if="store.previous" :disabled="store.busy" @click="replaceAccount(true)">恢复替换前账号</button></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入账号资料文件" hidden @change="importFile">
-    <p class="account-hint">切换前保留恢复副本，不更改已有轴。莫娜 JSON 与 Enka 展柜导入在角色页，圣遗物文件也可在库存页导入。</p>
-    <p v-if="store.notice" role="status">{{ store.notice }}</p>
+    <p class="account-hint">切换前保留恢复副本，不更改已有轴。角色页可导入 Enka 展柜，圣遗物库存页可导入莫娜 JSON。</p>
+
     <div v-if="store.error" role="alert">{{ localDataErrorLabel(store.error) }}<details><summary>技术详情</summary>{{ store.error }}</details></div>
   </section>
 </template>
@@ -62,7 +62,7 @@ function replaceAccount(restore = false) {
 .account-settings { margin:0; }
 header { display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:16px; margin-bottom:12px; }
 h2 { font-size:var(--font-dialog); margin:0; } p { font-size:var(--font-body); line-height:1.8; margin:10px 0; }
-label { display:grid; gap:8px; max-width:400px; font-size:var(--font-body); } input { width:100%; box-sizing:border-box; }
+label { display:grid; gap:8px; max-width:400px; margin-bottom:14px; font-size:var(--font-body); } input { width:100%; box-sizing:border-box; }
 .account-file-actions { display:flex; gap:12px; flex-wrap:wrap; margin:20px 0; }
 .account-save-state { font-size:var(--font-body); color:var(--element-geo-deep); background:var(--element-geo-light); border:1px solid var(--neutral-line); border-radius:6px; padding:8px 12px; }
 .account-hint { color:var(--neutral-muted); } [role=alert] { color:var(--element-pyro-deep); }

@@ -30,7 +30,7 @@ const props=defineProps<{characterId?:string;selectable?:boolean;currentPresetId
 const emit=defineEmits<{select:[characterId:string,presetId:string];adopted:[];deleted:[characterId:string,presetId:string];resetRole:[]}>();
 const account=useAccountStore(),loadouts=useCharacterLoadoutsStore();
 const data=ref<Awaited<ReturnType<typeof loadAccountGameData>>>(),error=ref('');
-const pendingPreferred=ref<AccountConfiguration>(),notice=ref('');
+const pendingPreferred=ref<AccountConfiguration>();
 let adoptionBaseline='';
 function requestPreferred(configuration:AccountConfiguration) {
   const open=()=>{try{preparePreferredConfiguration(account.account,configuration);adoptionBaseline=JSON.stringify(account.account);pendingPreferred.value=configuration;error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'配置不可采用。';}};
@@ -42,7 +42,7 @@ function confirmPreferred() {
     if(JSON.stringify(account.account)!==adoptionBaseline)throw new Error('账号已变化，请重新核对配置。');
     const {next,current}=preparePreferredConfiguration(account.account,configuration);
     if(!loadouts.loadouts.some(item=>item.accountId===account.account.id && item.characterId===current.id && configurationSignature(item.snapshot.characters[0])===configurationSignature(current)))loadouts.save(characterLoadoutName(current,account.account,loadouts.effectiveStats(account.account.id,current.id,current.name),data.value?.catalog.sets ?? []),account.account,current);
-    account.commitEdit(next);pendingPreferred.value=undefined;notice.value='已设为首选，原首选保留为备选。';emit('adopted');
+    account.commitEdit(next);pendingPreferred.value=undefined;emit('adopted');
   }catch(cause){error.value=cause instanceof Error?cause.message:'未更改首选。';pendingPreferred.value=undefined;}
 }
 onMounted(async()=>{try{data.value=await loadAccountGameData();}catch{error.value='套装目录加载失败，请重新打开。';}});
@@ -95,7 +95,7 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
 <template>
   <div ref="listRoot" class="character-configuration-list">
     <LibraryToolbar v-model="query" label="搜索角色配置" placeholder="查找角色、套装或武器…" :filter-count="(filter==='all'?0:1)+(!selectable && characterId?1:0)" :sorted="sort!=='rolls' || direction!=='desc'" @filter="filterOpen=true" @sort="sortOpen=true" @reset="filter='all';sort='rolls';direction='desc';emit('resetRole')"><template v-if="$slots.actions" #actions><slot name="actions" /></template></LibraryToolbar>
-    <p v-if="error || loadouts.error" role="alert">{{ error || loadouts.error }}</p><p v-if="notice" role="status">{{ notice }}</p>
+    <p v-if="error || loadouts.error" role="alert">{{ error || loadouts.error }}</p>
     <LibraryListHeader v-model:page="page" :pages="pages" :count="configurations.length" :total="allConfigurations.length" unit="套配置" />
     <article v-for="configuration in visible" :key="configuration.id" class="configuration-row" :class="{current:selectable && currentPresetId===configuration.presetId}" :data-preset-id="configuration.presetId" :data-configuration-id="configuration.id" @contextmenu.prevent="openMenu($event,configuration)">
       <div class="configuration-top"><div class="configuration-heading"><ConfigurationTitle :character-name="configuration.character.name" :name="name(configuration)" :preferred="!configuration.presetId" :current="selectable && currentPresetId===configuration.presetId" /><span v-if="configuration.character.build" class="configuration-cultivation">{{ configuration.character.build.level }}级 · {{ configuration.character.build.constellation }}命 · 天赋 {{ configuration.character.build.talents.normal }}/{{ configuration.character.build.talents.skill }}/{{ configuration.character.build.talents.burst }} · 武器 {{ configuration.character.build.weaponLevel }}级 · 精炼{{ configuration.character.build.refinement }}</span><span v-else class="configuration-cultivation">培养资料缺失 · 未配置武器</span></div><button v-if="selectable && configuration.presetId" class="ui-action soft configuration-prefer" data-size="md" :aria-label="`设${configuration.character.name}此配置为首选`" @click="requestPreferred(configuration)">设为首选</button></div>

@@ -86,7 +86,7 @@ function conditionName(previous: string, event: Event) {
     <CharacterDefinitionEditor />
     <div class="library-actions"><h2>独立内容定义库</h2><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="open">打开定义库</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="store.save()">保存定义库</button><span>{{ store.dirty ? '定义库有未保存修改' : '定义库已保存' }}</span></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入内容定义库文件" hidden @change="importFile">
-    <p role="status">{{ store.notice }}</p><div v-if="store.error || error" role="alert">{{ localDataErrorLabel(store.error || error) }}<details><summary>技术详情</summary>{{ store.error || error }}</details></div>
+    <div v-if="store.error || error" role="alert">{{ localDataErrorLabel(store.error || error) }}<details><summary>技术详情</summary>{{ store.error || error }}</details></div>
     <div class="library-fields"><label>内容名称<input v-model="name" aria-label="新定义名称" maxlength="160"></label><label>内容类型<select v-model="kind" aria-label="新定义类型"><option value="damage">伤害公式</option><option value="character">角色</option><option value="equipment">武器或效果</option></select></label><button class="ui-action soft" data-accent="anemo" @click="create">创建定义</button></div>
     <div class="library-fields"><label>编辑库内定义<select v-model="selectedId" aria-label="编辑库内定义"><option value="">请选择</option><option v-for="(definition, index) in store.library.definitions" :key="definition.id" :value="definition.id">{{ definition.name || `内容${index + 1}` }}</option></select></label><button class="ui-action soft" data-accent="anemo" :disabled="!selected" @click="copy(selectedId)">复制所选定义到当前轴</button></div>
     <div v-if="selected" class="definition-editor">
