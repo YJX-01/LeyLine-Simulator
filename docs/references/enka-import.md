@@ -4,7 +4,7 @@
 
 ## 来源与实际材料
 
-协议依据 [Enka 官方 API 规则](https://github.com/EnkaNetwork/API-docs/blob/master/api.md)及[原神响应字段](https://github.com/EnkaNetwork/API-docs/blob/master/docs/gi/api.md)。固定元数据来自 `EnkaNetwork/API-docs` 提交 `b94bc40528941126590e0eefb0f03278e7a44ec8` 的 `store/characters.json`，其哈希与数字 ID/天赋顺序映射存于 `docs/constant/enka/catalog.json`；网页领域数据由 `node tools/scripts/convert-enka-catalog.mjs` 生成，`--check` 只读 canonical，`--capture` 才读参考文件。元数据快照保存在 `.references/enka/`，这是固定文件参考，不冒充 Git checkout。
+协议依据 [Enka 官方 API 规则](https://github.com/EnkaNetwork/API-docs/blob/master/api.md)及[原神响应字段](https://github.com/EnkaNetwork/API-docs/blob/master/docs/gi/api.md)。固定元数据来自 `EnkaNetwork/API-docs` 提交 `b94bc40528941126590e0eefb0f03278e7a44ec8` 的 `store/characters.json`，其哈希与数字 ID/天赋顺序映射存于 `tools/data/sources/catalog/enka/catalog.json`；网页领域数据由 `node tools/scripts/data/convert-enka-catalog.mjs` 生成，`--check` 只读 canonical，`--capture` 才读参考文件。元数据快照保存在 `.references/enka/`，这是固定文件参考，不冒充 Git checkout。
 
 实际输入使用官方文档直接提供的公开示例 [UID 618285856](https://enka.network/api/uid/618285856/)，不是用户自己的账号。取得的原始响应保存在忽略的 `.references/enka/official-example.json`，SHA-256 `e41b52d6abe70e2d571ac1da7505a09e209391c01dfbce7c8bdbe99fd971ea45`。本轮另做实际网页与桌面网络请求；网页实收时间 `2026-11-06T15:03:57.648Z`，响应 SHA-256 `9252b9a42f2d57c636d46d633222e1e2b1e451ea38f3c5fdd62438852596d026`，4 位角色为安柏、班尼特、甘雨、行秋。TTL 会变化，原始响应和自动化账号保存文件不是可冒充的游戏导出。未上传或提交用户莫娜文件。
 
@@ -41,7 +41,7 @@
 
 已补齐薇斯纳、奥黛特、桑多涅、沃雅妮莎、哥伦比娅的 Enka 天赋顺序映射。来源为 GachaBase 对应角色的 `release?lang=en` 正式数据页，以固定 genshin-db 英文 `combat1/combat2/combat3` 名称逐项匹配页内数字技能 ID；没有从玩家响应的 key 顺序、编号大小或默认值推测。薇斯纳页还有特殊动作，按技能名称匹配避免将其当作元素爆发。
 
-来源 URL、原文 SHA-256、名称目录的固定提交与哈希、技能分类和形态 ID 记录在 `docs/constant/enka/skill-supplements.json`。`python tools/scripts/capture-enka-skills.py` 读取忽略目录内正式页面并核对名称；`node tools/scripts/convert-enka-catalog.mjs --capture` 合并经核验补充，若与官方已有顺序冲突则拒绝；普通生成/检查不联网。原文仅作参考，不执行外部脚本。用户响应仅用于核验观察到的等级，未用于生成映射。
+来源 URL、原文路径、名称目录的固定提交、技能分类和形态 ID 记录在 `tools/data/sources/catalog/enka/skill-supplements.json`。`python tools/scripts/data/capture-enka-skills.py` 读取忽略目录内正式页面并核对名称；`node tools/scripts/data/convert-enka-catalog.mjs --capture` 合并经核验补充，若与官方已有顺序冲突则拒绝；普通生成/检查不联网。原文仅作参考，不执行外部脚本。用户响应仅用于核验观察到的等级，未用于生成映射。
 
 用户授权展柜的 12 位角色现已全部通过预览和确认导入，原先 5 位不再跳过；对应三类天赋分别为薇斯纳 8/10/10、奥黛特 2/10/7、桑多涅 10/8/10、沃雅妮莎 2/10/2、哥伦比娅 2/10/9。预览前账号不写入，确认后 12 位、背包实物 0；窄屏和桌面头像保持 48×48。由实际响应单独更改技能形态的边界检查会拒绝误用已核验映射。针对性 2 项真实文件检查、类型及浏览器流程通过，证据在 `artifacts/enka-adaptation-*`。
 

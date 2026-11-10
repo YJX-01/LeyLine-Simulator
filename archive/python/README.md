@@ -6,7 +6,7 @@ This directory preserves the pre-TypeScript implementation for historical refere
 
 | Archived path | Original path | Purpose |
 | --- | --- | --- |
-| `src/` | `/src/` | Python simulation, PyQt UI, demos, and assets |
+| `src/` | `/src/` | Python simulation, PyQt UI and assets; retired demos removed |
 | `requirements.txt`, `ENV.md`, `.env` | Repository root | Historical dependencies and environment instructions |
 | `.gitignore` | `/.gitignore` | Original Python ignore rules |
 | `docs/dict/`, `docs/graph/` | `/docs/dict/`, `/docs/graph/` | Old usage, terminology, diagrams, and demo images |
@@ -18,4 +18,4 @@ VS Code launch/settings files were intentionally removed. Root `README.md` and `
 
 Start with [legacy usage](docs/dict/usage.md) and [environment notes](ENV.md). To investigate historical behavior, use this directory as the working directory and `PYTHONPATH=src`. Dependencies and instructions are preserved, not verified against current Python versions. Old mechanics require independent auditing.
 
-Active snapshots in `/docs/constant/` and `/docs/characters/` remain outside the archive: the TypeScript generator consumes the constants and mechanics documentation cites character records. See [current architecture](../../docs/architecture/overview.md).
+The old demo scripts have been removed by user decision. Active metadata belongs in `src/game-data/data`; `docs` contains Markdown only. This archive does not supply inputs to the current generator. See [current architecture](../../docs/architecture/overview.md).

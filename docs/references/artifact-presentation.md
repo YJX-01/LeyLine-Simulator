@@ -10,9 +10,9 @@
 
 ## 来源
 
-精确档位来自固定的游戏导出表 [ReliquaryAffixExcelConfigData.json](https://github.com/Rafs-kk/LunaGC-6.6-res/blob/b0501c5d89767ead5f647869a2412521447f7682/ExcelBinOutput/ReliquaryAffixExcelConfigData.json)。规范快照 `docs/constant/artifact-rolls.json` 记录仓库、提交、路径、原文 SHA-256，提取 401/501 两组共 80 个副词条档位。编号的属性身份另与固定 Enka 元数据 `b94bc40528941126590e0eefb0f03278e7a44ec8/store/affixes.json` 交叉核验。只读取 JSON 数据，不执行参考仓库代码。
+精确档位来自固定的游戏导出表 [ReliquaryAffixExcelConfigData.json](https://github.com/Rafs-kk/LunaGC-6.6-res/blob/b0501c5d89767ead5f647869a2412521447f7682/ExcelBinOutput/ReliquaryAffixExcelConfigData.json)。规范快照 `src/game-data/data/tables/artifact-rolls.json` 记录仓库、提交、路径、原文 SHA-256，提取 401/501 两组共 80 个副词条档位。编号的属性身份另与固定 Enka 元数据 `b94bc40528941126590e0eefb0f03278e7a44ec8/store/affixes.json` 交叉核验。只读取 JSON 数据，不执行参考仓库代码。
 
-`node tools/scripts/convert-artifact-rolls.mjs --capture` 从忽略目录原文重新捕获并核验；正常生成和 `--check` 只读规范快照，输出 `src/web/src/domain/data/artifact-rolls.json`。展示模块按需加载，不增加引擎规则或概率系统。
+`node tools/scripts/data/convert-artifact-rolls.mjs --capture` 从忽略目录原文重新捕获并核验；正常生成和 `--check` 只读规范快照，输出 `src/web/generated/artifact-rolls.json`。展示模块按需加载，不增加引擎规则或概率系统。
 
 ## 强化次数
 
@@ -36,7 +36,7 @@ Enka 的 appendPropIdList 经编号、稀有度和显示汇总核验后保存可
 
 ## 角色有效词条
 
-默认值取自 miao-plugin 提交 `9d8972c2b060ede67d1b0dc7565abb4fe39b3aa7` 的 `resources/meta-gs/artifact/artis-mark.js`。将 usefulAttr 中非零的副词条属性转为选中组，不沿用其权重分数或角色自定义规则。常规 usefulAttr 表保留123个来源条目；补充旅行者按元素的显式artis.js规则与奇偶男女calc.js中声明的mainAttr后，当前141个命名条目覆盖目录全部140个身份，另含通用“旅行者”。补充路径和哈希记录在同一canonical，不执行上游JavaScript。未知且没有可靠来源的新身份仍保留待选，不推造默认值。可追溯源哈希、选择策略位于 `docs/constant/character-effective-stats.json`，运行时副本在 web domain，MIT 原文位于 licenses/sources/miao-plugin/LICENSE。
+默认值取自 miao-plugin 提交 `9d8972c2b060ede67d1b0dc7565abb4fe39b3aa7` 的 `resources/meta-gs/artifact/artis-mark.js`。将 usefulAttr 中非零的副词条属性转为选中组，不沿用其权重分数或角色自定义规则。常规 usefulAttr 表保留123个来源条目；补充旅行者按元素的显式artis.js规则与奇偶男女calc.js中声明的mainAttr后，当前141个命名条目包含通用“旅行者”。新增奇偶元素形态继承各自基础奇偶已登记的mainAttr，不重复手写或推测权重，合计覆盖154份角色定义。补充路径和固定版本记录在同一canonical，不执行上游JavaScript。未知且没有可靠来源的新身份仍保留待选，不推造默认值。固定源版本、选择策略位于 `src/game-data/data/tables/character-effective-stats.json`，运行投影在src/web/generated，MIT 原文位于 licenses/sources/miao-plugin/LICENSE。
 
 生命、攻击、防御各作为一个选择组，同时包含固定值和百分比；精通、充能、暴击、暴伤单独成组，共七个图文点选框。角色默认值无需逐次手选，用户覆盖按账号和角色保存；旧固定/比例分开的选择自动合并。该区域在圣遗物下方直接展开。有效条数统计将固定生命／攻击／防御先除以参考白值，再按对应比例单次平均值折算；其他副词条保持数值除以同稀有度单次平均值。原始平均档数仍可供物品核验，两者不能混称。
 
@@ -51,7 +51,7 @@ Enka 的 appendPropIdList 经编号、稀有度和显示汇总核验后保存可
 
 生命、攻击、防御的有效条数为 `(比例副词条合计＋固定副词条合计÷白值)÷对应比例单次平均值`，各件按自身稀有度分别折算。只统计副词条，不含主词条、圣遗物加成或临时增益。白值由角色等级／突破与武器等级／突破计算；攻击白值包含武器基础攻击。角色草稿修改武器后即时重算，展柜使用自身快照。
 
-组合独立保存创建时的白值、角色及武器信息，之后角色更换武器不改变该组合。主动重选参考角色时才重新带入该角色当前首选资料。没有完整参考或旧组合没有历史基准时，使用默认白值：生命14000、攻击750（角色230＋武器520）、防御700，不留空、不推造历史武器。来源为固定 miao-plugin 的 models/artis/ArtisMarkCfg.js，提交与哈希记录于 docs/constant/effective-roll-basis.json；只读取上游数据，不执行代码。
+组合独立保存创建时的白值、角色及武器信息，之后角色更换武器不改变该组合。主动重选参考角色时才重新带入该角色当前首选资料。没有完整参考或旧组合没有历史基准时，使用默认白值：生命14000、攻击750（角色230＋武器520）、防御700，不留空、不推造历史武器。来源为固定 miao-plugin 的 models/artis/ArtisMarkCfg.js，提交与原始路径记录于 src/game-data/data/tables/effective-roll-basis.json；只读取上游数据，不执行代码。
 
 真实 UID 107590923 菲林斯记录：攻击比例副词条36.2%、固定攻击52、攻击白值1025.9267578125，折算 `(0.362＋52÷1025.9267578125)÷0.04955＝8.32867567`，显示8.3条。直接加原始平均档数会错算10.45条。相同记录中薇斯纳羽毛34.2%暴伤，接口记录4次重复强化；移除记录元数据保留全部实值后，联合推定仍选4次。上述完整玩家资料仅留授权忽略目录。
 

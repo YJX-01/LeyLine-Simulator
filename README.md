@@ -1,126 +1,34 @@
-# LeyLine Simulator
+# 地脉工作台 LeyLine
 
-轴与配装工作台，使用 Vue 3 + TypeScript 构建，桌面与网页共用界面及计算内核。默认进入已整合的侧栏工作台，可编辑候选配装、动作与伤害点、条件及目标，查看公式来源，并保存、重新打开轴项目。旧模拟器、公式验收页和开发验证页已移除，产品只保留当前工作台。
+本地原神配装资料与时间轴工作台。账户库存、轴项目、内容定义库独立保存；当前支持范围见[能力说明](docs/architecture/content-support.md)。
 
-文档总入口见[文档导航](docs/README.md)。P3 已完成，当前推进 U1 界面与交互改进；可将[实施 prompt](docs/planning/implementation-agent-prompt.md)交给下一位 agent。产品方向见[产品方向记录](docs/planning/product-direction.md)，阶段状态见[实施路线](docs/planning/implementation-roadmap.md)，实施交接统一使用[交接指令](docs/planning/implementation-agent-prompt.md)。后续顺序为 P5、P6、P4、P7、P8。工作台和公式工具已使用中文展示，后续新增流程继续中文优先；文件字段与版本保持原值。
+## 开发
 
-依赖版本、协议和使用说明见 [第三方声明](THIRD_PARTY_NOTICES.md)、[完整依赖清单](licenses/DEPENDENCIES.md)及 [鸣谢](CREDITS.md)。应用内可在“设置 → 关于与支持范围 → 开源许可与鸣谢”查看。
-
-## 桌面打开与验收
-
-Windows 本地构建的稳定双击入口为 `artifacts/desktop/Start-LeyLine.cmd`，不需要输入命令、启动 Vite 或浏览器。它指向最新构建的 `releases/build-*/LeyLine-win32-x64/LeyLine.exe`；也可直接打开该 exe，移动程序时保留整个所在目录。实际路径记录于 `artifacts/desktop/latest.json`。
-
-当前为 U1 界面迭代：先管理角色与圣遗物，再保存队伍和建立独立轴。角色卡打开详情，可直接编辑培养、选择武器与装备；支持莫娜五星库存和 Enka UID 公开展柜预览导入，展柜配装与背包实物保持分开。设置管理账号文件和七元素配色预览。当前流程见[使用指南](docs/user-guide.md)。
-
-账号、轴、定义库独立保存重开，支持实物转移确认、撤销重做、恢复和 Worker 求值。目录覆盖与机制支持分别标注；支持范围以[内容支持矩阵](docs/architecture/content-support.md)为准。美术资源 2,045 张、约 9.41 MiB，按类别直接放在 public；来源与处理方法见[资源 README](src/web/public/README.md)，`pnpm assets:check` 校验哈希和预算。
-
-开发者重新生成桌面程序：`pnpm exec install-electron` 安装匹配的运行时，`pnpm desktop:build` 打包，`pnpm test:desktop` 实际窗口验收，`pnpm desktop:start` 打开最新程序。每次打包保留独立目录，成功后更新启动入口，不覆盖运行中的旧版本。程序为本地未签名便携版本，生成产物不纳入 Git。
-
-## 快速开始
-
-开发环境使用 Node.js 22.12+ 和 pnpm 11.3.0；CI 使用 Node.js 24。
+Node.js 22.12+、pnpm 11.3.0；CI使用Node.js 24。在仓库根执行：
 
 ```sh
 pnpm install --frozen-lockfile
+pnpm data:build
 pnpm dev
 ```
 
-打开终端显示的本地地址，默认进入账号角色页；`/#axis` 直接进入当前时间轴。旧版地址不再加载其他界面，已有轴文件仍可在项目页打开，原文件不会因删除入口被清除。
+`pnpm build`构建网页；`pnpm desktop:build`生成独立桌面包。日常选择相关测试，最终验收见[部署与验证](docs/guides/deployment.md)。
 
-agent 可继续调用 `node tools/scripts/evaluate-workbench.mjs <轴项目.json>`，读取 UI 保存的相同 v1 项目，无需桌面窗口。
+## 目录与职责
 
-## 计算支持范围
-
-角色/武器/套装有目录资料不表示全部效果已实现。当前按[内容支持矩阵](docs/architecture/content-support.md)声明范围；历史自动模拟器的机制、fixtures 和引擎回归保留作开发依据，其前端已删除。U1 仍待真实整轴与用户体验验收。
-
-## 目录与架构
-
-```text
-src/
-  web/           Vue 页面、状态与 Worker 入口
-  engine/        战斗计算、事件调度及机制实现
-  schema/        输入校验、版本化合同与 Worker 消息类型
-  game-data/     游戏内容定义和生成的数据快照
-tools/           开发工具（下列目录均位于 tools/）
-  desktop/       Electron 主进程与受限文件桥
-  scripts/       数据转换、架构检查、构建验证、清理与交付
-  patches/       需要随依赖安装应用的补丁
-tests/           开发及生产浏览器测试
-fixtures/        可重复的场景与性能输入
-docs/            使用说明、架构、规则依据与源数据
-archive/python/  旧 Python 实现及历史资料
-.github/         GitHub Actions 自动检查
-```
-
-四个 workspace 由 `pnpm-workspace.yaml` 的 `src/*` 管理。依赖方向为 `web → engine/schema/game-data`、`engine → schema/game-data`；跨模块使用 `@leyline/*` 公共入口。`schema` 与 `game-data` 不依赖其他 workspace。
-
-`docs/constant/` 仍是数据生成输入，`docs/characters/` 保留数据依据；它们不属于废弃文件。生成数据位于 `src/game-data/src/generated/`，修改源数据后执行 `node tools/scripts/convert-repo-data.mjs`，不要单独手改生成结果。P2.5 canonical 在 `docs/constant/real-game/`，运行快照在 `src/game-data/src/real-data/`，通过 `node tools/scripts/convert-real-game-data.mjs` 再生成。详见[架构与扩展指南](docs/architecture/overview.md)与[真实数据来源](docs/references/p2-5-data.md)。
-
-## 当前依赖
-
-以下列出所有直接外部依赖；“锁定版本”来自当前 `pnpm-lock.yaml`，安装时以锁文件为准。间接依赖由 pnpm 自动解析，无需逐个安装。
-
-### 运行依赖
-
-| 包 | 声明范围 | 锁定版本 | 用途 / 所属 workspace |
-| --- | --- | --- | --- |
-| `vue` | `^3.5.0` | `3.5.44` | 页面组件与响应式状态 / web |
-| `pinia` | `^4.1.0` | `4.1.0` | 工作区、方案及结果状态 / web |
-| `zod` | `^4.1.0` | `4.6.7` | 配置与消息合同校验 / schema |
-
-### 开发与验证依赖
-
-| 包 | 声明范围 | 锁定版本 | 用途 |
-| --- | --- | --- | --- |
-| `typescript` | `^5.9.3` | `5.9.3` | TypeScript 类型检查及源码解析 |
-| `electron` | `^45.2.3` | `45.2.3` | 桌面运行时 |
-| `@electron/packager` | `^20.3.0` | `20.3.0` | 桌面便携程序打包 |
-| `vite` | `^7.2.0` | `7.3.7` | 本地开发与生产构建 |
-| `@vitejs/plugin-vue` | `^6.0.0` | `6.0.10` | Vite 的 Vue 单文件组件支持 |
-| `vue-tsc` | `^3.1.0` | `3.3.14` | Vue 模板与脚本类型检查 |
-| `vitest` | `^3.2.4` | `3.2.7` | 单元测试 |
-| `@playwright/test` | `^1.64.1` | `1.64.1` | Chromium、Firefox、WebKit 回归测试 |
-| `@types/node` | `^24.19.2` | `24.19.2` | 开发脚本与配置的 Node.js 类型 |
-
-`vite` 和 `@vitejs/plugin-vue` 声明在 web，其余开发工具声明在根目录。仓库内部包为 `@leyline/web`、`@leyline/engine`、`@leyline/schema`、`@leyline/game-data`，通过 `workspace:*` 连接，不从 npm 下载。
-
-当前另有一个针对间接依赖 `@vue/devtools-kit@8.2.1` 的补丁，防止浏览器拒绝 `localStorage` 时启动白屏。冻结安装会自动应用；确认上游修复并通过回归后可移除。见[补丁说明](tools/patches/README.md)。
-
-## 常用命令
-
-在仓库根目录执行：
-
-| 命令 | 用途 |
+| 目录 | 维护内容 |
 | --- | --- |
-| `pnpm dev` | 启动开发服务 |
-| `pnpm architecture:check` | 检查目录、包边界、循环依赖及归档隔离 |
-| `pnpm data:check` / `pnpm fixture:check` | 检查生成数据和场景一致性 |
-| `pnpm typecheck` / `pnpm test` | 类型检查 / 单元测试 |
-| `pnpm build` / `pnpm build:check` | 生产构建 / 体积预算检查 |
-| `pnpm preview` | 本地查看已构建的 `src/web/dist/` |
-| `pnpm perf:engine` | 引擎性能预算检查 |
-| `pnpm test:e2e` | 三内核开发流程测试 |
-| `pnpm build:subpath` / `pnpm test:production` | 子路径构建 / 根路径及子路径生产测试 |
+| `src/schema` | Zod契约及其推导类型，含角色、配装、账号、项目、文件适配与Worker协议 |
+| `src/game-data` | 正式JSON内容及加载器；`data`可编辑，`generated`由命令生成 |
+| `src/engine` | 配装属性、单次伤害、效果依赖图、时间轴求值；只依赖schema |
+| `src/web` | 页面、组件、纯业务操作、状态、Worker、桌面与本地网络服务 |
+| `assets` | 唯一可维护图像、矢量、装饰及资源索引 |
+| `tests` | 单元、集成、浏览器、桌面、性能测试，及helpers和固定输入 |
+| `tools` | 分类维护脚本、共享工具、采集原件与依赖补丁 |
+| `docs` | 现行规范、架构、指南、机制、研究与当前计划；仅Markdown |
+| `licenses` | 许可原件、依赖清单与声明 |
+| `archive` | 退休内核、旧表、工具与历史文档；任何默认命令都不读取 |
+| `.references` | 忽略的本地参考仓库、私有原件；普通构建不依赖 |
+| `.cache` / `artifacts` | 忽略的可重建缓存 / 验证记录与本地交付包 |
 
-首次运行浏览器测试前执行 `pnpm exec playwright install chromium firefox webkit`；Linux 系统依赖安装方式见[交付指南](docs/deployment.md)。可用 `pnpm test:e2e --project=chromium` 单独验证 Chromium。
-
-完整浏览器矩阵通过后，`pnpm release:prepare` 生成本地候选，`pnpm release:verify --dir=<候选路径>` 校验文件。打包会拒绝缺失或陈旧的浏览器证据，不自动对外部署或推送。
-
-## 生成目录与清理
-
-`node_modules/` 及 workspace 内同名目录由 pnpm 管理；`.cache/` 是本地下载缓存和临时补丁工作区。`artifacts/`、`test-results/`、`src/web/dist/` 和 `src/web/dist-subpath/` 是生成产物，均不提交。
-
-- `pnpm clean:outputs --dry-run`：预览产物清理清单。
-- `pnpm clean:outputs`：清理构建、报告、测试输出及本地交付候选；需要保留的候选请先移出 `artifacts/`。
-- `pnpm clean:cache`：清理缓存，不删除已安装依赖；先保存尚未完成的临时补丁修改。
-
-清理后，构建和验证命令会重新生成所需目录。预览和生产测试需要先构建；发布候选需要重新运行完整浏览器验证。
-
-## 维护入口
-
-- [贡献与代理工作规范](AGENTS.md)
-- [架构与扩展指南](docs/architecture/overview.md)
-- [使用与故障恢复](docs/user-guide.md)
-- [构建、验证和本地交付](docs/deployment.md)
-- [开发工具与依赖维护](tools/README.md)
-- [Python 历史归档](archive/python/README.md)
+详细边界见[仓库地图](docs/architecture/repository-map.md)，维护入口见[文档导航](docs/README.md)。U1已由用户确认结束；当前结构重构按[批准方案](docs/planning/repository-refactor.md)实施，状态记录在[实施记录](docs/planning/repository-refactor-implementation.md)。

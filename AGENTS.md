@@ -1,10 +1,14 @@
 # Repository Guidelines
 
+## Approved refactor (2026-11-10)
+
+The user reviewed and approved `docs/planning/repository-refactor.md` and instructed implementation. Current status, migration maps and verification live in `docs/planning/repository-refactor-implementation.md`. U1 was explicitly confirmed ended; do not reopen its acceptance. Continue the approved foundation work before later product integration.
+
 ## Project Structure & Module Organization
 
-The TypeScript pnpm workspace lives under `src/`: `web` contains Vue components, Pinia stores, and the current Worker; `engine` owns simulation; `schema` owns validated contracts; `game-data` owns content snapshots. Each keeps implementation in its own `src/` directory.
+Four workspaces under src: schema owns shared validated contracts; game-data owns canonical JSON and generated runtime chunks; engine owns attribute/damage and dependency/timeline evaluation; web owns UI, state, Worker, desktop and server adapters. Each implementation lives in its own src; web/desktop and web/server contain platform application code.
 
-Colocated `*.test.ts` files use Vitest. Browser `*.spec.ts` files live in `tests/e2e/` and `tests/production/`. Scenarios belong in `fixtures/`, automation in `tools/scripts/`, dependency patches in `tools/patches/`, and references in `docs/`. `archive/python/` is historical material, excluded from the active build.
+All tests, helpers and fixed inputs belong in tests, grouped by unit package, integration, browser/development, browser/production, desktop and performance. Assets have one canonical root assets. tools/scripts groups data, assets, checks, build, release, dev and licenses; shared helpers live in tools/lib. docs contains Markdown only; current standards are indexed by docs/standards/README.md. History in archive is excluded from every default command.
 
 ## Build, Test, and Development Commands
 
@@ -19,19 +23,27 @@ Use Node.js 22.12+ and pnpm 11.3.0; CI uses Node.js 24. Run from the repository 
 - `pnpm test:e2e`: run browser tests after installing Playwright browsers.
 - `pnpm test:ui`: focused U1 real-inventory UI smoke check in Chromium with one worker. Use this for daily U1 iteration; `pnpm test:ui:desktop` checks the runnable desktop package when needed.
 
-Production/subpath checks and release prerequisites are documented in `docs/deployment.md`.
+Production/subpath checks and release prerequisites are documented in `docs/guides/deployment.md`.
 
 ## Coding Style & Architecture
 
 Use two-space indentation, single-quoted TypeScript strings, semicolons, and strict typing. Use PascalCase Vue components, camelCase functions, and kebab-case filenames. No formatter or lint script is configured.
 
-Import workspace public exports through `@leyline/*`. Only web depends on engine; engine may depend on schema and game-data. Keep shared packages independent of UI/platform adapters, and web domain modules independent of reactive stores and components. Preserve deterministic event ordering, seeded randomness, and per-run state.
+Import workspace public exports through `@leyline/*`. Only web depends on engine; engine depends only on schema, and game-data reuses schema through its declared dependency. Keep shared packages independent of UI/platform adapters, and web domain modules independent of reactive stores and components. Preserve deterministic event ordering, seeded randomness, and per-run state.
 
 ## Testing & Data Changes
 
 Add regression tests for changed behavior, with independent expected calculations for mechanics. No numeric coverage threshold is configured. Run relevant data checks, architecture checks, types, tests, and build validation; UI/Worker changes also require browser tests.
 
-Edit canonical inputs in `docs/constant/`, regenerate with `node tools/scripts/convert-repo-data.mjs`, and review snapshots and hashes together. Update mechanics assumptions and the support matrix when content changes.
+Production metadata is strict two-space UTF-8/LF JSON under src/game-data/data. Each character has one complete CharacterDefinition (identity/text, growth, talent parameters and hit bindings, passives, constellations, static rules and honest capabilities), shared by builtin/custom definitions, UI, engine and export. Weapon/set entities and current tables share corresponding schemas. Edit canonical data, run pnpm data:build, and review numeric comparisons with pnpm data:check. Upstream evidence belongs in tools/data/sources, images in assets, derived files in package generated directories. Never read archived tables in active tools. See docs/standards/content.md and docs/references/numeric-precision.md.
+
+User update on 2026-11-10: this is a breaking refactor. Support only current document schemas and storage namespaces; remove old document migration, preview/conversion adapters and fallback reads. Reject unsupported file versions. Do not delete existing user files or browser storage as part of code cleanup. Mona/Enka external import previews remain part of the current product.
+
+User update on 2026-11-10 supersedes the YAML choice: JSON first, one common character metadata contract. Use two-space indentation, UTF-8 without BOM, LF and one final newline. Preserve precision, units, IDs and meaningful array order; provenance/support explanations use defined fields, longer explanations belong in docs. No YAML/JSONC/JSON5 metadata sources or YAML parser dependency. The shared content-source.mjs and Python content_source.py helpers handle strict JSON.
+
+Generated snapshots belong in src/game-data/generated and web indices in src/web/generated. All maintained assets belong in assets. Adopted source evidence belongs in tools/data/sources. Archive is excluded from active builds and checks; no active script may read archived tables.
+
+Regenerate with pnpm data:build and review snapshots and direct numeric comparisons with pnpm data:check. Capture sources and prepare candidates explicitly; review before adopting canonical JSON. Ordinary generation stays offline and never overwrites authored metadata. Update content support and assumptions when content changes.
 
 ## Commits & Repository Hygiene
 
@@ -42,15 +54,13 @@ Keep dependencies declared in their owning manifests; commit lockfile and patch 
 
 ## Current Product Priority and Acceptance Rules
 
-User update on 2026-11-06: prioritize U1 UI and interaction work over exhaustive testing. During daily UI iteration, run only checks relevant to the changed operation; do not rerun all unit tests, all browsers, desktop, and both production paths after each edit. Avoid tests that merely mirror low-impact layout or text changes. Keep useful historical regressions available, but select them only when the affected behavior warrants it. Full stage acceptance and user experience review remain separate from these focused checks.
+User update on 2026-11-06: prioritize U1 UI and interaction work over exhaustive testing. During daily UI iteration, run only checks relevant to the changed operation; do not rerun all unit tests, all browsers, desktop, and both production paths after each edit. Avoid tests that merely mirror low-impact layout or text changes. Keep current behavior regressions and select checks relevant to the changed operation. Full stage acceptance and user experience review remain separate from these focused checks.
 
-The user revised the plan after P3: execute U1 (dedicated UI and interaction redesign), then P5, P6, P4, P7, and P8. Read `docs/planning/implementation-roadmap.md` and the current implementation prompt; do not restore the old P4-first dependency order. P5/P6 must include necessary condition, inventory, capability, cancellation, and budget checks even though the full probability system is deferred.
+From U1 onward, do not introduce or use simulated/synthetic examples to develop, demonstrate, benchmark, or accept new functionality. Use traceable actual game cases with real characters, equipment, mechanics, builds/inventory, and recorded conditions; derive expectations independently. Do not fabricate player exports, recordings, observations, inventories, or damage sequences. Missing evidence must remain an explicit gap. Follow `docs/standards/evidence.md`.
 
-From U1 onward, do not introduce or use simulated/synthetic examples to develop, demonstrate, benchmark, or accept new functionality. Use traceable actual game cases with real characters, equipment, mechanics, builds/inventory, and recorded conditions; derive expectations independently. Do not fabricate player exports, recordings, observations, inventories, or damage sequences. Missing evidence must remain an explicit gap. Follow `docs/planning/real-case-validation.md`.
+User update on 2026-11-10: delete historical constructed fixtures, scenario-only helpers and their dedicated tests, including archived copies. Retain actual recordings used by current behavior checks; do not preserve legacy scenarios for compatibility. New boundary/error/performance cases must derive transparently from real projects. A static game catalog, a constructed format fixture, or an automated desktop export must not be presented as actual player data.
 
-Keep existing synthetic fixtures/tests as historical compatibility regressions; they do not prove acceptance of later stages. New boundary/error/performance cases must derive transparently from real projects. A static game catalog, a constructed format fixture, or an automated desktop export must not be presented as actual player data.
-
-Preserve the approved theme and three data domains, but redesign the present interaction flow in U1. Functional automated checks and usability acceptance are separate; do not mark U1 complete or bypass it with P5/P6 product integration before actual task walkthroughs and user experience review. Provide the complete runnable redesign and evidence before requesting final experience review.
+Preserve the approved theme, three data domains and delivered U1 interaction flow. U1 is closed by the user's explicit confirmation on 2026-11-10. Functional checks and actual game observations remain distinct; the stage closure does not expand supported mechanics or supply missing player evidence.
 
 Run desktop and browser acceptance serially with one worker. Manage only processes proven to belong to the current run; never terminate applications by name or disturb the user's existing desktop.
 
@@ -66,4 +76,6 @@ When available, use `frontend-design`, `web-design-guidelines`, and `webapp-test
 
 ## Retired UI (user decision, 2026-11-07)
 
-Only the current WorkspaceShell ships. Do not restore LegacyWorkspaceShell, Workbench, AnnotationWorkbench, DeveloperTools, their old routes, old synthetic sample launchers, P3Panel, RealGamePanel mode switches, or the old simulation Worker/chart UI from historical documentation. Current candidate editing lives in TeamLoadoutEditor. Engine/core compatibility fixtures and regressions remain; historical sample builders belong only in tests/helpers. Removing obsolete UI must not delete user account/project files or browser storage.
+Only the current WorkspaceShell ships. Do not restore LegacyWorkspaceShell, Workbench, AnnotationWorkbench, DeveloperTools, their old routes, old synthetic sample launchers, P3Panel, RealGamePanel mode switches, or the old simulation Worker/chart UI from historical documentation. Current candidate editing lives in TeamLoadoutEditor. Historical constructed scenarios and their dedicated tests/helpers have been removed by user decision. Current functional checks use actual recordings or explicit format/error derivatives. Removing obsolete UI must not delete user account/project files or browser storage.
+
+User review update (2026-11-10): maintained asset/game-data records use IDs, paths, aliases and source versions; do not add bulk permanent SHA-256 inventories. Compute cache revisions and build/release fingerprints in generated artifacts. Preserve only functional recording/placeholder or dependency checks. Asset checks must cover every actual current character reference and browser decoding, not only already-listed files.

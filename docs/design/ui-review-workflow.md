@@ -56,7 +56,7 @@ Windows桌面使用原生滚动条时，根元素scrollbar-gutter:stable会使CS
 
 ## 星内收藏、删除脱离库存与返回路径复查（2026-11-09）
 
-定点命令：pnpm exec playwright test tests/e2e/u1-artifact-reference-actions.spec.ts tests/e2e/u1-ui-contracts.spec.ts --project=chromium --workers=1。以官方四人真实展柜操作，验证一个右键收藏项、星内数字、独一副本别名、左上删除、组合未入库角标、编辑保存，以及三类引用关闭后回圣遗物库。角色详情右键使用实际装备，检查查看／卸下与还原；展柜选择仅快照后只入库生之花，验证新增一件且不装备。
+定点命令：pnpm exec playwright test tests/browser/development/artifact-reference-actions.spec.ts tests/browser/development/ui-contracts.spec.ts --project=chromium --workers=1。以官方四人真实展柜操作，验证一个右键收藏项、星内数字、独一副本别名、左上删除、组合未入库角标、编辑保存，以及三类引用关闭后回圣遗物库。角色详情右键使用实际装备，检查查看／卸下与还原；展柜选择仅快照后只入库生之花，验证新增一件且不装备。
 
 新artifact-detachment-real.test.ts结合实际观察数据检查有序匹配、持久化推定、展柜覆盖历史、元数据同步、无库存身份快照持久化和删除事务失败回退；与原相关测试共10项通过。真实458件莫娜库存流程、五项草稿退出回归通过。早期返回测试未等目标异步弹窗挂载便按Escape，已改为明确等目标可见后操作，最终浏览器和桌面均确认返回原库，不用固定延时。
 

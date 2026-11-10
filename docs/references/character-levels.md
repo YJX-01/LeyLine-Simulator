@@ -4,7 +4,7 @@
 
 “月之一”版本加入从 90 级直接提升至 95 级、再提升至 100 级的培养规则。来源：[版本更新说明（4399 官方公告栏目，2025-09-10）](https://bbs.4399.cn/thread-view-tid-50524833)，其中“砺行修远”章节记录无主的命星对应的等级提升。
 
-固定 genshin-db 提交 `8e5badd60b5d894284ccc927a56c9683529d2592` 的 `src/data/curve/characters.json` 已包含 95、100 级成长系数。本仓库规范输入为 `docs/constant/real-game/character-curves.json`，源哈希见同目录 sources.json；生成的角色曲线按索引保存 0～100 级。95／100 级沿用第六次突破的属性加值，天赋培养上限沿用十级，命座加成另计。
+固定 genshin-db 提交 `8e5badd60b5d894284ccc927a56c9683529d2592` 的 `src/data/curve/characters.json` 已包含 95、100 级成长系数。本仓库规范输入为 `tools/data/sources/catalog/genshin-db/character-curves.json`，源哈希见同目录 sources.json；生成的角色曲线按索引保存 0～100 级。95／100 级沿用第六次突破的属性加值，天赋培养上限沿用十级，命座加成另计。
 
 本轮 realBuild 角色等级接受 1～90、95、100；95／100 级要求突破阶段为 6。武器仍按自身星级和突破范围选择，最高 90 级。历史 team-repo-v1 合同维持原有范围。
 

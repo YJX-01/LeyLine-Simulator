@@ -2,11 +2,11 @@
 
 2026-11-06。用户指出新社区版与新增资料遗漏后重新检索。之前默认的 `1803233552/genshin_artifact/main` 提交为 2025-10-11 的 `beaced4d…`，包版本 5.30.0，不能作为当前社区版依据。`xenon2333/mona` 的 2026-10-22 发布物标记为 5.33.58；另外核实 [TwiceDrop 维护版](https://github.com/TwiceDrop/genshin_artifact/tree/589ac6919057709924c0c20d5a9d673fe9b0be1a) 的正式版本为 **7.2.02**，提交时间 2026-10-31，当前采用该固定提交核对新目录与导出身份。
 
-参考文件下载到 `.references/mona-current/`，仅读取生成的 JSON 数据及图片，不执行社区项目代码。角色、武器、套装目录和中文词典的哈希、与本项目固定目录的对照在 `docs/constant/mona-community/catalog.json`。维护命令：
+参考文件下载到 `.references/mona-current/`，仅读取生成的 JSON 数据及图片，不执行社区项目代码。角色、武器、套装目录和中文词典的哈希、与本项目固定目录的对照在 `tools/data/sources/catalog/mona-community/catalog.json`。维护命令：
 
-- 已取得同版本参考文件时，`node tools/scripts/capture-mona-community.mjs --capture` 重新核对并捕获。
-- 日常运行 `node tools/scripts/capture-mona-community.mjs --check`，只读取 canonical，不依赖外部 checkout。
-- `python tools/scripts/sync-game-icons.py` 复用已核对图片，新增米提亚、瓦列里的头像从该固定社区版获取，压缩成 128px 透明 WebP；每张 URL 与原图/派生图哈希记录在图片 manifest。
+- 已取得同版本参考文件时，`node tools/scripts/data/convert-mona-catalog.mjs --capture` 重新核对并捕获。
+- 日常运行 `node tools/scripts/data/convert-mona-catalog.mjs --check`，只读取 canonical，不依赖外部 checkout。
+- `python tools/scripts/assets/sync-game-icons.py` 复用已核对图片，新增米提亚、瓦列里的头像从该固定社区版获取，压缩成 128px 透明 WebP；每张 URL、身份和转换方式记录在统一图片 manifest，缓存版本由构建自动计算。
 
 对照结果：社区版含 63 套圣遗物、143 个角色身份和 257 个武器条目。63 套均与本项目静态目录按精确中文名称对应，生成 102 个社区导出键别名，替代原来少量手写别名。角色身份包含空/荧与奇偶的元素变体，本项目仍保留 126 个基础角色目录，不把元素身份变体计为新增的完整可计算角色。社区中石英大剑、琥珀玥、黑檀弓不在当前固定游戏目录，没有据此加入未经核验装备。
 
