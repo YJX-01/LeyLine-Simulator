@@ -31,4 +31,4 @@ pnpm dev
 | `.references` | 忽略的本地参考仓库、私有原件；普通构建不依赖 |
 | `.cache` / `artifacts` | 忽略的可重建缓存 / 验证记录与本地交付包 |
 
-详细边界见[仓库地图](docs/architecture/repository-map.md)，维护入口见[文档导航](docs/README.md)。U1已由用户确认结束；当前结构重构按[批准方案](docs/planning/repository-refactor.md)实施，状态记录在[实施记录](docs/planning/repository-refactor-implementation.md)。
+详细边界见[仓库地图](docs/architecture/repository-map.md)，维护入口见[文档导航](docs/README.md)。U1已由用户确认结束，结构重构已完成逐项审核，验证边界记录在[实施记录](docs/planning/repository-refactor-implementation.md)。下一阶段按[当前路线](docs/planning/implementation-roadmap.md)推进[P5全角色基础可用与同轴配装比较](docs/planning/p5-character-usability.md)；计划目标不代表当前计算支持。

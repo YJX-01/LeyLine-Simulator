@@ -2,7 +2,11 @@
 
 ## Approved refactor (2026-11-10)
 
-The user reviewed and approved `docs/planning/repository-refactor.md` and instructed implementation. Current status, migration maps and verification live in `docs/planning/repository-refactor-implementation.md`. U1 was explicitly confirmed ended; do not reopen its acceptance. Continue the approved foundation work before later product integration.
+The user reviewed and approved `docs/planning/repository-refactor.md`; its item-by-item review is complete. Status, migration maps and verification boundaries live in `docs/planning/repository-refactor-implementation.md`. U1 was explicitly confirmed ended; do not reopen its acceptance or restart the completed foundation refactor.
+
+## Approved product expansion (2026-11-11)
+
+Follow `docs/planning/implementation-roadmap.md` and the detailed P5 plan in `docs/planning/p5-character-usability.md`. P5 must make every character/form in the current canonical catalog basically usable, including core mechanics and support functions, and deliver basic same-timeline loadout comparison. One real team is an early integration check, not the stage exit. Advance through a full-catalog audit, shared mechanics, character batches and multiple real-team checks. Required probability rules belong in P5 when basic use depends on them; deeper probability analysis follows optimization. Keep source research, independent calculations, real-data functional checks and game observations distinct under `docs/standards/evidence.md`. Planning approval does not expand current runtime support or authorize unspecified UI changes.
 
 ## Project Structure & Module Organization
 
