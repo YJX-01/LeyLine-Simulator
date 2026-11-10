@@ -1,0 +1,10 @@
+{
+  "file": "tests/fixtures/recordings/enka/official-example.json",
+  "uid": "618285856",
+  "url": "https://enka.network/api/uid/618285856/",
+  "referenceRepository": "EnkaNetwork/API-docs",
+  "referenceCommit": "b94bc40528941126590e0eefb0f03278e7a44ec8",
+  "sha256": "e41b52d6abe70e2d571ac1da7505a09e209391c01dfbce7c8bdbe99fd971ea45",
+  "fetchedAt": null,
+  "note": "Previously captured official public example; original capture time was not recorded. An API showcase snapshot, not a full account export or an observed combat timeline."
+}

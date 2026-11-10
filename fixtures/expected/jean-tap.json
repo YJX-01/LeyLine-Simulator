@@ -1,5 +1,0 @@
-{
-  "totalDamage": 5840, "dps": 730, "hitTimesMs": [767, 7067],
-  "castTimesMs": [0, 6300], "rejectionReasons": ["action-lock", "cooldown", "cooldown"],
-  "absoluteTolerance": 0.001
-}
