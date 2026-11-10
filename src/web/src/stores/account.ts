@@ -47,22 +47,35 @@ export const useAccountStore = defineStore('local-account', () => {
     const content = typeof localStorage === 'undefined' ? null : localStorage.getItem(`${storageKey}-previous`);
     if (content) previous.value = parseAccount(JSON.parse(content));
   } catch { /* Current account remains available even if an older backup cannot be read. */ }
+  let unreadableDraft: string | undefined;
   try {
     const content = typeof localStorage === 'undefined' ? null : localStorage.getItem(storageKey);
-    if (content) { account.value = parseAccount(JSON.parse(content)); notice.value = '已恢复上次本地账号草稿，请另存文件备份。'; }
+    if (content) {
+      unreadableDraft = content;
+      account.value = parseAccount(JSON.parse(content));
+      unreadableDraft = undefined;
+      notice.value = '已恢复上次本地账号草稿，请另存文件备份。';
+    }
   } catch { error.value = '本地账号草稿无法读取，未覆盖原始草稿。'; }
   const dirty = computed(() => saved.value !== JSON.stringify(account.value));
   function commitEdit(input: LocalAccount) {
+    if (unreadableDraft !== undefined) throw new Error('本地账号草稿无法读取，未覆盖原始草稿。');
     const next = parseAccount(input);
     try { localStorage.setItem(storageKey, JSON.stringify(next)); }
     catch { throw new Error('本地保存失败，请检查存储空间；原配置保持不变，当前草稿仍保留。'); }
     account.value = next;
   }
   watch(account, value => {
+    if (unreadableDraft !== undefined) return;
     try { if (typeof localStorage !== 'undefined') localStorage.setItem(storageKey, JSON.stringify(parseAccount(value))); }
     catch { error.value = '账号草稿未能自动保存，请检查输入并另存文件。'; }
   }, { deep: true, flush: 'sync' });
   function backup() {
+    if (unreadableDraft !== undefined) {
+      localStorage.setItem(`${storageKey}-previous`, unreadableDraft);
+      previous.value = undefined;
+      return;
+    }
     const snapshot = parseAccount(account.value);
     if (typeof localStorage !== 'undefined' && typeof localStorage.setItem === 'function') localStorage.setItem(`${storageKey}-previous`, JSON.stringify(snapshot));
     previous.value = snapshot;
@@ -70,11 +83,11 @@ export const useAccountStore = defineStore('local-account', () => {
   function restorePrevious() {
     if (!previous.value) return;
     const next = previous.value;
-    try { backup(); account.value = next; saved.value = null; notice.value = '已恢复替换前的账号资料，请保存文件备份。'; error.value = ''; }
+    try { backup(); unreadableDraft = undefined; account.value = next; saved.value = null; notice.value = '已恢复替换前的账号资料，请保存文件备份。'; error.value = ''; }
     catch { error.value = '无法保留当前账号备份，未执行恢复。请先保存文件。'; }
   }
   function create(name?: string) {
-    try { backup(); account.value = createAccount(name); saved.value = null; error.value = ''; notice.value = '已新建独立账号；可恢复替换前资料。'; }
+    try { backup(); unreadableDraft = undefined; account.value = createAccount(name); saved.value = null; error.value = ''; notice.value = '已新建独立账号；可恢复替换前资料。'; }
     catch { error.value = '无法保留当前账号备份，未新建账号。请先保存文件。'; }
   }
   function importContent(content: string) {
@@ -82,7 +95,7 @@ export const useAccountStore = defineStore('local-account', () => {
     let input: unknown;
     try { input = JSON.parse(content); } catch { throw new Error('账号文件无法识别，现有账号保持不变。'); }
     const next = parseAccount(input);
-    backup();account.value=next;saved.value=JSON.stringify(next);error.value='';notice.value='账号已打开，当前轴保持原有快照。';
+    backup();unreadableDraft=undefined;account.value=next;saved.value=JSON.stringify(next);error.value='';notice.value='账号已打开，当前轴保持原有快照。';
   }
   async function save(): Promise<boolean> {
     if (busy.value) return false;
