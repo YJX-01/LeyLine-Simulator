@@ -1,0 +1,182 @@
+{
+  "formatVersion": 1,
+  "capturedOn": "2026-11-07",
+  "method": "Release page numeric talent IDs matched by exact combat1/combat2/combat3 names from the pinned game catalog; not inferred from a player skillLevelMap or sorted IDs.",
+  "characters": {
+    "10000125": {
+      "id": "columbina",
+      "skillDepotId": 12501,
+      "skills": [
+        11251,
+        11252,
+        11255
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Moondew Cascade",
+          "id": 11251
+        },
+        {
+          "category": "skill",
+          "name": "Eternal Tides",
+          "id": 11252
+        },
+        {
+          "category": "burst",
+          "name": "Moonlit Melancholy",
+          "id": 11255
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000125/columbina/release?lang=en",
+        "localPath": ".references/enka/columbina-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/columbina.json"
+      }
+    },
+    "10000133": {
+      "id": "sandrone",
+      "skillDepotId": 13301,
+      "skills": [
+        11331,
+        11332,
+        11335
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Formule Phenomenale: Self-Evident Proposition",
+          "id": 11331
+        },
+        {
+          "category": "skill",
+          "name": "Formule Phenomenale: Differential Analysis",
+          "id": 11332
+        },
+        {
+          "category": "burst",
+          "name": "Formule Phenomenale: Q.E.D.",
+          "id": 11335
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000133/sandrone/release?lang=en",
+        "localPath": ".references/enka/sandrone-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/sandrone.json"
+      }
+    },
+    "10000140": {
+      "id": "vodyanitsa",
+      "skillDepotId": 14001,
+      "skills": [
+        11401,
+        11402,
+        11405
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Psyshkhwe Arietta",
+          "id": 11401
+        },
+        {
+          "category": "skill",
+          "name": "Rechitativ: Sonorous Dawn",
+          "id": 11402
+        },
+        {
+          "category": "burst",
+          "name": "Koda: Sink With Thee",
+          "id": 11405
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000140/vodyanitsa/release?lang=en",
+        "localPath": ".references/enka/vodyanitsa-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/vodyanitsa.json"
+      }
+    },
+    "10000143": {
+      "id": "vesna",
+      "skillDepotId": 14301,
+      "skills": [
+        11431,
+        11432,
+        11435
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Vila Blade Dance",
+          "id": 11431
+        },
+        {
+          "category": "skill",
+          "name": "The Art of Victory",
+          "id": 11432
+        },
+        {
+          "category": "burst",
+          "name": "For the Tsaritsa!",
+          "id": 11435
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000143/vesna/release?lang=en",
+        "localPath": ".references/enka/vesna-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/vesna.json"
+      }
+    },
+    "10000150": {
+      "id": "odette",
+      "skillDepotId": 15001,
+      "skills": [
+        11501,
+        11502,
+        11505
+      ],
+      "talents": [
+        {
+          "category": "normal",
+          "name": "Snow Swan Variation",
+          "id": 11501
+        },
+        {
+          "category": "skill",
+          "name": "Adagio: Phantom Night Dancers",
+          "id": 11502
+        },
+        {
+          "category": "burst",
+          "name": "Presto: Bluebird Finale",
+          "id": 11505
+        }
+      ],
+      "source": {
+        "url": "https://gi.gachabase.net/characters/10000150/odette/release?lang=en",
+        "localPath": ".references/enka/odette-release.html"
+      },
+      "nameSource": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/English/talents/odette.json"
+      }
+    }
+  }
+}

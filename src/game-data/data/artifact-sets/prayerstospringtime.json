@@ -1,0 +1,20 @@
+{
+  "id": "prayerstospringtime",
+  "name": "祭冰之人",
+  "effects": [
+    {
+      "pieces": 1,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：受到的冰元素附着效果的持续时间减少40%。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/prayerstospringtime.json"
+  },
+  "rarity": 4
+}

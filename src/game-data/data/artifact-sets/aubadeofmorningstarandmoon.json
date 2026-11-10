@@ -1,0 +1,35 @@
+{
+  "id": "aubadeofmorningstarandmoon",
+  "name": "晨星与月的晓歌",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "elementalMastery",
+          "values": [
+            80
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "元素精通提高80点。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：装备者处于队伍后台时，造成的月曜反应伤害提升20%；队伍的月兆等级至少为满辉时，造成的月曜反应伤害进一步提升40%。上述效果将在装备者位于场上3秒后移除。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/aubadeofmorningstarandmoon.json"
+  },
+  "rarity": 5
+}

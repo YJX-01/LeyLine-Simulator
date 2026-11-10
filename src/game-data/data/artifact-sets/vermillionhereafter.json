@@ -1,0 +1,35 @@
+{
+  "id": "vermillionhereafter",
+  "name": "辰砂往生录",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "attackPercent",
+          "values": [
+            0.18
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "攻击力提高18%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：施放元素爆发后，将产生持续16秒的「潜光」效果：攻击力提升8%；并在角色的生命值降低时，攻击力进一步提升10%，至多通过这种方式提升4次，每0.8秒至多触发一次。「潜光」效果将在角色退场时消失；持续期间再次施放元素爆发，将移除原有的「潜光」。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/vermillionhereafter.json"
+  },
+  "rarity": 5
+}

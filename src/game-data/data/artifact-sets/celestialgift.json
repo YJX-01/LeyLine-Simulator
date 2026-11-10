@@ -1,0 +1,35 @@
+{
+  "id": "celestialgift",
+  "name": "天之美赐",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "energyRecharge",
+          "values": [
+            0.2
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "元素充能效率提高20%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：若装备者已经完成了魔女的课业，则施放元素战技后，会获得「天光之引」效果：依据装备者的元素类型，使队伍中附近的所有角色获得20%对应元素伤害加成，持续20秒。装备者处于后台时也能触发上述效果，同名圣遗物套装产生的伤害加成效果无法叠加。\n·队伍拥有「魔导·秘仪」效果时，「天光之引」效果将会升级为「凡世颂歌」，除装备者的元素类型外，还会依据队伍中自己的当前场上角色的元素类型，使队伍中附近的所有角色获得对应元素伤害加成，且上述两种元素伤害加成提升至40%，同元素类型的元素伤害加成效果无法叠加。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/celestialgift.json"
+  },
+  "rarity": 5
+}

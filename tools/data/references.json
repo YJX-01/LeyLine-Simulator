@@ -1,0 +1,127 @@
+{
+  "formatVersion": 1,
+  "checkedOn": "2026-11-06",
+  "updatedOn": "2026-11-10",
+  "localRoot": ".references/",
+  "localRoots": [
+    ".references/"
+  ],
+  "ignored": true,
+  "repositories": [
+    {
+      "id": "genshin-tools",
+      "kind": "git",
+      "url": "https://github.com/Anyrainel/GenshinTools.git",
+      "branch": "main",
+      "commit": "345edc8b1ade7b57cd47153844cb1abae8c3e415",
+      "commitDate": "2026-11-07T10:22:39-08:00",
+      "checkedOn": "2026-11-10",
+      "localPath": ".references/GenshinTools",
+      "purpose": "architecture research: generated game data, typed combat implementations, stat/buff/formula organization; not a runtime or build dependency",
+      "research": "docs/references/genshin-tools.md",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": [],
+      "licenseStatus": "No tracked LICENSE/COPYING/NOTICE file found at the pinned commit; no upstream implementation copied into the product"
+    },
+    {
+      "id": "mona-current",
+      "kind": "git",
+      "url": "https://github.com/TwiceDrop/genshin_artifact",
+      "branch": "main",
+      "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+      "commitDate": "2026-10-31T11:12:02Z",
+      "release": "7.2.02",
+      "localPath": ".references/mona-current",
+      "purpose": "current pinned community Git checkout; catalog identity and verified image sources; upstream code is not executed",
+      "canonicalSnapshot": "tools/data/sources/catalog/mona-community/catalog.json",
+      "licenseFiles": [
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md"
+      ],
+      "shallow": true,
+      "submodulesInitialized": false
+    },
+    {
+      "id": "mona-community",
+      "kind": "git",
+      "url": "https://github.com/TwiceDrop/genshin_artifact",
+      "branch": "main",
+      "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+      "commitDate": "2026-10-31T11:12:02Z",
+      "localPath": ".references/mona-community",
+      "purpose": "secondary current checkout; former origin retained as legacy remote",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": [
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md"
+      ],
+      "release": "7.2.02"
+    },
+    {
+      "id": "genshin-db",
+      "kind": "git",
+      "url": "https://github.com/theBowja/genshin-db",
+      "branch": "main",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "commitDate": "2026-11-04T19:44:50-05:00",
+      "localPath": ".references/genshin-db",
+      "purpose": "character, weapon, artifact, enemy and multilingual metadata",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "id": "kqm-tcl",
+      "kind": "git",
+      "url": "https://github.com/KQM-git/TCL",
+      "branch": "master",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "commitDate": "2026-10-13T10:58:20+05:30",
+      "localPath": ".references/kqm-tcl",
+      "purpose": "mechanics articles, evidence, snapshot/dynamic and enemy rules",
+      "shallow": true,
+      "submodulesInitialized": false,
+      "licenseFiles": []
+    },
+    {
+      "id": "enka-api-docs",
+      "kind": "pinned-files",
+      "url": "https://github.com/EnkaNetwork/API-docs",
+      "commit": "b94bc40528941126590e0eefb0f03278e7a44ec8",
+      "localPath": ".references/enka",
+      "canonicalSnapshot": "tools/data/sources/catalog/enka/catalog.json",
+      "purpose": "Official character skill metadata for public UID showcase mapping; pinned files, not a Git checkout; public example is a separate input case"
+    },
+    {
+      "id": "enka-skill-supplements",
+      "kind": "pinned-files",
+      "url": "https://gi.gachabase.net/",
+      "localPath": ".references/enka",
+      "canonicalSnapshot": "tools/data/sources/catalog/enka/skill-supplements.json",
+      "purpose": "Five character release-page skill IDs matched to pinned genshin-db combat talent names; exact page URLs and hashes recorded per character; player exports are not mapping sources"
+    },
+    {
+      "id": "artifact-affix-values",
+      "kind": "pinned-files",
+      "url": "https://github.com/Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "localPath": ".references/enka/reliquary-affixes.json",
+      "canonicalSnapshot": "src/game-data/data/tables/artifact-rolls.json",
+      "purpose": "Exact artifact substat tiers for UI enhancement count inference; affix identities cross-checked against pinned official Enka metadata; no reference code executed"
+    }
+  ],
+  "webSources": [
+    {
+      "id": "meropide",
+      "url": "https://meropide.cn/chs/",
+      "localPath": ".references/meropide/",
+      "kind": "selected-web-snapshots",
+      "manifest": ".references/meropide/manifest.json",
+      "publicRepositoryIdentified": false
+    }
+  ]
+}

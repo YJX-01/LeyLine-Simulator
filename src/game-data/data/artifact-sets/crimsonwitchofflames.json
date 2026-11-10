@@ -1,0 +1,35 @@
+{
+  "id": "crimsonwitchofflames",
+  "name": "炽烈的炎之魔女",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "pyroBonus",
+          "values": [
+            0.15
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "获得15%火元素伤害加成。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：超载、燃烧、烈绽放反应造成的伤害提升40%，蒸发、融化反应的加成系数提高15%。施放元素战技后的10秒内，2件套的效果提高50%，该效果最多叠加3次。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/crimsonwitchofflames.json"
+  },
+  "rarity": 5
+}

@@ -1,0 +1,35 @@
+{
+  "id": "viridescentvenerer",
+  "name": "翠绿之影",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "anemoBonus",
+          "values": [
+            0.15
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "获得15%风元素伤害加成。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：扩散反应造成的伤害提升60%，星扩散反应造成的伤害提升20%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续10秒。对敌人触发星扩散反应时，也会降低其40%的冰元素抗性。同元素类型的抗性降低效果无法叠加。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/viridescentvenerer.json"
+  },
+  "rarity": 5
+}

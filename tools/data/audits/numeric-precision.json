@@ -1,0 +1,781 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "independentRawCommit": "b0501c5d89767ead5f647869a2412521447f7682",
+  "method": "Exact numeric equality against adopted fixed JSON fields; checks run directly, without stored file hashes. Does not prove game float32 evaluation equivalence.",
+  "comparedValues": {
+    "character-base": 770,
+    "character-curves": 46200,
+    "character-promotion": 5390,
+    "talent-parameters": 60810,
+    "weapon-base": 512,
+    "weapon-curves": 51200,
+    "weapon-promotion": 1772,
+    "artifact-affixes": 80,
+    "artifact-main": 399
+  },
+  "differences": [],
+  "templateParameterGaps": [],
+  "independentBaseDifferences": [],
+  "mainStatChanges": {
+    "rows": 21,
+    "changes": [
+      {
+        "stat": "hpPercent",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "hpPercent",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "hpPercent",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "hpPercent",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "hpPercent",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "hpPercent",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "hpPercent",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "hpPercent",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "attackPercent",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "attackPercent",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "attackPercent",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "attackPercent",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "attackPercent",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "attackPercent",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "attackPercent",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "attackPercent",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "defense",
+        "level": 0,
+        "old": 0,
+        "new": 111
+      },
+      {
+        "stat": "defense",
+        "level": 1,
+        "old": 0,
+        "new": 143
+      },
+      {
+        "stat": "defense",
+        "level": 2,
+        "old": 0,
+        "new": 174
+      },
+      {
+        "stat": "defense",
+        "level": 3,
+        "old": 0,
+        "new": 206
+      },
+      {
+        "stat": "defense",
+        "level": 4,
+        "old": 0,
+        "new": 237
+      },
+      {
+        "stat": "defense",
+        "level": 5,
+        "old": 0,
+        "new": 269
+      },
+      {
+        "stat": "defense",
+        "level": 6,
+        "old": 0,
+        "new": 300
+      },
+      {
+        "stat": "defense",
+        "level": 7,
+        "old": 0,
+        "new": 331
+      },
+      {
+        "stat": "defense",
+        "level": 8,
+        "old": 0,
+        "new": 363
+      },
+      {
+        "stat": "defense",
+        "level": 9,
+        "old": 0,
+        "new": 394
+      },
+      {
+        "stat": "defense",
+        "level": 10,
+        "old": 0,
+        "new": 426
+      },
+      {
+        "stat": "defense",
+        "level": 11,
+        "old": 0,
+        "new": 457
+      },
+      {
+        "stat": "defense",
+        "level": 12,
+        "old": 0,
+        "new": 489
+      },
+      {
+        "stat": "defense",
+        "level": 13,
+        "old": 0,
+        "new": 520
+      },
+      {
+        "stat": "defense",
+        "level": 14,
+        "old": 0,
+        "new": 552
+      },
+      {
+        "stat": "defense",
+        "level": 15,
+        "old": 0,
+        "new": 583
+      },
+      {
+        "stat": "defense",
+        "level": 16,
+        "old": 0,
+        "new": 615
+      },
+      {
+        "stat": "defense",
+        "level": 17,
+        "old": 0,
+        "new": 646
+      },
+      {
+        "stat": "defense",
+        "level": 18,
+        "old": 0,
+        "new": 678
+      },
+      {
+        "stat": "defense",
+        "level": 19,
+        "old": 0,
+        "new": 709
+      },
+      {
+        "stat": "defense",
+        "level": 20,
+        "old": 0,
+        "new": 741
+      },
+      {
+        "stat": "defensePercent",
+        "level": 1,
+        "old": 0.11199999999999999,
+        "new": 0.112
+      },
+      {
+        "stat": "defensePercent",
+        "level": 2,
+        "old": 0.13699999999999998,
+        "new": 0.137
+      },
+      {
+        "stat": "defensePercent",
+        "level": 4,
+        "old": 0.18600000000000003,
+        "new": 0.186
+      },
+      {
+        "stat": "defensePercent",
+        "level": 5,
+        "old": 0.21100000000000002,
+        "new": 0.211
+      },
+      {
+        "stat": "defensePercent",
+        "level": 6,
+        "old": 0.23600000000000002,
+        "new": 0.236
+      },
+      {
+        "stat": "defensePercent",
+        "level": 8,
+        "old": 0.28600000000000003,
+        "new": 0.286
+      },
+      {
+        "stat": "defensePercent",
+        "level": 15,
+        "old": 0.45899999999999996,
+        "new": 0.459
+      },
+      {
+        "stat": "defensePercent",
+        "level": 18,
+        "old": 0.5329999999999999,
+        "new": 0.533
+      },
+      {
+        "stat": "defensePercent",
+        "level": 19,
+        "old": 0.5579999999999999,
+        "new": 0.558
+      },
+      {
+        "stat": "critRate",
+        "level": 14,
+        "old": 0.23199999999999998,
+        "new": 0.232
+      },
+      {
+        "stat": "critDamage",
+        "level": 0,
+        "old": 0.09300000000000001,
+        "new": 0.093
+      },
+      {
+        "stat": "critDamage",
+        "level": 3,
+        "old": 0.17300000000000001,
+        "new": 0.173
+      },
+      {
+        "stat": "critDamage",
+        "level": 4,
+        "old": 0.19899999999999998,
+        "new": 0.199
+      },
+      {
+        "stat": "critDamage",
+        "level": 10,
+        "old": 0.35700000000000004,
+        "new": 0.357
+      },
+      {
+        "stat": "critDamage",
+        "level": 13,
+        "old": 0.43700000000000006,
+        "new": 0.437
+      },
+      {
+        "stat": "critDamage",
+        "level": 14,
+        "old": 0.46299999999999997,
+        "new": 0.463
+      },
+      {
+        "stat": "energyRecharge",
+        "level": 3,
+        "old": 0.14400000000000002,
+        "new": 0.144
+      },
+      {
+        "stat": "energyRecharge",
+        "level": 7,
+        "old": 0.23199999999999998,
+        "new": 0.232
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 1,
+        "old": 0.11199999999999999,
+        "new": 0.112
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 2,
+        "old": 0.13699999999999998,
+        "new": 0.137
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 4,
+        "old": 0.18600000000000003,
+        "new": 0.186
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 5,
+        "old": 0.21100000000000002,
+        "new": 0.211
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 6,
+        "old": 0.23600000000000002,
+        "new": 0.236
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 8,
+        "old": 0.28600000000000003,
+        "new": 0.286
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 15,
+        "old": 0.45899999999999996,
+        "new": 0.459
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 18,
+        "old": 0.5329999999999999,
+        "new": 0.533
+      },
+      {
+        "stat": "physicalBonus",
+        "level": 19,
+        "old": 0.5579999999999999,
+        "new": 0.558
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "anemoBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "geoBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "geoBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "geoBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "geoBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "geoBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "geoBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "geoBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "geoBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "electroBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "electroBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "electroBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "electroBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "electroBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "electroBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "electroBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "electroBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "hydroBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "pyroBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "cryoBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 5,
+        "old": 0.16899999999999998,
+        "new": 0.169
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 6,
+        "old": 0.18899999999999997,
+        "new": 0.189
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 11,
+        "old": 0.28800000000000003,
+        "new": 0.288
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 13,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 14,
+        "old": 0.34700000000000003,
+        "new": 0.347
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 15,
+        "old": 0.36700000000000005,
+        "new": 0.367
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 17,
+        "old": 0.40700000000000003,
+        "new": 0.407
+      },
+      {
+        "stat": "dendroBonus",
+        "level": 18,
+        "old": 0.42700000000000005,
+        "new": 0.427
+      },
+      {
+        "stat": "healingBonus",
+        "level": 0,
+        "old": 0.054000000000000006,
+        "new": 0.054
+      },
+      {
+        "stat": "healingBonus",
+        "level": 8,
+        "old": 0.17600000000000002,
+        "new": 0.176
+      },
+      {
+        "stat": "healingBonus",
+        "level": 10,
+        "old": 0.20600000000000002,
+        "new": 0.206
+      },
+      {
+        "stat": "healingBonus",
+        "level": 18,
+        "old": 0.32799999999999996,
+        "new": 0.328
+      },
+      {
+        "stat": "healingBonus",
+        "level": 19,
+        "old": 0.34299999999999997,
+        "new": 0.343
+      }
+    ],
+    "elementalMasteryAt20": 186.5
+  },
+  "staticRules": "Author-reviewed static rules remain separate from localized descriptions.",
+  "gaps": [
+    "Upstream formats may already round values.",
+    "No recorded full combat timeline or game float32 comparison."
+  ]
+}

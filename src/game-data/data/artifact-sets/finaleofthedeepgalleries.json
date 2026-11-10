@@ -1,0 +1,35 @@
+{
+  "id": "finaleofthedeepgalleries",
+  "name": "深廊终曲",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "cryoBonus",
+          "values": [
+            0.15
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "获得15%冰元素伤害加成。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：装备者的元素能量为0时，普通攻击造成的伤害提升60%，元素爆发造成的伤害提升60%。装备者的普通攻击造成伤害后，上述元素爆发伤害提升效果将失效6秒；装备者的元素爆发造成伤害后，上述普通攻击伤害提升效果将失效6秒。角色处于队伍后台也能触发。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/finaleofthedeepgalleries.json"
+  },
+  "rarity": 5
+}

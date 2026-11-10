@@ -1,0 +1,35 @@
+{
+  "id": "emblemofseveredfate",
+  "name": "绝缘之旗印",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "energyRecharge",
+          "values": [
+            0.2
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "元素充能效率提高20%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：基于元素充能效率的25%，提高元素爆发造成的伤害。至多通过这种方式获得75%提升。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/emblemofseveredfate.json"
+  },
+  "rarity": 5
+}

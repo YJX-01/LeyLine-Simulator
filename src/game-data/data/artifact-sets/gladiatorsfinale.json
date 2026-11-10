@@ -1,0 +1,35 @@
+{
+  "id": "gladiatorsfinale",
+  "name": "角斗士的终幕礼",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "attackPercent",
+          "values": [
+            0.18
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "攻击力提高18%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：装备该圣遗物套装的角色为单手剑、双手剑、长柄武器角色时，角色普通攻击造成的伤害提高35%。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/gladiatorsfinale.json"
+  },
+  "rarity": 5
+}

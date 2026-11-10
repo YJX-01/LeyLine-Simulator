@@ -1,0 +1,187 @@
+{
+	"id": 10000127,
+	"name": "叶洛亚",
+	"title": "魇夜燃芯",
+	"description": "调查分队「魇夜之莺」成员，执灯人最年轻的分队长。",
+	"weaponType": "WEAPON_POLE",
+	"weaponText": "长柄武器",
+	"bodyType": "BODY_BOY",
+	"gender": "男",
+	"qualityType": "QUALITY_PURPLE",
+	"rarity": 4,
+	"birthdaymmdd": "12/23",
+	"birthday": "12月23日",
+	"elementType": "ELEMENT_GEO",
+	"elementText": "岩",
+	"affiliation": "执灯人",
+	"associationType": "ASSOC_NODKRAI",
+	"region": "挪德卡莱",
+	"substatType": "FIGHT_PROP_ELEMENT_MASTERY",
+	"substatText": "元素精通",
+	"constellation": "金莺座",
+	"cv": {
+		"english": "乔纳森·河",
+		"chinese": "昱头",
+		"japanese": "梅田修一朗",
+		"korean": "黄栋炫"
+	},
+	"costs": {
+		"ascend1": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 20000
+			},
+			{
+				"id": 104171,
+				"name": "坚牢黄玉碎屑",
+				"count": 1
+			},
+			{
+				"id": 101269,
+				"name": "松珀香",
+				"count": 3
+			},
+			{
+				"id": 112122,
+				"name": "毁损机轴",
+				"count": 3
+			}
+		],
+		"ascend2": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 40000
+			},
+			{
+				"id": 104172,
+				"name": "坚牢黄玉断片",
+				"count": 3
+			},
+			{
+				"id": 113080,
+				"name": "循环式军用月矩核心",
+				"count": 2
+			},
+			{
+				"id": 101269,
+				"name": "松珀香",
+				"count": 10
+			},
+			{
+				"id": 112122,
+				"name": "毁损机轴",
+				"count": 15
+			}
+		],
+		"ascend3": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 60000
+			},
+			{
+				"id": 104172,
+				"name": "坚牢黄玉断片",
+				"count": 6
+			},
+			{
+				"id": 113080,
+				"name": "循环式军用月矩核心",
+				"count": 4
+			},
+			{
+				"id": 101269,
+				"name": "松珀香",
+				"count": 20
+			},
+			{
+				"id": 112123,
+				"name": "加固机轴",
+				"count": 12
+			}
+		],
+		"ascend4": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 80000
+			},
+			{
+				"id": 104173,
+				"name": "坚牢黄玉块",
+				"count": 3
+			},
+			{
+				"id": 113080,
+				"name": "循环式军用月矩核心",
+				"count": 8
+			},
+			{
+				"id": 101269,
+				"name": "松珀香",
+				"count": 30
+			},
+			{
+				"id": 112123,
+				"name": "加固机轴",
+				"count": 18
+			}
+		],
+		"ascend5": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 100000
+			},
+			{
+				"id": 104173,
+				"name": "坚牢黄玉块",
+				"count": 6
+			},
+			{
+				"id": 113080,
+				"name": "循环式军用月矩核心",
+				"count": 12
+			},
+			{
+				"id": 101269,
+				"name": "松珀香",
+				"count": 45
+			},
+			{
+				"id": 112124,
+				"name": "精制机轴",
+				"count": 12
+			}
+		],
+		"ascend6": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 120000
+			},
+			{
+				"id": 104174,
+				"name": "坚牢黄玉",
+				"count": 6
+			},
+			{
+				"id": 113080,
+				"name": "循环式军用月矩核心",
+				"count": 20
+			},
+			{
+				"id": 101269,
+				"name": "松珀香",
+				"count": 60
+			},
+			{
+				"id": 112124,
+				"name": "精制机轴",
+				"count": 24
+			}
+		]
+	}
+}

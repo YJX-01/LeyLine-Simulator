@@ -1,0 +1,618 @@
+{
+  "formatVersion": 1,
+  "mappings": [
+    {
+      "from": "docs/unifiedname.txt",
+      "to": "archive/data/unifiedname.txt",
+      "originalSha256": "52b43af5cb870687b679c7e2a2b0bf2bac270796695438fc50aad296c60034cc",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/albedo.json",
+      "to": "archive/data/characters/albedo.json",
+      "originalSha256": "cd90643a8b56d8a607a69528daa72d59e652fcc4e8856ce51f2093018e212d3f",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/aloy.json",
+      "to": "archive/data/characters/aloy.json",
+      "originalSha256": "6a8215b09986e6d1e41f98cf8e4dfcb94a9df9b7a8e849225622344ab3a69aef",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/amber.json",
+      "to": "archive/data/characters/amber.json",
+      "originalSha256": "e2b471127a131fd5855aff6fea370289c9ecbd4662fea24f742581bd0cb24588",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/ayaka.json",
+      "to": "archive/data/characters/ayaka.json",
+      "originalSha256": "3bb9d5b8555e2975a517d6d049f12ae05456807c6d1a357eee6c513caeaba79b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/barbara.json",
+      "to": "archive/data/characters/barbara.json",
+      "originalSha256": "53bb50be2dd6eedba34a18d0ae2fe425f8ff033cd4ef44a21498d5f20ab3b90b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/beidou.json",
+      "to": "archive/data/characters/beidou.json",
+      "originalSha256": "904cdd473208230bff139eaaecbb3ce71a3183f8f393e1cb22e2735740a06efc",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/bennett.json",
+      "to": "archive/data/characters/bennett.json",
+      "originalSha256": "a7fdd3e5e3e8f73d3309a2f83f64ae9136721d5758dd9c96b3a9471df4341c0e",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/chongyun.json",
+      "to": "archive/data/characters/chongyun.json",
+      "originalSha256": "08a4b41e5b8288b4d522d0fab6a5c723303746cfa1b36ae9f137b17375f889c6",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/diluc.json",
+      "to": "archive/data/characters/diluc.json",
+      "originalSha256": "b4500869b145146c146a888b55a31f8806c70e1aa350fa96f4abc100b00a6f4e",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/diona.json",
+      "to": "archive/data/characters/diona.json",
+      "originalSha256": "e1222f94398040e3fb9fd3dfe4c25afdfc5bbb31126a42b7908a2de5329ad39b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/eula.json",
+      "to": "archive/data/characters/eula.json",
+      "originalSha256": "f05d12f49c531445b27c60f54d584195291718ce9870b3a767333aeb2f11054c",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/feiyan.json",
+      "to": "archive/data/characters/feiyan.json",
+      "originalSha256": "1e17e09f1e5bad0c51b7f79e21278353c6a17ef6bab30f270165bc6579c06c42",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/fischl.json",
+      "to": "archive/data/characters/fischl.json",
+      "originalSha256": "10fe18cfd893cc945191831d172e876989060f8947dcdbf04020626508bc6ca4",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/ganyu.json",
+      "to": "archive/data/characters/ganyu.json",
+      "originalSha256": "8447225ba0abeb38ec897c9268ba8d65e72c648e3ba134b4df88f30b0298c940",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/hutao.json",
+      "to": "archive/data/characters/hutao.json",
+      "originalSha256": "48f5707d31a0f3763512b65df8bf11ee8701132a5c5cf3eaf05adb0e3dd30778",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/jean.json",
+      "to": "archive/data/characters/jean.json",
+      "originalSha256": "991524198fd3897d13576a5fb18c3817b1f555250f8c6d335c6da250cbc6b449",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/kaeya.json",
+      "to": "archive/data/characters/kaeya.json",
+      "originalSha256": "96dbd701048477420fe7b04b152eade089f1550f183a63d3c043b2b5b921e627",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/kazuha.json",
+      "to": "archive/data/characters/kazuha.json",
+      "originalSha256": "01a3c178fe212c0628e3032e0072086c4eba935446554f976c196c48ff2f50fb",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/keqing.json",
+      "to": "archive/data/characters/keqing.json",
+      "originalSha256": "e43d549d5ccdac3a72c086de0d302099950e4c2d617797663fd3e20c33d1b456",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/klee.json",
+      "to": "archive/data/characters/klee.json",
+      "originalSha256": "607f93ceb35913fc73e2c5330d1fd431af9556f97053ec1cece2b66830296aab",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/kokomi.json",
+      "to": "archive/data/characters/kokomi.json",
+      "originalSha256": "738966957d80752d53150f8b572ea78351e60bb6bac39a41272ff1baa7d2395b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/lisa.json",
+      "to": "archive/data/characters/lisa.json",
+      "originalSha256": "1b177c94ce7d33df1928ebc1c97b3595d258c4e7fad7c252dff1a6a24b61ca16",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/mona.json",
+      "to": "archive/data/characters/mona.json",
+      "originalSha256": "1705382c9d3270c490a91183818134da7e37785684122ae4ea66573cb54ea303",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/ningguang.json",
+      "to": "archive/data/characters/ningguang.json",
+      "originalSha256": "7c9990566b5f38e394dc6525bba54331a5587427ea5c8134cd5fef761efe9399",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/noelle.json",
+      "to": "archive/data/characters/noelle.json",
+      "originalSha256": "298da19d9a3d1f7de2dfe62e3f3a5c6e8b9d4d775f7beb9f2ddc271d859ed5e7",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/qiqi.json",
+      "to": "archive/data/characters/qiqi.json",
+      "originalSha256": "d42740298dcc01f62fd89f2238731e93fccf0f7be8419b1c241461e2ea79e49c",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/razor.json",
+      "to": "archive/data/characters/razor.json",
+      "originalSha256": "753575bf1f5aa770df64404f5b912df96c6f0b30be06939cb47d9c4bc088794b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/rosaria.json",
+      "to": "archive/data/characters/rosaria.json",
+      "originalSha256": "5375c9d889c2768d282fb3895990712ae754fe6ecbe65193bf31f989ce3f8899",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/sara.json",
+      "to": "archive/data/characters/sara.json",
+      "originalSha256": "51bf5304adb4b5cbe00f83bfff0c44aad9765bf76b3f2505be954c13dc5de122",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/sayu.json",
+      "to": "archive/data/characters/sayu.json",
+      "originalSha256": "1b03d3151cc3c843bdb971a3e1ead200134f30cdada2c6a795feb6ecfaa409a9",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/shougun.json",
+      "to": "archive/data/characters/shougun.json",
+      "originalSha256": "05b27ca86bb2a2feeb74159821475da4764681f637cb4b358dfa4403bcd4cd76",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/sucrose.json",
+      "to": "archive/data/characters/sucrose.json",
+      "originalSha256": "0be7e7263782c0f1eebeb62ff9c5e92c73099a7085fc0bd8420fdc8a4c85c59d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/tartaglia.json",
+      "to": "archive/data/characters/tartaglia.json",
+      "originalSha256": "efdbb29d59fa3b8b65fce4f091f5055865f8dd97aa7ba807044d7c4b522c6695",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/thoma.json",
+      "to": "archive/data/characters/thoma.json",
+      "originalSha256": "edf594881efca92253e3b0f7ae0ea9b0ce6077173fb0012db582be3fe229c223",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/traveler_boy_anemo.json",
+      "to": "archive/data/characters/traveler_boy_anemo.json",
+      "originalSha256": "e0d1530cebb164d2927aea0c53484801ed3d145d33601bae2654627da86a2a9a",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/traveler_boy_electro.json",
+      "to": "archive/data/characters/traveler_boy_electro.json",
+      "originalSha256": "b838e067bc882bd42861da4ce19bd1010449e0cea18eade24a540ee57a75adf9",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/traveler_boy_geo.json",
+      "to": "archive/data/characters/traveler_boy_geo.json",
+      "originalSha256": "4bdf914a3144bec0f4a636af9102fc855f07f2c391098c8c34c7ac479f3a8b48",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/traveler_girl_anemo.json",
+      "to": "archive/data/characters/traveler_girl_anemo.json",
+      "originalSha256": "d20ae41db257772bbafdc92945c91cf9cdd354c69af314526ae8a8a18013d482",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/traveler_girl_electro.json",
+      "to": "archive/data/characters/traveler_girl_electro.json",
+      "originalSha256": "9c02a837d0a79feade260fc163faffd590bff6d7c41853c97f1241d960be467b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/traveler_girl_geo.json",
+      "to": "archive/data/characters/traveler_girl_geo.json",
+      "originalSha256": "4a8a83b4d887b6c8470d5d655fbca574d74c28ba2015fa180aa66650e872d5aa",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/venti.json",
+      "to": "archive/data/characters/venti.json",
+      "originalSha256": "a87dd7979b3fb0775ee0e9799c44d62d5a4ff56e11833c629c875c9bf4fa1c6d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/xiangling.json",
+      "to": "archive/data/characters/xiangling.json",
+      "originalSha256": "7e6501241bb6805f6ad96c260c6c265e66f820ea6b01ecd457ceb572f30bb7e9",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/xiao.json",
+      "to": "archive/data/characters/xiao.json",
+      "originalSha256": "b33c286dc98808e349504647d56889517be254724d2fa0b4db87dda2f52bc87c",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/xingqiu.json",
+      "to": "archive/data/characters/xingqiu.json",
+      "originalSha256": "1e28d529810221d9383992d23ff341c88118c22afc37721106abd7896ace0eba",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/xinyan.json",
+      "to": "archive/data/characters/xinyan.json",
+      "originalSha256": "3718fdd7e62086960a91a0cbd9890d1d19022799b2f473b4d3aae575201956f9",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/yoimiya.json",
+      "to": "archive/data/characters/yoimiya.json",
+      "originalSha256": "93f75297454d4fa5ac51a6aa2672800f280a76ea865e5d4e51d49a1b20f658a2",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/characters/zhongli.json",
+      "to": "archive/data/characters/zhongli.json",
+      "originalSha256": "4e4f15a8deb6639239926e0125f765ada27967fbcb939369670ac556db6ef2c3",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/ActionTime.json",
+      "to": "src/game-data/data/legacy/ActionTime.json",
+      "originalSha256": "7e4d68b1d49bb61513f28567851ac08c6ddcdbf763be1379b9f86ee69bca0db9",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/artifact-rolls.json",
+      "to": "src/game-data/data/tables/artifact-rolls.json",
+      "originalSha256": "2083e680755c93d9d0ef860b1d7c073d8ed6a55a02973ca3533f2b99a546bd2c",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/artifact-set-short-names.json",
+      "to": "src/game-data/data/tables/artifact-set-short-names.json",
+      "originalSha256": "7e39f27c027b301235f8355a0eaf5166a2d96ed15708bd0d7da5e392bc5aaeb2",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/ArtifactStat.json",
+      "to": "src/game-data/data/legacy/ArtifactStat.json",
+      "originalSha256": "f3fef52d399b8238e4c68757f2112c00bbc9974e6bbc10c1cc1d4824c028f5bf",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/catalog-release-metadata.json",
+      "to": "src/game-data/data/tables/catalog-release-metadata.json",
+      "originalSha256": "f5282b42003c9d393bf8b60111b0e92ec8ac1f561dec15678637c284a34f63d7",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/character-effective-stats.json",
+      "to": "src/game-data/data/tables/character-effective-stats.json",
+      "originalSha256": "a093ff030e263bf7078210d85d4684cb0155243e62e2b8072731ed61060dc4b2",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/CharacterConfig.json",
+      "to": "src/game-data/data/legacy/CharacterConfig.json",
+      "originalSha256": "9a42500f71bab5f42a14c9a4258086bcbd043d8e1f6d8324082e13005523eb92",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/CharacterLevelMultiplier.json",
+      "to": "src/game-data/data/legacy/CharacterLevelMultiplier.json",
+      "originalSha256": "05da15f1f1e369ae8e94cca97fce1fce6494f9f9b2dae739df9d138b358b02a7",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/effective-roll-basis.json",
+      "to": "src/game-data/data/tables/effective-roll-basis.json",
+      "originalSha256": "50144d0143e11a1bc4daf4907b5f01337ff4ca18b7749f09ef92a5aa5bfaa9bc",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/miao-plugin-LICENSE.txt",
+      "to": "licenses/sources/miao-plugin/legacy-metadata-LICENSE.txt",
+      "originalSha256": "aad5f0a8dd1d47a23b7c66f1c07a8a2055518ff23849a76b4e07af8a55c24363",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/ReactionLevelMultiplier.json",
+      "to": "src/game-data/data/legacy/ReactionLevelMultiplier.json",
+      "originalSha256": "5853ffb7cd64a8f6246f4e58ff5271e524dafbeb8d3ffeeffd1804acb9216ade",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/SkillConfig.json",
+      "to": "src/game-data/data/legacy/SkillConfig.json",
+      "originalSha256": "4a116acd230e4a9151844892f7e61068487ffe9fbff6f3de34c16597da3ea57e",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/ui-artifact-slot-sources.json",
+      "to": "assets/sources/artifact-slots.json",
+      "originalSha256": "d8f77d817726c4d6fb7f6a50e29abc80a2bf59213d7f1e1abcf8a57d38ef2b9e",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/ui-buff-sources.json",
+      "to": "assets/sources/buffs.json",
+      "originalSha256": "c7714e8191ab478d450f1305a8b4afe2eacd6991a2fdc2bd21f8a71989c4ac23",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/ui-icon-scope.json",
+      "to": "assets/sources/scope.json",
+      "originalSha256": "8c846ba5ec6d0408015483d9153ba2775e4bc2cf0019f451381b73fae58d5686",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/ui-icon-sources.json",
+      "to": "assets/sources/sprites.json",
+      "originalSha256": "28f319ef6f334a99670e727957a3ef5d4b8e3d5cf2c01ee7aba0c18259a13c77",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/ui-stat-sources.json",
+      "to": "assets/sources/stats.json",
+      "originalSha256": "a1a65881425488d374684f6e656ee850bd176d312c3493d8fea56bb089f2dcdf",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/WeaponConfig.json",
+      "to": "src/game-data/data/legacy/WeaponConfig.json",
+      "originalSha256": "c9196553261da29b5d4773ce336fcf4f886d60d651855eb3ac9845582edad464",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/WeaponLevelMultiplier.json",
+      "to": "src/game-data/data/legacy/WeaponLevelMultiplier.json",
+      "originalSha256": "4b3860cbb3da726db8804593e90106abbc9800f83b8a322afcacdb4268505a73",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/performance/stage-6-browsers.json",
+      "to": "fixtures/performance/history/stage-6-browsers.json",
+      "originalSha256": "017aff13dba441bcb3ea0da7bce8be6a76f1624da0d6a6ff225b88144d8c88d8",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/performance/stage-6-build.json",
+      "to": "fixtures/performance/history/stage-6-build.json",
+      "originalSha256": "b1be680250024210abdf6a1c7fe79e9821c6e96a8ef9ac4d03fb758fa17e3abf",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/performance/stage-6-engine-baseline.json",
+      "to": "fixtures/performance/history/stage-6-engine-baseline.json",
+      "originalSha256": "da169575213314f865ec0510939b11a48f6c1361eff226c45a0b8b9affd3fc2d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/performance/stage-6-engine-final.json",
+      "to": "fixtures/performance/history/stage-6-engine-final.json",
+      "originalSha256": "880538e57b098a66089f7e3868ef377da04569f22d2fbc3dbec4ab8c8eb59d9b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/references/sources.json",
+      "to": "tools/data/references.json",
+      "originalSha256": "f53473bdcf3c84d6dd04d2cffb4a0ac395bc8299082c7855347d922010738900",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/artifact-slot-vectors/circlet.svg",
+      "to": "assets/sources/vectors/artifact-slots/circlet.svg",
+      "originalSha256": "d7e79cdf0856dffd010d18c9911ff6b621cf1fdfc3728a739dcedc19d93c3658",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/artifact-slot-vectors/flower.svg",
+      "to": "assets/sources/vectors/artifact-slots/flower.svg",
+      "originalSha256": "e610828950fe568ee9fd23cf3df7428fe433d2a71178d098586b43802bf93e3d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/artifact-slot-vectors/goblet.svg",
+      "to": "assets/sources/vectors/artifact-slots/goblet.svg",
+      "originalSha256": "64b73421eabfed5b92c8c18bad8f0c81de6a7aab024fb93ae3a23baaafea8531",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/artifact-slot-vectors/plume.svg",
+      "to": "assets/sources/vectors/artifact-slots/plume.svg",
+      "originalSha256": "16a2a5f607f5e5a25c52bcc821efae943b7acb1866255b352110605670783d8d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/artifact-slot-vectors/sands.svg",
+      "to": "assets/sources/vectors/artifact-slots/sands.svg",
+      "originalSha256": "b2cee525ba06cf0211af84fbac72f1da04cfe0e69ccefb33cc9b42747779dc05",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/enka/catalog.json",
+      "to": "tools/data/sources/catalog/enka/catalog.json",
+      "originalSha256": "4cf32091931c8cd388517dda290392605129d94680320dfe8dbc0edcf7eb685b",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/enka/skill-supplements.json",
+      "to": "tools/data/sources/catalog/enka/skill-supplements.json",
+      "originalSha256": "f70d30be2f6522eab9edbd3e8e13c3dab954a602931c6d17ae7107493227fd70",
+      "transformation": "json-relocation"
+    },
+    {
+      "from": "docs/constant/mona-community/catalog.json",
+      "to": "tools/data/sources/catalog/mona-community/catalog.json",
+      "originalSha256": "7b6ebb5e30a8ce97323bb26f2505203635bc965fadf7fd51f7112667e82c1cab",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/artifact-main.json",
+      "to": "tools/data/sources/catalog/genshin-db/artifact-main.json",
+      "originalSha256": "2bac142d7383c67ce8cab22e14f3c0765205492202cde797d65a390d2c7883b8",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/character-curves.json",
+      "to": "tools/data/sources/catalog/genshin-db/character-curves.json",
+      "originalSha256": "c357550982d5a5696e7622792da516e69acff01506b10e045fc4cc9c29c43cbd",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/characters.json",
+      "to": "tools/data/sources/catalog/genshin-db/characters.json",
+      "originalSha256": "709e5b2bbbb9b4b4a95f61756958b4e3cec4eb538be6c58b91dc315ef2ba4661",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/sets.json",
+      "to": "tools/data/sources/catalog/genshin-db/sets.json",
+      "originalSha256": "f3b94df5c9cb32df4ca618b7c725dc6af3ad3040fd40f3c9eaa42808a8188f02",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/sources.json",
+      "to": "tools/data/sources/catalog/genshin-db/sources.json",
+      "originalSha256": "40e8849e2bc97e8c610b7aec20c1135021a7e5316db4347585dcdc7ecb5d4ff2",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/traveler-forms.json",
+      "to": "tools/data/sources/catalog/genshin-db/traveler-forms.json",
+      "originalSha256": "6f4a1fa313a800d27d416d12cf50f54b32711b912f83c845d25065a73e1936a1",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/weapon-curves.json",
+      "to": "tools/data/sources/catalog/genshin-db/weapon-curves.json",
+      "originalSha256": "c7bbe641d3a7cbedd12d585d5082deddf546eaff843f6ba0845bbbdf7b8d8a8c",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/real-game/weapons.json",
+      "to": "tools/data/sources/catalog/genshin-db/weapons.json",
+      "originalSha256": "bc385819ca1ab70a7e66ab1683780540a380f80b74e23c426810ac8f2b146b03",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/attack.svg",
+      "to": "assets/sources/vectors/stats/attack.svg",
+      "originalSha256": "d634bc2605ac948537a307cdb48d60a4280f3ef0b47d690e33e04135e405d17d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/cooldownReduction.svg",
+      "to": "assets/sources/vectors/stats/cooldownReduction.svg",
+      "originalSha256": "836a1534186402f96d27e4f348ba2098f436287d43f159872ac00414c4cf1f89",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/critDamage.svg",
+      "to": "assets/sources/vectors/stats/critDamage.svg",
+      "originalSha256": "eda00e7436e2023ebc076973227ff8fd059ad48599eff2012f071af8734c3283",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/critRate.svg",
+      "to": "assets/sources/vectors/stats/critRate.svg",
+      "originalSha256": "198eeaf476c83ad3dfd50f2c8a47dd0cd6f2cd34c1fb51c7f5f9a52c1ef29a5d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/defense.svg",
+      "to": "assets/sources/vectors/stats/defense.svg",
+      "originalSha256": "69de355d42cc945da5cedf7af60980e072afc789f4cba64a8cbfd5c22241ff3d",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/elementalMastery.svg",
+      "to": "assets/sources/vectors/stats/elementalMastery.svg",
+      "originalSha256": "297163a1234a3d0b045bff1298396b935d9ac43c10f2f2ba1692d863a30f6477",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/energyRecharge.svg",
+      "to": "assets/sources/vectors/stats/energyRecharge.svg",
+      "originalSha256": "2141a476adde56ae034ae4c01f509b5382d69cd8cf2d4d4edc2c1723c5451897",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/flatAttack.svg",
+      "to": "assets/sources/vectors/stats/flatAttack.svg",
+      "originalSha256": "d502169e189e003056c8a27bb654a4b2a2198711650ab21b10bfdb9e21fc5a13",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/flatDefense.svg",
+      "to": "assets/sources/vectors/stats/flatDefense.svg",
+      "originalSha256": "528c5d47d7bab5a0e6fc7fb1b3a57881bb1562e117b56f8fd6579f6d2c7aff23",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/flatHp.svg",
+      "to": "assets/sources/vectors/stats/flatHp.svg",
+      "originalSha256": "1cd6a70aabae9d4ea872ac3b1ba86b56902b6906ac7f81eb402098e66c9d4227",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/healingBonus.svg",
+      "to": "assets/sources/vectors/stats/healingBonus.svg",
+      "originalSha256": "4aa0bc1cc7d7d90c6aea337dd589dc313a530f7839c1378cb518790f7a364db0",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/hp.svg",
+      "to": "assets/sources/vectors/stats/hp.svg",
+      "originalSha256": "44bac6685efaf6dab143241c307fa4dc222f5c576f33f6c1fed7c323b99493c3",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/physicalDamage.svg",
+      "to": "assets/sources/vectors/stats/physicalDamage.svg",
+      "originalSha256": "a1ebb1c05d13a1117290ebe4bfe2f818895243905dfca2d42251704c1ca657b4",
+      "transformation": "byte-preserving-move"
+    },
+    {
+      "from": "docs/constant/stat-vectors/shieldStrength.svg",
+      "to": "assets/sources/vectors/stats/shieldStrength.svg",
+      "originalSha256": "05df3f33349a01bf8b2c135ea6c68643c3b82e7039a815ef391493743e0c9c6b",
+      "transformation": "byte-preserving-move"
+    }
+  ],
+  "policy": "from/originalSha256 preserve the original documentation-era capture; to points at the current owner. Character metadata is now maintained per entity as strict JSON."
+}

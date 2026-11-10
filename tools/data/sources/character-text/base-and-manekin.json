@@ -1,0 +1,2283 @@
+{
+  "schemaVersion": 1,
+  "extraction": "Lossless selected raw rows and referenced Chinese text entries, not full original files. TextMapCHS overrides Medium for overlapping keys. Skill hashes are matched explicitly across the two pinned sources; original bytes remain in the local capture. Numeric levels come only from the adopted fixed ProudSkill table.",
+  "sources": [
+    {
+      "id": "depots",
+      "repository": "Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "file": "ExcelBinOutput/AvatarSkillDepotExcelConfigData.json"
+    },
+    {
+      "id": "skills",
+      "repository": "Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "file": "ExcelBinOutput/AvatarSkillExcelConfigData.json"
+    },
+    {
+      "id": "parameters",
+      "repository": "Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "file": "ExcelBinOutput/ProudSkillExcelConfigData.json"
+    },
+    {
+      "id": "mediumText",
+      "repository": "Dimbreath/AnimeGameData",
+      "commit": "433284d22ef1a704e9d49ae22fb96cf7a245828e",
+      "file": "TextMap/TextMap_MediumCHS.json"
+    },
+    {
+      "id": "text",
+      "repository": "Dimbreath/AnimeGameData",
+      "commit": "433284d22ef1a704e9d49ae22fb96cf7a245828e",
+      "file": "TextMap/TextMapCHS.json"
+    }
+  ],
+  "proudSkillsFile": "tools/data/sources/lunagc/b0501c5d89767ead5f647869a2412521447f7682/ProudSkillExcelConfigData.json",
+  "bindings": {
+    "aether": {
+      "baseId": "aether",
+      "element": "physical",
+      "skillDepotId": 501
+    },
+    "lumine": {
+      "baseId": "lumine",
+      "element": "physical",
+      "skillDepotId": 701
+    },
+    "manekin": {
+      "baseId": "manekin",
+      "element": "physical",
+      "skillDepotId": 11701
+    },
+    "manekina": {
+      "baseId": "manekina",
+      "element": "physical",
+      "skillDepotId": 11801
+    },
+    "manekin-pyro": {
+      "baseId": "manekin",
+      "element": "pyro",
+      "skillDepotId": 11702
+    },
+    "manekin-hydro": {
+      "baseId": "manekin",
+      "element": "hydro",
+      "skillDepotId": 11703
+    },
+    "manekin-electro": {
+      "baseId": "manekin",
+      "element": "electro",
+      "skillDepotId": 11704
+    },
+    "manekin-cryo": {
+      "baseId": "manekin",
+      "element": "cryo",
+      "skillDepotId": 11705
+    },
+    "manekin-anemo": {
+      "baseId": "manekin",
+      "element": "anemo",
+      "skillDepotId": 11706
+    },
+    "manekin-geo": {
+      "baseId": "manekin",
+      "element": "geo",
+      "skillDepotId": 11707
+    },
+    "manekin-dendro": {
+      "baseId": "manekin",
+      "element": "dendro",
+      "skillDepotId": 11708
+    },
+    "manekina-pyro": {
+      "baseId": "manekina",
+      "element": "pyro",
+      "skillDepotId": 11802
+    },
+    "manekina-hydro": {
+      "baseId": "manekina",
+      "element": "hydro",
+      "skillDepotId": 11803
+    },
+    "manekina-electro": {
+      "baseId": "manekina",
+      "element": "electro",
+      "skillDepotId": 11804
+    },
+    "manekina-cryo": {
+      "baseId": "manekina",
+      "element": "cryo",
+      "skillDepotId": 11805
+    },
+    "manekina-anemo": {
+      "baseId": "manekina",
+      "element": "anemo",
+      "skillDepotId": 11806
+    },
+    "manekina-geo": {
+      "baseId": "manekina",
+      "element": "geo",
+      "skillDepotId": 11807
+    },
+    "manekina-dendro": {
+      "baseId": "manekina",
+      "element": "dendro",
+      "skillDepotId": 11808
+    }
+  },
+  "skillDepots": {
+    "501": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 0,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 501,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "Avatar_Player_AbilityGroup_Boy_Common",
+      "skills": [
+        100540,
+        0,
+        0,
+        0
+      ],
+      "subSkills": [
+        10035,
+        10101,
+        10001,
+        10102,
+        5005010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": ""
+    },
+    "701": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 0,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 701,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "Avatar_Player_AbilityGroup_Girl_Common",
+      "skills": [
+        100550,
+        0,
+        0,
+        0
+      ],
+      "subSkills": [
+        10035,
+        10101,
+        10001,
+        10102,
+        5007010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": ""
+    },
+    "11701": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 0,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11701,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        0,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11801": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 0,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11801,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        0,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11702": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111751,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11702,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11703": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111752,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11703,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11704": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111753,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11704,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11705": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111754,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11705,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11706": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111755,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11706,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11707": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111756,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11707,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11708": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111757,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11708,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11802": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111751,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11802,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11803": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111752,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11803,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11804": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111753,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11804,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11805": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111754,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11805,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11806": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111755,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11806,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11807": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111756,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11807,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    },
+    "11808": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 111757,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11808,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        11172,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
+    }
+  },
+  "skills": {
+    "11171": {
+      "abilityName": "Avatar_LittleIdol_ExtraAttack",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 0,
+      "cdTime": 0,
+      "costElemType": "None",
+      "costElemVal": 0,
+      "costStamina": 0,
+      "descTextMapHash": 3512850744,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 85213199,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 11171,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR5H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 3368284549,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11731,
+      "shareCDID": 0,
+      "skillIcon": "Skill_A_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 0
+    },
+    "11172": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 0,
+      "cdTime": 10,
+      "costElemType": "None",
+      "costElemVal": 0,
+      "costStamina": 0,
+      "descTextMapHash": 2956446032,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 3935202551,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 11172,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 2,
+      "nameTextMapHash": 1295754653,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11732,
+      "shareCDID": 0,
+      "skillIcon": "Skill_S_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 2
+    },
+    "100540": {
+      "abilityName": "Avatar_PlayerBoy_ExtraAttack_Common",
+      "ADICEIPFANB": false,
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "buffIcon": "",
+      "cdSlot": 0,
+      "cdTime": 0,
+      "costElemType": "None",
+      "costElemVal": 0,
+      "costStamina": 0,
+      "descTextMapHash": 1517379584,
+      "dragType": "DRAG_NONE",
+      "EHHLOCMOEGC": false,
+      "energyMin": 0,
+      "extraDescTextMapHash": 3408858615,
+      "GGAFPEMGCPM": false,
+      "specialEnergyMax": 0,
+      "globalValueKey": "",
+      "id": 100540,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "isAttackCameraLock": true,
+      "JEGJLMPGMLP": false,
+      "LHBMMBJBPMH": false,
+      "specialEnergyMin": 0,
+      "lockShape": "CircleLockEnemyR5H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 1952055533,
+      "NCFNCHOJDGI": false,
+      "needMonitor": "MONITOR_NEVER",
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 730,
+      "shareCDID": 0,
+      "skillIcon": "Skill_A_01",
+      "triggerID": 0
+    },
+    "100550": {
+      "abilityName": "Avatar_PlayerGirl_ExtraAttack_Common",
+      "ADICEIPFANB": false,
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "buffIcon": "",
+      "cdSlot": 0,
+      "cdTime": 0,
+      "costElemType": "None",
+      "costElemVal": 0,
+      "costStamina": 0,
+      "descTextMapHash": 1437911408,
+      "dragType": "DRAG_NONE",
+      "EHHLOCMOEGC": false,
+      "energyMin": 0,
+      "extraDescTextMapHash": 2177518271,
+      "GGAFPEMGCPM": false,
+      "specialEnergyMax": 0,
+      "globalValueKey": "",
+      "id": 100550,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "isAttackCameraLock": true,
+      "JEGJLMPGMLP": false,
+      "LHBMMBJBPMH": false,
+      "specialEnergyMin": 0,
+      "lockShape": "CircleLockEnemyR5H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 3538369725,
+      "NCFNCHOJDGI": false,
+      "needMonitor": "MONITOR_NEVER",
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 731,
+      "shareCDID": 0,
+      "skillIcon": "Skill_A_01",
+      "triggerID": 0
+    },
+    "111751": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Fire",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 1994483736,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 3055082663,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111751,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 2655999205,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    },
+    "111752": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Water",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 3138347120,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 1681102087,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111752,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 5469597,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    },
+    "111753": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Electric",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 3506027984,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 2041531767,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111753,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 742353141,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    },
+    "111754": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Ice",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 1555903536,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 2385677423,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111754,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 1239943437,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    },
+    "111755": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Wind",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 2099216448,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 4186369279,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111755,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 2227608621,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    },
+    "111756": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Rock",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 158679408,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 1706717647,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111756,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 212785517,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    },
+    "111757": {
+      "abilityName": "",
+      "ADICEIPFANB": false,
+      "buffIcon": "",
+      "cdSlot": 5,
+      "cdTime": 15,
+      "costElemType": "Grass",
+      "costElemVal": 60,
+      "costStamina": 0,
+      "descTextMapHash": 4189851840,
+      "dragType": "DRAG_NONE",
+      "energyMin": 0,
+      "extraDescTextMapHash": 1323630839,
+      "globalValueKey": "",
+      "AMIDJEIFHDL": false,
+      "BFOPGOPPDAO": false,
+      "EHHLOCMOEGC": false,
+      "id": 111757,
+      "isAttackCameraLock": true,
+      "GGAFPEMGCPM": false,
+      "JEGJLMPGMLP": false,
+      "lockShape": "CircleLockEnemyR8H6HC",
+      "lockWeightParams": [
+        1,
+        1,
+        0.3,
+        0
+      ],
+      "maxChargeNum": 1,
+      "nameTextMapHash": 3986638933,
+      "needMonitor": "MONITOR_NEVER",
+      "LHBMMBJBPMH": false,
+      "NCFNCHOJDGI": false,
+      "NGMJPKHBMNI": false,
+      "OHFALENFJNH": false,
+      "proudSkillGroupId": 11739,
+      "shareCDID": 0,
+      "skillIcon": "Skill_E_LittleIdol_01",
+      "specialEnergyMax": 0,
+      "specialEnergyMin": 0,
+      "IHFACGBENMJ": "SPECIAL_ENERGY_NONE",
+      "triggerID": 5
+    }
+  },
+  "textMap": {
+    "5469597": "禁入限区",
+    "20618565": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "29244494": "元素能量|{param5:I}",
+    "32797975": "四段伤害|{param4:P}",
+    "37536053": "下坠期间伤害|{param9:F1P}",
+    "41411719": "冷却时间|{param4:F1}秒",
+    "62282167": "三段伤害|{param3:F1P}*2",
+    "67803476": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "81042671": "冷却时间|{param3:F1}秒",
+    "84716967": "四段伤害|{param4:F1P}",
+    "106407962": "重击体力消耗|{param7:F1}点",
+    "123752902": "元素属性转化持续时间|{param2:F1}秒",
+    "125675950": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "127917406": "禁限区域踏入伤害|{param2:F1P}",
+    "136608949": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "143351204": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "158679408": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "163034446": "元素属性转化持续时间|{param2:F1}秒",
+    "175584511": "冷却时间|{param3:F1}秒",
+    "179332239": "四段伤害|{param4:F1P}",
+    "192890998": "禁限区域踏入伤害|{param2:F1P}",
+    "206217621": "交战持备",
+    "206724390": "禁限区域踏入伤害|{param2:F1P}",
+    "212785517": "禁入限区",
+    "216533086": "禁限区域生成伤害|{param1:F1P}",
+    "221964423": "重击体力消耗|{param8:F1}点",
+    "224615719": "冷却时间|{param4:F1}秒",
+    "238487983": "冷却时间|{param3:F1}秒",
+    "240766439": "冷却时间|{param4:F1}秒",
+    "256595258": "重击体力消耗|{param7:F1}点",
+    "267072558": "一段伤害|{param1:F1P}",
+    "267381814": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "270239950": "元素能量|{param5:I}",
+    "288014375": "下坠期间伤害|{param8:F1P}",
+    "296156334": "五段伤害|{param5:P}",
+    "301261094": "元素属性转化持续时间|{param2:F1}秒",
+    "328344791": "三段伤害|{param3:F1P}*2",
+    "334873790": "技能伤害|{param1:F1P}",
+    "343591326": "二段伤害|{param2:F1P}",
+    "349708438": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "415985674": "重击伤害|{param6:P}+{param7:P}",
+    "424926213": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "425973822": "元素属性转化持续时间|{param2:F1}秒",
+    "427761823": "四段伤害|{param4:F1P}",
+    "436653502": "二段伤害|{param2:F1P}",
+    "444715182": "技能伤害|{param1:F1P}",
+    "450297911": "四段伤害|{param4:P}",
+    "455601374": "禁限区域生成伤害|{param1:F1P}",
+    "457218541": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "464269414": "五段伤害|{param5:P}",
+    "464463109": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "480058766": "元素能量|{param5:I}",
+    "483482030": "技能伤害|{param1:F1P}",
+    "491056614": "二段伤害|{param2:F1P}",
+    "496201958": "技能伤害|{param1:F1P}",
+    "506731654": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "512662783": "三段伤害|{param3:P}",
+    "523771046": "一段伤害|{param1:P}",
+    "535593158": "二段伤害|{param2:F1P}",
+    "550956111": "三段伤害|{param3:F1P}*2",
+    "554119631": "下坠期间伤害|{param8:F1P}",
+    "565052845": "灵巧战姿",
+    "566226341": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "598887886": "技能伤害|{param1:F1P}",
+    "600486383": "三段伤害|{param3:F1P}*2",
+    "607128834": "重击伤害|{param6:P}+{param7:P}",
+    "625108471": "下坠期间伤害|{param8:F1P}",
+    "631236031": "禁限区域持续时间|{param3:F1}秒",
+    "648807519": "重击体力消耗|{param8:F1}点",
+    "666667086": "二段伤害|{param2:F1P}",
+    "666712229": "战域重划",
+    "675230750": "元素能量|{param5:I}",
+    "689645999": "下坠期间伤害|{param8:F1P}",
+    "705718623": "下坠期间伤害|{param8:F1P}",
+    "708797471": "重击体力消耗|{param8:F1}点",
+    "735787102": "禁限区域踏入伤害|{param2:F1P}",
+    "742353141": "禁入限区",
+    "750458343": "三段伤害|{param3:F1P}",
+    "753577052": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "774336822": "元素能量|{param5:I}",
+    "774683814": "禁限区域生成伤害|{param1:F1P}",
+    "776926311": "冷却时间|{param4:F1}秒",
+    "778044798": "二段伤害|{param2:F1P}",
+    "778179932": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "789988659": "奇偶施放元素战技与元素爆发时，会从已有的装扮搭配方案中，随机选择一套进行切换。",
+    "796369398": "技能伤害|{param1:F1P}",
+    "856049839": "禁限区域持续时间|{param3:F1}秒",
+    "880108951": "三段伤害|{param3:F1P}",
+    "898313710": "五段伤害|{param5:P}",
+    "898954567": "下坠期间伤害|{param8:F1P}",
+    "936606174": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "940304414": "一段伤害|{param1:P}",
+    "958824710": "技能伤害|{param1:F1P}",
+    "966693942": "二段伤害|{param2:P}",
+    "968608070": "元素属性转化持续时间|{param2:F1}秒",
+    "974725350": "禁限区域生成伤害|{param1:F1P}",
+    "990728574": "五段伤害|{param5:P}",
+    "991646829": "下坠期间伤害|{param9:F1P}",
+    "1010260270": "技能伤害|{param1:F1P}",
+    "1043056038": "二段伤害|{param2:F1P}",
+    "1050849319": "重击体力消耗|{param8:F1}点",
+    "1052371294": "一段伤害|{param1:F1P}",
+    "1057178725": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "1064346839": "三段伤害|{param3:F1P}*2",
+    "1074311598": "五段伤害|{param5:P}",
+    "1084401698": "重击伤害|{param6:P}+{param7:P}",
+    "1090239707": "奇偶处于队伍后台时，若元素能量低于30%，每秒为自己恢复2点元素能量。",
+    "1097268661": "下坠期间伤害|{param9:F1P}",
+    "1105291615": "下坠期间伤害|{param8:F1P}",
+    "1113273351": "四段伤害|{param4:F1P}",
+    "1128764863": "重击体力消耗|{param8:F1}点",
+    "1141365166": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "1149036871": "重击体力消耗|{param8:F1}点",
+    "1152290230": "技能伤害|{param1:F1P}",
+    "1161110813": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "1163750410": "重击体力消耗|{param7:F1}点",
+    "1164168303": "冷却时间|{param4:F1}秒",
+    "1167267175": "下坠期间伤害|{param8:F1P}",
+    "1182570583": "冷却时间|{param3:F1}秒",
+    "1187562722": "重击伤害|{param6:F1P}+{param7:F1P}",
+    "1195768902": "二段伤害|{param2:F1P}",
+    "1208275271": "四段伤害|{param4:F1P}",
+    "1239943437": "禁入限区",
+    "1242032254": "元素能量|{param5:I}",
+    "1242513838": "二段伤害|{param2:P}",
+    "1253814295": "三段伤害|{param3:F1P}",
+    "1260834230": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "1272324124": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1279018150": "元素能量|{param5:I}",
+    "1283257566": "五段伤害|{param5:P}",
+    "1291123867": "奇偶离场时，如果场上存在奇偶自己创造的「禁限区域」，则「禁限区域」会发生爆炸，造成相当于奇偶攻击力200%的自身元素范围伤害。",
+    "1295754653": "戒惩轰击",
+    "1298025783": "冷却时间|{param4:F1}秒",
+    "1308147183": "三段伤害|{param3:F1P}",
+    "1308241982": "技能伤害|{param1:F1P}",
+    "1357557110": "禁限区域踏入伤害|{param2:F1P}",
+    "1370505302": "禁限区域踏入伤害|{param2:F1P}",
+    "1371873751": "冷却时间|{param4:F1}秒",
+    "1392529799": "重击体力消耗|{param8:F1}点",
+    "1403064650": "重击体力消耗|{param7:F1}点",
+    "1411004790": "二段伤害|{param2:F1P}",
+    "1417619591": "下坠期间伤害|{param8:F1P}",
+    "1421729007": "四段伤害|{param4:F1P}",
+    "1423911055": "三段伤害|{param3:F1P}",
+    "1436072046": "元素属性转化持续时间|{param2:F1}秒",
+    "1437911408": "<color=#FFD780FF>普通攻击</color>\\n进行至多五段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "1445771750": "五段伤害|{param5:P}",
+    "1447623846": "元素能量|{param5:I}",
+    "1449160910": "二段伤害|{param2:P}",
+    "1449185470": "技能伤害|{param1:F1P}",
+    "1449473357": "下坠期间伤害|{param9:F1P}",
+    "1452628070": "一段伤害|{param1:F1P}",
+    "1462062366": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "1464662279": "重击体力消耗|{param8:F1}点",
+    "1468748263": "下坠期间伤害|{param8:F1P}",
+    "1468862578": "重击体力消耗|{param7:F1}点",
+    "1482971517": "下坠期间伤害|{param9:F1P}",
+    "1482985694": "元素属性转化持续时间|{param2:F1}秒",
+    "1502147927": "冷却时间|{param4:F1}秒",
+    "1503281438": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "1508772351": "冷却时间|{param4:F1}秒",
+    "1512821951": "四段伤害|{param4:P}",
+    "1513873734": "禁限区域生成伤害|{param1:F1P}",
+    "1517379584": "<color=#FFD780FF>普通攻击</color>\\n进行至多五段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "1534011855": "四段伤害|{param4:F1P}",
+    "1544370263": "下坠期间伤害|{param8:F1P}",
+    "1545713783": "四段伤害|{param4:F1P}",
+    "1546132886": "元素能量|{param5:I}",
+    "1548998934": "一段伤害|{param1:F1P}",
+    "1555903536": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "1559151702": "五段伤害|{param5:F1P}",
+    "1573933174": "禁限区域踏入伤害|{param2:F1P}",
+    "1588687887": "三段伤害|{param3:F1P}*2",
+    "1596679182": "元素属性转化持续时间|{param2:F1}秒",
+    "1610843220": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1620291637": "下坠期间伤害|{param9:F1P}",
+    "1640371262": "禁限区域踏入伤害|{param2:F1P}",
+    "1641603294": "五段伤害|{param5:F1P}",
+    "1650160078": "元素属性转化持续时间|{param2:F1}秒",
+    "1654276559": "重击体力消耗|{param8:F1}点",
+    "1693050238": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "1694017687": "三段伤害|{param3:F1P}",
+    "1695443308": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1710650426": "重击体力消耗|{param7:F1}点",
+    "1712994422": "禁限区域踏入伤害|{param2:F1P}",
+    "1738112271": "四段伤害|{param4:F1P}",
+    "1742891190": "二段伤害|{param2:F1P}",
+    "1761129573": "下坠期间伤害|{param9:F1P}",
+    "1762102439": "冷却时间|{param3:F1}秒",
+    "1766836695": "三段伤害|{param3:F1P}*2",
+    "1768599767": "四段伤害|{param4:P}",
+    "1781682181": "下坠期间伤害|{param9:F1P}",
+    "1816746077": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "1828785364": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1828987358": "五段伤害|{param5:F1P}",
+    "1877768615": "重击体力消耗|{param8:F1}点",
+    "1904081332": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1906027751": "三段伤害|{param3:P}",
+    "1914087782": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "1915992551": "四段伤害|{param4:F1P}",
+    "1923358982": "一段伤害|{param1:F1P}",
+    "1925704095": "重击体力消耗|{param8:F1}点",
+    "1927504223": "三段伤害|{param3:P}",
+    "1946871918": "一段伤害|{param1:F1P}",
+    "1952055533": "故去的追忆",
+    "1957247374": "一段伤害|{param1:F1P}",
+    "1957590461": "下坠期间伤害|{param9:F1P}",
+    "1961912719": "冷却时间|{param3:F1}秒",
+    "1970564118": "禁限区域踏入伤害|{param2:F1P}",
+    "1973246437": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "1986987429": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "1994483736": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "1994497298": "重击伤害|{param6:P}+{param7:P}",
+    "1997075783": "三段伤害|{param3:F1P}",
+    "2025389119": "重击体力消耗|{param8:F1}点",
+    "2029311478": "元素能量|{param5:I}",
+    "2036806010": "重击伤害|{param6:P}+{param7:P}",
+    "2047165487": "四段伤害|{param4:F1P}",
+    "2055448782": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "2089608653": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "2099216448": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "2104736238": "禁限区域生成伤害|{param1:F1P}",
+    "2105231703": "三段伤害|{param3:F1P}",
+    "2114433095": "四段伤害|{param4:F1P}",
+    "2128335085": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "2132729326": "元素属性转化持续时间|{param2:F1}秒",
+    "2143275423": "四段伤害|{param4:F1P}",
+    "2144492990": "一段伤害|{param1:F1P}",
+    "2145760271": "禁限区域持续时间|{param3:F1}秒",
+    "2161597558": "一段伤害|{param1:F1P}",
+    "2165464390": "元素能量|{param5:I}",
+    "2179008534": "一段伤害|{param1:F1P}",
+    "2180425983": "三段伤害|{param3:F1P}*2",
+    "2182404242": "重击体力消耗|{param7:F1}点",
+    "2193616167": "四段伤害|{param4:F1P}",
+    "2211079191": "四段伤害|{param4:F1P}",
+    "2213960124": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "2218327166": "一段伤害|{param1:F1P}",
+    "2219258095": "三段伤害|{param3:F1P}*2",
+    "2224557486": "二段伤害|{param2:F1P}",
+    "2227608621": "禁入限区",
+    "2255866359": "三段伤害|{param3:F1P}",
+    "2259325039": "冷却时间|{param4:F1}秒",
+    "2263376031": "三段伤害|{param3:F1P}*2",
+    "2265083231": "四段伤害|{param4:F1P}",
+    "2268750286": "一段伤害|{param1:P}",
+    "2273723590": "禁限区域踏入伤害|{param2:F1P}",
+    "2298823919": "禁限区域持续时间|{param3:F1}秒",
+    "2308574287": "禁限区域持续时间|{param3:F1}秒",
+    "2315259103": "四段伤害|{param4:P}",
+    "2316988887": "冷却时间|{param3:F1}秒",
+    "2323809302": "禁限区域踏入伤害|{param2:F1P}",
+    "2378628463": "禁限区域持续时间|{param3:F1}秒",
+    "2392164518": "二段伤害|{param2:F1P}",
+    "2394507702": "二段伤害|{param2:P}",
+    "2394849775": "三段伤害|{param3:F1P}*2",
+    "2405640686": "禁限区域生成伤害|{param1:F1P}",
+    "2419712223": "禁限区域持续时间|{param3:F1}秒",
+    "2427947014": "五段伤害|{param5:P}",
+    "2455142550": "二段伤害|{param2:F1P}",
+    "2460296494": "二段伤害|{param2:F1P}",
+    "2462506494": "五段伤害|{param5:P}",
+    "2477590922": "重击伤害|{param6:F1P}+{param7:P}",
+    "2481889374": "禁限区域生成伤害|{param1:F1P}",
+    "2489234495": "下坠期间伤害|{param8:F1P}",
+    "2496478586": "重击伤害|{param6:P}+{param7:P}",
+    "2497382686": "禁限区域生成伤害|{param1:F1P}",
+    "2527319166": "禁限区域生成伤害|{param1:F1P}",
+    "2538401070": "元素属性转化持续时间|{param2:F1}秒",
+    "2553235518": "一段伤害|{param1:F1P}",
+    "2559698405": "下坠期间伤害|{param9:F1P}",
+    "2594914510": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "2606959895": "冷却时间|{param4:F1}秒",
+    "2635814031": "四段伤害|{param4:F1P}",
+    "2642414694": "禁限区域生成伤害|{param1:F1P}",
+    "2655999205": "禁入限区",
+    "2673074191": "禁限区域持续时间|{param3:F1}秒",
+    "2693166223": "三段伤害|{param3:F1P}",
+    "2697627678": "禁限区域踏入伤害|{param2:F1P}",
+    "2708416596": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "2713878882": "重击体力消耗|{param7:F1}点",
+    "2729824750": "二段伤害|{param2:F1P}",
+    "2731545069": "下坠期间伤害|{param9:F1P}",
+    "2735646855": "冷却时间|{param3:F1}秒",
+    "2761704805": "下坠期间伤害|{param9:F1P}",
+    "2775588142": "一段伤害|{param1:F1P}",
+    "2776540230": "五段伤害|{param5:F1P}",
+    "2826761274": "重击体力消耗|{param7:F1}点",
+    "2858122343": "四段伤害|{param4:F1P}",
+    "2859363799": "冷却时间|{param3:F1}秒",
+    "2872911886": "技能伤害|{param1:F1P}",
+    "2898834630": "技能伤害|{param1:F1P}",
+    "2934758510": "元素能量|{param5:I}",
+    "2954847247": "禁限区域持续时间|{param3:F1}秒",
+    "2956446032": "奇偶对附近的敌人进行一次攻击，造成自身元素属性的范围伤害，并迅速后退。施放元素战技后的一段时间内，奇偶的普通攻击、重击与下落攻击将转为造成无法被附魔覆盖的自身元素属性的伤害，该效果将在奇偶离场时消失。\\n\\n拥有2次可使用次数。\\n\\n<i>「恰到好处的打击，是必要的警告。」</i>",
+    "2975727830": "元素能量|{param5:I}",
+    "2994139335": "冷却时间|{param3:F1}秒",
+    "2994139358": "二段伤害|{param2:F1P}",
+    "2994240918": "元素能量|{param5:I}",
+    "3001960719": "四段伤害|{param4:P}",
+    "3004997655": "四段伤害|{param4:F1P}",
+    "3017237783": "重击体力消耗|{param8:F1}点",
+    "3038020894": "二段伤害|{param2:P}",
+    "3074337090": "重击体力消耗|{param7:F1}点",
+    "3076815294": "元素属性转化持续时间|{param2:F1}秒",
+    "3091754495": "四段伤害|{param4:P}",
+    "3104710743": "四段伤害|{param4:F1P}",
+    "3138347120": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "3152482750": "五段伤害|{param5:F1P}",
+    "3153483834": "重击体力消耗|{param7:F1}点",
+    "3157870599": "冷却时间|{param4:F1}秒",
+    "3158322406": "禁限区域踏入伤害|{param2:F1P}",
+    "3179595946": "重击伤害|{param6:F1P}+{param7:F1P}",
+    "3183795351": "冷却时间|{param4:F1}秒",
+    "3186294101": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "3189685343": "四段伤害|{param4:P}",
+    "3193110838": "禁限区域生成伤害|{param1:F1P}",
+    "3214375423": "冷却时间|{param3:F1}秒",
+    "3222141007": "三段伤害|{param3:F1P}*2",
+    "3224225158": "五段伤害|{param5:P}",
+    "3245328631": "四段伤害|{param4:F1P}",
+    "3247244526": "一段伤害|{param1:F1P}",
+    "3272323158": "二段伤害|{param2:F1P}",
+    "3280144650": "重击伤害|{param6:P}+{param7:P}",
+    "3281015919": "禁限区域持续时间|{param3:F1}秒",
+    "3287819702": "二段伤害|{param2:F1P}",
+    "3289215046": "二段伤害|{param2:F1P}",
+    "3297519774": "一段伤害|{param1:F1P}",
+    "3316154798": "禁限区域踏入伤害|{param2:F1P}",
+    "3324597396": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "3325636799": "重击体力消耗|{param8:F1}点",
+    "3326983452": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "3368284549": "外域剑术·安谨守望",
+    "3375179055": "四段伤害|{param4:F1P}",
+    "3388285111": "重击体力消耗|{param8:F1}点",
+    "3402210390": "元素属性转化持续时间|{param2:F1}秒",
+    "3407582319": "冷却时间|{param3:F1}秒",
+    "3445419230": "五段伤害|{param5:F1P}",
+    "3453246814": "一段伤害|{param1:F1P}",
+    "3463672222": "一段伤害|{param1:P}",
+    "3476778422": "二段伤害|{param2:F1P}",
+    "3477950890": "重击体力消耗|{param7:F1}点",
+    "3487317164": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "3489709334": "一段伤害|{param1:F1P}",
+    "3506027984": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "3509337135": "下坠期间伤害|{param8:F1P}",
+    "3512850744": "<color=#FFD780FF>普通攻击</color>\\n进行至多四段的连续剑击。\\n\\n<color=#FFD780FF>重击</color>\\n消耗一定体力，瞬间向前方挥出两剑。\\n\\n<color=#FFD780FF>下落攻击</color>\\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
+    "3516220879": "禁限区域持续时间|{param3:F1}秒",
+    "3516742990": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "3520521230": "禁限区域生成伤害|{param1:F1P}",
+    "3523172838": "一段伤害|{param1:F1P}",
+    "3524700671": "重击体力消耗|{param8:F1}点",
+    "3538369725": "故去的追忆",
+    "3541764438": "二段伤害|{param2:F1P}",
+    "3553415639": "冷却时间|{param3:F1}秒",
+    "3565222130": "重击体力消耗|{param7:F1}点",
+    "3569787204": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "3595921694": "二段伤害|{param2:F1P}",
+    "3622619286": "二段伤害|{param2:F1P}",
+    "3637038239": "重击体力消耗|{param8:F1}点",
+    "3677380694": "一段伤害|{param1:F1P}",
+    "3698762998": "一段伤害|{param1:P}",
+    "3705595914": "重击伤害|{param6:F1P}+{param7:P}",
+    "3731347607": "禁限区域持续时间|{param3:F1}秒",
+    "3737249126": "技能伤害|{param1:F1P}",
+    "3743764502": "元素属性转化持续时间|{param2:F1}秒",
+    "3759859063": "冷却时间|{param3:F1}秒",
+    "3786659222": "二段伤害|{param2:F1P}",
+    "3793319319": "重击体力消耗|{param8:F1}点",
+    "3811489798": "二段伤害|{param2:F1P}",
+    "3829945439": "冷却时间|{param4:F1}秒",
+    "3843758287": "四段伤害|{param4:F1P}",
+    "3844728303": "三段伤害|{param3:F1P}*2",
+    "3847515378": "重击体力消耗|{param7:F1}点",
+    "3871267183": "下坠期间伤害|{param8:F1P}",
+    "3874898383": "四段伤害|{param4:F1P}",
+    "3915256278": "二段伤害|{param2:F1P}",
+    "3916261863": "冷却时间|{param3:F1}秒",
+    "3925209214": "禁限区域生成伤害|{param1:F1P}",
+    "3947522063": "三段伤害|{param3:F1P}",
+    "3961367814": "技能伤害|{param1:F1P}",
+    "3964297316": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "3986638933": "禁入限区",
+    "3987744239": "三段伤害|{param3:F1P}",
+    "3992016158": "一段伤害|{param1:F1P}",
+    "3994791133": "低空/高空坠地冲击伤害|{param9:P}/{param10:P}",
+    "3996420365": "下坠期间伤害|{param9:F1P}",
+    "4000237679": "禁限区域持续时间|{param3:F1}秒",
+    "4021933327": "重击体力消耗|{param8:F1}点",
+    "4024662158": "五段伤害|{param5:P}",
+    "4027393255": "三段伤害|{param3:F1P}*2",
+    "4040863958": "一段伤害|{param1:P}",
+    "4060844086": "元素属性转化持续时间|{param2:F1}秒",
+    "4086331447": "四段伤害|{param4:F1P}",
+    "4089111558": "一段伤害|{param1:F1P}",
+    "4091058271": "冷却时间|{param4:F1}秒",
+    "4103354570": "重击体力消耗|{param7:F1}点",
+    "4105317718": "五段伤害|{param5:F1P}",
+    "4119896415": "禁限区域持续时间|{param3:F1}秒",
+    "4150641038": "元素能量|{param5:I}",
+    "4162847063": "三段伤害|{param3:F1P}*2",
+    "4164885894": "重击伤害|{param5:F1P}+{param6:F1P}",
+    "4189851840": "奇偶唤出跟随自身的「禁限区域」，对附近的敌人造成一次奇偶自身元素属性的伤害。\\n此外，敌人进入「禁限区域」时，也会受到一次奇偶自身元素属性的伤害，该效果每0.5秒至多触发一次。\\n「禁限区域」将在奇偶离场时消失。\\n\\n<i>「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」</i>",
+    "4211111159": "下坠期间伤害|{param8:F1P}",
+    "4223509550": "一段伤害|{param1:F1P}",
+    "4241462682": "重击伤害|{param6:P}+{param7:P}",
+    "4245568951": "禁限区域持续时间|{param3:F1}秒",
+    "4265682974": "一段伤害|{param1:F1P}",
+    "4277349655": "四段伤害|{param4:P}",
+    "4280357934": "禁限区域生成伤害|{param1:F1P}",
+    "4283129342": "一段伤害|{param1:F1P}"
+  }
+}

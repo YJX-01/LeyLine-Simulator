@@ -1,0 +1,35 @@
+{
+  "id": "paleflame",
+  "name": "苍白之火",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "physicalBonus",
+          "values": [
+            0.25
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "造成的物理伤害提高25%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：元素战技命中敌人后，攻击力提升9%。该效果持续7秒，至多叠加2层，每0.3秒至多触发一次。叠满2层时，2件套的效果提升100%。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/paleflame.json"
+  },
+  "rarity": 5
+}

@@ -1,0 +1,35 @@
+{
+  "id": "disenchantmentindeepshadow",
+  "name": "影中沉凝的幻灭",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "attackPercent",
+          "values": [
+            0.18
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "攻击力提高18%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：超导反应造成的伤害提升80%，星超导反应造成的伤害提升40%；装备者攻击受到超导或星超导反应影响的敌人时，本次攻击的暴击率提高16%。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/disenchantmentindeepshadow.json"
+  },
+  "rarity": 5
+}

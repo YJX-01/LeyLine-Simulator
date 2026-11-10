@@ -1,0 +1,35 @@
+{
+  "id": "archaicpetra",
+  "name": "悠古的磐岩",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "geoBonus",
+          "values": [
+            0.15
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "获得15%岩元素伤害加成。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：获得结晶反应形成的晶片或触发月结晶反应时，队伍中所有角色获得35%对应元素伤害加成，持续10秒。同时只能通过该效果获得一种元素伤害加成。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/archaicpetra.json"
+  },
+  "rarity": 5
+}

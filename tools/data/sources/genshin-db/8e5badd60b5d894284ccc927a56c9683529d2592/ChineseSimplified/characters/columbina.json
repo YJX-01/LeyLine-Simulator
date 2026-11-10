@@ -1,0 +1,187 @@
+{
+	"id": 10000125,
+	"name": "哥伦比娅",
+	"title": "空月归乡",
+	"description": "于挪德卡莱诞生的「月之少女」，亦是归乡的空月。",
+	"weaponType": "WEAPON_CATALYST",
+	"weaponText": "法器",
+	"bodyType": "BODY_GIRL",
+	"gender": "女",
+	"qualityType": "QUALITY_ORANGE",
+	"rarity": 5,
+	"birthdaymmdd": "1/14",
+	"birthday": "1月14日",
+	"elementType": "ELEMENT_HYDRO",
+	"elementText": "水",
+	"affiliation": "银月之庭",
+	"associationType": "ASSOC_NODKRAI",
+	"region": "挪德卡莱",
+	"substatType": "FIGHT_PROP_CRITICAL",
+	"substatText": "暴击率",
+	"constellation": "？？？",
+	"cv": {
+		"english": "罗元湘",
+		"chinese": "杨梦露",
+		"japanese": "Lynn",
+		"korean": "刘荣"
+	},
+	"costs": {
+		"ascend1": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 20000
+			},
+			{
+				"id": 104121,
+				"name": "涤净青金碎屑",
+				"count": 1
+			},
+			{
+				"id": 101268,
+				"name": "冬凌草",
+				"count": 3
+			},
+			{
+				"id": 112002,
+				"name": "史莱姆凝液",
+				"count": 3
+			}
+		],
+		"ascend2": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 40000
+			},
+			{
+				"id": 104122,
+				"name": "涤净青金断片",
+				"count": 3
+			},
+			{
+				"id": 113079,
+				"name": "漫光的辉角",
+				"count": 2
+			},
+			{
+				"id": 101268,
+				"name": "冬凌草",
+				"count": 10
+			},
+			{
+				"id": 112002,
+				"name": "史莱姆凝液",
+				"count": 15
+			}
+		],
+		"ascend3": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 60000
+			},
+			{
+				"id": 104122,
+				"name": "涤净青金断片",
+				"count": 6
+			},
+			{
+				"id": 113079,
+				"name": "漫光的辉角",
+				"count": 4
+			},
+			{
+				"id": 101268,
+				"name": "冬凌草",
+				"count": 20
+			},
+			{
+				"id": 112003,
+				"name": "史莱姆清",
+				"count": 12
+			}
+		],
+		"ascend4": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 80000
+			},
+			{
+				"id": 104123,
+				"name": "涤净青金块",
+				"count": 3
+			},
+			{
+				"id": 113079,
+				"name": "漫光的辉角",
+				"count": 8
+			},
+			{
+				"id": 101268,
+				"name": "冬凌草",
+				"count": 30
+			},
+			{
+				"id": 112003,
+				"name": "史莱姆清",
+				"count": 18
+			}
+		],
+		"ascend5": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 100000
+			},
+			{
+				"id": 104123,
+				"name": "涤净青金块",
+				"count": 6
+			},
+			{
+				"id": 113079,
+				"name": "漫光的辉角",
+				"count": 12
+			},
+			{
+				"id": 101268,
+				"name": "冬凌草",
+				"count": 45
+			},
+			{
+				"id": 112004,
+				"name": "史莱姆原浆",
+				"count": 12
+			}
+		],
+		"ascend6": [
+			{
+				"id": 202,
+				"name": "摩拉",
+				"count": 120000
+			},
+			{
+				"id": 104124,
+				"name": "涤净青金",
+				"count": 6
+			},
+			{
+				"id": 113079,
+				"name": "漫光的辉角",
+				"count": 20
+			},
+			{
+				"id": 101268,
+				"name": "冬凌草",
+				"count": 60
+			},
+			{
+				"id": 112004,
+				"name": "史莱姆原浆",
+				"count": 24
+			}
+		]
+	}
+}

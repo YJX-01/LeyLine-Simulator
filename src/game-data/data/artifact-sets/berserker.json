@@ -1,0 +1,35 @@
+{
+  "id": "berserker",
+  "name": "战狂",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "critRate",
+          "values": [
+            0.12
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "暴击率提高12%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：生命值低于70%时，暴击率额外提升24%。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/berserker.json"
+  },
+  "rarity": 4
+}

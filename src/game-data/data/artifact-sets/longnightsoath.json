@@ -1,0 +1,28 @@
+{
+  "id": "longnightsoath",
+  "name": "长夜之誓",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：下落攻击造成的伤害提升25%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：装备者的下落攻击/重击/元素战技命中敌人后，获得1/2/2层「永照的流辉」，由下落攻击、重击或元素战技产生的该效果分别每1秒至多触发一次。永照的流辉：下落攻击造成的伤害提升15%，持续6秒，至多叠加5层，每层持续时间独立计算。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/longnightsoath.json"
+  },
+  "rarity": 5
+}

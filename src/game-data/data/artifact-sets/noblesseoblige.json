@@ -1,0 +1,28 @@
+{
+  "id": "noblesseoblige",
+  "name": "昔日宗室之仪",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：元素爆发造成的伤害提升20%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：施放元素爆发后，队伍中所有角色攻击力提升20%，持续12秒。该效果不可叠加。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json"
+  },
+  "rarity": 5
+}

@@ -1,0 +1,35 @@
+{
+  "id": "scholar",
+  "name": "学士",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "energyRecharge",
+          "values": [
+            0.2
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "元素充能效率提高20%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：获得元素微粒或元素晶球时，队伍中所有弓箭和法器角色额外恢复3点元素能量。该效果每3秒只能触发一次。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/scholar.json"
+  },
+  "rarity": 4
+}

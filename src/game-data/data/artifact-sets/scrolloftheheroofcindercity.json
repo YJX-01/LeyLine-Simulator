@@ -1,0 +1,28 @@
+{
+  "id": "scrolloftheheroofcindercity",
+  "name": "烬城勇者绘卷",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：队伍中附近的角色触发「夜魂迸发」时，装备者恢复6点元素能量。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：装备者触发其对应元素类型的相关反应后，队伍中附近的所有角色的该元素反应相关的元素伤害加成提升12%，持续15秒。若触发该效果时，装备者处于夜魂加持状态下，还将使队伍中附近的所有角色的与该元素反应相关的元素伤害加成提升28%，持续20秒。装备者处于后台时也能触发上述效果。同名圣遗物套装产生的伤害加成效果无法叠加。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/scrolloftheheroofcindercity.json"
+  },
+  "rarity": 5
+}

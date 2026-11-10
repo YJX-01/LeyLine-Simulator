@@ -1,0 +1,2619 @@
+{
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
+  },
+  "characters": {
+    "kamisatoayaka": {
+      "name": "神里绫华",
+      "version": "2.0",
+      "gameId": 10000002,
+      "rarity": 5
+    },
+    "jean": {
+      "name": "琴",
+      "version": "1.0",
+      "gameId": 10000003,
+      "rarity": 5
+    },
+    "aether": {
+      "name": "空",
+      "version": "1.0",
+      "gameId": 10000005,
+      "rarity": 5
+    },
+    "lisa": {
+      "name": "丽莎",
+      "version": "1.0",
+      "gameId": 10000006,
+      "rarity": 4
+    },
+    "lumine": {
+      "name": "荧",
+      "version": "1.0",
+      "gameId": 10000007,
+      "rarity": 5
+    },
+    "barbara": {
+      "name": "芭芭拉",
+      "version": "1.0",
+      "gameId": 10000014,
+      "rarity": 4
+    },
+    "kaeya": {
+      "name": "凯亚",
+      "version": "1.0",
+      "gameId": 10000015,
+      "rarity": 4
+    },
+    "diluc": {
+      "name": "迪卢克",
+      "version": "1.0",
+      "gameId": 10000016,
+      "rarity": 5
+    },
+    "razor": {
+      "name": "雷泽",
+      "version": "1.0",
+      "gameId": 10000020,
+      "rarity": 4
+    },
+    "amber": {
+      "name": "安柏",
+      "version": "1.0",
+      "gameId": 10000021,
+      "rarity": 4
+    },
+    "venti": {
+      "name": "温迪",
+      "version": "1.0",
+      "gameId": 10000022,
+      "rarity": 5
+    },
+    "xiangling": {
+      "name": "香菱",
+      "version": "1.0",
+      "gameId": 10000023,
+      "rarity": 4
+    },
+    "beidou": {
+      "name": "北斗",
+      "version": "1.0",
+      "gameId": 10000024,
+      "rarity": 4
+    },
+    "xingqiu": {
+      "name": "行秋",
+      "version": "1.0",
+      "gameId": 10000025,
+      "rarity": 4
+    },
+    "xiao": {
+      "name": "魈",
+      "version": "1.3",
+      "gameId": 10000026,
+      "rarity": 5
+    },
+    "ningguang": {
+      "name": "凝光",
+      "version": "1.0",
+      "gameId": 10000027,
+      "rarity": 4
+    },
+    "klee": {
+      "name": "可莉",
+      "version": "1.0",
+      "gameId": 10000029,
+      "rarity": 5
+    },
+    "zhongli": {
+      "name": "钟离",
+      "version": "1.1",
+      "gameId": 10000030,
+      "rarity": 5
+    },
+    "fischl": {
+      "name": "菲谢尔",
+      "version": "1.0",
+      "gameId": 10000031,
+      "rarity": 4
+    },
+    "bennett": {
+      "name": "班尼特",
+      "version": "1.0",
+      "gameId": 10000032,
+      "rarity": 4
+    },
+    "tartaglia": {
+      "name": "达达利亚",
+      "version": "1.1",
+      "gameId": 10000033,
+      "rarity": 5
+    },
+    "noelle": {
+      "name": "诺艾尔",
+      "version": "1.0",
+      "gameId": 10000034,
+      "rarity": 4
+    },
+    "qiqi": {
+      "name": "七七",
+      "version": "1.0",
+      "gameId": 10000035,
+      "rarity": 5
+    },
+    "chongyun": {
+      "name": "重云",
+      "version": "1.0",
+      "gameId": 10000036,
+      "rarity": 4
+    },
+    "ganyu": {
+      "name": "甘雨",
+      "version": "1.2",
+      "gameId": 10000037,
+      "rarity": 5
+    },
+    "albedo": {
+      "name": "阿贝多",
+      "version": "1.2",
+      "gameId": 10000038,
+      "rarity": 5
+    },
+    "diona": {
+      "name": "迪奥娜",
+      "version": "1.1",
+      "gameId": 10000039,
+      "rarity": 4
+    },
+    "mona": {
+      "name": "莫娜",
+      "version": "1.0",
+      "gameId": 10000041,
+      "rarity": 5
+    },
+    "keqing": {
+      "name": "刻晴",
+      "version": "1.0",
+      "gameId": 10000042,
+      "rarity": 5
+    },
+    "sucrose": {
+      "name": "砂糖",
+      "version": "1.0",
+      "gameId": 10000043,
+      "rarity": 4
+    },
+    "xinyan": {
+      "name": "辛焱",
+      "version": "1.1",
+      "gameId": 10000044,
+      "rarity": 4
+    },
+    "rosaria": {
+      "name": "罗莎莉亚",
+      "version": "1.4",
+      "gameId": 10000045,
+      "rarity": 4
+    },
+    "hutao": {
+      "name": "胡桃",
+      "version": "1.3",
+      "gameId": 10000046,
+      "rarity": 5
+    },
+    "kaedeharakazuha": {
+      "name": "枫原万叶",
+      "version": "1.6",
+      "gameId": 10000047,
+      "rarity": 5
+    },
+    "yanfei": {
+      "name": "烟绯",
+      "version": "1.5",
+      "gameId": 10000048,
+      "rarity": 4
+    },
+    "yoimiya": {
+      "name": "宵宫",
+      "version": "2.0",
+      "gameId": 10000049,
+      "rarity": 5
+    },
+    "thoma": {
+      "name": "托马",
+      "version": "2.2",
+      "gameId": 10000050,
+      "rarity": 4
+    },
+    "eula": {
+      "name": "优菈",
+      "version": "1.5",
+      "gameId": 10000051,
+      "rarity": 5
+    },
+    "raidenshogun": {
+      "name": "雷电将军",
+      "version": "2.1",
+      "gameId": 10000052,
+      "rarity": 5
+    },
+    "sayu": {
+      "name": "早柚",
+      "version": "2.0",
+      "gameId": 10000053,
+      "rarity": 4
+    },
+    "sangonomiyakokomi": {
+      "name": "珊瑚宫心海",
+      "version": "2.1",
+      "gameId": 10000054,
+      "rarity": 5
+    },
+    "gorou": {
+      "name": "五郎",
+      "version": "2.3",
+      "gameId": 10000055,
+      "rarity": 4
+    },
+    "kujousara": {
+      "name": "九条裟罗",
+      "version": "2.1",
+      "gameId": 10000056,
+      "rarity": 4
+    },
+    "aratakiitto": {
+      "name": "荒泷一斗",
+      "version": "2.3",
+      "gameId": 10000057,
+      "rarity": 5
+    },
+    "yaemiko": {
+      "name": "八重神子",
+      "version": "2.5",
+      "gameId": 10000058,
+      "rarity": 5
+    },
+    "shikanoinheizou": {
+      "name": "鹿野院平藏",
+      "version": "2.8",
+      "gameId": 10000059,
+      "rarity": 4
+    },
+    "yelan": {
+      "name": "夜兰",
+      "version": "2.7",
+      "gameId": 10000060,
+      "rarity": 5
+    },
+    "kirara": {
+      "name": "绮良良",
+      "version": "3.7",
+      "gameId": 10000061,
+      "rarity": 4
+    },
+    "aloy": {
+      "name": "埃洛伊",
+      "version": "2.1",
+      "gameId": 10000062,
+      "rarity": 5
+    },
+    "shenhe": {
+      "name": "申鹤",
+      "version": "2.4",
+      "gameId": 10000063,
+      "rarity": 5
+    },
+    "yunjin": {
+      "name": "云堇",
+      "version": "2.4",
+      "gameId": 10000064,
+      "rarity": 4
+    },
+    "kukishinobu": {
+      "name": "久岐忍",
+      "version": "2.7",
+      "gameId": 10000065,
+      "rarity": 4
+    },
+    "kamisatoayato": {
+      "name": "神里绫人",
+      "version": "2.6",
+      "gameId": 10000066,
+      "rarity": 5
+    },
+    "collei": {
+      "name": "柯莱",
+      "version": "3.0",
+      "gameId": 10000067,
+      "rarity": 4
+    },
+    "dori": {
+      "name": "多莉",
+      "version": "3.0",
+      "gameId": 10000068,
+      "rarity": 4
+    },
+    "tighnari": {
+      "name": "提纳里",
+      "version": "3.0",
+      "gameId": 10000069,
+      "rarity": 5
+    },
+    "nilou": {
+      "name": "妮露",
+      "version": "3.1",
+      "gameId": 10000070,
+      "rarity": 5
+    },
+    "cyno": {
+      "name": "赛诺",
+      "version": "3.1",
+      "gameId": 10000071,
+      "rarity": 5
+    },
+    "candace": {
+      "name": "坎蒂丝",
+      "version": "3.1",
+      "gameId": 10000072,
+      "rarity": 4
+    },
+    "nahida": {
+      "name": "纳西妲",
+      "version": "3.2",
+      "gameId": 10000073,
+      "rarity": 5
+    },
+    "layla": {
+      "name": "莱依拉",
+      "version": "3.2",
+      "gameId": 10000074,
+      "rarity": 4
+    },
+    "wanderer": {
+      "name": "流浪者",
+      "version": "3.3",
+      "gameId": 10000075,
+      "rarity": 5
+    },
+    "faruzan": {
+      "name": "珐露珊",
+      "version": "3.3",
+      "gameId": 10000076,
+      "rarity": 4
+    },
+    "yaoyao": {
+      "name": "瑶瑶",
+      "version": "3.4",
+      "gameId": 10000077,
+      "rarity": 4
+    },
+    "alhaitham": {
+      "name": "艾尔海森",
+      "version": "3.4",
+      "gameId": 10000078,
+      "rarity": 5
+    },
+    "dehya": {
+      "name": "迪希雅",
+      "version": "3.5",
+      "gameId": 10000079,
+      "rarity": 5
+    },
+    "mika": {
+      "name": "米卡",
+      "version": "3.5",
+      "gameId": 10000080,
+      "rarity": 4
+    },
+    "kaveh": {
+      "name": "卡维",
+      "version": "3.6",
+      "gameId": 10000081,
+      "rarity": 4
+    },
+    "baizhu": {
+      "name": "白术",
+      "version": "3.6",
+      "gameId": 10000082,
+      "rarity": 5
+    },
+    "lynette": {
+      "name": "琳妮特",
+      "version": "4.0",
+      "gameId": 10000083,
+      "rarity": 4
+    },
+    "lyney": {
+      "name": "林尼",
+      "version": "4.0",
+      "gameId": 10000084,
+      "rarity": 5
+    },
+    "freminet": {
+      "name": "菲米尼",
+      "version": "4.0",
+      "gameId": 10000085,
+      "rarity": 4
+    },
+    "wriothesley": {
+      "name": "莱欧斯利",
+      "version": "4.1",
+      "gameId": 10000086,
+      "rarity": 5
+    },
+    "neuvillette": {
+      "name": "那维莱特",
+      "version": "4.1",
+      "gameId": 10000087,
+      "rarity": 5
+    },
+    "charlotte": {
+      "name": "夏洛蒂",
+      "version": "4.2",
+      "gameId": 10000088,
+      "rarity": 4
+    },
+    "furina": {
+      "name": "芙宁娜",
+      "version": "4.2",
+      "gameId": 10000089,
+      "rarity": 5
+    },
+    "chevreuse": {
+      "name": "夏沃蕾",
+      "version": "4.3",
+      "gameId": 10000090,
+      "rarity": 4
+    },
+    "navia": {
+      "name": "娜维娅",
+      "version": "4.3",
+      "gameId": 10000091,
+      "rarity": 5
+    },
+    "gaming": {
+      "name": "嘉明",
+      "version": "4.4",
+      "gameId": 10000092,
+      "rarity": 4
+    },
+    "xianyun": {
+      "name": "闲云",
+      "version": "4.4",
+      "gameId": 10000093,
+      "rarity": 5
+    },
+    "chiori": {
+      "name": "千织",
+      "version": "4.5",
+      "gameId": 10000094,
+      "rarity": 5
+    },
+    "sigewinne": {
+      "name": "希格雯",
+      "version": "4.7",
+      "gameId": 10000095,
+      "rarity": 5
+    },
+    "arlecchino": {
+      "name": "阿蕾奇诺",
+      "version": "4.6",
+      "gameId": 10000096,
+      "rarity": 5
+    },
+    "sethos": {
+      "name": "赛索斯",
+      "version": "4.7",
+      "gameId": 10000097,
+      "rarity": 4
+    },
+    "clorinde": {
+      "name": "克洛琳德",
+      "version": "4.7",
+      "gameId": 10000098,
+      "rarity": 5
+    },
+    "emilie": {
+      "name": "艾梅莉埃",
+      "version": "4.8",
+      "gameId": 10000099,
+      "rarity": 5
+    },
+    "kachina": {
+      "name": "卡齐娜",
+      "version": "5.0",
+      "gameId": 10000100,
+      "rarity": 4
+    },
+    "kinich": {
+      "name": "基尼奇",
+      "version": "5.0",
+      "gameId": 10000101,
+      "rarity": 5
+    },
+    "mualani": {
+      "name": "玛拉妮",
+      "version": "5.0",
+      "gameId": 10000102,
+      "rarity": 5
+    },
+    "xilonen": {
+      "name": "希诺宁",
+      "version": "5.1",
+      "gameId": 10000103,
+      "rarity": 5
+    },
+    "chasca": {
+      "name": "恰斯卡",
+      "version": "5.2",
+      "gameId": 10000104,
+      "rarity": 5
+    },
+    "ororon": {
+      "name": "欧洛伦",
+      "version": "5.2",
+      "gameId": 10000105,
+      "rarity": 4
+    },
+    "mavuika": {
+      "name": "玛薇卡",
+      "version": "5.3",
+      "gameId": 10000106,
+      "rarity": 5
+    },
+    "citlali": {
+      "name": "茜特菈莉",
+      "version": "5.3",
+      "gameId": 10000107,
+      "rarity": 5
+    },
+    "lanyan": {
+      "name": "蓝砚",
+      "version": "5.3",
+      "gameId": 10000108,
+      "rarity": 4
+    },
+    "yumemizukimizuki": {
+      "name": "梦见月瑞希",
+      "version": "5.4",
+      "gameId": 10000109,
+      "rarity": 5
+    },
+    "iansan": {
+      "name": "伊安珊",
+      "version": "5.5",
+      "gameId": 10000110,
+      "rarity": 4
+    },
+    "varesa": {
+      "name": "瓦雷莎",
+      "version": "5.5",
+      "gameId": 10000111,
+      "rarity": 5
+    },
+    "escoffier": {
+      "name": "爱可菲",
+      "version": "5.6",
+      "gameId": 10000112,
+      "rarity": 5
+    },
+    "ifa": {
+      "name": "伊法",
+      "version": "5.6",
+      "gameId": 10000113,
+      "rarity": 4
+    },
+    "skirk": {
+      "name": "丝柯克",
+      "version": "5.7",
+      "gameId": 10000114,
+      "rarity": 5
+    },
+    "dahlia": {
+      "name": "塔利雅",
+      "version": "5.7",
+      "gameId": 10000115,
+      "rarity": 4
+    },
+    "ineffa": {
+      "name": "伊涅芙",
+      "version": "5.8",
+      "gameId": 10000116,
+      "rarity": 5
+    },
+    "manekin": {
+      "name": "奇偶·男性",
+      "version": "6.1",
+      "gameId": 10000117,
+      "rarity": 5
+    },
+    "manekina": {
+      "name": "奇偶·女性",
+      "version": "6.1",
+      "gameId": 10000118,
+      "rarity": 5
+    },
+    "lauma": {
+      "name": "菈乌玛",
+      "version": "6.0",
+      "gameId": 10000119,
+      "rarity": 5
+    },
+    "flins": {
+      "name": "菲林斯",
+      "version": "6.0",
+      "gameId": 10000120,
+      "rarity": 5
+    },
+    "aino": {
+      "name": "爱诺",
+      "version": "6.0",
+      "gameId": 10000121,
+      "rarity": 4
+    },
+    "nefer": {
+      "name": "奈芙尔",
+      "version": "6.1",
+      "gameId": 10000122,
+      "rarity": 5
+    },
+    "durin": {
+      "name": "杜林",
+      "version": "6.2",
+      "gameId": 10000123,
+      "rarity": 5
+    },
+    "jahoda": {
+      "name": "雅珂达",
+      "version": "6.2",
+      "gameId": 10000124,
+      "rarity": 4
+    },
+    "columbina": {
+      "name": "哥伦比娅",
+      "version": "6.3",
+      "gameId": 10000125,
+      "rarity": 5
+    },
+    "zibai": {
+      "name": "兹白",
+      "version": "6.3",
+      "gameId": 10000126,
+      "rarity": 5
+    },
+    "illuga": {
+      "name": "叶洛亚",
+      "version": "6.3",
+      "gameId": 10000127,
+      "rarity": 4
+    },
+    "varka": {
+      "name": "法尔伽",
+      "version": "6.4",
+      "gameId": 10000128,
+      "rarity": 5
+    },
+    "lohen": {
+      "name": "洛恩",
+      "version": "6.6",
+      "gameId": 10000129,
+      "rarity": 5
+    },
+    "linnea": {
+      "name": "莉奈娅",
+      "version": "6.5",
+      "gameId": 10000130,
+      "rarity": 5
+    },
+    "nicole": {
+      "name": "尼可",
+      "version": "6.6",
+      "gameId": 10000131,
+      "rarity": 5
+    },
+    "prune": {
+      "name": "布伦妮",
+      "version": "6.6",
+      "gameId": 10000132,
+      "rarity": 4
+    },
+    "sandrone": {
+      "name": "桑多涅",
+      "version": "6.7",
+      "gameId": 10000133,
+      "rarity": 5
+    },
+    "mitya": {
+      "name": "米提亚",
+      "version": "7.2",
+      "gameId": 10000136,
+      "rarity": 5
+    },
+    "valeriy": {
+      "name": "瓦列里",
+      "version": "7.2",
+      "gameId": 10000137,
+      "rarity": 4
+    },
+    "vodyanitsa": {
+      "name": "沃雅妮莎",
+      "version": "7.1",
+      "gameId": 10000140,
+      "rarity": 5
+    },
+    "vesna": {
+      "name": "薇斯纳",
+      "version": "7.1",
+      "gameId": 10000143,
+      "rarity": 5
+    },
+    "alyosha": {
+      "name": "阿罗夏",
+      "version": "7.0",
+      "gameId": 10000148,
+      "rarity": 4
+    },
+    "odette": {
+      "name": "奥黛塔",
+      "version": "7.0",
+      "gameId": 10000150,
+      "rarity": 5
+    }
+  },
+  "weapons": {
+    "dullblade": {
+      "name": "无锋剑",
+      "version": "1.0",
+      "gameId": 11101,
+      "rarity": 1
+    },
+    "silversword": {
+      "name": "银剑",
+      "version": "1.0",
+      "gameId": 11201,
+      "rarity": 2
+    },
+    "coolsteel": {
+      "name": "冷刃",
+      "version": "1.0",
+      "gameId": 11301,
+      "rarity": 3
+    },
+    "harbingerofdawn": {
+      "name": "黎明神剑",
+      "version": "1.0",
+      "gameId": 11302,
+      "rarity": 3
+    },
+    "travelershandysword": {
+      "name": "旅行剑",
+      "version": "1.0",
+      "gameId": 11303,
+      "rarity": 3
+    },
+    "darkironsword": {
+      "name": "暗铁剑",
+      "version": "1.0",
+      "gameId": 11304,
+      "rarity": 3
+    },
+    "filletblade": {
+      "name": "吃虎鱼刀",
+      "version": "1.0",
+      "gameId": 11305,
+      "rarity": 3
+    },
+    "skyridersword": {
+      "name": "飞天御剑",
+      "version": "1.0",
+      "gameId": 11306,
+      "rarity": 3
+    },
+    "favoniussword": {
+      "name": "西风剑",
+      "version": "1.0",
+      "gameId": 11401,
+      "rarity": 4
+    },
+    "theflute": {
+      "name": "笛剑",
+      "version": "1.0",
+      "gameId": 11402,
+      "rarity": 4
+    },
+    "sacrificialsword": {
+      "name": "祭礼剑",
+      "version": "1.0",
+      "gameId": 11403,
+      "rarity": 4
+    },
+    "royallongsword": {
+      "name": "宗室长剑",
+      "version": "1.0",
+      "gameId": 11404,
+      "rarity": 4
+    },
+    "lionsroar": {
+      "name": "匣里龙吟",
+      "version": "1.0",
+      "gameId": 11405,
+      "rarity": 4
+    },
+    "prototyperancour": {
+      "name": "试作斩岩",
+      "version": "1.0",
+      "gameId": 11406,
+      "rarity": 4
+    },
+    "ironsting": {
+      "name": "铁蜂刺",
+      "version": "1.0",
+      "gameId": 11407,
+      "rarity": 4
+    },
+    "blackclifflongsword": {
+      "name": "黑岩长剑",
+      "version": "1.0",
+      "gameId": 11408,
+      "rarity": 4
+    },
+    "theblacksword": {
+      "name": "黑剑",
+      "version": "1.0",
+      "gameId": 11409,
+      "rarity": 4
+    },
+    "thealleyflash": {
+      "name": "暗巷闪光",
+      "version": "1.4",
+      "gameId": 11410,
+      "rarity": 4
+    },
+    "swordofdescension": {
+      "name": "降临之剑",
+      "version": "1.0",
+      "gameId": 11412,
+      "rarity": 4
+    },
+    "festeringdesire": {
+      "name": "腐殖之剑",
+      "version": "1.2",
+      "gameId": 11413,
+      "rarity": 4
+    },
+    "amenomakageuchi": {
+      "name": "天目影打刀",
+      "version": "2.0",
+      "gameId": 11414,
+      "rarity": 4
+    },
+    "cinnabarspindle": {
+      "name": "辰砂之纺锤",
+      "version": "2.3",
+      "gameId": 11415,
+      "rarity": 4
+    },
+    "kagotsurubeisshin": {
+      "name": "笼钓瓶一心",
+      "version": "2.8",
+      "gameId": 11416,
+      "rarity": 4
+    },
+    "sapwoodblade": {
+      "name": "原木刀",
+      "version": "3.0",
+      "gameId": 11417,
+      "rarity": 4
+    },
+    "xiphosmoonlight": {
+      "name": "西福斯的月光",
+      "version": "3.1",
+      "gameId": 11418,
+      "rarity": 4
+    },
+    "prizedisshinblade": {
+      "name": "「一心传」名刀",
+      "version": "2.8",
+      "gameId": 11419,
+      "rarity": 4
+    },
+    "prizedisshinblade-01": {
+      "name": "「一心传」名刀",
+      "version": "2.8",
+      "gameId": 11420,
+      "rarity": 4
+    },
+    "prizedisshinblade-02": {
+      "name": "「一心传」名刀",
+      "version": "2.8",
+      "gameId": 11421,
+      "rarity": 4
+    },
+    "toukaboushigure": {
+      "name": "东花坊时雨",
+      "version": "3.3",
+      "gameId": 11422,
+      "rarity": 4
+    },
+    "wolffang": {
+      "name": "狼牙",
+      "version": "4.0",
+      "gameId": 11424,
+      "rarity": 4
+    },
+    "finaleofthedeep": {
+      "name": "海渊终曲",
+      "version": "4.0",
+      "gameId": 11425,
+      "rarity": 4
+    },
+    "fleuvecendreferryman": {
+      "name": "灰河渡手",
+      "version": "4.0",
+      "gameId": 11426,
+      "rarity": 4
+    },
+    "thedockhandsassistant": {
+      "name": "船坞长剑",
+      "version": "4.1",
+      "gameId": 11427,
+      "rarity": 4
+    },
+    "swordofnarzissenkreuz": {
+      "name": "水仙十字之剑",
+      "version": "4.2",
+      "gameId": 11428,
+      "rarity": 4
+    },
+    "sturdybone": {
+      "name": "弥坚骨",
+      "version": "5.1",
+      "gameId": 11430,
+      "rarity": 4
+    },
+    "fluteofezpitzal": {
+      "name": "息燧之笛",
+      "version": "5.0",
+      "gameId": 11431,
+      "rarity": 4
+    },
+    "calamityofeshu": {
+      "name": "厄水之祸",
+      "version": "5.2",
+      "gameId": 11432,
+      "rarity": 4
+    },
+    "serenityscall": {
+      "name": "谧音吹哨",
+      "version": "6.0",
+      "gameId": 11433,
+      "rarity": 4
+    },
+    "moonweaversdawn": {
+      "name": "织月者的曙色",
+      "version": "6.0",
+      "gameId": 11434,
+      "rarity": 4
+    },
+    "hereticsmoltenblade": {
+      "name": "熔猎异端之刃",
+      "version": "7.0",
+      "gameId": 11435,
+      "rarity": 4
+    },
+    "emberwell": {
+      "name": "引火之源",
+      "version": "7.0",
+      "gameId": 11436,
+      "rarity": 4
+    },
+    "newbough": {
+      "name": "新枝",
+      "version": "7.1",
+      "gameId": 11437,
+      "rarity": 4
+    },
+    "silverlight": {
+      "name": "银釭",
+      "version": "7.1",
+      "gameId": 11438,
+      "rarity": 4
+    },
+    "aquilafavonia": {
+      "name": "风鹰剑",
+      "version": "1.0",
+      "gameId": 11501,
+      "rarity": 5
+    },
+    "skywardblade": {
+      "name": "天空之刃",
+      "version": "1.0",
+      "gameId": 11502,
+      "rarity": 5
+    },
+    "freedomsworn": {
+      "name": "苍古自由之誓",
+      "version": "1.6",
+      "gameId": 11503,
+      "rarity": 5
+    },
+    "summitshaper": {
+      "name": "斫峰之刃",
+      "version": "1.2",
+      "gameId": 11504,
+      "rarity": 5
+    },
+    "primordialjadecutter": {
+      "name": "磐岩结绿",
+      "version": "1.3",
+      "gameId": 11505,
+      "rarity": 5
+    },
+    "mistsplitterreforged": {
+      "name": "雾切之回光",
+      "version": "2.0",
+      "gameId": 11509,
+      "rarity": 5
+    },
+    "harangeppakufutsu": {
+      "name": "波乱月白经津",
+      "version": "2.6",
+      "gameId": 11510,
+      "rarity": 5
+    },
+    "keyofkhajnisut": {
+      "name": "圣显之钥",
+      "version": "3.1",
+      "gameId": 11511,
+      "rarity": 5
+    },
+    "lightoffoliarincision": {
+      "name": "裁叶萃光",
+      "version": "3.4",
+      "gameId": 11512,
+      "rarity": 5
+    },
+    "splendoroftranquilwaters": {
+      "name": "静水流涌之辉",
+      "version": "4.2",
+      "gameId": 11513,
+      "rarity": 5
+    },
+    "urakumisugiri": {
+      "name": "有乐御簾切",
+      "version": "4.5",
+      "gameId": 11514,
+      "rarity": 5
+    },
+    "absolution": {
+      "name": "赦罪",
+      "version": "4.7",
+      "gameId": 11515,
+      "rarity": 5
+    },
+    "peakpatrolsong": {
+      "name": "岩峰巡歌",
+      "version": "5.1",
+      "gameId": 11516,
+      "rarity": 5
+    },
+    "azurelight": {
+      "name": "苍耀",
+      "version": "5.7",
+      "gameId": 11517,
+      "rarity": 5
+    },
+    "athameartis": {
+      "name": "黑蚀",
+      "version": "6.2",
+      "gameId": 11518,
+      "rarity": 5
+    },
+    "lightbearingmoonshard": {
+      "name": "朏魄含光",
+      "version": "6.3",
+      "gameId": 11519,
+      "rarity": 5
+    },
+    "whitelakefrostfeather": {
+      "name": "白湖冬羽",
+      "version": "7.0",
+      "gameId": 11520,
+      "rarity": 5
+    },
+    "exaiphanesblade": {
+      "name": "星锋剑",
+      "version": "7.0",
+      "gameId": 11521,
+      "rarity": 5
+    },
+    "beyondthechrysalis": {
+      "name": "蝶变",
+      "version": "7.1",
+      "gameId": 11522,
+      "rarity": 5
+    },
+    "wastergreatsword": {
+      "name": "训练大剑",
+      "version": "1.0",
+      "gameId": 12101,
+      "rarity": 1
+    },
+    "oldmercspal": {
+      "name": "佣兵重剑",
+      "version": "1.0",
+      "gameId": 12201,
+      "rarity": 2
+    },
+    "ferrousshadow": {
+      "name": "铁影阔剑",
+      "version": "1.0",
+      "gameId": 12301,
+      "rarity": 3
+    },
+    "bloodtaintedgreatsword": {
+      "name": "沐浴龙血的剑",
+      "version": "1.0",
+      "gameId": 12302,
+      "rarity": 3
+    },
+    "whiteirongreatsword": {
+      "name": "白铁大剑",
+      "version": "1.0",
+      "gameId": 12303,
+      "rarity": 3
+    },
+    "debateclub": {
+      "name": "以理服人",
+      "version": "1.0",
+      "gameId": 12305,
+      "rarity": 3
+    },
+    "skyridergreatsword": {
+      "name": "飞天大御剑",
+      "version": "1.0",
+      "gameId": 12306,
+      "rarity": 3
+    },
+    "favoniusgreatsword": {
+      "name": "西风大剑",
+      "version": "1.0",
+      "gameId": 12401,
+      "rarity": 4
+    },
+    "thebell": {
+      "name": "钟剑",
+      "version": "1.0",
+      "gameId": 12402,
+      "rarity": 4
+    },
+    "sacrificialgreatsword": {
+      "name": "祭礼大剑",
+      "version": "1.0",
+      "gameId": 12403,
+      "rarity": 4
+    },
+    "royalgreatsword": {
+      "name": "宗室大剑",
+      "version": "1.0",
+      "gameId": 12404,
+      "rarity": 4
+    },
+    "rainslasher": {
+      "name": "雨裁",
+      "version": "1.0",
+      "gameId": 12405,
+      "rarity": 4
+    },
+    "prototypearchaic": {
+      "name": "试作古华",
+      "version": "1.0",
+      "gameId": 12406,
+      "rarity": 4
+    },
+    "whiteblind": {
+      "name": "白影剑",
+      "version": "1.0",
+      "gameId": 12407,
+      "rarity": 4
+    },
+    "blackcliffslasher": {
+      "name": "黑岩斩刀",
+      "version": "1.0",
+      "gameId": 12408,
+      "rarity": 4
+    },
+    "serpentspine": {
+      "name": "螭骨剑",
+      "version": "1.0",
+      "gameId": 12409,
+      "rarity": 4
+    },
+    "lithicblade": {
+      "name": "千岩古剑",
+      "version": "1.3",
+      "gameId": 12410,
+      "rarity": 4
+    },
+    "snowtombedstarsilver": {
+      "name": "雪葬的星银",
+      "version": "1.2",
+      "gameId": 12411,
+      "rarity": 4
+    },
+    "luxurioussealord": {
+      "name": "衔珠海皇",
+      "version": "2.1",
+      "gameId": 12412,
+      "rarity": 4
+    },
+    "katsuragikirinagamasa": {
+      "name": "桂木斩长正",
+      "version": "2.0",
+      "gameId": 12414,
+      "rarity": 4
+    },
+    "makhairaaquamarine": {
+      "name": "玛海菈的水色",
+      "version": "3.1",
+      "gameId": 12415,
+      "rarity": 4
+    },
+    "akuoumaru": {
+      "name": "恶王丸",
+      "version": "2.2",
+      "gameId": 12416,
+      "rarity": 4
+    },
+    "forestregalia": {
+      "name": "森林王器",
+      "version": "3.0",
+      "gameId": 12417,
+      "rarity": 4
+    },
+    "mailedflower": {
+      "name": "饰铁之花",
+      "version": "3.5",
+      "gameId": 12418,
+      "rarity": 4
+    },
+    "talkingstick": {
+      "name": "聊聊棒",
+      "version": "4.0",
+      "gameId": 12424,
+      "rarity": 4
+    },
+    "tidalshadow": {
+      "name": "浪影阔剑",
+      "version": "4.0",
+      "gameId": 12425,
+      "rarity": 4
+    },
+    "ultimateoverlordsmegamagicsword": {
+      "name": "「究极霸王超级魔剑」",
+      "version": "4.3",
+      "gameId": 12426,
+      "rarity": 4
+    },
+    "portablepowersaw": {
+      "name": "便携动力锯",
+      "version": "4.1",
+      "gameId": 12427,
+      "rarity": 4
+    },
+    "fruitfulhook": {
+      "name": "硕果钩",
+      "version": "5.1",
+      "gameId": 12430,
+      "rarity": 4
+    },
+    "earthshaker": {
+      "name": "撼地者",
+      "version": "5.0",
+      "gameId": 12431,
+      "rarity": 4
+    },
+    "flameforgedinsight": {
+      "name": "拾慧铸熔",
+      "version": "5.8",
+      "gameId": 12432,
+      "rarity": 4
+    },
+    "masterkey": {
+      "name": "万能钥匙",
+      "version": "6.0",
+      "gameId": 12433,
+      "rarity": 4
+    },
+    "forgedbythegoldenmelody": {
+      "name": "金律铸影",
+      "version": "7.0",
+      "gameId": 12435,
+      "rarity": 4
+    },
+    "bladeofatonement": {
+      "name": "救赎之斩",
+      "version": "7.0",
+      "gameId": 12436,
+      "rarity": 4
+    },
+    "skywardpride": {
+      "name": "天空之傲",
+      "version": "1.0",
+      "gameId": 12501,
+      "rarity": 5
+    },
+    "wolfsgravestone": {
+      "name": "狼的末路",
+      "version": "1.0",
+      "gameId": 12502,
+      "rarity": 5
+    },
+    "songofbrokenpines": {
+      "name": "松籁响起之时",
+      "version": "1.5",
+      "gameId": 12503,
+      "rarity": 5
+    },
+    "theunforged": {
+      "name": "无工之剑",
+      "version": "1.1",
+      "gameId": 12504,
+      "rarity": 5
+    },
+    "redhornstonethresher": {
+      "name": "赤角石溃杵",
+      "version": "2.3",
+      "gameId": 12510,
+      "rarity": 5
+    },
+    "beaconofthereedsea": {
+      "name": "苇海信标",
+      "version": "3.5",
+      "gameId": 12511,
+      "rarity": 5
+    },
+    "verdict": {
+      "name": "裁断",
+      "version": "4.3",
+      "gameId": 12512,
+      "rarity": 5
+    },
+    "fangofthemountainking": {
+      "name": "山王长牙",
+      "version": "5.0",
+      "gameId": 12513,
+      "rarity": 5
+    },
+    "athousandblazingsuns": {
+      "name": "焚曜千阳",
+      "version": "5.3",
+      "gameId": 12514,
+      "rarity": 5
+    },
+    "gestofthemightywolf": {
+      "name": "狼的武功歌",
+      "version": "6.4",
+      "gameId": 12515,
+      "rarity": 5
+    },
+    "ateaspoonoftranscendence": {
+      "name": "超越之匙",
+      "version": "6.7",
+      "gameId": 12516,
+      "rarity": 5
+    },
+    "beginnersprotector": {
+      "name": "新手长枪",
+      "version": "1.0",
+      "gameId": 13101,
+      "rarity": 1
+    },
+    "ironpoint": {
+      "name": "铁尖枪",
+      "version": "1.0",
+      "gameId": 13201,
+      "rarity": 2
+    },
+    "whitetassel": {
+      "name": "白缨枪",
+      "version": "1.0",
+      "gameId": 13301,
+      "rarity": 3
+    },
+    "halberd": {
+      "name": "钺矛",
+      "version": "1.0",
+      "gameId": 13302,
+      "rarity": 3
+    },
+    "blacktassel": {
+      "name": "黑缨枪",
+      "version": "1.0",
+      "gameId": 13303,
+      "rarity": 3
+    },
+    "dragonsbane": {
+      "name": "匣里灭辰",
+      "version": "1.0",
+      "gameId": 13401,
+      "rarity": 4
+    },
+    "prototypestarglitter": {
+      "name": "试作星镰",
+      "version": "1.0",
+      "gameId": 13402,
+      "rarity": 4
+    },
+    "crescentpike": {
+      "name": "流月针",
+      "version": "1.0",
+      "gameId": 13403,
+      "rarity": 4
+    },
+    "blackcliffpole": {
+      "name": "黑岩刺枪",
+      "version": "1.0",
+      "gameId": 13404,
+      "rarity": 4
+    },
+    "deathmatch": {
+      "name": "决斗之枪",
+      "version": "1.0",
+      "gameId": 13405,
+      "rarity": 4
+    },
+    "lithicspear": {
+      "name": "千岩长枪",
+      "version": "1.3",
+      "gameId": 13406,
+      "rarity": 4
+    },
+    "favoniuslance": {
+      "name": "西风长枪",
+      "version": "1.0",
+      "gameId": 13407,
+      "rarity": 4
+    },
+    "royalspear": {
+      "name": "宗室猎枪",
+      "version": "1.1",
+      "gameId": 13408,
+      "rarity": 4
+    },
+    "dragonspinespear": {
+      "name": "龙脊长枪",
+      "version": "1.2",
+      "gameId": 13409,
+      "rarity": 4
+    },
+    "kitaincrossspear": {
+      "name": "喜多院十文字",
+      "version": "2.0",
+      "gameId": 13414,
+      "rarity": 4
+    },
+    "thecatch": {
+      "name": "「渔获」",
+      "version": "2.1",
+      "gameId": 13415,
+      "rarity": 4
+    },
+    "wavebreakersfin": {
+      "name": "断浪长鳍",
+      "version": "2.2",
+      "gameId": 13416,
+      "rarity": 4
+    },
+    "moonpiercer": {
+      "name": "贯月矢",
+      "version": "3.0",
+      "gameId": 13417,
+      "rarity": 4
+    },
+    "missivewindspear": {
+      "name": "风信之锋",
+      "version": "3.1",
+      "gameId": 13419,
+      "rarity": 4
+    },
+    "balladofthefjords": {
+      "name": "峡湾长歌",
+      "version": "4.0",
+      "gameId": 13424,
+      "rarity": 4
+    },
+    "rightfulreward": {
+      "name": "公义的酬报",
+      "version": "4.0",
+      "gameId": 13425,
+      "rarity": 4
+    },
+    "dialoguesofthedesertsages": {
+      "name": "沙中伟贤的对答",
+      "version": "4.5",
+      "gameId": 13426,
+      "rarity": 4
+    },
+    "prospectorsdrill": {
+      "name": "勘探钻机",
+      "version": "4.1",
+      "gameId": 13427,
+      "rarity": 4
+    },
+    "mountainbracingbolt": {
+      "name": "镇山之钉",
+      "version": "5.1",
+      "gameId": 13430,
+      "rarity": 4
+    },
+    "footprintoftherainbow": {
+      "name": "虹的行迹",
+      "version": "5.0",
+      "gameId": 13431,
+      "rarity": 4
+    },
+    "tamayurateinoohanashi": {
+      "name": "且住亭御咄",
+      "version": "5.4",
+      "gameId": 13432,
+      "rarity": 4
+    },
+    "prospectorsshovel": {
+      "name": "掘金之锹",
+      "version": "6.0",
+      "gameId": 13433,
+      "rarity": 4
+    },
+    "sacrificersstaff": {
+      "name": "圣祭者的辉杖",
+      "version": "6.1",
+      "gameId": 13434,
+      "rarity": 4
+    },
+    "frostbreath": {
+      "name": "寒息",
+      "version": "7.0",
+      "gameId": 13435,
+      "rarity": 4
+    },
+    "songofthevigil": {
+      "name": "戍望谣歌",
+      "version": "7.0",
+      "gameId": 13436,
+      "rarity": 4
+    },
+    "staffofhoma": {
+      "name": "护摩之杖",
+      "version": "1.3",
+      "gameId": 13501,
+      "rarity": 5
+    },
+    "skywardspine": {
+      "name": "天空之脊",
+      "version": "1.0",
+      "gameId": 13502,
+      "rarity": 5
+    },
+    "vortexvanquisher": {
+      "name": "贯虹之槊",
+      "version": "1.1",
+      "gameId": 13504,
+      "rarity": 5
+    },
+    "primordialjadewingedspear": {
+      "name": "和璞鸢",
+      "version": "1.0",
+      "gameId": 13505,
+      "rarity": 5
+    },
+    "calamityqueller": {
+      "name": "息灾",
+      "version": "2.4",
+      "gameId": 13507,
+      "rarity": 5
+    },
+    "engulfinglightning": {
+      "name": "薙草之稻光",
+      "version": "2.1",
+      "gameId": 13509,
+      "rarity": 5
+    },
+    "staffofthescarletsands": {
+      "name": "赤沙之杖",
+      "version": "3.1",
+      "gameId": 13511,
+      "rarity": 5
+    },
+    "crimsonmoonssemblance": {
+      "name": "赤月之形",
+      "version": "4.6",
+      "gameId": 13512,
+      "rarity": 5
+    },
+    "lumidouceelegy": {
+      "name": "柔灯挽歌",
+      "version": "4.8",
+      "gameId": 13513,
+      "rarity": 5
+    },
+    "symphonistofscents": {
+      "name": "香韵奏者",
+      "version": "5.6",
+      "gameId": 13514,
+      "rarity": 5
+    },
+    "fracturedhalo": {
+      "name": "支离轮光",
+      "version": "5.8",
+      "gameId": 13515,
+      "rarity": 5
+    },
+    "bloodsoakedruins": {
+      "name": "血染荒城",
+      "version": "6.0",
+      "gameId": 13516,
+      "rarity": 5
+    },
+    "disasterandremorse": {
+      "name": "灾悔",
+      "version": "6.6",
+      "gameId": 13517,
+      "rarity": 5
+    },
+    "apprenticesnotes": {
+      "name": "学徒笔记",
+      "version": "1.0",
+      "gameId": 14101,
+      "rarity": 1
+    },
+    "pocketgrimoire": {
+      "name": "口袋魔导书",
+      "version": "1.0",
+      "gameId": 14201,
+      "rarity": 2
+    },
+    "magicguide": {
+      "name": "魔导绪论",
+      "version": "1.0",
+      "gameId": 14301,
+      "rarity": 3
+    },
+    "thrillingtalesofdragonslayers": {
+      "name": "讨龙英杰谭",
+      "version": "1.0",
+      "gameId": 14302,
+      "rarity": 3
+    },
+    "otherworldlystory": {
+      "name": "异世界行记",
+      "version": "1.0",
+      "gameId": 14303,
+      "rarity": 3
+    },
+    "emeraldorb": {
+      "name": "翡玉法球",
+      "version": "1.0",
+      "gameId": 14304,
+      "rarity": 3
+    },
+    "twinnephrite": {
+      "name": "甲级宝珏",
+      "version": "1.0",
+      "gameId": 14305,
+      "rarity": 3
+    },
+    "favoniuscodex": {
+      "name": "西风秘典",
+      "version": "1.0",
+      "gameId": 14401,
+      "rarity": 4
+    },
+    "thewidsith": {
+      "name": "流浪乐章",
+      "version": "1.0",
+      "gameId": 14402,
+      "rarity": 4
+    },
+    "sacrificialfragments": {
+      "name": "祭礼残章",
+      "version": "1.0",
+      "gameId": 14403,
+      "rarity": 4
+    },
+    "royalgrimoire": {
+      "name": "宗室秘法录",
+      "version": "1.0",
+      "gameId": 14404,
+      "rarity": 4
+    },
+    "solarpearl": {
+      "name": "匣里日月",
+      "version": "1.0",
+      "gameId": 14405,
+      "rarity": 4
+    },
+    "prototypeamber": {
+      "name": "试作金珀",
+      "version": "1.0",
+      "gameId": 14406,
+      "rarity": 4
+    },
+    "mappamare": {
+      "name": "万国诸海图谱",
+      "version": "1.0",
+      "gameId": 14407,
+      "rarity": 4
+    },
+    "blackcliffagate": {
+      "name": "黑岩绯玉",
+      "version": "1.0",
+      "gameId": 14408,
+      "rarity": 4
+    },
+    "eyeofperception": {
+      "name": "昭心",
+      "version": "1.0",
+      "gameId": 14409,
+      "rarity": 4
+    },
+    "wineandsong": {
+      "name": "暗巷的酒与诗",
+      "version": "1.4",
+      "gameId": 14410,
+      "rarity": 4
+    },
+    "frostbearer": {
+      "name": "忍冬之果",
+      "version": "1.2",
+      "gameId": 14412,
+      "rarity": 4
+    },
+    "dodocotales": {
+      "name": "嘟嘟可故事集",
+      "version": "1.6",
+      "gameId": 14413,
+      "rarity": 4
+    },
+    "hakushinring": {
+      "name": "白辰之环",
+      "version": "2.0",
+      "gameId": 14414,
+      "rarity": 4
+    },
+    "oathsworneye": {
+      "name": "证誓之明瞳",
+      "version": "2.5",
+      "gameId": 14415,
+      "rarity": 4
+    },
+    "wanderingevenstar": {
+      "name": "流浪的晚星",
+      "version": "3.1",
+      "gameId": 14416,
+      "rarity": 4
+    },
+    "fruitoffulfillment": {
+      "name": "盈满之实",
+      "version": "3.0",
+      "gameId": 14417,
+      "rarity": 4
+    },
+    "sacrificialjade": {
+      "name": "遗祀玉珑",
+      "version": "4.0",
+      "gameId": 14424,
+      "rarity": 4
+    },
+    "flowingpurity": {
+      "name": "纯水流华",
+      "version": "4.0",
+      "gameId": 14425,
+      "rarity": 4
+    },
+    "balladoftheboundlessblue": {
+      "name": "无垠蔚蓝之歌",
+      "version": "4.1",
+      "gameId": 14426,
+      "rarity": 4
+    },
+    "ashgravendrinkinghorn": {
+      "name": "苍纹角杯",
+      "version": "5.0",
+      "gameId": 14427,
+      "rarity": 4
+    },
+    "waveridingwhirl": {
+      "name": "乘浪的回旋",
+      "version": "5.2",
+      "gameId": 14430,
+      "rarity": 4
+    },
+    "ringofyaxche": {
+      "name": "木棉之环",
+      "version": "5.0",
+      "gameId": 14431,
+      "rarity": 4
+    },
+    "etherlightspindlelute": {
+      "name": "天光的纺琴",
+      "version": "6.0",
+      "gameId": 14432,
+      "rarity": 4
+    },
+    "blackmarrowlantern": {
+      "name": "乌髓孑灯",
+      "version": "6.0",
+      "gameId": 14433,
+      "rarity": 4
+    },
+    "dawningfrost": {
+      "name": "霜辰",
+      "version": "6.1",
+      "gameId": 14434,
+      "rarity": 4
+    },
+    "clashofkings": {
+      "name": "群王局戏",
+      "version": "7.0",
+      "gameId": 14435,
+      "rarity": 4
+    },
+    "echoesoftheheart": {
+      "name": "寸心余响",
+      "version": "7.0",
+      "gameId": 14436,
+      "rarity": 4
+    },
+    "wintersheavyheart": {
+      "name": "凝雪沉心",
+      "version": "7.1",
+      "gameId": 14437,
+      "rarity": 4
+    },
+    "skywardatlas": {
+      "name": "天空之卷",
+      "version": "1.0",
+      "gameId": 14501,
+      "rarity": 5
+    },
+    "lostprayertothesacredwinds": {
+      "name": "四风原典",
+      "version": "1.0",
+      "gameId": 14502,
+      "rarity": 5
+    },
+    "memoryofdust": {
+      "name": "尘世之锁",
+      "version": "1.1",
+      "gameId": 14504,
+      "rarity": 5
+    },
+    "jadefallssplendor": {
+      "name": "碧落之珑",
+      "version": "3.6",
+      "gameId": 14505,
+      "rarity": 5
+    },
+    "everlastingmoonglow": {
+      "name": "不灭月华",
+      "version": "2.1",
+      "gameId": 14506,
+      "rarity": 5
+    },
+    "kagurasverity": {
+      "name": "神乐之真意",
+      "version": "2.5",
+      "gameId": 14509,
+      "rarity": 5
+    },
+    "athousandfloatingdreams": {
+      "name": "千夜浮梦",
+      "version": "3.2",
+      "gameId": 14511,
+      "rarity": 5
+    },
+    "tulaytullahsremembrance": {
+      "name": "图莱杜拉的回忆",
+      "version": "3.3",
+      "gameId": 14512,
+      "rarity": 5
+    },
+    "cashflowsupervision": {
+      "name": "金流监督",
+      "version": "4.1",
+      "gameId": 14513,
+      "rarity": 5
+    },
+    "tomeoftheeternalflow": {
+      "name": "万世流涌大典",
+      "version": "4.1",
+      "gameId": 14514,
+      "rarity": 5
+    },
+    "cranesechoingcall": {
+      "name": "鹤鸣余音",
+      "version": "4.4",
+      "gameId": 14515,
+      "rarity": 5
+    },
+    "surfsup": {
+      "name": "冲浪时光",
+      "version": "5.0",
+      "gameId": 14516,
+      "rarity": 5
+    },
+    "starcallerswatch": {
+      "name": "祭星者之望",
+      "version": "5.3",
+      "gameId": 14517,
+      "rarity": 5
+    },
+    "sunnymorningsleepin": {
+      "name": "寝正月初晴",
+      "version": "5.4",
+      "gameId": 14518,
+      "rarity": 5
+    },
+    "vividnotions": {
+      "name": "溢彩心念",
+      "version": "5.5",
+      "gameId": 14519,
+      "rarity": 5
+    },
+    "nightweaverslookingglass": {
+      "name": "纺夜天镜",
+      "version": "6.0",
+      "gameId": 14520,
+      "rarity": 5
+    },
+    "reliquaryoftruth": {
+      "name": "真语秘匣",
+      "version": "6.1",
+      "gameId": 14521,
+      "rarity": 5
+    },
+    "nocturnescurtaincall": {
+      "name": "帷间夜曲",
+      "version": "6.3",
+      "gameId": 14522,
+      "rarity": 5
+    },
+    "angelosheptades": {
+      "name": "尘光七谕",
+      "version": "6.6",
+      "gameId": 14523,
+      "rarity": 5
+    },
+    "hymnofthemaelstrom": {
+      "name": "漩流颂歌",
+      "version": "7.1",
+      "gameId": 14524,
+      "rarity": 5
+    },
+    "starsealededict": {
+      "name": "秘星典谕",
+      "version": "7.2",
+      "gameId": 14525,
+      "rarity": 5
+    },
+    "huntersbow": {
+      "name": "猎弓",
+      "version": "1.0",
+      "gameId": 15101,
+      "rarity": 1
+    },
+    "seasonedhuntersbow": {
+      "name": "历练的猎弓",
+      "version": "1.0",
+      "gameId": 15201,
+      "rarity": 2
+    },
+    "ravenbow": {
+      "name": "鸦羽弓",
+      "version": "1.0",
+      "gameId": 15301,
+      "rarity": 3
+    },
+    "sharpshootersoath": {
+      "name": "神射手之誓",
+      "version": "1.0",
+      "gameId": 15302,
+      "rarity": 3
+    },
+    "recurvebow": {
+      "name": "反曲弓",
+      "version": "1.0",
+      "gameId": 15303,
+      "rarity": 3
+    },
+    "slingshot": {
+      "name": "弹弓",
+      "version": "1.0",
+      "gameId": 15304,
+      "rarity": 3
+    },
+    "messenger": {
+      "name": "信使",
+      "version": "1.0",
+      "gameId": 15305,
+      "rarity": 3
+    },
+    "favoniuswarbow": {
+      "name": "西风猎弓",
+      "version": "1.0",
+      "gameId": 15401,
+      "rarity": 4
+    },
+    "thestringless": {
+      "name": "绝弦",
+      "version": "1.0",
+      "gameId": 15402,
+      "rarity": 4
+    },
+    "sacrificialbow": {
+      "name": "祭礼弓",
+      "version": "1.0",
+      "gameId": 15403,
+      "rarity": 4
+    },
+    "royalbow": {
+      "name": "宗室长弓",
+      "version": "1.0",
+      "gameId": 15404,
+      "rarity": 4
+    },
+    "rust": {
+      "name": "弓藏",
+      "version": "1.0",
+      "gameId": 15405,
+      "rarity": 4
+    },
+    "prototypecrescent": {
+      "name": "试作澹月",
+      "version": "1.0",
+      "gameId": 15406,
+      "rarity": 4
+    },
+    "compoundbow": {
+      "name": "钢轮弓",
+      "version": "1.0",
+      "gameId": 15407,
+      "rarity": 4
+    },
+    "blackcliffwarbow": {
+      "name": "黑岩战弓",
+      "version": "1.0",
+      "gameId": 15408,
+      "rarity": 4
+    },
+    "theviridescenthunt": {
+      "name": "苍翠猎弓",
+      "version": "1.0",
+      "gameId": 15409,
+      "rarity": 4
+    },
+    "alleyhunter": {
+      "name": "暗巷猎手",
+      "version": "1.4",
+      "gameId": 15410,
+      "rarity": 4
+    },
+    "fadingtwilight": {
+      "name": "落霞",
+      "version": "2.7",
+      "gameId": 15411,
+      "rarity": 4
+    },
+    "mitternachtswaltz": {
+      "name": "幽夜华尔兹",
+      "version": "1.6",
+      "gameId": 15412,
+      "rarity": 4
+    },
+    "windblumeode": {
+      "name": "风花之颂",
+      "version": "1.4",
+      "gameId": 15413,
+      "rarity": 4
+    },
+    "hamayumi": {
+      "name": "破魔之弓",
+      "version": "2.0",
+      "gameId": 15414,
+      "rarity": 4
+    },
+    "predator": {
+      "name": "掠食者",
+      "version": "2.1",
+      "gameId": 15415,
+      "rarity": 4
+    },
+    "mouunsmoon": {
+      "name": "曚云之月",
+      "version": "2.2",
+      "gameId": 15416,
+      "rarity": 4
+    },
+    "kingssquire": {
+      "name": "王下近侍",
+      "version": "3.0",
+      "gameId": 15417,
+      "rarity": 4
+    },
+    "endoftheline": {
+      "name": "竭泽",
+      "version": "3.0",
+      "gameId": 15418,
+      "rarity": 4
+    },
+    "ibispiercer": {
+      "name": "鹮穿之喙",
+      "version": "3.7",
+      "gameId": 15419,
+      "rarity": 4
+    },
+    "scionoftheblazingsun": {
+      "name": "烈阳之嗣",
+      "version": "4.0",
+      "gameId": 15424,
+      "rarity": 4
+    },
+    "songofstillness": {
+      "name": "静谧之曲",
+      "version": "4.0",
+      "gameId": 15425,
+      "rarity": 4
+    },
+    "cloudforged": {
+      "name": "筑云",
+      "version": "4.7",
+      "gameId": 15426,
+      "rarity": 4
+    },
+    "rangegauge": {
+      "name": "测距规",
+      "version": "4.1",
+      "gameId": 15427,
+      "rarity": 4
+    },
+    "flowerwreathedfeathers": {
+      "name": "缀花之翎",
+      "version": "5.2",
+      "gameId": 15430,
+      "rarity": 4
+    },
+    "chainbreaker": {
+      "name": "碎链",
+      "version": "5.0",
+      "gameId": 15431,
+      "rarity": 4
+    },
+    "sequenceofsolitude": {
+      "name": "冷寂迸音",
+      "version": "5.6",
+      "gameId": 15432,
+      "rarity": 4
+    },
+    "snarehook": {
+      "name": "罗网勾针",
+      "version": "6.0",
+      "gameId": 15433,
+      "rarity": 4
+    },
+    "rainbowserpentsrainbow": {
+      "name": "虹蛇的雨弦",
+      "version": "6.2",
+      "gameId": 15434,
+      "rarity": 4
+    },
+    "jadevista": {
+      "name": "悬黎千钧",
+      "version": "7.0",
+      "gameId": 15435,
+      "rarity": 4
+    },
+    "covenantoffrostandsnow": {
+      "name": "霜雪誓约",
+      "version": "7.0",
+      "gameId": 15436,
+      "rarity": 4
+    },
+    "breezebornerefrain": {
+      "name": "柔风游弦",
+      "version": "7.1",
+      "gameId": 15437,
+      "rarity": 4
+    },
+    "skywardharp": {
+      "name": "天空之翼",
+      "version": "1.0",
+      "gameId": 15501,
+      "rarity": 5
+    },
+    "amosbow": {
+      "name": "阿莫斯之弓",
+      "version": "1.0",
+      "gameId": 15502,
+      "rarity": 5
+    },
+    "elegyfortheend": {
+      "name": "终末嗟叹之诗",
+      "version": "1.4",
+      "gameId": 15503,
+      "rarity": 5
+    },
+    "polarstar": {
+      "name": "冬极白星",
+      "version": "2.2",
+      "gameId": 15507,
+      "rarity": 5
+    },
+    "aquasimulacra": {
+      "name": "若水",
+      "version": "2.7",
+      "gameId": 15508,
+      "rarity": 5
+    },
+    "thunderingpulse": {
+      "name": "飞雷之弦振",
+      "version": "2.0",
+      "gameId": 15509,
+      "rarity": 5
+    },
+    "hunterspath": {
+      "name": "猎人之径",
+      "version": "3.0",
+      "gameId": 15511,
+      "rarity": 5
+    },
+    "thefirstgreatmagic": {
+      "name": "最初的大魔术",
+      "version": "4.0",
+      "gameId": 15512,
+      "rarity": 5
+    },
+    "silvershowerheartstrings": {
+      "name": "白雨心弦",
+      "version": "4.7",
+      "gameId": 15513,
+      "rarity": 5
+    },
+    "astralvulturescrimsonplumage": {
+      "name": "星鹫赤羽",
+      "version": "5.2",
+      "gameId": 15514,
+      "rarity": 5
+    },
+    "thedaybreakchronicles": {
+      "name": "黎明破晓之史",
+      "version": "6.2",
+      "gameId": 15515,
+      "rarity": 5
+    },
+    "goldenfrostboundoath": {
+      "name": "霜结的誓金枝",
+      "version": "6.5",
+      "gameId": 15516,
+      "rarity": 5
+    }
+  },
+  "artifacts": {
+    "resolutionofsojourner": {
+      "name": "行者之心",
+      "version": "1.0",
+      "gameId": 10001
+    },
+    "braveheart": {
+      "name": "勇士之心",
+      "version": "1.0",
+      "gameId": 10002
+    },
+    "defenderswill": {
+      "name": "守护之心",
+      "version": "1.0",
+      "gameId": 10003
+    },
+    "tinymiracle": {
+      "name": "奇迹",
+      "version": "1.0",
+      "gameId": 10004
+    },
+    "berserker": {
+      "name": "战狂",
+      "version": "1.0",
+      "gameId": 10005
+    },
+    "martialartist": {
+      "name": "武人",
+      "version": "1.0",
+      "gameId": 10006
+    },
+    "instructor": {
+      "name": "教官",
+      "version": "1.0",
+      "gameId": 10007
+    },
+    "gambler": {
+      "name": "赌徒",
+      "version": "1.0",
+      "gameId": 10008
+    },
+    "theexile": {
+      "name": "流放者",
+      "version": "1.0",
+      "gameId": 10009
+    },
+    "adventurer": {
+      "name": "冒险家",
+      "version": "1.0",
+      "gameId": 10010
+    },
+    "luckydog": {
+      "name": "幸运儿",
+      "version": "1.0",
+      "gameId": 10011
+    },
+    "scholar": {
+      "name": "学士",
+      "version": "1.0",
+      "gameId": 10012
+    },
+    "travelingdoctor": {
+      "name": "游医",
+      "version": "1.0",
+      "gameId": 10013
+    },
+    "blizzardstrayer": {
+      "name": "冰风迷途的勇士",
+      "version": "1.2",
+      "gameId": 14001
+    },
+    "thundersoother": {
+      "name": "平息鸣雷的尊者",
+      "version": "1.0",
+      "gameId": 14002
+    },
+    "lavawalker": {
+      "name": "渡过烈火的贤人",
+      "version": "1.0",
+      "gameId": 14003
+    },
+    "maidenbeloved": {
+      "name": "被怜爱的少女",
+      "version": "1.0",
+      "gameId": 14004
+    },
+    "gladiatorsfinale": {
+      "name": "角斗士的终幕礼",
+      "version": "1.0",
+      "gameId": 15001
+    },
+    "viridescentvenerer": {
+      "name": "翠绿之影",
+      "version": "1.0",
+      "gameId": 15002
+    },
+    "wandererstroupe": {
+      "name": "流浪大地的乐团",
+      "version": "1.0",
+      "gameId": 15003
+    },
+    "thunderingfury": {
+      "name": "如雷的盛怒",
+      "version": "1.0",
+      "gameId": 15005
+    },
+    "crimsonwitchofflames": {
+      "name": "炽烈的炎之魔女",
+      "version": "1.0",
+      "gameId": 15006
+    },
+    "noblesseoblige": {
+      "name": "昔日宗室之仪",
+      "version": "1.0",
+      "gameId": 15007
+    },
+    "bloodstainedchivalry": {
+      "name": "染血的骑士道",
+      "version": "1.0",
+      "gameId": 15008
+    },
+    "prayersforillumination": {
+      "name": "祭火之人",
+      "version": "1.0",
+      "gameId": 15009
+    },
+    "prayersfordestiny": {
+      "name": "祭水之人",
+      "version": "1.0",
+      "gameId": 15010
+    },
+    "prayersforwisdom": {
+      "name": "祭雷之人",
+      "version": "1.0",
+      "gameId": 15011
+    },
+    "prayerstospringtime": {
+      "name": "祭冰之人",
+      "version": "1.0",
+      "gameId": 15013
+    },
+    "archaicpetra": {
+      "name": "悠古的磐岩",
+      "version": "1.0",
+      "gameId": 15014
+    },
+    "retracingbolide": {
+      "name": "逆飞的流星",
+      "version": "1.0",
+      "gameId": 15015
+    },
+    "heartofdepth": {
+      "name": "沉沦之心",
+      "version": "1.2",
+      "gameId": 15016
+    },
+    "tenacityofthemillelith": {
+      "name": "千岩牢固",
+      "version": "1.5",
+      "gameId": 15017
+    },
+    "paleflame": {
+      "name": "苍白之火",
+      "version": "1.5",
+      "gameId": 15018
+    },
+    "shimenawasreminiscence": {
+      "name": "追忆之注连",
+      "version": "2.0",
+      "gameId": 15019
+    },
+    "emblemofseveredfate": {
+      "name": "绝缘之旗印",
+      "version": "2.0",
+      "gameId": 15020
+    },
+    "huskofopulentdreams": {
+      "name": "华馆梦醒形骸记",
+      "version": "2.3",
+      "gameId": 15021
+    },
+    "oceanhuedclam": {
+      "name": "海染砗磲",
+      "version": "2.3",
+      "gameId": 15022
+    },
+    "vermillionhereafter": {
+      "name": "辰砂往生录",
+      "version": "2.6",
+      "gameId": 15023
+    },
+    "echoesofanoffering": {
+      "name": "来歆余响",
+      "version": "2.6",
+      "gameId": 15024
+    },
+    "deepwoodmemories": {
+      "name": "深林的记忆",
+      "version": "3.0",
+      "gameId": 15025
+    },
+    "gildeddreams": {
+      "name": "饰金之梦",
+      "version": "3.0",
+      "gameId": 15026
+    },
+    "desertpavilionchronicle": {
+      "name": "沙上楼阁史话",
+      "version": "3.3",
+      "gameId": 15027
+    },
+    "flowerofparadiselost": {
+      "name": "乐园遗落之花",
+      "version": "3.3",
+      "gameId": 15028
+    },
+    "nymphsdream": {
+      "name": "水仙之梦",
+      "version": "3.6",
+      "gameId": 15029
+    },
+    "vourukashasglow": {
+      "name": "花海甘露之光",
+      "version": "3.6",
+      "gameId": 15030
+    },
+    "marechausseehunter": {
+      "name": "逐影猎人",
+      "version": "4.0",
+      "gameId": 15031
+    },
+    "goldentroupe": {
+      "name": "黄金剧团",
+      "version": "4.0",
+      "gameId": 15032
+    },
+    "songofdayspast": {
+      "name": "昔时之歌",
+      "version": "4.3",
+      "gameId": 15033
+    },
+    "nighttimewhispersintheechoingwoods": {
+      "name": "回声之林夜话",
+      "version": "4.3",
+      "gameId": 15034
+    },
+    "fragmentofharmonicwhimsy": {
+      "name": "谐律异想断章",
+      "version": "4.6",
+      "gameId": 15035
+    },
+    "unfinishedreverie": {
+      "name": "未竟的遐思",
+      "version": "4.6",
+      "gameId": 15036
+    },
+    "scrolloftheheroofcindercity": {
+      "name": "烬城勇者绘卷",
+      "version": "5.0",
+      "gameId": 15037
+    },
+    "obsidiancodex": {
+      "name": "黑曜秘典",
+      "version": "5.0",
+      "gameId": 15038
+    },
+    "longnightsoath": {
+      "name": "长夜之誓",
+      "version": "5.5",
+      "gameId": 15039
+    },
+    "finaleofthedeepgalleries": {
+      "name": "深廊终曲",
+      "version": "5.5",
+      "gameId": 15040
+    },
+    "nightoftheskysunveiling": {
+      "name": "穹境示现之夜",
+      "version": "6.0",
+      "gameId": 15041
+    },
+    "silkenmoonsserenade": {
+      "name": "纺月的夜歌",
+      "version": "6.0",
+      "gameId": 15042
+    },
+    "aubadeofmorningstarandmoon": {
+      "name": "晨星与月的晓歌",
+      "version": "6.3",
+      "gameId": 15043
+    },
+    "adaycarvedfromrisingwinds": {
+      "name": "风起之日",
+      "version": "6.3",
+      "gameId": 15044
+    },
+    "celestialgift": {
+      "name": "天之美赐",
+      "version": "6.6",
+      "gameId": 15045
+    },
+    "disenchantmentindeepshadow": {
+      "name": "影中沉凝的幻灭",
+      "version": "6.6",
+      "gameId": 15046
+    },
+    "scarletproof": {
+      "name": "血红之证",
+      "version": "7.0",
+      "gameId": 15047
+    },
+    "heartofthefurnace": {
+      "name": "炉火融炼之心",
+      "version": "7.0",
+      "gameId": 15048
+    }
+  }
+}

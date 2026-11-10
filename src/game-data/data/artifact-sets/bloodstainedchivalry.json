@@ -1,0 +1,35 @@
+{
+  "id": "bloodstainedchivalry",
+  "name": "染血的骑士道",
+  "effects": [
+    {
+      "pieces": 2,
+      "modifiers": [
+        {
+          "stat": "physicalBonus",
+          "values": [
+            0.25
+          ]
+        }
+      ],
+      "support": {
+        "supported": true,
+        "reason": "造成的物理伤害提高25%。"
+      }
+    },
+    {
+      "pieces": 4,
+      "modifiers": [],
+      "support": {
+        "supported": false,
+        "reason": "效果未实现：击败敌人后的10秒内，施放重击时不消耗体力，且重击造成的伤害提升50%。"
+      }
+    }
+  ],
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/bloodstainedchivalry.json"
+  },
+  "rarity": 5
+}
