@@ -1,21 +1,8 @@
-import type { WorkbenchProject } from '@leyline/schema';
-import type { WorkbenchResult } from '@leyline/engine';
-
-export interface AxisRequest {
-  taskId: number;
-  session: number;
-  revision: number;
-  project: WorkbenchProject;
-}
-export interface AxisResponse {
-  taskId: number;
-  session: number;
-  revision: number;
-  result: WorkbenchResult;
-}
+import type { AxisRequest, AxisResponse, EvaluationResult } from '@leyline/schema';
+export type { AxisRequest, AxisResponse } from '@leyline/schema';
 
 /** The empty result deliberately carries no values from the preceding revision. */
-export function pendingAxisResult(): WorkbenchResult {
+export function pendingAxisResult(): EvaluationResult {
   return { status: 'partial', points: [], objectiveValue: null, totalValue: null, diagnostics: [], plan: null };
 }
 

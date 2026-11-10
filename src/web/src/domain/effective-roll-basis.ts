@@ -1,5 +1,5 @@
-import type {RealBuild} from '@leyline/schema';
-import defaults from './data/effective-roll-basis.json';
+import type {Build} from '@leyline/schema';
+import defaults from '../../generated/effective-roll-basis.json';
 
 export interface EffectiveRollBasis {
   hp:number;attack:number;defense:number;source:'build'|'default';
@@ -7,13 +7,13 @@ export interface EffectiveRollBasis {
 }
 export function defaultRollBasis():EffectiveRollBasis {return {...defaults.defaults,source:'default'};}
 /** White stats only: no artifact mains, bonuses, passives, teammates, or temporary buffs. */
-export function buildRollBasis(build?:Pick<RealBuild,'character'|'weapon'|'level'|'ascension'|'weaponLevel'|'weaponAscension'>):EffectiveRollBasis {
+export function buildRollBasis(build?:Pick<Build,'character'|'weapon'|'level'|'ascension'|'weaponLevel'|'weaponAscension'>):EffectiveRollBasis {
   if(!build)return defaultRollBasis();
-  const {character,weapon}=build,promotion=character.promotion[build.ascension],weaponPromotion=weapon.promotion[build.weaponAscension];
+  const {character,weapon}=build,promotion=character.progression.promotion[build.ascension],weaponPromotion=weapon.promotion[build.weaponAscension];
   if(!promotion || weaponPromotion===undefined)return defaultRollBasis();
-  const hp=character.base.hp*character.curves.hp[build.level]+promotion.hp;
-  const attack=character.base.attack*character.curves.attack[build.level]+promotion.attack+weapon.baseAttack*weapon.attackCurve[build.weaponLevel]+weaponPromotion;
-  const defense=character.base.defense*character.curves.defense[build.level]+promotion.defense;
+  const hp=character.attributes.base.hp*character.progression.curves.hp[build.level]+promotion.hp;
+  const attack=character.attributes.base.attack*character.progression.curves.attack[build.level]+promotion.attack+weapon.baseAttack*weapon.attackCurve[build.weaponLevel]+weaponPromotion;
+  const defense=character.attributes.base.defense*character.progression.curves.defense[build.level]+promotion.defense;
   if(![hp,attack,defense].every(value=>Number.isFinite(value) && value>0))return defaultRollBasis();
   return {hp,attack,defense,source:'build',characterId:character.id,weaponId:weapon.id,weaponName:weapon.name,level:build.level,weaponLevel:build.weaponLevel};
 }

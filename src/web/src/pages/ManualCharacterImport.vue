@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed,onMounted,ref } from 'vue';
-import { loadAccountGameData } from './domain/account-presentation';
-import { useUnsavedChanges } from './composables/use-unsaved-changes';
+import { loadAccountGameData } from '../domain/account-presentation';
+import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import CharacterForm from './CharacterForm.vue';
-import CatalogBrowser from './components/CatalogBrowser.vue';
-import ImportActions from './components/ImportActions.vue';
-import WorkbenchDialog from './components/WorkbenchDialog.vue';
-import UnsavedChangesDialog from './components/UnsavedChangesDialog.vue';
+import CatalogBrowser from '../components/CatalogBrowser.vue';
+import ImportActions from '../components/ImportActions.vue';
+import WorkbenchDialog from '../components/WorkbenchDialog.vue';
+import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
 const emit=defineEmits<{close:[];saved:[id:string]}>();
 const data=ref<Awaited<ReturnType<typeof loadAccountGameData>>>(),selected=ref(''),dirty=ref(false),error=ref(''),busy=ref(false),form=ref<InstanceType<typeof CharacterForm>>();
 const guard=useUnsavedChanges(dirty);
 onMounted(async()=>{try{data.value=await loadAccountGameData();}catch{error.value='角色目录加载失败，请重新打开。';}});
-const choices=computed(()=>data.value?.catalog.characters.filter(entry=>!['aether','lumine'].includes(entry.id)) ?? []);
+const choices=computed(()=>data.value?.catalog.characters.filter(entry=>!['aether','lumine','manekin','manekina'].includes(entry.id)) ?? []);
 function back(){guard.requestLeave(()=>{selected.value='';dirty.value=false;});}
 async function save(notify=true){if(!form.value?.canSave){error.value='请选择武器后再保存。';return false;}busy.value=true;try{return await form.value.apply(notify);}finally{busy.value=false;}}
 </script>

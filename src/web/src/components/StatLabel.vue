@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { RealStat } from '@leyline/schema';
+import type { StatKey } from '@leyline/schema';
 import { accountStatLabels } from '../domain/account-real';
 import GameIcon from './GameIcon.vue';
-const props = withDefaults(defineProps<{ stat: RealStat; iconOnly?: boolean; size?: number; short?:boolean }>(), { size:16 });
+const props = withDefaults(defineProps<{ stat: StatKey; iconOnly?: boolean; size?: number; short?:boolean }>(), { size:16 });
 const fullLabel = computed(() => accountStatLabels[props.stat].replace(/%$/, ''));
 const label = computed(() => props.short ? fullLabel.value.replace('元素伤害加成','伤').replace('物理伤害加成','物理伤') : fullLabel.value);
 const description = computed(() => `${fullLabel.value}${props.stat.endsWith('Percent') ? '（比例）' : ['hp', 'attack', 'defense'].includes(props.stat) ? '（固定）' : ''}`);

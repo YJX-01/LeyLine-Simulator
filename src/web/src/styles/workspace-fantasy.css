@@ -58,7 +58,7 @@
 
 .workspace-design .panel { background: var(--neutral-surface); border-color: var(--neutral-line); box-shadow: 0 3px 12px color-mix(in srgb,var(--neutral-ink) 2.75%,transparent), inset 0 0 0 3px color-mix(in srgb,var(--element-geo-light) 36.86%,transparent); }
 .workspace-design .panel:not(.timeline-main) { position: relative; }
-.workspace-design .panel:not(.timeline-main):not(.library-page)::after { content: ''; position: absolute; right: 7px; top: 7px; width: 25px; height: 25px; transform: rotate(90deg); background: var(--fantasy-gold); mask: url('../assets/ornaments/knot-corner.svg') center / contain no-repeat; opacity: .32; pointer-events: none; }
+.workspace-design .panel:not(.timeline-main):not(.library-page)::after { content: ''; position: absolute; right: 7px; top: 7px; width: 25px; height: 25px; transform: rotate(90deg); background: var(--fantasy-gold); mask: url('../../../../assets/ui/ornaments/knot-corner.svg') center / contain no-repeat; opacity: .32; pointer-events: none; }
 .workspace-design .muted, .workspace-design .library-note, .workspace-design .panel-heading p, .workspace-design .page-heading p { color: var(--neutral-muted); }
 .workspace-design .section-eyebrow, .workspace-design .context-label, .workspace-design .save-context { color: var(--neutral-muted); }
 .workspace-design .subtle-tag, .workspace-design .snapshot-tag { color: var(--neutral-muted); background: var(--element-pyro-light); border-color: var(--neutral-line); }
@@ -215,7 +215,7 @@
   .workspace-design .drawer-shade { background: color-mix(in srgb,var(--neutral-ink) 60.00%,transparent); }
 }
 
-/* U1: readable controls, task context and deliberate focus treatment. */
+/* Workspace: readable controls, task context and deliberate focus treatment. */
 .workspace-design { font-size:var(--font-body); }
 
 

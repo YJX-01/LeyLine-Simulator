@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { useAccountStore } from './stores/account';
-import { fetchEnka, enkaErrorLabel } from './platform/enka';
-import { previewEnkaImport, confirmEnkaImport, type EnkaPreview } from './domain/enka-import';
-import {useInventoryHistoryMerge} from './composables/use-inventory-history-merge';
-import ChoiceGroup from './components/ChoiceGroup.vue';
-import { cloneAccount } from './domain/account';
-import { planShowcaseInventory } from './domain/showcase-inventory';
-import CharacterEquipmentIcons from './components/CharacterEquipmentIcons.vue';
-import LibraryToolbar from './components/LibraryToolbar.vue';
+import { useAccountStore } from '../stores/account';
+import { fetchEnka, enkaErrorLabel } from '../platform/enka';
+import { previewEnkaImport, confirmEnkaImport, type EnkaPreview } from '../domain/enka-import';
+import {useInventoryHistoryMerge} from '../composables/use-inventory-history-merge';
+import ChoiceGroup from '../components/ChoiceGroup.vue';
+import { cloneAccount } from '../domain/account';
+import { planShowcaseInventory } from '../domain/showcase-inventory';
+import CharacterEquipmentIcons from '../components/CharacterEquipmentIcons.vue';
+import LibraryToolbar from '../components/LibraryToolbar.vue';
 const emit = defineEmits<{ close:[]; imported:[id:string] }>();
 const store=useAccountStore(); const uid=ref(store.account.uid ?? ''); const busy=ref(false); const error=ref(''); const preview=ref<EnkaPreview>(); const selected=ref<string[]>([]);
 const commitMergedInventory=useInventoryHistoryMerge();
@@ -45,7 +45,7 @@ defineExpose({confirm,confirmLabel,canConfirm,hasPreview:computed(()=>!!preview.
       <LibraryToolbar v-model="search" label="搜索展柜角色" placeholder="查找角色…" search-only><template #actions><button class="ui-action soft" data-accent="electro" data-size="md" :disabled="selected.length===preview.rows.length" @click="selectAll">全选</button><button class="ui-action soft" data-accent="electro" data-size="md" :disabled="!selected.length" @click="selected=[]">清空选择</button></template></LibraryToolbar>
       <ChoiceGroup :model-value="importArtifacts?'inventory':'snapshot'" :options="[{value:'snapshot',label:'仅保存展柜'},{value:'inventory',label:'同时导入本地库'}]" label="展柜圣遗物处理" tone="electro" @update:model-value="importArtifacts=$event==='inventory'" />
       <p v-if="importArtifacts && artifactPlan" role="status">圣遗物新增 {{ artifactPlan.added }} 件，匹配 {{ artifactPlan.matched }} 件。匹配包含副词条顺序，相同内容合并，优先保存展柜强化次数；穿戴关系保留。</p>
-      <div class="showcase-choices"><button v-for="row in visibleRows" :key="row.character.id" class="import-row" :class="{selected:selected.includes(row.character.id)}" :aria-label="`导入${row.character.name}`" :aria-pressed="selected.includes(row.character.id)" @click="toggleSelection(row.character.id)"><span class="showcase-portrait"><CharacterEquipmentIcons :build="row.character.realBuild" :name="row.character.name" :size="104" /><strong>{{ row.character.name }}</strong></span><span class="selection-symbol" aria-hidden="true"><svg v-if="selected.includes(row.character.id)" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg></span></button></div>
+      <div class="showcase-choices"><button v-for="row in visibleRows" :key="row.character.id" class="import-row" :class="{selected:selected.includes(row.character.id)}" :aria-label="`导入${row.character.name}`" :aria-pressed="selected.includes(row.character.id)" @click="toggleSelection(row.character.id)"><span class="showcase-portrait"><CharacterEquipmentIcons :build="row.character.build" :name="row.character.name" :size="104" /><strong>{{ row.character.name }}</strong></span><span class="selection-symbol" aria-hidden="true"><svg v-if="selected.includes(row.character.id)" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg></span></button></div>
       <p v-if="preview.rows.length && !visibleRows.length">没有匹配的角色。</p><p v-if="!preview.rows.length">没有可导入的角色，请核对展柜设置和以下提示。</p>
       <details v-if="preview.skipped.length" class="skipped-characters import-issues" open><summary>{{ preview.skipped.length }} 位角色暂不能导入</summary><p v-for="message in preview.skipped" :key="message" class="skip">{{ message }}</p></details>
     </template>

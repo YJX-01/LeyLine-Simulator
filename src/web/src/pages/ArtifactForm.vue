@@ -1,26 +1,26 @@
 <script setup lang="ts">
 import {computed,onMounted,ref,watch,useId} from 'vue';
-import {realArtifactSchema,type RealArtifact,type RealBuild,type RealStat} from '@leyline/schema';
-import {accountSlots,accountSlotLabels,type AccountArtifact,type LocalAccount} from './domain/account';
-import {accountMainStats,accountSubstats,ratioStat,validateAccountArtifact} from './domain/account-real';
-import {applyAccountArtifact,loadAccountGameData,artifactMainValue,formatGameStat} from './domain/account-presentation';
-import {useAccountStore} from './stores/account';
-import CatalogPicker from './components/CatalogPicker.vue';
+import {artifactItemSchema,type ArtifactItem,type Build,type StatKey} from '@leyline/schema';
+import {accountSlots,accountSlotLabels,type AccountArtifact,type LocalAccount} from '../domain/account';
+import {accountMainStats,accountSubstats,ratioStat,validateAccountArtifact} from '../domain/account-real';
+import {applyAccountArtifact,loadAccountGameData,artifactMainValue,formatGameStat} from '../domain/account-presentation';
+import {useAccountStore} from '../stores/account';
+import CatalogPicker from '../components/CatalogPicker.vue';
 import ArtifactSummary from './ArtifactSummary.vue';
-import CancelButton from './components/CancelButton.vue';
-import NumberStepper from './components/NumberStepper.vue';
-import StatPicker from './components/StatPicker.vue';
-import SingleSelectPicker from './components/SingleSelectPicker.vue';
-import {preferredUpgradeCounts,persistArtifactRolls,legalUpgradeHistories,cycleUpgradeHistory} from './domain/artifact-rolls';
+import CancelButton from '../components/CancelButton.vue';
+import NumberStepper from '../components/NumberStepper.vue';
+import StatPicker from '../components/StatPicker.vue';
+import SingleSelectPicker from '../components/SingleSelectPicker.vue';
+import {preferredUpgradeCounts,persistArtifactRolls,legalUpgradeHistories,cycleUpgradeHistory} from '../domain/artifact-rolls';
 const props=defineProps<{item?:AccountArtifact;inline?:boolean;targetAccount?:LocalAccount;details?:boolean}>();
 const emit=defineEmits<{close:[];dirtyChange:[dirty:boolean]}>(),store=useAccountStore(),levelInputId=useId(),originalAccount=props.targetAccount ?? store.account;
 const draft=ref<AccountArtifact>(props.item?JSON.parse(JSON.stringify(props.item)):{id:crypto.randomUUID(),name:'',slot:'flower',attack:0,real:{id:'',setId:'',slot:'flower',rarity:5,level:20,mainStat:'hp',substats:[]}});
 if(!draft.value.real)draft.value.real={id:draft.value.id,setId:'',slot:draft.value.slot,rarity:5,level:20,mainStat:accountMainStats[draft.value.slot][0],substats:[]};
-type Sub=RealArtifact['substats'][number];
+type Sub=ArtifactItem['substats'][number];
 const subSlots=ref<(Sub|undefined)[]>(Array.from({length:4},(_,index)=>draft.value.real!.substats[index]));
 const setPicker=ref<InstanceType<typeof CatalogPicker>>(),setInvalid=ref(false);
 watch(()=>draft.value.real?.setId,value=>{if(value)setInvalid.value=false;});
-const baseline=ref(JSON.stringify(draft.value)),sets=ref<{id:string;name:string;rarity:number}[]>([]),main=ref<RealBuild['artifactMain']>(),error=ref(''),preview=ref(false);
+const baseline=ref(JSON.stringify(draft.value)),sets=ref<{id:string;name:string;rarity:number}[]>([]),main=ref<Build['artifactMain']>(),error=ref(''),preview=ref(false);
 watch(()=>JSON.stringify(draft.value),value=>emit('dirtyChange',value!==baseline.value));
 const available=computed(()=>accountMainStats[draft.value.slot]),counts=computed(()=>preferredUpgradeCounts(draft.value.real!));
 const histories=computed(()=>legalUpgradeHistories(draft.value.real!));
@@ -28,7 +28,7 @@ function syncSubs(){draft.value.real!.substats=subSlots.value.filter((sub):sub i
 let resetting=false;
 function clearHistory(){for(const sub of subSlots.value)if(sub)delete sub.rolls;delete draft.value.rollSource;syncSubs();}
 watch([()=>draft.value.real!.level,()=>draft.value.real!.mainStat],()=>{if(!resetting)clearHistory();},{flush:'sync'});
-function selectSub(index:number,stat?:RealStat){subSlots.value[index]=stat?{stat,value:NaN}:undefined;clearHistory();}
+function selectSub(index:number,stat?:StatKey){subSlots.value[index]=stat?{stat,value:NaN}:undefined;clearHistory();}
 function value(index:number,event:Event){const sub=subSlots.value[index];if(!sub)return;const raw=(event.target as HTMLInputElement).value;sub.value=raw.trim()?Number(raw)/(ratioStat(sub.stat)?100:1):NaN;clearHistory();}
 function subIndex(index:number){return subSlots.value.slice(0,index).filter(Boolean).length;}
 function count(index:number){return subSlots.value[index]?counts.value[subIndex(index)]?.min:undefined;}
@@ -43,7 +43,7 @@ function prepare():AccountArtifact|undefined{
     syncSubs();if(!draft.value.real?.setId){setInvalid.value=true;error.value='';setPicker.value?.focus();return undefined;}if(!props.item){const set=sets.value.find(item=>item.id===draft.value.real!.setId);if(!set)throw new Error('套装目录尚未加载，请重新选择套装。');draft.value.name=`${set.name} · ${accountSlotLabels[draft.value.slot]}`;}
     if(props.item && (draft.value.name!==props.item.name || draft.value.slot!==props.item.slot || draft.value.real.setId!==props.item.real?.setId))throw new Error('名称、部位和套装属于实物身份，只能通过新建选择。');
     const alias=draft.value.alias?.trim();if(alias)draft.value.alias=alias;else delete draft.value.alias;
-    draft.value.real.id=draft.value.id;validateAccountArtifact(draft.value.real);draft.value.real=realArtifactSchema.parse(draft.value.real);persistArtifactRolls(draft.value);
+    draft.value.real.id=draft.value.id;validateAccountArtifact(draft.value.real);draft.value.real=artifactItemSchema.parse(draft.value.real);persistArtifactRolls(draft.value);
     subSlots.value=Array.from({length:4},(_,index)=>draft.value.real!.substats[index]);error.value='';return JSON.parse(JSON.stringify(draft.value));
   }catch(cause){error.value=cause instanceof Error && cause.name!=='ZodError'?cause.message:'请核对强化等级与词条数值。';return undefined;}
 }

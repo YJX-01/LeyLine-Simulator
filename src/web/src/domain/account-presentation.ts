@@ -1,24 +1,24 @@
-import { getArtifactMain, loadRealCatalog } from '@leyline/game-data/real';
-import type { RealBuild, RealStat } from '@leyline/schema';
+import { getArtifactMain, loadCatalog } from '@leyline/game-data';
+import type { Build, StatKey } from '@leyline/schema';
 import type { AccountArtifact, LocalAccount } from './account';
 import { parseAccount } from './account';
 import { ratioStat } from './account-real';
 
-type AccountGameData = { catalog: Awaited<ReturnType<typeof loadRealCatalog>>; main: RealBuild['artifactMain'] };
+type AccountGameData = { catalog: Awaited<ReturnType<typeof loadCatalog>>; main: Build['artifactMain'] };
 let gameData: Promise<AccountGameData> | undefined;
 export function loadAccountGameData(): Promise<AccountGameData> {
-  gameData ??= Promise.all([loadRealCatalog(), getArtifactMain()]).then(([catalog, main]) => ({ catalog, main })).catch(error => { gameData = undefined; throw error; });
+  gameData ??= Promise.all([loadCatalog(), getArtifactMain()]).then(([catalog, main]) => ({ catalog, main })).catch(error => { gameData = undefined; throw error; });
   return gameData;
 }
-export function artifactMainValue(item: AccountArtifact, main?: RealBuild['artifactMain']): number | undefined {
+export function artifactMainValue(item: AccountArtifact, main?: Build['artifactMain']): number | undefined {
   return item.real ? main?.[item.real.mainStat]?.[item.real.level] : item.attack;
 }
-export function formatGameStat(stat: RealStat, value: number | undefined, useGrouping = true): string {
+export function formatGameStat(stat: StatKey, value: number | undefined, useGrouping = true): string {
   if (value === undefined || !Number.isFinite(value)) return '—';
   const percent=ratioStat(stat);
   return `${(value*(percent?100:1)).toLocaleString('zh-CN',{useGrouping,minimumFractionDigits:percent?1:0,maximumFractionDigits:percent?1:0})}${percent?'%':''}`;
 }
-export function formatAccountStat(stat: RealStat, value: number | undefined, maximumFractionDigits = 1): string {
+export function formatAccountStat(stat: StatKey, value: number | undefined, maximumFractionDigits = 1): string {
   if (value === undefined || !Number.isFinite(value)) return '—';
   return `${(value * (ratioStat(stat) ? 100 : 1)).toLocaleString('zh-CN', { maximumFractionDigits })}${ratioStat(stat) ? '%' : ''}`;
 }

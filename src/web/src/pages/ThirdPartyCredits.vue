@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import CloseButton from './components/CloseButton.vue';
+import CloseButton from '../components/CloseButton.vue';
 type Dependency = { id:string; license:string; productionDependencyClosure:boolean; desktopRuntime:boolean; direct:Array<{ importer:string; group:string }>; modified:string[]; noticeStatus:string };
 type Source = { id:string; name:string; url:string | null; license:string; usage:string };
 const packages = ref<Dependency[]>([]);

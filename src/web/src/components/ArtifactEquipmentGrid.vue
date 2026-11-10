@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { RealStat } from '@leyline/schema';
+import type { StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountSlot, LocalAccount } from '../domain/account';
 import { accountSlotLabels } from '../domain/account';
-import ArtifactSummary from '../ArtifactSummary.vue';
+import ArtifactSummary from '../pages/ArtifactSummary.vue';
 import GameIcon from './GameIcon.vue';
-withDefaults(defineProps<{ density?:'relaxed'|'compact'; entries:{slot:AccountSlot;item?:AccountArtifact}[]; account?:LocalAccount; effectiveStats?:readonly RealStat[]; readonly?:boolean; popup?:boolean; contextMenu?:boolean; inspectPrimary?:boolean; busy?:boolean; wearers?:{name:string;id?:string;label?:string}[] }>(),{density:'relaxed'});
+withDefaults(defineProps<{ density?:'relaxed'|'compact'; entries:{slot:AccountSlot;item?:AccountArtifact}[]; account?:LocalAccount; effectiveStats?:readonly StatKey[]; readonly?:boolean; popup?:boolean; contextMenu?:boolean; inspectPrimary?:boolean; busy?:boolean; wearers?:{name:string;id?:string;label?:string}[] }>(),{density:'relaxed'});
 const emit=defineEmits<{ change:[slot:AccountSlot]; remove:[slot:AccountSlot]; inspect:[slot:AccountSlot]; menu:[slot:AccountSlot,event:MouseEvent|KeyboardEvent] }>();
 function keyboard(event:KeyboardEvent,slot:AccountSlot,enabled?:boolean){if(enabled && (event.key==='ContextMenu' || event.shiftKey && event.key==='F10')){event.preventDefault();emit('menu',slot,event);}}
 </script>

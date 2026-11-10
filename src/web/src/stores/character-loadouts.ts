@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { RealStat } from '@leyline/schema';
+import type { StatKey } from '@leyline/schema';
 import { effectiveStatOptions, defaultEffectiveStats, effectiveStatGroups } from '../domain/character-loadout-name';
 import { parseAccount, type AccountCharacter, type LocalAccount } from '../domain/account';
 
 export interface CharacterLoadout { id: string; name: string; accountId: string; characterId: string; snapshot: LocalAccount }
-const key = 'leyline-character-loadouts-v1';
+const key = 'leyline-character-loadouts-v2';
 export const useCharacterLoadoutsStore = defineStore('character-loadouts', () => {
   const loadouts = ref<CharacterLoadout[]>([]);
   const error = ref('');
@@ -24,18 +24,18 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     localStorage.setItem('leyline-character-favorites-v1',JSON.stringify(next));favorites.value=next;
   }
 
-  const effective = ref<Record<string,RealStat[]>>({});
+  const effective = ref<Record<string,StatKey[]>>({});
   try {
     const raw=JSON.parse(localStorage.getItem('leyline-effective-stats-v1') ?? '{}');
     if(raw && typeof raw==='object' && !Array.isArray(raw)) for(const [id,stats] of Object.entries(raw)) {
-      if(Array.isArray(stats) && stats.every(stat=>effectiveStatOptions.includes(stat))) effective.value[id]=[...new Set(stats)] as RealStat[];
+      if(Array.isArray(stats) && stats.every(stat=>effectiveStatOptions.includes(stat))) effective.value[id]=[...new Set(stats)] as StatKey[];
     }
   } catch { /* Invalid display preferences do not replace account data. */ }
   function effectiveStats(accountId:string,characterId:string,name='') {
     const selected=effective.value[`${accountId}/${characterId}`];
     return selected ? effectiveStatGroups.filter(group=>group.members.some(stat=>selected.includes(stat))).flatMap(group=>group.members) : defaultEffectiveStats(name);
   }
-  function setEffectiveStats(accountId:string,characterId:string,stats:RealStat[]) {
+  function setEffectiveStats(accountId:string,characterId:string,stats:StatKey[]) {
     const next={...effective.value,[`${accountId}/${characterId}`]:[...new Set(stats.filter(stat=>effectiveStatOptions.includes(stat)))]};
     localStorage.setItem('leyline-effective-stats-v1',JSON.stringify(next)); effective.value=next;
   }
@@ -95,13 +95,14 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
       const input = JSON.parse(raw);
       if (!Array.isArray(input) || input.length > 50) throw new Error();
       const ids = new Set<string>();
-      loadouts.value = input.map(entry => {
+      const next:CharacterLoadout[] = input.map(entry => {
         if (!entry || typeof entry.id !== 'string' || ids.has(entry.id) || typeof entry.name !== 'string' || !entry.name.trim() || entry.name.length > 160) throw new Error();
         ids.add(entry.id);
         const snapshot = parseAccount(entry.snapshot);
         if (snapshot.characters.length !== 1 || snapshot.id !== entry.accountId || snapshot.characters[0].id !== entry.characterId) throw new Error();
         return { id:entry.id, name:entry.name, accountId:entry.accountId, characterId:entry.characterId, snapshot };
       });
+      loadouts.value = next;
     }
   } catch { error.value = '角色配装方案无法读取，原始资料未覆盖。'; }
   function save(name: string, account: LocalAccount, character: AccountCharacter) {

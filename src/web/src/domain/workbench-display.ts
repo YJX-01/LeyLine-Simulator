@@ -1,4 +1,4 @@
-import type { WorkbenchProject } from '@leyline/schema';
+import type { Project } from '@leyline/schema';
 import { actorLabel, definitionLabel, nodeLabel, unitLabel, inputLabel, capabilityLabel, recordLabel } from './workbench-labels';
 
 export interface DamagePresentation {
@@ -9,7 +9,7 @@ export interface DamagePresentation {
 }
 
 /** Display the saved expression structure without evaluating combat rules. */
-export function formatWorkbenchExpression(project: WorkbenchProject, definitionId: string, rootId?: string): string {
+export function formatWorkbenchExpression(project: Project, definitionId: string, rootId?: string): string {
   const definition = project.definitions.find(entry => entry.id === definitionId);
   if (!definition) return '缺失定义';
   const root = rootId ?? definition.damage;
@@ -44,7 +44,7 @@ export function formatWorkbenchExpression(project: WorkbenchProject, definitionI
 }
 
 /** Resolve display labels from the selected record's own definition snapshot. */
-export function getDamagePresentation(project: WorkbenchProject, recordId: string): DamagePresentation {
+export function getDamagePresentation(project: Project, recordId: string): DamagePresentation {
   const record = project.timeline.find(entry => entry.id === recordId);
   if (!record) return { actorLabel: '未选择角色', definitionLabel: '未选择定义', rootLabel: '未指定公式', expression: '未选择记录' };
   const definition = project.definitions.find(entry => entry.id === record.definition);

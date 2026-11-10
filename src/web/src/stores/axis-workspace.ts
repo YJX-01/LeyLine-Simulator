@@ -1,18 +1,19 @@
+import { formatJson } from '@leyline/schema';
 import { defineStore } from 'pinia';
 import { computed, ref, shallowRef, watch, onScopeDispose } from 'vue';
-import { evaluateWorkbench } from '@leyline/engine';
-import { workbenchProjectSchema, type WorkbenchProject } from '@leyline/schema';
-import { createEmptyWorkbenchProject, importWorkbenchProject } from '../domain/workbench-project';
+import { evaluateTimeline } from '@leyline/engine';
+import { projectSchema, type Project } from '@leyline/schema';
+import { createEmptyProject, importProject } from '../domain/workbench-project';
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 import { matchesAxisTask, pendingAxisResult, type AxisRequest, type AxisResponse } from '../domain/axis-task';
 import { fileSignature } from '../domain/file-signature';
 
 const maxProjectBytes = 8 * 1024 * 1024;
-const recoveryKey = 'leyline-axis-recovery-v1';
+const recoveryKey = 'leyline-axis-recovery-v2';
 
 export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
-  const project = ref(createEmptyWorkbenchProject());
+  const project = ref(createEmptyProject());
   const savedSnapshot = ref<string | null>(null);
   const actorId = ref(project.value.candidate.actors[0]?.id ?? '');
   const selectedId = ref(project.value.timeline.find(record => record.kind === 'damage')?.id ?? '');
@@ -21,7 +22,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const busy = ref(false);
   const workerResult = shallowRef(pendingAxisResult());
   const workerEnabled = typeof Worker !== 'undefined';
-  const result = computed(() => workerEnabled ? workerResult.value : evaluateWorkbench(project.value));
+  const result = computed(() => workerEnabled ? workerResult.value : evaluateTimeline(project.value));
   const runState = ref('尚未计算');
   const recoveryAvailable = ref(false);
   const history = ref<string[]>([]);
@@ -56,7 +57,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       const request: AxisRequest = { taskId: ++taskId, session, revision, project: JSON.parse(JSON.stringify(project.value)) };
       currentRequest = request;
       try {
-        const active = new Worker(new URL('../axis.worker.ts', import.meta.url), { type: 'module' });
+        const active = new Worker(new URL('../workers/axis.worker.ts', import.meta.url), { type: 'module' });
         worker = active;
         active.onmessage = (event: MessageEvent<AxisResponse>) => {
           if (worker !== active || !currentRequest || !matchesAxisTask(event.data, currentRequest)) return;
@@ -87,9 +88,9 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
 
   function persistRecovery() {
     // Invalid editor drafts stay in memory; never overwrite the last recoverable input.
-    const parsed = workbenchProjectSchema.safeParse(project.value);
+    const parsed = projectSchema.safeParse(project.value);
     if (!parsed.success) return;
-    const content = JSON.stringify({ schemaVersion: 1, project: parsed.data, savedSnapshot: savedSnapshot.value });
+    const content = JSON.stringify({ schemaVersion: 2, project: parsed.data, savedSnapshot: savedSnapshot.value });
     if (new TextEncoder().encode(content).byteLength > maxProjectBytes) return;
     try {
       if (typeof localStorage === 'undefined') return;
@@ -119,7 +120,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   onScopeDispose(stopWorker);
 
   /** Groups a multi-field edit into a single reversible command. */
-  function command(edit: (draft: WorkbenchProject) => void) {
+  function command(edit: (draft: Project) => void) {
     const before = JSON.stringify(project.value);
     suppressHistory = true;
     try { edit(project.value); } finally { suppressHistory = false; }
@@ -160,12 +161,11 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       if (!content) return false;
       if (new TextEncoder().encode(content).byteLength > maxProjectBytes) throw new Error('恢复副本超过大小限制。');
       const input = JSON.parse(content);
-      if (input.schemaVersion !== 1) throw new Error('恢复副本版本无法识别。');
-      const next = workbenchProjectSchema.parse(input.project);
-      const previousSaved = typeof input.savedSnapshot === 'string' ? fileSignature(JSON.parse(input.savedSnapshot)) : null;
-      installProject(next);
-      savedSnapshot.value = previousSaved;
-      notice.value = '已恢复本地编辑副本，并重新计算；请保存项目文件。';
+      if (input.schemaVersion !== 2) throw new Error('恢复副本版本无法识别。');
+      const next = importProject(JSON.stringify(input.project));
+      const previousSaved=typeof input.savedSnapshot==='string'?fileSignature(JSON.parse(input.savedSnapshot)):null;
+      installProject(next);savedSnapshot.value=previousSaved;
+      notice.value='已恢复本地编辑副本，并重新计算；请保存项目文件。';
       return true;
     } catch {
       error.value = '恢复副本无法读取，当前项目保持不变。';
@@ -175,7 +175,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const dirty = computed(() => savedSnapshot.value === null || fileSignature(project.value) !== savedSnapshot.value);
   const actor = computed(() => project.value.candidate.actors.find(entry => entry.id === actorId.value));
 
-  function installProject(next: WorkbenchProject) {
+  function installProject(next: Project) {
     session++;
     suppressHistory = true;
     try { project.value = next; } finally { suppressHistory = false; }
@@ -190,22 +190,20 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   }
 
   function replaceProject(input: unknown): void {
-    const parsed = workbenchProjectSchema.safeParse(input);
+    const parsed = projectSchema.safeParse(input);
     if (!parsed.success) throw new Error(`项目格式无效：${parsed.error.issues.slice(0, 3).map(issue => `${issue.path.join('.')}: ${issue.message}`).join('；')}。当前项目保持不变。`);
-    const evaluated = evaluateWorkbench(parsed.data);
+    const evaluated = evaluateTimeline(parsed.data);
     if (evaluated.status === 'invalid') throw new Error(`项目引用或计算规则无效：${evaluated.diagnostics.slice(0, 3).map(issue => `${issue.path}: ${issue.message}`).join('；')}。当前项目保持不变。`);
     installProject(parsed.data);
     notice.value = '项目已打开，并已按保存的定义和规则版本重新计算。';
   }
 
-  function importContent(content: string): void {
-    const next = importWorkbenchProject(content);
-    installProject(next);
-    notice.value = '项目已打开，并已按保存的定义和规则版本重新计算。';
+  function importContent(content:string):void {
+    installProject(importProject(content));notice.value='项目已打开，并已按保存的定义和规则版本重新计算。';
   }
 
   function createProject(id: string = crypto.randomUUID(), preserveRecovery = false): void {
-    const next = createEmptyWorkbenchProject(id);
+    const next = createEmptyProject(id);
     installProject(next);
     savedSnapshot.value = null;
     notice.value = '已新建空轴，尚未保存。请先从账号选择队伍，再记录动作与伤害。';
@@ -215,14 +213,14 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   async function saveProject(): Promise<boolean> {
     if (busy.value) return false;
     error.value = '';
-    const parsed = workbenchProjectSchema.safeParse(project.value);
-    if (!parsed.success || evaluateWorkbench(parsed.data).status === 'invalid') {
+    const parsed = projectSchema.safeParse(project.value);
+    if (!parsed.success || evaluateTimeline(parsed.data).status === 'invalid') {
       error.value = '请先修正非法数值、引用或计算规则再保存；未知条件可以保留。';
       return false;
     }
     const snapshot = fileSignature(parsed.data);
     const savingSession = session;
-    const content = JSON.stringify(parsed.data, null, 2);
+    const content = formatJson(parsed.data);
     if (new TextEncoder().encode(content).byteLength > maxProjectBytes) {
       error.value = '项目超过 8 MiB，未写入文件。';
       return false;

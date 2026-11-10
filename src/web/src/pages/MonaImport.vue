@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { loadRealCatalog, getArtifactMain } from '@leyline/game-data/real';
-import { useAccountStore } from './stores/account';
-import { previewMonaImport, confirmMonaImport, type MonaImportPreview } from './domain/mona-import';
-import { artifactMainValue, formatGameStat } from './domain/account-presentation';
-import { localDataErrorLabel } from './domain/workbench-labels';
-import GameIcon from './components/GameIcon.vue';
-import StatLabel from './components/StatLabel.vue';
-import ChoiceGroup from './components/ChoiceGroup.vue';
-import LibraryPagination from './components/LibraryPagination.vue';
-import LibraryEmptyState from './components/LibraryEmptyState.vue';
+import { loadCatalog, getArtifactMain } from '@leyline/game-data';
+import { useAccountStore } from '../stores/account';
+import { previewMonaImport, confirmMonaImport, type MonaImportPreview } from '../domain/mona-import';
+import { artifactMainValue, formatGameStat } from '../domain/account-presentation';
+import { localDataErrorLabel } from '../domain/workbench-labels';
+import GameIcon from '../components/GameIcon.vue';
+import StatLabel from '../components/StatLabel.vue';
+import ChoiceGroup from '../components/ChoiceGroup.vue';
+import LibraryPagination from '../components/LibraryPagination.vue';
+import LibraryEmptyState from '../components/LibraryEmptyState.vue';
 const props=defineProps<{automatic?:boolean}>();
 const emit=defineEmits<{imported:[]}>();
 const store=useAccountStore();
@@ -59,7 +59,7 @@ async function inspect() {
   const generation=++revision,source=content.value,owner=store.account;
   busy.value=true;error.value='';preview.value=undefined;allowUpdates.value=false;
   try {
-    const [catalog,table]=await Promise.all([loadRealCatalog(),getArtifactMain()]);
+    const [catalog,table]=await Promise.all([loadCatalog(),getArtifactMain()]);
     const result=await previewMonaImport(source,owner,catalog.sets,table);
     if(generation!==revision)return;
     if(source!==content.value || owner!==store.account)throw new Error('文件或账号已变更，请重新预览。');

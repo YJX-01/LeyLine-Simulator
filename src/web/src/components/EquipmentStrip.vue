@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type {RealStat} from '@leyline/schema';
+import type {StatKey} from '@leyline/schema';
 import type { AccountArtifact, AccountSlot } from '../domain/account';
 import { accountSlotLabels } from '../domain/account';
-import ArtifactSummary from '../ArtifactSummary.vue';
+import ArtifactSummary from '../pages/ArtifactSummary.vue';
 import GameIcon from './GameIcon.vue';
-defineProps<{effectiveStats?:readonly RealStat[];entries:{slot:AccountSlot;item?:AccountArtifact}[]}>();
+defineProps<{effectiveStats?:readonly StatKey[];entries:{slot:AccountSlot;item?:AccountArtifact}[]}>();
 </script>
 <template>
   <div class="equipment-strip" aria-label="五部位装备摘要"><div class="equipment-strip-items" :class="{'with-leading':!!$slots.leading}">

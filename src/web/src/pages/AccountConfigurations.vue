@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import LibraryCornerOrnaments from './components/LibraryCornerOrnaments.vue';
+import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import {computed,ref,watch} from 'vue';
-import {useAccountStore} from './stores/account';
-import {useLibraryViewStore} from './stores/library-view';
-import {useLibraryScroll} from './composables/use-library-scroll';
-import CharacterSelectionDialog from './components/CharacterSelectionDialog.vue';
+import {useAccountStore} from '../stores/account';
+import {useLibraryViewStore} from '../stores/library-view';
+import {useLibraryScroll} from '../composables/use-library-scroll';
+import CharacterSelectionDialog from '../components/CharacterSelectionDialog.vue';
 import CharacterConfigurationList from './CharacterConfigurationList.vue';
 import ArtifactCombinationLibrary from './ArtifactCombinationLibrary.vue';
-import GameIcon from './components/GameIcon.vue';
+import GameIcon from '../components/GameIcon.vue';
 const combinations=ref<InstanceType<typeof ArtifactCombinationLibrary>>();
 defineExpose({requestLeave:(action:()=>void)=>combinations.value?combinations.value.requestLeave(action):action(),openCombination:(id:string)=>combinations.value?.openCombination(id)});
 const props=defineProps<{mode:'characters'|'artifacts'}>();
@@ -24,7 +24,7 @@ useLibraryScroll(()=>props.mode==='characters'?'configurations':'combinations');
   <section class="account-configurations panel library-page" :aria-label="mode==='characters'?'角色配置':'圣遗物组合'">
     <LibraryCornerOrnaments />
     <CharacterConfigurationList v-if="mode==='characters'" :character-id="view.characterId" @reset-role="selectCharacter('')" @select="(characterId,presetId)=>emit('edit',characterId,presetId)">
-      <template #actions><button class="ui-action soft configuration-character-filter library-primary-action" aria-label="筛选配置角色" @click="characterPickerOpen=true"><GameIcon v-if="selectedCharacter" kind="characters" :id="selectedCharacter.realBuild?.character.id" :name="selectedCharacter.name" :size="28" /><span>{{ selectedCharacter?.name ?? '全部角色' }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
+      <template #actions><button class="ui-action soft configuration-character-filter library-primary-action" aria-label="筛选配置角色" @click="characterPickerOpen=true"><GameIcon v-if="selectedCharacter" kind="characters" :id="selectedCharacter.build?.character.id" :name="selectedCharacter.name" :size="28" /><span>{{ selectedCharacter?.name ?? '全部角色' }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
     </CharacterConfigurationList>
     <ArtifactCombinationLibrary v-else ref="combinations" @closed="emit('detailClosed')" />
     <CharacterSelectionDialog v-if="characterPickerOpen" allow-all :selected-id="view.characterId" @close="characterPickerOpen=false" @select="selectCharacter" />

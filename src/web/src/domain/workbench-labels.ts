@@ -1,4 +1,4 @@
-import type { WorkbenchProject } from '@leyline/schema';
+import type { Project } from '@leyline/schema';
 
 const units: Record<string, string> = { scalar: '倍率', attack: '攻击力', damage: '伤害' };
 const operations: Record<string, string> = { attribute: '时刻属性读取', capture: '属性捕获', history: '历史累计与计数', constant: '常量', input: '输入属性', add: '相加', multiply: '相乘', divide: '相除', condition: '条件选择', unsupported: '尚未支持', 'game-damage': '真实技能伤害' };
@@ -10,43 +10,43 @@ export const diagnosticLabel = (value: string) => lookup(diagnostics, value, '�
 export const statusLabel = (value: string) => lookup({ complete: '已完整计算', partial: '部分待确认', invalid: '输入需修正' }, value, '状态待确认');
 export const capabilityLabel = (value: string) => lookup({ snapshot: '快照', history: '历史累计', probability: '概率' }, value, '未知机制');
 export const inputLabel = (value: string) => lookup({ attack: '攻击力', damageBonus: '伤害加成', triggered: '触发条件' }, value, value);
-export function definitionLabel(project: WorkbenchProject, id: string): string {
+export function definitionLabel(project: Project, id: string): string {
   const name = project.definitions.find(entry => entry.id === id)?.name;
   if (name) return name;
   const known: Record<string, string> = { 'synthetic-character': '示例角色定义', 'weapon-a': '武器甲 · 区间加成', 'weapon-b': '武器乙 · 无加成', 'ordinary-hit': '普通伤害公式' };
   const index = project.definitions.findIndex(entry => entry.id === id);
   return index < 0 ? '缺失定义' : lookup(known, id, `定义${index + 1}`);
 }
-export function actorLabel(project: WorkbenchProject, id: string): string {
+export function actorLabel(project: Project, id: string): string {
   const name = project.candidate.actors.find(entry => entry.id === id)?.name;
   if (name) return name;
   const index = project.candidate.actors.findIndex(entry => entry.id === id);
   return index < 0 ? '缺失角色' : id === 'actor' ? '示例角色' : `角色${index + 1}`;
 }
-export function recordLabel(project: WorkbenchProject, id: string): string {
+export function recordLabel(project: Project, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
   if (record.kind === 'action') { const definition = project.definitions.find(entry => entry.id === record.definition); if (definition?.name) return definition.name; }
-  if (record.realDamage) {
+  if (record.damage) {
     const actor = project.candidate.actors.find(entry => entry.id === record.actor);
-    const skill = actor?.realBuild?.character.skills.find(entry => entry.id === record.realDamage?.skillId);
-    return `${skill?.name ?? '真实技能'} · 第${record.realDamage.hitIndex + 1}段`;
+    const skill = actor?.build?.character.talents.find(entry => entry.id === record.damage?.skillId);
+    return `${skill?.name ?? '真实技能'} · 第${record.damage.hitIndex + 1}段`;
   }
   const index = project.timeline.filter(entry => entry.kind === record.kind).findIndex(entry => entry.id === id);
   return `${record.kind === 'damage' ? '命中' : '动作'}${index + 1}`;
 }
-export function nodeLabel(project: WorkbenchProject, definitionId: string, id: string | null | undefined): string {
+export function nodeLabel(project: Project, definitionId: string, id: string | null | undefined): string {
   if (!id) return '未指定公式';
   const nodes = project.definitions.find(entry => entry.id === definitionId)?.nodes ?? [];
   const index = nodes.findIndex(entry => entry.id === id);
   const known: Record<string, string> = { attack: '攻击力', multiplier: '倍率', base: '基础伤害', bonus: '伤害加成' };
   return index < 0 ? '缺失节点' : lookup(known, id, `节点${index + 1}`);
 }
-export function effectLabel(project: WorkbenchProject, definitionId: string, id: string): string {
+export function effectLabel(project: Project, definitionId: string, id: string): string {
   const index = project.definitions.find(entry => entry.id === definitionId)?.effects.findIndex(entry => entry.id === id) ?? -1;
   return index < 0 ? '缺失效果' : id === 'opening-bonus' ? '开场伤害加成' : `效果${index + 1}`;
 }
-export const projectLabel = (project: WorkbenchProject) => project.name ?? (project.id === 'ordinary-example' ? '普通伤害示例轴' : '未命名轴项目');
+export const projectLabel = (project: Project) => project.name ?? (project.id === 'ordinary-example' ? '普通伤害示例轴' : '未命名轴项目');
 export const errorLabel = (message: string) => message.includes('JSON') ? '项目文件格式无法识别，请检查后重试。' : '操作未完成，请检查项目文件与计算规则。';
 
 export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(message) ? message : '资料操作未完成，请检查文件或存储位置后重试。';

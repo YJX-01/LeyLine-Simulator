@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import {buildRollBasis,defaultRollBasis,rollBasisTitle,type EffectiveRollBasis} from './domain/effective-roll-basis';
+import {buildRollBasis,defaultRollBasis,rollBasisTitle,type EffectiveRollBasis} from '../domain/effective-roll-basis';
 import { computed, ref, onMounted } from 'vue';
-import type { AccountArtifact, AccountSlot } from './domain/account';
-import { accountSlots, accountSlotLabels, cloneAccount } from './domain/account';
-import type { RealStat } from '@leyline/schema';
-import { defaultCombinationName, combinationName, usesAutomaticCombinationName, type ArtifactCombination } from './domain/artifact-combinations';
-import { defaultEffectiveStats, effectiveStatGroups } from './domain/character-loadout-name';
-import { loadAccountGameData } from './domain/account-presentation';
-import { useAccountStore } from './stores/account';
-import { useCharacterLoadoutsStore } from './stores/character-loadouts';
-import { useArtifactCombinationsStore } from './stores/artifact-combinations';
-import { useUnsavedChanges } from './composables/use-unsaved-changes';
-import WorkbenchDialog from './components/WorkbenchDialog.vue';
-import EditorActions from './components/EditorActions.vue';
-import FavoriteControl from './components/FavoriteControl.vue';
-import ArtifactEquipmentGrid from './components/ArtifactEquipmentGrid.vue';
-import EffectiveRollSummary from './components/EffectiveRollSummary.vue';
-import EffectiveReferencePicker from './components/EffectiveReferencePicker.vue';
-import ConfirmationDialog from './components/ConfirmationDialog.vue';
-import UnsavedChangesDialog from './components/UnsavedChangesDialog.vue';
-import ComparisonPanel from './components/ComparisonPanel.vue';
+import type { AccountArtifact, AccountSlot } from '../domain/account';
+import { accountSlots, accountSlotLabels, cloneAccount } from '../domain/account';
+import type { StatKey } from '@leyline/schema';
+import { defaultCombinationName, combinationName, usesAutomaticCombinationName, type ArtifactCombination } from '../domain/artifact-combinations';
+import { defaultEffectiveStats, effectiveStatGroups } from '../domain/character-loadout-name';
+import { loadAccountGameData } from '../domain/account-presentation';
+import { useAccountStore } from '../stores/account';
+import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
+import { useArtifactCombinationsStore } from '../stores/artifact-combinations';
+import { useUnsavedChanges } from '../composables/use-unsaved-changes';
+import WorkbenchDialog from '../components/WorkbenchDialog.vue';
+import EditorActions from '../components/EditorActions.vue';
+import FavoriteControl from '../components/FavoriteControl.vue';
+import ArtifactEquipmentGrid from '../components/ArtifactEquipmentGrid.vue';
+import EffectiveRollSummary from '../components/EffectiveRollSummary.vue';
+import EffectiveReferencePicker from '../components/EffectiveReferencePicker.vue';
+import ConfirmationDialog from '../components/ConfirmationDialog.vue';
+import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
+import ComparisonPanel from '../components/ComparisonPanel.vue';
 import ArtifactDetail from './ArtifactDetail.vue';
-import ContextMenu from './components/ContextMenu.vue';
-import ArtifactPickerDialog from './components/ArtifactPickerDialog.vue';
-const props=defineProps<{combination?:ArtifactCombination;seed?:{items:AccountArtifact[];stats:RealStat[];referenceName:string;name?:string;basis?:EffectiveRollBasis};pendingArtifacts?:AccountArtifact[]}>();
+import ContextMenu from '../components/ContextMenu.vue';
+import ArtifactPickerDialog from '../components/ArtifactPickerDialog.vue';
+const props=defineProps<{combination?:ArtifactCombination;seed?:{items:AccountArtifact[];stats:StatKey[];referenceName:string;name?:string;basis?:EffectiveRollBasis};pendingArtifacts?:AccountArtifact[]}>();
 const emit=defineEmits<{close:[];saved:[id:string,duplicate:boolean]}>();
 const account=useAccountStore(),combinations=useArtifactCombinationsStore(),loadouts=useCharacterLoadoutsStore();
 const owner=account.account.id,inventoryBaseline=JSON.stringify(account.account);
@@ -50,8 +50,8 @@ const favorite=computed(()=>combinations.combinations.find(item=>item.id===props
 function setFavorite(value:number){try{if(props.combination)combinations.setFavorite(owner,props.combination.id,value);error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'收藏未保存。';}}
 function close(){guard.requestLeave(()=>emit('close'));}
 function restore(){draft.value=JSON.parse(baseline);error.value='';}
-function chooseReference(name:string){draft.value.referenceName=name;const character=account.account.characters.find(item=>item.name===name);if(name)draft.value.stats=character?loadouts.effectiveStats(owner,character.id,name):defaultEffectiveStats(name);draft.value.basis=buildRollBasis(character?.realBuild);}
-function toggle(stat:RealStat){const group=effectiveStatGroups.find(item=>item.stat===stat)!;draft.value.stats=group.members.some(item=>draft.value.stats.includes(item))?draft.value.stats.filter(item=>!group.members.includes(item)):[...draft.value.stats,...group.members];}
+function chooseReference(name:string){draft.value.referenceName=name;const character=account.account.characters.find(item=>item.name===name);if(name)draft.value.stats=character?loadouts.effectiveStats(owner,character.id,name):defaultEffectiveStats(name);draft.value.basis=buildRollBasis(character?.build);}
+function toggle(stat:StatKey){const group=effectiveStatGroups.find(item=>item.stat===stat)!;draft.value.stats=group.members.some(item=>draft.value.stats.includes(item))?draft.value.stats.filter(item=>!group.members.includes(item)):[...draft.value.stats,...group.members];}
 function save(confirmed=false,copy=false){
   try{
     error.value='';

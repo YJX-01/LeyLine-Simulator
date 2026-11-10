@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {ref} from 'vue';
-import type {RealStat} from '@leyline/schema';
+import type {StatKey} from '@leyline/schema';
 import type {AccountArtifact,AccountSlot,LocalAccount} from '../domain/account';
 import {accountSlotLabels} from '../domain/account';
 import WorkbenchDialog from './WorkbenchDialog.vue';
-import ArtifactBrowser from '../ArtifactBrowser.vue';
-defineProps<{slot:AccountSlot;account:LocalAccount;current?:AccountArtifact;effectiveStats?:readonly RealStat[]}>();
+import ArtifactBrowser from '../pages/ArtifactBrowser.vue';
+defineProps<{slot:AccountSlot;account:LocalAccount;current?:AccountArtifact;effectiveStats?:readonly StatKey[]}>();
 const emit=defineEmits<{close:[];select:[item:AccountArtifact];remove:[]}>();
 const browser=ref<InstanceType<typeof ArtifactBrowser>>();
 function close(){if(browser.value)browser.value.requestLeave(()=>emit('close'));else emit('close');}

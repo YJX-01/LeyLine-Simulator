@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import {buildRollBasis} from './domain/effective-roll-basis';
+import {buildRollBasis} from '../domain/effective-roll-basis';
 import { computed, onMounted, ref, watch, nextTick } from 'vue';
-import { useAccountStore } from './stores/account';
-import { useCharacterLoadoutsStore } from './stores/character-loadouts';
-import { accountConfigurations, preparePreferredConfiguration, localConfigurationComplete, type AccountConfiguration } from './domain/account-configurations';
-import { accountSlots } from './domain/account';
-import { characterLoadoutName,equipmentConfigurationName } from './domain/character-loadout-name';
-import { loadAccountGameData } from './domain/account-presentation';
-import GameIcon from './components/GameIcon.vue';
-import LibraryToolbar from './components/LibraryToolbar.vue';
-import WorkbenchDialog from './components/WorkbenchDialog.vue';
-import ChoiceGroup from './components/ChoiceGroup.vue';
-import FilterPanel from './components/FilterPanel.vue';
-import SortPanel from './components/SortPanel.vue';
-import FilterActions from './components/FilterActions.vue';
-import LibraryPagination from './components/LibraryPagination.vue';
-import LibraryListHeader from './components/LibraryListHeader.vue';
-import ConfigurationTitle from './components/ConfigurationTitle.vue';
-import ContextMenu from './components/ContextMenu.vue';
-import EffectiveRollSummary from './components/EffectiveRollSummary.vue';
-import {useLibraryViewStore} from './stores/library-view';
-import {effectiveTotal} from './domain/artifact-combinations';
-import {hasLocalConfiguration,planConfigurationRemoval} from './domain/account-configurations';
-import ConfirmationDialog from './components/ConfirmationDialog.vue';
-import WeaponPlaceholder from './components/WeaponPlaceholder.vue';
-import EquipmentStrip from './components/EquipmentStrip.vue';
-import { configurationSignature } from './domain/character-loadout-name';
+import { useAccountStore } from '../stores/account';
+import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
+import { accountConfigurations, preparePreferredConfiguration, localConfigurationComplete, type AccountConfiguration } from '../domain/account-configurations';
+import { accountSlots } from '../domain/account';
+import { characterLoadoutName,equipmentConfigurationName } from '../domain/character-loadout-name';
+import { loadAccountGameData } from '../domain/account-presentation';
+import GameIcon from '../components/GameIcon.vue';
+import LibraryToolbar from '../components/LibraryToolbar.vue';
+import WorkbenchDialog from '../components/WorkbenchDialog.vue';
+import ChoiceGroup from '../components/ChoiceGroup.vue';
+import FilterPanel from '../components/FilterPanel.vue';
+import SortPanel from '../components/SortPanel.vue';
+import FilterActions from '../components/FilterActions.vue';
+import LibraryPagination from '../components/LibraryPagination.vue';
+import LibraryListHeader from '../components/LibraryListHeader.vue';
+import ConfigurationTitle from '../components/ConfigurationTitle.vue';
+import ContextMenu from '../components/ContextMenu.vue';
+import EffectiveRollSummary from '../components/EffectiveRollSummary.vue';
+import {useLibraryViewStore} from '../stores/library-view';
+import {effectiveTotal} from '../domain/artifact-combinations';
+import {hasLocalConfiguration,planConfigurationRemoval} from '../domain/account-configurations';
+import ConfirmationDialog from '../components/ConfirmationDialog.vue';
+import WeaponPlaceholder from '../components/WeaponPlaceholder.vue';
+import EquipmentStrip from '../components/EquipmentStrip.vue';
+import { configurationSignature } from '../domain/character-loadout-name';
 const props=defineProps<{characterId?:string;selectable?:boolean;currentPresetId?:string;beforeAdopt?:(action:()=>void)=>void}>();
 const emit=defineEmits<{select:[characterId:string,presetId:string];adopted:[];deleted:[characterId:string,presetId:string];resetRole:[]}>();
 const account=useAccountStore(),loadouts=useCharacterLoadoutsStore();
@@ -65,8 +65,8 @@ const presentations=computed(()=>{
     const entries=accountSlots.map(slot=>({slot,item:index!.get(configuration.character.equipment[slot] ?? '')}));
     const items=entries.flatMap(entry=>entry.item?[entry.item]:[]);
     let selected=masks.get(configuration.character.id);if(!selected){selected=loadouts.effectiveStats(account.account.id,configuration.character.id,configuration.character.name);masks.set(configuration.character.id,selected);}
-    const basis=buildRollBasis(configuration.character.realBuild),total=effectiveTotal(items,selected,basis) ?? -1;
-    const label=equipmentConfigurationName(configuration.character.name,items,selected,data.value?.catalog.sets ?? [],basis,configuration.character.realBuild?.weapon.name ?? '未配武器',Math.max(0,total)).split(' · ').slice(1).join('|');
+    const basis=buildRollBasis(configuration.character.build),total=effectiveTotal(items,selected,basis) ?? -1;
+    const label=equipmentConfigurationName(configuration.character.name,items,selected,data.value?.catalog.sets ?? [],basis,configuration.character.build?.weapon.name ?? '未配武器',Math.max(0,total)).split(' · ').slice(1).join('|');
     return [configuration.id,{entries,items,stats:selected,basis,total,name:label}] as const;
   }));
 });
@@ -98,8 +98,8 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
     <p v-if="error || loadouts.error" role="alert">{{ error || loadouts.error }}</p><p v-if="notice" role="status">{{ notice }}</p>
     <LibraryListHeader v-model:page="page" :pages="pages" :count="configurations.length" :total="allConfigurations.length" unit="套配置" />
     <article v-for="configuration in visible" :key="configuration.id" class="configuration-row" :class="{current:selectable && currentPresetId===configuration.presetId}" :data-preset-id="configuration.presetId" :data-configuration-id="configuration.id" @contextmenu.prevent="openMenu($event,configuration)">
-      <div class="configuration-top"><div class="configuration-heading"><ConfigurationTitle :character-name="configuration.character.name" :name="name(configuration)" :preferred="!configuration.presetId" :current="selectable && currentPresetId===configuration.presetId" /><span v-if="configuration.character.realBuild" class="configuration-cultivation">{{ configuration.character.realBuild.level }}级 · {{ configuration.character.realBuild.constellation }}命 · 天赋 {{ configuration.character.realBuild.talents.normal }}/{{ configuration.character.realBuild.talents.skill }}/{{ configuration.character.realBuild.talents.burst }} · 武器 {{ configuration.character.realBuild.weaponLevel }}级 · 精炼{{ configuration.character.realBuild.refinement }}</span><span v-else class="configuration-cultivation">培养资料缺失 · 未配置武器</span></div><button v-if="selectable && configuration.presetId" class="ui-action soft configuration-prefer" data-size="md" :aria-label="`设${configuration.character.name}此配置为首选`" @click="requestPreferred(configuration)">设为首选</button></div>
-      <EquipmentStrip :effective-stats="stats(configuration)" :entries="entries(configuration)"><template #leading><GameIcon kind="characters" :id="configuration.character.realBuild?.character.id" :name="configuration.character.name" :size="64" :level="configuration.character.realBuild?.level" :constellation="configuration.character.realBuild?.constellation" /><GameIcon v-if="configuration.character.realBuild" kind="weapons" :id="configuration.character.realBuild.weapon.id" :name="configuration.character.realBuild.weapon.name" :size="64" :level="configuration.character.realBuild.weaponLevel" :refinement="configuration.character.realBuild.refinement" /><WeaponPlaceholder v-else :size="64" /></template></EquipmentStrip>
+      <div class="configuration-top"><div class="configuration-heading"><ConfigurationTitle :character-name="configuration.character.name" :name="name(configuration)" :preferred="!configuration.presetId" :current="selectable && currentPresetId===configuration.presetId" /><span v-if="configuration.character.build" class="configuration-cultivation">{{ configuration.character.build.level }}级 · {{ configuration.character.build.constellation }}命 · 天赋 {{ configuration.character.build.talents.normal }}/{{ configuration.character.build.talents.skill }}/{{ configuration.character.build.talents.burst }} · 武器 {{ configuration.character.build.weaponLevel }}级 · 精炼{{ configuration.character.build.refinement }}</span><span v-else class="configuration-cultivation">培养资料缺失 · 未配置武器</span></div><button v-if="selectable && configuration.presetId" class="ui-action soft configuration-prefer" data-size="md" :aria-label="`设${configuration.character.name}此配置为首选`" @click="requestPreferred(configuration)">设为首选</button></div>
+      <EquipmentStrip :effective-stats="stats(configuration)" :entries="entries(configuration)"><template #leading><GameIcon kind="characters" :id="configuration.character.build?.character.id" :name="configuration.character.name" :size="64" :level="configuration.character.build?.level" :constellation="configuration.character.build?.constellation" /><GameIcon v-if="configuration.character.build" kind="weapons" :id="configuration.character.build.weapon.id" :name="configuration.character.build.weapon.name" :size="64" :level="configuration.character.build.weaponLevel" :refinement="configuration.character.build.refinement" /><WeaponPlaceholder v-else :size="64" /></template></EquipmentStrip>
       <EffectiveRollSummary inline :basis="presentations.get(configuration.id)!.basis" :items="pieces(configuration)" :selected-stats="stats(configuration)" />
       <button class="configuration-open" :aria-label="`${selectable?'选择':'查看'}${configuration.character.name}${configuration.presetId?'备选':'首选'}配置`" :disabled="selectable && currentPresetId===configuration.presetId" @click="open(configuration)" @keydown="menuKey($event,configuration)"></button>
     </article>

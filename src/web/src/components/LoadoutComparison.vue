@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {buildRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
 import { computed, ref, watch } from 'vue';
-import type { RealBuild, RealStat } from '@leyline/schema';
+import type { Build, StatKey } from '@leyline/schema';
 import type { AccountArtifact, LocalAccount } from '../domain/account';
 import { accountSlots, accountSlotLabels } from '../domain/account';
 import { effectiveRollBreakdown, defaultEffectiveStats } from '../domain/character-loadout-name';
@@ -10,8 +10,8 @@ import WorkbenchDialog from './WorkbenchDialog.vue';
 import EffectiveReferencePicker from './EffectiveReferencePicker.vue';
 import { useAccountStore } from '../stores/account';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
-import ArtifactSummary from '../ArtifactSummary.vue';
-const props=defineProps<{sides:{title:string;items:AccountArtifact[];build?:RealBuild;account?:LocalAccount;basis?:EffectiveRollBasis}[];stats:RealStat[];referenceName?:string;inline?:boolean}>();
+import ArtifactSummary from '../pages/ArtifactSummary.vue';
+const props=defineProps<{sides:{title:string;items:AccountArtifact[];build?:Build;account?:LocalAccount;basis?:EffectiveRollBasis}[];stats:StatKey[];referenceName?:string;inline?:boolean}>();
 const emit=defineEmits<{close:[]}>();
 const account=useAccountStore(),loadouts=useCharacterLoadoutsStore();
 function chooseReference(name:string){reference.value=name;const character=account.account.characters.find(item=>item.name===name);selected.value=character?loadouts.effectiveStats(account.account.id,character.id,name):defaultEffectiveStats(name);}

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { WorkbenchNode, WorkbenchUnit } from '@leyline/schema';
-import { useAxisWorkspaceStore } from './stores/axis-workspace';
-import { useDefinitionLibraryStore } from './stores/definition-library';
-import { cloneDefinition, copyDefinitionToProject, createDefinition } from './domain/definition-library';
-import { localDataErrorLabel, definitionLabel, operationLabel, unitLabel, capabilityLabel, inputLabel } from './domain/workbench-labels';
+import CharacterDefinitionEditor from './CharacterDefinitionEditor.vue';
+import type { ExpressionNode, QuantityUnit } from '@leyline/schema';
+import { useAxisWorkspaceStore } from '../stores/axis-workspace';
+import { useDefinitionLibraryStore } from '../stores/definition-library';
+import { cloneDefinition, copyDefinitionToProject, createDefinition } from '../domain/definition-library';
+import { localDataErrorLabel, definitionLabel, operationLabel, unitLabel, capabilityLabel, inputLabel } from '../domain/workbench-labels';
 
 const workspace = useAxisWorkspaceStore();
 const store = useDefinitionLibraryStore();
@@ -14,9 +15,9 @@ const selectedId = ref('');
 const selected = computed(() => store.library.definitions.find(entry => entry.id === selectedId.value));
 const error = ref('');
 const fileInput = ref<HTMLInputElement>();
-const operations: WorkbenchNode['op'][] = ['constant', 'input', 'add', 'multiply', 'divide', 'condition', 'unsupported'];
-const units: WorkbenchUnit[] = ['scalar', 'attack', 'damage'];
-const op = ref<WorkbenchNode['op']>('constant');
+const operations: ExpressionNode['op'][] = ['constant', 'input', 'add', 'multiply', 'divide', 'condition', 'unsupported'];
+const units: QuantityUnit[] = ['scalar', 'attack', 'damage'];
+const op = ref<ExpressionNode['op']>('constant');
 function create() {
   const definition = createDefinition(name.value, kind.value);
   store.library.definitions.push(definition);
@@ -28,7 +29,7 @@ function addNode() {
   const id = crypto.randomUUID();
   const first = definition.nodes[0]?.id ?? id;
   const operation = op.value;
-  const node: WorkbenchNode = operation === 'constant' ? { id, op: operation, quantity: { value: 1, unit: 'scalar' } }
+  const node: ExpressionNode = operation === 'constant' ? { id, op: operation, quantity: { value: 1, unit: 'scalar' } }
     : operation === 'input' ? { id, op: operation, key: 'attack', unit: 'attack' }
     : operation === 'condition' ? { id, op: operation, key: '触发条件', yes: first, no: first }
     : operation === 'unsupported' ? { id, op: operation, capability: 'snapshot' }
@@ -82,6 +83,7 @@ function conditionName(previous: string, event: Event) {
 </script>
 <template>
   <section class="independent-library" aria-label="独立内容定义库">
+    <CharacterDefinitionEditor />
     <div class="library-actions"><h2>独立内容定义库</h2><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="open">打开定义库</button><button class="ui-action soft" data-accent="anemo" :disabled="store.busy" @click="store.save()">保存定义库</button><span>{{ store.dirty ? '定义库有未保存修改' : '定义库已保存' }}</span></div>
     <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入内容定义库文件" hidden @change="importFile">
     <p role="status">{{ store.notice }}</p><div v-if="store.error || error" role="alert">{{ localDataErrorLabel(store.error || error) }}<details><summary>技术详情</summary>{{ store.error || error }}</details></div>

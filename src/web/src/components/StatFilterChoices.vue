@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { RealStat } from '@leyline/schema';
+import type { StatKey } from '@leyline/schema';
 import StatLabel from './StatLabel.vue';
 defineProps<{modelValue:string[];label:string;options:{stat:string;label:string}[]}>();
-function iconStat(stat:string):RealStat { return ({hp:'hpPercent',attack:'attackPercent',defense:'defensePercent'}[stat] ?? stat) as RealStat; }
+function iconStat(stat:string):StatKey { return ({hp:'hpPercent',attack:'attackPercent',defense:'defensePercent'}[stat] ?? stat) as StatKey; }
 const emit=defineEmits<{'update:modelValue':[value:string[]]}>();
 </script>
 <template><div class="stat-filter-choices" role="group" :aria-label="label"><button :aria-pressed="!modelValue.length" @click="emit('update:modelValue',[])">全部</button><button v-for="option in options" :key="option.stat" :aria-label="option.label" :aria-pressed="modelValue.includes(option.stat)" @click="emit('update:modelValue',modelValue.includes(option.stat)?modelValue.filter(value=>value!==option.stat):[...modelValue,option.stat])"><StatLabel :stat="iconStat(option.stat)" icon-only /><span>{{ option.label }}</span></button></div></template>

@@ -1,18 +1,18 @@
 import {persistArtifactRolls} from './artifact-rolls';
-import { realArtifactSchema, type RealStat } from '@leyline/schema';
+import { artifactItemSchema, type StatKey } from '@leyline/schema';
 import { accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountSlot, type LocalAccount } from './account';
 import { accountMainStats, validateAccountArtifact } from './account-real';
 
 const slotMap = { flower: 'flower', feather: 'plume', plume: 'plume', sand: 'sands', sands: 'sands', cup: 'goblet', goblet: 'goblet', head: 'circlet', circlet: 'circlet' } as const;
 const groups = ['flower', 'feather', 'sand', 'cup', 'head'] as const;
 const aliases: Record<string, string> = { feather: 'plume', sand: 'sands', cup: 'goblet', head: 'circlet' };
-const statMap: Record<string, RealStat> = { lifeStatic: 'hp', lifePercentage: 'hpPercent', attackStatic: 'attack', attackPercentage: 'attackPercent', defendStatic: 'defense', defendPercentage: 'defensePercent', critical: 'critRate', criticalDamage: 'critDamage', recharge: 'energyRecharge', elementalMastery: 'elementalMastery', windBonus: 'anemoBonus', rockBonus: 'geoBonus', thunderBonus: 'electroBonus', waterBonus: 'hydroBonus', fireBonus: 'pyroBonus', iceBonus: 'cryoBonus', dendroBonus: 'dendroBonus', physicalBonus: 'physicalBonus', cureEffect: 'healingBonus' };
+const statMap: Record<string, StatKey> = { lifeStatic: 'hp', lifePercentage: 'hpPercent', attackStatic: 'attack', attackPercentage: 'attackPercent', defendStatic: 'defense', defendPercentage: 'defensePercent', critical: 'critRate', criticalDamage: 'critDamage', recharge: 'energyRecharge', elementalMastery: 'elementalMastery', windBonus: 'anemoBonus', rockBonus: 'geoBonus', thunderBonus: 'electroBonus', waterBonus: 'hydroBonus', fireBonus: 'pyroBonus', iceBonus: 'cryoBonus', dendroBonus: 'dendroBonus', physicalBonus: 'physicalBonus', cureEffect: 'healingBonus' };
 // Identity mapping captured from TwiceDrop Mona 7.2.02, matched by exact Chinese catalog names.
-import monaSetAliases from './data/mona-set-aliases.json';
+import monaSetAliases from '../../generated/mona-set-aliases.json';
 const setAliases: Record<string, string> = monaSetAliases;
 
 type SetEntry = { id: string; name: string };
-type MainTable = Record<RealStat, number[]>;
+type MainTable = Record<StatKey, number[]>;
 function realContent(item: AccountArtifact['real']): string {
   return JSON.stringify(item && { id: item.id, setId: item.setId, slot: item.slot, rarity: item.rarity, level: item.level, mainStat: item.mainStat, substats: item.substats.map(({stat,value})=>({stat,value})) });
 }
@@ -31,10 +31,13 @@ export async function previewMonaSetRepairs(account: LocalAccount, sets: SetEntr
     if (!set) { preview.skipped.push(`${name}：仍没有经过核对的套装映射。`); continue; }
     const snapshot = JSON.stringify(item);
     const content = { setId: item.real.setId, slot: item.real.slot, level: item.real.level, main: { stat: item.real.mainStat, value: item.mona.mainValue }, substats: item.real.substats };
-    if (await digest(JSON.stringify(content)) !== item.real.source.fingerprint) {
+    const rawContent = { ...content, substats: content.substats.map(({ stat, value }) => ({ stat, value })) };
+    // Import identities cover scanned values, before local enhancement-roll inference.
+    // Accept the historical repair fingerprint too, while preserving edit detection.
+    if (await digest(JSON.stringify(rawContent)) !== item.real.source.fingerprint && await digest(JSON.stringify(content)) !== item.real.source.fingerprint) {
       preview.skipped.push(`${item.name}：导入后词条已修改，请保留现有物品并核对原文件。`); continue;
     }
-    const fingerprint = await digest(JSON.stringify({ ...content, setId: set.id }));
+    const fingerprint = await digest(JSON.stringify({ ...rawContent, setId: set.id }));
     const originalName = `${name}（套装待核对） · ${accountSlotLabels[item.slot]}`;
     preview.updates.push({ before: snapshot, item: { ...item,
       name: item.name === originalName ? `${set.name} · ${accountSlotLabels[item.slot]}` : item.name,
@@ -46,7 +49,7 @@ async function digest(content: string): Promise<string> {
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
   return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
 }
-function stat(tag: unknown): { stat: RealStat; value: number } {
+function stat(tag: unknown): { stat: StatKey; value: number } {
   if (!object(tag) || !text(tag.name) || !Object.hasOwn(statMap, tag.name) || typeof tag.value !== 'number' || !Number.isFinite(tag.value) || tag.value <= 0) throw new Error('莫娜文件包含未知或非法词条。百分比必须使用原格式的小数值。');
   return { stat: statMap[tag.name], value: tag.value };
 }
@@ -108,7 +111,7 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
     const setIdentityPending = !set;
     if (seenIds.has(id)) throw new Error(`${path}与本文件另一件圣遗物使用相同实例标识。`);
     seenIds.add(id);
-    const real = realArtifactSchema.parse({ id, setId, slot, rarity: 5, level: level, mainStat: primary.stat, substats, source: { format: 'mona-v1', key, fingerprint } });
+    const real = artifactItemSchema.parse({ id, setId, slot, rarity: 5, level: level, mainStat: primary.stat, substats, source: { format: 'mona-v1', key, fingerprint } });
     validateAccountArtifact(real);
     const next: AccountArtifact = { id, name: `${set?.name ?? `${setName}（套装待核对）`} · ${accountSlotLabels[slot]}`, slot, attack: 0, real,
       mona: { mainValue: primary.value, omit: item.omit === true, sourceSetName: setName, ...(setIdentityPending ? { setIdentityPending: true } : {}), ...(text(item.equip) ? { equippedBy: item.equip } : {}), ...(typeof item.contentHash === 'string' ? { contentHash: item.contentHash } : {}) } };

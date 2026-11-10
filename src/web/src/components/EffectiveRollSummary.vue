@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { RealStat } from '@leyline/schema';
+import type { StatKey } from '@leyline/schema';
 import type { AccountArtifact } from '../domain/account';
 import { effectiveRollBreakdown } from '../domain/character-loadout-name';
 import {rollBasisTitle,type EffectiveRollBasis} from '../domain/effective-roll-basis';
 import GameIcon from './GameIcon.vue';
-const props=defineProps<{ items:AccountArtifact[]; selectedStats:readonly RealStat[]; selectable?:boolean; inline?:boolean; basis?:EffectiveRollBasis }>();
-const emit=defineEmits<{toggle:[stat:RealStat]}>();
+const props=defineProps<{ items:AccountArtifact[]; selectedStats:readonly StatKey[]; selectable?:boolean; inline?:boolean; basis?:EffectiveRollBasis }>();
+const emit=defineEmits<{toggle:[stat:StatKey]}>();
 const rows=computed(()=>effectiveRollBreakdown(props.items,props.basis).sort((a,b)=>props.selectable?0:Number(b.members.some(stat=>props.selectedStats.includes(stat)))-Number(a.members.some(stat=>props.selectedStats.includes(stat)))));
 </script>
 <template>

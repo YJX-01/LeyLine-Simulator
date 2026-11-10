@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { elementPalette, neutralPalette, contrastRatio } from './styles/palette';
+import { elementPalette, neutralPalette, contrastRatio } from '../styles/palette';
 const selected = ref<(typeof elementPalette)[number]>(elementPalette[0]);
 </script>
 <template>

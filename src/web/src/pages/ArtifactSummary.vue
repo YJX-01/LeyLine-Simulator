@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import GameIcon from './components/GameIcon.vue';
-import ArtifactPortrait from './components/ArtifactPortrait.vue';
-import {useArtifactFavoritesStore} from './stores/artifact-favorites';
-import StatLabel from './components/StatLabel.vue';
+import GameIcon from '../components/GameIcon.vue';
+import ArtifactPortrait from '../components/ArtifactPortrait.vue';
+import {useArtifactFavoritesStore} from '../stores/artifact-favorites';
+import StatLabel from '../components/StatLabel.vue';
 import { computed, onMounted, shallowRef } from 'vue';
-import type { RealBuild, RealStat } from '@leyline/schema';
-import type { AccountArtifact, LocalAccount } from './domain/account';
-import { accountSlotLabels } from './domain/account';
-import { useAccountStore } from './stores/account';
-import { artifactMainValue, formatGameStat, loadAccountGameData } from './domain/account-presentation';
-const props=defineProps<{ item: AccountArtifact; account?: LocalAccount; compact?: boolean; variant?: 'relaxed' | 'compact'; effectiveStats?:readonly RealStat[]; wearers?: {name:string;id?:string;label?:string}[] }>();
+import type { Build, StatKey } from '@leyline/schema';
+import type { AccountArtifact, LocalAccount } from '../domain/account';
+import { accountSlotLabels } from '../domain/account';
+import { useAccountStore } from '../stores/account';
+import { artifactMainValue, formatGameStat, loadAccountGameData } from '../domain/account-presentation';
+const props=defineProps<{ item: AccountArtifact; account?: LocalAccount; compact?: boolean; variant?: 'relaxed' | 'compact'; effectiveStats?:readonly StatKey[]; wearers?: {name:string;id?:string;label?:string}[] }>();
 const store=useAccountStore(),favorites=useArtifactFavoritesStore();
 const favorite=computed(()=>favorites.level((props.account ?? store.account).id,props.item.id));
 const effective=computed(()=>props.effectiveStats ?? []);
 const density=computed(()=>props.variant ?? (props.compact?'compact':'relaxed'));
 const wearers=computed(()=>{
   if(props.wearers)return props.wearers;
-  const local=(props.account ?? store.account).characters.filter(character=>Object.values(character.equipment).includes(props.item.id)).map(character=>({name:character.name,id:character.realBuild?.character.id,label:'本地装备'}));
+  const local=(props.account ?? store.account).characters.filter(character=>Object.values(character.equipment).includes(props.item.id)).map(character=>({name:character.name,id:character.build?.character.id,label:'本地装备'}));
   return local.length?local:props.item.mona?.equippedBy?[{name:props.item.mona.equippedBy,id:undefined,label:'原始穿戴备注'}]:[];
 });
 
-const rolls=shallowRef<typeof import('./domain/artifact-rolls')>();
+const rolls=shallowRef<typeof import('../domain/artifact-rolls')>();
 const counts=computed(()=>props.item.real&&rolls.value?rolls.value.preferredUpgradeCounts(props.item.real):[]);
 function rollTitle(index:number) { const count=counts.value[index];return count?`${props.item.rollSource==='manual'?'手动选择的合法次数':props.item.rollSource==='inferred'?'已保存的合法推定':count.recorded?'展柜记录':'合法组合推定（歧义取较小值）'}：强化命中 ${count.min} 次（不含初始词条）`:'当前数值无法匹配合法强化组合'; }
-const main = shallowRef<RealBuild['artifactMain']>();
-onMounted(async () => { const [data,result]=await Promise.allSettled([loadAccountGameData(),import('./domain/artifact-rolls')]);if(data.status==='fulfilled')main.value=data.value.main;if(result.status==='fulfilled')rolls.value=result.value; });
+const main = shallowRef<Build['artifactMain']>();
+onMounted(async () => { const [data,result]=await Promise.allSettled([loadAccountGameData(),import('../domain/artifact-rolls')]);if(data.status==='fulfilled')main.value=data.value.main;if(result.status==='fulfilled')rolls.value=result.value; });
 </script>
 <template>
   <div class="artifact-summary" :class="density" :title="`${item.alias ?? item.name} · ${accountSlotLabels[item.slot]}`">

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {computed,ref,watch} from 'vue';
-import type {RealStat} from '@leyline/schema';
+import type {StatKey} from '@leyline/schema';
 import type {ComparisonSide,ComparisonOption} from '../domain/loadout-comparison';
 import LoadoutComparison from './LoadoutComparison.vue';
-const props=defineProps<{current:ComparisonSide;options:ComparisonOption[];stats:RealStat[];referenceName?:string;kind:'配置'|'组合'}>();
+const props=defineProps<{current:ComparisonSide;options:ComparisonOption[];stats:StatKey[];referenceName?:string;kind:'配置'|'组合'}>();
 const selectedId=ref('');
 const selected=computed(()=>props.options.find(option=>option.id===selectedId.value));
 watch(()=>props.options,options=>{if(!options.some(option=>option.id===selectedId.value))selectedId.value='';});

@@ -7,6 +7,6 @@ function normalizeLocation() {
 normalizeLocation();
 window.addEventListener('hashchange',normalizeLocation);
 onBeforeUnmount(()=>window.removeEventListener('hashchange',normalizeLocation));
-const WorkspaceShell=defineAsyncComponent({loader:()=>import('./WorkspaceShell.vue'),errorComponent:ViewLoadError,timeout:15000,loadingComponent:{render:()=>h('main',{role:'status'},'正在加载页面…')}});
+const WorkspaceShell=defineAsyncComponent({loader:()=>import('./pages/WorkspaceShell.vue'),errorComponent:ViewLoadError,timeout:15000,loadingComponent:{render:()=>h('main',{role:'status'},'正在加载页面…')}});
 </script>
 <template><WorkspaceShell /></template>

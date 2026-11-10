@@ -6,7 +6,7 @@ export interface AccountConfiguration { id:string; character:AccountCharacter; s
 interface SavedConfiguration { id:string; accountId:string; characterId:string; snapshot:LocalAccount }
 
 export function localConfigurationComplete(account:LocalAccount,character:AccountCharacter):boolean {
-  return !!character.realBuild && accountSlots.every(slot=>{
+  return !!character.build && accountSlots.every(slot=>{
     const item=account.artifacts.find(item=>item.id===character.equipment[slot]);
     return item?.slot===slot && !!item.real && !item.mona?.setIdentityPending;
   });
@@ -58,7 +58,7 @@ export function preparePreferredConfiguration(account:LocalAccount,configuration
 
 
 export function hasLocalConfiguration(character:AccountCharacter):boolean {
-  return !!character.realBuild || Object.values(character.equipment).some(Boolean) || character.attack>0 || !!character.weapon.trim();
+  return !!character.build || Object.values(character.equipment).some(Boolean) || character.attack>0 || !!character.weapon.trim();
 }
 export function hasCharacterInformation(character:AccountCharacter):boolean { return hasLocalConfiguration(character) || !!character.showcase; }
 
@@ -93,6 +93,6 @@ export function planConfigurationRemoval(account:LocalAccount,saved:readonly Sav
   }
   const draft=cloneAccount(account),character=draft.characters.find(item=>item.id===characterId);
   if(!character || !hasLocalConfiguration(character))throw new Error('本地配置已不存在，请重新打开。');
-  delete character.realBuild;character.attack=0;character.weapon='';character.equipment={};
+  delete character.build;character.attack=0;character.weapon='';character.equipment={};
   return {...planClearedConfiguration(account,draft,saved,characterId),accountChanged:true};
 }

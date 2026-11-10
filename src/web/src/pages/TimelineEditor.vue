@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import GameIcon from './components/GameIcon.vue';
-import ChoiceGroup from './components/ChoiceGroup.vue';
+import GameIcon from '../components/GameIcon.vue';
+import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
-import { useAxisWorkspaceStore } from './stores/axis-workspace';
-import { nextRecordId } from './domain/workbench-project';
-import { recordLabel } from './domain/workbench-labels';
-import type { WorkbenchProject } from '@leyline/schema';
-type Record = WorkbenchProject['timeline'][number];
+import { useAxisWorkspaceStore } from '../stores/axis-workspace';
+import { nextRecordId } from '../domain/workbench-project';
+import { recordLabel } from '../domain/workbench-labels';
+import type { Project } from '@leyline/schema';
+type Record = Project['timeline'][number];
 const axis = useAxisWorkspaceStore();
 const cursor = ref(0);
 const scale = ref(60);
@@ -29,7 +29,7 @@ function toggleClock() {
   };
   frame = requestAnimationFrame(tick);
 }
-const skills = computed(() => axis.actor?.realBuild?.character.skills ?? []);
+const skills = computed(() => axis.actor?.build?.character.talents ?? []);
 const skill = computed(() => skills.value.find(item => item.id === skillId.value) ?? skills.value[0]);
 const duration = computed(() => Math.min(3600000, Math.max(15000, cursor.value + 3000, ...axis.project.timeline.map(record => record.timeMs + 3000))));
 const width = computed(() => Math.max(600, duration.value / 1000 * scale.value));
@@ -39,13 +39,13 @@ function add(kind = layer.value, selectedSkill = skill.value) {
   if (!owner || !selectedSkill) { error.value = '请先准备队伍并选择技能。'; return; }
   const time = Math.round(cursor.value);
   if (!Number.isInteger(time) || time < 0 || time > 3600000) { error.value = '记录时间必须在 0 到 3600000 毫秒之间。'; return; }
-  if (kind === 'damage' && (!selectedSkill.support.supported || !selectedSkill.multipliers[hitIndex.value])) { error.value = '该技能或段数尚未支持伤害计算；动作仍可记录。'; return; }
+  if (kind === 'damage' && (!selectedSkill.support.supported || !selectedSkill.hits[hitIndex.value])) { error.value = '该技能或段数尚未支持伤害计算；动作仍可记录。'; return; }
   const id = nextRecordId(axis.project);
   axis.command(draft => {
     const definition = kind === 'damage' ? `${owner.id}-real-damage` : `${owner.id}-action-${selectedSkill.id}`;
-    if (kind === 'action' && !draft.definitions.some(entry => entry.id === definition)) draft.definitions.push({ id: definition, name: selectedSkill.name, version: owner.realBuild!.dataVersion, source: { kind: 'preset', reference: owner.realBuild!.dataVersion, verified: false }, nodes: [], effects: [] });
+    if (kind === 'action' && !draft.definitions.some(entry => entry.id === definition)) draft.definitions.push({ id: definition, name: selectedSkill.name, version: owner.build!.dataVersion, source: { kind: 'preset', reference: owner.build!.dataVersion, verified: false }, nodes: [], effects: [] });
     draft.timeline.push({ id, kind, actor: owner.id, definition, timeMs: time, order: Math.max(-1, ...draft.timeline.map(record => record.order)) + 1,
-      ...(kind === 'damage' ? { realDamage: { skillId: selectedSkill.id, hitIndex: hitIndex.value, crit: null, reaction: null } } : {}) });
+      ...(kind === 'damage' ? { damage: { skillId: selectedSkill.id, hitIndex: hitIndex.value, crit: null, reaction: null } } : {}) });
     if (kind === 'damage' && draft.objective.damageIds) draft.objective.damageIds.push(id);
   });
   axis.selectedId = id;
@@ -100,11 +100,11 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
 </script>
 <template>
   <section class="editing-desk" aria-label="剪辑式时间轴编辑">
-    <div class="roster"><button v-for="(actor, index) in axis.project.candidate.actors" :key="actor.id" :class="{ active: axis.actorId === actor.id }" @click="axis.actorId = actor.id"><GameIcon kind="characters" :id="actor.realBuild?.character.id" :name="actor.name" :constellation="actor.realBuild?.constellation" :level="actor.realBuild?.level" :size="32" /><kbd>{{ index + 1 }}</kbd> {{ actor.name ?? actor.realBuild?.character.name }}</button><p v-if="!axis.project.candidate.actors.length">先到队伍页，从账号选择角色。</p></div>
+    <div class="roster"><button v-for="(actor, index) in axis.project.candidate.actors" :key="actor.id" :class="{ active: axis.actorId === actor.id }" @click="axis.actorId = actor.id"><GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation" :level="actor.build?.level" :size="32" /><kbd>{{ index + 1 }}</kbd> {{ actor.name ?? actor.build?.character.identity.name }}</button><p v-if="!axis.project.candidate.actors.length">先到队伍页，从账号选择角色。</p></div>
     <div class="edit-tools"><ChoiceGroup :model-value="layer" :options="[{value:'action',label:'动作层'},{value:'damage',label:'伤害层'}]" label="标注图层" joined @update:model-value="layer=$event==='damage'?'damage':'action'" /><button class="ui-action soft" data-accent="anemo" :aria-pressed="playing" @click="toggleClock">{{ playing ? '暂停标注时钟' : '播放标注时钟' }}</button><label>光标时间 / 毫秒<input v-model.number="cursor" aria-label="标注光标时间" type="number" min="0" max="3600000" step="10" @focus="pause"></label><label>缩放<input v-model.number="scale" aria-label="时间轴缩放" type="range" min="15" max="180"></label></div>
-    <div class="skill-palette"><button v-for="item in skills" :key="item.id" :class="{ active: skill?.id === item.id }" @click="skillId = item.id; hitIndex = 0">{{ item.name }}<small>{{ item.support.supported ? '可计算' : '可记动作 · 伤害待支持' }}</small></button><label v-if="layer === 'damage' && skill">命中段数<select v-model.number="hitIndex" aria-label="标注技能段数"><option v-for="(_, index) in skill.multipliers" :key="index" :value="index">第 {{ index + 1 }} 段</option></select></label><button class="ui-action" data-accent="anemo" :disabled="!skill" @click="add()">在光标处记录{{ layer === 'action' ? '动作' : '伤害点' }}</button></div>
+    <div class="skill-palette"><button v-for="item in skills" :key="item.id" :class="{ active: skill?.id === item.id }" @click="skillId = item.id; hitIndex = 0">{{ item.name }}<small>{{ item.support.supported ? '可计算' : '可记动作 · 伤害待支持' }}</small></button><label v-if="layer === 'damage' && skill">命中段数<select v-model.number="hitIndex" aria-label="标注技能段数"><option v-for="(_, index) in skill.hits" :key="index" :value="index">第 {{ index + 1 }} 段</option></select></label><button class="ui-action" data-accent="anemo" :disabled="!skill" @click="add()">在光标处记录{{ layer === 'action' ? '动作' : '伤害点' }}</button></div>
     <p class="key-help">空格 播放/暂停标注时钟 · 1–4 选角色 · E 战技 · Q 爆发 · Enter 记录所选技能 · ←/→ 移动 10 毫秒（Shift 为 1 秒）。拖动记录细调，默认吸附 10 毫秒，Alt 精确到 1 毫秒。动作与命中分别记录，时钟本身不会生成记录。</p><p v-if="error" role="alert">{{ error }}</p>
-    <div class="desk-scroll"><div class="desk-tracks" :style="{ width: `${width + 120}px` }"><div class="desk-ruler"><span>角色 / 信息层</span><div :style="{ width: `${width}px` }" @click="seek"><i v-for="tick in Math.ceil(duration / 1000) + 1" :key="tick" :style="{ left: `${(tick - 1) * scale}px` }">{{ tick - 1 }}s</i><b class="playhead" :style="{ left: `${cursor / 1000 * scale}px` }"></b></div></div><template v-for="actor in axis.project.candidate.actors" :key="actor.id"><div v-for="kind in ['action', 'damage']" :key="kind" class="desk-row" :class="{ dim: layer !== kind }"><div class="desk-label"><GameIcon kind="characters" :id="actor.realBuild?.character.id" :name="actor.name" :constellation="actor.realBuild?.constellation" :level="actor.realBuild?.level" :size="28" />{{ actor.name ?? '角色' }}<small>{{ kind === 'action' ? '动作' : '伤害' }}</small></div><div class="desk-lane" @click="seek"><span class="cursor-line" :style="{ left: `${cursor / 1000 * scale}px` }"></span><button v-for="record in records(actor.id, kind)" :key="record.id" class="desk-record" :class="{ selected: axis.selectedId === record.id, damage: kind === 'damage' }" :style="{ left: `${record.timeMs / 1000 * scale}px` }" :aria-label="`选择${kind === 'action' ? '动作' : '伤害点'} ${recordLabel(axis.project, record.id)}`" :data-record-id="record.id" @click.stop="axis.selectedId = record.id; axis.actorId = record.actor" @pointerdown="drag($event, record)">{{ recordLabel(axis.project, record.id) }}<small>{{ record.timeMs }} ms</small></button></div></div></template></div></div>
+    <div class="desk-scroll"><div class="desk-tracks" :style="{ width: `${width + 120}px` }"><div class="desk-ruler"><span>角色 / 信息层</span><div :style="{ width: `${width}px` }" @click="seek"><i v-for="tick in Math.ceil(duration / 1000) + 1" :key="tick" :style="{ left: `${(tick - 1) * scale}px` }">{{ tick - 1 }}s</i><b class="playhead" :style="{ left: `${cursor / 1000 * scale}px` }"></b></div></div><template v-for="actor in axis.project.candidate.actors" :key="actor.id"><div v-for="kind in ['action', 'damage']" :key="kind" class="desk-row" :class="{ dim: layer !== kind }"><div class="desk-label"><GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation" :level="actor.build?.level" :size="28" />{{ actor.name ?? '角色' }}<small>{{ kind === 'action' ? '动作' : '伤害' }}</small></div><div class="desk-lane" @click="seek"><span class="cursor-line" :style="{ left: `${cursor / 1000 * scale}px` }"></span><button v-for="record in records(actor.id, kind)" :key="record.id" class="desk-record" :class="{ selected: axis.selectedId === record.id, damage: kind === 'damage' }" :style="{ left: `${record.timeMs / 1000 * scale}px` }" :aria-label="`选择${kind === 'action' ? '动作' : '伤害点'} ${recordLabel(axis.project, record.id)}`" :data-record-id="record.id" @click.stop="axis.selectedId = record.id; axis.actorId = record.actor" @pointerdown="drag($event, record)">{{ recordLabel(axis.project, record.id) }}<small>{{ record.timeMs }} ms</small></button></div></div></template></div></div>
     <p v-if="!axis.project.timeline.length" class="empty-axis">轴里还没有记录。选择角色与技能，在光标位置记录动作；切到伤害层记录实际命中，再补充条件。</p>
   </section>
 </template>

@@ -1,18 +1,18 @@
 import { accountSlots, accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountCharacter, type LocalAccount } from './account';
 import {persistArtifactRolls} from './artifact-rolls';
-import type { RealBuild } from '@leyline/schema';
+import type { Build } from '@leyline/schema';
 
 /** Identity-independent item content; history/source metadata is not an equipment change. */
 export function artifactValueSignature(item:AccountArtifact){const real=item.real;return JSON.stringify(real?[real.setId,real.slot,real.rarity,real.level,real.mainStat,real.substats.map(sub=>[sub.stat,sub.value])]:[item.slot,item.attack]);}
 
 /** Exact, ordered contents shared by import confirmation and read-only inventory status. */
-export function orderedArtifactContent(item:AccountArtifact, main?:RealBuild['artifactMain']) {
+export function orderedArtifactContent(item:AccountArtifact, main?:Build['artifactMain']) {
   const real=item.real;
   if(!real)return '';
   return JSON.stringify([real.setId,real.slot,real.rarity,real.level,real.mainStat,item.mona?.mainValue ?? main?.[real.mainStat]?.[real.level],real.substats.map(sub=>[sub.stat,sub.value])]);
 }
 
-function matchingInventoryArtifact(account:LocalAccount,source:AccountArtifact,main?:RealBuild['artifactMain']) {
+function matchingInventoryArtifact(account:LocalAccount,source:AccountArtifact,main?:Build['artifactMain']) {
   const signature=orderedArtifactContent(source,main);
   return signature?account.artifacts.find(item=>item.inventoryId!==null && !item.isCopy && !/ · 副本\d+$/.test(item.alias ?? '') && orderedArtifactContent(item,main)===signature):undefined;
 }

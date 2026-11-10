@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useAccountStore } from './stores/account';
-import { localDataErrorLabel } from './domain/workbench-labels';
+import { useAccountStore } from '../stores/account';
+import { localDataErrorLabel } from '../domain/workbench-labels';
 
 const store = useAccountStore();
 const fileInput = ref<HTMLInputElement>();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import WorkbenchDialog from './WorkbenchDialog.vue';
-import AccountLibrary from '../AccountLibrary.vue';
+import AccountLibrary from '../pages/AccountLibrary.vue';
 defineProps<{selectedId?:string;allowAll?:boolean}>();
 const emit=defineEmits<{select:[id:string];close:[]}>();
 </script>

@@ -1,10 +1,11 @@
+import { formatJson } from '@leyline/schema';
 import { computed, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { createAccount, parseAccount, type LocalAccount } from '../domain/account';
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 
-const storageKey = 'leyline-account-v1';
+const storageKey = 'leyline-account-v2';
 const maximumBytes = 8 * 1024 * 1024;
 export const useAccountStore = defineStore('local-account', () => {
   const account = ref<LocalAccount>(createAccount());
@@ -81,8 +82,7 @@ export const useAccountStore = defineStore('local-account', () => {
     let input: unknown;
     try { input = JSON.parse(content); } catch { throw new Error('账号文件无法识别，现有账号保持不变。'); }
     const next = parseAccount(input);
-    backup();
-    account.value = next; saved.value = JSON.stringify(next); error.value = ''; notice.value = '账号已打开，当前轴保持原有快照。';
+    backup();account.value=next;saved.value=JSON.stringify(next);error.value='';notice.value='账号已打开，当前轴保持原有快照。';
   }
   async function save(): Promise<boolean> {
     if (busy.value) return false;
@@ -92,7 +92,7 @@ export const useAccountStore = defineStore('local-account', () => {
       const snapshot = JSON.stringify(next);
       if (new TextEncoder().encode(snapshot).byteLength > maximumBytes) throw new Error('账号文件超过 8 MiB。');
       const bridge = getDesktopBridge();
-      if (bridge) { if (!await bridge.saveProject(JSON.stringify(next, null, 2))) { notice.value = '已取消账号保存，当前编辑保留。'; return false; } }
+      if (bridge) { if (!await bridge.saveProject(formatJson(next))) { notice.value = '已取消账号保存，当前编辑保留。'; return false; } }
       else downloadJson(next, `${next.name}.account.json`);
       saved.value = snapshot; notice.value = '账号文件已保存，轴项目未被修改。'; return true;
     } catch { error.value = '账号保存失败，请检查角色、数值及装备归属；现有资料保持不变。'; return false; }

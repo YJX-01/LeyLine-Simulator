@@ -1,10 +1,10 @@
-import metadata from './data/catalog-release-metadata.json';
-import { travelerForm } from './traveler-forms';
+import metadata from '../../generated/catalog-release-metadata.json';
+import { elementalForm } from './elemental-forms';
 
 export type ReleaseMetadata = { name: string; version: string; gameId: number; rarity?: number };
 export function releaseMetadata(group: 'characters' | 'weapons' | 'artifacts', id?: string, name?: string): ReleaseMetadata | undefined {
   const entries = metadata[group] as Record<string, ReleaseMetadata>;
-  return (id ? entries[id] ?? entries[travelerForm(id)?.baseId ?? ''] : undefined) ?? (name ? Object.values(entries).find(entry => entry.name === name) : undefined);
+  return (id ? entries[id] ?? entries[elementalForm(id)?.baseId ?? ''] : undefined) ?? (name ? Object.values(entries).find(entry => entry.name === name) : undefined);
 }
 export function compareReleaseNewest(a?: ReleaseMetadata, b?: ReleaseMetadata): number {
   if (!a || !b) return a ? -1 : b ? 1 : 0;

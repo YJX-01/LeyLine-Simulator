@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { computed, ref,inject,nextTick,onMounted } from 'vue';
-import type { AccountArtifact, LocalAccount } from './domain/account';
-import { cloneAccount,accountSlotLabels } from './domain/account';
-import { applyAccountArtifact,loadAccountGameData } from './domain/account-presentation';
-import { useAccountStore } from './stores/account';
-import WorkbenchDialog from './components/WorkbenchDialog.vue';
+import type { AccountArtifact, LocalAccount } from '../domain/account';
+import { cloneAccount,accountSlotLabels } from '../domain/account';
+import { applyAccountArtifact,loadAccountGameData } from '../domain/account-presentation';
+import { useAccountStore } from '../stores/account';
+import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import ArtifactForm from './ArtifactForm.vue';
-import EditorActions from './components/EditorActions.vue';
-import UnsavedChangesDialog from './components/UnsavedChangesDialog.vue';
-import { useUnsavedChanges } from './composables/use-unsaved-changes';
-import {useCharacterLoadoutsStore} from './stores/character-loadouts';
-import {useArtifactCombinationsStore} from './stores/artifact-combinations';
-import {accountConfigurations} from './domain/account-configurations';
-import {combinationName} from './domain/artifact-combinations';
-import {characterLoadoutName} from './domain/character-loadout-name';
-import {artifactReferences,copyArtifact,type ArtifactReferenceTarget} from './domain/artifact-references';
-import {artifactReferenceNavigation} from './composables/artifact-reference-navigation';
-import ArtifactPortrait from './components/ArtifactPortrait.vue';
-import ArtifactFavorite from './components/ArtifactFavorite.vue';
-import ConfirmationDialog from './components/ConfirmationDialog.vue';
-import {useArtifactRemoval} from './composables/use-artifact-removal';
+import EditorActions from '../components/EditorActions.vue';
+import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
+import { useUnsavedChanges } from '../composables/use-unsaved-changes';
+import {useCharacterLoadoutsStore} from '../stores/character-loadouts';
+import {useArtifactCombinationsStore} from '../stores/artifact-combinations';
+import {accountConfigurations} from '../domain/account-configurations';
+import {combinationName} from '../domain/artifact-combinations';
+import {characterLoadoutName} from '../domain/character-loadout-name';
+import {artifactReferences,copyArtifact,type ArtifactReferenceTarget} from '../domain/artifact-references';
+import {artifactReferenceNavigation} from '../composables/artifact-reference-navigation';
+import ArtifactPortrait from '../components/ArtifactPortrait.vue';
+import ArtifactFavorite from '../components/ArtifactFavorite.vue';
+import ConfirmationDialog from '../components/ConfirmationDialog.vue';
+import {useArtifactRemoval} from '../composables/use-artifact-removal';
 const props=defineProps<{item:AccountArtifact;account?:LocalAccount;readonly?:boolean}>();
 const emit=defineEmits<{close:[]}>();
 const store=useAccountStore(),loadouts=useCharacterLoadoutsStore(),combinations=useArtifactCombinationsStore();
@@ -55,7 +55,7 @@ const references=computed(()=>{
   const configurations=accountConfigurations(inventory.value,loadouts.loadouts);
   return artifactReferences(inventory.value,configurations,combinations.combinations,display.value.id).map(reference=>{
     if(reference.target.kind==='combination'){const target=reference.target,item=combinations.combinations.find(item=>item.id===target.id);return {...reference,name:item?combinationName(item,sets.value):reference.name};}
-    if(reference.target.kind==='configuration'){const target=reference.target,configuration=configurations.find(item=>item.character.id===target.characterId && item.presetId===target.presetId);if(configuration){const character=configuration.character,stats=loadouts.effectiveStats(inventory.value.id,character.id,character.name);return {...reference,name:`${character.name} · ${configuration.presetId?'备选':'首选'} · ${character.realBuild?character.realBuild.constellation+'命':'培养待补全'} · ${characterLoadoutName(character,configuration.source,stats,sets.value).split(' · ').slice(1).join('|')}`};}}
+    if(reference.target.kind==='configuration'){const target=reference.target,configuration=configurations.find(item=>item.character.id===target.characterId && item.presetId===target.presetId);if(configuration){const character=configuration.character,stats=loadouts.effectiveStats(inventory.value.id,character.id,character.name);return {...reference,name:`${character.name} · ${configuration.presetId?'备选':'首选'} · ${character.build?character.build.constellation+'命':'培养待补全'} · ${characterLoadoutName(character,configuration.source,stats,sets.value).split(' · ').slice(1).join('|')}`};}}
     return reference;
   });
 });

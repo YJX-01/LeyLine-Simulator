@@ -1,4 +1,4 @@
-import { lookupEnka } from './enka.mjs';
+import { lookupEnka } from '../server/enka.mjs';
 import { app, BrowserWindow, dialog, ipcMain, Menu, net, protocol, session } from 'electron';
 import { readFile, stat, writeFile, rename, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
@@ -6,7 +6,7 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const directory = dirname(fileURLToPath(import.meta.url));
-const renderer = resolve(directory, 'renderer');
+const renderer = resolve(directory, '../renderer');
 const entry = 'leyline://app/index.html';
 const maxBytes = 8 * 1024 * 1024;
 protocol.registerSchemesAsPrivileged([{ scheme: 'leyline', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } }]);
@@ -40,7 +40,7 @@ app.whenReady().then(() => {
     trusted(event);
     if (typeof content !== 'string' || Buffer.byteLength(content) > maxBytes) throw new Error('项目内容无效或超过 8 MiB');
     const parsed = JSON.parse(content);
-    const objectName = parsed.kind === 'account' ? '账号资料' : parsed.kind === 'definition-library' ? '内容定义库' : '轴项目';
+    const objectName = parsed.kind === 'account' ? '账号资料' : parsed.kind === 'definition-library' ? '内容定义库' : parsed.kind === 'character-definition' ? '角色定义' : '轴项目';
     const result = await dialog.showSaveDialog(window, { title: `保存${objectName}`, defaultPath: `地脉-${objectName}.json`, filters: [{ name: '地脉资料', extensions: ['json'] }] });
     if (result.canceled || !result.filePath) return false;
     const temporaryPath = `${result.filePath}.${randomUUID()}.tmp`;

@@ -1,7 +1,7 @@
 import {readRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { RealStat } from '@leyline/schema';
+import type { StatKey } from '@leyline/schema';
 import { parseAccount, type AccountArtifact, type LocalAccount } from '../domain/account';
 import { combinationSignature, normalizeEffectiveStats, type ArtifactCombination } from '../domain/artifact-combinations';
 import { effectiveStatOptions } from '../domain/character-loadout-name';
@@ -13,12 +13,12 @@ export const useArtifactCombinationsStore=defineStore('artifact-combinations',()
     if(!Array.isArray(raw) || raw.length>200)throw new Error();
     const ids=new Set<string>();
     combinations.value=raw.map(entry=>{
-      if(!entry || typeof entry.id!=='string' || !entry.id || entry.id.length>200 || ids.has(entry.id) || typeof entry.accountId!=='string' || typeof entry.referenceName!=='string' || entry.referenceName.length>200 || !Array.isArray(entry.items) || !entry.items.length || entry.items.length>5 || !Array.isArray(entry.stats) || !entry.stats.length || !entry.stats.every((stat:RealStat)=>effectiveStatOptions.includes(stat)))throw new Error();
+      if(!entry || typeof entry.id!=='string' || !entry.id || entry.id.length>200 || ids.has(entry.id) || typeof entry.accountId!=='string' || typeof entry.referenceName!=='string' || entry.referenceName.length>200 || !Array.isArray(entry.items) || !entry.items.length || entry.items.length>5 || !Array.isArray(entry.stats) || !entry.stats.length || !entry.stats.every((stat:StatKey)=>effectiveStatOptions.includes(stat)))throw new Error();
       if(entry.nameMode!==undefined && !['auto','custom'].includes(entry.nameMode))throw new Error();
       if(entry.favorite!==undefined && (!Number.isInteger(entry.favorite) || entry.favorite<0 || entry.favorite>3))throw new Error();
       if(entry.name!==undefined && (typeof entry.name!=='string' || !entry.name.trim() || entry.name.length>160))throw new Error();
       ids.add(entry.id);
-      const account=parseAccount({schemaVersion:1,kind:'account',id:entry.accountId,name:'组合',characters:[],artifacts:entry.items});
+      const account=parseAccount({schemaVersion:2,kind:'account',id:entry.accountId,name:'组合',characters:[],artifacts:entry.items});
       if(new Set(account.artifacts.map(item=>item.slot)).size!==account.artifacts.length)throw new Error();
       return {id:entry.id,accountId:entry.accountId,items:account.artifacts,stats:normalizeEffectiveStats(entry.stats),referenceName:entry.referenceName,...(entry.nameMode===undefined?{}:{nameMode:entry.nameMode}),basis:readRollBasis(entry.basis),...(entry.name===undefined?{}:{name:entry.name}),...(entry.favorite===undefined?{}:{favorite:entry.favorite})};
     });
@@ -29,7 +29,7 @@ export const useArtifactCombinationsStore=defineStore('artifact-combinations',()
     if(new TextEncoder().encode(text).byteLength>8*1024*1024)throw new Error('组合资料超过本地保存上限，请先导出备份并整理。');
     localStorage.setItem(key,text);combinations.value=next;
   }
-  function save(account:LocalAccount,items:AccountArtifact[],stats:RealStat[],referenceName='',id='',commit?:()=>void,name?:string,basis?:EffectiveRollBasis,copy=false) {
+  function save(account:LocalAccount,items:AccountArtifact[],stats:StatKey[],referenceName='',id='',commit?:()=>void,name?:string,basis?:EffectiveRollBasis,copy=false) {
     if(copy)id='';
     if(name!==undefined && (!name.trim() || name.length>160))throw new Error('请输入1至160字的组合名称，或使用自动命名。');
     if(!items.length)throw new Error('请至少选择一件圣遗物。');

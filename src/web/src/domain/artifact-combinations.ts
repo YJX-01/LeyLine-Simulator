@@ -1,24 +1,24 @@
 import {artifactValueSignature} from './showcase-inventory';
 import {defaultRollBasis,type EffectiveRollBasis} from './effective-roll-basis';
-import shortNames from './data/artifact-set-short-names.json';
-import type { RealStat } from '@leyline/schema';
+import shortNames from '../../generated/artifact-set-short-names.json';
+import type { StatKey } from '@leyline/schema';
 import { accountSlots, cloneAccount, parseAccount, equipArtifact, artifactOwner, type AccountArtifact, type LocalAccount } from './account';
 import { effectiveRollBreakdown, effectiveStatGroups } from './character-loadout-name';
 
 export interface ArtifactCombination {
-  id:string; accountId:string; items:AccountArtifact[]; stats:RealStat[]; referenceName:string; name?:string; nameMode?:'auto'|'custom'; basis?:EffectiveRollBasis; favorite?:number;
+  id:string; accountId:string; items:AccountArtifact[]; stats:StatKey[]; referenceName:string; name?:string; nameMode?:'auto'|'custom'; basis?:EffectiveRollBasis; favorite?:number;
 }
-export function normalizeEffectiveStats(stats:readonly RealStat[]) {
+export function normalizeEffectiveStats(stats:readonly StatKey[]) {
   return effectiveStatGroups.filter(group=>group.members.some(stat=>stats.includes(stat))).flatMap(group=>group.members);
 }
-export function combinationSignature(items:readonly AccountArtifact[],stats:readonly RealStat[],basis:EffectiveRollBasis=defaultRollBasis(),referenceName='') {
+export function combinationSignature(items:readonly AccountArtifact[],stats:readonly StatKey[],basis:EffectiveRollBasis=defaultRollBasis(),referenceName='') {
   return JSON.stringify([accountSlots.map(slot=>items.find(item=>item.slot===slot)?.id ?? ''),normalizeEffectiveStats(stats),[basis.hp,basis.attack,basis.defense,basis.characterId ?? '',basis.weaponId ?? '',basis.level ?? 0,basis.weaponLevel ?? 0],referenceName]);
 }
-export function effectiveTotal(items:readonly AccountArtifact[],stats:readonly RealStat[],basis?:EffectiveRollBasis) {
+export function effectiveTotal(items:readonly AccountArtifact[],stats:readonly StatKey[],basis?:EffectiveRollBasis) {
   const rows=effectiveRollBreakdown(items,basis).filter(row=>row.members.some(stat=>stats.includes(stat)));
   return rows.some(row=>row.value===undefined)?undefined:rows.reduce((total,row)=>total+(row.value ?? 0),0);
 }
-export const mainStatInitials:Record<RealStat,string>={hp:'生',hpPercent:'生',attack:'攻',attackPercent:'攻',defense:'防',defensePercent:'防',elementalMastery:'精',energyRecharge:'充',critRate:'暴',critDamage:'爆',healingBonus:'治',anemoBonus:'风',geoBonus:'岩',electroBonus:'雷',dendroBonus:'草',hydroBonus:'水',pyroBonus:'火',cryoBonus:'冰',physicalBonus:'物'};
+export const mainStatInitials:Record<StatKey,string>={hp:'生',hpPercent:'生',attack:'攻',attackPercent:'攻',defense:'防',defensePercent:'防',elementalMastery:'精',energyRecharge:'充',critRate:'暴',critDamage:'爆',healingBonus:'治',anemoBonus:'风',geoBonus:'岩',electroBonus:'雷',dendroBonus:'草',hydroBonus:'水',pyroBonus:'火',cryoBonus:'冰',physicalBonus:'物'};
 export function defaultCombinationName(combination:Pick<ArtifactCombination,'items'|'stats'|'basis'>,sets:readonly {id:string;name:string}[]) {
   const counts=new Map<string,number>();
   for(const item of combination.items)if(item.real && !item.mona?.setIdentityPending)counts.set(item.real.setId,(counts.get(item.real.setId) ?? 0)+1);

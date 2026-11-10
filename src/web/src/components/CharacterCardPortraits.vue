@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { RealBuild } from '@leyline/schema';
+import type { Build } from '@leyline/schema';
 import type { AccountArtifact } from '../domain/account';
-import talentDisplay from '../domain/data/character-talent-display.json';
+import talentDisplay from '../../generated/character-talent-display.json';
 import GameIcon from './GameIcon.vue';
 import CornerBadge from './CornerBadge.vue';
 import WeaponPlaceholder from './WeaponPlaceholder.vue';
-import { travelerForm } from '../domain/traveler-forms';
+import { talentDisplayRows } from '../domain/character-info';
 
-const props = defineProps<{ build?: RealBuild; name: string; artifacts: AccountArtifact[] }>();
+const props = defineProps<{ build?: Build; name: string; artifacts: AccountArtifact[] }>();
 type Talent = { key: string; label: string; icon: string; name: string; constellations: number[] };
 const rows = computed(() => {
-  const source = (talentDisplay.characters as Record<string, Talent[]>)[travelerForm(props.build?.character.id)?.talentName ?? props.name];
+  const source = props.build ? talentDisplayRows(props.build.character) : (talentDisplay.characters as Record<string,Talent[]>)[props.name];
   return (source ?? ['normal', 'skill', 'burst'].map((key, index) => ({ key, label: 'AEQ'[index], icon: '', name: '', constellations: [] }))).map(row => {
-    const base = props.build?.talents[row.key as keyof RealBuild['talents']];
+    const base = props.build?.talents[row.key as keyof Build['talents']];
     const bonus = row.constellations.filter(rank => rank <= (props.build?.constellation ?? 0)).length * 3;
-    return { ...row, base, bonus, level: base === undefined ? '—' : base + bonus };
+    const bonusKnown=!props.build || props.build.constellation===0 || props.build.character.constellations.length===6;
+    return { ...row, base, bonus, bonusKnown, level: base === undefined ? '—' : bonusKnown ? base + bonus : `${base}+?` };
   });
 });
 const sets = computed(() => {
@@ -53,7 +54,7 @@ const setDescription = computed(() => sets.value.map(set => `${set.name} · ${se
       <WeaponPlaceholder v-if="!build" />
     </span>
     <span class="card-talents">
-      <span v-for="row in rows" :key="row.key" class="talent-row" :aria-label="`${row.label} ${row.name} ${row.level}级`" :title="`${row.label} · ${row.name}${row.base === undefined ? ' · 待补全' : ` · 基础 ${row.base}${row.bonus ? ` + 命座 ${row.bonus}` : ''}`}`">
+      <span v-for="row in rows" :key="row.key" class="talent-row" :aria-label="`${row.label} ${row.name} ${row.level}级`" :title="`${row.label} · ${row.name}${row.base === undefined ? ' · 待补全' : ` · 基础 ${row.base}${!row.bonusKnown ? ' · 命座加级未收录' : row.bonus ? ` + 命座 ${row.bonus}` : ''}`}`">
         <GameIcon kind="skills" :id="row.icon" :size="24" />
         <b>{{ row.level }}<sup data-ui-badge="mini" v-if="row.bonus && row.base !== undefined">*</sup></b>
       </span>
