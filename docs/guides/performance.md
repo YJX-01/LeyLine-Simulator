@@ -1,6 +1,6 @@
 # 性能检查范围
 
-`pnpm perf:engine`使用tests/fixtures/recordings/enka中的官方公开响应，按原配装解析四位角色，预热一次后测七次属性求值，p95取七次最大值。预算为2000ms，原始输入哈希及实际支持状态写入artifacts/performance/timeline.json。
+`pnpm perf:engine`使用.references/enka/official-example.json原件；缺失时明确记录skipped，不生成替代输入。原件存在时，按原配装解析四位角色，预热一次后测七次属性求值，p95取七次最大值。预算为2000ms，原始输入哈希及实际支持状态写入artifacts/performance/timeline.json。
 
 该响应没有战斗动作、敌人或命中记录。报告只覆盖配装求值与空轴求和，不能代表完整战斗轴吞吐、游戏伤害观测或优化器性能；不会为了性能报告补造500次伤害。历史构造的深度/访问预算场景及专用回归已删除，当前报告不据此证明完整时间轴或预算边界。
 

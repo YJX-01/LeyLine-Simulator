@@ -9,7 +9,7 @@
 | `data:capture` | 显式读取固定.references/genshin-db，原字节写入全新的artifacts/content-candidates子目录；不覆盖正式数据 |
 | `data:prepare-characters --out artifacts/content-candidates/<新目录>` | 采用的完整来源与当前规则生成154份待审角色定义及差异；不覆盖正式输入 |
 | `data:audit` | 通过Node显式逐字段核对各数值族，写无文件哈希清单的tools/data/audits摘要；源参数分歧必须先审查，不能自动容差放行 |
-| `fixture:check` / `assets:check` / `architecture:check` / `docs:check` | 只读检查固定输入、资源完整性、模块边界、当前文档链接及根命令 |
+| `assets:check` / `architecture:check` / `docs:check` | 只读检查资源完整性、模块边界、当前文档链接及根命令 |
 | `dev` / `build` / `build:subpath` | 先离线生成，再启动Vite或写dist/dist-subpath；不采集上游数据 |
 | `desktop:build` / `desktop:preview:build` | 直接在临时目录构建并打包，共用artifacts/desktop/releases的最新两版；预览为同一命令别名，不另存Electron副本；已有ZIP可通过LEYLINE_ELECTRON_ZIP_DIR复用 |
 | `desktop:start` | 启动最新本地产物；不终止已有应用 |

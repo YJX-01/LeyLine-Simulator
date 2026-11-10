@@ -23,7 +23,7 @@
 | `assets/game` / `ui` / `sources` | 游戏图标 / 应用装饰 / 资源维护依据；统一`manifest.json` |
 | `tests/unit` / `integration` | 按包镜像的纯单元 / 跨模块、文件和真实录存回归 |
 | `tests/browser` / `desktop` / `performance` | 网页开发与生产 / 桌面 / 性能测量 |
-| `tests/helpers` / `fixtures` | 仅测试辅助 / 当前测试使用的真实公开响应；README说明用途，历史构造场景已删除 |
+| `tests/helpers` | 仅测试辅助；不保存固定输入，真实资料直接读取获授权的.references原件，缺失时明确跳过 |
 | `tools/scripts` | data、assets、checks、build、release、dev、licenses分类入口 |
 | `tools/lib` / `data` / `patches` | 已复用的工具函数 / 来源原件和审计 / 依赖补丁 |
 | `docs` / `archive/docs` | 现行文档 / 历史方案与退休机制记录 |

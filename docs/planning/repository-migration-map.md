@@ -106,7 +106,7 @@
 | `tools/scripts/third-party-notices.mjs` | `tools/scripts/licenses/third-party-notices.mjs` | 按职责迁移，修复路径/当前消费者 |
 | `tools/scripts/verify-release.mjs` | `tools/scripts/release/verify-release.mjs` | 按职责迁移，修复路径/当前消费者 |
 
-新增正式工具：data/build、build-display、capture-catalog、prepare-character-update、audit-numeric-sources；assets/build；checks/check-docs与check-fixtures。build-display从旧八表转换器仅抽取现行显示投影；旧转换器及其他已退出工具的归档副本已删除。当前性能脚本改用录存公开展柜，停止制造重复命中。
+新增正式工具：data/build、build-display、capture-catalog、prepare-character-update、audit-numeric-sources；assets/build；checks/check-docs；固定输入检查工具按最新要求删除。build-display从旧八表转换器仅抽取现行显示投影；旧转换器及其他已退出工具的归档副本已删除。当前性能脚本改用录存公开展柜，停止制造重复命中。
 
 ## 实现与资源整组迁移
 
@@ -115,7 +115,7 @@
 | schema的real-game/workbench巨型入口 | common/content/account/project/exchange/protocol，根出口只导出当前契约 |
 | 当前real-game求值和workbench/p3图 | engine/attributes、effects、timeline，同一时间轴入口 |
 | 旧模拟器、旧schema、八表及生成内容 | archive/retired-simulator，正式依赖为零 |
-| 源码并置单测、根fixtures、桌面/性能脚本 | tests的unit/integration/browser/desktop/performance/helpers/fixtures |
+| 源码并置单测、根fixtures、桌面/性能脚本 | tests的unit/integration/browser/desktop/performance/helpers；固定输入目录已删除 |
 | public游戏图标、src装饰、web/data来源 | 根assets；.cache/public与generated仅为派生物 |
 | tools/desktop运行代码 | src/web/desktop与src/web/server |
 | src内generated目录 | 各包外层generated，忽略且可重建 |
