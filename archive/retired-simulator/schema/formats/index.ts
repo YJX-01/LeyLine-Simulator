@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { realBuildSchema, realDamageSchema, realEnemySchema } from '../real-game';
+import { buildSchema, damageRequestSchema, enemySchema } from '../real-game';
 
 const id = z.string().min(1).max(160);
 const ms = z.number().int().nonnegative().max(3600000);
@@ -27,11 +27,11 @@ const definition = z.object({
   source: z.object({ kind: z.enum(['preset', 'user']), reference: id, verified: z.boolean() }).strict(),
   nodes: z.array(node).max(1000), damage: id.optional(), effects: z.array(effect).max(1000),
 }).strict();
-export const workbenchProjectSchema = z.object({
+export const projectSchema = z.object({
   schemaVersion: z.literal(1), rulesVersion: z.enum(['workbench-v1', 'workbench-p3']), id, name: id.optional(), revision: id,
   definitions: z.array(definition).max(200),
   candidate: z.object({
-    id, actors: z.array(z.object({ id, name: id.optional(), character: id, weapon: id, inputs: z.record(id, quantity), realBuild: realBuildSchema.optional(),
+    id, actors: z.array(z.object({ id, name: id.optional(), character: id, weapon: id, inputs: z.record(id, quantity), build: buildSchema.optional(),
       accountSnapshot: z.object({ accountId: id, characterId: id, weapon: z.string().max(160),
         artifacts: z.array(z.object({ id, name: id, slot: z.enum(['flower', 'plume', 'sands', 'goblet', 'circlet']), attack: z.number().finite().nonnegative() }).strict()).max(5),
       }).strict().optional(),
@@ -39,10 +39,10 @@ export const workbenchProjectSchema = z.object({
   }).strict(),
   effectRevisions: z.array(z.object({ instanceId: id.max(2000), disabled: z.boolean(), value: quantity.optional() }).strict()).max(10000).optional(),
   conditions: z.record(id, z.boolean().nullable()),
-  enemy: realEnemySchema.optional(),
+  enemy: enemySchema.optional(),
   timeline: z.array(z.object({
     id, timeMs: ms, order: z.number().int().nonnegative(), actor: id,
-    kind: z.enum(['action', 'damage']), definition: id, realDamage: realDamageSchema.optional(),
+    kind: z.enum(['action', 'damage']), definition: id, damage: damageRequestSchema.optional(),
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(id).optional() }).strict(),
 }).strict().superRefine((project, context) => {
@@ -58,16 +58,16 @@ export const workbenchProjectSchema = z.object({
   });
   const occupied = new Set<string>();
   project.candidate.actors.forEach((actor, index) => {
-    if (actor.realBuild) {
-      const accountId = actor.realBuild.inventoryAccountId ?? 'local-real-inventory';
-      actor.realBuild.artifacts.forEach((artifact, artifactIndex) => {
+    if (actor.build) {
+      const accountId = actor.build.inventoryAccountId ?? 'local-real-inventory';
+      actor.build.artifacts.forEach((artifact, artifactIndex) => {
         const key = JSON.stringify([artifact.inventoryAccountId ?? accountId, artifact.id]);
-        if (occupied.has(key)) context.addIssue({ code: 'custom', message: '同一账号的实物圣遗物不能在队伍中重复占用。', path: ['candidate','actors',index,'realBuild','artifacts',artifactIndex] });
+        if (occupied.has(key)) context.addIssue({ code: 'custom', message: '同一账号的实物圣遗物不能在队伍中重复占用。', path: ['candidate','actors',index,'build','artifacts',artifactIndex] });
         occupied.add(key);
       });
     }
     const snapshot = actor.accountSnapshot;
-    if (!snapshot || actor.realBuild) return;
+    if (!snapshot || actor.build) return;
     const slots = new Set<string>();
     snapshot.artifacts.forEach((artifact, artifactIndex) => {
       const key = JSON.stringify([snapshot.accountId, artifact.id]);
@@ -77,10 +77,10 @@ export const workbenchProjectSchema = z.object({
     });
   });
 });
-export type WorkbenchProject = z.infer<typeof workbenchProjectSchema>;
-export type WorkbenchNode = z.infer<typeof node>;
-export type WorkbenchUnit = z.infer<typeof workbenchUnitSchema>;
-export interface WorkbenchDiagnostic {
+export type Project = z.infer<typeof projectSchema>;
+export type ExpressionNode = z.infer<typeof node>;
+export type QuantityUnit = z.infer<typeof workbenchUnitSchema>;
+export interface Diagnostic {
   code: 'invalid-input' | 'missing-reference' | 'duplicate-id' | 'cycle' | 'unit' | 'unknown' | 'unsupported' | 'arithmetic' | 'budget' | 'stale-revision';
   path: string;
   message: string;
