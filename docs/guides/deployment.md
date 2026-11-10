@@ -4,7 +4,7 @@
 
 ## 桌面本地构建
 
-安装依赖后用 `pnpm exec install-electron` 准备匹配版本运行时，执行 `pnpm desktop:build` 和 `pnpm test:desktop`。最新产物清单在 `artifacts/desktop/latest.json`；Windows 的稳定双击入口是 `artifacts/desktop/Start-LeyLine.cmd`。每次打包生成独立 releases 目录，避免覆盖运行中的程序，不关闭用户已有窗口。详见[正式整合记录](../../archive/docs/planning/desktop-integration.md)。网页与桌面使用同一个 `WorkspaceShell`，桌面无需 Vite 服务。`test:desktop` 现指向当前真实库存/文件流程，需本地已授权的 `.references/artifacts_mona.json`；没有资料时不能用合成账号替代验收。
+安装依赖后用 `pnpm exec install-electron` 准备匹配版本运行时，执行 `pnpm desktop:build` 和 `pnpm test:desktop`。最新产物清单在 `artifacts/desktop/latest.json`；Windows 的稳定双击入口是 `artifacts/desktop/Start-LeyLine.cmd`。每次打包在.cache/build的独立工作区直接构建渲染器，不再留下dist-desktop和中转副本。完成后登记到releases，仅保留最新与上一次成功包；失败清掉本次工作区并保留原两版，不关闭用户已有窗口。desktop:preview:build复用同一流程和目录。详见[正式整合记录](../../archive/docs/planning/desktop-integration.md)。网页与桌面使用同一个 `WorkspaceShell`，桌面无需 Vite 服务。`test:desktop` 现指向当前真实库存/文件流程，需本地已授权的 `.references/artifacts_mona.json`；没有资料时不能用合成账号替代验收。
 
 ## 构建和验证
 
@@ -12,7 +12,7 @@
 2. `pnpm build`、`pnpm build:check`、`pnpm perf:engine`，检查构建体积与性能预算。
 3. `pnpm exec playwright install chromium firefox webkit`，执行 `pnpm test:e2e`。Linux环境需安装对应系统库，可使用 `playwright install --with-deps chromium firefox webkit`。
 4. `pnpm build:subpath`、`pnpm test:production`，验证根路径和 `/leyline/` 两个构建。两套浏览器报告写入 `artifacts/playwright/`，失败trace分开写入 `test-results/development/` 与 `test-results/production/`。
-5. `pnpm release:prepare` 重新构建根路径、检查体积并生成 `artifacts/releases/<commit>-<随机后缀>/`。打包会核对当前源码指纹与两份完整三内核报告，拒绝缺失、失败、跳过或陈旧的证据。最后用 `pnpm release:verify --dir=产物目录` 校验每个站点文件的SHA-256、长度和文件清单。
+5. `pnpm release:prepare` 重新构建根路径、检查体积并生成 `artifacts/releases/<commit>-<随机后缀>/`。打包会核对当前源码指纹与两份完整三内核报告，拒绝缺失、失败、跳过或陈旧的证据。网页候选也在临时目录完成后才登记，artifacts/releases/latest.json标识最新包及上一次成功包，最终目录最多保留两版。最后用 `pnpm release:verify --dir=产物目录` 校验每个站点文件的SHA-256、长度和文件清单。
 
 默认构建位于 `src/web/dist/`。子路径示例位于 `src/web/dist-subpath/`，不要将它当作根路径构建混用。其他子路径可执行 `pnpm --filter @leyline/web build --base=/你的路径/`，随后调整本地服务的base验证；路径必须以斜杠结尾。
 
@@ -44,3 +44,9 @@
 Vite 启动前同步分发副本到 `.cache/public/licenses/`，构建时按实际保留的模块生成 `licenses/bundled-packages.json`。根路径、子路径和桌面相对路径使用同一目录；设置页提供说明、原文、清单和鸣谢。
 
 网页交付复制完整静态输出（`.vite/` 除外），把许可、图片和索引纳入 SHA-256 清单。桌面渲染器带入相同许可目录，桌面根目录保留 Electron 的 LICENSE 与 LICENSES.chromium.html，打包器对照已安装原件校验哈希。
+
+## 产物保留与清理
+
+桌面和网页交付分别只保留最新、上一次成功包。普通网页dist及子路径变体各自覆盖，不累积版本；generated与资源缓存复用相同字节，并移除过期派生文件。最终包不依赖这些中间目录。
+
+`pnpm outputs:prune --dry-run`预览旧包清理，去掉dry-run执行；Windows下仍在运行的旧桌面包会被保护，不终止应用。`pnpm clean:outputs`清理生成数据、资源缓存、网页构建和报告，保留最终包与用户资料；之后开发或构建会重新生成所需中间数据。`.cache/build`中的本次中转无论成功或失败均清理，`clean:cache`另行显式清除整个缓存。

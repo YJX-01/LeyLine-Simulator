@@ -14,8 +14,8 @@
     "fixture:check": "node tools/scripts/checks/check-fixtures.mjs",
     "assets:check": "node tools/scripts/checks/check-ui-assets.mjs",
     "dev": "pnpm data:build && pnpm --filter @leyline/web dev",
-    "desktop:build": "pnpm data:build && pnpm --filter @leyline/web build --base=./ --outDir=dist-desktop && node tools/scripts/build/package-desktop.mjs",
-    "desktop:preview:build": "pnpm data:build && pnpm --filter @leyline/web build --base=./ --outDir=dist-desktop && node tools/scripts/build/package-desktop.mjs --preview",
+    "desktop:build": "pnpm data:build && node tools/scripts/build/package-desktop.mjs",
+    "desktop:preview:build": "pnpm desktop:build",
     "desktop:start": "node tools/scripts/dev/start-desktop.mjs",
     "test:desktop": "node tests/desktop/workspace.mjs",
     "build": "pnpm data:build && pnpm --filter @leyline/web build",
@@ -40,7 +40,8 @@
     "data:audit": "node tools/scripts/data/audit-numeric-sources.mjs",
     "data:capture": "node tools/scripts/data/capture-catalog.mjs",
     "data:prepare-characters": "python tools/scripts/data/prepare-character-update.py",
-    "project:evaluate": "node tools/scripts/data/evaluate-project.mjs"
+    "project:evaluate": "node tools/scripts/data/evaluate-project.mjs",
+    "outputs:prune": "node tools/scripts/dev/prune-outputs.mjs"
   },
   "devDependencies": {
     "@electron/packager": "^20.3.0",

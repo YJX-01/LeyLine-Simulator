@@ -1,4 +1,5 @@
-import { readFile, writeFile, readdir, mkdir, cp } from 'node:fs/promises';
+import { copyGeneratedFile, pruneGeneratedFiles } from '../../lib/generated-files.mjs';
+import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { resolve, relative, dirname } from 'node:path';
@@ -131,7 +132,8 @@ if (process.argv.includes('--check')) {
   if ((await readdir(resolve(root, 'assets/game/stats'))).some(path => /license/i.test(path))) throw new Error('License files belong in the central licenses directory, not stats/');
 } else {
   await mkdir(publicDirectory, { recursive:true });
-  await cp(canonical, publicDirectory, { recursive:true, force:true });
-  for (const path of legalFiles) await cp(resolve(root, path), resolve(publicDirectory, path));
+  pruneGeneratedFiles(root, publicDirectory, [...canonicalFiles, ...legalFiles]);
+  for (const path of canonicalFiles) copyGeneratedFile(resolve(canonical, path), resolve(publicDirectory, path));
+  for (const path of legalFiles) copyGeneratedFile(resolve(root, path), resolve(publicDirectory, path));
 }
 console.log(JSON.stringify(inventory.summary));

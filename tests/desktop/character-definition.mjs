@@ -8,7 +8,7 @@ import { desktopExecutable } from '../../tools/lib/desktop-location.mjs';
 const output = resolve('artifacts/character-definition-desktop');
 await mkdir(output, { recursive: true });
 const profile = await mkdtemp(resolve(tmpdir(), 'leyline-character-definition-'));
-const executable = await desktopExecutable(false,true);
+const executable = await desktopExecutable(true);
 const env = { ...process.env }; delete env.ELECTRON_RUN_AS_NODE;
 const app = await electron.launch({ executablePath: executable, args: ['--smoke', `--user-data-dir=${profile}`], env, timeout: 30000 });
 try {

@@ -1,3 +1,4 @@
+import { writeGeneratedFile } from '../../lib/generated-files.mjs';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
@@ -25,6 +26,6 @@ if (process.argv.includes('--capture')) {
 const content = readFileSync(canonical, 'utf8');
 if (process.argv.includes('--check')) {
   if (readFileSync(target, 'utf8') !== content) throw new Error('Release metadata needs regeneration.');
-} else writeFileSync(target, content);
+} else writeGeneratedFile(target, content);
 const data = JSON.parse(content);
 console.log(Object.fromEntries(['characters', 'weapons', 'artifacts'].map(group => [group, Object.keys(data[group]).length])));

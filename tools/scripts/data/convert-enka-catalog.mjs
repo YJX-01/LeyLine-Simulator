@@ -1,3 +1,4 @@
+import { writeGeneratedFile } from '../../lib/generated-files.mjs';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { readContentSource } from '../../lib/content-source.mjs';
@@ -38,5 +39,5 @@ for(const [avatarId,item] of Object.entries(supplements.characters)) {
 }
 const expected=`${JSON.stringify(snapshot.mapping)}\n`;
 if(process.argv.includes('--check')) { if(readFileSync(output,'utf8')!==expected)throw new Error('Enka catalog needs regeneration.'); }
-else writeFileSync(output,expected);
+else writeGeneratedFile(output,expected);
 console.log(JSON.stringify({characters:Object.keys(snapshot.mapping.characters).length,weapons:Object.keys(snapshot.mapping.weapons).length,sets:Object.keys(snapshot.mapping.sets).length,sourceCommit:snapshot.source.commit}));

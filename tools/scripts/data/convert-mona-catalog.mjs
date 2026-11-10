@@ -1,3 +1,4 @@
+import { writeGeneratedFile } from '../../lib/generated-files.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -46,5 +47,5 @@ for (const set of snapshot.sets) {
 const result = `${JSON.stringify(aliases, null, 2)}\n`;
 if (process.argv.includes('--check')) {
   if (readFileSync(aliasesPath, 'utf8') !== result) throw new Error('Mona set aliases need regeneration.');
-} else writeFileSync(aliasesPath, result);
+} else writeGeneratedFile(aliasesPath, result);
 console.log(JSON.stringify({ release: snapshot.release, sets: snapshot.sets.length, characters: snapshot.characters.length, weapons: snapshot.weapons.length, aliases: Object.keys(aliases).length }));

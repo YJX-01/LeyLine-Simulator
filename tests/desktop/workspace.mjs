@@ -8,7 +8,7 @@ import { sourceFingerprint } from '../../tools/lib/source-fingerprint.mjs';
 const directory=resolve('artifacts/workspace-desktop-validation');
 await mkdir(directory,{recursive:true});
 const userData=await mkdtemp(resolve(tmpdir(),'leyline-workspace-'));
-const executable=await desktopExecutable(process.argv.includes('--preview'),true);
+const executable=await desktopExecutable(true);
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
 const app=await electron.launch({executablePath:executable,args:['--smoke',`--user-data-dir=${userData}`],env,timeout:30000});
 try {

@@ -1,8 +1,9 @@
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
+import { readFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { readContentSource } from '../../lib/content-source.mjs';
 import { loadContentSchema } from '../../lib/load-content-schema.mjs';
+import { writeGeneratedFile, pruneGeneratedFiles } from '../../lib/generated-files.mjs';
 
 const root = resolve(import.meta.dirname, '../../..');
 if (process.argv.includes('--capture')) throw new Error('Use node tools/scripts/data/capture-catalog.mjs to capture source evidence; review metadata explicitly before generation.');
@@ -51,6 +52,7 @@ mkdirSync(directory, { recursive: true });
 for (const [name, data] of Object.entries(outputs)) {
   const text = `${JSON.stringify(data)}\n`, path = resolve(directory, name);
   if (process.argv.includes('--check')) { if (readFileSync(path, 'utf8').replace(/\r\n/g, '\n') !== text) throw new Error(`Real game snapshot stale: ${name}`); }
-  else writeFileSync(path, text);
+  else writeGeneratedFile(path, text);
 }
+pruneGeneratedFiles(root, directory, Object.keys(outputs), process.argv.includes('--check'));
 console.log(`Validated per-entity JSON: ${characters.length} characters, ${weapons.length} weapons, ${sets.length} sets; ${Object.keys(outputs).length} generated chunks.`);

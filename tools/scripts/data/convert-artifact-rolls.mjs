@@ -1,3 +1,4 @@
+import { writeGeneratedFile } from '../../lib/generated-files.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 const root=new URL('../../../', import.meta.url);
 const canonical=new URL('src/game-data/data/tables/artifact-rolls.json',root);
@@ -15,5 +16,5 @@ if(process.argv.includes('--capture')) {
 }
 const data=JSON.parse(readFileSync(canonical));const expected=JSON.stringify(data.affixes)+'\n';
 const output=new URL('src/web/generated/artifact-rolls.json',root);
-if(process.argv.includes('--check')) {if(readFileSync(output,'utf8')!==expected)throw Error('Artifact roll data needs regeneration');}else writeFileSync(output,expected);
+if(process.argv.includes('--check')) {if(readFileSync(output,'utf8')!==expected)throw Error('Artifact roll data needs regeneration');}else writeGeneratedFile(output,expected);
 console.log(JSON.stringify({affixes:Object.keys(data.affixes).length,commit:data.source.commit}));
