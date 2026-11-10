@@ -1,3 +1,4 @@
+import {preparePreferredConfiguration} from '../../../../src/web/src/domain/account-configurations';
 import { hasRecordedReference as existsSync, readRecordedReference } from '../../../helpers/recorded-reference';
 import { describe,it,expect,vi } from 'vitest';
 import { createPinia,setActivePinia } from 'pinia';
@@ -33,8 +34,12 @@ describe.skipIf(!existsSync(path))('recorded showcase to independent local combi
   const stats=defaultEffectiveStats(character.name),combination={id:'recorded-boundary-combination',accountId:account.id,items,stats,referenceName:character.name};
   const before=JSON.stringify(plan.next),draft=applyCombination(plan.next,character.id,combination);
   expect(JSON.stringify(plan.next)).toBe(before);expect(Object.values(draft.next.characters[0].equipment)).toHaveLength(5);expect(parseAccount(draft.next)).toEqual(draft.next);
-  const target=plan.next.characters[1],transfer=applyCombination(draft.next,target.id,combination);expect(transfer.transfers).toHaveLength(5);
-  expect(transfer.next.characters[0].equipment).toEqual({});expect(Object.values(transfer.next.characters[1].equipment)).toHaveLength(5);
+  const target=plan.next.characters[1],shared=applyCombination(draft.next,target.id,combination);
+  expect(shared.next.characters[0].equipment).toEqual(draft.next.characters[0].equipment);expect(shared.next.characters[1].equipment).toEqual(draft.next.characters[0].equipment);expect(parseAccount(shared.next)).toEqual(shared.next);
+  const configuration={id:'recorded-shared-preset',presetId:'recorded-shared-preset',character:shared.next.characters[1],source:{...shared.next,characters:[shared.next.characters[1]],artifacts:items}};
+  const preferred=preparePreferredConfiguration(draft.next,configuration);
+  expect(preferred.next.characters[0].equipment).toEqual(draft.next.characters[0].equipment);
+  expect(preferred.next.characters[1].equipment).toEqual(draft.next.characters[0].equipment);
   const data=await loadAccountGameData();const name=combinationName(combination,data.catalog.sets);
   const means:Record<string,number>={hp:253.94,hpPercent:.04955,attack:16.535,attackPercent:.04955,defense:19.675,defensePercent:.06195,elementalMastery:19.815,energyRecharge:.05505,critRate:.03305,critDamage:.06605};
   const expected=items.reduce((sum,item)=>sum+item.real!.substats.reduce((value,sub)=>value+(stats.includes(sub.stat)?(['hp','attack','defense'].includes(sub.stat)?sub.value/({hp:14000,attack:750,defense:700}[sub.stat as 'hp'|'attack'|'defense'])/means[sub.stat+'Percent']:sub.value/means[sub.stat]):0),0),0);

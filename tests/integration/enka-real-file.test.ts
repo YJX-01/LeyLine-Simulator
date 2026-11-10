@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { createAccount, cloneAccount, parseAccount } from '../../src/web/src/domain/account';
+import { createAccount, cloneAccount, parseAccount, equipArtifact, artifactOwners } from '../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../src/web/src/domain/enka-import';
 import { getWeapon } from '@leyline/game-data';
 import { resolveBuild, evaluateDamage, evaluateTimeline } from '@leyline/engine';
@@ -33,6 +33,53 @@ describe.skipIf(!existsSync(path))('Enka official documented public showcase (ac
     const changed=cloneAccount(account);changed.characters[0].name+='（已编辑）';
     expect(()=>confirmEnkaImport(changed,again,[again.rows[0].character.id])).toThrow('预览后角色资料已变化');
     expect(account.characters).toHaveLength(preview.rows.length);
+  });
+});
+
+describe.skipIf(!existsSync(path))('shared local references from the recorded showcase',()=>{
+  it('syncs selected equipment, reuses IDs and preserves other roles and old inventory',async()=>{
+    const raw=JSON.parse(readFileSync(path,'utf8')),account=createAccount();
+    const preview=await previewEnkaImport(raw,String(raw.uid),account),ids=preview.rows.map(row=>row.character.id);
+    confirmEnkaImport(account,preview,ids,true);
+    expect(account.artifacts).toHaveLength(20);
+    expect(account.characters.every(role=>Object.keys(role.equipment).length===5)).toBe(true);
+    const original=cloneAccount(account),[first,second]=account.characters;
+    // Explicit local trial using the two recorded sets; not observed player wearing.
+    for(const id of Object.values(second.equipment))equipArtifact(account,first.id,id!);
+    expect(artifactOwners(account,second.equipment.flower!).map(role=>role.id)).toEqual([first.id,second.id]);
+    expect(parseAccount(account)).toEqual(account);
+    const invalid=cloneAccount(account);invalid.characters[0].equipment.flower=second.equipment.plume;
+    expect(()=>parseAccount(invalid)).toThrow();
+    invalid.characters[0].equipment.flower='missing-recorded-item';expect(()=>parseAccount(invalid)).toThrow();
+    const untouched=JSON.stringify(account.characters.slice(1)),inventory=JSON.stringify(account.artifacts);
+    const again=await previewEnkaImport(raw,String(raw.uid),account),previewState=JSON.stringify(again);
+    confirmEnkaImport(account,again,[first.id],true);
+    expect(account.characters[0].equipment).toEqual(original.characters[0].equipment);
+    expect(JSON.stringify(account.characters.slice(1))).toBe(untouched);
+    expect(JSON.stringify(account.artifacts)).toBe(inventory);
+    expect(JSON.stringify(again)).toBe(previewState);
+    // Snapshot-only leaves local references intact, including shared references.
+    equipArtifact(account,first.id,second.equipment.flower!);
+    const equipment={...account.characters[0].equipment};
+    const snapshot=await previewEnkaImport(raw,String(raw.uid),account);
+    confirmEnkaImport(account,snapshot,[first.id],false);
+    expect(account.characters[0].equipment).toEqual(equipment);
+    const stale=await previewEnkaImport(raw,String(raw.uid),account);
+    account.characters[0].equipment={};const before=JSON.stringify(account);
+    expect(()=>confirmEnkaImport(account,stale,[first.id],true)).toThrow('预览后角色资料已变化');
+    expect(JSON.stringify(account)).toBe(before);
+  });
+  it('clears missing showcase slots on sync but retains the old physical items',async()=>{
+    const raw=JSON.parse(readFileSync(path,'utf8')),account=createAccount();
+    const initial=await previewEnkaImport(raw,String(raw.uid),account),id=initial.rows[0].character.id;
+    confirmEnkaImport(account,initial,[id],true);const oldFlower=account.characters[0].equipment.flower;
+    // Explicit unequip boundary derived by removing the recorded flower entry.
+    raw.avatarInfoList[0].equipList=raw.avatarInfoList[0].equipList.filter((item:{flat:{equipType?:string}})=>item.flat.equipType!=='EQUIP_BRACER');
+    const next=await previewEnkaImport(raw,String(raw.uid),account);
+    confirmEnkaImport(account,next,[id],true);
+    expect(account.characters[0].equipment.flower).toBeUndefined();
+    expect(Object.keys(account.characters[0].equipment)).toHaveLength(4);
+    expect(account.artifacts).toHaveLength(5);expect(account.artifacts.some(item=>item.id===oldFlower)).toBe(true);
   });
 });
 

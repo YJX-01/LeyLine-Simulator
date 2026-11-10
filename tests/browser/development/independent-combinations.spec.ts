@@ -15,6 +15,7 @@ async function combos(page:Page){return page.evaluate(()=>JSON.parse(localStorag
 test('recorded items: explicit standalone save, duplicate reuse, draft application, comparison and independent edits',async({page})=>{
   test.setTimeout(60000);await page.setViewportSize({width:1440,height:1000});await importShowcase(page,true);
   expect(await combos(page)).toHaveLength(0);
+  const importedEquipment=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!).characters.find((item:{name:string})=>item.name==='安柏').equipment);
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!).artifacts.length)).toBe(20);
   await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});
   await role.getByRole('button',{name:'展柜',exact:true}).click();await role.getByRole('button',{name:'保存组合',exact:true}).click();
@@ -22,8 +23,8 @@ test('recorded items: explicit standalone save, duplicate reuse, draft applicati
   expect(await combos(page)).toHaveLength(1);
   await role.getByRole('button',{name:'本地',exact:true}).click();await role.getByRole('button',{name:'应用组合',exact:true}).click();
   const picker=page.getByRole('dialog',{name:'选择圣遗物组合',exact:true});await picker.getByRole('button',{name:'应用组合',exact:true}).click();
-  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!).characters.find((item:{name:string})=>item.name==='安柏').equipment)).toEqual({});
-  await role.getByRole('button',{name:'保存',exact:true}).click();
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!).characters.find((item:{name:string})=>item.name==='安柏').equipment)).toEqual(importedEquipment);
+  await expect(role.getByRole('button',{name:'保存',exact:true})).toBeDisabled();
   const adopted=await page.evaluate(()=>localStorage.getItem('leyline-account-v2'));expect(Object.values(JSON.parse(adopted!).characters.find((item:{name:string})=>item.name==='安柏').equipment)).toHaveLength(5);
   await role.getByRole('button',{name:'保存组合',exact:true}).click();await expect(page.getByRole('dialog',{name:'编辑组合',exact:true})).toBeVisible();
   expect(await combos(page)).toHaveLength(1);await page.keyboard.press('Escape');await page.keyboard.press('Escape');

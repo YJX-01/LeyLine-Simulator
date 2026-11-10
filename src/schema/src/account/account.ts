@@ -27,11 +27,9 @@ export const accountSchema = z.object({
 }).strict().superRefine((account, ctx) => {
   const ids = [...account.characters, ...account.artifacts].map(item => item.id);
   if (new Set(ids).size !== ids.length) ctx.addIssue({ code: 'custom', message: '账号实体标识重复。' });
-  const owners = new Set<string>();
   for (const character of account.characters) for (const [slot, id] of Object.entries(character.equipment)) {
     const item = account.artifacts.find(item => item.id === id);
-    if (!item || item.slot !== slot || owners.has(id!)) ctx.addIssue({ code: 'custom', message: '穿戴引用或唯一归属无效。' });
-    if (id) owners.add(id);
+    if (!item || item.slot !== slot) ctx.addIssue({ code: 'custom', message: '穿戴引用或部位无效。' });
   }
 });
 export type AccountArtifact = z.infer<typeof accountArtifactSchema>;

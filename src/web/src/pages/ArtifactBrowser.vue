@@ -2,7 +2,7 @@
 import { computed, ref, watch, onMounted, shallowRef,nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import type { StatKey } from '@leyline/schema';
-import { accountSlots, accountSlotLabels, artifactOwner, type AccountArtifact, type AccountSlot, type LocalAccount } from '../domain/account';
+import { accountSlots, accountSlotLabels, artifactOwners, type AccountArtifact, type AccountSlot, type LocalAccount } from '../domain/account';
 import { accountStatLabels } from '../domain/account-real';
 import { useAccountStore } from '../stores/account';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
@@ -68,7 +68,7 @@ onMounted(async()=>{try {catalogSets.value=(await loadAccountGameData()).catalog
 const sets=computed(()=>[...catalogSets.value,...[...new Set(inventoryItems.value.map(item=>item.real?.setId ?? 'legacy'))].filter(id=>!catalogSets.value.some(set=>set.id===id)).map(id=>({id,name:id.startsWith('mona-unresolved-')?'套装身份待核对':'旧版 / 散件',rarity:0}))]);
 const ownerOptions=computed(()=>[{id:'free',name:'未装备'},{id:'equipped',name:'已装备'},...inventory.value.characters.map(character=>({id:character.id,name:character.name,icon:character.build?.character.id}))]);
 const selected=computed(()=>inventory.value.artifacts.find(item=>item.id===selectedId.value));
-const owner=(item:AccountArtifact)=>artifactOwner(inventory.value,item.id)?.name;
+const owner=(item:AccountArtifact)=>artifactOwners(inventory.value,item.id).map(character=>character.name).join('、');
 const statOptions=Object.entries(accountStatLabels).filter(([stat])=>!stat.endsWith('Percent')).map(([stat,label])=>({stat,label:stat==='energyRecharge'?'元素充能效率':label}));
 const mainOptions=computed(()=>statOptions.filter(option=>inventoryItems.value.some(item=>(!props.slot || item.slot===props.slot) && statMatches(item.real?.mainStat,option.stat))));
 const subOptions=statOptions.filter(option=>['hp','attack','defense','elementalMastery','energyRecharge','critRate','critDamage'].includes(option.stat));
@@ -77,7 +77,7 @@ const filtered=computed(()=>inventoryItems.value.filter(item=>{
   const hasSub=(stat:string)=>item.real?.substats.some(sub=>statMatches(sub.stat,stat));
   return (props.slot?item.slot===props.slot:!slotFilter.value.length || slotFilter.value.includes(item.slot))
     && (!statFilter.value.length || statFilter.value.some(stat=>statMatches(item.real?.mainStat,stat)))
-    && (!ownerFilter.value.length || ownerFilter.value.some(id=>id==='free'?!owner(item):id==='equipped'?!!owner(item):artifactOwner(inventory.value,item.id)?.id===id))
+    && (!ownerFilter.value.length || ownerFilter.value.some(id=>id==='free'?!owner(item):id==='equipped'?!!owner(item):artifactOwners(inventory.value,item.id).some(character=>character.id===id)))
     && (!setFilter.value.length || setFilter.value.includes(item.real?.setId ?? 'legacy'))
     && (!subFilter.value.length || (subMatch.value==='all'?subFilter.value.every(hasSub):subFilter.value.some(hasSub)))
     && (!levelFilter.value.length || levelFilter.value.includes(String(item.real?.level)))

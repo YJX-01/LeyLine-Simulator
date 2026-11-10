@@ -2,7 +2,7 @@ import {artifactValueSignature} from './showcase-inventory';
 import {defaultRollBasis,type EffectiveRollBasis} from './effective-roll-basis';
 import shortNames from '../../generated/artifact-set-short-names.json';
 import type { StatKey } from '@leyline/schema';
-import { accountSlots, cloneAccount, parseAccount, equipArtifact, artifactOwner, type AccountArtifact, type LocalAccount } from './account';
+import { accountSlots, cloneAccount, parseAccount, equipArtifact, type AccountArtifact, type LocalAccount } from './account';
 import { effectiveRollBreakdown, effectiveStatGroups } from './character-loadout-name';
 
 export interface ArtifactCombination {
@@ -48,12 +48,7 @@ export function applyCombination(account:LocalAccount,characterId:string,combina
   validateCombinationItems(account,combination.items);
   const next=cloneAccount(account),character=next.characters.find(item=>item.id===characterId);
   if(!character)throw new Error('角色已不存在。');
-  const transfers:string[]=[];
   character.equipment={};
-  for(const item of combination.items) {
-    const owner=artifactOwner(next,item.id);
-    if(owner && owner.id!==characterId)transfers.push(`从「${owner.name}」转移「${item.name}」`);
-    equipArtifact(next,characterId,item.id,true);
-  }
-  return {next:parseAccount(next),transfers};
+  for(const item of combination.items) equipArtifact(next,characterId,item.id);
+  return {next:parseAccount(next)};
 }

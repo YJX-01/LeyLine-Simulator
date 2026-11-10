@@ -13,18 +13,13 @@ export function parseAccount(input:unknown):LocalAccount {
  for(const item of parsed.data.artifacts)if(item.real)validateAccountArtifact(item.real);
  return cloneAccount(input as LocalAccount);
 }
-export function artifactOwner(account: LocalAccount, artifactId: string): AccountCharacter | undefined {
-  return account.characters.find(character => Object.values(character.equipment).includes(artifactId));
+export function artifactOwners(account: LocalAccount, artifactId: string): AccountCharacter[] {
+  return account.characters.filter(character => Object.values(character.equipment).includes(artifactId));
 }
-export function equipArtifact(account: LocalAccount, characterId: string, artifactId: string, confirmed = false): void {
+export function equipArtifact(account: LocalAccount, characterId: string, artifactId: string): void {
   const character = account.characters.find(entry => entry.id === characterId);
   const artifact = account.artifacts.find(entry => entry.id === artifactId);
   if (!character || !artifact) throw new Error('角色或圣遗物不存在。');
-  const owner = artifactOwner(account, artifactId);
-  if (owner && owner.id !== characterId) {
-    if (!confirmed) throw new Error(`需要确认：从「${owner.name}」转移「${artifact.name}」给「${character.name}」。`);
-    delete owner.equipment[artifact.slot];
-  }
   character.equipment[artifact.slot] = artifactId;
 }
 export function copyAccountCharacter(account: LocalAccount, characterId: string, project: Project, characterDefinition: string, weaponDefinition: string): string {

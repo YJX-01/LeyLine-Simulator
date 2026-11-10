@@ -5,7 +5,7 @@ import {buildRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-b
 import { computed, ref, shallowRef, onMounted, watch, defineAsyncComponent, nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import type { StatKey } from '@leyline/schema';
-import { cloneAccount, parseAccount, accountSlots, accountSlotLabels, artifactOwner, equipArtifact, type AccountSlot, type AccountCharacter, type AccountArtifact, type LocalAccount } from '../domain/account';
+import { cloneAccount, parseAccount, accountSlots, accountSlotLabels, equipArtifact, type AccountSlot, type AccountCharacter, type AccountArtifact, type LocalAccount } from '../domain/account';
 import { useAccountStore } from '../stores/account';
 import { localDataErrorLabel } from '../domain/workbench-labels';
 import { loadAccountGameData } from '../domain/account-presentation';
@@ -114,8 +114,6 @@ const favoriteFilter=props.pick?ref<string[]>([]):context.characterFavoriteFilte
 watch(()=>account.value.id,()=>{favoriteFilter.value=[];});
 const previewConfiguration = ref<AccountCharacter>();
 let draftBaseline = '';
-const pendingPreset = ref('');
-const presetTransfers = ref<string[]>([]);
 let baseSnapshot = '';
 const detailDirty = computed(() => cultivationDirty.value || (!!draftAccount.value && JSON.stringify(draftAccount.value) !== draftBaseline));
 const availableLoadouts = computed(() => loadouts.loadouts.filter(item => item.accountId === account.value.id && item.characterId === characterId.value));
@@ -149,12 +147,11 @@ function resetDraft() {
   equipmentPickerOpen.value=false;
   baseSnapshot = JSON.stringify(account.value);
   draftAccount.value = cloneAccount(account.value);draftBaseline=JSON.stringify(draftAccount.value);editingPresetId.value='';previewConfiguration.value=undefined;
-  cultivationDirty.value = false; formRevision.value++; pending.value = undefined; artifactId.value='';
-  detailError.value = ''; detailNotice.value = ''; selectedPreset.value = ''; pendingPreset.value = '';
+  cultivationDirty.value = false; formRevision.value++; artifactId.value='';
+  detailError.value = ''; detailNotice.value = ''; selectedPreset.value = '';
 }
 async function saveDetail(asPreset = false) {
   if (!draftAccount.value || !character.value || detailBusy.value) return false;
-  if (pending.value) { detailError.value='请先确认或取消装备转移，再保存。'; return false; }
   const draft = draftAccount.value;
   detailBusy.value = true; detailError.value = '';
   try {
@@ -193,7 +190,7 @@ async function saveDetail(asPreset = false) {
   } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '保存失败，原配置保持不变。'; return false; }
   finally { detailBusy.value = false; }
 }
-function tryPreset(id: string, confirmed = false) {
+function tryPreset(id: string) {
   if (!id || !draftAccount.value || !character.value) return;
   detailError.value = '';
   try {
@@ -205,9 +202,6 @@ function tryPreset(id: string, confirmed = false) {
       const current = draftAccount.value.artifacts.find(candidate => candidate.id === item.id);
       if (item.inventoryId!==null && (!current || artifactValueSignature(current) !== artifactValueSignature(item))) throw new Error('方案中的实物已缺失或词条发生变化，请先核对库存。');
     }
-    const transfers = Object.values(entry.equipment).flatMap(artifact => { const owner = artifactOwner(draftAccount.value!, artifact!); const item = draftAccount.value!.artifacts.find(item=>item.id===artifact); return owner && owner.id !== entry.id ? [`从「${owner.name}」卸下「${item?.name ?? '圣遗物'}」并转移给「${entry.name}」`] : []; });
-    presetTransfers.value = transfers;
-    if (transfers.length && !confirmed) { pendingPreset.value = id; return; }
     const next = cloneAccount(draftAccount.value);
     next.artifacts.push(...preset.snapshot.artifacts.filter(item=>item.inventoryId===null && !next.artifacts.some(current=>current.id===item.id)));
     const original = next.characters.find(item => item.id === entry.id)!;
@@ -215,15 +209,15 @@ function tryPreset(id: string, confirmed = false) {
     const equipment = { ...snapshot.equipment };
     snapshot.equipment = {}; snapshot.showcase = original.showcase;
     next.characters[next.characters.findIndex(item => item.id === snapshot.id)] = snapshot;
-    for (const artifact of Object.values(equipment)) equipArtifact(next, snapshot.id, artifact!, confirmed);
+    for (const artifact of Object.values(equipment)) equipArtifact(next, snapshot.id, artifact!);
     draftAccount.value = parseAccount(next);draftBaseline=JSON.stringify(draftAccount.value);editingPresetId.value=id;selectedPreset.value=id;formRevision.value++;cultivationDirty.value=false;
-    pendingPreset.value = ''; detailNotice.value = '正在查看备选配装；保存只更新此方案，设为首选才改变实际穿戴。';
+    detailNotice.value = '正在查看备选配装；保存只更新此方案，设为首选才改变实际穿戴。';
   } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '方案未载入。'; selectedPreset.value = ''; }
 }
 const combinationStore=useArtifactCombinationsStore();
 const combinationPickerOpen=ref(false),combinationEditorId=ref('');
 const combinationSeed=ref<{items:AccountArtifact[];stats:StatKey[];referenceName:string;basis?:EffectiveRollBasis}>(),combinationPendingArtifacts=ref<AccountArtifact[]>([]);
-const pendingCombination=ref<ArtifactCombination>(),combinationTransfers=ref<string[]>([]);
+const pendingCombination=ref<ArtifactCombination>();
 let combinationBaseline='';
 function syncImportedArtifacts(){
   if(!draftAccount.value)return;
@@ -261,8 +255,8 @@ function useCombination(combination:ArtifactCombination,confirmed=false){
   try{
     if(confirmed && combinationBaseline!==JSON.stringify(draftAccount.value))throw new Error('草稿已变化，请重新选择组合。');
     const plan=applyCombination(draftAccount.value,character.value.id,combination);
-    if(!confirmed && (plan.transfers.length || combination.items.length<5)){
-      pendingCombination.value=combination;combinationTransfers.value=plan.transfers;combinationBaseline=JSON.stringify(draftAccount.value);return;
+    if(!confirmed && combination.items.length<5){
+      pendingCombination.value=combination;combinationBaseline=JSON.stringify(draftAccount.value);return;
     }
     draftAccount.value=plan.next;combinationPickerOpen.value=false;pendingCombination.value=undefined;
     detailNotice.value='组合已应用到草稿，保存后生效。';
@@ -281,9 +275,9 @@ function equipmentContext(slot:AccountSlot,event:MouseEvent|KeyboardEvent){
 function openInspectedArtifact(slot:AccountSlot){
   if(equipmentView.value==='showcase'){inspectingSlot.value=slot;return;}
   const preset=editingPresetId.value;
-  requestLeave(()=>{if(detailDirty.value){resetDraft();if(preset)tryPreset(preset,true);}inspectingSlot.value=slot;});
+  requestLeave(()=>{if(detailDirty.value){resetDraft();if(preset)tryPreset(preset);}inspectingSlot.value=slot;});
 }
-function closeInspectedArtifact(){const editable=equipmentView.value==='local',preset=editingPresetId.value;inspectingSlot.value=undefined;if(editable){resetDraft();if(preset)tryPreset(preset,true);}}
+function closeInspectedArtifact(){const editable=equipmentView.value==='local',preset=editingPresetId.value;inspectingSlot.value=undefined;if(editable){resetDraft();if(preset)tryPreset(preset);}}
 function equipmentAction(action:string){const slot=equipmentMenu.value?.slot;equipmentMenu.value=undefined;if(!slot)return;
   if(action==='details')openInspectedArtifact(slot);
   else if(action==='replace')openEquipmentPicker(slot);
@@ -308,7 +302,7 @@ function requestLeave(action: ()=>void) {
 }
 function guardPreferred(action:()=>void) {
   const id=editingPresetId.value;
-  requestLeave(()=>{if(detailDirty.value){resetDraft();if(id)tryPreset(id,true);}action();});
+  requestLeave(()=>{if(detailDirty.value){resetDraft();if(id)tryPreset(id);}action();});
 }
 function requestCloseCharacter() { requestLeave(closeCharacter); }
 const clearTarget = ref<'local'|'showcase'>('local');
@@ -336,7 +330,7 @@ function clearShowcase() {
 }
 defineExpose({ requestLeave, openConfiguration });
 function openCharacter(id:string) { equipmentView.value='local'; characterId.value=id; resetDraft(); detailOpen.value=true;panelOpen.value=false; }
-function closeCharacter() { equipmentMenu.value=undefined;inspectingSlot.value=undefined;importingSlot.value=undefined;const wasOpen=detailOpen.value;comparisonTargetRevision.value++;combinationPickerOpen.value=false;combinationEditorId.value='';combinationSeed.value=undefined;combinationPendingArtifacts.value=[];pendingCombination.value=undefined;configurationPickerOpen.value=false;cancelDiscard();clearShowcaseOpen.value=false;draftAccount.value=undefined; cultivationDirty.value=false; saveAsOpen.value=false; pendingPreset.value=''; detailOpen.value=false; pending.value=undefined;if(wasOpen)emit('detailClosed'); }
+function closeCharacter() { equipmentMenu.value=undefined;inspectingSlot.value=undefined;importingSlot.value=undefined;const wasOpen=detailOpen.value;comparisonTargetRevision.value++;combinationPickerOpen.value=false;combinationEditorId.value='';combinationSeed.value=undefined;combinationPendingArtifacts.value=[];pendingCombination.value=undefined;configurationPickerOpen.value=false;cancelDiscard();clearShowcaseOpen.value=false;draftAccount.value=undefined; cultivationDirty.value=false; saveAsOpen.value=false;  detailOpen.value=false; if(wasOpen)emit('detailClosed'); }
 watch([()=>account.value.id,()=>props.page],()=>{characterMenu.value=undefined;deleteCharacterId.value='';closeCharacter();modal.value='';});
 const modal = ref<'import' | 'create' | 'equipment' | 'artifact' | 'repair' | 'network' | 'filters' | 'sort' | ''>('');
 const repairPreview = ref<MonaImportPreview>();
@@ -402,21 +396,10 @@ function cardArtifacts(entry: AccountCharacter, context:LocalAccount=account.val
     : accountSlots.flatMap(slot => { const item = showcaseArtifact(entry, slot); return item ? [item] : []; });
 }
 
-const pending = ref<{ accountId: string; characterId: string; artifactId: string; message: string }>();
 function equip() {
   if (!character.value || !artifactId.value) { error.value = '请选择角色和圣遗物。'; return; }
-  const owner = artifactOwner(editingAccount.value, artifactId.value);
-  const item = editingAccount.value.artifacts.find(entry => entry.id === artifactId.value)!;
-  if (owner && owner.id !== character.value.id) {
-    pending.value = { accountId: account.value.id, characterId: character.value.id, artifactId: item.id, message: `将「${item.name}」从「${owner.name}」卸下并转移给「${character.value.name}」，替换目标角色同部位装备（原装备保留在库存）。` };
-  } else equipArtifact(editingAccount.value, character.value.id, item.id);
-}
-function confirmTransfer() {
-  if (!pending.value) return;
-  if (pending.value.accountId !== account.value.id) { pending.value = undefined; return; }
-  try { equipArtifact(editingAccount.value, pending.value.characterId, pending.value.artifactId, true); } catch (cause) { error.value = String(cause); pending.value = undefined; return; }
-  pending.value = undefined;
-  detailNotice.value = '转移已加入草稿，保存后才生效，原装备仍保留在库存。';
+  try { equipArtifact(editingAccount.value, character.value.id, artifactId.value); }
+  catch (cause) { error.value = cause instanceof Error ? cause.message : '装备未更新。'; }
 }
 </script>
 
@@ -467,7 +450,6 @@ function confirmTransfer() {
         </section>
         <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="effectiveBasis" :items="accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
         <ComparisonPanel v-if="detailOpen" :key="`${character.id}-${editingPresetId}-${comparisonTargetRevision}`" kind="配置" :current="{title:(equipmentView==='showcase'?'展柜：':'当前配置：')+draftName.split(' · ').slice(1).join('|'),basis:effectiveBasis,items:accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})}" :options="comparisonOptions" :stats="effectiveStats" :reference-name="character.name" />
-        <div v-if="pending" class="transfer-confirm" role="alert"><p>{{ pending.message }}</p><button @click="confirmTransfer">确认转移装备</button><button @click="pending = undefined">取消转移</button></div>
       </div>
       </WorkbenchDialog>
       <ContextMenu v-if="equipmentMenu" :x="equipmentMenu.x" :y="equipmentMenu.y" label="角色圣遗物操作" :options="[{id:'details',label:'查看详情'},...(equipmentView==='showcase'?[{id:'import',label:'入库',accent:'anemo' as const}]:[{id:'replace',label:'替换'},{id:'remove',label:'卸下',danger:true}])]" @close="equipmentMenu=undefined" @select="equipmentAction" />
@@ -476,13 +458,12 @@ function confirmTransfer() {
       <ArtifactPickerDialog v-if="equipmentPickerOpen && character && equipmentView==='local'" :slot="equipmentSlot" :account="editingAccount" :current="equipmentItem(equipmentSlot)" :effective-stats="effectiveStats" @close="equipmentPickerOpen=false" @remove="unequipCurrentSlot" @select="artifactId=$event.id;equip();equipmentPickerOpen=false" />
       <WorkbenchDialog v-if="combinationPickerOpen && character" title="选择圣遗物组合" @close="combinationPickerOpen=false"><ArtifactCombinationLibrary pick :stats="effectiveStats" :reference-name="character.name" @select="useCombination" /></WorkbenchDialog>
       <ArtifactCombinationEditor v-if="combinationEditorId || combinationSeed" :key="combinationEditorId || 'seed'" :combination="combinationStore.combinations.find(item=>item.id===combinationEditorId)" :seed="combinationSeed" :pending-artifacts="combinationPendingArtifacts" @close="closeCombination" @saved="combinationSaved" />
-      <ConfirmationDialog v-if="pendingCombination" title="应用圣遗物组合？" :danger="false" confirm-label="应用到草稿" @cancel="pendingCombination=undefined" @confirm="useCombination(pendingCombination!,true)"><p v-for="message in combinationTransfers" :key="message">{{ message }}</p><p v-if="pendingCombination.items.length<5">组合未满五件，缺少的部位将卸下。</p><p>保存角色后生效，库存物品保留。</p></ConfirmationDialog>
+      <ConfirmationDialog v-if="pendingCombination" title="应用圣遗物组合？" :danger="false" confirm-label="应用到草稿" @cancel="pendingCombination=undefined" @confirm="useCombination(pendingCombination!,true)"><p v-if="pendingCombination.items.length<5">组合未满五件，缺少的部位将卸下。</p><p>保存角色后生效，库存物品保留。</p></ConfirmationDialog>
       <WorkbenchDialog v-if="configurationPickerOpen && character" :title="`${character.name}的配置`" @close="configurationPickerOpen=false"><p v-if="detailDirty" class="detail-feedback">切换前会确认未保存的修改。</p><CharacterConfigurationList :character-id="character.id" selectable :current-preset-id="editingPresetId"  :before-adopt="guardPreferred" @adopted="resetDraft();configurationPickerOpen=false" @deleted="configurationDeleted" @select="chooseConfiguration" /></WorkbenchDialog>
 
       <UnsavedChangesDialog v-if="discardOpen" :busy="detailBusy" @save="saveAndLeave(()=>saveDetail())" @continue="cancelDiscard" @discard="discardChanges" />
-      <ConfirmationDialog v-if="clearShowcaseOpen" :title="clearTarget==='local'?'清除本地配装？':'清除展柜信息？'" confirm-label="确认清除" @cancel="clearShowcaseOpen=false" @confirm="clearShowcase"><p>{{ clearTarget==='local'?'清除本地培养与穿戴，圣遗物保留在库存。':'清除该角色的展柜信息。' }}</p><p v-if="clearPreview?.promotedId">保存后由下一套备选接替首选。</p><p v-if="clearPreview?.removedCharacter">已无其他配置及展柜，保存后移除角色。</p><p v-for="message in clearPreview?.transfers ?? []" :key="message">{{ message }}</p><p>保存后生效。</p></ConfirmationDialog>
+      <ConfirmationDialog v-if="clearShowcaseOpen" :title="clearTarget==='local'?'清除本地配装？':'清除展柜信息？'" confirm-label="确认清除" @cancel="clearShowcaseOpen=false" @confirm="clearShowcase"><p>{{ clearTarget==='local'?'清除本地培养与穿戴，圣遗物保留在库存。':'清除该角色的展柜信息。' }}</p><p v-if="clearPreview?.promotedId">保存后由下一套备选接替首选。</p><p v-if="clearPreview?.removedCharacter">已无其他配置及展柜，保存后移除角色。</p><p>保存后生效。</p></ConfirmationDialog>
       <WorkbenchDialog v-if="saveAsOpen" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="draftName" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名；首选配置和实际穿戴不变。</p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
-      <WorkbenchDialog v-if="pendingPreset" title="确认试用配装方案" @close="pendingPreset=''; selectedPreset=''"><p v-for="message in presetTransfers" :key="message">{{ message }}</p><p>试用只修改草稿，保存时才转移实际穿戴，原装备保留在库存。</p><button @click="tryPreset(pendingPreset,true)">确认试用方案</button></WorkbenchDialog>
     </template>
     <template v-else>
 
@@ -519,7 +500,7 @@ label { font-size:var(--font-body); display: grid; gap: 7px; } input, select { m
 
 
 .account-copy { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 12px; }
-.account-note { display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin:0 0 16px; }.account-note strong { font-size:var(--font-body); }.account-note span { color:var(--muted); }.account-error { color: var(--element-pyro-deep); }.transfer-confirm { border: 1px solid var(--element-geo-primary); padding: 16px; }.transfer-confirm button { margin-right: 12px; }
+.account-note { display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin:0 0 16px; }.account-note strong { font-size:var(--font-body); }.account-note span { color:var(--muted); }.account-error { color: var(--element-pyro-deep); }
 .hidden-file { display: none; }.account-inventory { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 16px; margin-top: 18px; }.account-inventory article { border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 12px; } details { font-size:var(--font-body); overflow-wrap: anywhere; }
 @media(max-width:700px) { .account-library { margin-inline:15px; }.account-editor { grid-template-columns:minmax(0,1fr); } }
 .account-editor { display:block; margin:0; }h2 { margin:0; font-size:var(--font-dialog); }h3 { font-size:var(--font-body); margin:0 0 14px; }.account-library { margin-inline:0; }

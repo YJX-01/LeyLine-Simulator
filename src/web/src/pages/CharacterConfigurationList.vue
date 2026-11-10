@@ -30,10 +30,10 @@ const props=defineProps<{characterId?:string;selectable?:boolean;currentPresetId
 const emit=defineEmits<{select:[characterId:string,presetId:string];adopted:[];deleted:[characterId:string,presetId:string];resetRole:[]}>();
 const account=useAccountStore(),loadouts=useCharacterLoadoutsStore();
 const data=ref<Awaited<ReturnType<typeof loadAccountGameData>>>(),error=ref('');
-const pendingPreferred=ref<AccountConfiguration>(),transfers=ref<string[]>([]),notice=ref('');
+const pendingPreferred=ref<AccountConfiguration>(),notice=ref('');
 let adoptionBaseline='';
 function requestPreferred(configuration:AccountConfiguration) {
-  const open=()=>{try{const prepared=preparePreferredConfiguration(account.account,configuration);adoptionBaseline=JSON.stringify(account.account);transfers.value=prepared.transfers;pendingPreferred.value=configuration;error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'配置不可采用。';}};
+  const open=()=>{try{preparePreferredConfiguration(account.account,configuration);adoptionBaseline=JSON.stringify(account.account);pendingPreferred.value=configuration;error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'配置不可采用。';}};
   if(props.beforeAdopt)props.beforeAdopt(open);else open();
 }
 function confirmPreferred() {
@@ -106,8 +106,8 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
     <LibraryPagination v-model:page="page" :pages="pages" always position="底部" full />
     <p v-if="!configurations.length" class="configuration-empty">{{ query || filter!=='all'?'没有匹配的配置，请调整筛选。':'还没有本地配置，请前往角色库保存。' }}</p>
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="配置操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
-    <ConfirmationDialog v-if="deleting" title="清除配置？" confirm-label="确认清除" @cancel="cancelDelete" @confirm="confirmDelete"><p>清除「{{ deleting.character.name }}」的{{ deleting.presetId?'这份备选':'首选' }}配置。</p><p v-if="deletePlan?.promotedId">下一份备选将接替首选。</p><p v-for="message in deletePlan?.transfers ?? []" :key="message">{{ message }}</p><p>圣遗物库存与展柜信息保留。</p></ConfirmationDialog>
-    <ConfirmationDialog v-if="pendingPreferred" title="设为首选配置？" :danger="false" confirm-label="确认设为首选" @cancel="pendingPreferred=undefined" @confirm="confirmPreferred"><p>采用此配置，原首选保留为备选。</p><p v-for="message in transfers" :key="message">{{ message }}</p></ConfirmationDialog>
+    <ConfirmationDialog v-if="deleting" title="清除配置？" confirm-label="确认清除" @cancel="cancelDelete" @confirm="confirmDelete"><p>清除「{{ deleting.character.name }}」的{{ deleting.presetId?'这份备选':'首选' }}配置。</p><p v-if="deletePlan?.promotedId">下一份备选将接替首选。</p><p>圣遗物库存与展柜信息保留。</p></ConfirmationDialog>
+    <ConfirmationDialog v-if="pendingPreferred" title="设为首选配置？" :danger="false" confirm-label="确认设为首选" @cancel="pendingPreferred=undefined" @confirm="confirmPreferred"><p>采用此配置，原首选保留为备选。</p></ConfirmationDialog>
     <WorkbenchDialog v-if="filterOpen" title="筛选角色配置" size="filter" @close="filterOpen=false"><FilterPanel><section><h3>配置类型</h3><ChoiceGroup stretch v-model="filter" label="配置类型" :options="[{value:'all',label:'全部'},{value:'preferred',label:'首选'},{value:'alternate',label:'备选'}]" /></section></FilterPanel><template #footer><FilterActions flush @reset="filter='all'" @confirm="filterOpen=false" /></template></WorkbenchDialog>
     <WorkbenchDialog v-if="sortOpen" title="配置排序" size="filter" @close="sortOpen=false"><SortPanel v-model="sort" v-model:direction="direction" :options="[{value:'default',label:'首选优先'},{value:'rolls',label:'有效词条数'}]" @reset="sort='rolls';direction='desc'" @confirm="sortOpen=false" /></WorkbenchDialog>
   </div>

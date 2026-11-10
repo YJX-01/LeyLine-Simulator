@@ -243,8 +243,8 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button',{name:'完成选择',exact:true}).click();
   await page.getByRole('dialog',{name:'筛选圣遗物',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await page.locator('.inventory-card').first().click();
-  await expect(page.getByRole('button', { name: '确认转移装备', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: '取消转移', exact: true }).click();
+  await expect(page.getByRole('button', { name: '确认转移装备', exact: true })).toHaveCount(0);
+  await editingRole.getByRole('button', { name: '还原', exact: true }).click();
   const originalRoleAccount = await page.evaluate(() => localStorage.getItem('leyline-account-v2'));
   const roleDetail = page.getByRole('dialog');
   await unloadFlower();

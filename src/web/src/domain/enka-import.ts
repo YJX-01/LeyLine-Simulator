@@ -77,10 +77,18 @@ export function confirmEnkaImport(account:LocalAccount,preview:EnkaPreview,selec
   for(const row of preview.rows.filter(row=>selectedIds.includes(row.character.id))) {
     const index=next.characters.findIndex(item=>item.id===row.character.id);
     if (row.before ? index<0||JSON.stringify(next.characters[index])!==row.before : index>=0||next.characters.some(item=>item.name===row.character.name)) throw new Error('预览后角色资料已变化，请重新查询。');
-    if (index>=0) next.characters[index]=row.character;else next.characters.push(row.character);count++;
+    const character=JSON.parse(JSON.stringify(row.character)) as AccountCharacter;
+    if (index>=0) next.characters[index]=character;else next.characters.push(character);count++;
   }
   if (!count) throw new Error('请先选择要导入的角色。');
-  if(importArtifacts)next.artifacts=planShowcaseInventory(next,next.characters.filter(character=>selectedIds.includes(character.id))).next.artifacts;
+  if(importArtifacts) {
+    const characters=next.characters.filter(character=>selectedIds.includes(character.id));
+    const plan=planShowcaseInventory(next,characters);
+    next.artifacts=plan.next.artifacts;
+    for(const character of characters) {
+      character.equipment=Object.fromEntries(plan.items[character.id].map(item=>[item.slot,item.id]));
+    }
+  }
   const valid=parseAccount(next);
   account.characters=valid.characters;account.artifacts=valid.artifacts;account.uid=valid.uid;
   return count;

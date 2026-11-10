@@ -91,7 +91,7 @@ describe.skipIf(!existsSync(monaPath))('Preferred configuration from actual inve
   const prepared=preparePreferredConfiguration(original,saved);
   expect(prepared.next.characters.find(item=>item.id===jean.id)!.equipment).toEqual(draft.equipment);
   expect(prepared.next.artifacts).toEqual(original.artifacts);
-  expect(prepared.transfers).toEqual([]);expect(JSON.stringify(original)).toBe(before);
+  expect(JSON.stringify(original)).toBe(before);
   const missing=structuredClone(original);missing.artifacts=missing.artifacts.filter(item=>item.id!==draft.equipment.plume);
   expect(()=>preparePreferredConfiguration(missing,saved)).toThrow('实物已缺失');
   expect(JSON.stringify(original)).toBe(before);
