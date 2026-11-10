@@ -1,27 +1,18 @@
-import type { WorkbenchProject, WorkbenchDiagnostic, WorkbenchUnit } from '@leyline/schema';
-import { evaluateRealDamage, resolveRealBuild } from '../real-game';
-import type { WorkbenchPoint, WorkbenchResult } from './index';
+import type { Project, Diagnostic, QuantityUnit } from '@leyline/schema';
+import { evaluateDamage, resolveBuild } from '../attributes/build';
+import type { DamagePoint, EvaluationResult, EffectInstance, AttributeRead } from '@leyline/schema';
 
-type Definition = WorkbenchProject['definitions'][number];
+type Definition = Project['definitions'][number];
 type Effect = Definition['effects'][number];
-type RecordEntry = WorkbenchProject['timeline'][number];
-type Quantity = { value: number; unit: WorkbenchUnit };
-export interface P3EffectInstance {
-  id: string; owner: string; slot: string; definition: string; version: string; effect: string;
-  action: string | null; startMs: number; endMs: number; recipient: string; attribute: string;
-  unit: WorkbenchUnit; disabled: boolean;
-}
-export interface P3Read {
-  id: string; actor: string; key: string; unit: WorkbenchUnit; timeMs: number;
-  phase: 'before' | 'after'; recordId: string; instanceId?: string; value: number | null; dependencies: string[];
-}
-interface Instance { view: P3EffectInstance; definition: Definition; effect: Effect; trigger?: RecordEntry; index: number }
-interface Context { actor: string; record: RecordEntry; phase: 'before' | 'after'; excluded?: string; point: WorkbenchPoint; trace?: P3Read }
+type RecordEntry = Project['timeline'][number];
+type Quantity = { value: number; unit: QuantityUnit };
+interface Instance { view: EffectInstance; definition: Definition; effect: Effect; trigger?: RecordEntry; index: number }
+interface Context { actor: string; record: RecordEntry; phase: 'before' | 'after'; excluded?: string; point: DamagePoint; trace?: AttributeRead }
 
-/** P3 uses one demand-driven dependency graph for attributes, captures and historical damage. */
-export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
-  const diagnostics: WorkbenchDiagnostic[] = [];
-  const report = (code: WorkbenchDiagnostic['code'], path: string, message: string) => {
+/** Demand-driven graph for attributes, effects, captures and historical damage. */
+export function evaluateDependencyGraph(project: Project): EvaluationResult {
+  const diagnostics: Diagnostic[] = [];
+  const report = (code: Diagnostic['code'], path: string, message: string) => {
     if (!diagnostics.some(d => d.code === code && d.path === path && d.message === message)) diagnostics.push({ code, path, message });
   };
   const definitions = new Map(project.definitions.map(d => [d.id, d]));
@@ -74,7 +65,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
         for (const trigger of triggers) {
           if (!touch('effects')) break;
           const identity: (string | null)[] = [actor.id, slot, d.id, d.version, effect.id, trigger?.id ?? null];
-          if (actor.realBuild) identity.push(actor.realBuild[slot].id, actor.realBuild.dataVersion);
+          if (actor.build) identity.push(actor.build[slot].id, actor.build.dataVersion);
           const id = JSON.stringify(identity);
           const recipient = effect.recipient ?? 'self';
           if (recipient !== 'self' && recipient !== 'team' && !actors.has(recipient)) missing(recipient, `effects.${id}.recipient`);
@@ -106,11 +97,11 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
   }
   const instanceIds = new Set(instances.map(i => i.view.id));
   for (const revision of project.effectRevisions ?? []) if (!instanceIds.has(revision.instanceId)) report('stale-revision', `effectRevisions.${revision.instanceId}`, '来源已删除、换装或版本变化，此修订待核对，未附着到其他实例。');
-  const reads: P3Read[] = [];
-  const points = new Map<string, WorkbenchPoint>();
+  const reads: AttributeRead[] = [];
+  const points = new Map<string, DamagePoint>();
   const completed = new Set<string>();
   const gameDamagePoints = new Set<string>();
-  const panels = new Map<string, ReturnType<typeof resolveRealBuild>>();
+  const panels = new Map<string, ReturnType<typeof resolveBuild>>();
   const ctxKey = (ctx: Context) => JSON.stringify([ctx.actor, ctx.record.id, ctx.phase]);
   const before = (a: RecordEntry, ctx: Context) => (positions.get(a.id) ?? -1) < (positions.get(ctx.record.id) ?? -1) || (a.id === ctx.record.id && ctx.phase === 'after');
   function source(ctx: Context, d: Definition, path: string) {
@@ -126,14 +117,14 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
     if (!record) { missing(id, `timeline.${ctx.record.id}.capture`); return null; }
     return { ...ctx, record, phase };
   }
-  function baseAttribute(actorId: string, key: string, unit: WorkbenchUnit, ctx: Context): Quantity | null {
+  function baseAttribute(actorId: string, key: string, unit: QuantityUnit, ctx: Context): Quantity | null {
     const actor = actors.get(actorId);
     if (!actor) { missing(actorId, `timeline.${ctx.record.id}.attribute`); return null; }
     if (key === 'damageBonus') return { value: 0, unit: 'scalar' };
-    if (key === 'attack' && actor.realBuild) {
+    if (key === 'attack' && actor.build) {
       let panel = panels.get(actorId);
-      if (!panel) { panel = resolveRealBuild(actor.realBuild); panels.set(actorId, panel); }
-      for (const issue of panel.issues) report(issue.code, `candidate.actors.${actorId}.realBuild`, issue.message);
+      if (!panel) { panel = resolveBuild(actor.build); panels.set(actorId, panel); }
+      for (const issue of panel.issues) report(issue.code, `candidate.actors.${actorId}.build`, issue.message);
       return panel.status === 'complete' ? { value: panel.stats.attack, unit: 'attack' } : null;
     }
     const value = Object.hasOwn(actor.inputs, key) ? actor.inputs[key] : undefined;
@@ -156,10 +147,10 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
       return nodeValue(instance.definition, instance.effect.value, effectContext);
     });
   }
-  function attribute(actorId: string, key: string, unit: WorkbenchUnit, ctx: Context): Quantity | null {
+  function attribute(actorId: string, key: string, unit: QuantityUnit, ctx: Context): Quantity | null {
     const path = `timeline.${ctx.record.id}.attribute.${actorId}.${key}`;
     return graph(`attribute:${actorId}:${key}:${ctx.record.id}:${ctx.phase}:${ctx.excluded ?? ''}`, path, () => {
-      const trace: P3Read = { id: `read-${reads.length + 1}`, actor: actorId, key, unit, timeMs: ctx.record.timeMs, phase: ctx.phase, recordId: ctx.record.id, instanceId: ctx.excluded, value: null, dependencies: [] };
+      const trace: AttributeRead = { id: `read-${reads.length + 1}`, actor: actorId, key, unit, timeMs: ctx.record.timeMs, phase: ctx.phase, recordId: ctx.record.id, instanceId: ctx.excluded, value: null, dependencies: [] };
       reads.push(trace);
       ctx.trace?.dependencies.push(trace.id);
       const base = baseAttribute(actorId, key, unit, ctx);
@@ -237,7 +228,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
         case 'capture': {
           const context = at(ctx, node.at, node.phase ?? 'before');
           if (!context) return null;
-          const trace: P3Read = { id: `read-${reads.length + 1}`, actor: ctx.actor, key: `capture:${node.id}`, unit: 'scalar', timeMs: context.record.timeMs, phase: context.phase, recordId: node.at, instanceId: ctx.excluded, value: null, dependencies: [] };
+          const trace: AttributeRead = { id: `read-${reads.length + 1}`, actor: ctx.actor, key: `capture:${node.id}`, unit: 'scalar', timeMs: context.record.timeMs, phase: context.phase, recordId: node.at, instanceId: ctx.excluded, value: null, dependencies: [] };
           reads.push(trace); ctx.trace?.dependencies.push(trace.id);
           const q = nodeValue(d, node.value, { ...context, trace });
           if (q) { trace.unit = q.unit; trace.value = q.value; }
@@ -247,7 +238,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
           if (node.actor && !actors.has(node.actor)) { missing(node.actor, path); return null; }
           if (node.definition && !definitions.has(node.definition)) { missing(node.definition, path); return null; }
           if (node.endMs < node.startMs) { report('invalid-input', path, '历史窗口结束早于开始。'); return null; }
-          const trace: P3Read = { id: `read-${reads.length + 1}`, actor: node.actor ?? ctx.actor, key: `history:${node.id}`, unit: node.mode === 'count' ? 'scalar' : 'damage', timeMs: ctx.record.timeMs, phase: ctx.phase, recordId: ctx.record.id, instanceId: ctx.excluded, value: null, dependencies: [] };
+          const trace: AttributeRead = { id: `read-${reads.length + 1}`, actor: node.actor ?? ctx.actor, key: `history:${node.id}`, unit: node.mode === 'count' ? 'scalar' : 'damage', timeMs: ctx.record.timeMs, phase: ctx.phase, recordId: ctx.record.id, instanceId: ctx.excluded, value: null, dependencies: [] };
           reads.push(trace); ctx.trace?.dependencies.push(trace.id);
           let resetPosition = -1;
           for (const resetId of node.resetAt ?? []) {
@@ -277,7 +268,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
           gameDamagePoints.add(ctx.point.id);
           const attack = attribute(ctx.actor, 'attack', 'attack', ctx);
           const bonus = attribute(ctx.actor, 'damageBonus', 'scalar', ctx);
-          const real = evaluateRealDamage(actors.get(ctx.actor)?.realBuild, ctx.record.realDamage, project.enemy, bonus?.value ?? 0, attack?.value);
+          const real = evaluateDamage(actors.get(ctx.actor)?.build, ctx.record.damage, project.enemy, bonus?.value ?? 0, attack?.value);
           ctx.point.real = real;
           for (const issue of real.issues) report(issue.code, path, issue.message);
           return attack && bonus && real.value !== null ? { value: real.value, unit: 'damage' } : null;
@@ -285,7 +276,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
         case 'add': case 'multiply': case 'divide': {
           const left = nodeValue(d, node.left, ctx); const right = nodeValue(d, node.right, ctx);
           if (!left || !right) return null;
-          let unit: WorkbenchUnit;
+          let unit: QuantityUnit;
           if (node.op === 'add') {
             if (left.unit !== right.unit) { report('unit', path, '相加要求相同单位。'); return null; }
             unit = left.unit;
@@ -308,7 +299,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
     const path = `timeline.${record.id}`;
     return graph(`damage:${record.id}`, path, () => {
       const d = definitions.get(record.definition);
-      const point: WorkbenchPoint = points.get(record.id) ?? { id: record.id, value: null, formula: { definition: record.definition, root: d?.damage ?? null, effects: [] }, sources: [] };
+      const point: DamagePoint = points.get(record.id) ?? { id: record.id, value: null, formula: { definition: record.definition, root: d?.damage ?? null, effects: [] }, sources: [] };
       points.set(record.id, point);
       if (!d?.damage) { missing('damage', path); completed.add(record.id); return null; }
       const ctx: Context = { actor: record.actor, record, phase: 'before', point };
@@ -329,7 +320,7 @@ export function evaluateP3(project: WorkbenchProject): WorkbenchResult {
   for (const record of timeline) if (record.kind === 'damage') damageValue(record);
   const orderedPoints = timeline.filter(r => r.kind === 'damage').map(record => points.get(record.id) ?? { id: record.id, value: null, formula: { definition: record.definition, root: definitions.get(record.definition)?.damage ?? null, effects: [] }, sources: [] });
   const invalid = diagnostics.some(d => !['unknown', 'unsupported', 'stale-revision', 'budget'].includes(d.code));
-  const sum = (selected: WorkbenchPoint[]) => {
+  const sum = (selected: DamagePoint[]) => {
     if (invalid || exhausted || selected.some(p => p.value === null)) return null;
     const total = selected.reduce((value, p) => value + (p.value ?? 0), 0);
     if (!Number.isFinite(total)) { report('arithmetic', 'objective', '统计结果不是有限值。'); return null; }

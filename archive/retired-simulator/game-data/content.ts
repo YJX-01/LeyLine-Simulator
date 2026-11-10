@@ -1,4 +1,4 @@
-import generated from './generated/content.json';
+import generated from './generated/legacy/content.json';
 export type CharacterKey = 'jean' | 'xingqiu' | 'hutao' | 'albedo' | 'raiden';
 export type WeaponKey = 'harbinger-of-dawn' | 'favonius-sword' | 'sacrificial-sword' | 'festering-desire' | 'white-tassel' | 'prototype-starglitter' | 'staff-of-homa' | 'engulfing-lightning';
 export interface BaseCharacter {

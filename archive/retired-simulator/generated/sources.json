@@ -1,0 +1,14 @@
+{
+  "version": "repo-content-v1",
+  "hashFormat": "sha256-lf-normalized",
+  "hashes": {
+    "src/game-data/data/legacy/CharacterConfig.json": "9a42500f71bab5f42a14c9a4258086bcbd043d8e1f6d8324082e13005523eb92",
+    "src/game-data/data/legacy/SkillConfig.json": "4a116acd230e4a9151844892f7e61068487ffe9fbff6f3de34c16597da3ea57e",
+    "src/game-data/data/legacy/ActionTime.json": "7e4d68b1d49bb61513f28567851ac08c6ddcdbf763be1379b9f86ee69bca0db9",
+    "src/game-data/data/legacy/CharacterLevelMultiplier.json": "05da15f1f1e369ae8e94cca97fce1fce6494f9f9b2dae739df9d138b358b02a7",
+    "src/game-data/data/legacy/WeaponConfig.json": "c9196553261da29b5d4773ce336fcf4f886d60d651855eb3ac9845582edad464",
+    "src/game-data/data/legacy/WeaponLevelMultiplier.json": "4b3860cbb3da726db8804593e90106abbc9800f83b8a322afcacdb4268505a73",
+    "src/game-data/data/legacy/ArtifactStat.json": "f3fef52d399b8238e4c68757f2112c00bbc9974e6bbc10c1cc1d4824c028f5bf",
+    "src/game-data/data/legacy/ReactionLevelMultiplier.json": "5853ffb7cd64a8f6246f4e58ff5271e524dafbeb8d3ffeeffd1804acb9216ade"
+  }
+}
