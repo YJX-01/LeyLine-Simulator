@@ -3,13 +3,13 @@ import { execFileSync } from 'node:child_process';
 import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = realpathSync(fileURLToPath(new URL('../../', import.meta.url)));
+const root = realpathSync(fileURLToPath(new URL('../../../', import.meta.url)));
 const args = new Set(process.argv.slice(2));
 for (const arg of args) {
   if (!['--cache', '--dry-run'].includes(arg)) throw new Error(`Unknown cleanup option: ${arg}`);
 }
 const paths = args.has('--cache') ? ['.cache'] : [
-  'artifacts', 'test-results', 'playwright-report', 'coverage',
+  'artifacts/performance', 'artifacts/playwright', 'test-results', 'playwright-report', 'coverage',
   'src/web/dist', 'src/web/dist-subpath', 'src/web/dist-desktop',
 ];
 

@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { desktopExecutable } from './desktop-location.mjs';
+import { desktopExecutable } from '../../lib/desktop-location.mjs';
 const executable = await desktopExecutable(process.argv.includes('--preview'));
 if (!existsSync(executable)) throw new Error(`Desktop build missing. Run pnpm ${process.argv.includes('--preview') ? 'desktop:preview:build' : 'desktop:build'} first.`);
 const launchEnvironment = { ...process.env };

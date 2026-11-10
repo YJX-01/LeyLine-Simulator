@@ -2,12 +2,12 @@ import { defineConfig } from '@playwright/test';
 import development from './playwright.config';
 export default defineConfig({
   ...development,
-  testDir: './tests/production',
+  testDir: './tests/browser/production',
   outputDir: 'test-results/production',
   reporter: [['list'], ['json', { outputFile: 'artifacts/playwright/production-results.json' }]],
   use: { ...development.use, baseURL: 'http://127.0.0.1:5175' },
   webServer: [
-    { command: 'node tools/scripts/serve-dist.mjs --port=5175', url: 'http://127.0.0.1:5175', reuseExistingServer: false },
-    { command: 'node tools/scripts/serve-dist.mjs --port=5176 --base=/leyline/ --dir=src/web/dist-subpath', url: 'http://127.0.0.1:5176/leyline/', reuseExistingServer: false },
+    { command: 'node tools/scripts/dev/serve-dist.mjs --port=5175', url: 'http://127.0.0.1:5175', reuseExistingServer: false },
+    { command: 'node tools/scripts/dev/serve-dist.mjs --port=5176 --base=/leyline/ --dir=src/web/dist-subpath', url: 'http://127.0.0.1:5176/leyline/', reuseExistingServer: false },
   ],
 });

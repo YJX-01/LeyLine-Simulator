@@ -2,7 +2,7 @@ import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
-const root = fileURLToPath(new URL('../../', import.meta.url));
+const root = fileURLToPath(new URL('../../../', import.meta.url));
 const dist = resolve(root, process.argv.find(arg => arg.startsWith('--dist='))?.slice(7) ?? 'src/web/dist');
 const manifest = JSON.parse(await readFile(resolve(dist, '.vite/manifest.json'), 'utf8'));
 const entry = Object.keys(manifest).find(key => manifest[key].isEntry);

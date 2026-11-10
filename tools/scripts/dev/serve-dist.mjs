@@ -1,9 +1,9 @@
-import { serveEnka } from '../desktop/enka.mjs';
+import { serveEnka } from '../../../src/web/server/enka.mjs';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-const workspace = fileURLToPath(new URL('../../', import.meta.url));
+const workspace = fileURLToPath(new URL('../../../', import.meta.url));
 const option = (key, fallback) => process.argv.find(arg => arg.startsWith(`--${key}=`))?.slice(key.length + 3) ?? fallback;
 const root = resolve(workspace, option('dir', 'src/web/dist'));
 const base = option('base', '/');

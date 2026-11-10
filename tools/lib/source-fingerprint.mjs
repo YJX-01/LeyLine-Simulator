@@ -11,7 +11,7 @@ export function sourceFingerprint() {
       const target = `${path}/${entry.name}`; if (entry.isDirectory()) walk(target); else if (entry.isFile()) file(target);
     }
   }
-  for (const path of ['src/web/src', 'src/engine/src', 'src/schema/src', 'src/game-data/src', 'fixtures', 'tests', 'tools/scripts', 'tools/desktop', 'tools/patches', 'licenses']) walk(path);
+  for (const path of ['src/web/src', 'src/web/server', 'src/web/desktop', 'assets', 'src/engine/src', 'src/schema/src', 'src/game-data/src', 'src/game-data/data', 'tests', 'tools/scripts', 'tools/lib', 'tools/data', 'tools/patches', 'licenses']) walk(path);
   for (const path of ['THIRD_PARTY_NOTICES.md', 'CREDITS.md', 'package.json', 'src/web/package.json', 'src/web/vite.config.ts', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'playwright.config.ts', 'playwright.production.config.ts', 'tsconfig.json', 'vitest.config.ts']) file(path);
   return hash.digest('hex');
 }

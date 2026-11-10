@@ -1,8 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES2022", "module": "ESNext", "moduleResolution": "Bundler",
-    "strict": true, "noEmit": true, "skipLibCheck": true,
-    "resolveJsonModule": true, "esModuleInterop": true
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@leyline/schema": [
+        "./src/schema/src/index.ts"
+      ],
+      "@leyline/schema/enka": [
+        "./src/schema/src/exchange/enka.ts"
+      ],
+      "@leyline/engine": [
+        "./src/engine/src/index.ts"
+      ],
+      "@leyline/game-data": [
+        "./src/game-data/src/index.ts"
+      ],
+      "vue": [
+        "./src/web/node_modules/vue"
+      ],
+      "pinia": [
+        "./src/web/node_modules/pinia"
+      ]
+    }
   },
-  "include": ["src/engine/**/*.ts", "src/schema/**/*.ts", "src/game-data/**/*.ts", "tests/**/*.ts", "playwright*.config.ts", "vitest.config.ts"]
+  "include": [
+    "src/engine/**/*.ts",
+    "src/schema/**/*.ts",
+    "src/game-data/**/*.ts",
+    "tests/**/*.ts",
+    "playwright*.config.ts",
+    "vitest.config.ts"
+  ]
 }

@@ -1,16 +1,19 @@
+import { sourceFingerprint } from '../../lib/source-fingerprint.mjs';
 import { createHash } from 'node:crypto';
 import { packager } from '@electron/packager';
 import { cp, mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
+const root = fileURLToPath(new URL('../../../', import.meta.url));
+const fingerprint=sourceFingerprint();
 await mkdir(resolve(root, 'artifacts/desktop-stage'), { recursive: true });
 const stage = await mkdtemp(resolve(root, 'artifacts/desktop-stage/build-'));
-await cp(resolve(root, 'tools/desktop'), stage, { recursive: true });
+await cp(resolve(root, 'src/web/desktop'), resolve(stage,'desktop'), { recursive: true });
+await cp(resolve(root,'src/web/server'), resolve(stage,'server'), {recursive:true});
 await cp(resolve(root, 'src/web/dist-desktop'), resolve(stage, 'renderer'), { recursive: true, force: true });
 const version = '0.2.0';
-await writeFile(resolve(stage, 'package.json'), JSON.stringify({ name: 'leyline-desktop', productName: 'LeyLine', version, type: 'module', main: 'main.mjs' }, null, 2));
+await writeFile(resolve(stage, 'package.json'), JSON.stringify({ name: 'leyline-desktop', productName: 'LeyLine', version, type: 'module', main: 'desktop/main.mjs' }, null, 2));
 const electronVersion = JSON.parse(await readFile(resolve(root, 'node_modules/electron/package.json'), 'utf8')).version;
 const preview = process.argv.includes('--preview');
 await mkdir(resolve(root, 'artifacts/desktop/releases'), { recursive: true });
@@ -25,9 +28,11 @@ for (const directory of output) for (const name of ['LICENSE', 'LICENSES.chromiu
   const bundled = await readFile(resolve(directory, name));
   if (createHash('sha256').update(original).digest('hex') !== createHash('sha256').update(bundled).digest('hex')) throw new Error(`Desktop notice mismatch: ${name}`);
 }
+if(sourceFingerprint()!==fingerprint)throw new Error('Source changed during packaging; rebuild the desktop package.');
+await writeFile(resolve(outputDirectory,'build-info.json'),JSON.stringify({sourceFingerprint:fingerprint},null,2)+'\n');
 if (!preview) {
   const executable = resolve(output[0], process.platform === 'win32' ? 'LeyLine.exe' : 'LeyLine');
-  const release = { formatVersion: 1, version, directory: relative(root, output[0]), executable: relative(root, executable) };
+  const release = { formatVersion: 1, version, sourceFingerprint:fingerprint, directory: relative(root, output[0]), executable: relative(root, executable) };
   await writeFile(resolve(root, 'artifacts/desktop/latest.json'), JSON.stringify(release, null, 2));
   if (process.platform === 'win32') {
     const target = relative(resolve(root, 'artifacts/desktop'), executable);

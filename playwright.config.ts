@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
-import { sourceFingerprint } from './tools/scripts/source-fingerprint.mjs';
+import { sourceFingerprint } from './tools/lib/source-fingerprint.mjs';
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: './tests/browser/development',
   metadata: { sourceFingerprint: sourceFingerprint() },
   outputDir: 'test-results/development',
   workers: 1,

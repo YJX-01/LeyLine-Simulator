@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "inputs": {
-    "lockfile": "b8b7536fddbd3bacc4569d26df1919b2d7dc079fbbb5483378fd89d581ebc022",
+    "lockfile": "be658e20f5998e8381d17805e329936d6206fb8467080e9adf1a4bf3660b9520",
     "manifests": [
       {
         "path": "package.json",
@@ -9,7 +9,7 @@
       },
       {
         "path": "src/web/package.json",
-        "sha256": "4d1dfddf218c36eda00cb1ee987df595cf3160153e01cd31c9f618cd2a272fef"
+        "sha256": "238ca99da02552c54b15800bf2b033f3edf12ea22e243a4d0a230e9b3dab9031"
       },
       {
         "path": "src/schema/package.json",
@@ -17,11 +17,11 @@
       },
       {
         "path": "src/engine/package.json",
-        "sha256": "53d779c3ad13460da3a93de115decb5a9f430ce173c3f2a9d6465f827cc25a13"
+        "sha256": "38716c09d854084bb9d214bc68444729895a557589ea057babaef5efa2c53644"
       },
       {
         "path": "src/game-data/package.json",
-        "sha256": "dbbb76ab4c89386dc76ee81b7e4a07ff1adcb0f5ca9e6a21c41321cdf752e7c5"
+        "sha256": "38716c09d854084bb9d214bc68444729895a557589ea057babaef5efa2c53644"
       }
     ],
     "workspace": "df9b59709acc1e0522a6a33d468e6a162d87373498f39b7a485777bc36432631"
@@ -2696,6 +2696,10 @@
       "direct": [
         {
           "importer": "package.json",
+          "group": "devDependencies"
+        },
+        {
+          "importer": "src/web/package.json",
           "group": "devDependencies"
         }
       ],

@@ -59,7 +59,7 @@
       "id": "gachabase",
       "name": "GachaBase",
       "url": "https://gi.gachabase.net/",
-      "version": "逐角色页面 URL 与 SHA-256 见 docs/constant/enka/skill-supplements.json",
+      "version": "逐角色页面 URL 与 SHA-256 见 tools/data/sources/catalog/enka/skill-supplements.json",
       "license": "页面数据条款待核实",
       "usage": "提取并核对五个角色的公开技能数字 ID 与名称。"
     },
@@ -83,7 +83,7 @@
       "id": "meropide",
       "name": "梅信心 / Meropide 及资料贡献者",
       "url": "https://meropide.cn/chs/",
-      "version": "原文快照与 URL 见 docs/references/sources.json",
+      "version": "原文快照与 URL 见 tools/data/references.json",
       "license": "机制研究引用",
       "usage": "中文机制说明与数值交叉核对。"
     },
@@ -99,7 +99,7 @@
       "id": "legacy-data",
       "name": "仓库历史常量输入",
       "url": null,
-      "version": "docs/constant/ 历史输入；见生成器与 mechanics 文档",
+      "version": "历史输入已归档；当前内容依据见 docs/references/numeric-precision.md",
       "license": "独立上游许可和作者记录待补核",
       "usage": "历史常量用于兼容性与数值输入；"
     },

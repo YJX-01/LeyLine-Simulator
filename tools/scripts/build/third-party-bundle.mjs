@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
+const root = fileURLToPath(new URL('../../../', import.meta.url));
 export function thirdPartyBundle() {
   const packageCache = new Map();
   function packageFor(id) {
@@ -22,7 +22,7 @@ export function thirdPartyBundle() {
   }
   return {
     name:'leyline-third-party-notices',
-    configResolved() { execFileSync(process.execPath, [resolve(root, 'tools/scripts/third-party-notices.mjs')], { cwd:root, stdio:'pipe', windowsHide:true }); },
+    configResolved() { execFileSync(process.execPath, [resolve(root, 'tools/scripts/licenses/third-party-notices.mjs')], { cwd:root, stdio:'pipe', windowsHide:true }); },
     generateBundle(_options, bundle) {
       const packages = new Map();
       for (const chunk of Object.values(bundle)) if (chunk.type === 'chunk') for (const [id, module] of Object.entries(chunk.modules)) {

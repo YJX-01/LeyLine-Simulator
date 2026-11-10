@@ -11,11 +11,14 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm data:build
       - run: pnpm data:check
+      - run: pnpm docs:check
       - run: pnpm fixture:check
       - run: pnpm architecture:check
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm test:content
       - run: pnpm build
       - run: pnpm build:check
       - run: pnpm perf:engine
@@ -23,7 +26,6 @@ jobs:
       - run: pnpm test:e2e
       - run: pnpm build:subpath
       - run: pnpm test:production
-      - run: pnpm release:prepare
       - uses: actions/upload-artifact@v4
         if: always()
         with:

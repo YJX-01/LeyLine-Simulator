@@ -4,9 +4,9 @@ import { execFileSync } from 'node:child_process';
 import { resolve, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
+const root = fileURLToPath(new URL('../../../', import.meta.url));
 const canonical = resolve(root, 'licenses');
-const publicDirectory = resolve(root, 'src/web/public/licenses');
+const publicDirectory = resolve(root, '.cache/public/licenses');
 const json = async path => JSON.parse(await readFile(path, 'utf8'));
 const hash = content => createHash('sha256').update(content).digest('hex');
 const normalized = path => path.replaceAll('\\', '/');
@@ -128,7 +128,7 @@ const canonicalFiles = (await readdir(canonical, { recursive:true, withFileTypes
 if (process.argv.includes('--check')) {
   for (const path of canonicalFiles) if (!Buffer.from(await readFile(resolve(canonical, path))).equals(await readFile(resolve(publicDirectory, path)))) throw new Error(`Stale distributed notice: ${path}`);
   for (const path of legalFiles) if (!Buffer.from(await readFile(resolve(root, path))).equals(await readFile(resolve(publicDirectory, path)))) throw new Error(`Stale distributed notice: ${path}`);
-  if ((await readdir(resolve(root, 'src/web/public/stats'))).some(path => /license/i.test(path))) throw new Error('License files belong in the central licenses directory, not stats/');
+  if ((await readdir(resolve(root, 'assets/game/stats'))).some(path => /license/i.test(path))) throw new Error('License files belong in the central licenses directory, not stats/');
 } else {
   await mkdir(publicDirectory, { recursive:true });
   await cp(canonical, publicDirectory, { recursive:true, force:true });
