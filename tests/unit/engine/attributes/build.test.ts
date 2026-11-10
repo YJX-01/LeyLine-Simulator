@@ -14,7 +14,7 @@ function build(): Build {
     talents: [{ id: 'skill', name: '独立双段技能', category: 'skill', element:'hydro',description:'',parameters:[{id:'hit1',unit:'ratio',values:Array(15).fill(2)},{id:'hit2',unit:'ratio',values:Array(15).fill(3)}],details:[],hits:[{parameter:'hit1'},{parameter:'hit2'}],support}],passives:[],constellations:[],capabilities:{text:'unavailable',numbers:'partial',calculation:support} },
     weapon: { id: 'weapon', name: '独立武器', weaponType: 'sword', rarity: 4, baseAttack: 20, baseStat: 0, stat: 'attackPercent', attackCurve: curve(), statCurve: curve(), promotion: Array(7).fill(0), modifiers: [], support, source },
     sets: [], artifactMain: Object.fromEntries(statKeys.map(stat => [stat, Array(21).fill(0)])) as Build['artifactMain'],
-    level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1, hpRatio: 1, artifacts: [] };
+    level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1, artifacts: [] };
 }
 function enemy(resistance = 0.1): Enemy {
   return { level: 90, resistances: { physical: resistance, anemo: resistance, geo: resistance, electro: resistance, hydro: resistance, pyro: resistance, cryo: resistance, dendro: resistance }, defenseReduction: 0, defenseIgnore: 0 };
@@ -85,13 +85,12 @@ describe('snapshot-bound real game panel and damage', () => {
       { id: 'plume', slot: 'plume', setId: 'set', rarity: 5, level: 20, mainStat: 'attack', substats: [{ stat: 'critDamage', value: 0.14 }] }];
     input.sets = [{ id: 'set', name: '独立攻击套装', source, effects: [{ pieces: 2, modifiers: [{ stat: 'attackPercent', values: [0.18] }], support }] }];
     input.weapon.modifiers.push({ stat: 'critRate', values: [0.14], hpAbove: 0.9 });
-    const panel = resolveBuild(input);
+    const panel = resolveBuild(input, {hpRatio:1});
     expect(panel.status).toBe('complete');
     expect(panel.stats.attack).toBeCloseTo(464.6, 10); // 120*(1+.1+.18)+311
     expect(panel.stats.hp).toBe(5780);
     expect(panel.stats.critRate).toBeCloseTo(0.19);
-    input.hpRatio = 0.9;
-    expect(resolveBuild(input).stats.critRate).toBe(0.05);
+    expect(resolveBuild(input, {hpRatio:0.9}).stats.critRate).toBe(0.05);
     expect(JSON.parse(JSON.stringify(input))).toEqual(input);
   });
   it('uses explicit defense and all three resistance branches', () => {

@@ -1,4 +1,4 @@
-import { buildSchema, damageRequestSchema, enemySchema, statKeys, type Build, type DamageRequest, type Enemy, type StatKey } from '@leyline/schema';
+import { buildSchema, combatConditionsSchema, damageRequestSchema, enemySchema, statKeys, type Build, type CombatConditions, type DamageRequest, type Enemy, type StatKey } from '@leyline/schema';
 
 import type { CalculationStatus, CalculationIssue, Contribution, AttributePanel, DamageResult } from '@leyline/schema';
 const zeroStats = (): Record<StatKey, number> => Object.fromEntries(statKeys.map(key => [key, 0])) as Record<StatKey, number>;
@@ -15,7 +15,7 @@ const allowedMain: Record<Build['artifacts'][number]['slot'], readonly StatKey[]
 const subLimits: Partial<Record<StatKey, number>> = { hp: 1793, attack: 117, defense: 139, hpPercent: 0.35, attackPercent: 0.35, defensePercent: 0.44, energyRecharge: 0.4, elementalMastery: 140, critRate: 0.24, critDamage: 0.48 };
 
 /** Resolves only the versioned snapshot carried by the build; never consults a live catalog. */
-export function resolveBuild(input: unknown): AttributePanel {
+export function resolveBuild(input: unknown, conditions: CombatConditions = {}): AttributePanel {
   const stats = zeroStats();
   const issues: CalculationIssue[] = [];
   const contributions: Contribution[] = [];
@@ -28,6 +28,9 @@ export function resolveBuild(input: unknown): AttributePanel {
     return finish();
   }
   const build = parsed.data;
+  const context = combatConditionsSchema.safeParse(conditions);
+  if (!context.success) { report('invalid-input', '战斗条件格式或数值无效。'); return finish(); }
+  const combat = context.data;
   const character = build.character;
   const weapon = build.weapon;
   if (character.attributes.base.hp <= 0 || character.attributes.base.attack < 0 || character.attributes.base.defense < 0 || character.attributes.base.critRate < 0 || character.attributes.base.critDamage < 0 || weapon.baseAttack < 0 || weapon.baseStat < 0) report('invalid-input', '角色或武器基础属性不能为负值，基础生命必须大于零。');
@@ -64,7 +67,10 @@ export function resolveBuild(input: unknown): AttributePanel {
   function modifiers(source: string, entries: Build['character']['attributes']['modifiers'], refinement: number) {
     for (const modifier of entries) {
       if (modifier.minAscension !== undefined && build.ascension < modifier.minAscension) continue;
-      if (modifier.hpAbove !== undefined && build.hpRatio <= modifier.hpAbove) continue;
+      if (modifier.hpAbove !== undefined) {
+        if (combat.hpRatio == null) { report('unknown', '生命比例尚未确认，无法判断生命条件效果。'); continue; }
+        if (combat.hpRatio <= modifier.hpAbove) continue;
+      }
       const value = modifier.values.length === 1 ? modifier.values[0] : modifier.values[refinement - 1];
       if (value === undefined) { report('invalid-input', '所选精炼等级的效果参数缺失。'); continue; }
       add(source, modifier.stat, value, modifier.category);
@@ -111,7 +117,8 @@ export function resolveBuild(input: unknown): AttributePanel {
 
 /** Direct, non-reacting hit. The caller must explicitly choose the crit and reaction facts. */
 export function evaluateDamage(buildInput: unknown, damageInput: DamageRequest | undefined, enemyInput: Enemy | undefined, extraBonus = 0, attackOverride?: number): DamageResult {
-  const panel = resolveBuild(buildInput);
+  const damage = damageInput === undefined ? undefined : damageRequestSchema.safeParse(damageInput);
+  const panel = resolveBuild(buildInput, damage?.success ? damage.data.conditions : undefined);
   const issues = [...panel.issues];
   const parts: DamageResult['parts'] = { attack: panel.status === 'invalid' ? null : attackOverride ?? panel.stats.attack, multiplier: null, bonus: null, crit: null, defense: null, resistance: null };
   const report = (code: CalculationIssue['code'], message: string) => { if (!issues.some(issue => issue.code === code && issue.message === message)) issues.push({ code, message }); };
@@ -125,7 +132,6 @@ export function evaluateDamage(buildInput: unknown, damageInput: DamageRequest |
   if (attackOverride !== undefined && (!Number.isFinite(attackOverride) || attackOverride < 0)) report('invalid-input', '效果修正后的攻击力必须为非负有限值。');
   const build = buildSchema.safeParse(buildInput);
   if (!build.success) return finish();
-  const damage = damageInput === undefined ? undefined : damageRequestSchema.safeParse(damageInput);
   if (!damage) { report('unknown', '尚未选择真实技能和命中条件。'); return finish(); }
   if (!damage.success) { report('invalid-input', '真实命中条件格式无效。'); return finish(); }
   const skill = build.data.character.talents.find(entry => entry.id === damage.data.skillId);

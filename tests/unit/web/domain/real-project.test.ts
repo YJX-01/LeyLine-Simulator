@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { getCharacter, getWeapon, getArtifactMain, DATA_VERSION } from '@leyline/game-data';
 import { evaluateTimeline } from '@leyline/engine';
 import { projectSchema, type Build } from '@leyline/schema';
-import { addActorFromBuild, addSkillHits } from '../../../../src/web/src/domain/real-project';
+import { addActorFromBuild, addSkillHits, defaultEnemy } from '../../../../src/web/src/domain/real-project';
 
 async function build(): Promise<Build> {
   return { dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
     artifactMain: await getArtifactMain(), sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 },
-    weaponLevel: 90, weaponAscension: 6, refinement: 1, hpRatio: 1, artifacts: [] };
+    weaponLevel: 90, weaponAscension: 6, refinement: 1, artifacts: [] };
 }
 function empty() {
   return projectSchema.parse({ schemaVersion: 2, rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
@@ -17,7 +17,9 @@ describe('real axis editing and inventory identity', () => {
     const source = await build();
     const project = empty();
     const actor = addActorFromBuild(project, source);
-    addSkillHits(project, actor, 'jean.skill', 2000);
+    expect(project.enemy).toBeUndefined();
+    project.enemy=defaultEnemy(); // Explicit calculation assumptions for this existing reference case.
+    addSkillHits(project, actor, 'jean.skill', 2000, {crit:'noncritical',reaction:'none'});
     source.character.attributes.base.attack = 99999;
     expect(evaluateTimeline(project).totalValue).toBeCloseTo(1549.2330752985004, 8);
     expect(evaluateTimeline(JSON.parse(JSON.stringify(project))).totalValue).toBeCloseTo(1549.2330752985004, 8);

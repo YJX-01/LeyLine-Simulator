@@ -59,12 +59,10 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
       const prop=(id:string)=>Number(value.propMap[id]?.val??value.propMap[id]?.ival);
       const levels=entry.skills.map(id=>value.skillLevelMap[String(id)]);
       if (levels.some(level=>level===undefined)) throw new Error('缺少天赋等级，未使用默认值填补。');
-      const currentHp=value.fightPropMap['1010'],maximumHp=value.fightPropMap['2000'];
-      if (!Number.isFinite(currentHp)||!(maximumHp>0)||currentHp<0||currentHp>maximumHp) throw new Error('缺少有效的生命值条件，未使用满生命值替代。');
       const refinements=Object.values(weaponEntry.weapon.affixMap??{});
       if (!refinements.length&&weapon.rarity>2) throw new Error('缺少武器精炼等级。');
       const build=buildSchema.parse({dataVersion:data.catalog.version,character,weapon,artifactMain:data.main,sets,level:prop('4001'),ascension:prop('1002'),constellation:value.talentIdList?.length??0,
-        talents:{normal:levels[0],skill:levels[1],burst:levels[2]},weaponLevel:weaponEntry.weapon.level,weaponAscension:weaponEntry.weapon.promoteLevel,refinement:(refinements[0]??0)+1,hpRatio:currentHp/maximumHp,artifacts});
+        talents:{normal:levels[0],skill:levels[1],burst:levels[2]},weaponLevel:weaponEntry.weapon.level,weaponAscension:weaponEntry.weapon.promoteLevel,refinement:(refinements[0]??0)+1,artifacts});
       const current=account.characters.find(item=>item.build?.character.id===entry.id||item.name===character.identity.name);
       preview.rows.push({action:current?.build?'update':current?'complete':'add',before:current?JSON.stringify(current):undefined,character:{...current,id:current?.id??crypto.randomUUID(),name:current?.name??character.identity.name,attack:0,weapon:weapon.name,equipment:{...current?.equipment},
         build:{...build,artifacts:[],sets:[]},showcase:{uid,avatarId:value.avatarId,fetchedAt:new Date().toISOString(),rawHash,build}}});

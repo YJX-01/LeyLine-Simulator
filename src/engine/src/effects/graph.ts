@@ -122,8 +122,10 @@ export function evaluateDependencyGraph(project: Project): EvaluationResult {
     if (!actor) { missing(actorId, `timeline.${ctx.record.id}.attribute`); return null; }
     if (key === 'damageBonus') return { value: 0, unit: 'scalar' };
     if (key === 'attack' && actor.build) {
-      let panel = panels.get(actorId);
-      if (!panel) { panel = resolveBuild(actor.build); panels.set(actorId, panel); }
+      const conditions = ctx.record.damage?.conditions;
+      const panelKey = JSON.stringify([actorId, conditions ?? {}]);
+      let panel = panels.get(panelKey);
+      if (!panel) { panel = resolveBuild(actor.build, conditions); panels.set(panelKey, panel); }
       for (const issue of panel.issues) report(issue.code, `candidate.actors.${actorId}.build`, issue.message);
       return panel.status === 'complete' ? { value: panel.stats.attack, unit: 'attack' } : null;
     }

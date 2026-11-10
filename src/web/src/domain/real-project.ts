@@ -8,19 +8,19 @@ export function defaultEnemy(): Enemy {
 export function addActorFromBuild(project: Project, input: Build, name?: string): string {
   const build = buildSchema.parse(input);
   const id = crypto.randomUUID();
-  const source = { kind: 'preset' as const, reference: build.dataVersion, verified: true };
+  const source = { kind: build.character.origin === 'builtin' ? 'preset' as const : 'user' as const, reference: build.dataVersion,
+    verified: build.character.origin === 'builtin' && build.character.capabilities.calculation.supported && build.constellation === 0 };
   project.definitions.push(
     { id: `${id}-character`, name: `${build.character.identity.name} · 角色快照`, version: build.dataVersion, source, nodes: [], effects: [] },
-    { id: `${id}-weapon`, name: `${build.weapon.name} · 武器快照`, version: build.dataVersion, source, nodes: [], effects: [] },
-    { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source,
+    { id: `${id}-weapon`, name: `${build.weapon.name} · 武器快照`, version: build.dataVersion, source: {kind:'preset',reference:build.dataVersion,verified:build.weapon.support.supported}, nodes: [], effects: [] },
+    { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source: {...source,verified:source.verified && build.weapon.support.supported && build.sets.every(set=>set.effects.filter(effect=>effect.pieces<=build.artifacts.filter(item=>item.setId===set.id).length).every(effect=>effect.support.supported))},
       nodes: [{ id: 'real-damage', op: 'game-damage' }], damage: 'real-damage', effects: [] },
   );
   project.candidate.actors.push({ id, name: name || build.character.identity.name, character: `${id}-character`, weapon: `${id}-weapon`, inputs: {}, build: build });
-  project.enemy ??= defaultEnemy();
   return id;
 }
 
-export function addSkillHits(project: Project, actorId: string, skillId: string, timeMs: number, crit: DamageRequest['crit'] = 'noncritical'): string[] {
+export function addSkillHits(project: Project, actorId: string, skillId: string, timeMs: number, choices: Pick<DamageRequest,'crit'|'reaction'|'conditions'> = {crit:null,reaction:null}): string[] {
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const skill = actor?.build?.character.talents.find(entry => entry.id === skillId);
   if (!actor || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择队员、技能和合法的整数毫秒时间。');
@@ -29,7 +29,7 @@ export function addSkillHits(project: Project, actorId: string, skillId: string,
   for (let hitIndex = 0; hitIndex < skill.hits.length; hitIndex++) {
     const id = nextRecordId(project);
     project.timeline.push({ id, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1,
-      actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitIndex, crit, reaction: 'none' } });
+      actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitIndex, ...choices } });
     if (project.objective.damageIds) project.objective.damageIds.push(id);
     ids.push(id);
   }
