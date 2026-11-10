@@ -26,8 +26,8 @@ test('manual selection opens directly, preserves the list on return, and display
 });
 
 test('account UID persists, prefills the showcase import, and the three entry dialogs share actions',async({page})=>{
-  test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires recorded public showcase.');
-  await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'))}));
+  test.skip(!existsSync('.references/enka/official-example.json'),'Requires recorded public showcase.');
+  await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('.references/enka/official-example.json','utf8'))}));
   await page.goto('/');await page.getByTestId('workspace-nav-account').click();await page.getByLabel('账号游戏 UID',{exact:true}).fill('618285856');await page.getByLabel('账号游戏 UID',{exact:true}).press('Enter');
   await page.reload();await page.getByTestId('workspace-nav-account').click();await expect(page.getByLabel('账号游戏 UID',{exact:true})).toHaveValue('618285856');
   await page.getByTestId('workspace-nav-characters').click();await page.getByRole('button',{name:'展柜导入',exact:true}).click();const showcase=page.getByRole('dialog',{name:'从角色展柜导入',exact:true});
@@ -50,7 +50,7 @@ test('actual Mona export accepts formatting above the former byte cap and still 
 
 
 test('manual cultivation transcribes the recorded Amber and saves once before reopening details',async({page})=>{
-  test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires the recorded cultivation.');
+  test.skip(!existsSync('.references/enka/official-example.json'),'Requires the recorded cultivation.');
   // Recorded UID 618285856: Amber 90/6, C6, 10/10/10, Skyward Harp 90/6 R2.
   await page.goto('/');await page.getByRole('button',{name:'手动添加角色',exact:true}).click();const dialog=page.getByRole('dialog',{name:'手动添加角色',exact:true});
   await dialog.getByLabel('搜索游戏角色',{exact:true}).fill('安柏');await dialog.getByRole('button',{name:'选择安柏',exact:true}).click();

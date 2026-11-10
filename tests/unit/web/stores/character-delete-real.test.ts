@@ -4,7 +4,7 @@ import {hasRecordedReference,readRecordedReference} from '../../../helpers/recor
 import {useCharacterLoadoutsStore} from '../../../../src/web/src/stores/character-loadouts';
 import {createAccount,cloneAccount,parseAccount} from '../../../../src/web/src/domain/account';
 import {previewEnkaImport,confirmEnkaImport} from '../../../../src/web/src/domain/enka-import';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 describe.skipIf(!hasRecordedReference(path))('whole character removal from recorded showcase',()=>{
   it('rolls back failed commits and removes only that character records, preserving physical items',async()=>{
     const memory=new Map<string,string>();vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key) ?? null,setItem:(key:string,value:string)=>memory.set(key,value),removeItem:(key:string)=>memory.delete(key)});

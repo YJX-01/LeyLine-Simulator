@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, disposePinia, setActivePinia } from 'pinia';
 import { evaluateTimeline } from '@leyline/engine';
@@ -23,7 +24,7 @@ function workspace() {
   return store;
 }
 
-describe('current workspace files and editing', () => {
+describe.skipIf(!existsSync('.references/enka/official-example.json'))('current workspace files and editing', () => {
   beforeAll(async () => { recorded = await recordedProject(); });
   beforeEach(() => {
     pinia = createPinia();

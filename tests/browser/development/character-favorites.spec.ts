@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
-const source='tests/fixtures/recordings/enka/official-example.json';
+const source='.references/enka/official-example.json';
 test.skip(!existsSync(source),'Requires the recorded public showcase.');
 test('real showcase: character favorites persist, filter and sort independently of equipment',async({page})=>{
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(source,'utf8'))}));

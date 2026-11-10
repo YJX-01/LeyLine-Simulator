@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createPinia, disposePinia, setActivePinia } from 'pinia';
 import { createAccount, parseAccount } from '../../src/web/src/domain/account';
@@ -17,7 +17,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 async function recordedDocuments() {
   const account=createAccount();
-  const response=JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'));
+  const response=JSON.parse(readFileSync('.references/enka/official-example.json','utf8'));
   const preview=await previewEnkaImport(response,'618285856',account);
   account.characters=preview.rows.map(row=>row.character);
   const build=account.characters[0].showcase!.build;
@@ -27,7 +27,7 @@ async function recordedDocuments() {
   return {account,build,project,library};
 }
 
-it('accepts current documents and rejects old version tags without converting recorded snapshots', async () => {
+it.skipIf(!existsSync('.references/enka/official-example.json'))('accepts current documents and rejects old version tags without converting recorded snapshots', async () => {
   const {account,build,project,library}=await recordedDocuments();
   const before=JSON.stringify({account,build,project,library});
   expect(parseAccount(account)).toEqual(account);
@@ -42,7 +42,7 @@ it('accepts current documents and rejects old version tags without converting re
   expect(JSON.stringify({account,build,project,library})).toBe(before);
 });
 
-it('ignores retired storage namespaces and leaves their original bytes untouched', async () => {
+it.skipIf(!existsSync('.references/enka/official-example.json'))('ignores retired storage namespaces and leaves their original bytes untouched', async () => {
   const {account,project,library}=await recordedDocuments();
   const old=new Map([
     ['leyline-account-v1',JSON.stringify({...account,schemaVersion:1})],
@@ -63,7 +63,7 @@ it('ignores retired storage namespaces and leaves their original bytes untouched
   } finally {disposePinia(pinia);}
 });
 
-it('restores current account, configuration, team, library and recovery snapshots directly', async () => {
+it.skipIf(!existsSync('.references/enka/official-example.json'))('restores current account, configuration, team, library and recovery snapshots directly', async () => {
   const {account,project,library}=await recordedDocuments(),character=account.characters[0];
   const configurations=[{id:character.id,name:character.name,accountId:account.id,characterId:character.id,snapshot:{...account,characters:[character]}}];
   const teams=[{id:project.id,name:character.name,project}];

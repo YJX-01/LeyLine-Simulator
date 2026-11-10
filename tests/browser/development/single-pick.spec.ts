@@ -1,8 +1,8 @@
 import {existsSync,readFileSync} from 'node:fs';
 import {test,expect} from '@playwright/test';
 test('recorded showcase stays in the library; shared artifact pickers select once and keep effective preferences scoped',async({page})=>{
-  test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires recorded public showcase.');test.setTimeout(60000);
-  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));await page.setViewportSize({width:1440,height:1000});await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'))}));
+  test.skip(!existsSync('.references/enka/official-example.json'),'Requires recorded public showcase.');test.setTimeout(60000);
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));await page.setViewportSize({width:1440,height:1000});await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('.references/enka/official-example.json','utf8'))}));
   await page.goto('/');await page.getByRole('button',{name:'展柜导入',exact:true}).click();await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();await page.getByRole('button',{name:'同时导入本地库',exact:true}).click();await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.locator('.character-card')).toHaveCount(4);
   await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});await role.getByRole('button',{name:'有效词条生命值',exact:true}).click();

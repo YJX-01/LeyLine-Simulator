@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
-const source = 'tests/fixtures/recordings/enka/official-example.json';
+const source = '.references/enka/official-example.json';
 test.skip(!existsSync(source), 'Requires the saved actual Enka example showcase.');
 
 test('actual showcase: element shortcuts, combined selections and separate sorting', async ({ page }) => {

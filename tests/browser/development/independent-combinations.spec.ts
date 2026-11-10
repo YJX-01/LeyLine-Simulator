@@ -1,7 +1,7 @@
 import { recordedJsonFile } from '../../helpers/recorded-reference';
 import { existsSync,readFileSync } from 'node:fs';
 import { test,expect,type Page } from '@playwright/test';
-const showcase='tests/fixtures/recordings/enka/official-example.json';
+const showcase='.references/enka/official-example.json';
 test.skip(!existsSync(showcase),'Requires the recorded public showcase.');
 async function importShowcase(page:Page,local=false){
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(showcase,'utf8'))}));

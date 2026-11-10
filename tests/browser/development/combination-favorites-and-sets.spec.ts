@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect, type Page } from '@playwright/test';
 
-const source='tests/fixtures/recordings/enka/official-example.json';
+const source='.references/enka/official-example.json';
 test.skip(!existsSync(source),'Requires the recorded actual four-character showcase.');
 
 async function readCombinations(page:Page) {

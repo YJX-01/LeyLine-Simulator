@@ -1,8 +1,8 @@
 # 测试入口
 
-unit按schema/game-data/engine/web镜像实现；integration放跨模块、文件及实际资料检查；browser分开发与生产；desktop和performance各自独立。helpers只为测试服务，fixtures保存固定输入，所有类型均不属于生产实现。
+unit按schema/game-data/engine/web镜像实现；integration放跨模块、文件及实际资料检查；browser分开发与生产；desktop和performance各自独立。helpers只为测试服务，不保存固定输入。所有测试均不属于生产实现。
 
-历史构造JSON、场景专用测试/辅助代码及归档副本已删除。fixtures/recordings/enka仅保存当前导入、配装、浏览器和性能检查仍使用的官方公开响应及完整性记录。用户的458件莫娜库存及另一UID原件仍在忽略的.references，缺失时对应检查明确跳过。
+历史构造JSON、场景专用测试/辅助代码及归档副本已删除。整个fixtures目录及其检查命令已删除，不另建替代目录。真实录存直接读取.references中已有的获授权原件：Enka公开响应位于enka/official-example.json，莫娜库存位于artifacts_mona.json；缺失时对应检查明确跳过，不复制或生成替代资料。
 
 current-format检查使用公开原响应的版本标记衍生输入验证旧版本拒绝、旧存储忽略和当前格式正常恢复；不声称是玩家原始导出或战斗实录。性能报告同样注明没有整轴实录。
 

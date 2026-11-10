@@ -11,7 +11,7 @@ import {useCharacterLoadoutsStore} from '../../../../src/web/src/stores/characte
 import {useArtifactCombinationsStore} from '../../../../src/web/src/stores/artifact-combinations';
 import {useArtifactRemoval} from '../../../../src/web/src/composables/use-artifact-removal';
 import {useInventoryHistoryMerge} from '../../../../src/web/src/composables/use-inventory-history-merge';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 describe.skipIf(!hasRecordedReference(path))('observed artifact identity and persisted history',()=>{
   async function recorded(){const account=createAccount(),preview=await previewEnkaImport(JSON.parse(readRecordedReference(path)),'618285856',account);confirmEnkaImport(account,preview,preview.rows.map(row=>row.character.id),true);return account;}
   it('shows showcase items as unstored after inventory deletion without changing their snapshot',async()=>{

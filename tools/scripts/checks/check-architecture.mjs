@@ -27,11 +27,11 @@ function checkDocuments(directory = 'docs') {
   for (const entry of readdirSync(resolve(root, directory), { withFileTypes: true })) {
     const path = `${directory}/${entry.name}`;
     if (entry.isDirectory()) checkDocuments(path);
-    else if (!path.endsWith('.md')) fail(path, 'docs contains documentation only; move metadata, sources and raw evidence to their owning data/assets/fixture directory');
+    else if (!path.endsWith('.md')) fail(path, 'docs contains documentation only; move metadata, sources and raw evidence to their owning data/assets directory or authorized .references source');
   }
 }
 checkDocuments();
-for (const path of ['apps', 'packages', 'scripts', 'patches', 'fixtures', 'tools/desktop', 'src/web/public', '.patch-work', '.pnpm-store']) {
+for (const path of ['apps', 'packages', 'scripts', 'patches', 'fixtures', 'tests/fixtures', 'tools/desktop', 'src/web/public', '.patch-work', '.pnpm-store']) {
   if (existsSync(resolve(root, path))) fail(path, 'retired root directory; use src/, tools/, or .cache/ instead');
 }
 for (const workspace of workspaces) {

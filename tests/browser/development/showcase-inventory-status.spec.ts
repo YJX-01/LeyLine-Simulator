@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
-const source='tests/fixtures/recordings/enka/official-example.json';
+const source='.references/enka/official-example.json';
 test.skip(!existsSync(source),'Requires the recorded actual showcase.');
 
 test('showcase missing-inventory badges replace portraits after deletion, and importing one slot updates only its status',async({page})=>{

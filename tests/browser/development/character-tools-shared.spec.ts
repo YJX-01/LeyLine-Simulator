@@ -1,6 +1,6 @@
 import {existsSync,readFileSync} from 'node:fs';
 import {test,expect} from '@playwright/test';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 test.skip(!existsSync(path),'Requires the recorded four-character showcase.');
 test('owned and catalog character pickers share controls while keeping data and filters independent',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(path,'utf8'))}));await page.goto('/');await page.getByRole('button',{name:'展柜导入',exact:true}).click();await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();await expect(page.locator('.character-cards > button')).toHaveCount(4);

@@ -2,7 +2,7 @@ import {existsSync} from 'node:fs';
 import {test,expect} from '@playwright/test';
 import {prepareRecordedAmberConfiguration} from '../../helpers/recorded-amber-configuration';
 import {auditDialog} from '../../helpers/ui-contract-audit';
-test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires the recorded four-character showcase.');
+test.skip(!existsSync('.references/enka/official-example.json'),'Requires the recorded four-character showcase.');
 test('catalog rarity filters, field validation and shared dropdowns preserve the manual draft',async({page})=>{
   test.setTimeout(60000);await page.setViewportSize({width:1440,height:1000});await page.goto('/');
   await page.getByRole('button',{name:'手动添加角色',exact:true}).click();const characters=page.getByRole('dialog',{name:'手动添加角色',exact:true});await characters.getByRole('button',{name:'筛选',exact:true}).click();const characterFilter=page.getByRole('dialog',{name:'筛选角色',exact:true});await expect(characterFilter.locator('.rarity-option')).toHaveText(['五星','四星']);await expect(characterFilter.locator('.rarity-option').first()).toHaveCSS('color','rgb(120, 88, 24)');await expect(characterFilter.locator('.rarity-option').last()).toHaveCSS('color','rgb(100, 69, 138)');await page.keyboard.press('Escape');await page.keyboard.press('Escape');

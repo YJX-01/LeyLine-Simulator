@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount, cloneAccount, parseAccount } from '../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../src/web/src/domain/enka-import';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 describe.skipIf(!existsSync(path))('Enka official documented public showcase (actual response)',()=>{
   it('preserves observed cultivation and isolates equipment snapshots from physical inventory',async()=>{
     const raw=JSON.parse(readFileSync(path,'utf8')); const account=createAccount();

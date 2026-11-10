@@ -43,7 +43,7 @@ test('verified Jean metadata supports sequential decimal editing, guarded replac
 });
 
 test('recorded Xingqiu candidate retains custom metadata through cultivation editing', async ({ page }) => {
-  const source = 'tests/fixtures/recordings/enka/official-example.json';
+  const source = '.references/enka/official-example.json';
   test.skip(!existsSync(source), 'Requires the recorded public showcase; no synthetic substitute.');
   await page.route('**/api/enka/618285856', route => route.fulfill({ json: JSON.parse(readFileSync(source, 'utf8')) }));
   await page.goto('/');

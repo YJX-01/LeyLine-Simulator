@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 test('recorded showcase files use the current contract and retired local accounts are ignored',async({page})=>{
-  const raw=JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'));
+  const raw=JSON.parse(readFileSync('.references/enka/official-example.json','utf8'));
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:raw}));
   await page.goto('/');
   await page.getByRole('button',{name:'展柜导入',exact:true}).click();

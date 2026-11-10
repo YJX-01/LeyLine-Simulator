@@ -8,7 +8,7 @@ import { planShowcaseInventory } from '../../../../src/web/src/domain/showcase-i
 import { applyCombination,combinationName,usesAutomaticCombinationName,combinationSignature,normalizeEffectiveStats } from '../../../../src/web/src/domain/artifact-combinations';
 import { defaultEffectiveStats } from '../../../../src/web/src/domain/character-loadout-name';
 import { loadAccountGameData } from '../../../../src/web/src/domain/account-presentation';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 describe.skipIf(!existsSync(path))('recorded showcase to independent local combinations',()=>{
  it('imports only after opt-in, reuses exact ordered contents, and never equips automatically',async()=>{
   const raw=JSON.parse(readRecordedReference(path)),account=createAccount();

@@ -6,7 +6,7 @@ import {previewEnkaImport,confirmEnkaImport} from '../../../../src/web/src/domai
 import {planShowcaseInventory} from '../../../../src/web/src/domain/showcase-inventory';
 import {planConfigurationRemoval,hasLocalConfiguration} from '../../../../src/web/src/domain/account-configurations';
 import {useCharacterLoadoutsStore} from '../../../../src/web/src/stores/character-loadouts';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 describe.skipIf(!hasRecordedReference(path))('configuration removal from recorded physical items',()=>{
   it('removes only a preset, promotes a valid alternative, and rolls back a failed account write',async()=>{
     const memory=new Map<string,string>();vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key) ?? null,setItem:(key:string,value:string)=>memory.set(key,value),removeItem:(key:string)=>memory.delete(key)});

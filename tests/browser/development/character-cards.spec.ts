@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
 
-const source = 'tests/fixtures/recordings/enka/official-example.json';
+const source = '.references/enka/official-example.json';
 async function expectStatusAlignment(page:import('@playwright/test').Page) {
   const issues=await page.locator('.character-card').evaluateAll(cards=>cards.flatMap(card=>{
     const status=card.querySelector('.character-card-status')!,picture=card.querySelector('.card-sets')!,name=card.querySelector('.character-card-header > strong')!;

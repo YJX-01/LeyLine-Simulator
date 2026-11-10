@@ -21,8 +21,8 @@ test('showcase preview has bulk selection and the shared reference picker has th
   const manifest=JSON.parse(readFileSync('src/game-data/data/manifest.json','utf8')) as {characters:string[]};
   const referenceNames=manifest.characters.filter(id=>!['aether','lumine'].includes(id)).map(id=>
     (JSON.parse(readFileSync(`src/game-data/data/characters/${id}.json`,'utf8')) as {identity:{name:string}}).identity.name);
-  test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires recorded public showcase.');
-  await page.setViewportSize({width:1280,height:900});await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'))}));
+  test.skip(!existsSync('.references/enka/official-example.json'),'Requires recorded public showcase.');
+  await page.setViewportSize({width:1280,height:900});await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('.references/enka/official-example.json','utf8'))}));
   await page.goto('/');await page.getByRole('button',{name:'展柜导入',exact:true}).click();const dialog=page.getByRole('dialog',{name:'从角色展柜导入',exact:true});await dialog.getByLabel('游戏 UID',{exact:true}).fill('618285856');await dialog.getByRole('button',{name:'查询角色展柜',exact:true}).click();
   await expect(dialog.locator('.import-row')).toHaveCount(4);await dialog.getByRole('button',{name:'清空选择',exact:true}).click();await expect(dialog.getByRole('button',{name:'确认导入 0 位角色',exact:true})).toBeDisabled();await dialog.getByRole('button',{name:'全选',exact:true}).click();await expect(dialog.locator('.import-row[aria-pressed=true]')).toHaveCount(4);
   await dialog.getByRole('button',{name:'导入安柏',exact:true}).click();await expect(dialog.getByRole('button',{name:'确认导入 3 位角色',exact:true})).toBeEnabled();await dialog.getByRole('button',{name:'全选',exact:true}).click();await page.screenshot({path:'artifacts/showcase-preview-unified.png',fullPage:true});

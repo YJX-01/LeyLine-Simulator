@@ -5,7 +5,7 @@ import {createAccount,parseAccount,equipArtifact} from '../../../../src/web/src/
 import {previewEnkaImport,confirmEnkaImport} from '../../../../src/web/src/domain/enka-import';
 import {artifactReferences,copyArtifact,removeInventoryArtifact} from '../../../../src/web/src/domain/artifact-references';
 import {useArtifactFavoritesStore} from '../../../../src/web/src/stores/artifact-favorites';
-const path='tests/fixtures/recordings/enka/official-example.json';
+const path='.references/enka/official-example.json';
 describe.skipIf(!hasRecordedReference(path))('recorded item metadata and reference operations',()=>{
   it('keeps actual numeric content and original identity while a deliberate copy receives a new identity',async()=>{
     const account=createAccount(),preview=await previewEnkaImport(JSON.parse(readRecordedReference(path)),'618285856',account);confirmEnkaImport(account,preview,preview.rows.map(row=>row.character.id),true);const item=account.artifacts[0],before=JSON.stringify(item);item.alias='原件别名';expect(parseAccount(account).artifacts[0].alias).toBe('原件别名');

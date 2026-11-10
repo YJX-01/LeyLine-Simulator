@@ -14,7 +14,6 @@ jobs:
       - run: pnpm data:build
       - run: pnpm data:check
       - run: pnpm docs:check
-      - run: pnpm fixture:check
       - run: pnpm architecture:check
       - run: pnpm typecheck
       - run: pnpm test

@@ -22,7 +22,7 @@ async function expectReadableText(page:import('@playwright/test').Page) {
   expect(wrongSizes).toEqual([]);
 }
 
-const source='tests/fixtures/recordings/enka/official-example.json';
+const source='.references/enka/official-example.json';
 test.skip(!existsSync(source),'Requires the saved actual Enka showcase.');
 
 test('shared real-character editor protects team drafts and keeps account independent',async({page})=>{

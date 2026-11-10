@@ -1,6 +1,6 @@
 import {existsSync,readFileSync} from 'node:fs';
 import {test,expect,type Locator} from '@playwright/test';
-test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires the recorded public showcase.');
+test.skip(!existsSync('.references/enka/official-example.json'),'Requires the recorded public showcase.');
 async function compactGeometry(root:Locator){
   await expect(root.locator('.artifact-summary.compact').first()).toBeVisible();
   const geometry=await root.locator('.artifact-summary.compact').evaluateAll(cards=>cards.map(card=>{
@@ -11,7 +11,7 @@ async function compactGeometry(root:Locator){
 }
 test('recorded Amber uses shared text compact cards in combinations, three-row configurations and selection',async({page})=>{
   test.setTimeout(60000);const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));await page.setViewportSize({width:1920,height:1080});
-  await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'))}));
+  await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('.references/enka/official-example.json','utf8'))}));
   await page.goto('/');
   // Transcribe only cultivation recorded for Amber: level 90/6, C6, 10/10/10, Skyward Harp 90/6 R2.
   await page.getByRole('button',{name:'手动添加角色',exact:true}).click();const manual=page.getByRole('dialog',{name:'手动添加角色',exact:true});await manual.getByLabel('搜索游戏角色',{exact:true}).pressSequentially('安柏');await manual.getByRole('button',{name:'选择安柏',exact:true}).click();await manual.getByRole('button',{name:'6命',exact:true}).click();await manual.getByRole('button',{name:'更换武器',exact:true}).click();await manual.getByLabel('搜索装备武器',{exact:true}).pressSequentially('天空之翼');await manual.getByRole('button',{name:'天空之翼',exact:true}).click();await manual.getByRole('button',{name:'精炼2阶',exact:true}).click();await manual.getByRole('button',{name:'保存角色资料',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});await expect(role).toBeVisible();await page.keyboard.press('Escape');

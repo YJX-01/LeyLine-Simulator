@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import {expect,type Page} from '@playwright/test';
 /** UI transcription of recorded UID 618285856; no fabricated account export. Leaves Amber details open. */
 export async function prepareRecordedAmberConfiguration(page:Page){
-  await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('tests/fixtures/recordings/enka/official-example.json','utf8'))}));await page.goto('/');
+  await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('.references/enka/official-example.json','utf8'))}));await page.goto('/');
   await page.getByRole('button',{name:'手动添加角色',exact:true}).click();const manual=page.getByRole('dialog',{name:'手动添加角色',exact:true});
   await manual.getByLabel('搜索游戏角色',{exact:true}).fill('安柏');await manual.getByRole('button',{name:'选择安柏',exact:true}).click();await manual.getByRole('button',{name:'6命',exact:true}).click();await manual.getByRole('button',{name:'更换武器',exact:true}).click();await manual.getByLabel('搜索装备武器',{exact:true}).fill('天空之翼');await manual.getByRole('button',{name:'天空之翼',exact:true}).click();await manual.getByRole('button',{name:'精炼2阶',exact:true}).click();await manual.getByRole('button',{name:'保存角色资料',exact:true}).click();
   const role=page.getByRole('dialog',{name:'安柏',exact:true});await expect(role).toBeVisible();await page.keyboard.press('Escape');

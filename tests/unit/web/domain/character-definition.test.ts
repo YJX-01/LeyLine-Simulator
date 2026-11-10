@@ -26,9 +26,9 @@ describe('portable real character metadata', () => {
     expect(() => parseCharacterDefinition(JSON.stringify({ ...file, talents: [skill, skill] }))).toThrow('重复');
   });
 
-  it.skipIf(!hasRecordedReference('tests/fixtures/recordings/enka/official-example.json'))('applies only to a candidate snapshot of recorded Xingqiu without changing account or equipment', async () => {
+  it.skipIf(!hasRecordedReference('.references/enka/official-example.json'))('applies only to a candidate snapshot of recorded Xingqiu without changing account or equipment', async () => {
     const account = createAccount();
-    const preview = await previewEnkaImport(JSON.parse(readRecordedReference('tests/fixtures/recordings/enka/official-example.json')), '618285856', account);
+    const preview = await previewEnkaImport(JSON.parse(readRecordedReference('.references/enka/official-example.json')), '618285856', account);
     const recorded = preview.rows.find(row => row.character.showcase!.build.character.id === 'xingqiu')!.character.showcase!.build;
     const project = createEmptyProject();
     const actorId = addActorFromBuild(project, recorded);

@@ -1,7 +1,7 @@
 import {existsSync} from 'node:fs';
 import {test,expect} from '@playwright/test';
 import {prepareRecordedAmberConfiguration} from '../../helpers/recorded-amber-configuration';
-test.skip(!existsSync('tests/fixtures/recordings/enka/official-example.json'),'Requires recorded public showcase.');
+test.skip(!existsSync('.references/enka/official-example.json'),'Requires recorded public showcase.');
 test('all configurations paginate five, open in place, compare inside details, and clear safely',async({page})=>{
   test.setTimeout(60000);page.setDefaultTimeout(10000);const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));await page.setViewportSize({width:1920,height:1080});const role=await prepareRecordedAmberConfiguration(page);
   // Five explicit UI trials vary recorded C6 cultivation; they are not claimed player configurations.

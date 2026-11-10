@@ -1,6 +1,6 @@
 import {existsSync,readFileSync} from 'node:fs';
 import {test,expect,type Page,type Locator} from '@playwright/test';
-const recorded='tests/fixtures/recordings/enka/official-example.json';
+const recorded='.references/enka/official-example.json';
 test.skip(!existsSync(recorded),'Requires the recorded public showcase.');
 async function importShowcase(page:Page,local=true){
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(recorded,'utf8'))}));
