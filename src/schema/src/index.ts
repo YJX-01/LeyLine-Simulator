@@ -11,6 +11,7 @@ export * from './account/build';
 export * from './account/account';
 export * from './project/damage';
 export * from './project/combat-conditions';
+export * from './project/combat-state';
 export * from './project/enemy';
 export * from './project/expressions';
 export * from './project/project';

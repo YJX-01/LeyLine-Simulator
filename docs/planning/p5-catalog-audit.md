@@ -1,5 +1,7 @@
 # P5全目录首轮盘点与实施依赖
 
+2026-11-13首批进度见[实施记录](p5-implementation.md)，包含规则审查、状态契约和当前验证边界。
+
 2026-11-11。基于当前正式JSON、现有契约/求值路径和本地固定参考进行静态盘点。已完成实体枚举、当前支持标记核对和参考注册入口检索；尚未完成所有实体的逐规则语义审查、独立计算及真实资料验收。本次不新增机制、不改变正式参数或支持标记。
 
 ## 全目录基线
@@ -24,7 +26,7 @@
 | --- | --- | --- | --- |
 | genshin-db | `8e5badd60b5d894284ccc927a56c9683529d2592` | 当前正式数据采用来源，参数、文本、成长等 | 根LICENSE为MIT；采用具体数据时仍保留其来源信息 |
 | GenshinTools | `345edc8b1ade7b57cd47153844cb1abae8c3e415` | `src/domain/combat/damage/impl`中的角色、武器、套装注册和公式组织 | 本地未发现LICENSE/COPYING/NOTICE许可文件；可以调查，不据此授权复制源码 |
-| mona-current / mona-community | 两者均为`589ac6919057709924c0c20d5a9d673fe9b0be1a` | `mona_generate/output/_gen_character.js`、`_gen_weapon.js`、`_gen_artifact.js`及后续算法调查入口 | 根LICENSE为MIT；两个检出不是两份独立机制证据；beta-data不自动成为正式游戏依据 |
+| mona-community | `589ac6919057709924c0c20d5a9d673fe9b0be1a` | `mona_generate/output/_gen_character.js`、`_gen_weapon.js`、`_gen_artifact.js`及后续算法调查入口 | 根LICENSE为MIT；2026-11-13按用户要求统一为此检出；beta-data不自动成为正式游戏依据 |
 | kqm-tcl | `7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5` | 角色说明、evidence记录、角色参数与帧资料；已定位琴的对应文档 | 本地未发现独立许可文件；本轮只定位，不将站点自述等同本项目核验 |
 | meropide本地网页资料 | 无独立Git版本；manifest记录2026-11-05采集 | `manifest.json`和`pages`，包含伤害公式及二次转化等来源入口 | 按具体网页及采集记录引用；git向上查找会返回本仓库，不能当作资料源提交；采用与许可需逐页核对 |
 

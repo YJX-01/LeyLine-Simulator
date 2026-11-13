@@ -134,6 +134,7 @@ export function evaluateDamage(buildInput: unknown, damageInput: DamageRequest |
   if (!build.success) return finish();
   if (!damage) { report('unknown', '尚未选择真实技能和命中条件。'); return finish(); }
   if (!damage.success) { report('invalid-input', '真实命中条件格式无效。'); return finish(); }
+  if (damage.data.stateOverrides?.length) { report('invalid-input', '按队员指定的命中覆盖需要项目上下文，请通过时间轴求值。'); return finish(); }
   const skill = build.data.character.talents.find(entry => entry.id === damage.data.skillId);
   if (!skill) { report('invalid-input', '真实技能定义不在当前角色快照中。'); return finish(); }
   if (!skill.support.supported) {

@@ -1,6 +1,6 @@
 # P5：全角色基础可用与同轴配装比较
 
-2026-11-11，用户确认范围与实施方向。当前已完成[全目录首轮静态盘点](p5-catalog-audit.md)，逐规则语义审查及机制实施待推进，尚未新增机制支持。本文件是P5唯一详细计划；阶段关系见[实施路线](implementation-roadmap.md)，当前能力见[支持范围](../architecture/content-support.md)。
+2026-11-11，用户确认范围与实施方向。已完成[全目录首轮静态盘点](p5-catalog-audit.md)；2026-11-13开始首批规则审查、战斗状态契约实施和全星级来源候选，进度见[实施记录](p5-implementation.md)。全目录机制仍待逐批覆盖。本文件是P5唯一详细计划；阶段关系见[实施路线](implementation-roadmap.md)，当前能力见[支持范围](../architecture/content-support.md)。
 
 ## 用户任务与范围
 

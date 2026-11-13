@@ -44,3 +44,23 @@ GenshinTools副词条求解和计分主要面向四、五星，部分入口将�
 ## 当前停止线
 
 首轮确认了一至五星数据入口和主要消费者，未完成全部星级的合法升级/词条池映射。正式采用与放宽校验必须等来源依据核验；可以继续资料调查和契约草案，不先让未经核验的组合进入计算。材料缺口不改变用户已批准的全目录目标。
+
+## 2026-11-13来源关联与首份候选
+
+已取得同一LunaGC固定提交的ExcelBinOutput/ReliquaryExcelConfigData.json（4292行）、ReliquaryMainPropExcelConfigData.json（66行）、ReliquarySetExcelConfigData.json（64行），保存于.references/metadata/artifact-rarity/b0501c5d89767ead5f647869a2412521447f7682。下载不等于正式采用，未复制进生产来源或修改实物契约。
+
+显式离线制备命令为node tools/scripts/data/prepare-artifact-rarity.mjs --out=artifacts/content-candidates/新目录。工具拒绝已有输出目录及候选根外路径，普通data:build不调用它；只写待审analysis.json，保留来源关联、原始数值和未解决项。
+
+| 星级 | 物品maxLevel | 强化上限候选 | 对应主词条行数 | 普通depot副词条行数 |
+| --- | --- | --- | --- | --- |
+| 1 | 5 | 4 | 5 | 20 |
+| 2 | 5 | 4 | 5 | 30 |
+| 3 | 13 | 12 | 13 | 40 |
+| 4 | 17 | 16 | 17 | 40 |
+| 5 | 21 | 20 | 21 | 40 |
+
+这些上限候选来自物品关联而非等级表行数。原addPropLevels为5/9/13/17/21，按maxLevel截断后才得到可发生的源等级候选；实际升级/初始条数语义仍需独立核对。
+
+物品表存在appendPropNum=0至4的模板变体，甚至包含不属于当前正式rarityList的套装/星级模板。不能将所有模板视为正常可获得物品，也不能取模板最小/最大值直接定义玩家初始词条数。正式目录仍以当前rarityList约束星级；生成/掉落规则和特殊物品需继续追踪。
+
+该来源缺当前正式目录heartofthefurnace、scarletproof的套装配置，不能依据其它套装模板补造其部位。首份候选在忽略的artifacts/content-candidates/artifact-rarity-2026-11-13/analysis.json；当前版本相容性、初始词条规则、非五星真实导入原件仍为缺口，五星合法性范围未放宽。

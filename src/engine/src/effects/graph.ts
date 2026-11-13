@@ -1,6 +1,7 @@
 import type { Project, Diagnostic, QuantityUnit } from '@leyline/schema';
 import { evaluateDamage, resolveBuild } from '../attributes/build';
 import type { DamagePoint, EvaluationResult, EffectInstance, AttributeRead } from '@leyline/schema';
+import { createCombatStateReader } from '../timeline/combat-state';
 
 type Definition = Project['definitions'][number];
 type Effect = Definition['effects'][number];
@@ -102,6 +103,13 @@ export function evaluateDependencyGraph(project: Project): EvaluationResult {
   const completed = new Set<string>();
   const gameDamagePoints = new Set<string>();
   const panels = new Map<string, ReturnType<typeof resolveBuild>>();
+  const readState = createCombatStateReader(project);
+  const stateReads = new Map<string, ReturnType<typeof readState>['reads'][number]>();
+  function combatConditions(actor: string, record: RecordEntry) {
+    const state = readState(actor, record);
+    for (const read of state.reads) stateReads.set(JSON.stringify([actor, record.id, read.field]), read);
+    return state.conditions;
+  }
   const ctxKey = (ctx: Context) => JSON.stringify([ctx.actor, ctx.record.id, ctx.phase]);
   const before = (a: RecordEntry, ctx: Context) => (positions.get(a.id) ?? -1) < (positions.get(ctx.record.id) ?? -1) || (a.id === ctx.record.id && ctx.phase === 'after');
   function source(ctx: Context, d: Definition, path: string) {
@@ -122,7 +130,7 @@ export function evaluateDependencyGraph(project: Project): EvaluationResult {
     if (!actor) { missing(actorId, `timeline.${ctx.record.id}.attribute`); return null; }
     if (key === 'damageBonus') return { value: 0, unit: 'scalar' };
     if (key === 'attack' && actor.build) {
-      const conditions = ctx.record.damage?.conditions;
+      const conditions = combatConditions(actorId, ctx.record);
       const panelKey = JSON.stringify([actorId, conditions ?? {}]);
       let panel = panels.get(panelKey);
       if (!panel) { panel = resolveBuild(actor.build, conditions); panels.set(panelKey, panel); }
@@ -270,7 +278,10 @@ export function evaluateDependencyGraph(project: Project): EvaluationResult {
           gameDamagePoints.add(ctx.point.id);
           const attack = attribute(ctx.actor, 'attack', 'attack', ctx);
           const bonus = attribute(ctx.actor, 'damageBonus', 'scalar', ctx);
-          const real = evaluateDamage(actors.get(ctx.actor)?.build, ctx.record.damage, project.enemy, bonus?.value ?? 0, attack?.value);
+          const damage = ctx.record.damage ? { ...ctx.record.damage, conditions: combatConditions(ctx.actor, ctx.record) } : undefined;
+          // Project-scoped overrides have already been resolved for the current actor.
+          if (damage) delete damage.stateOverrides;
+          const real = evaluateDamage(actors.get(ctx.actor)?.build, damage, project.enemy, bonus?.value ?? 0, attack?.value);
           ctx.point.real = real;
           for (const issue of real.issues) report(issue.code, path, issue.message);
           return attack && bonus && real.value !== null ? { value: real.value, unit: 'damage' } : null;
@@ -331,5 +342,5 @@ export function evaluateDependencyGraph(project: Project): EvaluationResult {
   const objectiveValue = sum(orderedPoints.filter(p => !project.objective.damageIds || project.objective.damageIds.includes(p.id)));
   const totalValue = sum(orderedPoints);
   return { status: invalid || diagnostics.some(d => d.code === 'arithmetic') ? 'invalid' : exhausted || diagnostics.some(d => d.code === 'stale-revision') || orderedPoints.some(p => p.value === null) ? 'partial' : 'complete', points: orderedPoints,
-    objectiveValue, totalValue, diagnostics, plan: project, effectInstances: instances.map(i => i.view), reads };
+    objectiveValue, totalValue, diagnostics, plan: project, effectInstances: instances.map(i => i.view), reads, stateReads: [...stateReads.values()] };
 }

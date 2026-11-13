@@ -20,7 +20,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[2] / 'lib'))
 from content_source import read_content
 
 ROOT = Path(__file__).resolve().parents[3]
-MONA = ROOT / '.references/mona-current'
+MONA = ROOT / '.references/mona-community'
 DB = ROOT / '.references/genshin-db/src/data'
 CACHE = ROOT / '.references/game-icon-downloads'
 parser = argparse.ArgumentParser(description=__doc__)

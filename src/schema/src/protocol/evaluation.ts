@@ -1,6 +1,7 @@
 import type { Project, Diagnostic } from '../project/project';
 import type { QuantityUnit } from '../common/values';
 import type { DamageResult } from './damage-result';
+import type { CombatStateField } from '../project/combat-state';
 type Definition = Project['definitions'][number];
 export interface EffectInstance {
   id: string; owner: string; slot: string; definition: string; version: string; effect: string;
@@ -18,6 +19,15 @@ export interface DamagePoint {
   sources: { path: string; definition: string; version: string; source: Definition['source'] }[];
   real?: DamageResult;
 }
+export interface CombatStateRead {
+  actor: string;
+  field: CombatStateField;
+  timeMs: number;
+  recordId: string;
+  value: number | boolean | null;
+  source: 'interval' | 'override' | 'unknown';
+  intervalId: string | null;
+}
 export interface EvaluationResult {
   status: 'complete' | 'partial' | 'invalid';
   points: DamagePoint[];
@@ -27,6 +37,7 @@ export interface EvaluationResult {
   plan: Project | null;
   effectInstances?: EffectInstance[];
   reads?: AttributeRead[];
+  stateReads?: CombatStateRead[];
 }
 
 /** Pure v1 evaluation: each candidate rebuilds its effects; no simulation or shared run state. */

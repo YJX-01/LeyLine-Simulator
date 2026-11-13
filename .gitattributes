@@ -1,6 +1,12 @@
 # Unified diff context lines contain a required leading space before upstream tabs.
 tools/patches/*.patch -whitespace
 
+# Canonical metadata requires LF even on Windows checkouts.
+src/game-data/data/**/*.json text eol=lf
+src/game-data/data/*.json text eol=lf
+pnpm-lock.yaml text eol=lf
+pnpm-workspace.yaml text eol=lf
+
 # Preserve upstream license and notice bytes across platforms.
 licenses/npm-LICENSES.txt -text -whitespace
 licenses/sources/** -text -whitespace

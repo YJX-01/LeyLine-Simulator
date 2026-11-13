@@ -7,7 +7,7 @@ const root = resolve(import.meta.dirname, '../../..');
 const canonical = resolve(root, 'tools/data/sources/catalog/mona-community/catalog.json');
 const aliasesPath = resolve(root, 'src/web/generated/mona-set-aliases.json');
 if (process.argv.includes('--capture')) {
-  const reference = resolve(root, '.references/mona-current');
+  const reference = resolve(root, '.references/mona-community');
   const expected = '589ac6919057709924c0c20d5a9d673fe9b0be1a';
   const actual = execFileSync('git', ['-C', reference, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   if (actual !== expected) throw new Error('Mona subrepository changed; review its catalog before capture.');

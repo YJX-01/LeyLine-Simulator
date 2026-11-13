@@ -4,6 +4,7 @@ import { buildSchema } from '../account/build';
 import { damageRequestSchema } from './damage';
 import { enemySchema } from './enemy';
 import { ruleDefinitionSchema } from './expressions';
+import { combatStateIntervalSchema, validateCombatStates } from './combat-state';
 export const projectSchema = z.object({
   schemaVersion: z.literal(2), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
   definitions: z.array(ruleDefinitionSchema).max(200),
@@ -16,6 +17,7 @@ export const projectSchema = z.object({
   }).strict(),
   effectRevisions: z.array(z.object({ instanceId: idSchema.max(2000), disabled: z.boolean(), value: quantitySchema.optional() }).strict()).max(10000).optional(),
   conditions: z.record(idSchema, z.boolean().nullable()),
+  combatStates: z.array(combatStateIntervalSchema).max(10000).optional(),
   enemy: enemySchema.optional(),
   timeline: z.array(z.object({
     id: idSchema, timeMs: millisecondsSchema, order: z.number().int().nonnegative(), actor: idSchema,
@@ -23,6 +25,7 @@ export const projectSchema = z.object({
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(idSchema).optional() }).strict(),
 }).strict().superRefine((project, context) => {
+  validateCombatStates(project, context);
   if (project.calculationProfile === 'direct') {
     if (project.effectRevisions !== undefined || project.definitions.some(d => d.nodes.some(n => ['attribute', 'capture', 'history'].includes(n.op)) || d.effects.some(e => ['recipient', 'attribute', 'unit', 'group', 'policy', 'maxStacks', 'captureAt'].some(k => Object.hasOwn(e, k))))) {
       context.addIssue({ code: 'custom', message: '属性读取、捕获、累计和效果修订需要明确采用依赖求值配置。', path: ['rulesVersion'] });

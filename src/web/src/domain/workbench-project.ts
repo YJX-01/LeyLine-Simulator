@@ -31,6 +31,10 @@ export function removeProjectActor(project: Project, id: string): void {
   const removed = new Set(project.timeline.filter(record => record.actor === id).map(record => record.id));
   project.timeline = project.timeline.filter(record => !removed.has(record.id));
   project.candidate.actors = project.candidate.actors.filter(actor => actor.id !== id);
+  if (project.combatStates) project.combatStates = project.combatStates.filter(interval => interval.actor !== id);
+  for (const record of project.timeline) {
+    if (record.damage?.stateOverrides) record.damage.stateOverrides = record.damage.stateOverrides.filter(override => override.actor !== id);
+  }
   if (project.objective.damageIds) project.objective.damageIds = project.objective.damageIds.filter(record => !removed.has(record));
 }
 

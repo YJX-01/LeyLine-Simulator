@@ -25,15 +25,15 @@
       "licenseStatus": "No tracked LICENSE/COPYING/NOTICE file found at the pinned commit; no upstream implementation copied into the product"
     },
     {
-      "id": "mona-current",
+      "id": "mona-community",
       "kind": "git",
       "url": "https://github.com/TwiceDrop/genshin_artifact",
       "branch": "main",
       "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
       "commitDate": "2026-10-31T11:12:02Z",
       "release": "7.2.02",
-      "localPath": ".references/mona-current",
-      "purpose": "current pinned community Git checkout; catalog identity and verified image sources; upstream code is not executed",
+      "localPath": ".references/mona-community",
+      "purpose": "canonical pinned community Git checkout; catalog identity, mechanics research and verified image sources; upstream code is not executed",
       "canonicalSnapshot": "tools/data/sources/catalog/mona-community/catalog.json",
       "licenseFiles": [
         "LICENSE",
@@ -41,23 +41,6 @@
       ],
       "shallow": true,
       "submodulesInitialized": false
-    },
-    {
-      "id": "mona-community",
-      "kind": "git",
-      "url": "https://github.com/TwiceDrop/genshin_artifact",
-      "branch": "main",
-      "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
-      "commitDate": "2026-10-31T11:12:02Z",
-      "localPath": ".references/mona-community",
-      "purpose": "secondary current checkout; former origin retained as legacy remote",
-      "shallow": true,
-      "submodulesInitialized": false,
-      "licenseFiles": [
-        "LICENSE",
-        "THIRD_PARTY_NOTICES.md"
-      ],
-      "release": "7.2.02"
     },
     {
       "id": "genshin-db",

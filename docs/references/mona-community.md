@@ -2,7 +2,7 @@
 
 2026-11-06。用户指出新社区版与新增资料遗漏后重新检索。之前默认的 `1803233552/genshin_artifact/main` 提交为 2025-10-11 的 `beaced4d…`，包版本 5.30.0，不能作为当前社区版依据。`xenon2333/mona` 的 2026-10-22 发布物标记为 5.33.58；另外核实 [TwiceDrop 维护版](https://github.com/TwiceDrop/genshin_artifact/tree/589ac6919057709924c0c20d5a9d673fe9b0be1a) 的正式版本为 **7.2.02**，提交时间 2026-10-31，当前采用该固定提交核对新目录与导出身份。
 
-参考文件下载到 `.references/mona-current/`，仅读取生成的 JSON 数据及图片，不执行社区项目代码。角色、武器、套装目录和中文词典的哈希、与本项目固定目录的对照在 `tools/data/sources/catalog/mona-community/catalog.json`。维护命令：
+2026-11-13，按用户要求统一使用 `.references/mona-community/`，不再保留重复的 `mona-current` 检出；参考登记、目录捕获和制图工具均使用此路径，固定提交不变。仅读取资料，不执行社区项目代码。角色、武器、套装目录和中文词典的哈希、与本项目固定目录的对照在 `tools/data/sources/catalog/mona-community/catalog.json`。维护命令：
 
 - 已取得同版本参考文件时，`node tools/scripts/data/convert-mona-catalog.mjs --capture` 重新核对并捕获。
 - 日常运行 `node tools/scripts/data/convert-mona-catalog.mjs --check`，只读取 canonical，不依赖外部 checkout。
@@ -21,7 +21,7 @@
 
 ## 头像占位图与参考子仓库纠正
 
-用户再次指出空白头像与比例不一致后，核查发现：此前 `.references/mona-current` 实际只是部分下载文件，不是 Git 子仓库；`.references/mona-community` 仍停在旧提交。现两者均为真实 Git checkout，HEAD 均为 `589ac6919057709924c0c20d5a9d673fe9b0be1a`，origin 均指向 `TwiceDrop/genshin_artifact`，工作区干净。`mona-community` 保留旧远端为 `legacy`；`mona-current/main` 跟踪 `origin/main`。原 genshin-db 保持既定的 2026-11-04 数值快照，未无关升级。制图与目录捕获脚本读取 `mona-current` 并先核对 Git HEAD，不能再把部分文件目录冒充已更新的子仓库。
+当时用户再次指出空白头像与比例不一致，核查发现旧 `.references/mona-current` 实际只是部分下载文件，不是 Git 子仓库；`.references/mona-community` 则停在旧提交。2026-11-10曾将两者固定到 `589ac6919057709924c0c20d5a9d673fe9b0be1a`，origin均指向 `TwiceDrop/genshin_artifact`。这属于历史处理记录；2026-11-13已统一为 `mona-community` 单一检出。制图与目录捕获继续核对固定Git HEAD，不将部分文件目录冒充已核验子仓库；genshin-db固定数值版本不变。
 
 第二个实因是旧官方下载地址为 242 个条目返回同一张服务器占位 PNG，HTTP 状态仍为 200，图片也能解码：55 张角色图、97 张武器图、90 张圣遗物图。其源 SHA-256 为 `ae5d4d9be2e3ee89c0fc94a326aaefd8412c55d916bef6f7d28c88ebf771af7b`，透明度最大值仅 37/255。此前“naturalWidth > 0”检查没有验证图像内容，因此旧的完整覆盖声明有误。
 
