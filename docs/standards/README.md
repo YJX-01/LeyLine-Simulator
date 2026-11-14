@@ -11,7 +11,7 @@
 | 培养资料与战斗条件 | [边界复查](../architecture/import-and-calculation-boundaries.md) | Build、damage.conditions、目标草稿及面板状态 | 菲林斯实际响应与命中条件隔离检查 |
 | 实际案例与独立期望 | [证据规范](evidence.md) | tests及录存manifest | 全角色按来源、独立核验、真实资料和观测分层记录；私有资料缺失明确跳过，历史构造场景已删除 |
 | 测试组织与检查选择 | [测试规范](testing.md) | tests、根命令、CI | `test` / 浏览器与桌面串行；已实施 |
-| 按查询支持证明与同轴复算 | [查询覆盖](../architecture/query-damage-coverage.md) | 共同定义、engine图、domain及Worker | R1有限证明；完整角色与P5仍待收口 |
+| 按查询支持证明与同轴复算 | [查询覆盖](../architecture/query-damage-coverage.md) | 共同定义、engine图、domain及Worker | 有限查询已实现；具体角色范围见支持说明 |
 | 采集、生成与工具维护 | [工具指南](../guides/tools.md) | tools分组与package.json | `--check`只读，采集显式；已实施 |
 
 本清单只指向权威文档，不复制其中的长期规则表。后续变更在同一说明中记录原因与影响，状态不得用“测试通过”代替用户决定。

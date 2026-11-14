@@ -14,9 +14,8 @@
 | [界面规范](design/visual-language.md) | 当前主题、色板、文字与控件规范 |
 | [直接伤害](mechanics/direct-hit.md) | 当前公式及能力边界 |
 | [参考索引](references/README.md) | 外部格式、研究结论及内容参考 |
-| [当前产品路线](planning/implementation-roadmap.md) | 全角色可用、比较、优化、概率、视频与交付的增量顺序 |
-| [P5全角色计划](planning/p5-character-usability.md) | 全目录基本可用与同轴配装比较的范围、批次、证据及出口 |
-| [P5全目录盘点](planning/p5-catalog-audit.md) | 角色、武器、套装覆盖基线，固定参考入口、公共依赖及建议批次 |
+| [产品需求](planning/product-direction.md) | 保留必要目标、用户决策和产品边界 |
+| [实施状态](planning/implementation-roadmap.md) | 旧方案已撤回；不保留旧批次、接手安排或重复台账 |
 | [已审核重构方案](planning/repository-refactor.md) / [实施记录](planning/repository-refactor-implementation.md) | 已完成基础的批准范围、变更映射及验证边界 |
 
 新增文档先确定类别；修改已有约定直接更新其权威说明，其他文件引用。生成数据、素材、录存响应、报告JSON不进入此目录。

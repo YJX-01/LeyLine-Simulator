@@ -30,6 +30,8 @@
 
 普通构建不写docs。修改套装简称后，显式运行`node tools/scripts/data/build-display.mjs --write-docs`更新文档对照表；`data:check`只读核对它与正式JSON是否一致。
 
+`node tools/scripts/data/audit-damage-paths.mjs`只读审计当前目录的命中绑定并向stdout输出摘要，不维护阶段文档或实施台账。
+
 素材采集在tools/scripts/assets：capture-stat-vectors.py、capture-ui-icon-sources.py刷新采集配置，sync-game-icons.py准备待审候选；采集结果先审查再采用，Node的build.mjs只从根assets复制并建索引。应用运行和测试脚本不混在这些工具中。
 
 clean:outputs清除两包generated、资源缓存、网页构建、报告及旧中转目录；最终两版包、内容待审候选、基线备份和用户资料保留。clean:cache显式清空整个.cache。检测到仍在执行的打包工作区时，清理拒绝执行。不要按应用名结束进程；浏览器与桌面串行，仅关闭当前测试自己启动的服务/profile。完整交付条件和证据限制见[部署说明](deployment.md)。
