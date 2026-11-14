@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { readContentSource } from '../../lib/content-source.mjs';
 import { writeGeneratedFile } from '../../lib/generated-files.mjs';
+if (process.argv.slice(2).some(argument => argument !== '--check')) throw new Error('Usage: node tools/scripts/data/build-display.mjs [--check]');
 const root=resolve(import.meta.dirname,'../../..');
 // UI names are community terminology only; they never alter set identities or mechanics.
 const shortNames=readContentSource(resolve(root,'src/game-data/data/tables/artifact-set-short-names.json'));
@@ -11,11 +12,6 @@ const shortText=JSON.stringify(Object.fromEntries(Object.entries(shortNames.sets
 const shortTarget=resolve(root,'src/web/generated/artifact-set-short-names.json');
 if(process.argv.includes('--check')) { if(readFileSync(shortTarget,'utf8').replace(/\r\n/g,'\n')!==shortText)throw new Error('Artifact set abbreviations need regeneration.'); }
 else writeGeneratedFile(shortTarget,shortText);
-
-const shortDoc=['# 圣遗物套装简称对照','','程序读取 `src/game-data/data/tables/artifact-set-short-names.json` 的 `shortName`。修改后运行 `pnpm data:build`。没有登记的套装使用全称。','','| 套装全称 | 当前简称 |','| --- | --- |',...Object.values(shortNames.sets).map(entry=>`| ${entry.name} | ${entry.shortName} |`)].join('\n')+'\n';
-const shortDocTarget=resolve(root,'docs/references/artifact-set-short-names.md');
-if(process.argv.includes('--check')) { if(readFileSync(shortDocTarget,'utf8').replace(/\r\n/g,'\n')!==shortDoc)throw new Error('Artifact abbreviation table needs regeneration with build-display.mjs --write-docs.'); }
-else if(process.argv.includes('--write-docs')) writeGeneratedFile(shortDocTarget,shortDoc);
 
 const effectiveDefaults=readContentSource(resolve(root,'src/game-data/data/tables/character-effective-stats.json'));
 const effectiveGroups=new Set(['hp','attack','defense','critRate','critDamage','elementalMastery','energyRecharge']);

@@ -1,7 +1,9 @@
 # game-data
 
-正式内容维护在`data/characters`、`weapons`、`artifact-sets`，一实体一JSON；`tables`存当前公共表，`manifest.json`列内容版本及有序ID。`src/catalog.ts`是加载器；`generated`只是运行分块。
+正式输入在data/characters、weapons、artifact-sets，每实体一份JSON；tables保存公共表，manifest.json维护版本和有序ID。src/catalog.ts提供加载器，generated提供只读运行分块。
 
-`pnpm data:build`验证共同schema后生成；`pnpm data:check`只读比较。内置和自定义角色使用相同CharacterDefinition，介绍、技能参数与静态规则直接进入UI和引擎。来源原件在tools/data/sources；图片在根assets；不读取archive或本地参考仓库。
+pnpm data:build经共同schema校验后离线生成，pnpm data:check直接比较来源、模板与派生结果。内置与自定义角色共用CharacterDefinition，文本、参数、命座加级及规则由相同定义提供；配装消费自身快照。
 
-字段语义见[内容规范](../../docs/standards/content.md)，精度及缺口见[数值审计](../../docs/references/numeric-precision.md)。
+套装简称位于[data/tables/artifact-set-short-names.json](data/tables/artifact-set-short-names.json)，有效属性与白值基准分别在character-effective-stats.json、effective-roll-basis.json。生成器输出运行索引，具体清单由正式JSON维护。
+
+来源原件和调查在[资料入口](../../tools/data/README.md)，精度与文本采用在[内容核对](../../tools/data/README.md#内容采用与精度核对)，计算能力在[支持记录](../../tools/data/README.md#计算支持与内容绑定)。通用语义见[内容规范](../../docs/content.md)。

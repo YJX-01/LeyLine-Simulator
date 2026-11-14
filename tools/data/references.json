@@ -18,7 +18,7 @@
       "checkedOn": "2026-11-10",
       "localPath": ".references/GenshinTools",
       "purpose": "architecture research: generated game data, typed combat implementations, stat/buff/formula organization; not a runtime or build dependency",
-      "research": "docs/references/genshin-tools.md",
+      "research": "tools/data/README.md",
       "shallow": true,
       "submodulesInitialized": false,
       "licenseFiles": [],

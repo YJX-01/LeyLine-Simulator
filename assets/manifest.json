@@ -1,5 +1,71 @@
 {
-  "formatVersion": 2,
+  "formatVersion": 3,
+  "capture": {
+    "spriteRepositories": [
+      {
+        "repository": "frzyc/genshin-optimizer",
+        "cacheFile": "optimizer-tree.json",
+        "pathPrefix": "libs/gi/assets/src/gen/"
+      },
+      {
+        "repository": "CMHopeSunshine/GenshinWikiMap",
+        "cacheFile": "wiki-tree.json",
+        "pathPrefix": "resources/talent/Skill_A_"
+      }
+    ],
+    "passives": {
+      "defaultCombatPassives": [
+        "passive1",
+        "passive2"
+      ],
+      "extraCombatPassives": {
+        "aino-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "alyosha-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "arlecchino-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "chasca-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "chasca-passive4": "击败敌人恢复维持夜魂状态的燃素；仅适用指定地区。",
+        "citlali-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "citlali-passive4": "夜魂迸发恢复燃素；仅适用指定地区。",
+        "columbina-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "emilie-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "flins-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "iansan-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "iansan-passive4": "补充维持夜魂状态的燃素；仅适用指定地区。",
+        "ifa-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "ifa-passive4": "低生命值时恢复生命；仅适用指定地区。",
+        "illuga-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "ineffa-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "jahoda-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "kachina-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "kinich-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "lauma-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "linnea-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "lohen-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "mavuika-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "mavuika-passive4": "缩短夜魂传递冷却，影响登场资源/状态；仅适用指定地区。",
+        "mitya-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "mualani-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "nefer-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "odette-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "ororon-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "sandrone-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "sangonomiyakokomi-passive4": "改变治疗加成与暴击率。",
+        "skirk-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "tartaglia-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "travelercryo-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "valeriy-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "varesa-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "varka-passive3": "按队伍成员减少元素战技长按冷却；有地区限制。",
+        "vesna-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。",
+        "xilonen-passive3": "混合天赋：保留夜魂资源/登场状态或空中攻击规则；附带探索效果不作为计算支持承诺。",
+        "xilonen-passive4": "夜魂传递恢复燃素，影响夜魂维持；仅适用指定地区。",
+        "zibai-passive3": "改变战斗属性、技能等级、反应规则或战斗状态。"
+      },
+      "excludedPolicy": "其他 passive3/passive4 为生活或探索便利，不下载；新天赋须依据原文审核后加入白名单。混合天赋只因其战斗部分保留；图片储备不声明引擎已实现。"
+    },
+    "critDisplayMapping": "critRate uses CritRateIcon hollow-star geometry; critDamage uses CritDmgIcon solid-star and ring geometry, matching Yatta.",
+    "statDisplayReference": "https://gi.yatta.moe/chs/archive/avatar"
+  },
   "sourceCommits": {
     "PathOfGenshin/resources": "015a2493b5672b28576ab78ffbcffde2ea0c9844",
     "frzyc/genshin-optimizer": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
@@ -12,7 +78,7 @@
   "rights": "Game artwork © miHoYo / HoYoverse. Unofficial tool; code licenses do not grant artwork rights.",
   "compression": {
     "format": "WebP + SVG stats",
-    "statTransform": "stat-vector-v4",
+    "statTransform": "stat-vector-v6",
     "quality": 76,
     "method": 6,
     "transparent": true,
@@ -46,8 +112,8 @@
     "maxAssetBytes": 32768,
     "maxTotalBytes": 16777216
   },
-  "totalBytes": 9984378,
-  "totalSourceBytes": 52373086,
+  "totalBytes": 9987608,
+  "totalSourceBytes": 52988323,
   "assets": [
     {
       "kind": "artifactSlots",
@@ -69,7 +135,8 @@
       ],
       "alphaMax": 255,
       "transform": "artifact-slot-vector-v1",
-      "vectorPath": "assets/sources/vectors/artifact-slots/circlet.svg"
+      "sourceFilename": "CircletIcon",
+      "license": "MIT"
     },
     {
       "kind": "artifactSlots",
@@ -91,7 +158,8 @@
       ],
       "alphaMax": 255,
       "transform": "artifact-slot-vector-v1",
-      "vectorPath": "assets/sources/vectors/artifact-slots/flower.svg"
+      "sourceFilename": "FlowerIcon",
+      "license": "MIT"
     },
     {
       "kind": "artifactSlots",
@@ -113,7 +181,8 @@
       ],
       "alphaMax": 255,
       "transform": "artifact-slot-vector-v1",
-      "vectorPath": "assets/sources/vectors/artifact-slots/goblet.svg"
+      "sourceFilename": "GobletIcon",
+      "license": "MIT"
     },
     {
       "kind": "artifactSlots",
@@ -135,7 +204,8 @@
       ],
       "alphaMax": 255,
       "transform": "artifact-slot-vector-v1",
-      "vectorPath": "assets/sources/vectors/artifact-slots/plume.svg"
+      "sourceFilename": "PlumeIcon",
+      "license": "MIT"
     },
     {
       "kind": "artifactSlots",
@@ -157,7 +227,8 @@
       ],
       "alphaMax": 255,
       "transform": "artifact-slot-vector-v1",
-      "vectorPath": "assets/sources/vectors/artifact-slots/sands.svg"
+      "sourceFilename": "SandsIcon",
+      "license": "MIT"
     },
     {
       "kind": "artifacts",
@@ -19391,7 +19462,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "c1"
+      "slot": "c1",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -19414,7 +19486,8 @@
       "alphaMax": 215,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "c2"
+      "slot": "c2",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -19437,7 +19510,8 @@
       "alphaMax": 215,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "c3"
+      "slot": "c3",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -19460,7 +19534,8 @@
       "alphaMax": 231,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "c4"
+      "slot": "c4",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -19483,7 +19558,8 @@
       "alphaMax": 255,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "c5"
+      "slot": "c5",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -19506,7 +19582,8 @@
       "alphaMax": 208,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "c6"
+      "slot": "c6",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -24497,7 +24574,8 @@
       "alphaMax": 247,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "c1"
+      "slot": "c1",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -24520,7 +24598,8 @@
       "alphaMax": 215,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "c2"
+      "slot": "c2",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -24543,7 +24622,8 @@
       "alphaMax": 255,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "c3"
+      "slot": "c3",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -24566,7 +24646,8 @@
       "alphaMax": 211,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "c4"
+      "slot": "c4",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -24589,7 +24670,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "c5"
+      "slot": "c5",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -24612,7 +24694,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "c6"
+      "slot": "c6",
+      "sourceOverride": true
     },
     {
       "kind": "constellations",
@@ -34496,7 +34579,8 @@
           "character": "manekina",
           "slot": "combat2"
         }
-      ]
+      ],
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34527,7 +34611,8 @@
           "character": "manekina",
           "slot": "combat3"
         }
-      ]
+      ],
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34558,7 +34643,8 @@
           "character": "manekina",
           "slot": "passive1"
         }
-      ]
+      ],
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34589,7 +34675,8 @@
           "character": "manekina",
           "slot": "passive2"
         }
-      ]
+      ],
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34842,7 +34929,8 @@
       "alphaMax": 215,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "combat2"
+      "slot": "combat2",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34865,7 +34953,8 @@
       "alphaMax": 228,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "combat3"
+      "slot": "combat3",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34888,7 +34977,8 @@
       "alphaMax": 204,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "passive1"
+      "slot": "passive1",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34911,7 +35001,8 @@
       "alphaMax": 223,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "passive2"
+      "slot": "passive2",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -34934,7 +35025,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "mitya",
-      "slot": "passive3"
+      "slot": "passive3",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -39382,7 +39474,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "combat2"
+      "slot": "combat2",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -39405,7 +39498,8 @@
       "alphaMax": 211,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "combat3"
+      "slot": "combat3",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -39428,7 +39522,8 @@
       "alphaMax": 219,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "passive1"
+      "slot": "passive1",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -39451,7 +39546,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "passive2"
+      "slot": "passive2",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -39474,7 +39570,8 @@
       "alphaMax": 207,
       "transform": "transparent-contain-hq-v1",
       "character": "valeriy",
-      "slot": "passive3"
+      "slot": "passive3",
+      "sourceOverride": true
     },
     {
       "kind": "skills",
@@ -41657,14 +41754,34 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/attack.svg",
-      "aliases": [
-        {
-          "key": "attackPercent",
-          "name": "攻击力%"
-        }
-      ]
+      "transform": "stat-vector-v6",
+      "sourceFilename": "AtkIcon",
+      "license": "MIT"
+    },
+    {
+      "kind": "stats",
+      "key": "attackPercent",
+      "id": "attackPercent",
+      "name": "攻击力%",
+      "file": "assets/game/stats/attackPercent.svg",
+      "format": "SVG",
+      "bytes": 2154,
+      "sourceUrl": "https://gi.yatta.moe/js/app.811bc44c.js",
+      "sourceBytes": 206140,
+      "sourceDimensions": [
+        24,
+        24
+      ],
+      "dimensions": [
+        128,
+        128
+      ],
+      "alphaMax": 255,
+      "transform": "stat-vector-v6",
+      "sourceFilename": "prop/FIGHT_PROP_ATTACK_PERCENT.svg",
+      "license": "upstream-unspecified",
+      "sourceModule": "af6c",
+      "sourceVersion": "app.811bc44c.js"
     },
     {
       "kind": "stats",
@@ -41685,8 +41802,9 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/cooldownReduction.svg"
+      "transform": "stat-vector-v6",
+      "sourceFilename": "CdRedIcon",
+      "license": "MIT"
     },
     {
       "kind": "stats",
@@ -41694,28 +41812,6 @@
       "id": "critDamage",
       "name": "暴击伤害",
       "file": "assets/game/stats/critDamage.svg",
-      "format": "SVG",
-      "bytes": 421,
-      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
-      "sourceBytes": 425,
-      "sourceDimensions": [
-        24,
-        24
-      ],
-      "dimensions": [
-        128,
-        128
-      ],
-      "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/critDamage.svg"
-    },
-    {
-      "kind": "stats",
-      "key": "critRate",
-      "id": "critRate",
-      "name": "暴击率",
-      "file": "assets/game/stats/critRate.svg",
       "format": "SVG",
       "bytes": 969,
       "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritDmgIcon.tsx",
@@ -41729,8 +41825,32 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/critRate.svg"
+      "transform": "stat-vector-v6",
+      "sourceFilename": "CritDmgIcon",
+      "license": "MIT"
+    },
+    {
+      "kind": "stats",
+      "key": "critRate",
+      "id": "critRate",
+      "name": "暴击率",
+      "file": "assets/game/stats/critRate.svg",
+      "format": "SVG",
+      "bytes": 421,
+      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/CritRateIcon.tsx",
+      "sourceBytes": 425,
+      "sourceDimensions": [
+        24,
+        24
+      ],
+      "dimensions": [
+        128,
+        128
+      ],
+      "alphaMax": 255,
+      "transform": "stat-vector-v6",
+      "sourceFilename": "CritRateIcon",
+      "license": "MIT"
     },
     {
       "kind": "stats",
@@ -41751,14 +41871,34 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/defense.svg",
-      "aliases": [
-        {
-          "key": "defensePercent",
-          "name": "防御力%"
-        }
-      ]
+      "transform": "stat-vector-v6",
+      "sourceFilename": "DefIcon",
+      "license": "MIT"
+    },
+    {
+      "kind": "stats",
+      "key": "defensePercent",
+      "id": "defensePercent",
+      "name": "防御力%",
+      "file": "assets/game/stats/defensePercent.svg",
+      "format": "SVG",
+      "bytes": 2023,
+      "sourceUrl": "https://gi.yatta.moe/js/app.811bc44c.js",
+      "sourceBytes": 206140,
+      "sourceDimensions": [
+        24,
+        24
+      ],
+      "dimensions": [
+        128,
+        128
+      ],
+      "alphaMax": 255,
+      "transform": "stat-vector-v6",
+      "sourceFilename": "prop/FIGHT_PROP_DEFENSE_PERCENT.svg",
+      "license": "upstream-unspecified",
+      "sourceModule": "08b1",
+      "sourceVersion": "app.811bc44c.js"
     },
     {
       "kind": "stats",
@@ -41779,8 +41919,9 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/elementalMastery.svg"
+      "transform": "stat-vector-v6",
+      "sourceFilename": "EleMasIcon",
+      "license": "MIT"
     },
     {
       "kind": "stats",
@@ -41801,92 +41942,9 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/energyRecharge.svg"
-    },
-    {
-      "kind": "stats",
-      "key": "flatAttack",
-      "id": "flatAttack",
-      "name": "攻击力（数值）",
-      "file": "assets/game/stats/flatAttack.svg",
-      "format": "SVG",
-      "bytes": 1156,
-      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/AtkIcon.tsx",
-      "sourceBytes": 1073,
-      "sourceDimensions": [
-        24,
-        24
-      ],
-      "dimensions": [
-        128,
-        128
-      ],
-      "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/flatAttack.svg",
-      "derivedFrom": "attack",
-      "derivation": {
-        "method": "blade-only-cutout",
-        "cutoutPath": "M 13.1 8.4 L 15.6 10.9 L 4.6 21.9 L 2.1 21.9 L 2.1 19.4 Z",
-        "notes": "只挖空剑身内部；剑柄与护手完整实心，保持原始外轮廓。"
-      }
-    },
-    {
-      "kind": "stats",
-      "key": "flatDefense",
-      "id": "flatDefense",
-      "name": "防御力（数值）",
-      "file": "assets/game/stats/flatDefense.svg",
-      "format": "SVG",
-      "bytes": 1346,
-      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/DefIcon.tsx",
-      "sourceBytes": 812,
-      "sourceDimensions": [
-        24,
-        24
-      ],
-      "dimensions": [
-        128,
-        128
-      ],
-      "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/flatDefense.svg",
-      "derivedFrom": "defense",
-      "derivation": {
-        "method": "outer-silhouette-stroke",
-        "strokeWidth": 5.0,
-        "notes": "只保留盾牌外围；删除中间分界线和内部填充。"
-      }
-    },
-    {
-      "kind": "stats",
-      "key": "flatHp",
-      "id": "flatHp",
-      "name": "生命值（数值）",
-      "file": "assets/game/stats/flatHp.svg",
-      "format": "SVG",
-      "bytes": 822,
-      "sourceUrl": "https://raw.githubusercontent.com/frzyc/genshin-optimizer/aa908fd1d3d9f64fcc11704c748915a109a8f3b8/libs/gi/svgicons/src/icons/Stats/HpIcon.tsx",
-      "sourceBytes": 1298,
-      "sourceDimensions": [
-        24,
-        24
-      ],
-      "dimensions": [
-        128,
-        128
-      ],
-      "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/flatHp.svg",
-      "derivedFrom": "hp",
-      "derivation": {
-        "method": "drop-outline-only",
-        "outlineStart": "M 12 24 C",
-        "notes": "保留原水滴外框及其内轮廓；删除内部水面和高光。"
-      }
+      "transform": "stat-vector-v6",
+      "sourceFilename": "EnerRechIcon",
+      "license": "MIT"
     },
     {
       "kind": "stats",
@@ -41907,8 +41965,9 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/healingBonus.svg"
+      "transform": "stat-vector-v6",
+      "sourceFilename": "HealingBonusIcon",
+      "license": "MIT"
     },
     {
       "kind": "stats",
@@ -41929,14 +41988,34 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/hp.svg",
-      "aliases": [
-        {
-          "key": "hpPercent",
-          "name": "生命值%"
-        }
-      ]
+      "transform": "stat-vector-v6",
+      "sourceFilename": "HpIcon",
+      "license": "MIT"
+    },
+    {
+      "kind": "stats",
+      "key": "hpPercent",
+      "id": "hpPercent",
+      "name": "生命值%",
+      "file": "assets/game/stats/hpPercent.svg",
+      "format": "SVG",
+      "bytes": 2377,
+      "sourceUrl": "https://gi.yatta.moe/js/app.811bc44c.js",
+      "sourceBytes": 206140,
+      "sourceDimensions": [
+        24,
+        24
+      ],
+      "dimensions": [
+        128,
+        128
+      ],
+      "alphaMax": 255,
+      "transform": "stat-vector-v6",
+      "sourceFilename": "prop/FIGHT_PROP_HP_PERCENT.svg",
+      "license": "upstream-unspecified",
+      "sourceModule": "24f8",
+      "sourceVersion": "app.811bc44c.js"
     },
     {
       "kind": "stats",
@@ -41957,14 +42036,15 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/physicalDamage.svg",
+      "transform": "stat-vector-v6",
       "aliases": [
         {
           "key": "physicalBonus",
           "name": "物理伤害加成"
         }
-      ]
+      ],
+      "sourceFilename": "PhysicalIcon",
+      "license": "MIT"
     },
     {
       "kind": "stats",
@@ -41985,8 +42065,9 @@
         128
       ],
       "alphaMax": 255,
-      "transform": "stat-vector-v4",
-      "vectorPath": "assets/sources/vectors/stats/shieldStrength.svg"
+      "transform": "stat-vector-v6",
+      "sourceFilename": "ShieldStrIcon",
+      "license": "MIT"
     },
     {
       "kind": "weapons",
@@ -48821,32 +48902,32 @@
     },
     {
       "key": "flat-attack",
-      "stat": "flatAttack",
+      "stat": "attack",
       "name": "攻击力（数值）"
     },
     {
       "key": "flat-defense",
-      "stat": "flatDefense",
+      "stat": "defense",
       "name": "防御力（数值）"
     },
     {
       "key": "flat-hp",
-      "stat": "flatHp",
+      "stat": "hp",
       "name": "生命值（数值）"
     },
     {
       "key": "attack-percent",
-      "stat": "attack",
+      "stat": "attackPercent",
       "name": "攻击力%"
     },
     {
       "key": "defense-percent",
-      "stat": "defense",
+      "stat": "defensePercent",
       "name": "防御力%"
     },
     {
       "key": "hp-percent",
-      "stat": "hp",
+      "stat": "hpPercent",
       "name": "生命值%"
     }
   ]

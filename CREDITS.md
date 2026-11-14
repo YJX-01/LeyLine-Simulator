@@ -10,7 +10,8 @@ Vue / Evan You 与 Vue 团队；Pinia / Eduardo San Martin Morote 与贡献者�
 
 ## 复用、资料与机制依据
 
-- **frzyc 与 Genshin Optimizer 贡献者**：属性矢量轮廓、图标资源整理；本地镂空修改保留来源记录。
+- **frzyc 与 Genshin Optimizer 贡献者**：普通属性和部位矢量轮廓、图标资源整理。
+- **Yatta / Project Amber 贡献者**：攻击、生命、防御的原始百分比属性矢量图标及使用方式。
 - **theBowja 与 genshin-db 贡献者**：角色、天赋、装备、成长曲线、语言和身份资料。
 - **wormtql、TwiceDrop 及莫娜占卜铺社区贡献者**：导出格式、使用流程与目录参考，部分图像来源。
 - **Enka.Network / EnkaNetwork 维护者**：公开角色展柜服务、接口文档和身份映射。

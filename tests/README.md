@@ -1,11 +1,21 @@
 # 测试入口
 
-unit按schema/game-data/engine/web镜像实现；integration放跨模块、文件及实际资料检查；browser分开发与生产；desktop和performance各自独立。helpers只为测试服务，不保存固定输入。所有测试均不属于生产实现。
+unit按schema、game-data、engine、web镜像实现，integration提供跨模块、文件及原始资料检查；browser区分development/production，desktop和performance独立。helpers提供操作与核对能力，真实输入直接读取.references获授权原件。
 
-历史构造JSON、场景专用测试/辅助代码及归档副本已删除。整个fixtures目录及其检查命令已删除，不另建替代目录。真实录存直接读取.references中已有的获授权原件：Enka公开响应位于enka/official-example.json，莫娜库存位于artifacts_mona.json；缺失时对应检查明确跳过，不复制或生成替代资料。
+| 命令 | 用途 |
+| --- | --- |
+| pnpm test | Vitest单元及TypeScript集成 |
+| pnpm test:content | Node内容和文件检查 |
+| pnpm test:ui | Chromium单worker真实库存流程 |
+| pnpm test:ui:contracts | Chromium单worker实际样式、焦点与窄屏 |
+| pnpm test:e2e | 开发浏览器矩阵 |
+| pnpm test:production | 根路径与子路径生产检查 |
+| pnpm test:desktop、test:ui:desktop | 独立profile桌面库存与原生文件 |
+| pnpm test:content:desktop | 桌面元数据文件往返 |
+| pnpm perf:engine | 真实录存Build求值与空轴聚合 |
 
-current-format检查使用公开原响应的版本标记衍生输入验证旧版本拒绝、旧存储忽略和当前格式正常恢复；不声称是玩家原始导出或战斗实录。性能报告同样注明没有整轴实录。
+原件为.references/artifacts_mona.json及已授权enka响应，具体登记见[验证资料](../tools/data/README.md#验证资料与独立计算记录)。原件缺失时对应检查明确跳过；历史构造场景、固定输入目录及专用辅助/归档副本已退出维护。
 
-维护与验收选择见[测试规范](../docs/standards/testing.md)。
+current-format使用实际录存的明确版本标签派生副本，检查版本拒绝、存储命名空间及当前恢复。保存、撤销、取消等行为使用当前空文档或原件派生副本。机制期望按来源独立推导，游戏观测单独记录。
 
-保存、撤销、取消、文件大小及非法输入等软件行为检查使用当前空文档或真实录存的明确派生副本；不构造虚拟战斗或伤害真值。
+浏览器与桌面串行单worker，只管理本次创建的服务与实例。通用规则见[测试规范](../docs/evidence-and-validation.md#测试与验证)，性能预算见[测量入口](performance/README.md)。

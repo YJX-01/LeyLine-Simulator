@@ -51,7 +51,13 @@ await withBuildWorkspace(root, 'web', async workspace => {
   await mkdir(resolve(destination, 'tools/scripts/dev'), { recursive: true }); await cp(resolve(root, 'tools/scripts/dev/serve-dist.mjs'), resolve(destination, 'tools/scripts/dev/serve-dist.mjs'));
   await mkdir(resolve(destination, 'src/web/server'), { recursive: true });
   await cp(resolve(root, 'src/web/server/enka.mjs'), resolve(destination, 'src/web/server/enka.mjs'));
-  await cp(resolve(root, 'docs/guides/user-guide.md'), resolve(destination, 'USER-GUIDE.md'));
+  const webReadme = await readFile(resolve(root, 'src/web/README.md'), 'utf8');
+  const guideHeading = '## 地脉工作台使用说明\n';
+  const guideStart = webReadme.indexOf(guideHeading);
+  if (guideStart < 0) throw new Error('Missing user guide in src/web/README.md');
+  const guideEnd = webReadme.indexOf('\n## ', guideStart + guideHeading.length);
+  const guide = webReadme.slice(guideStart, guideEnd < 0 ? undefined : guideEnd).replace(/^#(#{1,5} )/gm, '$1').trimEnd() + '\n';
+  await writeFile(resolve(destination, 'USER-GUIDE.md'), guide);
   await writeFile(resolve(destination, 'README.md'), '# 本地交付候选\n\n静态站点位于 site/，manifest.json 记录源码、验证证据与每个站点文件的SHA-256。此目录没有发布到外部服务。\n\n本地查看：在本目录执行 `node tools/scripts/dev/serve-dist.mjs --dir=site`，打开 http://127.0.0.1:5175/。不要通过file://打开页面。\n\nHTML使用no-cache，带哈希assets使用immutable；正式托管须配置相同策略。规则范围与浏览器本地方案说明见USER-GUIDE.md。\n');
   if (sourceFingerprint() !== fingerprint) throw new Error('Source changed while preparing the release.');
   const published = await publishRelease(root, 'web', destination, () => ({ formatVersion: 1, status: 'local-candidate', version: pkg.version,

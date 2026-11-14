@@ -7,9 +7,17 @@
       "url": "https://github.com/frzyc/genshin-optimizer",
       "version": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
       "license": "MIT（路径代码）；游戏图像权利另计",
-      "usage": "实际复用属性 SVG path 并制作三个本地镂空变体；部分装备、技能、命座、反应图使用该库镜像。",
+      "usage": "实际复用普通属性和部位的SVG路径；部分装备、技能、命座、反应图使用该库镜像。",
       "licenseFile": "licenses/sources/genshin-optimizer/LICENSE",
       "licenseSha256": "6c51d31f2009cda50d5112c2870e4a4d37696f2d5b29fa601b5ef186f4a5d11c"
+    },
+    {
+      "id": "yatta-stat-icons",
+      "name": "Yatta / Project Amber 与贡献者",
+      "url": "https://gi.yatta.moe/chs/archive/avatar",
+      "version": "https://gi.yatta.moe/js/app.811bc44c.js",
+      "license": "上游脚本中的独立SVG素材许可声明待补核",
+      "usage": "静态提取FIGHT_PROP_ATTACK_PERCENT、FIGHT_PROP_HP_PERCENT、FIGHT_PROP_DEFENSE_PERCENT三份原始SVG路径，统一到128px画布并保留透明区域；模块标识及来源版本见assets/manifest.json。"
     },
     {
       "id": "genshin-db",
@@ -77,7 +85,7 @@
       "url": "https://github.com/KQM-git/TCL",
       "version": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
       "license": "机制研究引用",
-      "usage": "机制依据与证据交叉核对；具体引用见 mechanics 和 references 文档。"
+      "usage": "机制依据与证据交叉核对；具体引用见tools/data/README.md#计算支持与验证资料。"
     },
     {
       "id": "meropide",
@@ -91,7 +99,7 @@
       "id": "hoyoverse",
       "name": "miHoYo / HoYoverse",
       "url": "https://genshin.hoyoverse.com/",
-      "version": "逐图 URL、源哈希与转换记录见 public/game-icon-manifest.json",
+      "version": "逐图URL、来源版本与转换记录见assets/manifest.json",
       "license": "游戏内容版权归 miHoYo / HoYoverse 及相关权利人",
       "usage": "角色、武器、圣遗物、元素、技能美术、游戏名称与资料。"
     },
@@ -99,7 +107,7 @@
       "id": "legacy-data",
       "name": "仓库历史常量输入",
       "url": null,
-      "version": "历史输入已归档；当前内容依据见 docs/references/numeric-precision.md",
+      "version": "历史输入已归档；当前内容依据见tools/data/README.md#内容与装备来源",
       "license": "独立上游许可和作者记录待补核",
       "usage": "历史常量用于兼容性与数值输入；"
     },

@@ -4,6 +4,7 @@ import { missingCharacterIcons, characterIconReferences } from '../../lib/asset-
 
 const iconDirectory = new URL('../../../', import.meta.url);
 const icons = JSON.parse(await readFile(new URL('assets/manifest.json', iconDirectory), 'utf8'));
+if (icons.formatVersion !== 3) throw new Error('Asset manifest formatVersion must be 3');
 const index = { ...JSON.parse(await readFile(new URL('../../../src/web/generated/game-icon-index.json', import.meta.url), 'utf8')), ...JSON.parse(await readFile(new URL('../../../src/web/generated/game-detail-icon-index.json', import.meta.url), 'utf8')) };
 let iconBytes = 0;
 const files = new Set();
@@ -17,14 +18,21 @@ for (const asset of icons.assets) {
   if (asset.kind === 'artifacts' && (asset.dimensions[0] !== 128 || asset.dimensions[1] !== 128 || asset.transform !== 'artifact-square-v2')) throw new Error(`Inconsistent artifact canvas: ${asset.key}`);
   if (asset.kind === 'artifactSlots' && (asset.format !== 'SVG' || asset.transform !== 'artifact-slot-vector-v1' || !content.toString('utf8').includes('fill="white"'))) throw new Error(`Invalid artifact slot vector: ${asset.key}`);
   if (asset.kind === 'characters' && (asset.dimensions[0] !== 128 || asset.dimensions[1] !== 128 || asset.transform !== (['manekin', 'manekina'].includes(asset.key) ? 'square-transparent-v2' : 'square-portrait-v1'))) throw new Error(`Inconsistent portrait dimensions: ${asset.key}`);
-  if (['skills', 'constellations', 'buffs', 'stats'].includes(asset.kind) && (asset.dimensions[0] !== 128 || asset.dimensions[1] !== 128 || asset.transform !== (asset.kind === 'stats' ? 'stat-vector-v4' : asset.kind === 'buffs' ? 'combat-glyph-contain-v2' : 'transparent-contain-hq-v1'))) throw new Error(`Inconsistent detail icon: ${asset.key}`);
+  if (['skills', 'constellations', 'buffs', 'stats'].includes(asset.kind) && (asset.dimensions[0] !== 128 || asset.dimensions[1] !== 128 || asset.transform !== (asset.kind === 'stats' ? 'stat-vector-v6' : asset.kind === 'buffs' ? 'combat-glyph-contain-v2' : 'transparent-contain-hq-v1'))) throw new Error(`Inconsistent detail icon: ${asset.key}`);
   if (index[asset.kind]?.[asset.key]?.revision !== createHash('sha256').update(content).digest('hex').slice(0,12)) throw new Error(`Icon cache revision mismatch: ${asset.key}`);
   if (files.has(asset.file)) throw new Error(`Duplicate icon: ${asset.file}`);
   files.add(asset.file);
   if (asset.format === 'SVG') {
     const svg = content.toString('utf8');
     if (!svg.startsWith('<svg ') || !svg.includes('viewBox="0 0 24 24"') || !svg.includes('<path ') || /<(?:script|image|foreignObject)\b|(?:href|onload)=/i.test(svg)) throw new Error(`Invalid icon SVG: ${asset.file}`);
-    if (!content.equals(await readFile(new URL(`../../../${asset.vectorPath}`, import.meta.url)))) throw new Error(`Canonical vector mismatch: ${asset.key}`);
+    if ('vectorPath' in asset || !asset.sourceFilename || !asset.license) throw new Error(`Incomplete vector source: ${asset.key}`);
+    const source = new URL(asset.sourceUrl);
+    if (asset.sourceModule) {
+      if (source.origin !== 'https://gi.yatta.moe' || source.pathname !== `/js/${asset.sourceVersion}` || !/^app\.[a-f0-9]+\.js$/.test(asset.sourceVersion) || !/^[a-f0-9]{4}$/.test(asset.sourceModule) || !/^prop\/FIGHT_PROP_(ATTACK|HP|DEFENSE)_PERCENT\.svg$/.test(asset.sourceFilename)) throw new Error(`Invalid bundled vector source: ${asset.key}`);
+    } else {
+      const [owner, repository, commit] = source.pathname.slice(1).split('/');
+      if (icons.sourceCommits[`${owner}/${repository}`] !== commit || !asset.sourceUrl.endsWith(`/${asset.sourceFilename}.tsx`)) throw new Error(`Vector source version mismatch: ${asset.key}`);
+    }
   } else if (content.toString('ascii', 0, 4) !== 'RIFF' || content.toString('ascii', 8, 12) !== 'WEBP') throw new Error(`Invalid icon WebP: ${asset.file}`);
   if (content.length !== asset.bytes || content.length > icons.budgets.maxAssetBytes) throw new Error(`Icon size or budget failure: ${asset.file}`);
   if (index[asset.kind]?.[asset.key]?.file !== asset.file) throw new Error(`Icon index mismatch: ${asset.key}`);

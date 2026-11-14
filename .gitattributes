@@ -7,6 +7,11 @@ src/game-data/data/*.json text eol=lf
 pnpm-lock.yaml text eol=lf
 pnpm-workspace.yaml text eol=lf
 
+# Maintained principles and standards use LF across platforms.
+docs/*.md text eol=lf
+assets/manifest.json text eol=lf
+assets/game/**/*.svg text eol=lf
+
 # Preserve upstream license and notice bytes across platforms.
 licenses/npm-LICENSES.txt -text -whitespace
 licenses/sources/** -text -whitespace

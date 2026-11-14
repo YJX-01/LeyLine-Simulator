@@ -1,21 +1,17 @@
 # 文档导航
 
-`docs`只保存Markdown。现行说明按用途分工，旧阶段记录在[历史目录](../archive/docs/README.md)，不再作为当前代码的实现指导。
+文档按主题平铺，每项约定在一个位置维护。
 
-| 入口 | 用途 |
+| 主题 | 内容 |
 | --- | --- |
-| [规范清单](standards/README.md) | 已认可范式、唯一权威位置及执行检查 |
-| [仓库地图](architecture/repository-map.md) | 每个目录的职责、依赖与维护分工 |
-| [架构概览](architecture/overview.md) | 数据从JSON、配装到求值与页面的路径 |
-| [支持范围](architecture/content-support.md) | 内容收录、计算支持与证据缺口 |
-| [使用指南](guides/user-guide.md) | 当前工作区的用户操作 |
-| [工具与命令](guides/tools.md) | 输入、输出、联网和写入约束 |
-| [部署与验证](guides/deployment.md) | 网页、子路径、桌面和交付检查 |
-| [界面规范](design/visual-language.md) | 当前主题、色板、文字与控件规范 |
-| [直接伤害](mechanics/direct-hit.md) | 当前公式及能力边界 |
-| [参考索引](references/README.md) | 外部格式、研究结论及内容参考 |
-| [产品需求](planning/product-direction.md) | 保留必要目标、用户决策和产品边界 |
-| [实施状态](planning/implementation-roadmap.md) | 旧方案已撤回；不保留旧批次、接手安排或重复台账 |
-| [已审核重构方案](planning/repository-refactor.md) / [实施记录](planning/repository-refactor-implementation.md) | 已完成基础的批准范围、变更映射及验证边界 |
+| [产品方向](product-direction.md) | 目标、数据领域与产品取舍 |
+| [架构](architecture.md) | 数据流、模块职责及依赖 |
+| [内容](content.md) | 共同模型、格式、单位与精度 |
+| [文件与状态](files-and-state.md) | 草稿、保存、导入、共享引用与快照 |
+| [计算](calculation.md) | 公式、规则、状态、捕获、输入、反应与比较 |
+| [界面](interface.md) | 视觉层级、控件、交互与复查 |
+| [证据与验证](evidence-and-validation.md) | 来源、独立期望、真实资料、测试与测量 |
+| [开发与交付](development-and-delivery.md) | 工具流程、构建、分发与产物管理 |
+| [文档维护](documentation.md) | 写作方式、结论保留与资料归属 |
 
-新增文档先确定类别；修改已有约定直接更新其权威说明，其他文件引用。生成数据、素材、录存响应、报告JSON不进入此目录。
+具体操作与实现见[仓库入口](../README.md)，来源、实体支持与案例见[资料入口](../tools/data/README.md)。

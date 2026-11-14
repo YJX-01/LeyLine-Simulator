@@ -1,10 +1,10 @@
 # 地脉工作台 LeyLine
 
-本地原神配装资料与时间轴工作台。账户库存、轴项目、内容定义库独立保存；当前支持范围见[能力说明](docs/architecture/content-support.md)。
+本地原神配装资料、伤害核验与时间轴工作台。账号库存、轴项目和内容定义库独立保存，独立计算器复用共同求值器。
 
 ## 开发
 
-Node.js 22.12+、pnpm 11.3.0；CI使用Node.js 24。在仓库根执行：
+Node.js 22.12+、pnpm 11.3.0，CI使用Node.js 24。在仓库根执行：
 
 ```sh
 pnpm install --frozen-lockfile
@@ -12,23 +12,23 @@ pnpm data:build
 pnpm dev
 ```
 
-`pnpm build`构建网页；`pnpm desktop:build`生成独立桌面包。日常选择相关测试，最终验收见[部署与验证](docs/guides/deployment.md)。
+pnpm build构建网页，pnpm desktop:build构建桌面。操作与交付见[应用指南](src/web/README.md#地脉工作台使用说明)及[交付步骤](tools/README.md#构建托管与本地交付操作)。
 
-## 目录与职责
+## 目录
 
-| 目录 | 维护内容 |
+| 目录 | 维护入口 |
 | --- | --- |
-| `src/schema` | Zod契约及其推导类型，含角色、配装、账号、项目、文件适配与Worker协议 |
-| `src/game-data` | 正式JSON内容及加载器；`data`可编辑，`generated`由命令生成 |
-| `src/engine` | 配装属性、单次伤害、效果依赖图、时间轴求值；只依赖schema |
-| `src/web` | 页面、组件、纯业务操作、状态、Worker、桌面与本地网络服务 |
-| `assets` | 唯一可维护图像、矢量、装饰及资源索引 |
-| `tests` | 单元、集成、浏览器、桌面、性能测试，及helpers和固定输入 |
-| `tools` | 分类维护脚本、共享工具、采集原件与依赖补丁 |
-| `docs` | 现行规范、架构、指南、机制、研究与当前计划；仅Markdown |
-| `licenses` | 许可原件、依赖清单与声明 |
-| `archive` | 退休内核、旧表、工具与历史文档；任何默认命令都不读取 |
-| `.references` | 忽略的本地参考仓库、私有原件；普通构建不依赖 |
-| `.cache` / `artifacts` | 忽略的可重建缓存 / 验证记录与本地交付包 |
+| src/schema | [共享契约与校验](src/schema/README.md) |
+| src/game-data | [正式JSON、运行投影与加载](src/game-data/README.md) |
+| src/engine | [属性、伤害、效果与时间轴](src/engine/README.md) |
+| src/web | [页面、状态、领域及平台适配](src/web/README.md) |
+| assets | [图片、矢量、装饰与来源](assets/README.md) |
+| tests | [单元、集成、浏览器、桌面与性能](tests/README.md) |
+| tools | [维护脚本、来源、审计及补丁](tools/README.md) |
+| docs | [设计思路、规范与流程](docs/README.md) |
+| licenses | 许可原件、清单与声明 |
+| archive | 已退出的实现与历史资料，隔离于默认命令 |
+| .references | 忽略的参考检出与获授权原件 |
+| .cache、artifacts | 可重建缓存、运行记录与本地交付包 |
 
-详细边界见[仓库地图](docs/architecture/repository-map.md)，维护入口见[文档导航](docs/README.md)。U1已结束，基础重构已完成逐项审核。当前保留[产品需求](docs/planning/product-direction.md)和[实际支持范围](docs/architecture/content-support.md)，旧阶段设计已撤回；[实施状态](docs/planning/implementation-roadmap.md)不再包含批次排期。
+[产品方向](docs/product-direction.md)维护目标，[支持判定](docs/calculation.md#计算支持判定)维护方法，[具体计算支持](tools/data/README.md#计算支持与内容绑定)维护实体与路径。

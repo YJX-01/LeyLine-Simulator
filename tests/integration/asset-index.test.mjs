@@ -26,3 +26,18 @@ test('removing the actual Manekin skill reports every affected form instead of a
   assert.ok(missing.some(item=>item.key==='manekina-hydro-combat2'));
   assert.ok(missing.some(item=>item.key==='manekin-pyro-combat2'));
 });
+
+test('stat and buff icons follow Yatta critical and percentage attribute usage',()=>{
+  // Yatta's FIGHT_PROP_CRITICAL is hollow; CRITICAL_HURT has the filled star and ring.
+  const stats=Object.fromEntries(manifest.assets.filter(asset=>asset.kind==='stats').map(asset=>[asset.key,asset]));
+  const index=createAssetIndex(manifest,characters,{});
+  assert.equal(stats.critRate.sourceFilename,'CritRateIcon');
+  assert.equal(stats.critDamage.sourceFilename,'CritDmgIcon');
+  for(const stat of ['attack','hp','defense']) {
+    assert.notEqual(index.stats[stat].file,index.stats[`${stat}Percent`].file);
+    assert.equal(stats[`${stat}Percent`].sourceFilename,`prop/FIGHT_PROP_${stat==='attack'?'ATTACK':stat.toUpperCase()}_PERCENT.svg`);
+    assert.equal(new URL(stats[`${stat}Percent`].sourceUrl).hostname,'gi.yatta.moe');
+    assert.equal(index.buffs[`flat-${stat}`].file,index.stats[stat].file);
+    assert.equal(index.buffs[`${stat}-percent`].file,index.stats[`${stat}Percent`].file);
+  }
+});

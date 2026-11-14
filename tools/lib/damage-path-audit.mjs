@@ -28,22 +28,6 @@ export function damagePathAudit(manifest, characters) {
     entities };
 }
 
-export function damagePathMarkdown(audit) {
-  const cell = (entity, category) => {
-    const talents = entity.talents.filter(talent => talent.category === category);
-    if (!talents.length) return '不适用';
-    return talents.map(talent => `${talent.hits.length} / ${talent.noIndependentDamage ? '无独立伤害' : talent.declaredSupported ? '已标记' : talent.hits.length ? '待规则' : '未绑定'}`).join('；');
-  };
-  return ['## 全目录伤害绑定索引', '',
-    '由正式定义显式生成，覆盖全部角色/形态。表中为命中类型绑定数与当前技能支持标记，不是实际命中次数或全角色完成判定；同参数多次命中由用户逐次记录。未绑定参数也可能是持续时间、治疗等非伤害参数，不能自动当作缺失伤害。', '',
-    `当前${audit.summary.entities}份定义、${audit.summary.talents}个技能，${audit.summary.boundTalents}个技能已有${audit.summary.boundHits}项命中类型绑定；其中${audit.summary.declaredSupportedTalents}个技能、${audit.summary.declaredSupportedHits}项绑定已标记支持。其余实体仍全部在覆盖范围。`, '',
-    `其中${audit.summary.talentsWithInputs}个技能声明显式命中输入，${audit.summary.countedHits}项绑定包含输入控制的附加缩放；这不表示相应角色完整规则已支持。`, '',
-    '| 角色/形态ID | 普攻类绑定 / 状态 | 战技绑定 / 状态 | 爆发绑定 / 状态 |',
-    '| --- | --- | --- | --- |',
-    ...audit.entities.map(entity => `| ${entity.name} (${entity.id}) | ${cell(entity, 'normal')} | ${cell(entity, 'skill')} | ${cell(entity, 'burst')} |`),
-    '', '详细绑定、属性缩放、命中输入、元素、攻击类别和未绑定参数ID位于生成目录的damage-paths.json。普通构建只生成索引；文档由显式audit-damage-paths.mjs --write-docs更新。', ''].join('\n');
-}
-
 /** Inventory all source families; a rule binding is not a character completion judgment. */
 export function combatRuleAudit(manifest, characters, weapons, sets) {
   const describe = (rules, unlock) => (rules ?? []).map(rule => ({ id: rule.id, revision: rule.revision, source: rule.source, ...(rule.support ? { support: rule.support } : {}), unlock,

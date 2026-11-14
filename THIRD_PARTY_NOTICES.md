@@ -27,7 +27,8 @@
 
 | 来源 | 实际用途 | 许可记录 |
 | --- | --- | --- |
-| Genshin Optimizer / frzyc 与贡献者 | 属性 SVG 路径、镂空派生图、部分游戏图标镜像 | 路径代码 MIT；原文位于 `licenses/sources/genshin-optimizer/LICENSE` |
+| Genshin Optimizer / frzyc 与贡献者 | 普通属性和部位 SVG 路径、部分游戏图标镜像 | 路径代码 MIT；原文位于 `licenses/sources/genshin-optimizer/LICENSE` |
+| Yatta / Project Amber | 三份原始百分比属性 SVG，保留路径与透明轮廓 | 固定脚本版本和模块见 `assets/manifest.json`；独立素材许可声明待补核 |
 | genshin-db / theBowja 与贡献者 | 角色、技能、装备、曲线、名称和目录元数据 | MIT；原文位于 `licenses/sources/genshin-db/LICENSE` |
 | 莫娜占卜铺 / wormtql、TwiceDrop 与社区 | JSON 格式、交互参考、目录身份和部分图片来源 | MIT；原文位于 `licenses/sources/mona/LICENSE` |
 | PathOfGenshin/resources、GenshinWikiMap | 游戏图像镜像、五种通用普攻原图 | 仓库代码 GPL-3.0；本项目使用其整理的游戏图片 |
@@ -37,7 +38,7 @@
 | Anonymous / Openclipart #12699 | celtic vine corner 页角藤结，单色与透明镂空适配 | [CC0 / public domain](https://openclipart.org/share)；[素材来源](https://openclipart.org/detail/12699/celtic-vine-corner-by-anonymous-12699) |
 | KQM TCL、梅信心 / Meropide | 机制研究和证据交叉核对 | 研究引用，具体链接见机制文档 |
 
-固定提交、用途及来源文件见 [sources.json](licenses/sources.json)。逐图 URL、源哈希和转换记录见素材清单及 `public/README.md`。
+固定版本、用途及来源文件见 [sources.json](licenses/sources.json)。逐图 URL、版本和转换记录见[资源清单](assets/manifest.json)及[资源说明](assets/README.md)。
 
 ## 工具与桌面组件
 

@@ -76,7 +76,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(firstFlower.locator('dd')).toHaveText(['5.8%', '11.0%', '10.9%', '17.9%']);
   expect(await page.locator('.inventory-card .stat-label').evaluateAll(nodes => nodes.some(node => node.textContent?.includes('%')))).toBe(false);
   await page.getByRole('group', { name:'卡片密度' }).getByRole('button', { name:'紧凑', exact:true }).click();
-  await expect(firstFlower.locator('.compact-main[data-stat=hp] img')).toHaveAttribute('src', /stats\/flatHp\.svg/);
+  await expect(firstFlower.locator('.compact-main[data-stat=hp] img')).toHaveAttribute('src', /stats\/hp\.svg/);
   await expect(firstFlower.locator('.compact-entry')).toHaveText(['生命值+5.8%', '充能效率+11.0%', '暴击率+10.9%', '暴击伤害+17.9%']);
   await expect(firstFlower.locator('.compact-entry img, .average-count, .roll-count')).toHaveCount(0);
   await expect(firstFlower.locator('dd, .summary-main, .artifact-wearers')).toHaveCount(0);

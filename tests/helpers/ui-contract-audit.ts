@@ -11,7 +11,7 @@ export async function auditActions(root:Locator) {
     if(Math.abs(parseFloat(style.borderRadius)-7)>.2)issues.push(`${prefix}: radius ${style.borderRadius}, expected 7px`);
     return issues;
   }));
-  expect(issues,'Action dimensions and type must match docs/design/visual-language.md').toEqual([]);
+  expect(issues,'Action dimensions and type must match docs/interface.md').toEqual([]);
 }
 
 export async function auditDialog(dialog:Locator,kind:'editor'|'content'|'filter'|'confirm') {
