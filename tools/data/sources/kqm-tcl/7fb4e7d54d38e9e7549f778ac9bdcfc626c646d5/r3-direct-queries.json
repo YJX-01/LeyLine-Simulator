@@ -1,0 +1,286 @@
+{
+  "facts": [
+    {
+      "id": "noelle",
+      "skill": "noelle.skill",
+      "hitIndices": [
+        0
+      ],
+      "maxConstellation": 3,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/noelle.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/noelle.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/geo/noelle.md"
+        }
+      ],
+      "branches": [
+        [
+          "base",
+          "irrelevant",
+          "护心铠施放单次岩伤动态读取防御力；大扫除的防御转攻击不改变此防御缩放，不交付护盾和治疗量。"
+        ],
+        [
+          "noelle.passive1",
+          "irrelevant",
+          "后台濒血护盾不改变护心铠施放伤害。"
+        ],
+        [
+          "noelle.passive2",
+          "irrelevant",
+          "普攻重击命中减少战技冷却，不改变此次伤害；不证明施放可行性。"
+        ],
+        [
+          "noelle.passive3",
+          "irrelevant",
+          "防御食物烹饪产出不改变本次伤害。"
+        ],
+        [
+          "constellation:1",
+          "irrelevant",
+          "双状态提高治疗触发率，不改变本次岩伤。"
+        ],
+        [
+          "constellation:2",
+          "irrelevant",
+          "重击体力和伤害增益不修饰战技。"
+        ],
+        [
+          "constellation:3",
+          "talent-level",
+          "战技加3级，使用共同talentLevelBonus和原参数表。"
+        ]
+      ],
+      "remaining": "C4护盾结束额外命中、C5—6及普攻强化、转换和护盾治疗仍未交付。",
+      "coefficientsAt9": [
+        2.04
+      ],
+      "method": "逐项阅读固定原文和KQM角色表，数值直接比较采用源；只采用所列路径的查询证明，不复制社区实现。"
+    },
+    {
+      "id": "xinyan",
+      "skill": "xinyan.skill",
+      "hitIndices": [
+        0
+      ],
+      "maxConstellation": 3,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/xinyan.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/xinyan.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/pyro/xinyan.md"
+        }
+      ],
+      "branches": [
+        [
+          "base",
+          "irrelevant",
+          "仅热情拂扫初始挥舞火伤，动态攻击缩放；护盾等级和存在性不改变此挥舞倍率，不计算后续脉冲。"
+        ],
+        [
+          "xinyan.passive1",
+          "irrelevant",
+          "减少护盾所需命中敌人数，不改变初始挥舞火伤。"
+        ],
+        [
+          "xinyan.passive2",
+          "irrelevant",
+          "护盾保护下物理伤害提高，不作用本次火伤。"
+        ],
+        [
+          "xinyan.passive3",
+          "irrelevant",
+          "防御食物烹饪产出不改变本次伤害。"
+        ],
+        [
+          "constellation:1",
+          "irrelevant",
+          "暴击后的普攻重击攻速不改变战技挥舞伤害。"
+        ],
+        [
+          "constellation:2",
+          "irrelevant",
+          "爆发物理暴击与生成三级盾不修饰战技初始挥舞；脉冲存在性不在本证明内。"
+        ],
+        [
+          "constellation:3",
+          "talent-level",
+          "战技加3级，使用共同talentLevelBonus和原参数表。"
+        ]
+      ],
+      "remaining": "E脉冲、Q、护盾等级及C4—6未交付，不从初始挥舞外推。",
+      "coefficientsAt9": [
+        2.8832
+      ],
+      "method": "逐项阅读固定原文和KQM角色表，数值直接比较采用源；只采用所列路径的查询证明，不复制社区实现。"
+    },
+    {
+      "id": "razor",
+      "skill": "razor.skill",
+      "hitIndices": [
+        0,
+        1
+      ],
+      "maxConstellation": 0,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/razor.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/razor.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/electro/razor.md"
+        }
+      ],
+      "branches": [
+        [
+          "base",
+          "irrelevant",
+          "点按和长按战技分别为动态攻击缩放单次雷伤；雷之印提高充能与长按能量返还，不是伤害层数；雷牙协同伤害仅跟随普攻，不为E生成协同命中。"
+        ],
+        [
+          "razor.passive1",
+          "irrelevant",
+          "减冷却及爆发重置冷却不改变E伤害；未证明施放可行性。"
+        ],
+        [
+          "razor.passive2",
+          "irrelevant",
+          "低能量提高元素充能效率，不改变本次E伤害。"
+        ],
+        [
+          "razor.passive3",
+          "irrelevant",
+          "冲刺体力消耗不改变本次伤害。"
+        ]
+      ],
+      "remaining": "C1拾取微粒全伤害、C2目标生命暴击及后续命座未实现；所有非零命继续阻断。",
+      "coefficientsAt9": [
+        3.3864,
+        5.0184
+      ],
+      "method": "逐项阅读固定原文和KQM角色表，数值直接比较采用源；只采用所列路径的查询证明，不复制社区实现。"
+    },
+    {
+      "id": "barbara",
+      "skill": "barbara.normal",
+      "hitIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "maxConstellation": 1,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/barbara.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/barbara.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/hydro/barbara.md"
+        }
+      ],
+      "branches": [
+        [
+          "base",
+          "irrelevant",
+          "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+        ],
+        [
+          "barbara.passive1",
+          "irrelevant",
+          "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+        ],
+        [
+          "barbara.passive2",
+          "irrelevant",
+          "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+        ],
+        [
+          "barbara.passive3",
+          "irrelevant",
+          "治疗食物烹饪产出不改变本次伤害。"
+        ],
+        [
+          "constellation:1",
+          "irrelevant",
+          "每10秒恢复能量，不改变普攻族单次伤害。"
+        ]
+      ],
+      "remaining": "C2歌声之环期间站场角色15%水伤尚未实现，C2以上阻断；E及治疗未由本证明开放。",
+      "coefficientsAt9": [
+        0.64328,
+        0.60384,
+        0.69768,
+        0.9384,
+        2.82608,
+        1.044064,
+        2.087686,
+        2.607632
+      ],
+      "method": "逐项阅读固定原文和KQM角色表，数值直接比较采用源；只采用所列路径的查询证明，不复制社区实现。"
+    }
+  ],
+  "playerRecords": false,
+  "gameObservations": false,
+  "generatedActionsOrHitSequences": false
+}

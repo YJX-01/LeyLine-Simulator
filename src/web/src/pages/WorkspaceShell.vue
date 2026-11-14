@@ -18,6 +18,8 @@ const configurationEditorOpen=ref(false);
 const accountConfigurations=ref<{requestLeave:(action:()=>void)=>void;openCombination:(id:string)=>void}>(),pendingArtifactReference=ref<ArtifactReferenceTarget>();
 const pendingAccountConfiguration=ref<{characterId:string;presetId:string}>();
 const AccountLibrary = defineAsyncComponent(() => import('./AccountLibrary.vue'));
+const DamageCalculator = defineAsyncComponent(() => import('./DamageCalculator.vue'));
+const calculator = ref<{ requestLeave: (action: () => void) => void }>();
 const DefinitionLibrary = defineAsyncComponent(() => import('./DefinitionLibrary.vue'));
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
@@ -37,7 +39,7 @@ const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue')
 const TeamWorkspace = defineAsyncComponent(() => import('./TeamWorkspace.vue'));
 const workspace = useAxisWorkspaceStore();
 const { project, result, selectedId, dirty, busy, error } = storeToRefs(workspace);
-type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'projects' | 'team' | 'timeline' | 'analysis' | 'definitions' | 'account' | 'settings';
+type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'projects' | 'team' | 'timeline' | 'analysis' | 'definitions' | 'account' | 'settings' | 'calculator';
 const page = ref<Page>(window.location.hash === '#axis' ? 'timeline' : 'characters');
 const collapsed = ref(false);
 const mobileOpen = ref(false);
@@ -62,13 +64,15 @@ const fileInput = ref<HTMLInputElement>();
 const isAccountPage = computed(() => ['characters','artifacts','loadouts','combinations','account'].includes(page.value));
 const isProjectPage = computed(() => ['projects', 'team', 'timeline', 'analysis'].includes(page.value));
 const activeDomain = computed(() => isAccountPage.value ? 'account' : isProjectPage.value ? 'project' : page.value === 'definitions' ? 'content' : 'settings');
-const titles: Record<Page, string> = { characters: '角色', artifacts: '圣遗物', loadouts:'角色配置', combinations:'圣遗物组合', projects: '轴项目', team: '队伍与候选方案', timeline: '时间轴', analysis: '伤害分析', definitions: '内容定义库', account:'账号', settings: '设置' };
+const titles: Record<Page, string> = { characters: '角色', artifacts: '圣遗物', loadouts:'角色配置', combinations:'圣遗物组合', projects: '轴项目', team: '队伍与候选方案', timeline: '时间轴', analysis: '伤害分析', definitions: '内容定义库', account:'账号', settings: '设置', calculator: '计算器' };
 const groups: { title: string; domain: string; items: { id: Page; name: string; icon: string }[] }[] = [
   { title: '库', domain: 'account', items: [{ id: 'characters', name: '角色', icon: 'person' }, {id:'loadouts',name:'角色配置',icon:'equipment'}, { id: 'artifacts', name: '圣遗物', icon: 'diamond' }, {id:'combinations',name:'圣遗物组合',icon:'pieces'}] },
   { title: '项目', domain: 'project', items: [{ id: 'projects', name: '项目', icon: 'folder' }, { id: 'team', name: '队伍', icon: 'team' }, { id: 'timeline', name: '时间轴', icon: 'timeline' }, { id: 'analysis', name: '伤害分析', icon: 'chart' }] },
   { title: '自定义', domain: 'content', items: [{ id: 'definitions', name: '内容定义库', icon: 'layers' }] },
+  { title: '工具', domain: 'tools', items: [{ id: 'calculator', name: '计算器', icon: 'calculator' }] },
 ];
 const icons: Record<string, string> = {
+  calculator: 'M5 3h14v18H5Z M8 6h8v4H8Z M8 13h2 M14 13h2 M8 17h2 M14 17h2',
   folder: 'M3 7V5h6l2 2h10v13H3V7Z',
   team: 'M3 20v-2a4 4 0 0 1 4-4h3a4 4 0 0 1 4 4v2 M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M16 4a4 4 0 0 1 0 7 M18 14a4 4 0 0 1 3 4v2',
   timeline: 'M3 6h18 M3 12h18 M3 18h18 M7 3v6 M16 9v6 M10 15v6',
@@ -96,7 +100,7 @@ function closeRestoredArtifact(){const id=restoredArtifact.value?.item.id;restor
 const artifactReturnPage=ref<Page>();
 function returnFromArtifactReference(){const origin=artifactReturnPage.value,item=artifactReturnItem.value;artifactReturnPage.value=undefined;artifactReturnItem.value=undefined;if(origin)void nextTick(()=>navigate(origin,()=>{if(item?.accountId===inventoryAccount.account.id)restoredArtifact.value=item;}));}
 function configurationClosed(){configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;returnFromArtifactReference();}
-function navigate(target: Page,after?:()=>void,reference=false) { const apply=()=>{restoredArtifact.value=undefined;if(!reference){artifactReturnPage.value=undefined;artifactReturnItem.value=undefined;}creditsOpen.value=false;configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;page.value=target;mobileOpen.value=false;if(after)nextTick(after);};if(restoredDetail.value)restoredDetail.value.requestLeave(apply);else if(configurationEditor.value && target!==page.value)configurationEditor.value.requestLeave(apply);else if(accountLibrary.value && target!==page.value)accountLibrary.value.requestLeave(apply);else if(accountConfigurations.value)accountConfigurations.value.requestLeave(apply);else if(teamWorkspace.value && target!==page.value)teamWorkspace.value.requestLeave(apply);else apply(); }
+function navigate(target: Page,after?:()=>void,reference=false) { const apply=()=>{restoredArtifact.value=undefined;if(!reference){artifactReturnPage.value=undefined;artifactReturnItem.value=undefined;}creditsOpen.value=false;configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;page.value=target;mobileOpen.value=false;if(after)nextTick(after);};if(restoredDetail.value)restoredDetail.value.requestLeave(apply);else if(configurationEditor.value && target!==page.value)configurationEditor.value.requestLeave(apply);else if(accountLibrary.value && target!==page.value)accountLibrary.value.requestLeave(apply);else if(accountConfigurations.value)accountConfigurations.value.requestLeave(apply);else if(teamWorkspace.value && target!==page.value)teamWorkspace.value.requestLeave(apply);else if(calculator.value && target!==page.value)calculator.value.requestLeave(apply);else apply(); }
 provide(artifactReferenceNavigation,(target,item)=>{const origin=artifactReturnPage.value ?? page.value;navigate(target.kind==='combination'?'combinations':target.kind==='configuration'?'loadouts':'characters',()=>{artifactReturnPage.value=origin;artifactReturnItem.value=item;pendingArtifactReference.value=target;},true);});
 watch([accountLibrary,accountConfigurations,pendingArtifactReference],([library,configurations,target])=>{
   if(!target)return;
@@ -157,7 +161,8 @@ async function importFile(event: Event) {
         <div v-if="error" role="alert" class="shell-error">{{ errorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
       </div>
 
-      <div v-if="page === 'timeline'" class="timeline-layout">
+      <DamageCalculator v-if="page === 'calculator'" ref="calculator" />
+      <div v-else-if="page === 'timeline'" class="timeline-layout">
         <section class="timeline-main panel">
           <div class="panel-heading axis-tools"><span>{{ damageRecords.length }} 个伤害点 · {{ actions.length }} 个动作</span><button class="ui-action soft" data-accent="anemo" @click="openTarget">目标条件</button></div>
           <WorkbenchDialog v-if="targetOpen && project.enemy" title="目标与计算条件" @close="targetOpen = false"><p>以下是手动输入条件，默认值不是游戏观测。请按实际目标核对等级、抗性与减防。</p><div class="candidate-form"><label>目标等级<input v-model.number="project.enemy.level" aria-label="目标等级" type="number" min="1" max="200"></label><label>减防比例<input v-model.number="project.enemy.defenseReduction" aria-label="减防比例" type="number" min="0" max="1" step="0.01"></label><label>无视防御比例<input v-model.number="project.enemy.defenseIgnore" aria-label="无视防御比例" type="number" min="0" max="1" step="0.01"></label><label v-for="element in elements" :key="element">{{ realElementLabel(element) }}抗性<input v-model.number="project.enemy.resistances[element]" :aria-label="`${realElementLabel(element)}抗性`" type="number" step="0.01"></label></div><p>比例 0.1 表示 10%。每个伤害点的暴击和反应在右侧检查面板确认。</p></WorkbenchDialog>

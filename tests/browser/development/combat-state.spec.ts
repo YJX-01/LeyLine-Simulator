@@ -51,7 +51,7 @@ test('Cinnabar flat damage recalculates through actual Worker and file round-tri
   expect(result.reopened).toEqual(result.original);
 });
 
-test('source-backed counter input survives files and Worker without promoting unsupported damage', async ({ page }) => {
+test('R1 counter coverage survives files and Worker while a missing tier stays unknown', async ({ page }) => {
   // A legal C0 calculation query, not a player export or recorded combat sequence.
   const build: Build = {
     dataVersion: 'genshin-db-8e5badd-content-v2',
@@ -69,6 +69,7 @@ test('source-backed counter input survives files and Worker without promoting un
     const { addActorFromBuild } = await import('/src/domain/real-project.ts');
     const project: Project = createEmptyProject();
     const actor = addActorFromBuild(project, build);
+    project.enemy = { level: 90, resistances: { physical: 0.1, anemo: 0.1, geo: 0.1, electro: 0.1, hydro: 0.1, pyro: 0.1, cryo: 0.1, dendro: 0.1 }, defenseReduction: 0, defenseIgnore: 0 };
     project.timeline.push({ id: 'counter-input-query', actor, timeMs: 0, order: 0, kind: 'damage', definition: `${actor}-real-damage`,
       damage: { skillId: 'beidou.skill', hitIndex: 0, crit: 'noncritical', reaction: 'none', inputs: { counterCharge: 2 } } });
     const reopened: Project = importProject(JSON.stringify(project));
@@ -90,8 +91,9 @@ test('source-backed counter input survives files and Worker without promoting un
   expect(result.reopened).toEqual(result.original);
   expect(result.known.result.points).toHaveLength(1);
   expect(result.known.result.points[0].real?.scaling[1].count).toEqual({ input: 'counterCharge', value: 2 });
-  expect(result.known.result.status).toBe('partial');
-  expect(result.known.result.totalValue).toBeNull();
+  expect(result.known.result.status).toBe('complete');
+  const attack = 18.87648 * 8.349 + 67.54129 + 23.245 * 5.968 + 46.7;
+  expect(result.known.result.totalValue).toBeCloseTo(attack * 7.5072 * 1.24 * 0.45, 8);
   expect(result.known.result.diagnostics.some(issue => issue.message.includes('技能输入尚未确认'))).toBe(false);
   expect(result.unknown.result.diagnostics.some(issue => issue.message.includes('技能输入尚未确认：counterCharge'))).toBe(true);
   expect(result.unknown.result.points[0].real?.scaling[1].count?.value).toBeNull();

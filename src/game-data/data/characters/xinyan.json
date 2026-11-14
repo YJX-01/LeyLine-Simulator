@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "xinyan",
-  "revision": "3",
+  "revision": "4",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -1265,5 +1265,75 @@
       "supported": false,
       "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
     }
-  }
+  },
+  "damageCoverage": [
+    {
+      "id": "xinyan-skill-r3",
+      "revision": "4",
+      "skillId": "xinyan.skill",
+      "hitIndices": [
+        0
+      ],
+      "maxConstellation": 3,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/xinyan.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/xinyan.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/pyro/xinyan.md"
+        }
+      ],
+      "branches": [
+        {
+          "id": "base",
+          "resolution": "irrelevant",
+          "reason": "仅热情拂扫初始挥舞火伤，动态攻击缩放；护盾等级和存在性不改变此挥舞倍率，不计算后续脉冲。"
+        },
+        {
+          "id": "xinyan.passive1",
+          "resolution": "irrelevant",
+          "reason": "减少护盾所需命中敌人数，不改变初始挥舞火伤。"
+        },
+        {
+          "id": "xinyan.passive2",
+          "resolution": "irrelevant",
+          "reason": "护盾保护下物理伤害提高，不作用本次火伤。"
+        },
+        {
+          "id": "xinyan.passive3",
+          "resolution": "irrelevant",
+          "reason": "防御食物烹饪产出不改变本次伤害。"
+        },
+        {
+          "id": "constellation:1",
+          "resolution": "irrelevant",
+          "reason": "暴击后的普攻重击攻速不改变战技挥舞伤害。"
+        },
+        {
+          "id": "constellation:2",
+          "resolution": "irrelevant",
+          "reason": "爆发物理暴击与生成三级盾不修饰战技初始挥舞；脉冲存在性不在本证明内。"
+        },
+        {
+          "id": "constellation:3",
+          "resolution": "talent-level",
+          "reason": "战技加3级，使用共同talentLevelBonus和原参数表。"
+        }
+      ]
+    }
+  ]
 }

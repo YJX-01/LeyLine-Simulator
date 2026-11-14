@@ -1,7 +1,9 @@
 import { characterDefinitionSchema, projectSchema, type CharacterDefinition, type Project } from '@leyline/schema';
 
 export function copyCharacterDefinition(character: CharacterDefinition, dataVersion: string): CharacterDefinition {
-  return characterDefinitionSchema.parse({ ...JSON.parse(JSON.stringify(character)), id:`custom-${crypto.randomUUID()}`, revision:'1', dataVersion, origin:'custom',
+  const copy = JSON.parse(JSON.stringify(character));
+  delete copy.damageCoverage;
+  return characterDefinitionSchema.parse({ ...copy, id:`custom-${crypto.randomUUID()}`, revision:'1', dataVersion, origin:'custom',
     derivedFrom:{id:character.id,name:character.identity.name,revision:character.revision}, identity:{...character.identity,name:`${character.identity.name} · 自定义`} });
 }
 export function parseCharacterDefinition(content: string): CharacterDefinition {
@@ -15,6 +17,7 @@ export function parseCharacterDefinition(content: string): CharacterDefinition {
 /** Text remains a draft until explicit apply/export validates every edited parameter. */
 export function prepareCharacterDefinition(draft:CharacterDefinition,edits:Record<string,string>):CharacterDefinition {
   const file=characterDefinitionSchema.parse(draft);
+  if (Object.keys(edits).length) delete file.damageCoverage;
   for(const [key,text] of Object.entries(edits)){
     const [skillId,hitText,levelText]=JSON.parse(key) as string[],hit=Number(hitText),level=Number(levelText);
     const talent=file.talents.find(talent=>talent.id===skillId),parameter=talent?.parameters.find(parameter=>parameter.id===talent.hits[hit]?.parameter);

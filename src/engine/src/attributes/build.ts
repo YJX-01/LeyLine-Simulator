@@ -1,4 +1,5 @@
-import { buildSchema, combatConditionsSchema, statKeys, type Build, type CombatConditions, type StatKey } from '@leyline/schema';
+import { buildSchema, combatConditionsSchema, statKeys, type Build, type CombatConditions, type DamageRequest, type StatKey } from '@leyline/schema';
+import { damageCoverage } from './query-coverage';
 
 import type { CalculationStatus, CalculationIssue, Contribution, AttributePanel } from '@leyline/schema';
 const zeroStats = (): Record<StatKey, number> => Object.fromEntries(statKeys.map(key => [key, 0])) as Record<StatKey, number>;
@@ -15,7 +16,7 @@ const allowedMain: Record<Build['artifacts'][number]['slot'], readonly StatKey[]
 const subLimits: Partial<Record<StatKey, number>> = { hp: 1793, attack: 117, defense: 139, hpPercent: 0.35, attackPercent: 0.35, defensePercent: 0.44, energyRecharge: 0.4, elementalMastery: 140, critRate: 0.24, critDamage: 0.48 };
 
 /** Resolves only the versioned snapshot carried by the build; never consults a live catalog. */
-export function resolveStaticBuild(input: unknown, conditions: CombatConditions = {}): AttributePanel {
+export function resolveStaticBuild(input: unknown, conditions: CombatConditions = {}, query?: Pick<DamageRequest, 'skillId' | 'hitIndex'>): AttributePanel {
   const stats = zeroStats();
   const issues: CalculationIssue[] = [];
   const contributions: Contribution[] = [];
@@ -45,9 +46,11 @@ export function resolveStaticBuild(input: unknown, conditions: CombatConditions 
   if (!validLevel(build.weaponLevel, build.weaponAscension) || build.weaponAscension >= weapon.promotion.length) report('invalid-input', '武器等级与突破阶段不匹配。');
   if (Object.values(build.talents).some(level => level > maxTalents[build.ascension])) report('invalid-input', '天赋等级超出角色突破阶段上限。');
   if (weapon.weaponType !== character.identity.weaponType) report('invalid-input', '角色与武器类型不匹配。');
-  if (!character.capabilities.calculation.supported) report('unsupported', character.capabilities.calculation.reason || '此角色的伤害规则尚未核验。');
+  if (weapon.rarity < 3 && build.refinement !== 1) report('invalid-input', '一星、二星基础武器没有精炼效果，精炼须为1。');
+  const covered = damageCoverage(build, query);
+  if (!covered && !character.capabilities.calculation.supported) report('unsupported', character.capabilities.calculation.reason || '此角色的伤害规则尚未核验。');
   if (!weapon.support.supported) report('unsupported', weapon.support.reason || '此武器的伤害效果尚未核验。');
-  if (build.constellation !== 0) report('unsupported', '当前真实伤害仅核验零命，所选命座效果尚未支持。');
+  if (!covered && build.constellation !== 0) report('unsupported', '所选命座尚无本次查询的完整覆盖证明；相关效果与必要目标条件仍待核验。');
   const promotion = character.progression.promotion[build.ascension];
   const weaponPromotion = weapon.promotion[build.weaponAscension];
   if (!promotion || weaponPromotion === undefined) { report('invalid-input', '成长或突破快照缺失。'); return finish(); }

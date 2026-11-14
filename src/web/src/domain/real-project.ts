@@ -1,4 +1,4 @@
-import { buildSchema, elements, projectSchema, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { buildSchema, elements, findDamageCoverage, projectSchema, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 import { nextRecordId } from './workbench-project';
 
@@ -39,11 +39,30 @@ export function addSkillAction(project: Project, actorId: string, skillId: strin
   return id;
 }
 
+/** An explicitly supplied read anchor, independent of casts, hits and effect triggers. */
+export function addAttributeCapture(project: Project, actorId: string, skillId: string, timeMs: number): string {
+  const actor = project.candidate.actors.find(actor => actor.id === actorId);
+  const skill = actor?.build?.character.talents.find(skill => skill.id === skillId);
+  if (!actor?.build || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择来源技能，并填写合法的捕获时刻。');
+  const definitionId = `${actorId}-attribute-capture`;
+  const definition = { id: definitionId, name: '独立属性捕获', version: actor.build.dataVersion,
+    source: { kind: 'user' as const, reference: `${actor.build.character.id}@${actor.build.character.revision}`, verified: false }, nodes: [], effects: [] };
+  const id = nextRecordId(project);
+  const next = projectSchema.parse({ ...project, calculationProfile: 'dependency',
+    definitions: project.definitions.some(entry => entry.id === definitionId) ? project.definitions : [...project.definitions, definition],
+    timeline: [...project.timeline, { id, actor: actorId, kind: 'capture', skillId, definition: definitionId, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1 }],
+  });
+  project.calculationProfile = next.calculationProfile;
+  project.definitions = next.definitions;
+  project.timeline = next.timeline;
+  return id;
+}
+
 export function addSkillHit(project: Project, actorId: string, skillId: string, hitIndex: number, timeMs: number, choices: Pick<DamageRequest,'crit'|'reaction'|'conditions'|'stateOverrides'|'capture'|'inputs'|'effectApplications'> = {crit:null,reaction:null}): string {
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const skill = actor?.build?.character.talents.find(entry => entry.id === skillId);
   if (!actor || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择队员、技能和合法的整数毫秒时间。');
-  if (!skill.support.supported || !Number.isInteger(hitIndex) || !skill.hits[hitIndex]) throw new Error('该技能或命中类型尚未核验。');
+  if ((!skill.support.supported && (!actor.build || !findDamageCoverage(actor.build.character, actor.build.constellation, { skillId, hitIndex }))) || !Number.isInteger(hitIndex) || !skill.hits[hitIndex]) throw new Error('该技能或命中类型尚未核验。');
   const id = nextRecordId(project);
   const record: Project['timeline'][number] = { id, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1,
     actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitIndex, ...choices } };

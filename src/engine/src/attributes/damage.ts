@@ -3,6 +3,7 @@ import { resolveStaticBuild } from './build';
 import { evaluateHitBase } from './hit-base';
 import { percentStat, relevantPanelIssues } from './stat-dependencies';
 import { evaluateHitReaction } from './hit-reaction';
+import { damageCoverage } from './query-coverage';
 
 export type DamageAttributeKey = StatKey | ReactionBonusKey | HitDamageKey;
 export type DamageAttributeReader = (stat: DamageAttributeKey) => number | null;
@@ -20,7 +21,7 @@ export function calculateDamageProduct(baseDamage: number | null, parts: DamageR
 /** The same formula consumes either snapshot attributes or the timeline's dependency reader. */
 export function evaluateDamage(buildInput: unknown, damageInput: DamageRequest | undefined, enemyInput: Enemy | undefined, extraBonus = 0, reader?: DamageAttributeReader, captureContext?: DamageCaptureContext): DamageResult {
   const damage = damageInput === undefined ? undefined : damageRequestSchema.safeParse(damageInput);
-  const panel = resolveStaticBuild(buildInput, damage?.success ? damage.data.conditions : undefined);
+  const panel = resolveStaticBuild(buildInput, damage?.success ? damage.data.conditions : undefined, damage?.success ? damage.data : undefined);
   const issues: CalculationIssue[] = [];
   const parts: DamageResult['parts'] = { attack: null, multiplier: null, bonus: null, crit: null, defense: null, resistance: null };
   let baseDamage: number | null = null;
@@ -52,7 +53,7 @@ export function evaluateDamage(buildInput: unknown, damageInput: DamageRequest |
   const inputIssues = talentInputIssues(skill, damage.data.inputs, build.data.constellation);
   if (inputIssues.length) { for (const message of inputIssues) report('invalid-input', message); return finish(); }
   if (skill.noIndependentDamage) { report('invalid-input', '所选技能没有独立伤害命中；强化或辅助规则不能作为一次攻击求值。'); return finish(); }
-  if (!skill.support.supported) report('unsupported', skill.support.reason || '所选技能命中尚未核验。');
+  if (!skill.support.supported && !damageCoverage(build.data, damage.data)) report('unsupported', skill.support.reason || '所选技能命中尚未核验。');
   const hit = skill.hits[damage.data.hitIndex];
   if (!hit) {
     if (skill.support.supported || skill.hits.length) report('invalid-input', '所选技能命中参数缺失。');

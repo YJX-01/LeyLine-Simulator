@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "razor",
-  "revision": "3",
+  "revision": "4",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -1246,5 +1246,61 @@
       "supported": false,
       "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
     }
-  }
+  },
+  "damageCoverage": [
+    {
+      "id": "razor-skill-r3",
+      "revision": "4",
+      "skillId": "razor.skill",
+      "hitIndices": [
+        0,
+        1
+      ],
+      "maxConstellation": 0,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/razor.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/razor.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/electro/razor.md"
+        }
+      ],
+      "branches": [
+        {
+          "id": "base",
+          "resolution": "irrelevant",
+          "reason": "点按和长按战技分别为动态攻击缩放单次雷伤；雷之印提高充能与长按能量返还，不是伤害层数；雷牙协同伤害仅跟随普攻，不为E生成协同命中。"
+        },
+        {
+          "id": "razor.passive1",
+          "resolution": "irrelevant",
+          "reason": "减冷却及爆发重置冷却不改变E伤害；未证明施放可行性。"
+        },
+        {
+          "id": "razor.passive2",
+          "resolution": "irrelevant",
+          "reason": "低能量提高元素充能效率，不改变本次E伤害。"
+        },
+        {
+          "id": "razor.passive3",
+          "resolution": "irrelevant",
+          "reason": "冲刺体力消耗不改变本次伤害。"
+        }
+      ]
+    }
+  ]
 }

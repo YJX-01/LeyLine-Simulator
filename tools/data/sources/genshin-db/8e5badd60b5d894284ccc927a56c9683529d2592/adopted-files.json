@@ -387,7 +387,15 @@
     "ChineseSimplified/talents/yunjin.json",
     "ChineseSimplified/talents/zhongli.json",
     "ChineseSimplified/talents/zibai.json",
-    "stats/talents.json"
+    "stats/talents.json",
+    "ChineseSimplified/weapons/apprenticesnotes.json",
+    "ChineseSimplified/weapons/beginnersprotector.json",
+    "ChineseSimplified/weapons/huntersbow.json",
+    "ChineseSimplified/weapons/ironpoint.json",
+    "ChineseSimplified/weapons/oldmercspal.json",
+    "ChineseSimplified/weapons/pocketgrimoire.json",
+    "ChineseSimplified/weapons/seasonedhuntersbow.json",
+    "ChineseSimplified/weapons/wastergreatsword.json"
   ],
   "verifiedHits": [
     {

@@ -88,7 +88,7 @@ export function validateCombatStates(project: StateProject, context: z.Refinemen
   };
   project.timeline.forEach((record, index) => {
     const overrides = record.damage?.stateOverrides ?? [];
-    if (record.kind !== 'damage' && record.damage) issue(['timeline', index, 'damage'], '动作记录不能携带命中条件或命中覆盖。');
+    if (record.kind !== 'damage' && record.damage) issue(['timeline', index, 'damage'], '非伤害记录不能携带命中条件或命中覆盖。');
     const values = new Map<string, CombatConditions>();
     if (record.damage?.conditions) values.set(record.actor, record.damage.conditions);
     overrides.forEach((override, overrideIndex) => {

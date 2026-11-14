@@ -1,0 +1,185 @@
+{
+  "weapons": [
+    {
+      "id": "apprenticesnotes",
+      "name": "学徒笔记",
+      "baseAttack": 23.245,
+      "attackAt70": 185.42615999999998,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/apprenticesnotes.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/catalysts/apprentices_notes.rs"
+        }
+      ]
+    },
+    {
+      "id": "beginnersprotector",
+      "name": "新手长枪",
+      "baseAttack": 23.245,
+      "attackAt70": 185.42615999999998,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/beginnersprotector.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/polearms/beginners_protector.rs"
+        }
+      ]
+    },
+    {
+      "id": "huntersbow",
+      "name": "猎弓",
+      "baseAttack": 23.245,
+      "attackAt70": 185.42615999999998,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/huntersbow.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/bows/hunters_bow.rs"
+        }
+      ]
+    },
+    {
+      "id": "ironpoint",
+      "name": "铁尖枪",
+      "baseAttack": 32.93,
+      "attackAt70": 243.22624000000002,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/ironpoint.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/polearms/iron_point.rs"
+        }
+      ]
+    },
+    {
+      "id": "oldmercspal",
+      "name": "佣兵重剑",
+      "baseAttack": 32.93,
+      "attackAt70": 243.22624000000002,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/oldmercspal.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/claymores/old_mercs_pal.rs"
+        }
+      ]
+    },
+    {
+      "id": "pocketgrimoire",
+      "name": "口袋魔导书",
+      "baseAttack": 32.93,
+      "attackAt70": 243.22624000000002,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/pocketgrimoire.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/catalysts/pocket_grimoire.rs"
+        }
+      ]
+    },
+    {
+      "id": "seasonedhuntersbow",
+      "name": "历练的猎弓",
+      "baseAttack": 32.93,
+      "attackAt70": 243.22624000000002,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/seasonedhuntersbow.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/bows/seasoned_hunters_bow.rs"
+        }
+      ]
+    },
+    {
+      "id": "wastergreatsword",
+      "name": "训练大剑",
+      "baseAttack": 23.245,
+      "attackAt70": 185.42615999999998,
+      "maxLevel": 70,
+      "maxAscension": 4,
+      "passive": "none",
+      "basis": "逐件阅读固定中文武器记录；社区对应武器明确返回None，仅作交叉核对；数值独立比较源成长和全部突破。未复制或运行社区代码。",
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/wastergreatsword.json"
+        },
+        {
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/claymores/waster_greatsword.rs"
+        }
+      ]
+    }
+  ],
+  "characters": [
+    "beidou C0 E, explicit counter tier",
+    "kaeya C0-C3 E, base talent + unlocked bonus"
+  ],
+  "semanticReview": "All passive branches and unlocked C1-C3 for these exact queries reviewed. Other paths remain unreviewed. No player records or game observations supplied."
+}

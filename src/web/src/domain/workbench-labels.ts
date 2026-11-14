@@ -26,6 +26,10 @@ export function actorLabel(project: Project, id: string): string {
 export function recordLabel(project: Project, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
+  if (record.kind === 'capture') {
+    const skill = project.candidate.actors.find(actor => actor.id === record.actor)?.build?.character.talents.find(skill => skill.id === record.skillId);
+    return `${skill?.name ?? '技能'} · 属性捕获`;
+  }
   if (record.kind === 'action') { const definition = project.definitions.find(entry => entry.id === record.definition); if (definition?.name) return definition.name; }
   if (record.damage) {
     const actor = project.candidate.actors.find(entry => entry.id === record.actor);

@@ -12,6 +12,8 @@ User update on 2026-11-13: prioritize actual damage calculation across all 154 c
 
 Stage review on 2026-11-14: the conclusions and revised R0–R6 work packages are recorded in the sole detailed P5 plan, `docs/planning/p5-character-usability.md`; resume with its R1 package. Track source review, bindings, component calculations, formal complete queries and user operation separately. Bindings, support flags and passing test counts are not character completion. Each shared-mechanic batch must close formal content, the existing evaluation graph, save/Worker and candidate recomputation; otherwise report it as work in progress. Do not remove coarse support guards without source-backed query coverage; absent proof remains blocked. Derive deterministic effects only when required records and initial state are explicit, and never infer that missing records mean nothing happened. Keep all 154 character/forms, 256 weapons and 63 sets in scope; the low-rarity deferral applies to artifacts, not weapons. Submit concrete UI proposals alongside backend work, but retain the UI review boundary. Record source/commit and runnable-package delivery separately; committing source does not update the existing desktop release. Exclude the temporary `docs/planning/p5-implementation-readiness.md` from commits.
 
+P5 continuation on 2026-11-14: R1's limited exit is implemented. R2 independent capture records and calculator source completion are implemented; contribution classification, wave association, trigger counts and cooldowns remain open. The R3 first direct-query batch covers only the explicit paths recorded in the sole P5 plan and semantic ledger. Preserve those boundaries, saved snapshots, and unimplemented relevant-constellation guards; continue R2/R3 rather than restarting R1.
+
 ## Project Structure & Module Organization
 
 Four workspaces under src: schema owns shared validated contracts; game-data owns canonical JSON and generated runtime chunks; engine owns attribute/damage and dependency/timeline evaluation; web owns UI, state, Worker, desktop and server adapters. Each implementation lives in its own src; web/desktop and web/server contain platform application code.
@@ -73,6 +75,8 @@ Preserve the approved theme, three data domains and delivered U1 interaction flo
 Run desktop and browser acceptance serially with one worker. Manage only processes proven to belong to the current run; never terminate applications by name or disturb the user's existing desktop.
 
 ## UI scope lock (2026-11-10)
+
+User addition on 2026-11-14: explicitly authorized a dedicated sidebar calculator page for checking damage, with `.references/mona-community` as a reference. Keep its loadouts and comparison baseline independent from the account and original timeline, and use the shared evaluator. This bounded addition does not authorize other changes to the existing character pages or timeline inspector; the inspector proposal lives in `docs/design/p5-hit-conditions-review.md` for review.
 
 Preserve the user-approved UI from before the repository refactor. Data, schema and architecture work does not authorize adding interface sections, explanatory copy, notifications, badges or redesigned interactions. Implement the user's explicit UI requests; raise any other proposed UI changes for review before implementation. Do not add character introductions or skill descriptions to character detail/cultivation views. Keep metadata available for content editing, calculation and export.
 

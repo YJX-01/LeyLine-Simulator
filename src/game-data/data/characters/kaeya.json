@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "kaeya",
-  "revision": "4",
+  "revision": "6",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -1055,5 +1055,123 @@
       "supported": true,
       "reason": "首批零命战技伤害验算；其他技能、命座与复杂机制未开放。"
     }
-  }
+  },
+  "damageCoverage": [
+    {
+      "id": "kaeya-skill-r1",
+      "revision": "6",
+      "skillId": "kaeya.skill",
+      "hitIndices": [
+        0
+      ],
+      "maxConstellation": 3,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/kaeya.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/kaeya.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/cryo/kaeya.md"
+        }
+      ],
+      "branches": [
+        {
+          "id": "base",
+          "resolution": "irrelevant",
+          "reason": "霜袭为动态攻击力缩放的单次冰伤，攻击成长、天赋参数、命座加级共用正式图。"
+        },
+        {
+          "id": "kaeya.passive1",
+          "resolution": "irrelevant",
+          "reason": "战技命中后的治疗不修饰本次战技伤害；治疗量未交付。"
+        },
+        {
+          "id": "kaeya.passive2",
+          "resolution": "irrelevant",
+          "reason": "冻结触发额外微粒不修饰本次战技伤害，不证明充能轴可执行。"
+        },
+        {
+          "id": "kaeya.passive3",
+          "resolution": "irrelevant",
+          "reason": "冲刺体力消耗不修饰本次伤害。"
+        },
+        {
+          "id": "constellation:1",
+          "resolution": "irrelevant",
+          "reason": "目标冰附着下的暴击率仅作用普攻和重击，不作用战技；普攻未获本证明。"
+        },
+        {
+          "id": "constellation:2",
+          "resolution": "irrelevant",
+          "reason": "击败敌人延长爆发持续时间，不修饰战技单次伤害。"
+        },
+        {
+          "id": "constellation:3",
+          "resolution": "talent-level",
+          "reason": "战技天赋提高3级，复用talentLevelBonus及原参数表，不加到基础天赋存值。"
+        }
+      ]
+    },
+    {
+      "id": "kaeya-burst-r2",
+      "revision": "6",
+      "skillId": "kaeya.burst",
+      "hitIndices": [
+        0
+      ],
+      "maxConstellation": 1,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/kaeya.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/kaeya.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/cryo/kaeya.md"
+        }
+      ],
+      "branches": [
+        {
+          "id": "base",
+          "resolution": "explicit-input",
+          "reason": "零至一命已明确记录的单次冰棱伤害；攻击力、暴击和冰伤依照命中snapshot从显式来源时刻读取，不自动推导施放、延迟、冰棱命中数或持续可执行性。"
+        },
+        {
+          "id": "kaeya.passive1",
+          "resolution": "irrelevant",
+          "reason": "霜袭命中后的治疗不修饰冰棱伤害；不交付治疗。"
+        },
+        {
+          "id": "kaeya.passive2",
+          "resolution": "irrelevant",
+          "reason": "霜袭冻结额外微粒不修饰冰棱单次伤害；充能和施放可行性未证明。"
+        },
+        {
+          "id": "kaeya.passive3",
+          "resolution": "irrelevant",
+          "reason": "冲刺体力消耗不改变本次冰棱伤害。"
+        },
+        {
+          "id": "constellation:1",
+          "resolution": "irrelevant",
+          "reason": "目标冰附着下的暴击率仅作用普通攻击和重击，不作用爆发冰棱；未扩展普攻支持。"
+        }
+      ]
+    }
+  ]
 }

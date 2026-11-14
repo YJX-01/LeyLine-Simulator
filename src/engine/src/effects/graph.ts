@@ -164,9 +164,11 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
   const panels = new Map<string, ReturnType<typeof resolveStaticBuild>>();
   function actorPanel(actorId: string, ctx: Context) {
     const conditions = combatConditions(actorId, ctx.record);
-    const key = JSON.stringify([actorId, conditions]);
+    const hitRecord = ctx.hitRecord ?? ctx.record;
+    const query = actorId === hitRecord.actor ? hitRecord.damage : undefined;
+    const key = JSON.stringify([actorId, conditions, query?.skillId, query?.hitIndex]);
     let panel = panels.get(key);
-    if (!panel) { panel = resolveStaticBuild(actors.get(actorId)?.build, conditions); panels.set(key, panel); }
+    if (!panel) { panel = resolveStaticBuild(actors.get(actorId)?.build, conditions, query); panels.set(key, panel); }
     return panel;
   }
   const readState = createCombatStateReader(project);

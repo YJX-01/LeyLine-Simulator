@@ -330,3 +330,166 @@
 | 奇偶·女性（火） (manekina-pyro) | 9 / 待规则 | 1 / 待规则 | 2 / 待规则 |
 
 详细绑定、属性缩放、命中输入、元素、攻击类别和未绑定参数ID位于生成目录的damage-paths.json。普通构建只生成索引；文档由显式audit-damage-paths.mjs --write-docs更新。
+
+<!-- p5-semantic-ledger -->
+
+## R0主要路径语义台账（2026-11-14）
+
+覆盖本清单全部154个ID。入口名称和绑定数量仅由正式定义枚举，不是语义归类或完成率；已细审北斗C0 E、凯亚C0—C3 E、C0—C1单次冰棱与8件基础武器。其它实体明确“本批未审”，不覆盖或否定历史局部证据。正式查询、用户操作与游戏观测分别登记；下表无一项表示整角色或P5完成，没有新增玩家战斗记录或游戏观测。统一边界见[本轮实施](p5-implementation.md)及[详细计划](p5-character-usability.md)。
+
+| 实体ID | 主要路径入口／待审范围 | 来源语义审阅 | 定义绑定 | 组件／独立计算 | 正式完整查询 | 用户操作 | 剩余阻断／归属 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 空 (aether) | 故去的追忆（aether.normal） | 本批未审，目录源和历史局部证据保留 | normal:10；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 爱诺 (aino) | 敲打修理法（aino.normal）；妙思捕手（aino.skill）；精密水冷仪（aino.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 阿贝多 (albedo) | 西风剑术·白（albedo.normal）；创生法·拟造阳华（albedo.skill）；诞生式·大地之潮（albedo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 艾尔海森 (alhaitham) | 溯因反绎法（alhaitham.normal）；共相·理式摹写（alhaitham.skill）；殊境·显象缚结（alhaitham.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:4／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 埃洛伊 (aloy) | 快速射击（aloy.normal）；冰尘雪野（aloy.skill）；曙光预言（aloy.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 阿罗夏 (alyosha) | 角枪驰弋（alyosha.normal）；伏袭霆击（alyosha.skill）；守猎进踞（alyosha.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 安柏 (amber) | 神射手（amber.normal）；爆弹玩偶（amber.skill）；箭雨（amber.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荒泷一斗 (aratakiitto) | 喧哗屋传说（aratakiitto.normal）；魔杀绝技·赤牛发破！（aratakiitto.skill）；最恶鬼王·一斗轰临！！（aratakiitto.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 阿蕾奇诺 (arlecchino) | 斩首之邀（arlecchino.normal）；万相化灰（arlecchino.skill）；厄月将升（arlecchino.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 白术 (baizhu) | 金匮针解（baizhu.normal）；太素诊要（baizhu.skill）；愈气全形论（baizhu.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 芭芭拉 (barbara) | 水之浅唱（barbara.normal）；演唱，开始♪（barbara.skill）；闪耀奇迹♪（barbara.burst） | 普攻族、全部被动及C1已读；C2水伤影响保留 | normal:8／skill:1／burst:0；支持标记未扩大 | C0—C1普攻族8类单次水伤独立完整公式 | 正式Build／图／文件／Worker／候选逐类核验 | 计算器可选、换装并重开；不是整角色可用 | C2以上、E及治疗；R2/R3 |
+| 北斗 (beidou) | 征涛（beidou.normal）；捉浪（beidou.skill）；斫雷（beidou.burst） | 本批E及全部被动作用范围已读；C1—6文本已读但未纳入证明 | normal:10／skill:1／burst:2；E档位0/1/2 | E九级三档独立完整公式 | C0 E正式Build／图／文件／Worker／候选 | 计算器可操作；完整角色仍未完成 | A/Q及命座、触发和捕获未收口；R2/R3 |
+| 班尼特 (bennett) | 好运剑（bennett.normal）；热情过载（bennett.skill）；美妙旅程（bennett.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:6／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 坎蒂丝 (candace) | 流耀枪术·守势（candace.normal）；圣仪·苍鹭庇卫（candace.skill）；圣仪·灰鸰衒潮（candace.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 夏洛蒂 (charlotte) | 冷色摄影律（charlotte.normal）；取景·冰点构图法（charlotte.skill）；定格·全方位确证（charlotte.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:4／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 恰斯卡 (chasca) | 迷羽流击（chasca.normal）；灵缰追影（chasca.skill）；索魂命袭（chasca.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:3／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 夏沃蕾 (chevreuse) | 线列枪刺·改（chevreuse.normal）；近迫式急促拦射（chevreuse.skill）；圆阵掷弹爆轰术（chevreuse.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:4／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 千织 (chiori) | 心织刀流（chiori.normal）；羽袖一触（chiori.skill）；二刀之形·比翼（chiori.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 重云 (chongyun) | 灭邪四式（chongyun.normal）；灵刃·重华叠霜（chongyun.skill）；灵刃·云开星落（chongyun.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 茜特菈莉 (citlali) | 宿灵捕影（citlali.normal）；霜昼黑星（citlali.skill）；诸曜饬令（citlali.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 克洛琳德 (clorinde) | 逐影之誓（clorinde.normal）；狩夜之巡（clorinde.skill）；残光将终（clorinde.burst） | 本批未审，目录源和历史局部证据保留 | normal:12／skill:6／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 柯莱 (collei) | 祈颂射艺（collei.normal）；拂花偈叶（collei.skill）；猫猫秘宝（collei.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 哥伦比娅 (columbina) | 月露泼降（columbina.normal）；万古潮汐（columbina.skill）；她的乡愁（columbina.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 赛诺 (cyno) | 七圣枪术（cyno.normal）；秘仪·律渊渡魂（cyno.skill）；圣仪·煟煌随狼行（cyno.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:10；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 塔利雅 (dahlia) | 西风剑术·祭仪（dahlia.normal）；圣浸的礼典（dahlia.skill）；纯耀的祷咏（dahlia.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 迪希雅 (dehya) | 拂金剑斗术（dehya.normal）；熔铁流狱（dehya.skill）；炎啸狮子咬（dehya.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:3／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 迪卢克 (diluc) | 淬炼之剑（diluc.normal）；逆焰之刃（diluc.skill）；黎明（diluc.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:3／burst:3；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 迪奥娜 (diona) | 猎人射术（diona.normal）；猫爪冻冻（diona.skill）；最烈特调（diona.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 多莉 (dori) | 妙显剑舞·改（dori.normal）；镇灵之灯·烦恼解决炮（dori.skill）；卡萨扎莱宫的无微不至（dori.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 杜林 (durin) | 芒焰之翼斩（durin.normal）；二元式·聚分熔炼（durin.skill）；白化法·如光流变（durin.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:4／burst:8；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 艾梅莉埃 (emilie) | 逐影枪术·改（emilie.normal）；撷萃调香（emilie.skill）；香氛演绎（emilie.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:4／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 爱可菲 (escoffier) | 后厨手艺（escoffier.normal）；低温烹饪（escoffier.skill）；花刀技法（escoffier.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 优菈 (eula) | 西风剑术·宗室（eula.normal）；冰潮的涡旋（eula.skill）；凝浪之光剑（eula.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 珐露珊 (faruzan) | 迴身箭术（faruzan.normal）；非想风天（faruzan.skill）；抟风秘道（faruzan.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 菲谢尔 (fischl) | 罪灭之矢（fischl.normal）；夜巡影翼（fischl.skill）；至夜幻现（fischl.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 菲林斯 (flins) | 扈圣魔枪（flins.normal）；古律·孤灯遗秘（flins.skill）；旧仪·夜客致访（flins.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:7／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 菲米尼 (freminet) | 洑流剑（freminet.normal）；浮冰增压（freminet.skill）；猎影潜袭（freminet.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:11／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 芙宁娜 (furina) | 独舞之邀（furina.normal）；孤心沙龙（furina.skill）；万众狂欢（furina.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:4／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 嘉明 (gaming) | 刃爪悬星（gaming.normal）；瑞兽登高楼（gaming.skill）；璨焰金猊舞（gaming.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 甘雨 (ganyu) | 流天射术（ganyu.normal）；山泽麟迹（ganyu.skill）；降众天华（ganyu.burst） | 本批未审，目录源和历史局部证据保留 | normal:13／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 五郎 (gorou) | 呲牙裂扇箭（gorou.normal）；犬坂吠吠方圆阵（gorou.skill）；兽牙逐突形胜战法（gorou.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 胡桃 (hutao) | 往生秘传枪法（hutao.normal）；蝶引来生（hutao.skill）；安神秘法（hutao.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 伊安珊 (iansan) | 负重锥击（iansan.normal）；电掣雷驰（iansan.skill）；力的三原理（iansan.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 伊法 (ifa) | 祛风妙仪（ifa.normal）；空天疾护（ifa.skill）；复合镇静域（ifa.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 叶洛亚 (illuga) | 守誓枪术（illuga.normal）；衔莺破晓（illuga.skill）；鉴照无影（illuga.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 伊涅芙 (ineffa) | 除尘旋刃（ineffa.normal）；涤净模式·稳态载频（ineffa.skill）；至高律令·全域扫灭（ineffa.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 雅珂达 (jahoda) | 见机行矢（jahoda.normal）；奇策·财富分配方案（jahoda.skill）；秘器·猎人的七道具（jahoda.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:3／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 琴 (jean) | 西风剑术（jean.normal）；风压剑（jean.skill）；蒲公英之风（jean.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 卡齐娜 (kachina) | 嵴之啮咬（kachina.normal）；出击，冲天转转！（kachina.skill）；现在，认真时间！（kachina.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 枫原万叶 (kaedeharakazuha) | 我流剑术（kaedeharakazuha.normal）；千早振（kaedeharakazuha.skill）；万叶之一刀（kaedeharakazuha.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 凯亚 (kaeya) | 仪典剑术（kaeya.normal）；霜袭（kaeya.skill）；凛冽轮舞（kaeya.burst） | E、全部被动及C1—3作用范围；冰棱捕获及C1已复核 | normal:10／skill:1／burst:1；E加级复用；Q显式独立捕获 | C0—C3 E及C0—C1单次冰棱独立公式 | 正式Build／图／文件／Worker／候选；Q独立取值点不生成动作 | 计算器可选捕获技能／时刻／阶段；完整角色仍未完成 | C1普攻目标冰附着；Q C2以上、贡献分类及其它路径；R2/R3 |
+| 神里绫华 (kamisatoayaka) | 神里流·倾（kamisatoayaka.normal）；神里流·冰华（kamisatoayaka.skill）；神里流·霜灭（kamisatoayaka.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 神里绫人 (kamisatoayato) | 神里流·转（kamisatoayato.normal）；神里流·镜花（kamisatoayato.skill）；神里流·水囿（kamisatoayato.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:4／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 卡维 (kaveh) | 旋规设矩（kaveh.normal）；画则巧施（kaveh.skill）；繁绘隅穹（kaveh.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 刻晴 (keqing) | 云来剑法（keqing.normal）；星斗归位（keqing.skill）；天街巡游（keqing.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:3／burst:3；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 基尼奇 (kinich) | 夜阳斗技（kinich.normal）；悬猎·游骋高狩（kinich.skill）；向伟大圣龙致意（kinich.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 绮良良 (kirara) | 箱纸切削术（kirara.normal）；呜喵町飞足（kirara.skill）；秘法·惊喜特派（kirara.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:3／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 可莉 (klee) | 砰砰（klee.normal）；蹦蹦炸弹（klee.skill）；轰轰火花（klee.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 九条裟罗 (kujousara) | 天狗传弓术（kujousara.normal）；鸦羽天狗霆雷召咒（kujousara.skill）；煌煌千道镇式（kujousara.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 久岐忍 (kukishinobu) | 忍流飞刃斩（kukishinobu.normal）；越祓雷草之轮（kukishinobu.skill）；御咏鸣神刈山祭（kukishinobu.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 蓝砚 (lanyan) | 玄鸾画水（lanyan.normal）；凤缕随翦舞（lanyan.skill）；鹍弦踏月出（lanyan.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 菈乌玛 (lauma) | 林麓旅踏（lauma.normal）；圣言述咏·终宵永眠（lauma.skill）；圣言述咏·众心为月（lauma.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:4／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 莱依拉 (layla) | 熠辉轨度剑（layla.normal）；垂裳端凝之夜（layla.skill）；星流摇床之梦（layla.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 莉奈娅 (linnea) | 捕获方案（linnea.normal）；对策·露米呀吼吼！（linnea.skill）；备忘·绝境生存指南（linnea.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:3／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 丽莎 (lisa) | 指尖雷暴（lisa.normal）；苍雷（lisa.skill）；蔷薇的雷光（lisa.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:5／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 洛恩 (lohen) | 西风枪术·破誓（lohen.normal）；奇兵诡出（lohen.skill）；裁罚遂成（lohen.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:10／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧 (lumine) | 故去的追忆（lumine.normal） | 本批未审，目录源和历史局部证据保留 | normal:10；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 琳妮特 (lynette) | 迅捷礼刺剑（lynette.normal）；谜影障身法（lynette.skill）；魔术·运变惊奇（lynette.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 林尼 (lyney) | 迫牌易位式（lyney.normal）；眩惑光戏法（lyney.skill）；大魔术·灵迹巡游（lyney.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性 (manekin) | 外域剑术·安谨守望（manekin.normal） | 本批未审，目录源和历史局部证据保留 | normal:9；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性 (manekina) | 外域剑术·安谨守望（manekina.normal） | 本批未审，目录源和历史局部证据保留 | normal:9；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 玛薇卡 (mavuika) | 以火织命（mavuika.normal）；称名之刻（mavuika.skill）；燔天之时（mavuika.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:10／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 米卡 (mika) | 西风枪术·镝传（mika.normal）；星霜的流旋（mika.skill）；苍翎的颂愿（mika.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 米提亚 (mitya) | 链式反应（mitya.normal）；律定·变量侦测（mitya.skill）；解析·递变之理（mitya.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 莫娜 (mona) | 因果点破（mona.normal）；水中幻愿（mona.skill）；星命定轨（mona.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 玛拉妮 (mualani) | 降温处理（mualani.normal）；踏鲨破浪（mualani.skill）；爆瀑飞弹（mualani.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 纳西妲 (nahida) | 行相（nahida.normal）；所闻遍计（nahida.skill）；心景幻成（nahida.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:3／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 娜维娅 (navia) | 直率的辞绝（navia.normal）；典仪式晶火（navia.skill）；如霰澄天的鸣礼（navia.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奈芙尔 (nefer) | 游虵吐信（nefer.normal）；弈术·千夜一舞（nefer.skill）；圣约·真眸幻戏（nefer.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 那维莱特 (neuvillette) | 如水从平（neuvillette.normal）；泪水啊，我必偿还（neuvillette.skill）；潮水啊，我已归来（neuvillette.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 尼可 (nicole) | 托喻（nicole.normal）；圣言默示·未现之光（nicole.skill）；圣言默示·天路历程（nicole.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 妮露 (nilou) | 弦月舞步（nilou.normal）；七域舞步（nilou.skill）；浮莲舞步·远梦聆泉（nilou.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:7／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 凝光 (ningguang) | 千金掷（ningguang.normal）；璇玑屏（ningguang.skill）；天权崩玉（ningguang.burst） | 本批未审，目录源和历史局部证据保留 | normal:6／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 诺艾尔 (noelle) | 西风剑术·女仆（noelle.normal）；护心铠（noelle.skill）；大扫除（noelle.burst） | E、全部被动及C1—3作用范围已读 | normal:9／skill:1／burst:2；支持标记未扩大 | C0—C3 E初始防御缩放；C3复用加级独立完整公式 | 正式Build／图／文件／Worker／候选逐类核验 | 计算器可选、换装并重开；不是整角色可用 | Q强化与转换、C4及以上、护盾和治疗；R2/R3 |
+| 奥黛塔 (odette) | 雪鹄变奏（odette.normal）；柔板·幻灵夜舞（odette.skill）；疾板·苍羽一梦（odette.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:4／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 欧洛伦 (ororon) | 宿灵闪箭（ororon.normal）；暝色缒索（ororon.skill）；黯声回响（ororon.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 布伦妮 (prune) | 隆咚咚·破魔之锤（prune.normal）；叮铃铃·猎魔之音（prune.skill）；铃鸣·狩魔之刻（prune.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 七七 (qiqi) | 云来古剑法（qiqi.normal）；仙法·寒病鬼差（qiqi.skill）；仙法·救苦度厄（qiqi.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 雷电将军 (raidenshogun) | 源流（raidenshogun.normal）；神变·恶曜开眼（raidenshogun.skill）；奥义·梦想真说（raidenshogun.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:12；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 雷泽 (razor) | 钢脊（razor.normal）；利爪与苍雷（razor.skill）；雷牙（razor.burst） | E点按／长按、雷之印及全部被动已读；C1全伤害影响保留 | normal:9／skill:2／burst:1；支持标记未扩大 | C0 E两类单次雷伤独立完整公式 | 正式Build／图／文件／Worker／候选逐类核验 | 计算器可选、换装并重开；不是整角色可用 | C1拾取增伤、C2目标生命、后续命座和Q协同；R2/R3 |
+| 罗莎莉亚 (rosaria) | 教会枪术（rosaria.normal）；噬罪的告解（rosaria.skill）；终命的圣礼（rosaria.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:3；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 桑多涅 (sandrone) | 事象数式·自明演绎（sandrone.normal）；事象数式·游衍解析（sandrone.skill）；事象数式·万理证毕（sandrone.burst） | 本批未审，目录源和历史局部证据保留 | normal:6／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 珊瑚宫心海 (sangonomiyakokomi) | 水有常形（sangonomiyakokomi.normal）；海月之誓（sangonomiyakokomi.skill）；海人化羽（sangonomiyakokomi.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 早柚 (sayu) | 忍刀·终末番（sayu.normal）；呜呼流·风隐急进（sayu.skill）；呜呼流·影貉缭乱（sayu.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 赛索斯 (sethos) | 王家苇箭术（sethos.normal）；古仪·鸣砂掣雷（sethos.skill）；秘仪·瞑光贯影（sethos.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 申鹤 (shenhe) | 踏辰摄斗（shenhe.normal）；仰灵威召将役咒（shenhe.skill）；神女遣灵真诀（shenhe.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 鹿野院平藏 (shikanoinheizou) | 不动流格斗术（shikanoinheizou.normal）；勠心拳（shikanoinheizou.skill）；聚风蹴（shikanoinheizou.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 希格雯 (sigewinne) | 靶向治疗（sigewinne.normal）；弹跳水疗法（sigewinne.skill）；过饱和心意注射（sigewinne.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 丝柯克 (skirk) | 极恶技·断（skirk.normal）；极恶技·闪（skirk.skill）；极恶技·灭（skirk.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:11／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 砂糖 (sucrose) | 简式风灵作成（sucrose.normal）；风灵作成·陆叁零捌（sucrose.skill）；禁·风灵作成·柒伍同构贰型（sucrose.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 达达利亚 (tartaglia) | 断雨（tartaglia.normal）；魔王武装·狂澜（tartaglia.skill）；极恶技·尽灭闪（tartaglia.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:11／burst:3；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 托马 (thoma) | 迅破枪势（thoma.normal）；烈烧佑命之侍护（thoma.skill）；真红炽火之大铠（thoma.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 提纳里 (tighnari) | 藏蕴破障（tighnari.normal）；识果种雷（tighnari.skill）；造生缠藤箭（tighnari.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 瓦列里 (valeriy) | 近卫战法·盾剑攻斥（valeriy.normal）；攻势防御·堡垒骤进（valeriy.skill）；火力焦点·雷霰急袭（valeriy.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 瓦雷莎 (varesa) | 角力搏摔（varesa.normal）；夜虹逐跃（varesa.skill）；闪烈降临！（varesa.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:3；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 法尔伽 (varka) | 西风剑术·流光之舞（varka.normal）；烈风终坠（varka.skill）；我即朔风（varka.burst） | 本批未审，目录源和历史局部证据保留 | normal:14／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 温迪 (venti) | 神代射术（venti.normal）；高天之歌（venti.skill）；风神之诗（venti.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 薇斯纳 (vesna) | 巡风剑舞（vesna.normal）；操典·制胜有道（vesna.skill）；致礼·献予女皇陛下（vesna.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:7／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 沃雅妮莎 (vodyanitsa) | 水色咏叹（vodyanitsa.normal）；宣叙·晨声纷流（vodyanitsa.skill）；终奏·伴尔沉沦（vodyanitsa.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 流浪者 (wanderer) | 行幡鸣弦（wanderer.normal）；羽画·风姿华歌（wanderer.skill）；狂言·式乐五番（wanderer.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 莱欧斯利 (wriothesley) | 迅烈倾霜拳（wriothesley.normal）；冰牙突驰（wriothesley.skill）；黑金狼噬（wriothesley.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:0／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 香菱 (xiangling) | 白案功夫（xiangling.normal）；锅巴出击（xiangling.skill）；旋火轮（xiangling.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:4；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 闲云 (xianyun) | 清风散花词（xianyun.normal）；朝起鹤云（xianyun.skill）；暮集竹星（xianyun.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:4／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 魈 (xiao) | 卷积微尘（xiao.normal）；风轮两立（xiao.skill）；靖妖傩舞（xiao.burst） | 本批未审，目录源和历史局部证据保留 | normal:12／skill:1／burst:0；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 希诺宁 (xilonen) | 锐锋攫猎（xilonen.normal）；音火锻淬（xilonen.skill）；豹烈律动！（xilonen.burst） | 本批未审，目录源和历史局部证据保留 | normal:8／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 行秋 (xingqiu) | 古华剑法（xingqiu.normal）；古华剑·画雨笼山（xingqiu.skill）；古华剑·裁雨留虹（xingqiu.burst） | 本批未审，目录源和历史局部证据保留 | normal:12／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 辛焱 (xinyan) | 炎舞（xinyan.normal）；热情拂扫（xinyan.skill）；叛逆刮弦（xinyan.burst） | E初始／脉冲区别、全部被动及C1—3已读 | normal:9／skill:2／burst:2；支持标记未扩大 | C0—C3 E初始火伤；C3复用加级独立完整公式 | 正式Build／图／文件／Worker／候选逐类核验 | 计算器可选、换装并重开；不是整角色可用 | E脉冲、Q、护盾等级及C4以上；R2/R3 |
+| 八重神子 (yaemiko) | 狐灵食罪式（yaemiko.normal）；野干役咒·杀生樱（yaemiko.skill）；大密法·天狐显真（yaemiko.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:4／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 烟绯 (yanfei) | 火漆制印（yanfei.normal）；丹书立约（yanfei.skill）；凭此结契（yanfei.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 瑶瑶 (yaoyao) | 颠扑连环枪（yaoyao.normal）；云台团团降芦菔（yaoyao.skill）；玉颗珊珊月中落（yaoyao.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 夜兰 (yelan) | 潜形隐曜弓（yelan.normal）；萦络纵命索（yelan.skill）；渊图玲珑骰（yelan.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 宵宫 (yoimiya) | 烟火打扬（yoimiya.normal）；焰硝庭火舞（yoimiya.skill）；琉金云间草（yoimiya.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:0／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 梦见月瑞希 (yumemizukimizuki) | 梦我梦心（yumemizukimizuki.normal）；秋沙歌枕巡礼（yumemizukimizuki.skill）；安乐秘汤疗法（yumemizukimizuki.burst） | 本批未审，目录源和历史局部证据保留 | normal:7／skill:2／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 云堇 (yunjin) | 拂云出手（yunjin.normal）；旋云开相（yunjin.skill）；破嶂见旌仪（yunjin.burst） | 本批未审，目录源和历史局部证据保留 | normal:11／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 钟离 (zhongli) | 岩雨（zhongli.normal）；地心（zhongli.skill）；天星（zhongli.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 兹白 (zibai) | 金铗点桂（zibai.normal）；天地忽然身（zibai.skill）；三垣威仪法（zibai.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:7／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（风） (aether-anemo) | 异邦铁风（aether-anemo.normal）；风涡剑（aether-anemo.skill）；风息激荡（aether-anemo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:4／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（岩） (aether-geo) | 异邦岩锋（aether-geo.normal）；星陨剑（aether-geo.skill）；岩潮叠嶂（aether-geo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（雷） (aether-electro) | 异邦惊雷（aether-electro.normal）；雷影剑（aether-electro.skill）；雷轰电转（aether-electro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（草） (aether-dendro) | 异邦草翦（aether-dendro.normal）；草缘剑（aether-dendro.skill）；偃草若化（aether-dendro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（水） (aether-hydro) | 异邦激流（aether-hydro.normal）；水纹剑（aether-hydro.skill）；扬水制流（aether-hydro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（火） (aether-pyro) | 异邦烈焰（aether-pyro.normal）；流火剑（aether-pyro.skill）；灼火燎原（aether-pyro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 空（冰） (aether-cryo) | 异邦寒芒（aether-cryo.normal）；冰雾剑（aether-cryo.skill）；聚冰成锋（aether-cryo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（风） (lumine-anemo) | 异邦铁风（lumine-anemo.normal）；风涡剑（lumine-anemo.skill）；风息激荡（lumine-anemo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:4／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（岩） (lumine-geo) | 异邦岩锋（lumine-geo.normal）；星陨剑（lumine-geo.skill）；岩潮叠嶂（lumine-geo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（雷） (lumine-electro) | 异邦惊雷（lumine-electro.normal）；雷影剑（lumine-electro.skill）；雷轰电转（lumine-electro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（草） (lumine-dendro) | 异邦草翦（lumine-dendro.normal）；草缘剑（lumine-dendro.skill）；偃草若化（lumine-dendro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（水） (lumine-hydro) | 异邦激流（lumine-hydro.normal）；水纹剑（lumine-hydro.skill）；扬水制流（lumine-hydro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（火） (lumine-pyro) | 异邦烈焰（lumine-pyro.normal）；流火剑（lumine-pyro.skill）；灼火燎原（lumine-pyro.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:3／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 荧（冰） (lumine-cryo) | 异邦寒芒（lumine-cryo.normal）；冰雾剑（lumine-cryo.skill）；聚冰成锋（lumine-cryo.burst） | 本批未审，目录源和历史局部证据保留 | normal:10／skill:2／burst:1；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（风） (manekin-anemo) | 外域剑术·安谨守望（manekin-anemo.normal）；戒惩轰击（manekin-anemo.skill）；禁入限区（manekin-anemo.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（冰） (manekin-cryo) | 外域剑术·安谨守望（manekin-cryo.normal）；戒惩轰击（manekin-cryo.skill）；禁入限区（manekin-cryo.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（草） (manekin-dendro) | 外域剑术·安谨守望（manekin-dendro.normal）；戒惩轰击（manekin-dendro.skill）；禁入限区（manekin-dendro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（雷） (manekin-electro) | 外域剑术·安谨守望（manekin-electro.normal）；戒惩轰击（manekin-electro.skill）；禁入限区（manekin-electro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（岩） (manekin-geo) | 外域剑术·安谨守望（manekin-geo.normal）；戒惩轰击（manekin-geo.skill）；禁入限区（manekin-geo.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（水） (manekin-hydro) | 外域剑术·安谨守望（manekin-hydro.normal）；戒惩轰击（manekin-hydro.skill）；禁入限区（manekin-hydro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·男性（火） (manekin-pyro) | 外域剑术·安谨守望（manekin-pyro.normal）；戒惩轰击（manekin-pyro.skill）；禁入限区（manekin-pyro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（风） (manekina-anemo) | 外域剑术·安谨守望（manekina-anemo.normal）；戒惩轰击（manekina-anemo.skill）；禁入限区（manekina-anemo.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（冰） (manekina-cryo) | 外域剑术·安谨守望（manekina-cryo.normal）；戒惩轰击（manekina-cryo.skill）；禁入限区（manekina-cryo.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（草） (manekina-dendro) | 外域剑术·安谨守望（manekina-dendro.normal）；戒惩轰击（manekina-dendro.skill）；禁入限区（manekina-dendro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（雷） (manekina-electro) | 外域剑术·安谨守望（manekina-electro.normal）；戒惩轰击（manekina-electro.skill）；禁入限区（manekina-electro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（岩） (manekina-geo) | 外域剑术·安谨守望（manekina-geo.normal）；戒惩轰击（manekina-geo.skill）；禁入限区（manekina-geo.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（水） (manekina-hydro) | 外域剑术·安谨守望（manekina-hydro.normal）；戒惩轰击（manekina-hydro.skill）；禁入限区（manekina-hydro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |
+| 奇偶·女性（火） (manekina-pyro) | 外域剑术·安谨守望（manekina-pyro.normal）；戒惩轰击（manekina-pyro.skill）；禁入限区（manekina-pyro.burst） | 本批未审，目录源和历史局部证据保留 | normal:9／skill:1／burst:2；绑定不代表可用 | 本批未核验 | 本批未审，不能由标记推断 | 本批未验收 | 主要玩法、被动与命座逐项复核；R0/R3 |

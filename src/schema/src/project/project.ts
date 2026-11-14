@@ -22,7 +22,7 @@ export const projectSchema = z.object({
   enemy: enemySchema.optional(),
   timeline: z.array(z.object({
     id: idSchema, timeMs: millisecondsSchema, order: z.number().int().nonnegative(), actor: idSchema,
-    kind: z.enum(['action', 'damage']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
+    kind: z.enum(['action', 'damage', 'capture']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(idSchema).optional() }).strict(),
 }).strict().superRefine((project, context) => {
@@ -45,8 +45,15 @@ export const projectSchema = z.object({
       const messages = record.kind !== 'damage' || !talent ? ['命中输入必须引用当前队员快照中的技能。'] : talentInputIssues(talent, record.damage.inputs, captureActors.get(record.actor)!.build!.constellation);
       for (const message of messages) context.addIssue({ code: 'custom', message, path: ['timeline', index, 'damage', 'inputs'] });
     }
-    if (record.skillId !== undefined && (record.kind !== 'action' || !captureActors.get(record.actor)?.build?.character.talents.some(talent => talent.id === record.skillId))) {
-      context.addIssue({ code: 'custom', message: '动作技能引用必须属于当前队员快照。', path: ['timeline', index, 'skillId'] });
+    if (record.skillId !== undefined && (record.kind === 'damage' || !captureActors.get(record.actor)?.build?.character.talents.some(talent => talent.id === record.skillId))) {
+      context.addIssue({ code: 'custom', message: '记录的技能引用必须属于当前队员快照。', path: ['timeline', index, 'skillId'] });
+    }
+    if (record.kind === 'capture') {
+      const definition = project.definitions.find(definition => definition.id === record.definition);
+      if (!record.skillId || !definition || definition.nodes.length || definition.effects.length || definition.damage !== undefined) {
+        context.addIssue({ code: 'custom', message: '独立捕获点须指定所属技能及无公式、无效果的定义；它不表示施放或伤害。', path: ['timeline', index] });
+      }
+      if (project.calculationProfile !== 'dependency') context.addIssue({ code: 'custom', message: '独立捕获点需要依赖求值配置。', path: ['calculationProfile'] });
     }
     const capture = record.damage?.capture;
     if (!capture) return;

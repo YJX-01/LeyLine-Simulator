@@ -21,14 +21,14 @@ describe('explicit skill counts multiply additional base scaling through the com
     const request: DamageRequest = { skillId: 'beidou.skill', hitIndex: 0, crit: 'noncritical', reaction: 'none', inputs: { counterCharge } };
     const attack = 18.87648 * 8.349 + 67.54129 + 23.245 * 5.968 + 46.7;
     const expectedBase = attack * (2.0672 + 2.72 * counterCharge);
-    // Explicit independently known attribute context; full character support remains blocked.
-    const direct = evaluateDamage(build, request, enemy, 0, stat => stat === 'attack' ? attack : stat === 'electroBonus' ? 0.24 : null);
+    // R1 now proves this exact C0 path from the formal snapshot, without an external reader.
+    const direct = evaluateDamage(build, request, enemy);
     expect(direct.baseDamage).toBeCloseTo(expectedBase, 8);
     expect(direct.parts.bonus).toBeCloseTo(1.24, 12);
     expect(direct.scaling[1]).toMatchObject({ multiplier: 2.72, count: { input: 'counterCharge', value: counterCharge } });
-    // Other character paths/rules are still unverified; base scaling does not promote the character.
-    expect(direct.status).toBe('partial');
-    expect(direct.value).toBeNull();
+    expect(direct.status).toBe('complete');
+    expect(direct.value).toBeCloseTo(expectedBase * 1.24 * 0.5 * 0.9, 8);
+    expect(build.character.capabilities.calculation.supported).toBe(false);
     const project = createEmptyProject();
     project.enemy = enemy;
     const actor = addActorFromBuild(project, build);
@@ -36,7 +36,8 @@ describe('explicit skill counts multiply additional base scaling through the com
     const saved = JSON.stringify(project);
     const result = evaluateTimeline(projectSchema.parse(JSON.parse(saved)));
     expect(result.points).toHaveLength(1);
-    expect(result.points[0].real?.baseDamage).toBeNull(); // The graph preserves unverified character attribute dependencies.
+    expect(result.points[0].real?.baseDamage).toBeCloseTo(expectedBase, 8);
+    expect(result.totalValue).toBeCloseTo(expectedBase * 1.24 * 0.5 * 0.9, 8);
     expect(result.points[0].real?.scaling[1].count).toEqual(direct.scaling[1].count);
     expect(JSON.stringify(project)).toBe(saved);
   });

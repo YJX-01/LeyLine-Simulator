@@ -1,0 +1,32 @@
+{
+  "sources": [
+    {
+      "repository": "theBowja/genshin-db",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "path": "src/data/ChineseSimplified/talents/kaeya.json"
+    },
+    {
+      "repository": "theBowja/genshin-db",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "path": "src/data/ChineseSimplified/constellations/kaeya.json"
+    },
+    {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/characters/cryo/kaeya.md"
+    }
+  ],
+  "scope": "Kaeya C0-C1 single icicle; explicit independent read anchor; existing E C0-C3 proof retained at revision6",
+  "talent9": 1.3192,
+  "captureDelayAdopted": false,
+  "actionsOrHitsGenerated": false,
+  "playerRecordsOrObservations": false,
+  "excluded": [
+    "C2-C6 burst",
+    "cast feasibility and duration validation",
+    "contribution-level dynamic/snapshot separation",
+    "Xingqiu wave generation",
+    "trigger counts and cooldowns"
+  ],
+  "review": "固定来源的爆发倍率、捕获分类、全部被动及C1已读；独立取值点只表达用户确认时刻，不冒充施放，不触发动作或伤害规则。数值定义及E证明保持原语义。"
+}

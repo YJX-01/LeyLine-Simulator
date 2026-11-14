@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "noelle",
-  "revision": "3",
+  "revision": "4",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -1238,5 +1238,75 @@
       "supported": false,
       "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
     }
-  }
+  },
+  "damageCoverage": [
+    {
+      "id": "noelle-skill-r3",
+      "revision": "4",
+      "skillId": "noelle.skill",
+      "hitIndices": [
+        0
+      ],
+      "maxConstellation": 3,
+      "sources": [
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/noelle.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/noelle.json"
+        },
+        {
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/geo/noelle.md"
+        }
+      ],
+      "branches": [
+        {
+          "id": "base",
+          "resolution": "irrelevant",
+          "reason": "护心铠施放单次岩伤动态读取防御力；大扫除的防御转攻击不改变此防御缩放，不交付护盾和治疗量。"
+        },
+        {
+          "id": "noelle.passive1",
+          "resolution": "irrelevant",
+          "reason": "后台濒血护盾不改变护心铠施放伤害。"
+        },
+        {
+          "id": "noelle.passive2",
+          "resolution": "irrelevant",
+          "reason": "普攻重击命中减少战技冷却，不改变此次伤害；不证明施放可行性。"
+        },
+        {
+          "id": "noelle.passive3",
+          "resolution": "irrelevant",
+          "reason": "防御食物烹饪产出不改变本次伤害。"
+        },
+        {
+          "id": "constellation:1",
+          "resolution": "irrelevant",
+          "reason": "双状态提高治疗触发率，不改变本次岩伤。"
+        },
+        {
+          "id": "constellation:2",
+          "resolution": "irrelevant",
+          "reason": "重击体力和伤害增益不修饰战技。"
+        },
+        {
+          "id": "constellation:3",
+          "resolution": "talent-level",
+          "reason": "战技加3级，使用共同talentLevelBonus和原参数表。"
+        }
+      ]
+    }
+  ]
 }

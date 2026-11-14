@@ -16,7 +16,7 @@ import CornerBadge from '../components/CornerBadge.vue';
 import { talentDisplayRows } from '../domain/character-info';
 import {buildRollBasis} from '../domain/effective-roll-basis';
 import { elementalForm } from '../domain/elemental-forms';
-const props = defineProps<{ character?: AccountCharacter; initialCharacterId?: string; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean }>();
+const props = defineProps<{ character?: AccountCharacter; initialCharacterId?: string; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean; resolveIdentity?: boolean }>();
 const emit = defineEmits<{ close: []; saved: [id: string]; dirtyChange: [dirty: boolean] }>();
 const store = useAccountStore();
 const originalAccount = store.account;
@@ -71,7 +71,7 @@ async function prepare(): Promise<AccountCharacter | undefined> {
     if (disposed) return;
     if (store.account !== originalAccount) throw new Error('账号已切换，请重新打开。');
     const lockedId=props.character?.build?.character.id??data.value.catalog.characters.find(item=>item.name===props.character?.name)?.id;
-    if(props.character && realCharacter.id!==lockedId)throw new Error('已有角色的身份不可更换。');
+    if(props.character && realCharacter.id!==lockedId && !(props.detached && props.resolveIdentity && !lockedId && !props.character.build))throw new Error('已有角色的身份不可更换。');
     const id = props.character?.id ?? crypto.randomUUID();
     if (!props.candidate && store.account.characters.some(item => item.id !== id && (item.build?.character.id === characterId.value || item.name === realCharacter.identity.name))) throw new Error('账号已有该角色，请在原角色资料上补全或编辑。');
     if (weaponAscension.value >= weapon.promotion.length) throw new Error(`所选武器最高突破为 ${weapon.promotion.length - 1}，请调整武器突破与等级。`);
@@ -113,12 +113,12 @@ async function getRollBasis(){
 }
 watch([characterId,weaponId,level,ascension,weaponLevel,weaponAscension],()=>{void getRollBasis();},{immediate:true});
 const canSave=computed(()=>!!character.value && weapons.value.some(item=>item.id===weaponId.value));
-defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis });
+defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis, selectedDefinition });
 
 </script>
 <template>
   <div class="character-form" :class="{inline,details:true}">
-    <CatalogPicker v-if="!props.character && !initialCharacterId" inline label="游戏角色" image-kind="characters" v-model="characterId" :options="data?.catalog.characters ?? []" @update:model-value="weaponId = ''" />
+    <CatalogPicker v-if="(!props.character && !initialCharacterId) || (detached && resolveIdentity && !props.character?.build && !data?.catalog.characters.some(item => item.name === props.character?.name))" inline label="游戏角色" image-kind="characters" v-model="characterId" :options="data?.catalog.characters ?? []" @update:model-value="weaponId = ''" />
     <template v-if="characterId">
       <div class="cultivation-groups">
         <fieldset class="cultivation-group talent-group" aria-label="天赋" :disabled="showcase">

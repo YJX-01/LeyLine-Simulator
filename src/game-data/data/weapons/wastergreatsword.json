@@ -221,12 +221,27 @@
   ],
   "modifiers": [],
   "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；未提供可核验的效果。"
+    "supported": true,
+    "reason": "R1逐件审阅：一/二星基础武器，无副属性及被动；等级1至70、突破0至4，精炼1；数值与固定源逐项一致。"
   },
   "source": {
     "repository": "theBowja/genshin-db",
     "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
     "path": "src/data/stats/weapons.json#wastergreatsword"
+  },
+  "passive": {
+    "kind": "none",
+    "sources": [
+      {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/wastergreatsword.json"
+      },
+      {
+        "repository": "TwiceDrop/genshin_artifact",
+        "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+        "path": "mona_core/src/weapon/weapons/claymores/waster_greatsword.rs"
+      }
+    ]
   }
 }

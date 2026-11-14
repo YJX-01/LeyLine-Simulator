@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getCharacter, getReactionRules, getWeapon } from '@leyline/game-data';
 import { characterDefinitionSchema, elements, projectSchema, type Build, type Enemy, type Project, type StatKey } from '@leyline/schema';
 import { evaluateDamage, evaluateTimeline, resolveBuild, type DamageAttributeReader } from '@leyline/engine';
-import { addActorFromBuild, addSkillAction, addSkillHit } from '../../../../src/web/src/domain/real-project';
+import { addActorFromBuild, addAttributeCapture, addSkillAction, addSkillHit } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
 import { previewEnkaImport } from '../../../../src/web/src/domain/enka-import';
 import { createAccount } from '../../../../src/web/src/domain/account';
@@ -26,6 +26,30 @@ function query(build: Build, timeMs = 1000, hitIndex = 0, phase: 'before' | 'aft
 }
 
 describe('hit attribute captures reuse the existing event dependency graph', () => {
+  it('validates independent anchor ownership, skill, time, empty definition and non-damage semantics', async () => {
+    const project = createEmptyProject();
+    const actor = addActorFromBuild(project, await setting());
+    const source = addAttributeCapture(project, actor, 'kaeya.burst', 0);
+    expect(project.timeline[0]).toMatchObject({ id: source, kind: 'capture', skillId: 'kaeya.burst' });
+    const original = JSON.stringify(project);
+    for (const [owner, skill, time] of [[actor, 'kaeya.burst', -1], [actor, 'unknown', 0], ['missing', 'kaeya.burst', 0]] as const) {
+      expect(() => addAttributeCapture(project, owner, skill, time)).toThrow();
+      expect(JSON.stringify(project)).toBe(original);
+    }
+    for (const derivative of ['no-skill', 'damage', 'formula', 'future'] as const) {
+      const next: Project = JSON.parse(original);
+      if (derivative === 'no-skill') delete next.timeline[0].skillId;
+      if (derivative === 'damage') next.timeline[0].damage = { skillId: 'kaeya.burst', hitIndex: 0, crit: 'noncritical', reaction: 'none' };
+      if (derivative === 'formula') next.definitions.find(definition => definition.id === next.timeline[0].definition)!.nodes = [{ id: 'real-damage', op: 'game-damage' }];
+      if (derivative === 'future') {
+        next.timeline[0].timeMs = 1001;
+        next.timeline.push({ id: 'query', actor, kind: 'damage', definition: `${actor}-real-damage`, timeMs: 1000, order: 1,
+          damage: { skillId: 'kaeya.burst', hitIndex: 0, crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'before' } } });
+      }
+      expect(projectSchema.safeParse(next).success).toBe(false);
+    }
+    expect(evaluateTimeline(project).points).toEqual([]);
+  });
   it.each(['duplicate-attribute', 'missing-skill'] as const)('rejects the %s derivative of the actual capture definition', async variant => {
     const character = await getCharacter('kaeya');
     const capture = character.talents.find(talent => talent.category === 'burst')!.hits[0].snapshot!;
@@ -120,6 +144,28 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
 
 const recording = '.references/enka/official-example-2026-11-13.json';
 describe.skipIf(!existsSync(recording))('capture calculations using actual recorded Noblesse artifact values', () => {
+  it('does not activate the real Noblesse burst trigger merely by adding an independent read anchor', async () => {
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
+    const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
+    const build = await setting();
+    // Explicit theoretical reuse of the original equipment, never claimed as Kaeya's player build.
+    build.artifacts = structuredClone(recorded.artifacts); build.sets = structuredClone(recorded.sets);
+    const project = createEmptyProject(); project.enemy = enemy;
+    const actor = addActorFromBuild(project, build);
+    const source = addAttributeCapture(project, actor, 'kaeya.burst', 200);
+    addSkillHit(project, actor, 'kaeya.burst', 0, 1000, { crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'after' } });
+    const result = evaluateTimeline(project);
+    expect(result.status).toBe('complete');
+    expect(result.points).toHaveLength(1);
+    expect(result.effectInstances?.some(instance => instance.content?.entity === 'noblesseoblige.4')).toBe(false);
+    // Action time is a separate independent condition, not synthesized from capture time.
+    addSkillAction(project, actor, 'kaeya.burst', 0);
+    const triggered = evaluateTimeline(project);
+    expect(triggered.effectInstances?.find(instance => instance.content?.entity === 'noblesseoblige.4')?.startMs).toBe(0);
+    expect(triggered.points).toHaveLength(1);
+    const white = 18.6984 * 8.349 + 66.90411 + 41.0671 * 7.275 + 155.6;
+    expect(triggered.totalValue! - result.totalValue!).toBeCloseTo(white * 0.2 * 1.3192 * 1.2 * 0.45, 7);
+  });
   it('captures before/after Noblesse at the source and recalculates a weapon candidate', async () => {
     const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
     const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
