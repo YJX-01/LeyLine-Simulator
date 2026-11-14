@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { existsSync } from 'node:fs';
 import { recordedProject } from '../../../helpers/recorded-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
 import { copyDefinitionToProject, parseDefinitionLibrary } from '../../../../src/web/src/domain/definition-library';
 
-describe('current definition snapshots', () => {
+describe.skipIf(!existsSync('.references/enka/official-example.json'))('current definition snapshots', () => {
   it('copies recorded definitions without later edits changing the installed snapshot', async () => {
     const source = await recordedProject();
     const project = createEmptyProject();

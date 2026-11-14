@@ -31,8 +31,14 @@ export function formatWorkbenchExpression(project: Project, definitionId: string
       case 'game-damage': return '真实攻击力 × 技能倍率 × 增伤 × 暴击 × 防御 × 抗性';
       case 'constant': return `${node.quantity.value} [${unitLabel(node.quantity.unit)}]`;
       case 'input': return `${inputLabel(node.key)} [${unitLabel(node.unit)}]`;
-      case 'add': case 'multiply': case 'divide': {
-        const symbol = node.op === 'add' ? '+' : node.op === 'multiply' ? '×' : '÷';
+      case 'refinement': return `按武器精炼取值 [${unitLabel(node.unit)}]`;
+      case 'talent-parameter': return `技能参数 ${node.skillId}/${node.parameter}`;
+      case 'combat-state': return `战斗状态 ${node.field}`;
+      case 'select': return `(${format(node.condition, next, depth + 1)} ? ${format(node.yes, next, depth + 1)} : ${format(node.no, next, depth + 1)})`;
+      case 'min': case 'max': return `${node.op}(${format(node.left, next, depth + 1)}, ${format(node.right, next, depth + 1)})`;
+      case 'compare': return `(${format(node.left, next, depth + 1)} ${node.comparison} ${format(node.right, next, depth + 1)})`;
+      case 'add': case 'subtract': case 'multiply': case 'divide': {
+        const symbol = node.op === 'add' ? '+' : node.op === 'subtract' ? '−' : node.op === 'multiply' ? '×' : '÷';
         return `(${format(node.left, next, depth + 1)} ${symbol} ${format(node.right, next, depth + 1)})`;
       }
       case 'condition': return `(条件 ${inputLabel(node.key)} ? ${format(node.yes, next, depth + 1)} : ${format(node.no, next, depth + 1)})`;

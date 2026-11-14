@@ -4,3 +4,5 @@ export const statKeys = ['hp', 'hpPercent', 'attack', 'attackPercent', 'defense'
 export const statSchema = z.enum(statKeys);
 export type StatKey = z.infer<typeof statSchema>;
 export type Element = typeof elements[number];
+/** Hit-local damage quantities, excluded from character panels and percentage modifiers. */
+export type HitDamageKey = 'baseDamageBonus';

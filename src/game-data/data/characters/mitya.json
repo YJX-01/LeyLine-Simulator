@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "mitya",
-  "revision": "1",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -647,10 +647,53 @@
           "template": "{param10:F1P}元素精通"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "electro"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "electro"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "electro"
+        },
+        {
+          "parameter": "param4",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "electro"
+        },
+        {
+          "parameter": "param6",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "electro"
+        },
+        {
+          "parameter": "param7",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "electro"
+        },
+        {
+          "parameter": "param8",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "electro"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -838,10 +881,26 @@
           "template": "{param7:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "skill",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "skill",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param3",
+          "category": "skill",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -975,10 +1034,22 @@
           "template": "{param5:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "attack",
+          "additionalScaling": [
+            {
+              "stat": "elementalMastery",
+              "parameter": "param2"
+            }
+          ]
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       }
     }
   ],

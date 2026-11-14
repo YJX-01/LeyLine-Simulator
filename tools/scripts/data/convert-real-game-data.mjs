@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { readContentSource } from '../../lib/content-source.mjs';
 import { loadContentSchema } from '../../lib/load-content-schema.mjs';
 import { writeGeneratedFile, pruneGeneratedFiles } from '../../lib/generated-files.mjs';
+import { damagePathAudit, combatRuleAudit } from '../../lib/damage-path-audit.mjs';
 
 const root = resolve(import.meta.dirname, '../../..');
 if (process.argv.includes('--capture')) throw new Error('Use node tools/scripts/data/capture-catalog.mjs to capture source evidence; review metadata explicitly before generation.');
@@ -42,6 +43,9 @@ const catalog = { version: manifest.dataVersion,
   weapons: weapons.map(({ id, name, weaponType, rarity, support }) => ({ id, name, weaponType, rarity, ...support })),
   sets: setMetadata.map(({ id, name, rarity }) => ({ id, name, rarity })) };
 const outputs = { 'version.json': manifest.dataVersion, 'catalog.json': catalog, 'artifact-main.json': main };
+outputs['damage-paths.json'] = damagePathAudit(manifest, characters);
+outputs['combat-rules.json'] = combatRuleAudit(manifest, characters, weapons, setMetadata);
+outputs['reactions.json'] = schemas.reactionRulesSchema.parse(read('src/game-data/data/tables/reactions.json'));
 for (const [group, entries, size] of [['characters', characters, 10], ['weapons', weapons, 40], ['sets', sets, 30]]) {
   for (let start = 0; start < entries.length; start += size) outputs[`${group}-${start / size}.json`] = entries.slice(start, start + size);
 }

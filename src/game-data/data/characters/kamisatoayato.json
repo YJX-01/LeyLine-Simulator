@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "kamisatoayato",
-  "revision": "1",
+  "revision": "5",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -647,10 +647,65 @@
           "template": "{param9:P}/{param10:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param5",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param6",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param8",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param9",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -864,11 +919,77 @@
           "template": "{param8:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "additionalScaling": [
+            {
+              "stat": "hp",
+              "parameter": "param5",
+              "count": "namisen"
+            }
+          ]
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "additionalScaling": [
+            {
+              "stat": "hp",
+              "parameter": "param5",
+              "count": "namisen"
+            }
+          ]
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "additionalScaling": [
+            {
+              "stat": "hp",
+              "parameter": "param5",
+              "count": "namisen"
+            }
+          ]
+        },
+        {
+          "parameter": "param6",
+          "category": "skill",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
-      }
+        "reason": "已核对单次命中基数、显式层数或愿力的附加缩放；完整触发、状态、捕获、被动及命座仍待接入，不作为完整角色伤害支持。"
+      },
+      "inputs": [
+        {
+          "id": "namisen",
+          "min": 0,
+          "max": 4,
+          "integer": true,
+          "source": {
+            "repository": "theBowja/genshin-db",
+            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+            "path": "src/data/ChineseSimplified/talents/kamisatoayato.json"
+          },
+          "constellationLimits": [
+            {
+              "rank": 2,
+              "max": 5,
+              "source": {
+                "repository": "theBowja/genshin-db",
+                "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+                "path": "src/data/ChineseSimplified/constellations/kamisatoayato.json"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kamisatoayato.burst",
@@ -1006,10 +1127,16 @@
           "template": "{param5:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       }
     }
   ],

@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "yoimiya",
-  "revision": "1",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -672,10 +672,77 @@
           "template": "{param10:P}/{param11:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param5",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param6",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param7",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "pyro"
+        },
+        {
+          "parameter": "param8",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "pyro"
+        },
+        {
+          "parameter": "param9",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param11",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -788,8 +855,9 @@
       "hits": [],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
-      }
+        "reason": "此技能没有独立伤害命中，强化或辅助规则仍待接入；不伪造伤害以表示技能已支持。"
+      },
+      "noIndependentDamage": true
     },
     {
       "id": "yoimiya.burst",
@@ -948,10 +1016,21 @@
           "template": "{param6:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "burst",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       }
     }
   ],

@@ -1,4 +1,5 @@
-import { buildSchema, elements, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { buildSchema, elements, projectSchema, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { evaluateTimeline } from '@leyline/engine';
 import { nextRecordId } from './workbench-project';
 
 export function defaultEnemy(): Enemy {
@@ -20,18 +21,48 @@ export function addActorFromBuild(project: Project, input: Build, name?: string)
   return id;
 }
 
-export function addSkillHits(project: Project, actorId: string, skillId: string, timeMs: number, choices: Pick<DamageRequest,'crit'|'reaction'|'conditions'> = {crit:null,reaction:null}): string[] {
+export function addSkillAction(project: Project, actorId: string, skillId: string, timeMs: number): string {
+  const actor = project.candidate.actors.find(entry => entry.id === actorId);
+  const build = actor?.build;
+  const skill = build?.character.talents.find(entry => entry.id === skillId);
+  if (!build || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择队员、技能和合法的整数毫秒时间。');
+  const definitionId = `${actorId}-action-${skillId}`;
+  const definition = { id: definitionId, name: skill.name, version: build.dataVersion,
+    source: { kind: build.character.origin === 'builtin' ? 'preset' as const : 'user' as const, reference: build.dataVersion, verified: false }, nodes: [], effects: [] };
+  const id = nextRecordId(project);
+  const record: Project['timeline'][number] = { id, actor: actorId, kind: 'action', definition: definitionId, skillId, timeMs,
+    order: Math.max(-1, ...project.timeline.map(entry => entry.order)) + 1 };
+  const definitions = project.definitions.some(entry => entry.id === definitionId) ? project.definitions : [...project.definitions, definition];
+  const parsed = projectSchema.parse({ ...project, definitions, timeline: [...project.timeline, record] });
+  if (definitions !== project.definitions) project.definitions.push(parsed.definitions[parsed.definitions.length - 1]);
+  project.timeline.push(parsed.timeline[parsed.timeline.length - 1]);
+  return id;
+}
+
+export function addSkillHit(project: Project, actorId: string, skillId: string, hitIndex: number, timeMs: number, choices: Pick<DamageRequest,'crit'|'reaction'|'conditions'|'stateOverrides'|'capture'|'inputs'|'effectApplications'> = {crit:null,reaction:null}): string {
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const skill = actor?.build?.character.talents.find(entry => entry.id === skillId);
   if (!actor || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择队员、技能和合法的整数毫秒时间。');
-  if (!skill.support.supported || !skill.hits.length) throw new Error('该技能命中尚未核验，请选择首批支持的战技。');
-  const ids: string[] = [];
-  for (let hitIndex = 0; hitIndex < skill.hits.length; hitIndex++) {
-    const id = nextRecordId(project);
-    project.timeline.push({ id, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1,
-      actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitIndex, ...choices } });
-    if (project.objective.damageIds) project.objective.damageIds.push(id);
-    ids.push(id);
-  }
-  return ids;
+  if (!skill.support.supported || !Number.isInteger(hitIndex) || !skill.hits[hitIndex]) throw new Error('该技能或命中类型尚未核验。');
+  const id = nextRecordId(project);
+  const record: Project['timeline'][number] = { id, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1,
+    actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitIndex, ...choices } };
+  const parsed = projectSchema.parse({ ...project, timeline: [...project.timeline, record] });
+  if (record.damage?.effectApplications?.length && evaluateTimeline(parsed).status === 'invalid') throw new Error('效果适用事实引用或作用范围无效，当前项目保持不变。');
+  project.timeline.push(parsed.timeline[parsed.timeline.length - 1]);
+  if (project.objective.damageIds) project.objective.damageIds.push(id);
+  return id;
+}
+
+/** A per-hit factual assertion; source identity and applicability are checked by the shared engine. */
+export function setDamageEffectApplication(project: Project, recordId: string, instanceId: string, active: boolean | null): void {
+  const index = project.timeline.findIndex(record => record.id === recordId);
+  const record = project.timeline[index];
+  if (!record || record.kind !== 'damage' || !record.damage) throw new Error('请选择已有的技能伤害记录。');
+  const effectApplications = [...(record.damage.effectApplications ?? []).filter(application => application.instanceId !== instanceId), { instanceId, active }];
+  const replacement = { ...record, damage: { ...record.damage, effectApplications } };
+  const timeline = project.timeline.map((entry, entryIndex) => entryIndex === index ? replacement : entry);
+  const parsed = projectSchema.parse({ ...project, timeline });
+  if (evaluateTimeline(parsed).status === 'invalid') throw new Error('效果适用事实引用或作用范围无效，当前项目保持不变。');
+  project.timeline[index] = parsed.timeline[index];
 }

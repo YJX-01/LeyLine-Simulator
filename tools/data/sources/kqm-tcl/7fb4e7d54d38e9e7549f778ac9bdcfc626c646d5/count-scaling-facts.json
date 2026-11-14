@@ -1,0 +1,106 @@
+{
+  "source": {
+    "repository": "KQM-git/TCL",
+    "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5"
+  },
+  "rangeSource": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/talents/"
+  },
+  "facts": [
+    {
+      "character": "kamisatoayato",
+      "path": "docs/characters/hydro/kamisato-ayato.md",
+      "skill": "skill",
+      "hits": [
+        0,
+        1,
+        2
+      ],
+      "input": "namisen",
+      "rangeAtC0": [
+        0,
+        4
+      ],
+      "integer": true,
+      "addedScalingStat": "hp",
+      "parameter": "param5",
+      "dynamicAttributes": true,
+      "scope": "Shunsuiken only; water illusion excluded. Input is the resolved count affecting this hit. A1 gains are not derived. The C2 five-stack input limit is validated, but its conditional HP bonus and complete constellation damage remain unsupported.",
+      "rangeAtC2": [
+        0,
+        5
+      ],
+      "constellationSourcePath": "src/data/ChineseSimplified/constellations/kamisatoayato.json"
+    },
+    {
+      "character": "raidenshogun",
+      "path": "docs/characters/electro/raiden-shogun.md",
+      "skill": "burst",
+      "hits": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "input": "resolve",
+      "rangeAtC0": [
+        0,
+        60
+      ],
+      "integer": false,
+      "addedScalingStat": "attack",
+      "initialParameter": "param2",
+      "stanceParameter": "param3",
+      "dynamicAttributes": true,
+      "scope": "Consumed cast-time Resolve, not the current wheel after consumption. Apply to each selected damage component, including split attacks. No rounding or automatic stack accumulation."
+    },
+    {
+      "character": "eula",
+      "path": "docs/characters/cryo/eula.md",
+      "skill": "burst",
+      "hits": [
+        1
+      ],
+      "input": "lightfallEnergy",
+      "rangeAtC0": [
+        0,
+        30
+      ],
+      "integer": true,
+      "addedScalingStat": "attack",
+      "parameter": "param3",
+      "dynamicAttributes": true,
+      "scope": "Lightfall explosion only; initial Cryo slash and A1 remnant excluded. Range is the declared cap, not proof that every C0 count is reachable on a particular timeline. No automatic accumulation or timing validation."
+    },
+    {
+      "character": "beidou",
+      "path": "docs/characters/electro/beidou.md",
+      "skill": "skill",
+      "hits": [
+        0
+      ],
+      "input": "counterCharge",
+      "rangeAtC0": [
+        0,
+        2
+      ],
+      "integer": true,
+      "addedScalingStat": "attack",
+      "parameter": "param4",
+      "dynamicAttributes": true,
+      "scope": "Resolved counter damage tier. Tap or zero charge is 0; A1 perfect counter is 2 even without two received attacks. Shield amount, parry timing and received attacks are not inferred."
+    }
+  ],
+  "upstreamImplementationCopied": false,
+  "gameObservationsProvided": false
+}

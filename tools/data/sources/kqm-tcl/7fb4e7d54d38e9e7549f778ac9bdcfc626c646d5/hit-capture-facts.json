@@ -1,0 +1,37 @@
+{
+  "sources": {
+    "general": {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/snapshot-and-dynamic.md"
+    },
+    "jean": {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/characters/anemo/jean.md"
+    },
+    "kaeya": {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/characters/cryo/kaeya.md"
+    }
+  },
+  "facts": [
+    {
+      "character": "jean",
+      "skill": "burst",
+      "snapshotScope": "field-enter-exit-damage",
+      "element": "anemo",
+      "category": "burst"
+    },
+    {
+      "character": "kaeya",
+      "skill": "burst",
+      "snapshotScope": "icicle-damage",
+      "element": "cryo",
+      "category": "burst"
+    }
+  ],
+  "captureDelayAdopted": false,
+  "upstreamImplementationCopied": false
+}

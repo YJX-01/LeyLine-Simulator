@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "neuvillette",
-  "revision": "1",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -714,10 +714,51 @@
           "template": "{param12:P}/{param13:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param4",
+          "category": "charged",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param5",
+          "category": "charged",
+          "scalingStat": "hp"
+        },
+        {
+          "parameter": "param11",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param12",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param13",
+          "category": "plunge",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -856,10 +897,21 @@
           "template": "{param4:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "skill",
+          "scalingStat": "hp"
+        },
+        {
+          "parameter": "param2",
+          "category": "skill",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -973,10 +1025,21 @@
           "template": "{param4:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "hp"
+        },
+        {
+          "parameter": "param2",
+          "category": "burst",
+          "scalingStat": "hp"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     }
   ],
@@ -997,9 +1060,94 @@
       "description": "基于当前生命值超出生命值上限30%的部分，每1%使那维莱特获得0.6%水元素伤害加成，通过这种方式，至多提升30%。",
       "unlockAscension": 4,
       "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+        "supported": true,
+        "reason": "已核验四突破被动的属性依赖、条件、上限及适用命中；角色其它机制仍按独立缺口处理。"
+      },
+      "combatRules": [
+        {
+          "id": "ascension-four",
+          "revision": "1",
+          "source": {
+            "repository": "theBowja/genshin-db",
+            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+            "path": "src/data/ChineseSimplified/talents/neuvillette.json#passive2"
+          },
+          "nodes": [
+            {
+              "id": "hp-ratio",
+              "op": "combat-state",
+              "field": "hpRatio"
+            },
+            {
+              "id": "threshold",
+              "op": "constant",
+              "quantity": {
+                "value": 0.3,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "zero",
+              "op": "constant",
+              "quantity": {
+                "value": 0,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "rate",
+              "op": "constant",
+              "quantity": {
+                "value": 0.6,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "cap",
+              "op": "constant",
+              "quantity": {
+                "value": 0.3,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "above",
+              "op": "subtract",
+              "left": "hp-ratio",
+              "right": "threshold"
+            },
+            {
+              "id": "positive",
+              "op": "max",
+              "left": "above",
+              "right": "zero"
+            },
+            {
+              "id": "raw",
+              "op": "multiply",
+              "left": "positive",
+              "right": "rate"
+            },
+            {
+              "id": "bonus",
+              "op": "min",
+              "left": "raw",
+              "right": "cap"
+            }
+          ],
+          "effects": [
+            {
+              "id": "hydro-bonus",
+              "startMs": 0,
+              "endMs": 3600000,
+              "permanent": true,
+              "value": "bonus",
+              "attribute": "hydroBonus",
+              "unit": "scalar"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "neuvillette.passive3",

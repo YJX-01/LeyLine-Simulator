@@ -5,6 +5,7 @@
 | 资料 | 用途 |
 | --- | --- |
 | [GenshinTools研究](genshin-tools.md) | 参考角色内容组织、参数/公式消费与就绪检查；不复制上游类注册架构 |
+| [P5网页来源](p5-web-sources.md) | 用户提供的五个网站、访问情况、候选用途和采用边界 |
 | [数值精度审计](numeric-precision.md) | 各数值族的依据、单位、差异与限度 |
 | [Enka导入](enka-import.md) | 实际公开展柜与本地实物的边界 |
 | [Mona社区格式](mona-community.md) | 圣遗物格式、套装映射与后续搜索参考 |

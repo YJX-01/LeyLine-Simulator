@@ -73,6 +73,20 @@ export function numericAudit(read = readAuditJson) {
     const expected = mainRows.get(level+1)?.addProps.find(prop=>prop.propType===`FIGHT_PROP_${props[stat]}`)?.value;
     check('artifact-main',value,expected,`${stat}/${level}`);
   });
+  const reactions = read('src/game-data/data/tables/reactions.json');
+  const reactionSource = 'tools/data/sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5';
+  const reactionLevels = read(`${reactionSource}/player.json`);
+  reactions.levelMultipliers.forEach((value,level)=>{
+    if (level > 0) check('reaction-levels',value,reactionLevels[level],`reaction-level/${level}`);
+  });
+  const reactionFacts = read(`${reactionSource}/reaction-facts.json`);
+  const reactionNumbers = (actual,expected,path) => {
+    for (const [key,value] of Object.entries(expected)) {
+      if (typeof value==='number') check('reaction-formulas',actual?.[key],value,`${path}/${key}`);
+      else if (value && typeof value==='object') reactionNumbers(actual?.[key],value,`${path}/${key}`);
+    }
+  };
+  for (const family of ['amplifying','additive']) reactionNumbers(reactions[family],reactionFacts[family],family);
   return {schemaVersion:1,sourceCommit:commit,independentRawCommit:luna,
     method:'Exact numeric equality against adopted fixed JSON fields; checks run directly, without stored file hashes. Does not prove game float32 evaluation equivalence.',
     comparedValues:counts,differences,templateParameterGaps,independentBaseDifferences,

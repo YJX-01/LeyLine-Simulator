@@ -223,12 +223,94 @@
   ],
   "modifiers": [],
   "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；元素战技造成的伤害值提高，提高数值相当于防御力的40%。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。"
+    "supported": true,
+    "reason": "按明确的本次命中适用事实计算R1至R5防御附加基数；1.5秒冷却及伤害后0.1秒清除不自动推导，缺事实保持未知。"
   },
   "source": {
     "repository": "theBowja/genshin-db",
     "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
     "path": "src/data/stats/weapons.json#cinnabarspindle"
-  }
+  },
+  "combatRules": [
+    {
+      "id": "defense-skill-base",
+      "revision": "1",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/cinnabarspindle.json"
+      },
+      "nodes": [
+        {
+          "id": "def",
+          "op": "attribute",
+          "key": "defense",
+          "unit": "defense"
+        },
+        {
+          "id": "one-def",
+          "op": "constant",
+          "quantity": {
+            "value": 1,
+            "unit": "defense"
+          }
+        },
+        {
+          "id": "def-points",
+          "op": "divide",
+          "left": "def",
+          "right": "one-def"
+        },
+        {
+          "id": "rate",
+          "op": "refinement",
+          "unit": "scalar",
+          "values": [
+            0.4,
+            0.5,
+            0.6,
+            0.7,
+            0.8
+          ]
+        },
+        {
+          "id": "one-damage",
+          "op": "constant",
+          "quantity": {
+            "value": 1,
+            "unit": "damage"
+          }
+        },
+        {
+          "id": "rate-damage",
+          "op": "multiply",
+          "left": "rate",
+          "right": "one-damage"
+        },
+        {
+          "id": "bonus",
+          "op": "multiply",
+          "left": "def-points",
+          "right": "rate-damage"
+        }
+      ],
+      "effects": [
+        {
+          "id": "base",
+          "startMs": 0,
+          "endMs": 3600000,
+          "permanent": true,
+          "recipient": "self",
+          "attribute": "baseDamageBonus",
+          "unit": "damage",
+          "value": "bonus",
+          "appliesTo": {
+            "category": "skill"
+          },
+          "captureAt": "dynamic",
+          "requiresApplication": true
+        }
+      ]
+    }
+  ]
 }

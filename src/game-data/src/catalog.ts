@@ -1,7 +1,7 @@
 /** Fixed, independently generated game snapshots. No runtime reference checkout dependency. */
 import version from '../generated/version.json';
 export const DATA_VERSION = version;
-import type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element } from '@leyline/schema';
+import type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element, ReactionRules } from '@leyline/schema';
 export type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element, ContentSource, Support, Modifier } from '@leyline/schema';
 export interface GameCatalog {
   version: string;
@@ -66,4 +66,7 @@ export async function getArtifactSet(id: string): Promise<ArtifactSetDefinition>
 }
 export async function getArtifactMain(): Promise<Record<StatKey, number[]>> {
   return clone((await import('../generated/artifact-main.json')).default as Record<StatKey, number[]>);
+}
+export async function getReactionRules(): Promise<ReactionRules> {
+  return clone((await import('../generated/reactions.json')).default as ReactionRules);
 }

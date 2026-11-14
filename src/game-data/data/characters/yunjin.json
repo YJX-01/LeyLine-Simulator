@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "yunjin",
-  "revision": "1",
+  "revision": "5",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -689,10 +689,77 @@
           "template": "{param11:P}/{param12:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param5",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param6",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param7",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param8",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param11",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param12",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -852,10 +919,26 @@
           "template": "{param6:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param3",
+          "category": "skill",
+          "scalingStat": "defense"
+        },
+        {
+          "parameter": "param4",
+          "category": "skill",
+          "scalingStat": "defense"
+        },
+        {
+          "parameter": "param5",
+          "category": "skill",
+          "scalingStat": "defense"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -1019,10 +1102,16 @@
           "template": "{param5:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       }
     }
   ],
@@ -1137,5 +1226,91 @@
       "supported": false,
       "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
     }
-  }
+  },
+  "combatRules": [
+    {
+      "id": "flying-cloud-base",
+      "revision": "2",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/talents/yunjin.json"
+      },
+      "nodes": [
+        {
+          "id": "def",
+          "op": "attribute",
+          "key": "defense",
+          "unit": "defense"
+        },
+        {
+          "id": "one-def",
+          "op": "constant",
+          "quantity": {
+            "value": 1,
+            "unit": "defense"
+          }
+        },
+        {
+          "id": "def-points",
+          "op": "divide",
+          "left": "def",
+          "right": "one-def"
+        },
+        {
+          "id": "rate",
+          "op": "talent-parameter",
+          "skillId": "yunjin.burst",
+          "parameter": "param2",
+          "unit": "scalar"
+        },
+        {
+          "id": "one-damage",
+          "op": "constant",
+          "quantity": {
+            "value": 1,
+            "unit": "damage"
+          }
+        },
+        {
+          "id": "rate-damage",
+          "op": "multiply",
+          "left": "rate",
+          "right": "one-damage"
+        },
+        {
+          "id": "bonus",
+          "op": "multiply",
+          "left": "def-points",
+          "right": "rate-damage"
+        }
+      ],
+      "effects": [
+        {
+          "id": "base",
+          "startMs": 0,
+          "endMs": 12000,
+          "recipient": "team",
+          "attribute": "baseDamageBonus",
+          "unit": "damage",
+          "value": "bonus",
+          "trigger": {
+            "kind": "action",
+            "skillId": "yunjin.burst"
+          },
+          "appliesTo": {
+            "category": "normal"
+          },
+          "captureAt": "dynamic",
+          "requiresApplication": true,
+          "group": "flying-cloud",
+          "policy": "replace"
+        }
+      ],
+      "support": {
+        "supported": false,
+        "reason": "飞云旗阵Q基础防御加值已绑定；四突破追加量及完整角色交互仍待核验，不能作为完整来源伤害支持。"
+      }
+    }
+  ]
 }

@@ -61,7 +61,7 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
       if (levels.some(level=>level===undefined)) throw new Error('缺少天赋等级，未使用默认值填补。');
       const refinements=Object.values(weaponEntry.weapon.affixMap??{});
       if (!refinements.length&&weapon.rarity>2) throw new Error('缺少武器精炼等级。');
-      const build=buildSchema.parse({dataVersion:data.catalog.version,character,weapon,artifactMain:data.main,sets,level:prop('4001'),ascension:prop('1002'),constellation:value.talentIdList?.length??0,
+      const build=buildSchema.parse({dataVersion:data.catalog.version,character,weapon,artifactMain:data.main,reactionRules:data.reactions,sets,level:prop('4001'),ascension:prop('1002'),constellation:value.talentIdList?.length??0,
         talents:{normal:levels[0],skill:levels[1],burst:levels[2]},weaponLevel:weaponEntry.weapon.level,weaponAscension:weaponEntry.weapon.promoteLevel,refinement:(refinements[0]??0)+1,artifacts});
       const current=account.characters.find(item=>item.build?.character.id===entry.id||item.name===character.identity.name);
       preview.rows.push({action:current?.build?'update':current?'complete':'add',before:current?JSON.stringify(current):undefined,character:{...current,id:current?.id??crypto.randomUUID(),name:current?.name??character.identity.name,attack:0,weapon:weapon.name,equipment:{...current?.equipment},

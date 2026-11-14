@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "manekina",
-  "revision": "2",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -852,10 +852,65 @@
           "template": "{param9:P}/{param10:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param5",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param6",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param8",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param9",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "已收录原始文本和等级参数，伤害与附魔规则尚未核验。"
+        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
       }
     }
   ],

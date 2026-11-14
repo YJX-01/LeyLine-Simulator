@@ -3,7 +3,7 @@ import GameIcon from '../components/GameIcon.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
-import { nextRecordId } from '../domain/workbench-project';
+import { addSkillAction, addSkillHit } from '../domain/real-project';
 import { recordLabel } from '../domain/workbench-labels';
 import type { Project } from '@leyline/schema';
 type Record = Project['timeline'][number];
@@ -40,14 +40,11 @@ function add(kind = layer.value, selectedSkill = skill.value) {
   const time = Math.round(cursor.value);
   if (!Number.isInteger(time) || time < 0 || time > 3600000) { error.value = '记录时间必须在 0 到 3600000 毫秒之间。'; return; }
   if (kind === 'damage' && (!selectedSkill.support.supported || !selectedSkill.hits[hitIndex.value])) { error.value = '该技能或段数尚未支持伤害计算；动作仍可记录。'; return; }
-  const id = nextRecordId(axis.project);
-  axis.command(draft => {
-    const definition = kind === 'damage' ? `${owner.id}-real-damage` : `${owner.id}-action-${selectedSkill.id}`;
-    if (kind === 'action' && !draft.definitions.some(entry => entry.id === definition)) draft.definitions.push({ id: definition, name: selectedSkill.name, version: owner.build!.dataVersion, source: { kind: 'preset', reference: owner.build!.dataVersion, verified: false }, nodes: [], effects: [] });
-    draft.timeline.push({ id, kind, actor: owner.id, definition, timeMs: time, order: Math.max(-1, ...draft.timeline.map(record => record.order)) + 1,
-      ...(kind === 'damage' ? { damage: { skillId: selectedSkill.id, hitIndex: hitIndex.value, crit: null, reaction: null } } : {}) });
-    if (kind === 'damage' && draft.objective.damageIds) draft.objective.damageIds.push(id);
-  });
+  let id = '';
+  try { axis.command(draft => {
+    if (kind === 'damage') { id = addSkillHit(draft, owner.id, selectedSkill.id, hitIndex.value, time); return; }
+    id = addSkillAction(draft, owner.id, selectedSkill.id, time);
+  }); } catch (cause) { error.value = cause instanceof Error ? cause.message : '命中记录无效。'; return; }
   axis.selectedId = id;
   error.value = '';
 }

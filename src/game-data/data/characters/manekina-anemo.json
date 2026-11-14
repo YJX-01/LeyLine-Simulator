@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "manekina-anemo",
-  "revision": "1",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -852,10 +852,65 @@
           "template": "{param9:P}/{param10:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param5",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param6",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param8",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param9",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack",
+          "element": "physical"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "已收录原始文本和等级参数，伤害与附魔规则尚未核验。"
+        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -1300,10 +1355,16 @@
           "template": "{param3:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "skill",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "已收录原始文本和等级参数，伤害与附魔规则尚未核验。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       },
       "flavorText": "「恰到好处的打击，是必要的警告。」"
     },
@@ -1757,10 +1818,21 @@
           "template": "{param5:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "burst",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "已收录原始文本和等级参数，伤害与附魔规则尚未核验。"
+        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
       },
       "flavorText": "「执意踏入禁区的对象，可被视为敌人，理应以最大武力进行驱逐。」"
     }

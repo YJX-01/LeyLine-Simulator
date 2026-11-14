@@ -6,7 +6,7 @@ describe('fixed real game snapshot', () => {
     const catalog = await loadCatalog();
     expect(catalog.version).toBe(DATA_VERSION);
     expect([catalog.characters.length, catalog.weapons.length, catalog.sets.length]).toEqual([154, 256, 63]);
-    expect(catalog.characters.filter(entry => entry.supported).map(entry => entry.id).sort()).toEqual(['jean', 'kaeya', 'xingqiu']);
+    expect(catalog.characters.filter(entry => entry.supported).map(entry => entry.id).sort()).toEqual(['aether', 'jean', 'kaeya', 'lumine', 'xingqiu']);
     expect(catalog.characters.find(entry => entry.id === 'jean')?.name).toBe('琴');
     expect(catalog.weapons.find(entry => entry.id === 'favoniussword')?.name).toBe('西风剑');
     expect(new Set(catalog.characters.map(entry => entry.id)).size).toBe(154);
@@ -39,6 +39,9 @@ describe('fixed real game snapshot', () => {
     expect((await getCharacter('manekina-hydro')).passives.map(passive=>passive.name)).toEqual(['战域重划','交战持备','灵巧战姿']);
     const catalogDefinitions=await Promise.all(catalog.characters.map(entry=>getCharacter(entry.id)));
     expect(catalogDefinitions.every(character=>character.capabilities.text==='complete' && character.identity.description.length>0 && character.talents.every(talent=>talent.description.length>0))).toBe(true);
+    // The ordinary-attack batch must include every form; this is a binding boundary, not full-character acceptance.
+    expect(catalogDefinitions.every(character => character.talents.find(talent => talent.category === 'normal')!.hits.length > 0)).toBe(true);
+    expect(catalogDefinitions.every(character => character.talents.every(talent => talent.hits.length > 0 || talent.noIndependentDamage))).toBe(true);
   });
   it('keeps raw numeric curves and independent skill parameters and isolates mutable consumers', async () => {
     const jean = await getCharacter('jean');
@@ -53,7 +56,7 @@ describe('fixed real game snapshot', () => {
     expect(xingqiu.attributes.modifiers).toEqual([{ stat: 'hydroBonus', values: [0.2], minAscension: 4 }]);
     jean.attributes.base.attack = 999;
     expect((await getCharacter('jean')).attributes.base.attack).toBe(18.62);
-    expect(jean.talents.find(skill => skill.category === 'burst')?.support.supported).toBe(false);
+    expect(jean.talents.find(skill => skill.category === 'burst')?.hits.map(hit => hit.snapshot?.sourceSkillId ?? null)).toEqual([null, 'jean.burst']);
   });
   it('uses weapon-specific growth, conditional and category modifiers without claiming unknown effects', async () => {
     const weapon = await getWeapon('favoniussword');
@@ -62,7 +65,8 @@ describe('fixed real game snapshot', () => {
     expect(weapon.support.supported).toBe(true);
     expect((await getWeapon('harbingerofdawn')).modifiers[0]).toEqual({ stat: 'critRate', values: [0.14, 0.175, 0.21, 0.245, 0.28], hpAbove: 0.9 });
     expect((await getWeapon('festeringdesire')).modifiers.find(entry => entry.stat === 'critRate')?.category).toBe('skill');
-    expect((await getWeapon('staffofhoma')).support.supported).toBe(false);
+    expect((await getWeapon('staffofhoma')).support.supported).toBe(true);
+    expect((await getWeapon('staffofhoma')).combatRules).toHaveLength(1);
     expect((await getArtifactSet('gladiatorsfinale')).effects[0].modifiers).toEqual([{ stat: 'attackPercent', values: [0.18] }]);
     expect((await getArtifactSet('gladiatorsfinale')).effects[1].support.supported).toBe(false);
   });

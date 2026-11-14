@@ -1,6 +1,6 @@
-import type { Project } from '@leyline/schema';
+import type { Project, QuantityUnit } from '@leyline/schema';
 
-const units: Record<string, string> = { scalar: '倍率', attack: '攻击力', damage: '伤害' };
+const units: Record<QuantityUnit, string> = { scalar: '倍率', attack: '攻击力', hp: '生命值', defense: '防御力', elementalMastery: '元素精通', damage: '伤害' };
 const operations: Record<string, string> = { attribute: '时刻属性读取', capture: '属性捕获', history: '历史累计与计数', constant: '常量', input: '输入属性', add: '相加', multiply: '相乘', divide: '相除', condition: '条件选择', unsupported: '尚未支持', 'game-damage': '真实技能伤害' };
 const diagnostics: Record<string, string> = { budget: '计算预算已用尽', 'stale-revision': '来源修订待核对', 'invalid-input': '输入格式有误', 'missing-reference': '引用内容缺失', 'duplicate-id': '标识重复', cycle: '公式存在循环引用', unit: '计算单位不匹配', unknown: '条件尚未确定', unsupported: '当前尚不支持此机制', arithmetic: '数值计算有误' };
 const lookup = (labels: Record<string, string>, value: string, fallback: string) => Object.hasOwn(labels, value) ? labels[value] : fallback;

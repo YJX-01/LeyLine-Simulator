@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "hutao",
-  "revision": "1",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -693,10 +693,66 @@
           "template": "{param11:P}/{param12:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param5",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param6",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param7",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param8",
+          "category": "charged",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param11",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param12",
+          "category": "plunge",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -881,10 +937,16 @@
           "template": "{param6:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param3",
+          "category": "skill",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -1069,10 +1131,21 @@
           "template": "{param6:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "burst",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     }
   ],
@@ -1093,9 +1166,76 @@
       "description": "胡桃的生命值低于或等于50%时，获得33%火元素伤害加成。",
       "unlockAscension": 4,
       "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+        "supported": true,
+        "reason": "已核验四突破被动的属性依赖、条件、上限及适用命中；角色其它机制仍按独立缺口处理。"
+      },
+      "combatRules": [
+        {
+          "id": "ascension-four",
+          "revision": "1",
+          "source": {
+            "repository": "theBowja/genshin-db",
+            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+            "path": "src/data/ChineseSimplified/talents/hutao.json#passive2"
+          },
+          "nodes": [
+            {
+              "id": "hp-ratio",
+              "op": "combat-state",
+              "field": "hpRatio"
+            },
+            {
+              "id": "half",
+              "op": "constant",
+              "quantity": {
+                "value": 0.5,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "low-hp",
+              "op": "compare",
+              "left": "hp-ratio",
+              "right": "half",
+              "comparison": "lte"
+            },
+            {
+              "id": "bonus",
+              "op": "constant",
+              "quantity": {
+                "value": 0.33,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "zero",
+              "op": "constant",
+              "quantity": {
+                "value": 0,
+                "unit": "scalar"
+              }
+            },
+            {
+              "id": "value",
+              "op": "select",
+              "condition": "low-hp",
+              "yes": "bonus",
+              "no": "zero"
+            }
+          ],
+          "effects": [
+            {
+              "id": "pyro-bonus",
+              "startMs": 0,
+              "endMs": 3600000,
+              "permanent": true,
+              "value": "value",
+              "attribute": "pyroBonus",
+              "unit": "scalar"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hutao.passive3",

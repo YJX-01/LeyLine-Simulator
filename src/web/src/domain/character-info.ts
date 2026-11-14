@@ -1,7 +1,7 @@
-import type { CharacterDefinition, Talent } from '@leyline/schema';
+import { talentLevelBonus, type CharacterDefinition, type Talent } from '@leyline/schema';
 
 export function talentBonus(character:CharacterDefinition,category:Talent['category'],constellation:number):number {
-  return character.constellations.filter(item=>item.rank<=constellation).flatMap(item=>item.talentBonuses).filter(item=>item.category===category).reduce((total,item)=>total+item.levels,0);
+  return talentLevelBonus(character, category, constellation);
 }
 export function talentDisplayRows(character:CharacterDefinition) {
   const base=character.derivedFrom?.id ?? character.id;

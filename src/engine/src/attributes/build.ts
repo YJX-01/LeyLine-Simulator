@@ -1,6 +1,6 @@
-import { buildSchema, combatConditionsSchema, damageRequestSchema, enemySchema, statKeys, type Build, type CombatConditions, type DamageRequest, type Enemy, type StatKey } from '@leyline/schema';
+import { buildSchema, combatConditionsSchema, statKeys, type Build, type CombatConditions, type StatKey } from '@leyline/schema';
 
-import type { CalculationStatus, CalculationIssue, Contribution, AttributePanel, DamageResult } from '@leyline/schema';
+import type { CalculationStatus, CalculationIssue, Contribution, AttributePanel } from '@leyline/schema';
 const zeroStats = (): Record<StatKey, number> => Object.fromEntries(statKeys.map(key => [key, 0])) as Record<StatKey, number>;
 const statusOf = (issues: CalculationIssue[]): CalculationStatus => issues.some(issue => issue.code === 'invalid-input') ? 'invalid' : issues.length ? 'partial' : 'complete';
 const maxLevels = [20, 40, 50, 60, 70, 80, 90];
@@ -15,13 +15,19 @@ const allowedMain: Record<Build['artifacts'][number]['slot'], readonly StatKey[]
 const subLimits: Partial<Record<StatKey, number>> = { hp: 1793, attack: 117, defense: 139, hpPercent: 0.35, attackPercent: 0.35, defensePercent: 0.44, energyRecharge: 0.4, elementalMastery: 140, critRate: 0.24, critDamage: 0.48 };
 
 /** Resolves only the versioned snapshot carried by the build; never consults a live catalog. */
-export function resolveBuild(input: unknown, conditions: CombatConditions = {}): AttributePanel {
+export function resolveStaticBuild(input: unknown, conditions: CombatConditions = {}): AttributePanel {
   const stats = zeroStats();
   const issues: CalculationIssue[] = [];
   const contributions: Contribution[] = [];
   const categoryModifiers: Contribution[] = [];
-  const report = (code: CalculationIssue['code'], message: string) => { if (!issues.some(issue => issue.code === code && issue.message === message)) issues.push({ code, message }); };
-  const finish = (): AttributePanel => ({ status: statusOf(issues), stats, contributions, categoryModifiers, diagnostics: issues.map(issue => issue.message), issues });
+  let baseStats: AttributePanel['baseStats'];
+  const report = (code: CalculationIssue['code'], message: string, scope?: NonNullable<CalculationIssue['affects']>[number]) => {
+    const existing = issues.find(issue => issue.code === code && issue.message === message);
+    if (!existing) issues.push({ code, message, ...(scope ? { affects: [scope] } : {}) });
+    else if (!scope) delete existing.affects;
+    else if (existing.affects && !existing.affects.some(entry => entry.stat === scope.stat && entry.category === scope.category)) existing.affects.push(scope);
+  };
+  const finish = (): AttributePanel => ({ status: statusOf(issues), stats, contributions, categoryModifiers, ...(baseStats ? { baseStats } : {}), diagnostics: issues.map(issue => issue.message), issues });
   const parsed = buildSchema.safeParse(input);
   if (!parsed.success) {
     report('invalid-input', '真实配装快照格式或数值无效。');
@@ -51,6 +57,7 @@ export function resolveBuild(input: unknown, conditions: CombatConditions = {}):
   const baseDefense = character.attributes.base.defense * character.progression.curves.defense[build.level] + promotion.defense;
   const weaponAttack = weapon.baseAttack * weapon.attackCurve[build.weaponLevel] + weaponPromotion;
   const baseAttack = characterAttack + weaponAttack;
+  baseStats = { hp: baseHp, attack: baseAttack, defense: baseDefense };
   const add = (source: string, stat: StatKey, value: number, category?: Contribution['category']) => {
     if (!Number.isFinite(value)) { report('invalid-input', '配装成长或属性值不是有限数值。'); return; }
     const item = { source, stat, value, ...(category ? { category } : {}) };
@@ -68,11 +75,11 @@ export function resolveBuild(input: unknown, conditions: CombatConditions = {}):
     for (const modifier of entries) {
       if (modifier.minAscension !== undefined && build.ascension < modifier.minAscension) continue;
       if (modifier.hpAbove !== undefined) {
-        if (combat.hpRatio == null) { report('unknown', '生命比例尚未确认，无法判断生命条件效果。'); continue; }
+        if (combat.hpRatio == null) { report('unknown', '生命比例尚未确认，无法判断生命条件效果。', { stat: modifier.stat, category: modifier.category }); continue; }
         if (combat.hpRatio <= modifier.hpAbove) continue;
       }
       const value = modifier.values.length === 1 ? modifier.values[0] : modifier.values[refinement - 1];
-      if (value === undefined) { report('invalid-input', '所选精炼等级的效果参数缺失。'); continue; }
+      if (value === undefined) { report('invalid-input', '所选精炼等级的效果参数缺失。', { stat: modifier.stat, category: modifier.category }); continue; }
       add(source, modifier.stat, value, modifier.category);
     }
   }
@@ -112,64 +119,5 @@ export function resolveBuild(input: unknown, conditions: CombatConditions = {}):
   stats.attack = baseAttack * (1 + stats.attackPercent) + stats.attack;
   stats.defense = baseDefense * (1 + stats.defensePercent) + stats.defense;
   if (Object.values(stats).some(value => !Number.isFinite(value)) || stats.hp <= 0 || stats.attack < 0 || stats.defense < 0) report('invalid-input', '计算后的配装面板不是合法有限值。');
-  return finish();
-}
-
-/** Direct, non-reacting hit. The caller must explicitly choose the crit and reaction facts. */
-export function evaluateDamage(buildInput: unknown, damageInput: DamageRequest | undefined, enemyInput: Enemy | undefined, extraBonus = 0, attackOverride?: number): DamageResult {
-  const damage = damageInput === undefined ? undefined : damageRequestSchema.safeParse(damageInput);
-  const panel = resolveBuild(buildInput, damage?.success ? damage.data.conditions : undefined);
-  const issues = [...panel.issues];
-  const parts: DamageResult['parts'] = { attack: panel.status === 'invalid' ? null : attackOverride ?? panel.stats.attack, multiplier: null, bonus: null, crit: null, defense: null, resistance: null };
-  const report = (code: CalculationIssue['code'], message: string) => { if (!issues.some(issue => issue.code === code && issue.message === message)) issues.push({ code, message }); };
-  const finish = (): DamageResult => {
-    const status = statusOf(issues);
-    const values = Object.values(parts);
-    const product = values.every(value => value !== null) ? values.reduce<number>((total, value) => total * (value ?? 0), 1) : null;
-    if (product !== null && !Number.isFinite(product)) report('invalid-input', '伤害计算溢出。');
-    return { status: statusOf(issues), value: status === 'complete' && product !== null && Number.isFinite(product) ? product : null, panel, parts, diagnostics: issues.map(issue => issue.message), issues };
-  };
-  if (attackOverride !== undefined && (!Number.isFinite(attackOverride) || attackOverride < 0)) report('invalid-input', '效果修正后的攻击力必须为非负有限值。');
-  const build = buildSchema.safeParse(buildInput);
-  if (!build.success) return finish();
-  if (!damage) { report('unknown', '尚未选择真实技能和命中条件。'); return finish(); }
-  if (!damage.success) { report('invalid-input', '真实命中条件格式无效。'); return finish(); }
-  if (damage.data.stateOverrides?.length) { report('invalid-input', '按队员指定的命中覆盖需要项目上下文，请通过时间轴求值。'); return finish(); }
-  const skill = build.data.character.talents.find(entry => entry.id === damage.data.skillId);
-  if (!skill) { report('invalid-input', '真实技能定义不在当前角色快照中。'); return finish(); }
-  if (!skill.support.supported) {
-    report('unsupported', skill.support.reason || '所选技能命中尚未核验。');
-    return finish();
-  }
-  const level = build.data.talents[skill.category];
-  const multiplier = skill.parameters.find(parameter => parameter.id === skill.hits[damage.data.hitIndex]?.parameter)?.values[level - 1];
-  if (multiplier === undefined) report('invalid-input', '所选技能命中或天赋等级的倍率缺失。');
-  else if (multiplier < 0) report('invalid-input', '真实技能倍率不能为负值。');
-  else parts.multiplier = multiplier;
-  if (!Number.isFinite(extraBonus)) report('invalid-input', '区间伤害加成不是有限数值。');
-  const elementStat = `${skill.element}Bonus` as StatKey;
-  let damageBonus = panel.stats[elementStat] ?? 0;
-  let critRate = panel.stats.critRate;
-  let critDamage = panel.stats.critDamage;
-  for (const modifier of panel.categoryModifiers.filter(entry => entry.category === skill.category)) {
-    if (modifier.stat === elementStat) damageBonus += modifier.value;
-    else if (modifier.stat === 'critRate') critRate += modifier.value;
-    else if (modifier.stat === 'critDamage') critDamage += modifier.value;
-    else report('unsupported', '此类别专属属性修正尚未支持。');
-  }
-  parts.bonus = 1 + damageBonus + extraBonus;
-  if (parts.bonus < 0 || critDamage < 0) report('invalid-input', '真实伤害乘区或暴击伤害不能为负值。');
-  if (damage.data.crit === null) report('unknown', '暴击条件尚未确认。');
-  else parts.crit = damage.data.crit === 'critical' ? 1 + critDamage : damage.data.crit === 'expected' ? 1 + Math.max(0, Math.min(1, critRate)) * critDamage : 1;
-  if (damage.data.reaction === null) report('unknown', '反应条件尚未确认。');
-  const enemy = enemyInput === undefined ? undefined : enemySchema.safeParse(enemyInput);
-  if (!enemy) report('unknown', '目标等级与抗性尚未设置。');
-  else if (!enemy.success) report('invalid-input', '目标等级、防御或抗性条件无效。');
-  else {
-    const own = build.data.level + 100;
-    parts.defense = own / (own + (enemy.data.level + 100) * (1 - enemy.data.defenseReduction) * (1 - enemy.data.defenseIgnore));
-    const resistance = enemy.data.resistances[skill.element];
-    parts.resistance = resistance < 0 ? 1 - resistance / 2 : resistance < 0.75 ? 1 - resistance : 1 / (1 + 4 * resistance);
-  }
   return finish();
 }

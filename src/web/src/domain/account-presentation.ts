@@ -1,13 +1,13 @@
-import { getArtifactMain, loadCatalog } from '@leyline/game-data';
+import { getArtifactMain, getReactionRules, loadCatalog } from '@leyline/game-data';
 import type { Build, StatKey } from '@leyline/schema';
 import type { AccountArtifact, LocalAccount } from './account';
 import { parseAccount } from './account';
 import { ratioStat } from './account-real';
 
-type AccountGameData = { catalog: Awaited<ReturnType<typeof loadCatalog>>; main: Build['artifactMain'] };
+type AccountGameData = { catalog: Awaited<ReturnType<typeof loadCatalog>>; main: Build['artifactMain']; reactions: Awaited<ReturnType<typeof getReactionRules>> };
 let gameData: Promise<AccountGameData> | undefined;
 export function loadAccountGameData(): Promise<AccountGameData> {
-  gameData ??= Promise.all([loadCatalog(), getArtifactMain()]).then(([catalog, main]) => ({ catalog, main })).catch(error => { gameData = undefined; throw error; });
+  gameData ??= Promise.all([loadCatalog(), getArtifactMain(), getReactionRules()]).then(([catalog, main, reactions]) => ({ catalog, main, reactions })).catch(error => { gameData = undefined; throw error; });
   return gameData;
 }
 export function artifactMainValue(item: AccountArtifact, main?: Build['artifactMain']): number | undefined {

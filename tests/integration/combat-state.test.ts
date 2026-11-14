@@ -125,6 +125,7 @@ describe.skipIf(!existsSync(source))('combat-state format derivatives of the rec
     setDamageStateOverride(project, 'state-query', actor.id, { hpRatio: 0.9 });
     expect(evaluateTimeline(project).points[0].real?.panel.stats.critRate).toBeCloseTo(baseRate, 12);
     setDamageStateOverride(project, 'state-query', actor.id, { hpRatio: null });
+    project.timeline[0].damage!.crit = 'expected';
     const unknown = evaluateTimeline(project);
     expect(unknown.diagnostics.some(issue => issue.code === 'unknown' && issue.message.includes('生命比例'))).toBe(true);
     expect(unknown.points[0].value).toBeNull();

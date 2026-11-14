@@ -15,9 +15,9 @@ const selectedId = ref('');
 const selected = computed(() => store.library.definitions.find(entry => entry.id === selectedId.value));
 const error = ref('');
 const fileInput = ref<HTMLInputElement>();
-const operations: ExpressionNode['op'][] = ['constant', 'input', 'add', 'multiply', 'divide', 'condition', 'unsupported'];
+const operations = ['constant', 'input', 'add', 'multiply', 'divide', 'condition', 'unsupported'] as const;
 const units: QuantityUnit[] = ['scalar', 'attack', 'damage'];
-const op = ref<ExpressionNode['op']>('constant');
+const op = ref<(typeof operations)[number]>('constant');
 function create() {
   const definition = createDefinition(name.value, kind.value);
   store.library.definitions.push(definition);
@@ -33,10 +33,6 @@ function addNode() {
     : operation === 'input' ? { id, op: operation, key: 'attack', unit: 'attack' }
     : operation === 'condition' ? { id, op: operation, key: '触发条件', yes: first, no: first }
     : operation === 'unsupported' ? { id, op: operation, capability: 'snapshot' }
-    : operation === 'attribute' ? { id, op: operation, key: 'attack', unit: 'attack' }
-    : operation === 'capture' ? { id, op: operation, at: '待选择记录', value: first }
-    : operation === 'history' ? { id, op: operation, mode: 'sum', startMs: 0, endMs: 6000 }
-    : operation === 'game-damage' ? { id, op: operation }
     : { id, op: operation, left: first, right: first };
   definition.nodes.push(node);
 }

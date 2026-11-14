@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "aether",
-  "revision": "2",
+  "revision": "3",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -840,10 +840,61 @@
           "template": "{param10:P}/{param11:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param5",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param6",
+          "category": "charged",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param7",
+          "category": "charged",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param9",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param11",
+          "category": "plunge",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
-        "supported": false,
-        "reason": "已收录原始文本和等级参数，伤害与附魔规则尚未核验。"
+        "supported": true,
+        "reason": "已核验未元素化基础形态的普通、重击和下落单次命中参数；施放不生成攻击序列。"
       }
     }
   ],
@@ -853,8 +904,8 @@
     "text": "complete",
     "numbers": "complete",
     "calculation": {
-      "supported": false,
-      "reason": "已收录原始文本和数值，角色伤害与效果规则尚未核验。"
+      "supported": true,
+      "reason": "基础形态零命物理普通、重击和下落命中；元素形态独立核验。"
     },
     "notes": [
       "当前是未元素化的基础形态，仅配置普通攻击。元素战技与元素爆发请查看对应元素形态。"

@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "kind": "character-definition",
   "id": "yelan",
-  "revision": "1",
+  "revision": "2",
   "dataVersion": "genshin-db-8e5badd-content-v2",
   "origin": "builtin",
   "identity": {
@@ -647,10 +647,63 @@
           "template": "{param9:P}/{param10:P}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param2",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param3",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param4",
+          "category": "normal",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param5",
+          "category": "charged",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param6",
+          "category": "charged",
+          "scalingStat": "attack",
+          "element": "hydro"
+        },
+        {
+          "parameter": "param7",
+          "category": "charged",
+          "scalingStat": "hp",
+          "element": "hydro"
+        },
+        {
+          "parameter": "param8",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param9",
+          "category": "plunge",
+          "scalingStat": "attack"
+        },
+        {
+          "parameter": "param10",
+          "category": "plunge",
+          "scalingStat": "attack"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -760,10 +813,16 @@
           "template": "{param4:F1}秒"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "skill",
+          "scalingStat": "hp"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     },
     {
@@ -902,10 +961,21 @@
           "template": "{param5:I}"
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "parameter": "param1",
+          "category": "burst",
+          "scalingStat": "hp"
+        },
+        {
+          "parameter": "param2",
+          "category": "burst",
+          "scalingStat": "hp"
+        }
+      ],
       "support": {
         "supported": false,
-        "reason": "技能资料已收录，命中结构、特殊取值或机制尚未核验，不能完整计算。"
+        "reason": "已核对伤害基数参数绑定；条件、被动、命座及动态效果仍待接入，不作为完整伤害支持。"
       }
     }
   ],

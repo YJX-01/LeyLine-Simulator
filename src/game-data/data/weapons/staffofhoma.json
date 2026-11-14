@@ -221,14 +221,146 @@
     155.6,
     186.7
   ],
-  "modifiers": [],
+  "modifiers": [
+    {
+      "stat": "hpPercent",
+      "values": [
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4
+      ]
+    }
+  ],
   "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；生命值提升20%。此外，基于装备该武器的角色生命值上限的0.8%，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得1%基于生命值上限的攻击力提升。"
+    "supported": true,
+    "reason": "已核验R1至R5生命上限提升及动态生命转攻击；低生命增量严格低于50%，缺条件保持未知。"
   },
   "source": {
     "repository": "theBowja/genshin-db",
     "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
     "path": "src/data/stats/weapons.json#staffofhoma"
-  }
+  },
+  "combatRules": [
+    {
+      "id": "hp-to-attack",
+      "revision": "1",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/staffofhoma.json#r1-r5"
+      },
+      "nodes": [
+        {
+          "id": "hp",
+          "op": "attribute",
+          "key": "hp",
+          "unit": "hp"
+        },
+        {
+          "id": "one-hp",
+          "op": "constant",
+          "quantity": {
+            "value": 1,
+            "unit": "hp"
+          }
+        },
+        {
+          "id": "hp-points",
+          "op": "divide",
+          "left": "hp",
+          "right": "one-hp"
+        },
+        {
+          "id": "rate",
+          "op": "refinement",
+          "values": [
+            0.008,
+            0.01,
+            0.012,
+            0.014,
+            0.016
+          ],
+          "unit": "attack"
+        },
+        {
+          "id": "base",
+          "op": "multiply",
+          "left": "hp-points",
+          "right": "rate"
+        },
+        {
+          "id": "hp-ratio",
+          "op": "combat-state",
+          "field": "hpRatio"
+        },
+        {
+          "id": "half",
+          "op": "constant",
+          "quantity": {
+            "value": 0.5,
+            "unit": "scalar"
+          }
+        },
+        {
+          "id": "low-hp",
+          "op": "compare",
+          "left": "hp-ratio",
+          "right": "half",
+          "comparison": "lt"
+        },
+        {
+          "id": "low-rate",
+          "op": "refinement",
+          "values": [
+            0.01,
+            0.012,
+            0.014,
+            0.016,
+            0.018
+          ],
+          "unit": "attack"
+        },
+        {
+          "id": "low-bonus",
+          "op": "multiply",
+          "left": "hp-points",
+          "right": "low-rate"
+        },
+        {
+          "id": "zero-attack",
+          "op": "constant",
+          "quantity": {
+            "value": 0,
+            "unit": "attack"
+          }
+        },
+        {
+          "id": "conditional",
+          "op": "select",
+          "condition": "low-hp",
+          "yes": "low-bonus",
+          "no": "zero-attack"
+        },
+        {
+          "id": "total",
+          "op": "add",
+          "left": "base",
+          "right": "conditional"
+        }
+      ],
+      "effects": [
+        {
+          "id": "attack",
+          "startMs": 0,
+          "endMs": 3600000,
+          "permanent": true,
+          "value": "total",
+          "attribute": "attack",
+          "unit": "attack"
+        }
+      ]
+    }
+  ]
 }

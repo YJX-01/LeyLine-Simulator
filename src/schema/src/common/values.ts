@@ -2,7 +2,7 @@ import { z } from 'zod';
 export const idSchema = z.string().min(1).max(160);
 export const finiteSchema = z.number().finite();
 export const millisecondsSchema = z.number().int().nonnegative().max(3600000);
-export const quantityUnitSchema = z.enum(['scalar', 'attack', 'damage']);
+export const quantityUnitSchema = z.enum(['scalar', 'attack', 'hp', 'defense', 'elementalMastery', 'damage']);
 export const quantitySchema = z.object({ value: finiteSchema, unit: quantityUnitSchema }).strict();
 export const supportSchema = z.object({ supported: z.boolean(), reason: z.string().max(1000) }).strict();
 export const contentSourceSchema = z.object({ repository: idSchema, commit: idSchema, path: z.string().min(1).max(500) }).strict();

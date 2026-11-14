@@ -4,7 +4,7 @@ import { createAccount, cloneAccount, parseAccount, equipArtifact, artifactOwner
 import { previewEnkaImport, confirmEnkaImport } from '../../src/web/src/domain/enka-import';
 import { getWeapon } from '@leyline/game-data';
 import { resolveBuild, evaluateDamage, evaluateTimeline } from '@leyline/engine';
-import { addActorFromBuild, addSkillHits, defaultEnemy } from '../../src/web/src/domain/real-project';
+import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../src/web/src/domain/workbench-project';
 const path='.references/enka/official-example.json';
 describe.skipIf(!existsSync(path))('Enka official documented public showcase (actual response)',()=>{
@@ -96,7 +96,7 @@ describe.skipIf(!existsSync(path))('explicit hit conditions derived from recorde
     expect(active.stats.critRate-inactive.stats.critRate).toBeCloseTo(0.14,10);
     const pending=resolveBuild(build);
     expect(pending.stats.critRate).toBe(inactive.stats.critRate);
-    expect(pending.issues).toContainEqual({code:'unknown',message:'生命比例尚未确认，无法判断生命条件效果。'});
+    expect(pending.issues).toContainEqual(expect.objectContaining({code:'unknown',message:'生命比例尚未确认，无法判断生命条件效果。'}));
     expect(pending.status).toBe('partial');
     const request={skillId:'xingqiu.skill',hitIndex:0,crit:'noncritical' as const,reaction:'none' as const};
     expect(evaluateDamage(build,{...request,conditions:{hpRatio:1}},undefined).panel.stats.critRate).toBe(active.stats.critRate);
@@ -105,19 +105,19 @@ describe.skipIf(!existsSync(path))('explicit hit conditions derived from recorde
     const project=createEmptyProject(),id=addActorFromBuild(project,build);
     expect(project.enemy).toBeUndefined();
     expect(project.definitions.find(definition=>definition.id===`${id}-real-damage`)!.source.verified).toBe(false); // Recorded constellation is outside the verified scope.
-    addSkillHits(project,id,'xingqiu.skill',0);
+    addSkillHit(project,id,'xingqiu.skill',0,0);
     expect(project.timeline.every(record=>record.damage?.crit===null && record.damage.reaction===null)).toBe(true);
     // Counterfactual C0 calculation from the same recorded cultivation/equipment,
     // with an explicit target assumption; not an observed player combat sequence.
     const calculation=structuredClone(build);calculation.constellation=0;
     const axis=createEmptyProject(),actor=addActorFromBuild(axis,calculation);axis.enemy=defaultEnemy();
-    const unknown=addSkillHits(axis,actor,'xingqiu.skill',0,{crit:'expected',reaction:'none'});
-    const high=addSkillHits(axis,actor,'xingqiu.skill',1000,{crit:'expected',reaction:'none',conditions:{hpRatio:1}});
-    const low=addSkillHits(axis,actor,'xingqiu.skill',2000,{crit:'expected',reaction:'none',conditions:{hpRatio:0.9}});
+    const unknown=addSkillHit(axis,actor,'xingqiu.skill',0,0,{crit:'expected',reaction:'none'});
+    const high=addSkillHit(axis,actor,'xingqiu.skill',0,1000,{crit:'expected',reaction:'none',conditions:{hpRatio:1}});
+    const low=addSkillHit(axis,actor,'xingqiu.skill',0,2000,{crit:'expected',reaction:'none',conditions:{hpRatio:0.9}});
     const result=evaluateTimeline(axis),point=(id:string)=>result.points.find(point=>point.id===id)!;
-    expect(point(unknown[0]).value).toBeNull();
-    expect(point(high[0]).value).not.toBeNull();expect(point(low[0]).value).not.toBeNull();
-    expect(point(high[0]).real!.panel.stats.critRate-point(low[0]).real!.panel.stats.critRate).toBeCloseTo(0.14,10);
+    expect(point(unknown).value).toBeNull();
+    expect(point(high).value).not.toBeNull();expect(point(low).value).not.toBeNull();
+    expect(point(high).real!.panel.stats.critRate-point(low).real!.panel.stats.critRate).toBeCloseTo(0.14,10);
   });
 });
 

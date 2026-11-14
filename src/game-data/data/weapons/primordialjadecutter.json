@@ -221,14 +221,87 @@
     155.6,
     186.7
   ],
-  "modifiers": [],
+  "modifiers": [
+    {
+      "stat": "hpPercent",
+      "values": [
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4
+      ]
+    }
+  ],
   "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；生命值提升20%。此外，基于装备该武器的角色生命值上限的1.2%，获得攻击力加成。"
+    "supported": true,
+    "reason": "已核验R1至R5生命上限提升及动态生命转攻击，复用同一属性依赖图。"
   },
   "source": {
     "repository": "theBowja/genshin-db",
     "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
     "path": "src/data/stats/weapons.json#primordialjadecutter"
-  }
+  },
+  "combatRules": [
+    {
+      "id": "hp-to-attack",
+      "revision": "1",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/primordialjadecutter.json#r1-r5"
+      },
+      "nodes": [
+        {
+          "id": "hp",
+          "op": "attribute",
+          "key": "hp",
+          "unit": "hp"
+        },
+        {
+          "id": "one-hp",
+          "op": "constant",
+          "quantity": {
+            "value": 1,
+            "unit": "hp"
+          }
+        },
+        {
+          "id": "hp-points",
+          "op": "divide",
+          "left": "hp",
+          "right": "one-hp"
+        },
+        {
+          "id": "rate",
+          "op": "refinement",
+          "values": [
+            0.012,
+            0.015,
+            0.018,
+            0.021,
+            0.024
+          ],
+          "unit": "attack"
+        },
+        {
+          "id": "base",
+          "op": "multiply",
+          "left": "hp-points",
+          "right": "rate"
+        }
+      ],
+      "effects": [
+        {
+          "id": "attack",
+          "startMs": 0,
+          "endMs": 3600000,
+          "permanent": true,
+          "value": "base",
+          "attribute": "attack",
+          "unit": "attack"
+        }
+      ]
+    }
+  ]
 }

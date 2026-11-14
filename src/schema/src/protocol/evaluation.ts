@@ -7,6 +7,10 @@ export interface EffectInstance {
   id: string; owner: string; slot: string; definition: string; version: string; effect: string;
   action: string | null; startMs: number; endMs: number; recipient: string; attribute: string;
   unit: QuantityUnit; disabled: boolean;
+  content?: { entity: string; rule: string };
+  permanent?: true;
+  unconfirmed?: true;
+  requiresApplication?: true;
 }
 export interface AttributeRead {
   id: string; actor: string; key: string; unit: QuantityUnit; timeMs: number;

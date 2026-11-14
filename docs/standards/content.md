@@ -14,6 +14,12 @@
 
 武器与套装也各自使用共同schema，静态修饰属于实体本身。ID用于引用，中文名称用于展示；命中、参数、被动和命座标识必须唯一，支持的命中不能引用缺失参数。资源和采集记录在assets及tools/data管理，不要求每个角色重复维护资源来源清单。
 
+内容规则可显式声明support，未完成的规则保持未支持，不能由固定值修订解除。装备或队友提供的基础加值使用伤害单位的baseDamageBonus，不加入面板或百分比增伤；requiresApplication与逐命中effectApplications保留必要来源事实，详见[基础加值契约](../architecture/hit-base-bonuses.md)。
+
+技能可以明确声明没有独立伤害（noIndependentDamage），此时不得伪造命中；该标记也不表示辅助/强化效果已经实现。命中snapshot声明所需来源技能、属性集合和依据，项目显式关联捕获记录及阶段，详见[属性捕获](../architecture/hit-attribute-capture.md)；不从技能文字或最近一次施放自动推导。
+
+技能inputs声明有来源的数值范围及整数要求，additionalScaling.count引用本技能输入；damage.inputs为本次命中提供明确值或未知，详见[命中输入与附加缩放](../architecture/hit-count-scaling.md)。不自动填零、不从队员输入或其它事件继承，不将层数误作额外命中次数或百分比增伤。
+
 比例以小数保存（46.6%为0.466），等级是整数，时间轴使用整数毫秒。源参数保留原精度；单位只在明确边界转换一次。所有数值族及替换依据见[精度审计](../references/numeric-precision.md)。JavaScript使用双精度运算，不声称复制游戏内部float32逐步运算；浮点尾数不等于新增可信精度。
 
 作者只编辑`src/game-data/data`；`pnpm data:build`校验并生成，`pnpm data:check`只读比较。采集和候选更新是显式动作，不能由构建自动覆盖正式JSON。内容版本变化也不能替换既有账号/轴里的数值快照。

@@ -1,0 +1,63 @@
+{
+  "mechanicsSource": {
+    "repository": "KQM-git/TCL",
+    "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5"
+  },
+  "numericSource": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
+  },
+  "facts": [
+    {
+      "entity": "cinnabarspindle",
+      "mechanicsPath": "docs/equipment/weapons/swords.md",
+      "numericPath": "src/data/ChineseSimplified/weapons/cinnabarspindle.json",
+      "sourceStat": "defense",
+      "recipient": "self",
+      "category": "skill",
+      "refinementRates": [
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8
+      ],
+      "sourceStatDynamic": true,
+      "cooldownMs": 1500,
+      "clearDelayMs": 100,
+      "applicationFactRequired": true,
+      "cooldownAutomaticallyDerived": false
+    },
+    {
+      "entity": "yunjin",
+      "mechanicsPath": "docs/characters/geo/yun-jin.md",
+      "numericPath": "src/data/ChineseSimplified/talents/yunjin.json",
+      "skillId": "yunjin.burst",
+      "parameter": "param2",
+      "sourceStat": "defense",
+      "recipient": "team",
+      "category": "normal",
+      "sourceStatDynamic": true,
+      "durationMs": 12000,
+      "quotaPerRecipient": 30,
+      "applicationFactRequired": true,
+      "quotaAutomaticallyDerived": false,
+      "ascensionPassive4Implemented": false,
+      "completeCharacterSupported": false
+    },
+    {
+      "entity": "shenhe",
+      "mechanicsPath": "docs/characters/cryo/shenhe.md",
+      "numericPath": "src/data/ChineseSimplified/talents/shenhe.json",
+      "skillId": "shenhe.skill",
+      "parameter": "param3",
+      "sourceStat": "attack",
+      "sourceStatDynamic": true,
+      "recipientElement": "cryo",
+      "canonicalRuleAdopted": false,
+      "scope": "Independent formula context only: current Shenhe ATK-based Quill contribution can be added to a Kaeya icicle whose recipient attributes are captured. No Shenhe runtime rule or complete team support is claimed."
+    }
+  ],
+  "upstreamImplementationCopied": false,
+  "gameObservationsProvided": false
+}
