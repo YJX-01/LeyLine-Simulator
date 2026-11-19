@@ -1,28 +1,138 @@
 {
   "id": "martialartist",
   "name": "武人",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    3,
+    4
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.set.martialartist",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/martialartist.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.martialartist.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "martialartist",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.martialartist"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.martialartist.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "martialartist",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.martialartist"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.martialartist"
+  ],
+  "rarity": 4,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：普通攻击与重击造成的伤害提高15%。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.martialartist.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：施放元素战技后的8秒内，普通攻击和重击造成的伤害提升25%。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.martialartist.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/martialartist.json"
-  },
-  "rarity": 4
+  ]
 }

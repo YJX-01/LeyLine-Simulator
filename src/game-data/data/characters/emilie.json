@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "emilie",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "艾梅莉埃",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000099,
     "region": "枫丹"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1056.2786,
-      "attack": 26.068,
-      "defense": 56.8385,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critDamage",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,635 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.emilie.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#emilie"
+        },
+        {
+          "id": "content.emilie.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#emilie/combat1"
+        },
+        {
+          "id": "content.emilie.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#emilie/combat2"
+        },
+        {
+          "id": "content.emilie.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#emilie/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.normal",
+            "hitId": "emilie.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.skill",
+            "hitId": "emilie.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.skill.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.skill",
+            "hitId": "emilie.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.skill.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.skill",
+            "hitId": "emilie.skill.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.skill.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.skill",
+            "hitId": "emilie.skill.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "emilie.burst",
+            "hitId": "emilie.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.emilie.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.emilie.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "emilie",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.emilie.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.emilie.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1056.2786,
+      "attack": 26.068,
+      "defense": 56.8385,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critDamage",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "emilie.normal",
@@ -397,6 +1014,40 @@
       "description": "普通攻击\n进行至多四段的连续枪击。\n\n重击\n消耗一定体力，进行向上的挑斩攻击。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param6:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param8:P}/{param9:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -588,94 +1239,451 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param6:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param8:P}/{param9:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "emilie.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "emilie.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "emilie.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "emilie.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "emilie.normal.param5",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param7",
+          "id": "emilie.normal.param7",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "emilie.normal.param8",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "emilie.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.emilie.normal.parameters"
+      ]
     },
     {
       "id": "emilie.skill",
@@ -684,6 +1692,36 @@
       "flavorText": "「世间之景，正如无数芬芳、色彩与歌声悠长的应和。」",
       "category": "skill",
       "element": "dendro",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "柔灯之匣·一阶攻击伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "柔灯之匣·二阶攻击伤害",
+          "template": "{param3:F1P}*2"
+        },
+        {
+          "label": "柔灯之匣持续时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "灵息之刺伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "灵息之刺冷却间隔",
+          "template": "{param6:F1}秒"
+        },
+        {
+          "label": "技能冷却时间",
+          "template": "{param7:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -833,62 +1871,231 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "柔灯之匣·一阶攻击伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "柔灯之匣·二阶攻击伤害",
-          "template": "{param3:F1P}*2"
-        },
-        {
-          "label": "柔灯之匣持续时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "灵息之刺伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "灵息之刺冷却间隔",
-          "template": "{param6:F1}秒"
-        },
-        {
-          "label": "技能冷却时间",
-          "template": "{param7:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "emilie.skill.param1",
+          "element": "dendro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "emilie.skill.param2",
+          "element": "dendro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.skill",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.skill.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "emilie.skill.param3",
+          "element": "dendro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.skill",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.skill.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param5",
+          "id": "emilie.skill.param5",
+          "element": "dendro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.skill",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.skill.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.emilie.skill.parameters"
+      ]
     },
     {
       "id": "emilie.burst",
@@ -897,6 +2104,24 @@
       "flavorText": "无论是什么样的香水，自接触空气的那一刻开始，其香调便会随着时间推移而改变，最终消溶在风与草木的低语中。某种意义上，人们永远也无法欣赏同一瓶香水。\n众生的轨迹也是这样。因此，或许可以说，香水便是人生的演绎。",
       "category": "burst",
       "element": "dendro",
+      "details": [
+        {
+          "label": "柔灯之匣·三阶攻击伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "柔灯之匣·三阶持续时间",
+          "template": "{param2:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -983,35 +2208,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "柔灯之匣·三阶攻击伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "柔灯之匣·三阶持续时间",
-          "template": "{param2:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "emilie.burst.param1",
+          "element": "dendro",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "emilie.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.emilie.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.emilie.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.emilie.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1020,30 +2276,21 @@
       "name": "余薰",
       "description": "每萃集两枚香韵，柔灯之匣·二阶将消耗香韵，并浸析出「清露香氛」，对敌人造成相当于艾梅莉埃攻击力600%的草元素范围伤害。该伤害不被视为元素战技伤害。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "emilie.passive2",
       "name": "精馏",
       "description": "基于艾梅莉埃的攻击力，提升艾梅莉埃对处于燃烧状态下的敌人造成的伤害：每1000点攻击力都将提升15%伤害，至多通过这种方式提升36%伤害。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "emilie.passive3",
       "name": "顶空集香",
       "description": "场上存在艾梅莉埃自己创造的柔灯之匣时，队伍中附近的所有角色对燃烧伤害的火元素抗性提升85%。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1052,20 +2299,14 @@
       "name": "淡香浸析",
       "description": "撷萃调香与突破天赋「余薰」的清露香氛造成的伤害提升20%，后者需要解锁突破天赋「余薰」。\n此外，队伍中附近的角色对敌人触发燃烧反应或对处于燃烧状态下的敌人造成草元素伤害时，会额外生成一枚香韵。此效果每2.9秒至多触发一次。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "湖光顶调",
       "description": "撷萃调香、香氛演绎或突破天赋「余薰」的清露香氛（需解锁该突破天赋）命中敌人时，该敌人的草元素抗性降低30%，持续10秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1077,20 +2318,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "柔灯心韵",
       "description": "香氛演绎的持续时间延长2秒，且每名敌人被香露选为目标的间隔降低0.3秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1102,28 +2337,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "茉洁香迹",
       "description": "施放撷萃调香或香氛演绎时，艾梅莉埃将获得「香迹留驻」，持续5秒。\n持续期间，艾梅莉埃进行普通攻击或重击后，将会产生一枚香韵，且艾梅莉埃的普通攻击与重击将转为无法被附魔覆盖的草元素伤害，并提升造成的伤害，提升值相当于艾梅莉埃攻击力的300%。\n\n「香迹留驻」效果将在通过这种方式产生4枚香韵或持续时间结束时解除。每12秒至多获得一次「香迹留驻」效果。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.emilie.growth",
+    "content.character-curves"
+  ]
 }

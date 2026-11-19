@@ -19,7 +19,7 @@ async function queryProject(timeMs = 1000): Promise<Project> {
   const project = await recordedProject(source);
   const actor = project.candidate.actors[0];
   project.timeline.push({ id: 'state-query', actor: actor.id, timeMs, order: 0, kind: 'damage',
-    definition: `${actor.id}-real-damage`, damage: { skillId: 'xingqiu.skill', hitIndex: 0, crit: null, reaction: null } });
+    definition: `${actor.id}-real-damage`, damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: null, reaction: null } });
   project.combatStates = [{ id: 'hp-annotation', actor: actor.id, startMs: 1000, endMs: 2000, values: { hpRatio: 1, shielded: false } }];
   return project;
 }

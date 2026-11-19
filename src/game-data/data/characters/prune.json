@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "prune",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "布伦妮",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000132,
     "region": "蒙德"
-  },
-  "attributes": {
-    "base": {
-      "hp": 811.494,
-      "attack": 18.52032,
-      "defense": 48.64125,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "attackPercent",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,569 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.prune.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#prune"
+        },
+        {
+          "id": "content.prune.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#prune/combat1"
+        },
+        {
+          "id": "content.prune.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#prune/combat2"
+        },
+        {
+          "id": "content.prune.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#prune/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param6",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.normal",
+            "hitId": "prune.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.skill",
+            "hitId": "prune.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.skill.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.skill",
+            "hitId": "prune.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.burst",
+            "hitId": "prune.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.burst.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "prune.burst",
+            "hitId": "prune.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.prune.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.prune.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "prune",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.prune.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.prune.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 811.494,
+      "attack": 18.52032,
+      "defense": 48.64125,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "attackPercent",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "prune.normal",
@@ -397,6 +948,36 @@
       "description": "普通攻击\n挥舞「狩灾誓锤」，进行至多三段的攻击，造成风元素伤害。\n\n重击\n消耗一定体力，以升势挥锤，对前方的敌人造成风元素伤害。\n\n下落攻击\n凝聚风元素的力量，从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成风元素范围伤害。",
       "category": "normal",
       "element": "anemo",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param5:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param7:F1P}/{param8:F1P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -567,84 +1148,396 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param5:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param7:F1P}/{param8:F1P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "prune.normal.param1",
+          "element": "anemo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "prune.normal.param2",
+          "element": "anemo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "prune.normal.param3",
+          "element": "anemo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "prune.normal.param4",
+          "element": "anemo",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param6",
+          "id": "prune.normal.param6",
+          "element": "anemo",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param6",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "prune.normal.param7",
+          "element": "anemo",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "prune.normal.param8",
+          "element": "anemo",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "anemo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.prune.normal.parameters"
+      ]
     },
     {
       "id": "prune.skill",
@@ -652,6 +1545,20 @@
       "description": "怀揣着打败「邪恶」魔女、拯救「德斯卡戴」的决心，解放风的力量吧！布伦妮使用「狩灾誓锤」敲击「诱巫饵铃」，造成风元素伤害。\n若布伦妮通过该次攻击对敌人触发了扩散或星扩散反应，则在接下来6秒内，叮铃铃·猎魔之音将被替换为咚锵锵·裁魔之惩。\n\n咚锵锵·裁魔之惩\n将先前参与扩散或星扩散反应的元素类型缠绕于锤，并使**「狩灾誓锤」**发生元素转化，点按施放时，布伦妮跃起并将「狩灾誓锤」向前踢出，对面前的敌人造成对应的元素类型伤害。",
       "category": "skill",
       "element": "anemo",
+      "details": [
+        {
+          "label": "叮铃铃·猎魔之音伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "咚锵锵·裁魔之惩伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -717,36 +1624,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "叮铃铃·猎魔之音伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "咚锵锵·裁魔之惩伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "prune.skill.param1",
+          "element": "anemo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "prune.skill.param2",
+          "element": "anemo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.skill",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.skill.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.prune.skill.parameters"
+      ]
     },
     {
       "id": "prune.burst",
@@ -754,6 +1746,28 @@
       "description": "布伦妮轻摇「诱巫饵铃」，对周围的敌人造成风元素伤害。随后「诱巫饵铃」将进入「寻猎」模式。\n\n诱巫饵铃·寻猎\n在该模式下，「诱巫饵铃」将跟随当前场上角色，并间歇性攻击周围的敌人，造成风元素范围伤害，该伤害视为元素爆发伤害。",
       "category": "burst",
       "element": "anemo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "诱巫饵铃伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "寻猎模式持续时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param5:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -861,44 +1875,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "诱巫饵铃伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "寻猎模式持续时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param5:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "prune.burst.param1",
+          "element": "anemo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "prune.burst.param2",
+          "element": "anemo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "prune.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.prune.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.prune.burst.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.prune.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -907,30 +1998,21 @@
       "name": "裁断追惩",
       "description": "元素爆发**铃鸣·狩魔之刻**中，处于「寻猎」模式下的「诱巫饵铃」对敌人造成伤害后，若该次伤害对敌人触发了扩散或星扩散反应，则还会在敌人面前召唤出一柄依据本次扩散或星扩散反应进行元素转化的**「狩灾誓锤」**向其砸下，造成布伦妮攻击力150%的对应类型的元素伤害，该伤害视为元素爆发伤害。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "prune.passive2",
       "name": "振铃同心",
       "description": "当布伦妮使用发生过元素转化的**「狩灾誓锤」**命中敌人后，队伍中附近的其他角色将获得持续5秒的「振铃鼓舞」效果：普通攻击、重击、下落攻击、元素战技或元素爆发对敌人造成伤害时，基于其获得「振铃鼓舞」效果时，布伦妮攻击力超过2000的部分，提升本次攻击造成的伤害：每点攻击力都会使本次攻击造成的伤害提升0.025%，至多提升50%。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "prune.passive3",
       "name": "改装！敲敲打打！",
       "description": "合成角色天赋素材时，有10%概率额外产生一份地区相同的其他随机天赋素材，等阶与合成后获得的素材相同。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -939,20 +2021,14 @@
       "name": "立下寻救的誓言，旅途由此开端",
       "description": "经过元素转化后的**「狩灾誓锤」**的攻击命中敌人后，将为布伦妮恢复2点元素能量，该效果每1.8秒至多触发一次。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "整理杂乱的包袱，元素妙力果然",
       "description": "元素爆发**铃鸣·狩魔之刻**中，当「诱巫饵铃」处于「寻猎」模式时，布伦妮还会获得「寻猎魔女」效果：布伦妮的攻击力提升10%；「诱巫饵铃」和经过元素转化的**「狩灾誓锤」**命中敌人时，还会进一步使攻击力提升5%。通过上述方式，至多使攻击力提升至40%。\n效果存在期间重新施放铃鸣·狩魔之刻，将移除原有的上述效果。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -964,20 +2040,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "循风同行回头看，影子还缺一半",
       "description": "经过元素转化的**「狩灾誓锤」**在命中敌人后，会再次弹起并于附近敌人处落下，对命中的敌人造成80%攻击力的对应元素类型的元素伤害。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -989,28 +2059,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "故事结尾在这儿，念给伙伴听完",
       "description": "元素爆发**铃鸣·狩魔之刻**中「诱巫饵铃」的「寻猎」模式的持续时间延长4秒。\n此外，队伍中处于「振铃鼓舞」效果影响下的角色在对敌人触发任意元素反应后，都会使布伦妮及附近当前场上拥有「振铃鼓舞」效果的其他角色攻击力提升350点，持续5秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.prune.growth",
+    "content.character-curves"
+  ]
 }

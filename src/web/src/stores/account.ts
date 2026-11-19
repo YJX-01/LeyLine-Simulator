@@ -5,7 +5,7 @@ import { createAccount, parseAccount, type LocalAccount } from '../domain/accoun
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 
-const storageKey = 'leyline-account-v2';
+const storageKey = 'leyline-account-v5';
 const maximumBytes = 8 * 1024 * 1024;
 export const useAccountStore = defineStore('local-account', () => {
   const account = ref<LocalAccount>(createAccount());

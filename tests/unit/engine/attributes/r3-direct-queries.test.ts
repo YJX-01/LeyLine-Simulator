@@ -1,5 +1,6 @@
+import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { describe, expect, it } from 'vitest';
-import { DATA_VERSION, getArtifactMain, getCharacter, getReactionRules, getWeapon } from '@leyline/game-data';
+import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
 import { type Build, type DamageRequest } from '@leyline/schema';
 import { compareTimelineLoadouts, evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
 import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
@@ -20,7 +21,7 @@ const cases = [
     attribute: (base: number) => 13.356 * 8.349 + 47.78865 + base * 5.968 + 46.7 },
 ];
 async function setting(id: string, weapon: string, constellation: number): Promise<Build> {
-  return { dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(), reactionRules: await getReactionRules(),
+  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
     level: 90, ascension: 6, constellation, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1, artifacts: [], sets: [] };
 }
 
@@ -28,17 +29,17 @@ describe('R3 reviewed direct queries, without broad support flag changes', () =>
   for (const entry of cases) for (let constellation = 0; constellation <= entry.max; constellation++) {
     it(`${entry.id} C${constellation}: every reviewed hit uses formal graph, file, domain candidate and independent expectation`, async () => {
       const build = await setting(entry.id, entry.weapon, constellation);
-      expect(build.character.capabilities.calculation.supported).toBe(false);
+      expect(build.character.calculation.bundle.coverage.some(record => record.scope.kind === 'context' && record.resolution === 'unavailable')).toBe(true);
       expect(resolveBuild(build).status).toBe('partial');
       const coefficients = constellation === 3 && entry.promoted ? entry.promoted : entry.coefficients;
       for (const [hitIndex, coefficient] of coefficients.entries()) {
-        const damage: DamageRequest = { skillId: `${entry.id}.${entry.skill}`, hitIndex, crit: 'noncritical', reaction: 'none' };
+        const damage: DamageRequest = { ...selectCatalogHit(build, `${entry.id}.${entry.skill}`, hitIndex), crit: 'noncritical', reaction: 'none' };
         const expected = entry.attribute(23.245) * coefficient * 0.45;
         expect(evaluateDamage(build, damage, defaultEnemy()).value).toBeCloseTo(expected, 7);
         const project = createEmptyProject(); project.enemy = defaultEnemy();
         const actorId = addActorFromBuild(project, build);
         const recordId = addSkillHit(project, actorId, damage.skillId, hitIndex, 0, { crit: damage.crit, reaction: damage.reaction });
-        const document = parseDamageCalculator(JSON.stringify({ schemaVersion: 1, kind: 'damage-calculator', project, actorId, recordId }));
+        const document = parseDamageCalculator(JSON.stringify({ schemaVersion: 4, kind: 'damage-calculator', project, actorId, recordId }));
         const original = JSON.stringify(document);
         expect(evaluateTimeline(document.project).status).toBe('complete');
         expect(evaluateTimeline(document.project).totalValue).toBeCloseTo(expected, 7);

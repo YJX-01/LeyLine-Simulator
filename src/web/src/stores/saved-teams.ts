@@ -4,7 +4,7 @@ import { projectSchema, type Project } from '@leyline/schema';
 import { downloadJson } from '../domain/download';
 
 export interface SavedTeam { id: string; name: string; project: Project }
-const key = 'leyline-saved-teams-v2';
+const key = 'leyline-saved-teams-v5';
 export const useSavedTeamsStore = defineStore('saved-teams', () => {
   const teams = ref<SavedTeam[]>([]);
   const error = ref('');

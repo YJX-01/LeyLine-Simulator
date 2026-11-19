@@ -221,14 +221,79 @@
     129.7,
     155.6
   ],
-  "modifiers": [],
-  "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；施放元素战技时，获得「玉锻之冕」效果：每1000点生命值上限都会使普通攻击造成的伤害提升0.6%，持续10秒。通过这种方式至多使普通攻击造成的伤害提升16%。"
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.weapon.ringofyaxche",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#ringofyaxche"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.ringofyaxche",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "ringofyaxche",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "武器全部相关伤害机制尚未闭合。",
+          "sources": [
+            "content.weapon.ringofyaxche"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "武器全部相关伤害机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#ringofyaxche"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.ringofyaxche",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.ringofyaxche",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

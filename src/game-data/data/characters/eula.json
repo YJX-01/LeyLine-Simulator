@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "eula",
   "revision": "4",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "优菈",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000051,
     "region": "蒙德"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1029.5856,
-      "attack": 26.6266,
-      "defense": 58.45391,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critDamage",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,701 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.eula.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#eula"
+        },
+        {
+          "id": "content.eula.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#eula/combat1"
+        },
+        {
+          "id": "content.eula.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#eula/combat2"
+        },
+        {
+          "id": "content.eula.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#eula/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param3",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param4",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param5",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param6",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param7",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param10",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param11",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.normal.param12",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.normal",
+            "hitId": "eula.normal.param12",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.skill.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.skill",
+            "hitId": "eula.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.skill.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.skill",
+            "hitId": "eula.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.skill.param3",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.skill",
+            "hitId": "eula.skill.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.burst.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.burst",
+            "hitId": "eula.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.burst.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "eula.burst",
+            "hitId": "eula.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.eula.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.eula.context",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "eula",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.eula.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.eula.context",
+        "revision": "4"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1029.5856,
+      "attack": 26.6266,
+      "defense": 58.45391,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critDamage",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "eula.normal",
@@ -397,6 +1080,52 @@
       "description": "普通攻击\n进行至多五段的连续挥砍。\n\n重击\n持续消耗体力，快速进行连续的斩击。\n重击结束时，会进行一次格外有力的挥砍。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}+{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "五段伤害",
+          "template": "{param5:F1P}+{param5:F1P}"
+        },
+        {
+          "label": "重击循环伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "重击终结伤害",
+          "template": "{param7:P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "每秒{param8:F1}点"
+        },
+        {
+          "label": "最大持续时间",
+          "template": "{param9:F1}秒"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param10:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param11:P}/{param12:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -651,118 +1380,561 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}+{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "五段伤害",
-          "template": "{param5:F1P}+{param5:F1P}"
-        },
-        {
-          "label": "重击循环伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "重击终结伤害",
-          "template": "{param7:P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "每秒{param8:F1}点"
-        },
-        {
-          "label": "最大持续时间",
-          "template": "{param9:F1}秒"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param10:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param11:P}/{param12:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "eula.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "eula.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "eula.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param3",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "eula.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param4",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "eula.normal.param5",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param5",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "eula.normal.param6",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param6",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "eula.normal.param7",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param7",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param10",
+          "id": "eula.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param10",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "eula.normal.param11",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param11",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param11"
         },
         {
-          "parameter": "param12",
+          "id": "eula.normal.param12",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.normal",
+                "parameterId": "param12",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.normal.param12",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param12"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.eula.normal.parameters"
+      ]
     },
     {
       "id": "eula.skill",
@@ -771,6 +1943,48 @@
       "flavorText": "「浪花就是这样打着旋，吞没了高贵的头冠。随后，冰冷浪潮的每一滴飞沫里，都映着一个金冠；每一滴浪沫，都闪烁着光。」",
       "category": "skill",
       "element": "cryo",
+      "details": [
+        {
+          "label": "点按伤害",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "长按伤害",
+          "template": "{param2:P}"
+        },
+        {
+          "label": "冰涡之剑伤害",
+          "template": "{param3:P}"
+        },
+        {
+          "label": "防御力提升",
+          "template": "每层{param9:P}"
+        },
+        {
+          "label": "冷酷之心持续时间",
+          "template": "{param13:F1}秒"
+        },
+        {
+          "label": "物理抗性降低",
+          "template": "{param4:P}"
+        },
+        {
+          "label": "冰元素抗性降低",
+          "template": "{param5:P}"
+        },
+        {
+          "label": "抗性降低时间",
+          "template": "{param6:F1}秒"
+        },
+        {
+          "label": "点按冷却时间",
+          "template": "{param7:F1}秒"
+        },
+        {
+          "label": "长按冷却时间",
+          "template": "{param8:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1046,69 +2260,176 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "点按伤害",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "长按伤害",
-          "template": "{param2:P}"
-        },
-        {
-          "label": "冰涡之剑伤害",
-          "template": "{param3:P}"
-        },
-        {
-          "label": "防御力提升",
-          "template": "每层{param9:P}"
-        },
-        {
-          "label": "冷酷之心持续时间",
-          "template": "{param13:F1}秒"
-        },
-        {
-          "label": "物理抗性降低",
-          "template": "{param4:P}"
-        },
-        {
-          "label": "冰元素抗性降低",
-          "template": "{param5:P}"
-        },
-        {
-          "label": "抗性降低时间",
-          "template": "{param6:F1}秒"
-        },
-        {
-          "label": "点按冷却时间",
-          "template": "{param7:F1}秒"
-        },
-        {
-          "label": "长按冷却时间",
-          "template": "{param8:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "eula.skill.param1",
+          "element": "cryo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.skill.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "eula.skill.param2",
+          "element": "cryo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.skill",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.skill.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "eula.skill.param3",
+          "element": "cryo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.skill",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.skill.param3",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param3"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.eula.skill.parameters"
+      ]
     },
     {
       "id": "eula.burst",
@@ -1117,6 +2438,49 @@
       "flavorText": "沉沦是件很容易的事情。尽管如此，她仍想要冻结住这股潮流。",
       "category": "burst",
       "element": "cryo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "光降之剑基础伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "每层能量伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "能量层数上限",
+          "template": "{param4:I}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param5:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param6:I}"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "lightfallEnergy",
+          "min": 0,
+          "max": 30,
+          "integer": true,
+          "source": {
+            "repository": "theBowja/genshin-db",
+            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+            "path": "src/data/ChineseSimplified/talents/eula.json"
+          },
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1245,68 +2609,178 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "光降之剑基础伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "每层能量伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "能量层数上限",
-          "template": "{param4:I}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param5:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param6:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "eula.burst.param1",
+          "element": "cryo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "eula.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.eula.burst.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
-          "category": "burst",
-          "scalingStat": "attack",
+          "id": "eula.burst.param2",
           "element": "physical",
-          "additionalScaling": [
+          "category": "burst",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "eula.burst",
+                    "parameterId": "param2",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-counted-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "eula.burst",
+                    "parameterId": "param3",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  },
+                  "count": {
+                    "kind": "fact",
+                    "key": "lightfallEnergy",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "count"
+                    },
+                    "scope": "query"
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.eula.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "attack",
-              "parameter": "param3",
-              "count": "lightfallEnergy"
+              "namespace": "builtin",
+              "id": "coverage.eula.burst.param2",
+              "revision": "4"
             }
-          ]
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、显式层数或愿力的附加缩放；完整触发、状态、捕获、被动及命座仍待接入，不作为完整角色伤害支持。"
-      },
-      "inputs": [
-        {
-          "id": "lightfallEnergy",
-          "min": 0,
-          "max": 30,
-          "integer": true,
-          "source": {
-            "repository": "theBowja/genshin-db",
-            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-            "path": "src/data/ChineseSimplified/talents/eula.json"
-          }
-        }
+      "sources": [
+        "content.eula.burst.parameters"
       ]
     }
   ],
@@ -1316,30 +2790,21 @@
       "name": "潮卷冰削",
       "description": "长按施放冰潮的涡旋时，若一次性消耗了2层冷酷之心效果，则创造会立即爆发的残缺光降之剑，造成相当于凝浪之光剑的光降之剑基础伤害50%的物理伤害。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "eula.passive2",
       "name": "战欲涌现",
       "description": "施放凝浪之光剑时，重置冰潮的涡旋的冷却时间，并为优菈赋予一层冷酷之心效果。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "eula.passive3",
       "name": "贵族的自省",
       "description": "合成角色天赋素材时，有10%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1348,20 +2813,14 @@
       "name": "光潮的幻象",
       "description": "消耗冰潮的涡旋的冷酷之心效果后，优菈的物理伤害加成提高30%，持续6秒，\n每消耗一层冷酷之心，都会使这个效果的持续时间延长6秒，最多不会超过18秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "海沫的少女",
       "description": "缩短冰潮的涡旋长按的冷却时间，使其降低至与点按的冷却时间相同。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1373,20 +2832,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "自卑者的逞强",
       "description": "对生命值低于50%的敌人，光降之剑造成的伤害提高25%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1398,28 +2851,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "高贵者的义务",
       "description": "凝浪之光剑创造的光降之剑立即获得5层能量。普通攻击、元素战技或元素爆发造成伤害使其积蓄能量层数时，有50%的概率额外获得一层。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.eula.growth",
+    "content.character-curves"
+  ]
 }

@@ -1,6 +1,7 @@
 import { accountSlots, accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountCharacter, type LocalAccount } from './account';
 import {persistArtifactRolls} from './artifact-rolls';
 import type { Build } from '@leyline/schema';
+import { physicalArtifact } from './build-snapshot';
 
 /** Identity-independent item content; history/source metadata is not an equipment change. */
 export function artifactValueSignature(item:AccountArtifact){const real=item.real;return JSON.stringify(real?[real.setId,real.slot,real.rarity,real.level,real.mainStat,real.substats.map(sub=>[sub.stat,sub.value])]:[item.slot,item.attack]);}
@@ -9,7 +10,7 @@ export function artifactValueSignature(item:AccountArtifact){const real=item.rea
 export function orderedArtifactContent(item:AccountArtifact, main?:Build['artifactMain']) {
   const real=item.real;
   if(!real)return '';
-  return JSON.stringify([real.setId,real.slot,real.rarity,real.level,real.mainStat,item.mona?.mainValue ?? main?.[real.mainStat]?.[real.level],real.substats.map(sub=>[sub.stat,sub.value])]);
+  return JSON.stringify([real.setId,real.slot,real.rarity,real.level,real.mainStat,item.mona?.mainValue ?? main?.[real.rarity][real.mainStat]?.[real.level],real.substats.map(sub=>[sub.stat,sub.value])]);
 }
 
 function matchingInventoryArtifact(account:LocalAccount,source:AccountArtifact,main?:Build['artifactMain']) {
@@ -45,8 +46,9 @@ export function planShowcaseInventory(account:LocalAccount, characters:readonly 
 }
 
 export function showcaseArtifact(character:AccountCharacter,slot:typeof accountSlots[number],inventory?:LocalAccount):AccountArtifact|undefined {
-  const real=character.showcase?.build.artifacts.find(item=>item.slot===slot);
-  if(!real)return undefined;
+  const piece=character.showcase?.build.artifacts.find(item=>item.slot===slot);
+  if(!piece)return undefined;
+  const real=physicalArtifact(piece);
   const source:AccountArtifact={id:real.id,slot,attack:0,real,rollSource:real.substats.every(sub=>sub.rolls!==undefined)?'showcase' as const:undefined,name:`${character.showcase!.build.sets.find(set=>set.id===real.setId)?.name ?? '展柜装备'} · ${accountSlotLabels[slot]}`};
   // Display status never adopts a local ID or changes the independent showcase snapshot.
   return inventory && !matchingInventoryArtifact(inventory,source,character.showcase!.build.artifactMain)?{...source,inventoryId:null}:source;

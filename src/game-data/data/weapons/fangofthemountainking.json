@@ -221,14 +221,79 @@
     155.6,
     186.7
   ],
-  "modifiers": [],
-  "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；元素战技命中敌人后，会获得1层「悬木祝赐」，该效果每0.5秒至多触发1次；队伍中附近的角色触发了燃烧或烈绽放反应后，装备者会获得3层悬木祝赐，该效果每2秒至多触发1次，队伍中的角色处于队伍后台时也能触发。悬木祝赐：元素战技伤害和元素爆发伤害提升10%，持续6秒，至多叠加6层，每层持续时间独立计算。"
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.weapon.fangofthemountainking",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#fangofthemountainking"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.fangofthemountainking",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "fangofthemountainking",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "武器全部相关伤害机制尚未闭合。",
+          "sources": [
+            "content.weapon.fangofthemountainking"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "武器全部相关伤害机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#fangofthemountainking"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.fangofthemountainking",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.fangofthemountainking",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

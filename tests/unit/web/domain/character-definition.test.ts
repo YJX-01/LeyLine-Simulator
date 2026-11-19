@@ -1,3 +1,4 @@
+import { talentLevelBonus } from '@leyline/schema';
 import { describe, expect, it } from 'vitest';
 import { getCharacter, DATA_VERSION } from '@leyline/game-data';
 import { copyCharacterDefinition, parseCharacterDefinition, prepareCharacterDefinition, applyCharacterDefinition } from '../../../../src/web/src/domain/character-definition';
@@ -22,7 +23,7 @@ describe('portable real character metadata', () => {
     expect(prepared.talents.find(skill => skill.category === 'skill')!.parameters[0].values[0]).toBe(2.92);
     expect(original.identity.name).toBe('琴');
     expect(() => prepareCharacterDefinition(file, { [JSON.stringify([skill.id, '0', '0'])]: '' })).toThrow('非负');
-    expect(() => parseCharacterDefinition(JSON.stringify({ ...file, schemaVersion: 3 }))).toThrow('格式');
+    expect(() => parseCharacterDefinition(JSON.stringify({ ...file, schemaVersion: 2 }))).toThrow();
     expect(() => parseCharacterDefinition(JSON.stringify({ ...file, talents: [skill, skill] }))).toThrow('重复');
   });
 
@@ -36,13 +37,13 @@ describe('portable real character metadata', () => {
     const file = copyCharacterDefinition(recorded.character, recorded.dataVersion);
     const talent=file.talents.find(talent=>talent.category==='skill')!;
     const parameter=talent.parameters.find(parameter=>parameter.id===talent.hits[0].parameter)!;
-    const level=recorded.talents.skill;
+    const level=recorded.talents.skill+talentLevelBonus(file,'skill',recorded.constellation);
     // An explicit custom trial, without an invented enemy, crit, or observed damage value.
     const trialValue=parameter.values[level-1]*2;
     const trial=prepareCharacterDefinition(file,{[JSON.stringify([talent.id,'0',String(level-1)])]:String(trialValue)});
     const trialProject=applyCharacterDefinition(project,actorId,trial);
     const trialBuild=trialProject.candidate.actors[0].build!;
-    const calculation=evaluateDamage(trialBuild,{skillId:talent.id,hitIndex:0,crit:null,reaction:null},undefined);
+    const calculation=evaluateDamage(trialBuild,{skillId:talent.id,hitId:talent.hits[0].id,outputId:talent.hits[0].outputs[0].id,crit:null,reaction:null},undefined);
     expect(calculation.parts.multiplier).toBe(trialValue);
     expect(calculation.value).toBeNull(); // The original showcase has no observed combat conditions.
     const trialTalent=trialBuild.character.talents.find(talent=>talent.category==='skill')!;

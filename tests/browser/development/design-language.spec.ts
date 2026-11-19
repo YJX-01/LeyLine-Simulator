@@ -43,7 +43,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');
   await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();
   await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();await page.keyboard.press('Escape');
-  const account=await page.evaluate(()=>localStorage.getItem('leyline-account-v2'));
+  const account=await page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
   await expectReadableText(page);
   // UI format harness derived from the recorded public snapshot; not a player export or physical inventory.
   const project=await page.evaluate(async raw=>{
@@ -88,7 +88,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await dialog.getByRole('button',{name:'精炼3阶',exact:true}).click();
   await dialog.getByRole('button',{name:'保存',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'保存',exact:true})).toBeDisabled();
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v2'))).toBe(account);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v5'))).toBe(account);
   await page.screenshot({path:'artifacts/unified-team-editor.png',fullPage:true});
   await page.setViewportSize({width:390,height:844});
   expect(await dialog.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);

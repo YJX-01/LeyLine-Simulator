@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "layla",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "莱依拉",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000074,
     "region": "须弥"
-  },
-  "attributes": {
-    "base": {
-      "hp": 930.0268,
-      "attack": 18.16416,
-      "defense": 54.936,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "hpPercent",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,569 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.layla.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#layla"
+        },
+        {
+          "id": "content.layla.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#layla/combat1"
+        },
+        {
+          "id": "content.layla.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#layla/combat2"
+        },
+        {
+          "id": "content.layla.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#layla/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.normal",
+            "hitId": "layla.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.skill",
+            "hitId": "layla.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.skill.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.skill",
+            "hitId": "layla.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "layla.burst",
+            "hitId": "layla.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.layla.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.layla.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "layla",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.layla.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.layla.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 930.0268,
+      "attack": 18.16416,
+      "defense": 54.936,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "hpPercent",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "layla.normal",
@@ -397,6 +948,36 @@
       "description": "普通攻击\n进行至多三段的连续剑击。\n\n重击\n消耗一定体力，瞬间向前方挥出两剑。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param4:F1P}+{param5:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param6:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param8:P}/{param9:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -588,90 +1169,451 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param4:F1P}+{param5:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param6:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param8:P}/{param9:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "layla.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "layla.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "layla.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "layla.normal.param4",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "layla.normal.param5",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param7",
+          "id": "layla.normal.param7",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "layla.normal.param8",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "layla.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.layla.normal.parameters"
+      ]
     },
     {
       "id": "layla.skill",
@@ -680,6 +1622,28 @@
       "flavorText": "「我与她像两位未曾谋面的神匠，同坐在一个椅垫上，同描绣一朵梦之花。」",
       "category": "skill",
       "element": "cryo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "飞星伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "护盾基础吸收量",
+          "template": "{param3:F1P}生命值上限+{param4:I}"
+        },
+        {
+          "label": "护盾持续时间",
+          "template": "{param5:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param6:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -808,44 +1772,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "飞星伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "护盾基础吸收量",
-          "template": "{param3:F1P}生命值上限+{param4:I}"
-        },
-        {
-          "label": "护盾持续时间",
-          "template": "{param5:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param6:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "layla.skill.param1",
+          "element": "cryo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "layla.skill.param2",
+          "element": "cryo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.skill",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.skill.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.layla.skill.parameters"
+      ]
     },
     {
       "id": "layla.burst",
@@ -854,6 +1895,24 @@
       "flavorText": "「睡吧，睡吧，我知道那诸多星轨在你梦中，诸多命运在你朦胧的睡眼前展露。」",
       "category": "burst",
       "element": "cryo",
+      "details": [
+        {
+          "label": "星光弹伤害",
+          "template": "{param1:F1P}生命值上限"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param2:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -940,35 +1999,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "星光弹伤害",
-          "template": "{param1:F1P}生命值上限"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param2:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "layla.burst.param1",
+          "element": "cryo",
           "category": "burst",
-          "scalingStat": "hp"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "hp-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.hp",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "layla.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.layla.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.layla.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.layla.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -977,30 +2067,21 @@
       "name": "如光骤现",
       "description": "安眠帷幕护盾在存在期间，每获得一枚晚星时，将产生深眠效果：\n·处于安眠帷幕护盾庇护下的角色，护盾强效提升6%；\n·该效果至多叠加4次，持续直到安眠帷幕护盾消失。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "layla.passive2",
       "name": "勿扰沉眠",
       "description": "垂裳端凝之夜发射的飞星造成的伤害提高，提高值相当于莱依拉生命值上限的1.5%。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "layla.passive3",
       "name": "叠影的梦兆",
       "description": "合成角色天赋素材时，有10%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1009,20 +2090,14 @@
       "name": "寐领围垣",
       "description": "垂裳端凝之夜的安眠帷幕护盾的伤害吸收量提高20%。\n此外，施放垂裳端凝之夜时，将为队伍中附近不处于安眠帷幕护盾庇护下的所有角色生成伤害吸收量为安眠帷幕护盾35%的护盾，该护盾持续12秒，对冰元素伤害有250%的吸收效果。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "归芒携信",
       "description": "垂裳端凝之夜发射的飞星命中敌人时，为莱依拉恢复1点能量。每枚飞星至多通过这种方式为莱依拉恢复一次能量。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1034,20 +2109,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "星示昭明",
       "description": "垂裳端凝之夜开始发射一轮飞星时，将为附近的队伍中所有角色赋予「启明」效果，使普通攻击与重击造成的伤害提升，提升值相当于莱依拉生命值上限的5%。\n「启明」效果至多持续3秒，将在造成普通攻击或重击伤害后的0.05秒后移除。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1059,28 +2128,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "曜光灵炬",
       "description": "垂裳端凝之夜的飞星造成的伤害提升40%，星流摇床之梦的星光弹造成的伤害提升40%。\n此外，垂裳端凝之夜产生晚星的间隔时间减少20%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.layla.growth",
+    "content.character-curves"
+  ]
 }

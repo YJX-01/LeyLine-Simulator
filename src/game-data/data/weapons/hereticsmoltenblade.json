@@ -221,14 +221,79 @@
     129.7,
     155.6
   ],
-  "modifiers": [],
-  "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；装备者施放元素战技后，获得「映落瞳中的初光」：持续期间，将记录装备者的移动距离，每秒都将基于上一秒记录的移动距离，使装备者获得最低18%、最高36%的攻击力加成。该效果持续14秒，每14秒至多触发一次，并会在装备者退场时移除。"
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.weapon.hereticsmoltenblade",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#hereticsmoltenblade"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.hereticsmoltenblade",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "hereticsmoltenblade",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "武器全部相关伤害机制尚未闭合。",
+          "sources": [
+            "content.weapon.hereticsmoltenblade"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "武器全部相关伤害机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#hereticsmoltenblade"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.hereticsmoltenblade",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.hereticsmoltenblade",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

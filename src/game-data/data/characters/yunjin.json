@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "yunjin",
   "revision": "5",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "云堇",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000064,
     "region": "璃月"
-  },
-  "attributes": {
-    "base": {
-      "hp": 893.5552,
-      "attack": 16.0272,
-      "defense": 61.5741,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "energyRecharge",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,926 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "genshin-db.yunjin.flying-cloud-base",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/yunjin.json"
+        },
+        {
+          "id": "content.yunjin.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#yunjin"
+        },
+        {
+          "id": "content.yunjin.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#yunjin/combat1"
+        },
+        {
+          "id": "content.yunjin.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#yunjin/combat2"
+        },
+        {
+          "id": "content.yunjin.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#yunjin/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "yunjin.flying-cloud-base",
+            "revision": "1"
+          },
+          "template": {
+            "id": "attribute-conversion",
+            "revision": "1",
+            "stat": "defense",
+            "target": "damage",
+            "attribute": "def",
+            "rate": "rate",
+            "output": "bonus"
+          },
+          "sources": [
+            "genshin-db.yunjin.flying-cloud-base"
+          ]
+        }
+      ],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "yunjin.flying-cloud-base.base",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.yunjin.flying-cloud-base"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "team",
+            "excludeOwner": false
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "yunjin.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "value": {
+            "kind": "formula",
+            "formula": {
+              "namespace": "builtin",
+              "id": "yunjin.flying-cloud-base",
+              "revision": "1"
+            },
+            "inputs": {
+              "def": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "rate": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "bonus"
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.baseDamageBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "application": "explicit",
+          "priority": 0,
+          "stacking": {
+            "group": "flying-cloud",
+            "scope": "recipient",
+            "policy": "replace",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param1",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param2",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param3",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param4",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param5",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param6",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param7",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param8",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param10",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param11",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.normal.param12",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.normal",
+            "hitId": "yunjin.normal.param12",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.skill.param3",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.skill",
+            "hitId": "yunjin.skill.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.skill.param4",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.skill",
+            "hitId": "yunjin.skill.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.skill.param5",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.skill",
+            "hitId": "yunjin.skill.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.burst.param1",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "yunjin.burst",
+            "hitId": "yunjin.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.yunjin.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.yunjin.context",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "yunjin",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "飞云旗阵实际作用于命中时，完整基数仍需核验固有天赋与命座等相关增益。明确未生效时无需读取此未核验增益。",
+          "sources": [
+            "content.yunjin.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "flying-cloud-full-base",
+              "resolution": "unavailable",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "yunjin.flying-cloud-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "飞云旗阵实际作用于命中时，完整基数仍需核验固有天赋与命座等相关增益。明确未生效时无需读取此未核验增益。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [
+      {
+        "namespace": "builtin",
+        "id": "yunjin.flying-cloud-base.base",
+        "revision": "1"
+      }
+    ],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.yunjin.context",
+        "revision": "5"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 893.5552,
+      "attack": 16.0272,
+      "defense": 61.5741,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "energyRecharge",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "yunjin.normal",
@@ -397,6 +1305,44 @@
       "description": "普通攻击\n进行至多五段的连续枪击。\n\n重击\n消耗一定体力，向前方突进，对路径上的敌人造成伤害。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}+{param4:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param5:F1P}+{param6:F1P}"
+        },
+        {
+          "label": "五段伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param8:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param9:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param10:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param11:P}/{param12:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -651,116 +1597,616 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}+{param4:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param5:F1P}+{param6:F1P}"
-        },
-        {
-          "label": "五段伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param8:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param9:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param10:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param11:P}/{param12:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "yunjin.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param1",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "yunjin.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param2",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "yunjin.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param3",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "yunjin.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param4",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "yunjin.normal.param5",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param5",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "yunjin.normal.param6",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param6",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "yunjin.normal.param7",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param7",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "yunjin.normal.param8",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param8",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param10",
+          "id": "yunjin.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param10",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "yunjin.normal.param11",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param11",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param11"
         },
         {
-          "parameter": "param12",
+          "id": "yunjin.normal.param12",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.normal",
+                "parameterId": "param12",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.normal.param12",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param12"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.yunjin.normal.parameters"
+      ]
     },
     {
       "id": "yunjin.skill",
@@ -769,6 +2215,28 @@
       "flavorText": "台上一刹光华，台下十年辛苦。",
       "category": "skill",
       "element": "geo",
+      "details": [
+        {
+          "label": "点按伤害",
+          "template": "{param3:F1P}防御力"
+        },
+        {
+          "label": "一段蓄力伤害",
+          "template": "{param4:F1P}防御力"
+        },
+        {
+          "label": "二段蓄力伤害",
+          "template": "{param5:F1P}防御力"
+        },
+        {
+          "label": "护盾吸收量",
+          "template": "{param1:P}生命值上限+{param2:I}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param6:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -897,49 +2365,176 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "点按伤害",
-          "template": "{param3:F1P}防御力"
-        },
-        {
-          "label": "一段蓄力伤害",
-          "template": "{param4:F1P}防御力"
-        },
-        {
-          "label": "二段蓄力伤害",
-          "template": "{param5:F1P}防御力"
-        },
-        {
-          "label": "护盾吸收量",
-          "template": "{param1:P}生命值上限+{param2:I}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param6:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param3",
+          "id": "yunjin.skill.param3",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.skill",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.skill.param3",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "yunjin.skill.param4",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.skill",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.skill.param4",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "yunjin.skill.param5",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.skill",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.skill.param5",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param5"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.yunjin.skill.parameters"
+      ]
     },
     {
       "id": "yunjin.burst",
@@ -948,6 +2543,32 @@
       "flavorText": "「桴鼓声中，刀枪剑戟空翻影，女婵娟今扮作掌旗大将。」\n「红毹上琴笛铙钹齐鸣，且看她如何荡平妖魔。」",
       "category": "burst",
       "element": "geo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "伤害值提升",
+          "template": "{param2:P}防御力"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "生效次数",
+          "template": "{param6:I}次"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param5:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1076,43 +2697,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "伤害值提升",
-          "template": "{param2:P}防御力"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "生效次数",
-          "template": "{param6:I}次"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param5:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "yunjin.burst.param1",
+          "element": "geo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "yunjin.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.yunjin.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.yunjin.burst.param1",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.yunjin.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1121,30 +2765,21 @@
       "name": "务守本真",
       "description": "在被攻击瞬间施放的旋云开相，会以长按二段蓄力的形式施放。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "yunjin.passive2",
       "name": "莫从恒蹊",
       "description": "「飞云旗阵」提供的普通攻击伤害提高，当队伍中存在1/2/3/4种元素类型的角色时，数值上进一步追加云堇防御力的2.5%/5%/7.5%/11.5%。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "yunjin.passive3",
       "name": "清食养性",
       "description": "完美烹饪冒险类食物时，有12%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1153,20 +2788,14 @@
       "name": "飞身趟马",
       "description": "旋云开相的冷却时间减少18%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "诸般切末",
       "description": "施放破嶂见旌仪后，附近队伍中所有角色普通攻击造成的伤害提升15%，持续12秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1178,20 +2807,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "昇堂吊云",
       "description": "云堇触发结晶、月结晶反应后，防御力提升20%，持续12秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1203,114 +2826,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "庄谐并举",
       "description": "处于「飞云旗阵」状态下的角色，普通攻击的攻击速度提升12%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  },
-  "combatRules": [
-    {
-      "id": "flying-cloud-base",
-      "revision": "2",
-      "source": {
-        "repository": "theBowja/genshin-db",
-        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-        "path": "src/data/ChineseSimplified/talents/yunjin.json"
-      },
-      "nodes": [
-        {
-          "id": "def",
-          "op": "attribute",
-          "key": "defense",
-          "unit": "defense"
-        },
-        {
-          "id": "one-def",
-          "op": "constant",
-          "quantity": {
-            "value": 1,
-            "unit": "defense"
-          }
-        },
-        {
-          "id": "def-points",
-          "op": "divide",
-          "left": "def",
-          "right": "one-def"
-        },
-        {
-          "id": "rate",
-          "op": "talent-parameter",
-          "skillId": "yunjin.burst",
-          "parameter": "param2",
-          "unit": "scalar"
-        },
-        {
-          "id": "one-damage",
-          "op": "constant",
-          "quantity": {
-            "value": 1,
-            "unit": "damage"
-          }
-        },
-        {
-          "id": "rate-damage",
-          "op": "multiply",
-          "left": "rate",
-          "right": "one-damage"
-        },
-        {
-          "id": "bonus",
-          "op": "multiply",
-          "left": "def-points",
-          "right": "rate-damage"
-        }
-      ],
-      "effects": [
-        {
-          "id": "base",
-          "startMs": 0,
-          "endMs": 12000,
-          "recipient": "team",
-          "attribute": "baseDamageBonus",
-          "unit": "damage",
-          "value": "bonus",
-          "trigger": {
-            "kind": "action",
-            "skillId": "yunjin.burst"
-          },
-          "appliesTo": {
-            "category": "normal"
-          },
-          "captureAt": "dynamic",
-          "requiresApplication": true,
-          "group": "flying-cloud",
-          "policy": "replace"
-        }
-      ],
-      "support": {
-        "supported": false,
-        "reason": "飞云旗阵Q基础防御加值已绑定；四突破追加量及完整角色交互仍待核验，不能作为完整来源伤害支持。"
-      }
-    }
+  "sources": [
+    "content.yunjin.growth",
+    "content.character-curves"
   ]
 }

@@ -9,7 +9,7 @@ test('shared local equipment survives combination use and selected showcase sync
   await page.setViewportSize({width:1440,height:1000});
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(source,'utf8'))}));
-  const account=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!));
+  const account=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v5')!));
   const combinations=()=>page.evaluate(()=>localStorage.getItem('leyline-artifact-combinations-v1'));
   await page.goto('/');
   await page.getByRole('button',{name:'展柜导入',exact:true}).click();

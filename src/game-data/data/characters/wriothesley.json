@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "wriothesley",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "莱欧斯利",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000086,
     "region": "枫丹"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1058.1852,
-      "attack": 24.206,
-      "defense": 59.41119,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critDamage",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,602 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.wriothesley.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#wriothesley"
+        },
+        {
+          "id": "content.wriothesley.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#wriothesley/combat1"
+        },
+        {
+          "id": "content.wriothesley.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#wriothesley/combat2"
+        },
+        {
+          "id": "content.wriothesley.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#wriothesley/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param6",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param10",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.normal.param11",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.normal",
+            "hitId": "wriothesley.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.burst",
+            "hitId": "wriothesley.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.burst.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "wriothesley.burst",
+            "hitId": "wriothesley.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.wriothesley.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.wriothesley.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "wriothesley",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.wriothesley.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.wriothesley.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1058.1852,
+      "attack": 24.206,
+      "defense": 59.41119,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critDamage",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "wriothesley.normal",
@@ -397,6 +981,44 @@
       "description": "普通攻击\n将坚冰凝聚于拳锋，挥出迅猛的斥逐拳，进行至多五段的快速打击，造成冰元素伤害。\n此外，施放元素战技「冰牙突驰」或进行冲刺后的一小段时间内，普通攻击连击段数不会重置。\n\n重击\n消耗一定体力，腾跃而起，打出凌跃拳，造成冰元素范围伤害。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成冰元素范围伤害。",
       "category": "normal",
       "element": "cryo",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}+{param5:F1P}"
+        },
+        {
+          "label": "五段伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param8:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param9:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param10:P}/{param11:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -630,110 +1252,561 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}+{param5:F1P}"
-        },
-        {
-          "label": "五段伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param8:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param9:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param10:P}/{param11:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "wriothesley.normal.param1",
+          "element": "cryo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "wriothesley.normal.param2",
+          "element": "cryo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "wriothesley.normal.param3",
+          "element": "cryo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "wriothesley.normal.param4",
+          "element": "cryo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "wriothesley.normal.param5",
+          "element": "cryo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "wriothesley.normal.param6",
+          "element": "cryo",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param6",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "wriothesley.normal.param7",
+          "element": "cryo",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param9",
+          "id": "wriothesley.normal.param9",
+          "element": "cryo",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "wriothesley.normal.param10",
+          "element": "cryo",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param10",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "wriothesley.normal.param11",
+          "element": "cryo",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "cryo"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.normal.param11",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param11"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.wriothesley.normal.parameters"
+      ]
     },
     {
       "id": "wriothesley.skill",
@@ -742,6 +1815,25 @@
       "flavorText": "「过去的裁罚已成定局，未来的选择犹在掌握。」\n「若是不愿命运被一时的罪恶吞尽，还请珍重此刻的光阴。」",
       "category": "skill",
       "element": "cryo",
+      "details": [
+        {
+          "label": "强化斥逐拳伤害",
+          "template": "{param1:F1P}普通攻击伤害"
+        },
+        {
+          "label": "消耗生命值",
+          "template": "{param2:F1P}生命值上限"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param4:F1}秒"
+        }
+      ],
+      "noIndependentDamage": true,
       "parameters": [
         {
           "id": "param1",
@@ -849,30 +1941,10 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "强化斥逐拳伤害",
-          "template": "{param1:F1P}普通攻击伤害"
-        },
-        {
-          "label": "消耗生命值",
-          "template": "{param2:F1P}生命值上限"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param4:F1}秒"
-        }
-      ],
       "hits": [],
-      "support": {
-        "supported": false,
-        "reason": "此技能没有独立伤害命中，强化或辅助规则仍待接入；不伪造伤害以表示技能已支持。"
-      },
-      "noIndependentDamage": true
+      "sources": [
+        "content.wriothesley.skill.parameters"
+      ]
     },
     {
       "id": "wriothesley.burst",
@@ -881,6 +1953,28 @@
       "flavorText": "总有一些事情，就算是梅洛彼得堡的公爵也会感到无可奈何——例如繁冗的文书工作，琐细的监管职责，或是…小小的友人们在自己拳套上偷偷贴一堆难撕的可爱贴纸的执着。",
       "category": "burst",
       "element": "cryo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F2P}*5"
+        },
+        {
+          "label": "流涌之刃伤害",
+          "template": "{param2:F2P}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "流涌之刃冷却时间",
+          "template": "{param5:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -988,44 +2082,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F2P}*5"
-        },
-        {
-          "label": "流涌之刃伤害",
-          "template": "{param2:F2P}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "流涌之刃冷却时间",
-          "template": "{param5:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "wriothesley.burst.param1",
+          "element": "cryo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "wriothesley.burst.param2",
+          "element": "cryo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "wriothesley.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.wriothesley.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.wriothesley.burst.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.wriothesley.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1034,30 +2205,21 @@
       "name": "公理终有辩诉之日",
       "description": "莱欧斯利的生命值低于60%时，将获得「恩典之诫」，使下次普通攻击·迅烈倾霜拳的重击强化为惩戒·凌跃拳：不消耗体力，造成的伤害提升50%，并在命中后为莱欧斯利恢复生命值，回复量相当于莱欧斯利生命值上限的30%。\n每5秒至多通过这种方式获得一次「恩典之诫」效果。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "wriothesley.passive2",
       "name": "罪业终有报偿之时",
       "description": "莱欧斯利的当前生命值提升或降低时，若莱欧斯利处于冰牙突驰的寒烈的惩裁状态下，寒烈的惩裁将获得一层「检偿之敕」效果，该效果至多叠加至5层，每层使莱欧斯利的攻击力提升6%。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "wriothesley.passive3",
       "name": "公爵的恩馈",
       "description": "合成武器突破素材时，有10%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1066,20 +2228,14 @@
       "name": "予行恶者以惩惧",
       "description": "突破天赋「公理终有辩诉之日」的「恩典之诫」转变为：\n莱欧斯利的生命值低于60%，或在冰牙突驰的寒烈的惩裁状态持续期间，斥逐拳的第五段攻击命中时，将获得「恩典之诫」，每2.5秒至多获得一次「恩典之诫」效果。\n\n此外，惩戒·凌跃拳获得以下强化：\n·造成的伤害提升进一步提升至200%；\n·命中时，若处于寒烈的惩裁状态下，该状态的持续时间延长4秒，在一次寒烈的惩裁状态持续期间，至多通过这种方式延长一次。\n\n需要解锁突破天赋「公理终有辩诉之日」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "予骄暴者以镣锁",
       "description": "施放黑金狼噬时，突破天赋「罪业终有报偿之时」的每层「检偿之敕」效果都将使造成的伤害提升40%。\n需要解锁突破天赋「罪业终有报偿之时」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1091,20 +2247,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "予贞苦者以拯赎",
       "description": "惩戒·凌跃拳为莱欧斯利恢复生命值的回复量提升为50%生命值上限，需要解锁突破天赋「公理终有辩诉之日」。\n此外，莱欧斯利受到治疗时，若此次治疗回复量溢出，将根据莱欧斯利是否处于当前场上产生不同的效果：处于当前场上时，莱欧斯利的攻击速度提升20%，持续4秒；处于队伍后台时，队伍中所有自己的角色攻击速度提升10%，持续6秒。上述这两种攻击速度提升效果无法叠加。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1116,28 +2266,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "予无罪者以念抚",
       "description": "惩戒·凌跃拳的暴击率提升10%，暴击伤害提升80%，并能够额外生成冰锥，造成原本100%的冰元素伤害，通过这种方式造成的伤害视为重击伤害。\n需要解锁突破天赋「公理终有辩诉之日」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.wriothesley.growth",
+    "content.character-curves"
+  ]
 }

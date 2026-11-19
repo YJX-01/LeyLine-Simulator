@@ -221,14 +221,79 @@
     129.7,
     155.6
   ],
-  "modifiers": [],
-  "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；装备者施放元素战技后，获得持续6秒的「棋中法度」：攻击力提升20%，元素精通提升100点，该效果每12秒至多触发一次，无法叠加。持续期间，装备者的重击命中敌人时，还会使上述效果的持续时间延长6秒，至多通过这种方式使持续时间延长6秒。"
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.weapon.clashofkings",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#clashofkings"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.clashofkings",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "clashofkings",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "武器全部相关伤害机制尚未闭合。",
+          "sources": [
+            "content.weapon.clashofkings"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "武器全部相关伤害机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#clashofkings"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.clashofkings",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.clashofkings",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

@@ -221,14 +221,79 @@
     129.7,
     155.6
   ],
-  "modifiers": [],
-  "support": {
-    "supported": false,
-    "reason": "基础属性可查，武器效果尚未核验；元素战技命中敌人后的6秒内，攻击力提升8%，元素充能效率提升6%。该效果至多叠加3层，装备者处于队伍后台时依然能触发。"
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.weapon.sacrificersstaff",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#sacrificersstaff"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.sacrificersstaff",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sacrificersstaff",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "武器全部相关伤害机制尚未闭合。",
+          "sources": [
+            "content.weapon.sacrificersstaff"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "武器全部相关伤害机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#sacrificersstaff"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.sacrificersstaff",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.sacrificersstaff",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

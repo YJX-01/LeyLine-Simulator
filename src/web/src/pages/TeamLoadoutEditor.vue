@@ -4,6 +4,7 @@ import { getArtifactSet } from '@leyline/game-data';
 import { buildSchema, type Build, type StatKey } from '@leyline/schema';
 import { resolveBuild } from '@leyline/engine';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
+import { calculationArtifact } from '../domain/build-snapshot';
 import { useAccountStore } from '../stores/account';
 import { accountSlots, accountSlotLabels, type AccountArtifact, type AccountCharacter, type AccountSlot } from '../domain/account';
 import { formatGameStat } from '../domain/account-presentation';
@@ -32,11 +33,11 @@ async function equip(item?:AccountArtifact,part=slot.value) {
   const original=draft.value,owner=accounts.account;if(!original||!part||busy.value)return;error.value='';busy.value=true;
   try {
     if(item&&(!item.real||item.mona?.setIdentityPending||item.slot!==part))throw Error('该实物的词条或套装身份待补全，不能用于计算。');
-    if(item&&axis.project.candidate.actors.some(actor=>actor.id!==actorId&&actor.build?.artifacts.some(piece=>piece.id===item.id&&(piece.inventoryAccountId??actor.build?.inventoryAccountId)===owner.id)))throw Error('当前队伍已使用这件实物，请先卸下其他队员的候选装备。');
-    const artifacts=original.artifacts.filter(piece=>piece.slot!==part);if(item?.real)artifacts.push({...JSON.parse(JSON.stringify(item.real)),inventoryAccountId:owner.id});
+    if(item&&axis.project.candidate.actors.some(actor=>actor.id!==actorId&&actor.build?.artifacts.some(piece=>piece.id===item.id&&piece.inventory?.accountId===owner.id)))throw Error('当前队伍已使用这件实物，请先卸下其他队员的候选装备。');
+    const artifacts=original.artifacts.filter(piece=>piece.slot!==part);if(item?.real)artifacts.push(calculationArtifact(JSON.parse(JSON.stringify(item.real)),owner.id));
     const sets=await Promise.all([...new Set(artifacts.map(piece=>piece.setId))].filter(id=>id!=='none').map(id=>getArtifactSet(id)));
     if(original!==draft.value||owner!==accounts.account)return;
-    draft.value={...original,inventoryAccountId:owner.id,artifacts,sets};slot.value=undefined;
+    draft.value={...original,artifacts,sets};slot.value=undefined;
   }catch(cause){error.value=cause instanceof Error?cause.message:'换装失败。';}finally{busy.value=false;}
 }
 async function save() {
@@ -45,7 +46,7 @@ async function save() {
   try {
     if(actorId!==axis.actorId || JSON.stringify(axis.actor?.build)!==baseline)throw Error('轴内配装已变化，请还原后重新核对。');
     const prepared=await form.value?.prepare();if(!prepared?.build)return false;
-    const next=buildSchema.parse({...draft.value,...prepared.build,artifacts:draft.value.artifacts,sets:draft.value.sets,inventoryAccountId:draft.value.inventoryAccountId});
+    const next=buildSchema.parse({...draft.value,...prepared.build,artifacts:draft.value.artifacts,sets:draft.value.sets});
     const issues=resolveBuild(next).issues.filter(issue=>issue.code==='invalid-input');if(issues.length)throw Error(issues.map(issue=>issue.message).join('；'));
     if(actorId!==axis.actorId || JSON.stringify(axis.actor?.build)!==baseline)throw Error('编辑对象已变化，未保存。');
     axis.command(project=>{const actor=project.candidate.actors.find(actor=>actor.id===actorId);if(actor)actor.build=next;});restore();return true;

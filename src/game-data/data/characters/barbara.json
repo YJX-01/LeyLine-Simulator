@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "barbara",
   "revision": "4",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "芭芭拉",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000014,
     "region": "蒙德"
-  },
-  "attributes": {
-    "base": {
-      "hp": 820.6119,
-      "attack": 13.356,
-      "defense": 56.0805,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "hpPercent",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,755 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.barbara.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#barbara"
+        },
+        {
+          "id": "content.barbara.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#barbara/combat1"
+        },
+        {
+          "id": "content.barbara.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#barbara/combat2"
+        },
+        {
+          "id": "content.barbara.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#barbara/combat3"
+        },
+        {
+          "id": "content.barbara.review-source-5",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/barbara.json"
+        },
+        {
+          "id": "content.barbara.review-source-6",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/barbara.json"
+        },
+        {
+          "id": "content.barbara.review-source-7",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "id": "content.barbara.review-source-8",
+          "kind": "repo",
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/hydro/barbara.md"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param1",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param2",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param3",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param3",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param4",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param4",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param5",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param5",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param7",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param7",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param8",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param8",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.normal.param9",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.normal",
+            "hitId": "barbara.normal.param9",
+            "maxConstellation": 1
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至1命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.barbara.normal.parameters",
+            "kqm.ordinary",
+            "content.barbara.review-source-5",
+            "content.barbara.review-source-6",
+            "content.barbara.review-source-7",
+            "content.barbara.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
+            },
+            {
+              "id": "barbara.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
+            },
+            {
+              "id": "barbara.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
+            },
+            {
+              "id": "barbara.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "治疗食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.skill.param5",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "barbara.skill",
+            "hitId": "barbara.skill.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.barbara.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.barbara.context",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "barbara",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.barbara.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.barbara.context",
+        "revision": "4"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 820.6119,
+      "attack": 13.356,
+      "defense": 56.0805,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "hpPercent",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "barbara.normal",
@@ -397,6 +1134,40 @@
       "description": "普通攻击\n进行至多四段的水花攻击，造成水元素伤害。\n\n重击\n消耗一定体力，短暂咏唱后，造成水元素范围伤害。\n\n下落攻击\n凝聚水元素的力量，从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成水元素范围伤害。",
       "category": "normal",
       "element": "hydro",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param5:P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param6:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param8:P}/{param9:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -588,94 +1359,4251 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param5:P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param6:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param8:P}/{param9:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "barbara.normal.param1",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param1.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param1",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param1",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "barbara.normal.param2",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param2.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param2",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param2",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "barbara.normal.param3",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param3.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param3",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param3",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param3",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "barbara.normal.param4",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param4.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param4",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param4",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param4",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "barbara.normal.param5",
+          "element": "hydro",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param5.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param5",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param5",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param5",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param7",
+          "id": "barbara.normal.param7",
+          "element": "hydro",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param7.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param7",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param7",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param7",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "barbara.normal.param8",
+          "element": "hydro",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param8.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param8",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param8",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param8",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "barbara.normal.param9",
+          "element": "hydro",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.normal.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "barbara.normal.param9.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "barbara.normal",
+                        "parameterId": "param9",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.hydroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.hydro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "hydro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.barbara.normal.param9",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.normal.param9",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param9"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.barbara.normal.parameters"
+      ]
     },
     {
       "id": "barbara.skill",
@@ -684,6 +5612,28 @@
       "flavorText": "芭芭拉的音乐就是治疗大家的魔法。",
       "category": "skill",
       "element": "hydro",
+      "details": [
+        {
+          "label": "命中治疗量",
+          "template": "{param3:F2P}生命值上限+{param4:I}"
+        },
+        {
+          "label": "持续治疗量",
+          "template": "{param1:F2P}生命值上限+{param2:I}"
+        },
+        {
+          "label": "水珠伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param6:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param7:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -833,39 +5783,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "命中治疗量",
-          "template": "{param3:F2P}生命值上限+{param4:I}"
-        },
-        {
-          "label": "持续治疗量",
-          "template": "{param1:F2P}生命值上限+{param2:I}"
-        },
-        {
-          "label": "水珠伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param6:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param7:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param5",
+          "id": "barbara.skill.param5",
+          "element": "hydro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "barbara.skill",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.barbara.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.barbara.skill.param5",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param5"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.barbara.skill.parameters"
+      ]
     },
     {
       "id": "barbara.burst",
@@ -874,6 +5851,21 @@
       "flavorText": "治愈大家的心就是芭芭拉战斗与歌唱的力量。",
       "category": "burst",
       "element": "hydro",
+      "details": [
+        {
+          "label": "治疗量",
+          "template": "{param1:F1P}生命值上限+{param2:I}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
+      "noIndependentDamage": true,
       "parameters": [
         {
           "id": "param1",
@@ -960,26 +5952,10 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "治疗量",
-          "template": "{param1:F1P}生命值上限+{param2:I}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [],
-      "support": {
-        "supported": false,
-        "reason": "此技能没有独立伤害命中，强化或辅助规则仍待接入；不伪造伤害以表示技能已支持。"
-      },
-      "noIndependentDamage": true
+      "sources": [
+        "content.barbara.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -988,30 +5964,21 @@
       "name": "光辉的季节",
       "description": "角色在演唱，开始♪的歌声之环中时，体力消耗降低12%。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "barbara.passive2",
       "name": "安可",
       "description": "当前场上自己的角色获得元素晶球或元素微粒时，延长演唱，开始♪歌声之环持续时间1秒。\n通过这种方式，至多延长5秒。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "barbara.passive3",
       "name": "心意♪注入",
       "description": "完美烹饪恢复类食物时，有12%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1020,20 +5987,14 @@
       "name": "彩色歌谣",
       "description": "芭芭拉每10秒恢复1点元素能量。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "元气迸发",
       "description": "演唱，开始♪的冷却时间降低15%；\n技能持续期间，当前场上自己的角色获得15%水元素伤害加成。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1045,20 +6006,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "努力即魔法",
       "description": "芭芭拉使用重击时，每命中一个敌人，就恢复1点元素能量。\n通过这种方式，一次至多回复5点元素能量。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1070,95 +6025,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "将一切美好献给你",
       "description": "芭芭拉处于队伍后台时，队伍中自己的角色倒下时，则立即：\n·复苏该角色；\n·将该角色生命值恢复至100%。\n该效果每15分钟只能触发一次。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  },
-  "damageCoverage": [
-    {
-      "id": "barbara-normal-r3",
-      "revision": "4",
-      "skillId": "barbara.normal",
-      "hitIndices": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "maxConstellation": 1,
-      "sources": [
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/talents/barbara.json"
-        },
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/constellations/barbara.json"
-        },
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json"
-        },
-        {
-          "repository": "KQM-git/TCL",
-          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-          "path": "docs/characters/hydro/barbara.md"
-        }
-      ],
-      "branches": [
-        {
-          "id": "base",
-          "resolution": "irrelevant",
-          "reason": "水元素普通、重击及下落单次命中动态攻击缩放；仅用户选择的命中类型，不自动生成四段连击、命中次数或治疗。"
-        },
-        {
-          "id": "barbara.passive1",
-          "resolution": "irrelevant",
-          "reason": "歌声之环减少体力消耗，不改变普攻族单次伤害。"
-        },
-        {
-          "id": "barbara.passive2",
-          "resolution": "irrelevant",
-          "reason": "获取微粒延长歌声之环，不改变C0—C1普攻族伤害；不外推C2水伤增益。"
-        },
-        {
-          "id": "barbara.passive3",
-          "resolution": "irrelevant",
-          "reason": "治疗食物烹饪产出不改变本次伤害。"
-        },
-        {
-          "id": "constellation:1",
-          "resolution": "irrelevant",
-          "reason": "每10秒恢复能量，不改变普攻族单次伤害。"
-        }
-      ]
-    }
+  "sources": [
+    "content.barbara.growth",
+    "content.character-curves"
   ]
 }

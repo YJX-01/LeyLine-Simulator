@@ -2,7 +2,7 @@ import { projectSchema, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 
 export function createEmptyProject(id:string=crypto.randomUUID()):Project {
-  return projectSchema.parse({schemaVersion:2,rulesVersion:'timeline-v1',calculationProfile:'direct',id,revision:'1',definitions:[],candidate:{id:`${id}-candidate`,actors:[]},conditions:{},timeline:[],objective:{}});
+  return projectSchema.parse({schemaVersion: 5, rulesVersion:'timeline-v1',calculationProfile:'direct',id,revision:'1',definitions:[],candidate:{id:`${id}-candidate`,actors:[]},conditions:{},timeline:[],objective:{}});
 }
 
 export function importProject(content: string): Project {

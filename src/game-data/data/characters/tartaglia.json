@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "tartaglia",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "达达利亚",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000033,
     "region": "至冬"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1020.0524,
-      "attack": 23.4612,
-      "defense": 63.4198,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "hydroBonus",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,1031 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.tartaglia.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#tartaglia"
+        },
+        {
+          "id": "content.tartaglia.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#tartaglia/combat1"
+        },
+        {
+          "id": "content.tartaglia.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#tartaglia/combat2"
+        },
+        {
+          "id": "content.tartaglia.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#tartaglia/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param6",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param11",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param12",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param12",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.normal.param13",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.normal",
+            "hitId": "tartaglia.normal.param13",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param6",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param10",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.skill.param11",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.skill",
+            "hitId": "tartaglia.skill.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.burst",
+            "hitId": "tartaglia.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.burst.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.burst",
+            "hitId": "tartaglia.burst.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.burst.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "tartaglia.burst",
+            "hitId": "tartaglia.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.tartaglia.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.tartaglia.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "tartaglia",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.tartaglia.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.tartaglia.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1020.0524,
+      "attack": 23.4612,
+      "defense": 63.4198,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "hydroBonus",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "tartaglia.normal",
@@ -397,6 +1410,60 @@
       "description": "普通攻击\n进行至多六段的连续弓箭射击。\n\n重击\n进行伤害更高、更为精准的瞄准射击。\n瞄准时，水元素之力会在箭矢上持续积聚。聚满了激流的箭矢会在命中敌人时造成水元素伤害，并施加断流效果。\n\n断流\n处于断流影响下的敌人受到达达利亚的各种攻击时，将产生水元素范围伤害效果。这些效果造成的伤害视为普通攻击伤害。\n·断流·闪：满蓄力瞄准射击命中处于断流影响下的敌人时，会引发连续范围伤害。断流·闪每0.7秒至多触发一次。\n·断流·破：击败处于断流影响下的敌人时会引发水之绽放，对附近的敌人施加断流效果。\n\n下落攻击\n从空中射出箭雨，并迅速下坠冲击地面，在落地时造成范围伤害。\n处于魔王武装·狂澜的近战状态下时，无法施展下落攻击。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "五段伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "六段伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "瞄准射击",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "满蓄力瞄准射击",
+          "template": "{param8:P}"
+        },
+        {
+          "label": "断流·闪 伤害",
+          "template": "{param9:F1P}*3"
+        },
+        {
+          "label": "断流·破 伤害",
+          "template": "{param10:F1P}"
+        },
+        {
+          "label": "断流持续时间",
+          "template": "{param14:F1}秒"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param11:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param12:P}/{param13:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -693,132 +1760,616 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "五段伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "六段伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "瞄准射击",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "满蓄力瞄准射击",
-          "template": "{param8:P}"
-        },
-        {
-          "label": "断流·闪 伤害",
-          "template": "{param9:F1P}*3"
-        },
-        {
-          "label": "断流·破 伤害",
-          "template": "{param10:F1P}"
-        },
-        {
-          "label": "断流持续时间",
-          "template": "{param14:F1}秒"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param11:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param12:P}/{param13:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "tartaglia.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "tartaglia.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "tartaglia.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "tartaglia.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "tartaglia.normal.param5",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "tartaglia.normal.param6",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param6",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "tartaglia.normal.param7",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "tartaglia.normal.param8",
+          "element": "hydro",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param11",
+          "id": "tartaglia.normal.param11",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param11",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param11"
         },
         {
-          "parameter": "param12",
+          "id": "tartaglia.normal.param12",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param12",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param12",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param12"
         },
         {
-          "parameter": "param13",
+          "id": "tartaglia.normal.param13",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.normal",
+                "parameterId": "param13",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.normal.param13",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param13"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.tartaglia.normal.parameters"
+      ]
     },
     {
       "id": "tartaglia.skill",
@@ -827,6 +2378,60 @@
       "flavorText": "为了克服自己不擅使弓的弱点，他才选择弓作为自己的武器。但在真正的战斗中，不得不拿出真正的实力…",
       "category": "skill",
       "element": "hydro",
+      "details": [
+        {
+          "label": "状态激发伤害",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "一段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "五段伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "六段伤害",
+          "template": "{param7:F1P}+{param8:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param9:F1P}+{param10:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param12:F1}点"
+        },
+        {
+          "label": "断流·斩 伤害",
+          "template": "{param11:P}"
+        },
+        {
+          "label": "最大持续时间",
+          "template": "{param13:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param14:F1}到{param15:F1}秒"
+        },
+        {
+          "label": "持续时间耗尽冷却时间",
+          "template": "{param16:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1165,121 +2770,616 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "状态激发伤害",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "一段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "五段伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "六段伤害",
-          "template": "{param7:F1P}+{param8:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param9:F1P}+{param10:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param12:F1}点"
-        },
-        {
-          "label": "断流·斩 伤害",
-          "template": "{param11:P}"
-        },
-        {
-          "label": "最大持续时间",
-          "template": "{param13:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param14:F1}到{param15:F1}秒"
-        },
-        {
-          "label": "持续时间耗尽冷却时间",
-          "template": "{param16:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "tartaglia.skill.param1",
+          "element": "hydro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "tartaglia.skill.param2",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "tartaglia.skill.param3",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "tartaglia.skill.param4",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "tartaglia.skill.param5",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "tartaglia.skill.param6",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param6",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "tartaglia.skill.param7",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "tartaglia.skill.param8",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "tartaglia.skill.param9",
+          "element": "hydro",
           "category": "charged",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "tartaglia.skill.param10",
+          "element": "hydro",
           "category": "charged",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param10",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "tartaglia.skill.param11",
+          "element": "hydro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.skill",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.skill.param11",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param11"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.tartaglia.skill.parameters"
+      ]
     },
     {
       "id": "tartaglia.burst",
@@ -1288,6 +3388,32 @@
       "flavorText": "湍流的水，在他的雪国故土并不常见。或许能将流水握在手中，正是因为明白流水的珍贵吧。",
       "category": "burst",
       "element": "hydro",
+      "details": [
+        {
+          "label": "技能伤害·近战",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "技能伤害·远程",
+          "template": "{param3:P}"
+        },
+        {
+          "label": "断流·爆 伤害",
+          "template": "{param2:P}"
+        },
+        {
+          "label": "技能返还元素能量（远程）",
+          "template": "{param4:I}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param5:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param6:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1416,53 +3542,176 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害·近战",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "技能伤害·远程",
-          "template": "{param3:P}"
-        },
-        {
-          "label": "断流·爆 伤害",
-          "template": "{param2:P}"
-        },
-        {
-          "label": "技能返还元素能量（远程）",
-          "template": "{param4:I}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param5:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param6:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "tartaglia.burst.param1",
+          "element": "hydro",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param3",
+          "id": "tartaglia.burst.param3",
+          "element": "hydro",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.burst",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.burst.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param2",
+          "id": "tartaglia.burst.param2",
+          "element": "hydro",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "tartaglia.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.tartaglia.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.tartaglia.burst.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.tartaglia.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1471,30 +3720,21 @@
       "name": "永无谢幕",
       "description": "断流效果的持续时间延长8秒。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "tartaglia.passive2",
       "name": "水形剑",
       "description": "处于魔王武装·狂澜的近战状态时，普通攻击与重击在造成暴击时，会为命中的敌人施加断流效果。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "tartaglia.passive3",
       "name": "诸武精通",
       "description": "队伍中自己的角色普通攻击等级提高1级。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1503,20 +3743,14 @@
       "name": "魔王武装·遏浪",
       "description": "魔王武装·狂澜的冷却时间降低20%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "魔王武装·暗流",
       "description": "处于断流效果影响下的敌人被击败时，为达达利亚恢复4点元素能量。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1528,20 +3762,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "深渊之灾·凝水盛放",
       "description": "每4秒，场上存在达达利亚自身施加的断流效果时，若达达利亚当前处于魔王武装·狂澜的近战状态，则触发断流·斩；否则，触发断流·闪。\n通过此命之座触发的断流·斩与断流·闪不受这两种断流各自的触发间隔限制，也不会影响其触发间隔。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1553,28 +3781,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "极恶技·天使灭尽",
       "description": "在近战状态下施放极恶技·尽灭闪时，清除魔王武装·狂澜的冷却时间。\n该效果会在回到远程状态后触发。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.tartaglia.growth",
+    "content.character-curves"
+  ]
 }

@@ -1,35 +1,211 @@
 {
   "id": "resolutionofsojourner",
   "name": "行者之心",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    3,
+    4
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "genshin-db.resolutionofsojourner.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/resolutionofsojourner.json"
+        },
+        {
+          "id": "content.set.resolutionofsojourner",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/resolutionofsojourner.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "resolutionofsojourner.static-attackPercent",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.resolutionofsojourner.static"
+          ],
+          "activation": {
+            "set": {
+              "id": "resolutionofsojourner",
+              "pieces": 2
+            }
+          },
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "constant",
+            "value": {
+              "kind": "quantity",
+              "unit": "scalar",
+              "value": 0.18
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.attackPercent",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "resolutionofsojourner.static-attackPercent",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.resolutionofsojourner.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "resolutionofsojourner",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+          "sources": [
+            "content.set.resolutionofsojourner"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "resolutionofsojourner.static-attackPercent",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.resolutionofsojourner.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "resolutionofsojourner",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.resolutionofsojourner"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.resolutionofsojourner"
+  ],
+  "rarity": 4,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [
+      "ruleIds": [
         {
-          "stat": "attackPercent",
-          "values": [
-            0.18
-          ]
+          "namespace": "builtin",
+          "id": "resolutionofsojourner.static-attackPercent",
+          "revision": "1"
         }
       ],
-      "support": {
-        "supported": true,
-        "reason": "攻击力提高18%。"
-      }
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.resolutionofsojourner.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：重击的暴击率提升30%。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.resolutionofsojourner.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/resolutionofsojourner.json"
-  },
-  "rarity": 4
+  ]
 }

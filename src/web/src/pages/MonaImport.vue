@@ -29,8 +29,8 @@ const canConfirm=computed(()=>{
   return !!result && !busy.value && (result.additions.length>0 || allowUpdates.value && result.updates.length>0)
     && (!result.conflicts.length || allowUpdates.value && result.updates.length===result.conflicts.length);
 });
-const confirmLabel=computed(()=>!preview.value?'确认导入':allowUpdates.value?`确认新增 ${preview.value.additions.length} 件并更新 ${preview.value.updates.length} 件五星圣遗物`:`确认导入 ${preview.value.additions.length} 件五星圣遗物`);
-const confirmText=computed(()=>confirmLabel.value.replace('五星圣遗物',''));
+const confirmLabel=computed(()=>!preview.value?'确认导入':allowUpdates.value?`确认新增 ${preview.value.additions.length} 件并更新 ${preview.value.updates.length} 件圣遗物`:`确认导入 ${preview.value.additions.length} 件圣遗物`);
+const confirmText=computed(()=>confirmLabel.value.replace('圣遗物',''));
 const summary=computed(()=>preview.value?[
   {label:'新增',count:preview.value.additions.length,tone:'hydro'},
   {label:'已存在',count:preview.value.duplicates,tone:'neutral'},

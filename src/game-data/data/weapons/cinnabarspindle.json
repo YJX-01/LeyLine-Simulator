@@ -221,96 +221,205 @@
     129.7,
     155.6
   ],
-  "modifiers": [],
-  "support": {
-    "supported": true,
-    "reason": "按明确的本次命中适用事实计算R1至R5防御附加基数；1.5秒冷却及伤害后0.1秒清除不自动推导，缺事实保持未知。"
-  },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#cinnabarspindle"
-  },
-  "combatRules": [
-    {
-      "id": "defense-skill-base",
-      "revision": "1",
-      "source": {
-        "repository": "theBowja/genshin-db",
-        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-        "path": "src/data/ChineseSimplified/weapons/cinnabarspindle.json"
-      },
-      "nodes": [
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
         {
-          "id": "def",
-          "op": "attribute",
-          "key": "defense",
-          "unit": "defense"
+          "id": "genshin-db.cinnabarspindle.defense-skill-base",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/cinnabarspindle.json"
         },
         {
-          "id": "one-def",
-          "op": "constant",
-          "quantity": {
-            "value": 1,
-            "unit": "defense"
-          }
-        },
-        {
-          "id": "def-points",
-          "op": "divide",
-          "left": "def",
-          "right": "one-def"
-        },
-        {
-          "id": "rate",
-          "op": "refinement",
-          "unit": "scalar",
-          "values": [
-            0.4,
-            0.5,
-            0.6,
-            0.7,
-            0.8
-          ]
-        },
-        {
-          "id": "one-damage",
-          "op": "constant",
-          "quantity": {
-            "value": 1,
-            "unit": "damage"
-          }
-        },
-        {
-          "id": "rate-damage",
-          "op": "multiply",
-          "left": "rate",
-          "right": "one-damage"
-        },
-        {
-          "id": "bonus",
-          "op": "multiply",
-          "left": "def-points",
-          "right": "rate-damage"
+          "id": "content.weapon.cinnabarspindle",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#cinnabarspindle"
         }
       ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "cinnabarspindle.defense-skill-base",
+            "revision": "1"
+          },
+          "template": {
+            "id": "attribute-conversion",
+            "revision": "1",
+            "stat": "defense",
+            "target": "damage",
+            "attribute": "def",
+            "rate": "rate",
+            "output": "bonus"
+          },
+          "sources": [
+            "genshin-db.cinnabarspindle.defense-skill-base"
+          ]
+        }
+      ],
+      "attributes": [],
       "effects": [
         {
-          "id": "base",
-          "startMs": 0,
-          "endMs": 3600000,
-          "permanent": true,
-          "recipient": "self",
-          "attribute": "baseDamageBonus",
-          "unit": "damage",
-          "value": "bonus",
-          "appliesTo": {
-            "category": "skill"
+          "identity": {
+            "namespace": "builtin",
+            "id": "cinnabarspindle.defense-skill-base.base",
+            "revision": "1"
           },
-          "captureAt": "dynamic",
-          "requiresApplication": true
+          "sources": [
+            "genshin-db.cinnabarspindle.defense-skill-base"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "formula",
+            "formula": {
+              "namespace": "builtin",
+              "id": "cinnabarspindle.defense-skill-base",
+              "revision": "1"
+            },
+            "inputs": {
+              "def": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "rate": {
+                "kind": "refinement-parameter",
+                "values": [
+                  0.4,
+                  0.5,
+                  0.6,
+                  0.7,
+                  0.8
+                ],
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "bonus"
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.baseDamageBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "explicit",
+          "priority": 0,
+          "stacking": {
+            "group": "cinnabarspindle.defense-skill-base.base",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.cinnabarspindle",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "cinnabarspindle",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。",
+          "sources": [
+            "content.weapon.cinnabarspindle",
+            "genshin-db.cinnabarspindle.defense-skill-base"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "cinnabarspindle.defense-skill-base.base",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。"
+            }
+          ]
         }
       ]
+    },
+    "ruleIds": [
+      {
+        "namespace": "builtin",
+        "id": "cinnabarspindle.defense-skill-base.base",
+        "revision": "1"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.cinnabarspindle",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.cinnabarspindle",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
     }
   ]
 }

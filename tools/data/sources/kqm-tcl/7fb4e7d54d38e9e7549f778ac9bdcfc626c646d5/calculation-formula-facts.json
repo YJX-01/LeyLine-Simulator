@@ -1,0 +1,51 @@
+{
+  "source": {
+    "repository": "KQM-git/TCL",
+    "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5"
+  },
+  "formulaPaths": {
+    "defense": "docs/combat-mechanics/_formulas/enemydef.md",
+    "resistance": "docs/combat-mechanics/_formulas/enemyres.md",
+    "ordinary": "docs/combat-mechanics/damage/damage-formula.md",
+    "transformative": "docs/combat-mechanics/_formulas/transformative.md"
+  },
+  "constants": [
+    {
+      "formula": "defense",
+      "node": "hundred",
+      "value": 100,
+      "meaning": "Equal character and enemy level offsets."
+    },
+    {
+      "formula": "resistance",
+      "node": "threshold",
+      "value": 0.75,
+      "meaning": "Boundary between the linear and reciprocal resistance branches."
+    },
+    {
+      "formula": "resistance",
+      "node": "two",
+      "value": 2,
+      "meaning": "Divisor of negative effective resistance."
+    },
+    {
+      "formula": "resistance",
+      "node": "four",
+      "value": 4,
+      "meaning": "Coefficient in the high-resistance denominator."
+    },
+    {
+      "formula": "transformative",
+      "node": "emNumerator",
+      "value": 16,
+      "meaning": "Transformative EM coefficient."
+    },
+    {
+      "formula": "transformative",
+      "node": "emDenominator",
+      "value": 2000,
+      "meaning": "Transformative EM denominator offset."
+    }
+  ],
+  "scope": "Formula component constants and branch definitions. Does not certify any character kit, conditional rule, player build or observed damage."
+}

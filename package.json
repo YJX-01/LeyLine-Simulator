@@ -37,6 +37,8 @@
     "data:build": "node tools/scripts/data/build.mjs",
     "docs:check": "node tools/scripts/checks/check-docs.mjs",
     "data:audit": "node tools/scripts/data/audit-numeric-sources.mjs",
+    "data:coverage": "node tools/scripts/data/audit-calculation-coverage.mjs",
+    "data:prepare-structured": "node tools/scripts/data/prepare-structured-content.mjs",
     "data:capture": "node tools/scripts/data/capture-catalog.mjs",
     "data:prepare-characters": "python tools/scripts/data/prepare-character-update.py",
     "project:evaluate": "node tools/scripts/data/evaluate-project.mjs",

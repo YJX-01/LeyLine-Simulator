@@ -52,7 +52,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
     expect(store.project.candidate.actors[0].build).toEqual(recorded.candidate.actors[0].build);
     expect(store.project.timeline).toEqual([]);
     expect(store.dirty).toBe(false);
-    data.set('leyline-axis-recovery-v2', '{');
+    data.set('leyline-axis-recovery-v5', '{');
     expect(store.recover()).toBe(false);
     expect(store.project.id).toBe(recorded.id);
   });

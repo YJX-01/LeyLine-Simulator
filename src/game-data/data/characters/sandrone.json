@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "sandrone",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "桑多涅",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000133,
     "region": "至冬"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1029.5856,
-      "attack": 26.6266,
-      "defense": 58.57357,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critRate",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,503 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.sandrone.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#sandrone"
+        },
+        {
+          "id": "content.sandrone.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#sandrone/combat1"
+        },
+        {
+          "id": "content.sandrone.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#sandrone/combat2"
+        },
+        {
+          "id": "content.sandrone.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#sandrone/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.normal",
+            "hitId": "sandrone.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.normal",
+            "hitId": "sandrone.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.normal",
+            "hitId": "sandrone.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.normal",
+            "hitId": "sandrone.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.normal",
+            "hitId": "sandrone.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.normal.param10",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.normal",
+            "hitId": "sandrone.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.skill",
+            "hitId": "sandrone.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.burst",
+            "hitId": "sandrone.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.burst.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sandrone.burst",
+            "hitId": "sandrone.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sandrone.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sandrone.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sandrone",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.sandrone.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.sandrone.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1029.5856,
+      "attack": 26.6266,
+      "defense": 58.57357,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critRate",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "sandrone.normal",
@@ -397,6 +882,48 @@
       "description": "普通攻击\n以数式编织出操纵兵刃的丝线，进行至多三段的连续挥砍。\n\n重击\n召唤出全功能通用型自动机关「法洁欧」，并使其切换至**解算**模式：对前方的敌人进行扫射攻击，并周期性发射冷凝射线，造成冰元素范围伤害。\n**辉映·星烁**：冷凝射线转为造成视为对应星烁反应伤害的冰元素范围伤害。\n在解算模式下，法洁欧的**解算功率**将会持续提升；发射冷凝射线时，还会使解算功率进一步提升。\n解算功率达到100点上限时，法洁欧将切换至功率过载模式，以更长的间隔对敌人进行射击，造成冰元素伤害，且无法切换至解算模式。\n不处于解算模式下时，法洁欧的解算功率将会缓慢降低；桑多涅处于队伍后台时，还会专注于维修法洁欧，使其解算功率降低速度加快至原本的300%。\n解算功率降低至50点以下时，法洁欧将退出功率过载模式。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "重击扫射伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击冷凝射线伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击冷凝射线星超导伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "重击冷凝射线星扩散伤害",
+          "template": "{param11:F1P}"
+        },
+        {
+          "label": "功率过载时伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param8:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param9:P}/{param10:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -630,90 +1157,341 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "重击扫射伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击冷凝射线伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击冷凝射线星超导伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "重击冷凝射线星扩散伤害",
-          "template": "{param11:F1P}"
-        },
-        {
-          "label": "功率过载时伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param8:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param9:P}/{param10:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "sandrone.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "sandrone.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "sandrone.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param8",
+          "id": "sandrone.normal.param8",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "sandrone.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "sandrone.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.normal.param10",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param10"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.sandrone.normal.parameters"
+      ]
     },
     {
       "id": "sandrone.skill",
@@ -721,6 +1499,24 @@
       "description": "秉持淑女完美的法度，搭乘茶会用战术突击悬浮机关，并持续向前浮行6秒。期间，桑多涅可以控制浮行的方向，并且点按冲刺时，将会消耗10点体力，进入优雅的高速悬浮模式，每秒消耗15点体力，以更快的速度进行浮行。\n\n开始浮行时，若附近存在敌人，桑多涅还会召唤出一台棱晶谐振炮，向没有冷静下来的敌人发射两枚棱晶弹，造成冰元素伤害。\n**辉映·星烁**：第二枚棱晶弹将转为造成视为对应星烁反应伤害的冰元素伤害。\n\n搭乘茶会用战术突击悬浮机关时，桑多涅还会优雅地悄悄维修法洁欧，使其**解算功率**快速降低。",
       "category": "skill",
       "element": "cryo",
+      "details": [
+        {
+          "label": "棱晶弹伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "棱晶弹星超导伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "棱晶弹星扩散伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -807,35 +1603,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "棱晶弹伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "棱晶弹星超导伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "棱晶弹星扩散伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "sandrone.skill.param1",
+          "element": "cryo",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.sandrone.skill.parameters"
+      ]
     },
     {
       "id": "sandrone.burst",
@@ -843,6 +1670,32 @@
       "description": "秉持淑女优雅的礼仪，召唤出大量棱晶谐振炮对前方进行广域轰炸，并在随后发射负温聚能光束轰击敌人，造成冰元素范围伤害。\n**辉映·星烁**：负温聚能光束将转为造成视为对应星烁反应伤害的冰元素范围伤害。",
       "category": "burst",
       "element": "cryo",
+      "details": [
+        {
+          "label": "轰炸伤害",
+          "template": "{param1:F1P}*3"
+        },
+        {
+          "label": "聚能光束伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "聚能光束星超导伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "聚能光束星扩散伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param5:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -971,48 +1824,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "轰炸伤害",
-          "template": "{param1:F1P}*3"
-        },
-        {
-          "label": "聚能光束伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "聚能光束星超导伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "聚能光束星扩散伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param5:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "sandrone.burst.param1",
+          "element": "cryo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "sandrone.burst.param2",
+          "element": "cryo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sandrone.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sandrone.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sandrone.burst.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.sandrone.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1021,40 +1947,28 @@
       "name": "悠久的演算机关",
       "description": "**辉映·星烁**：施放元素战技**事象数式·游衍解析**时，若法洁欧的**解算功率**超过50点，则会在降低解算功率的同时，使向附近敌人发射的第二枚棱晶弹造成原本400%的伤害。\n此外，法洁欧的解算功率每降低10点，都会获得一层持续60秒的改进战术效果，该效果至多叠加10层。桑多涅处于辉映·星烁状态下施放元素爆发**事象数式·万理证毕**时，将会清除全部的改进战术层数，使负温聚能光束造成原本100%+清除层数*10%的伤害。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "sandrone.passive2",
       "name": "淑女的行事准则",
       "description": "基于桑多涅的攻击力，提升其元素精通：每100点攻击力都将使桑多涅的元素精通提升8点，至多通过这种方式提升160点元素精通。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "sandrone.passive3",
       "name": "星耀祝礼·唯理为光",
       "description": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，桑多涅将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于桑多涅的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.7%上述反应的基础伤害，至多通过这种方式提升14%伤害。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "sandrone.passive4",
       "name": "茶会的序曲与长长的故事",
       "description": "桑多涅处于队伍中时，向凯瑟琳交付每日委托任务后，会获得额外的茶点奖励。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1063,20 +1977,14 @@
       "name": "鎏金未凋，夕暮已远",
       "description": "处于**解算**模式下时，法洁欧的**解算功率**提升速度降低50%，且队伍中的所有角色造成的星烁反应伤害提升30%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "回望镜中，时岁翩然",
       "description": "辉映·星烁：重击发射的冷凝射线的暴击伤害提升40%，且每次发射冷凝射线时，都会使本次**解算**模式期间，发射的所有冷凝射线的暴击伤害进一步提升20%，该效果至多叠加3层。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1088,20 +1996,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "世事皆数，昼来夜往",
       "description": "桑多涅的星超导/星扩散反应伤害命中敌人时，还会额外召唤一台棱晶谐振炮进行协同攻击，对敌人造成一次相当于桑多涅攻击力125%/187.5%的冰元素伤害，该伤害视为对应星烁反应造成的伤害。该效果每4秒至多触发一次。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1113,28 +2015,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "水仙梦醒，且望晨光",
       "description": "**解算**模式下，法洁欧第三次发射冷凝射线时，将转为持续发射威力更强的集束型冷凝射线，在原本后续发射的冷凝射线基础上，至多额外造成4段相当于桑多涅攻击力100%的冰元素范围伤害。\n辉映·星烁：集束型冷凝射线转为至多额外造成4段视为对应星烁反应伤害的冰元素范围伤害，该伤害相当于桑多涅攻击力的：\n辉映·星超导：80%；\n辉映·星扩散：120%。\n此外，桑多涅造成的所有星烁反应伤害**擢升**20%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.sandrone.growth",
+    "content.character-curves"
+  ]
 }

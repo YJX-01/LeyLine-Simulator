@@ -6,12 +6,12 @@ test('native file cancellation keeps the import dialog, preview and account unch
   test.skip(!existsSync('.references/artifacts_mona.json'),'Requires actual inventory.');
   await page.goto('/');await page.getByTestId('workspace-nav-artifacts').click();await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'导入莫娜圣遗物',exact:true}),file=dialog.getByLabel('导入莫娜圣遗物文件',{exact:true});
-  const before=await page.evaluate(()=>localStorage.getItem('leyline-account-v2'));
+  const before=await page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
   // File inputs emit a bubbling cancel event when the native chooser is dismissed.
   await file.dispatchEvent('cancel',{bubbles:true});await expect(dialog).toBeVisible();
   await file.setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
   await file.dispatchEvent('cancel',{bubbles:true});await expect(dialog).toBeVisible();await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v2'))).toBe(before);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v5'))).toBe(before);
   await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);
 });
 

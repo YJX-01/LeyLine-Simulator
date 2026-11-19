@@ -1,5 +1,5 @@
 import {persistArtifactRolls} from './artifact-rolls';
-import { artifactItemSchema, type StatKey } from '@leyline/schema';
+import { artifactItemSchema, artifactMaxLevel, type ArtifactMainTable, type ArtifactRarity, type StatKey } from '@leyline/schema';
 import { accountSlotLabels, cloneAccount, parseAccount, type AccountArtifact, type AccountSlot, type LocalAccount } from './account';
 import { accountMainStats, validateAccountArtifact } from './account-real';
 
@@ -11,8 +11,8 @@ const statMap: Record<string, StatKey> = { lifeStatic: 'hp', lifePercentage: 'hp
 import monaSetAliases from '../../generated/mona-set-aliases.json';
 const setAliases: Record<string, string> = monaSetAliases;
 
-type SetEntry = { id: string; name: string };
-type MainTable = Record<StatKey, number[]>;
+type SetEntry = { id: string; name: string; rarities: number[]; slots: AccountSlot[] };
+type MainTable = ArtifactMainTable;
 function realContent(item: AccountArtifact['real']): string {
   return JSON.stringify(item && { id: item.id, setId: item.setId, slot: item.slot, rarity: item.rarity, level: item.level, mainStat: item.mainStat, substats: item.substats.map(({stat,value})=>({stat,value})) });
 }
@@ -21,7 +21,7 @@ const text = (value: unknown): value is string => typeof value === 'string' && v
 export interface MonaImportPreview {
   format: 'mona-v1'; accountId: string; additions: AccountArtifact[]; updates: { item: AccountArtifact; before: string }[]; duplicates: number; skipped: string[]; conflicts: string[];
 }
-/** Repair only proven, unedited legacy identities, without recreating a player export. */
+/** Resolve only proven, unedited source identities, without recreating a player export. */
 export async function previewMonaSetRepairs(account: LocalAccount, sets: SetEntry[]): Promise<MonaImportPreview> {
   const preview: MonaImportPreview = { format: 'mona-v1', accountId: account.id, additions: [], updates: [], duplicates: 0, skipped: [], conflicts: [] };
   for (const item of account.artifacts) {
@@ -30,11 +30,10 @@ export async function previewMonaSetRepairs(account: LocalAccount, sets: SetEntr
     const set = sets.find(set => set.id === setAliases[name]);
     if (!set) { preview.skipped.push(`${name}：仍没有经过核对的套装映射。`); continue; }
     const snapshot = JSON.stringify(item);
-    const content = { setId: item.real.setId, slot: item.real.slot, level: item.real.level, main: { stat: item.real.mainStat, value: item.mona.mainValue }, substats: item.real.substats };
+    const content = { setId: item.real.setId, slot: item.real.slot, rarity: item.real.rarity, level: item.real.level, main: { stat: item.real.mainStat, value: item.mona.mainValue }, substats: item.real.substats };
     const rawContent = { ...content, substats: content.substats.map(({ stat, value }) => ({ stat, value })) };
     // Import identities cover scanned values, before local enhancement-roll inference.
-    // Accept the historical repair fingerprint too, while preserving edit detection.
-    if (await digest(JSON.stringify(rawContent)) !== item.real.source.fingerprint && await digest(JSON.stringify(content)) !== item.real.source.fingerprint) {
+    if (await digest(JSON.stringify(rawContent)) !== item.real.source.fingerprint) {
       preview.skipped.push(`${item.name}：导入后词条已修改，请保留现有物品并核对原文件。`); continue;
     }
     const fingerprint = await digest(JSON.stringify({ ...rawContent, setId: set.id }));
@@ -63,7 +62,7 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
   const preview: MonaImportPreview = { format: 'mona-v1', accountId: account.id, additions: [], updates: [], duplicates: 0, skipped: [], conflicts: [] };
   const occurrences = new Map<string, number>();
   const seenIds = new Set<string>();
-  const drafts: { path: string; item: Record<string, unknown>; set: SetEntry | undefined; slot: AccountSlot; primary: ReturnType<typeof stat>; substats: ReturnType<typeof stat>[]; level: number; setName: string }[] = [];
+  const drafts: { path: string; item: Record<string, unknown>; set: SetEntry | undefined; slot: AccountSlot; rarity: ArtifactRarity; primary: ReturnType<typeof stat>; substats: ReturnType<typeof stat>[]; level: number; setName: string }[] = [];
   let total = 0;
   for (const group of groups) {
     const alias = aliases[group];
@@ -74,30 +73,32 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
       const path = `${accountSlotLabels[slotMap[group]]}第${index + 1}件`;
       if (!object(item)) throw new Error(`${path}格式无效，库存保持不变。`);
       if (!Number.isInteger(item.star) || (item.star as number) < 1 || (item.star as number) > 5) throw new Error(`${path}星级无效。`);
-      if (item.star !== 5) { preview.skipped.push(`${path}：本阶段仅导入五星圣遗物。`); continue; }
+      if (item.star !== 4 && item.star !== 5) { preview.skipped.push(`${path}：当前仅导入四星和五星圣遗物。`); continue; }
+      const rarity = item.star;
       if (!text(item.setName) || !text(item.position) || !Object.hasOwn(slotMap, item.position) || slotMap[item.position as keyof typeof slotMap] !== slotMap[group]) throw new Error(`${path}套装或部位无效。`);
       // Preserve an unresolved export identity as a namespaced ID, never guess a catalog set.
       const mappedSetId = setAliases[item.setName] ?? item.setName.toLowerCase();
       const set = sets.find(entry => entry.id === mappedSetId);
+      if (set && (!set.rarities.includes(rarity) || !set.slots.includes(slotMap[group]))) throw new Error(`${path}星级或部位不在套装的合法集合中。`);
       const primary = stat(item.mainTag);
       if (!Array.isArray(item.normalTags) || item.normalTags.length > 4) throw new Error(`${path}副词条列表无效。`);
       const substats = item.normalTags.map(stat);
       const slot = slotMap[group];
       if (!accountMainStats[slot].includes(primary.stat)) throw new Error(`${path}主词条与部位不匹配。`);
-      if (typeof item.level !== 'number' || !Number.isInteger(item.level) || item.level < 0 || item.level > 20) throw new Error(`${path}等级必须为 0 到 20 的整数。`);
-      const expected = main[primary.stat]?.[item.level];
+      if (typeof item.level !== 'number' || !Number.isInteger(item.level) || item.level < 0 || item.level > artifactMaxLevel(rarity)) throw new Error(`${path}等级必须为 0 到 ${artifactMaxLevel(rarity)} 的整数。`);
+      const expected = main[rarity][primary.stat]?.[item.level];
       // Mona scans may retain rounded display values: EM 187 represents canonical 186.5.
       const tolerance = ['hp', 'attack', 'defense', 'elementalMastery'].includes(primary.stat) ? 0.500000001 : 0.000500001;
-      if (!Number.isFinite(expected) || Math.abs(primary.value - expected) > tolerance) throw new Error(`${path}主词条数值与五星等级表不符，请核对等级或百分比单位。`);
+      if (!Number.isFinite(expected) || Math.abs(primary.value - expected) > tolerance) throw new Error(`${path}主词条数值与所选星级的等级表不符，请核对等级或百分比单位。`);
       if (item.id !== undefined && !(typeof item.id === 'number' && Number.isSafeInteger(item.id) && item.id >= 0) && !text(item.id)) throw new Error(`${path}实例标识无效。`);
-      drafts.push({ path, item, set, slot, primary, substats, level: item.level, setName: item.setName });
+      drafts.push({ path, item, set, slot, rarity, primary, substats, level: item.level, setName: item.setName });
     }
   }
   // Submit each hashing phase together. Serial native crypto round trips are slow in WebKit.
   // Promise.all preserves source order, including the identity of equal no-ID physical items.
   const fingerprinted = await Promise.all(drafts.map(async draft => {
     const setId = draft.set?.id ?? `mona-unresolved-${await digest(draft.setName)}`;
-    const fingerprint = await digest(JSON.stringify({ setId, slot: draft.slot, level: draft.level, main: draft.primary, substats: draft.substats }));
+    const fingerprint = await digest(JSON.stringify({ setId, slot: draft.slot, rarity: draft.rarity, level: draft.level, main: draft.primary, substats: draft.substats }));
     return { ...draft, setId, fingerprint };
   }));
   const identified = await Promise.all(fingerprinted.map(async draft => {
@@ -107,11 +108,11 @@ export async function previewMonaImport(content: string, account: LocalAccount, 
     return { ...draft, key, id: `mona-${await digest(key)}` };
   }));
   for (const draft of identified) {
-    const { path, item, set, slot, primary, substats, level, setName, setId, fingerprint, key, id } = draft;
+    const { path, item, set, slot, rarity, primary, substats, level, setName, setId, fingerprint, key, id } = draft;
     const setIdentityPending = !set;
     if (seenIds.has(id)) throw new Error(`${path}与本文件另一件圣遗物使用相同实例标识。`);
     seenIds.add(id);
-    const real = artifactItemSchema.parse({ id, setId, slot, rarity: 5, level: level, mainStat: primary.stat, substats, source: { format: 'mona-v1', key, fingerprint } });
+    const real = artifactItemSchema.parse({ id, setId, slot, rarity, level, mainStat: primary.stat, substats, source: { format: 'mona-v1', key, fingerprint } });
     validateAccountArtifact(real);
     const next: AccountArtifact = { id, name: `${set?.name ?? `${setName}（套装待核对）`} · ${accountSlotLabels[slot]}`, slot, attack: 0, real,
       mona: { mainValue: primary.value, omit: item.omit === true, sourceSetName: setName, ...(setIdentityPending ? { setIdentityPending: true } : {}), ...(text(item.equip) ? { equippedBy: item.equip } : {}), ...(typeof item.contentHash === 'string' ? { contentHash: item.contentHash } : {}) } };

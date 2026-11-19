@@ -17,9 +17,9 @@ try {
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button', { name: '莫娜导入', exact: true }).click();
   await page.getByLabel('导入莫娜圣遗物文件', { exact: true }).setInputFiles(resolve('.references/artifacts_mona.json'));
-  await page.getByRole('button', { name: '确认导入 458 件五星圣遗物', exact: true }).click();
+  await page.getByRole('button', { name: '确认导入 458 件圣遗物', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  const before = await page.evaluate(() => localStorage.getItem('leyline-account-v2'));
+  const before = await page.evaluate(() => localStorage.getItem('leyline-account-v5'));
   if (JSON.parse(before).artifacts.length !== 458) throw new Error('Actual inventory did not import');
   await page.getByTestId('workspace-nav-definitions').click();
   const panel = page.getByRole('region', { name: '自定义角色元数据', exact: true });
@@ -41,7 +41,7 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   if (await panel.evaluate(element => element.scrollWidth > element.clientWidth + 1)) throw new Error('Narrow metadata panel overflows');
   await page.screenshot({ path: resolve(output, 'character-definition-mobile.png'), fullPage: true });
-  if (await page.evaluate(() => localStorage.getItem('leyline-account-v2')) !== before) throw new Error('Metadata workflow changed actual account');
+  if (await page.evaluate(() => localStorage.getItem('leyline-account-v5')) !== before) throw new Error('Metadata workflow changed actual account');
   if (errors.length) throw new Error(errors.join('\n'));
   await writeFile(resolve(output, 'report.json'), JSON.stringify({ status: 'passed', sourceFingerprint:sourceFingerprint(), executable, profile, actualInventory: 458,
     checks: ['actual-inventory-import', 'metadata-copy', 'sequential-decimal-input', 'native-export-open', 'save-cancel-preserves-draft', '390px', 'account-unchanged'],

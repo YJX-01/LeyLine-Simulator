@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "sethos",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "赛索斯",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000097,
     "region": "须弥"
-  },
-  "attributes": {
-    "base": {
-      "hp": 820.6119,
-      "attack": 19.05456,
-      "defense": 46.9245,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "elementalMastery",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,569 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.sethos.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#sethos"
+        },
+        {
+          "id": "content.sethos.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#sethos/combat1"
+        },
+        {
+          "id": "content.sethos.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#sethos/combat2"
+        },
+        {
+          "id": "content.sethos.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#sethos/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param6",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param10",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.normal.param11",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.normal",
+            "hitId": "sethos.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "sethos.skill",
+            "hitId": "sethos.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.sethos.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.sethos.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "sethos",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.sethos.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.sethos.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 820.6119,
+      "attack": 19.05456,
+      "defense": 46.9245,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "elementalMastery",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "sethos.normal",
@@ -397,6 +948,40 @@
       "description": "普通攻击\n进行至多三段的连续弓箭射击。\n\n重击\n进行伤害更高、更为精准的瞄准射击。\n瞄准时，雷霆的力量会在箭矢上持续积聚，并随攻击发射出去。根据蓄力时间长短，能造成不同的效果：\n·一段蓄力：射出附有雷元素的箭矢，造成雷元素伤害；\n·二段蓄力：发射能穿透敌人的贯影箭，对路径上的敌人造成雷元素伤害。贯影箭完成蓄力后，赛索斯将无法进行移动。\n\n下落攻击\n从空中射出箭雨，并迅速下坠冲击地面，在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}+{param3:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "瞄准射击",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "一段蓄力瞄准射击",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "贯影箭伤害",
+          "template": "{param7:F1P}攻击力+{param8:F1P}元素精通"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param9:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param10:F1P}/{param11:F1P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -630,112 +1215,610 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}+{param3:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "瞄准射击",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "一段蓄力瞄准射击",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "贯影箭伤害",
-          "template": "{param7:F1P}攻击力+{param8:F1P}元素精通"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param9:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param10:F1P}/{param11:F1P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "sethos.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
-        },
-        {
-          "parameter": "param2",
-          "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
-        },
-        {
-          "parameter": "param3",
-          "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
-        },
-        {
-          "parameter": "param4",
-          "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
-        },
-        {
-          "parameter": "param5",
-          "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
-        },
-        {
-          "parameter": "param6",
-          "category": "charged",
-          "scalingStat": "attack",
-          "element": "electro"
-        },
-        {
-          "parameter": "param7",
-          "category": "charged",
-          "scalingStat": "attack",
-          "element": "electro",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "elementalMastery",
-              "parameter": "param8"
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param1",
+              "revision": "3"
             }
-          ]
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param9",
-          "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "id": "sethos.normal.param2",
+          "element": "physical",
+          "category": "normal",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param10",
-          "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "id": "sethos.normal.param3",
+          "element": "physical",
+          "category": "normal",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param11",
+          "id": "sethos.normal.param4",
+          "element": "physical",
+          "category": "normal",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
+        },
+        {
+          "id": "sethos.normal.param5",
+          "element": "physical",
+          "category": "charged",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
+        },
+        {
+          "id": "sethos.normal.param6",
+          "element": "electro",
+          "category": "charged",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param6",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param6"
+        },
+        {
+          "id": "sethos.normal.param7",
+          "element": "electro",
+          "category": "charged",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "sethos.normal",
+                    "parameterId": "param7",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "elementalMastery-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.elementalMastery",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "sethos.normal",
+                    "parameterId": "param8",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
+        },
+        {
+          "id": "sethos.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
+        },
+        {
+          "id": "sethos.normal.param10",
+          "element": "physical",
+          "category": "plunge",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param10",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param10"
+        },
+        {
+          "id": "sethos.normal.param11",
+          "element": "physical",
+          "category": "plunge",
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.normal.param11",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param11"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.sethos.normal.parameters"
+      ]
     },
     {
       "id": "sethos.skill",
@@ -744,6 +1827,20 @@
       "flavorText": "「神灵凭依的司祭、点穴成泉的术师，沙海的歌者间流传着他们的故事…但我知道那并非传说，因为他们就是我们的先辈。」",
       "category": "skill",
       "element": "electro",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "恢复元素能量",
+          "template": "{param2:I}点"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -809,31 +1906,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "恢复元素能量",
-          "template": "{param2:I}点"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "sethos.skill.param1",
+          "element": "electro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "sethos.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.sethos.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.sethos.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.sethos.skill.parameters"
+      ]
     },
     {
       "id": "sethos.burst",
@@ -842,6 +1974,25 @@
       "flavorText": "缄默之殿的藏书室中保存着不少从赤王时代的阿赫塔蒙遗留下来的书籍，书中记载了许多威力强大的秘仪。但即便在缄默之殿中，也只有少数人能够习得掌握它们的力量。",
       "category": "burst",
       "element": "electro",
+      "details": [
+        {
+          "label": "瞑弦矢伤害提升",
+          "template": "{param1:F1P}元素精通"
+        },
+        {
+          "label": "寂想瞑影持续时间",
+          "template": "{param2:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
+      "noIndependentDamage": true,
       "parameters": [
         {
           "id": "param1",
@@ -928,30 +2079,10 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "瞑弦矢伤害提升",
-          "template": "{param1:F1P}元素精通"
-        },
-        {
-          "label": "寂想瞑影持续时间",
-          "template": "{param2:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [],
-      "support": {
-        "supported": false,
-        "reason": "此技能没有独立伤害命中，强化或辅助规则仍待接入；不伪造伤害以表示技能已支持。"
-      },
-      "noIndependentDamage": true
+      "sources": [
+        "content.sethos.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -960,30 +2091,21 @@
       "name": "黑鸢的密喻",
       "description": "瞄准射击时，赛索斯每1点当前元素能量都将使蓄力时间减少0.285秒，通过这种方式，至多使蓄力时间降低至0.3秒并计入20点元素能量；发射时，若发射的是贯影箭，将消耗计入的元素能量；如果发射的是一段蓄力的箭矢，则消耗计入元素能量的50%。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "sethos.passive2",
       "name": "砂王的赐礼",
       "description": "赛索斯获得「热砂炫影」效果，使贯影箭造成的伤害值提升，提升值相当于赛索斯的元素精通的700%。\n热砂炫影期间满足以下任意条件时效果将被移除：\n·贯影箭首次命中敌人5秒后；\n·4枚贯影箭命中敌人后。\n\n热砂炫影效果下的贯影箭首次命中敌人15秒后将重新获得热砂炫影效果。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "sethos.passive3",
       "name": "猿月的显迹",
       "description": "在小地图上显示周围的须弥区域特产的位置。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -992,20 +2114,14 @@
       "name": "封龛谒灵歌",
       "description": "贯影箭的暴击率提升15%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "寂秘纸草经",
       "description": "满足以下任意一项条件时，赛索斯的雷元素伤害加成提升15%，持续10秒，至多叠加2层，每层独立计时：\n·通过瞄准射击消耗元素能量，此条件需要解锁突破天赋「黑鸢的密喻」；\n·通过古仪·鸣砂掣雷触发元素反应恢复元素能量；\n·施放秘仪·瞑光贯影。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1017,20 +2133,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "真念鸵羽集",
       "description": "贯影箭或瞑弦矢命中2名及以上的敌人时，队伍中附近的所有角色的元素精通提升80点，持续10秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1042,28 +2152,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "巡日塔门书",
       "description": "贯影箭命中敌人后，将返还因突破天赋「黑鸢的密喻」消耗的元素能量，此效果每15秒至多触发一次，需要解锁突破天赋「黑鸢的密喻」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.sethos.growth",
+    "content.character-curves"
+  ]
 }

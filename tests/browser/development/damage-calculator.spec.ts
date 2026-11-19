@@ -1,3 +1,4 @@
+import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import type { AxisResponse, Build, DamageCalculatorDocument } from '@leyline/schema';
@@ -150,8 +151,7 @@ test('Kaeya C3 sequential talent editing, dirty navigation and formal Worker res
 
 test('actual comparison Worker recomputes Kaeya C3 after current document serialization', async ({ page }) => {
   const build: Build = {
-    dataVersion: 'genshin-db-8e5badd-content-v2', character: JSON.parse(readFileSync('src/game-data/data/characters/kaeya.json', 'utf8')),
-    weapon: JSON.parse(readFileSync('src/game-data/data/weapons/dullblade.json', 'utf8')), artifactMain: JSON.parse(readFileSync('src/game-data/data/tables/artifact-main.json', 'utf8')),
+    ...catalogSnapshotFields('kaeya', 'dullblade'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 3, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1,
   };
   await page.goto('/');
@@ -160,7 +160,7 @@ test('actual comparison Worker recomputes Kaeya C3 after current document serial
     const { createDamageCalculation, calculatorRequest, parseDamageCalculator } = await import('/src/domain/damage-calculator.ts');
     // @ts-expect-error Vite browser source URL.
     const { defaultEnemy } = await import('/src/domain/real-project.ts');
-    const document = createDamageCalculation(build, { skillId: 'kaeya.skill', hitIndex: 0, crit: 'noncritical', reaction: 'none' }, defaultEnemy());
+    const document = createDamageCalculation(build, { skillId: 'kaeya.skill', hitId: 'kaeya.skill.param1', outputId: 'kaeya.skill.param1.damage', crit: 'noncritical', reaction: 'none' }, defaultEnemy());
     document.baseline = JSON.parse(JSON.stringify(document.project));
     const candidate = document.project.candidate.actors[0].build;
     candidate.talents.skill = 8;
@@ -270,24 +270,27 @@ test('missing-build derivative of the original account stays selectable and carr
   expect(copied.artifacts.map(item => item.id)).toEqual(Object.values(before.equipment));
   expect(copied.artifacts).toHaveLength(5);
   expect(copied.weapon.id).toBe('dullblade');
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-v2'))).toBe(before.account);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-v5'))).toBe(before.account);
 });
 
 test('old saved content changes only after review and explicit adoption in the calculator copy', async ({ page }) => {
   const build: Build = {
-    dataVersion: 'genshin-db-8e5badd-content-v2', character: JSON.parse(readFileSync('src/game-data/data/characters/kaeya.json', 'utf8')),
-    weapon: JSON.parse(readFileSync('src/game-data/data/weapons/dullblade.json', 'utf8')), artifactMain: JSON.parse(readFileSync('src/game-data/data/tables/artifact-main.json', 'utf8')),
+    ...catalogSnapshotFields('kaeya', 'dullblade'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 3, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1,
   };
-  // Explicit pre-R1 revision4 missing-proof derivative; not a player file.
-  build.character.revision = '4'; delete build.character.damageCoverage;
+  // An earlier proof scope carried in a current-format derivative.
+  build.character.revision = '4';
+  for (const proof of build.character.calculation.bundle.coverage) {
+    proof.entity.revision = '4';
+    if (proof.scope.kind === 'hit' && proof.scope.skillId === 'kaeya.skill') proof.scope.maxConstellation = 0;
+  }
   await page.goto('/');
   const content = await page.evaluate(async build => {
     // @ts-expect-error Vite browser source URL.
     const { createDamageCalculation } = await import('/src/domain/damage-calculator.ts');
     // @ts-expect-error Vite browser source URL.
     const { defaultEnemy } = await import('/src/domain/real-project.ts');
-    return JSON.stringify(createDamageCalculation(build, { skillId: 'kaeya.skill', hitIndex: 0, crit: 'noncritical', reaction: 'none' }, defaultEnemy()));
+    return JSON.stringify(createDamageCalculation(build, { skillId: 'kaeya.skill', hitId: 'kaeya.skill.param1', outputId: 'kaeya.skill.param1.damage', crit: 'noncritical', reaction: 'none' }, defaultEnemy()));
   }, build);
   await page.getByTestId('workspace-nav-calculator').click();
   const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
@@ -338,7 +341,7 @@ for (const entry of [
     return Array.from(stepper.querySelectorAll('button,input')).every(node => { const box = node.getBoundingClientRect(); return box.left >= bounds.left && box.right <= bounds.right + 1; });
   })).toBe(true);
   await calculator.getByRole('combobox', { name: '技能', exact: true }).selectOption(`${entry.id}.${entry.skill}`);
-  await calculator.getByRole('combobox', { name: '命中类型', exact: true }).selectOption(String(entry.hitIndex));
+  await calculator.getByRole('combobox', { name: '命中类型', exact: true }).selectOption({ index: entry.hitIndex + 1 });
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
@@ -354,7 +357,7 @@ for (const entry of [
   const content = readFileSync((await (await downloadPromise).path())!, 'utf8');
   const saved = JSON.parse(content) as DamageCalculatorDocument;
   expect(saved.project.timeline).toHaveLength(1);
-  expect(saved.project.candidate.actors[0].build!.character.capabilities.calculation.supported).toBe(false);
+  expect(saved.project.candidate.actors[0].build!.character.calculation.bundle.coverage.some(proof => proof.scope.kind === 'context' && proof.resolution === 'unavailable')).toBe(true);
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: `${entry.name}单次计算.json`, mimeType: 'application/json', buffer: Buffer.from(content) });
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(entry.expected + entry.delta, 5);
   if (entry.id === 'barbara') {

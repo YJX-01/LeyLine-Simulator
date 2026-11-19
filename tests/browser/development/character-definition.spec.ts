@@ -33,7 +33,7 @@ test('verified Jean metadata supports sequential decimal editing, guarded replac
   expect(file).not.toHaveProperty('account');
   await panel.getByLabel('导入角色定义文件', { exact: true }).setInputFiles({ name: 'jean.character.json', mimeType: 'application/json', buffer: Buffer.from(content) });
   await expect(name).toHaveValue('琴 · 元数据往返');
-  await panel.getByLabel('导入角色定义文件', { exact: true }).setInputFiles({ name: 'invalid-version.character.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ ...file, schemaVersion: 3 })) });
+  await panel.getByLabel('导入角色定义文件', { exact: true }).setInputFiles({ name: 'invalid-version.character.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ ...file, schemaVersion: 2 })) });
   await expect(panel.getByRole('alert')).toContainText('格式无效');
   await expect(name).toHaveValue('琴 · 元数据往返');
   await page.setViewportSize({ width: 390, height: 844 });
@@ -54,19 +54,13 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   await page.getByRole('button', { name: '导入行秋', exact: true }).click();
   await page.getByRole('button', { name: '确认导入 1 位角色', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  // Explicitly save and adopt the recorded equipment; import alone never changes wearing.
-  await page.getByRole('button', { name: '查看行秋详情', exact: true }).click();
-  const role = page.getByRole('dialog', { name: '行秋', exact: true });
-  await role.getByRole('button', { name: '展柜', exact: true }).click();
-  await role.getByRole('button', { name: '保存组合', exact: true }).click();
-  await page.getByRole('dialog', { name: '保存组合', exact: true }).getByRole('button', { name: '保存', exact: true }).click();
-  await role.getByRole('button', { name: '本地', exact: true }).click();
-  await role.getByRole('button', { name: '应用组合', exact: true }).click();
-  await page.getByRole('dialog', { name: '选择圣遗物组合', exact: true }).getByRole('button', { name: '应用组合', exact: true }).click();
-  await role.getByRole('button', { name: '保存', exact: true }).click();
-  await expect(role.getByRole('button', { name: '保存', exact: true })).toBeDisabled();
-  await page.keyboard.press('Escape');
-  const account = await page.evaluate(() => localStorage.getItem('leyline-account-v2'));
+  // Confirmed import-and-merge already equips the selected character; no independent combination is created.
+  const account = await page.evaluate(() => localStorage.getItem('leyline-account-v5'));
+  const imported = JSON.parse(account!);
+  const recorded = JSON.parse(readFileSync(source, 'utf8')).avatarInfoList.find((avatar: { avatarId: number }) => avatar.avatarId === 10000025);
+  const importedCharacter = imported.characters.find((character: { build?: { character: { id: string } } }) => character.build?.character.id === 'xingqiu');
+  expect(Object.keys(importedCharacter.equipment)).toHaveLength(recorded.equipList.filter((item: { reliquary?: unknown }) => item.reliquary).length);
+  for (const id of Object.values(importedCharacter.equipment)) expect(imported.artifacts.some((artifact: { id: string }) => artifact.id === id)).toBe(true);
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('button', { name: '＋ 从账号选择队员', exact: true }).click();
   await page.getByRole('dialog', { name: '从账号选择队员', exact: true }).getByRole('button').filter({ has: page.getByText('行秋', { exact: true }) }).click();
@@ -78,8 +72,8 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   const name = panel.getByLabel('角色元数据名称', { exact: true });
   await name.clear(); await name.pressSequentially('行秋 · 自定义保存核对');
   await panel.getByRole('button', { name: '应用到所选队员', exact: true }).click();
-  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-axis-recovery-v2')!).project.candidate.actors[0].build.character.id)).toMatch(/^custom-/);
-  const before = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v2')!).project);
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project.candidate.actors[0].build.character.id)).toMatch(/^custom-/);
+  const before = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project);
   expect(before.candidate.actors[0].build.character.id).toMatch(/^custom-/);
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('button', { name: '查看与修改配装', exact: true }).click();
@@ -89,9 +83,9 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   await editor.getByRole('button', { name: `精炼${refinement}阶`, exact: true }).click();
   await editor.getByRole('button', { name: '保存', exact: true }).click();
   await expect(editor.getByRole('button', { name: '保存', exact: true })).toBeDisabled();
-  const after = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v2')!).project);
+  const after = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project);
   expect(after.candidate.actors[0].build.character).toEqual(before.candidate.actors[0].build.character);
   expect(after.candidate.actors[0].build.refinement).toBe(refinement);
   expect(after.candidate.actors[0].build.artifacts).toEqual(before.candidate.actors[0].build.artifacts);
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-v2'))).toBe(account);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-v5'))).toBe(account);
 });

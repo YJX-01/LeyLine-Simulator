@@ -32,7 +32,7 @@ it.skipIf(!existsSync('.references/enka/official-example.json'))('accepts curren
   const before=JSON.stringify({account,build,project,library});
   expect(parseAccount(account)).toEqual(account);
   expect(importProject(JSON.stringify(project))).toEqual(project);
-  expect(parseCharacterDefinition(JSON.stringify(build.character))).toEqual(build.character);
+  expect(parseCharacterDefinition(JSON.stringify(build.character), [build.character])).toEqual(build.character);
   expect(parseDefinitionLibrary(library)).toEqual(library);
   // Version-tag derivatives test a file boundary, not original player exports or combat records.
   expect(()=>parseAccount({...account,schemaVersion:1})).toThrow();
@@ -68,9 +68,9 @@ it.skipIf(!existsSync('.references/enka/official-example.json'))('restores curre
   const configurations=[{id:character.id,name:character.name,accountId:account.id,characterId:character.id,snapshot:{...account,characters:[character]}}];
   const teams=[{id:project.id,name:character.name,project}];
   const memory=new Map([
-    ['leyline-account-v2',JSON.stringify(account)],['leyline-character-loadouts-v2',JSON.stringify(configurations)],
-    ['leyline-saved-teams-v2',JSON.stringify(teams)],['leyline-definition-library-v2',JSON.stringify(library)],
-    ['leyline-axis-recovery-v2',JSON.stringify({schemaVersion:2,project,savedSnapshot:null})],
+    ['leyline-account-v5',JSON.stringify(account)],['leyline-character-loadouts-v5',JSON.stringify(configurations)],
+    ['leyline-saved-teams-v5',JSON.stringify(teams)],['leyline-definition-library-v2',JSON.stringify(library)],
+    ['leyline-axis-recovery-v5',JSON.stringify({schemaVersion:5,project,savedSnapshot:null})],
   ]);
   vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key)??null,setItem:(key:string,value:string)=>memory.set(key,value)});
   const pinia=createPinia();setActivePinia(pinia);

@@ -21,7 +21,7 @@ describe.skipIf(!existsSync(recording))('calculator reads original public showca
     expect(pending.character.build).toBeUndefined(); // Existing showcase must not fill missing local fields.
     expect(pending.equipment!.artifacts.map(item => item.id)).toEqual(Object.values(character.equipment));
     expect(pending.equipment!.artifacts).toHaveLength(5);
-    expect(pending.equipment!.artifacts.every(item => item.inventoryAccountId === account.id)).toBe(true);
+    expect(pending.equipment!.artifacts.every(item => item.inventory?.accountId === account.id)).toBe(true);
     const showcase = await readCalculatorSource(account, character.id, 'showcase');
     expect(showcase.equipment).toBeUndefined();
     expect(showcase.character.equipment).toEqual({});

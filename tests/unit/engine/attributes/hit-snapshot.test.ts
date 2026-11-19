@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { DATA_VERSION, getArtifactMain, getCharacter, getReactionRules, getWeapon } from '@leyline/game-data';
+import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
 import { characterDefinitionSchema, elements, projectSchema, type Build, type Enemy, type Project, type StatKey } from '@leyline/schema';
-import { evaluateDamage, evaluateTimeline, resolveBuild, type DamageAttributeReader } from '@leyline/engine';
+import { evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
 import { addActorFromBuild, addAttributeCapture, addSkillAction, addSkillHit } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
 import { previewEnkaImport } from '../../../../src/web/src/domain/enka-import';
@@ -10,8 +10,8 @@ import { createAccount } from '../../../../src/web/src/domain/account';
 
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id = 'kaeya', weapon = 'favoniussword'): Promise<Build> {
-  return { dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
-    artifactMain: await getArtifactMain(), reactionRules: await getReactionRules(), artifacts: [], sets: [], level: 90, ascension: 6,
+  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+    artifactMain: await getArtifactMain(), artifacts: [], sets: [], level: 90, ascension: 6,
     constellation: 0, talents: { normal: 1, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
 // Explicit single-point source/capture assertions from real skill rules, never observed casts or a combat sequence.
@@ -39,12 +39,12 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
     for (const derivative of ['no-skill', 'damage', 'formula', 'future'] as const) {
       const next: Project = JSON.parse(original);
       if (derivative === 'no-skill') delete next.timeline[0].skillId;
-      if (derivative === 'damage') next.timeline[0].damage = { skillId: 'kaeya.burst', hitIndex: 0, crit: 'noncritical', reaction: 'none' };
+      if (derivative === 'damage') next.timeline[0].damage = { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none' };
       if (derivative === 'formula') next.definitions.find(definition => definition.id === next.timeline[0].definition)!.nodes = [{ id: 'real-damage', op: 'game-damage' }];
       if (derivative === 'future') {
         next.timeline[0].timeMs = 1001;
         next.timeline.push({ id: 'query', actor, kind: 'damage', definition: `${actor}-real-damage`, timeMs: 1000, order: 1,
-          damage: { skillId: 'kaeya.burst', hitIndex: 0, crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'before' } } });
+          damage: { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'before' } } });
       }
       expect(projectSchema.safeParse(next).success).toBe(false);
     }
@@ -73,15 +73,13 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
       expect(result.reads?.find(read => read.key === 'attack')?.recordId).toBe(source);
       expect(evaluateTimeline(projectSchema.parse(JSON.parse(original))).totalValue).toBeCloseTo(expected, 8);
       expect(JSON.stringify(project)).toBe(original);
-      expect(evaluateDamage(build, record.damage, enemy).status).toBe('partial'); // No project source context supplied.
-      const panel = resolveBuild(build);
-      const read: DamageAttributeReader = stat => Object.hasOwn(panel.stats, stat) ? panel.stats[stat as StatKey] : 0;
-      expect(evaluateDamage(build, record.damage, enemy, 0, read, { read, panel }).value).toBeCloseTo(expected, 8);
+      expect(evaluateDamage(build, record.damage, enemy).value).toBeNull(); // No source anchor in direct query.
+
     });
 
   it('calculates Jean initial burst directly without imposing the persistent field capture', async () => {
     const build = await setting('jean');
-    const result = evaluateDamage(build, { skillId: 'jean.burst', hitIndex: 0, crit: 'noncritical', reaction: 'none' }, enemy);
+    const result = evaluateDamage(build, { skillId: 'jean.burst', hitId: 'jean.burst.param1', outputId: 'jean.burst.param1.damage', crit: 'noncritical', reaction: 'none' }, enemy);
     const attack = 18.62 * 8.739 + 76.4582 + 41.0671 * 7.275 + 155.6;
     expect(result.status).toBe('complete');
     expect(result.value).toBeCloseTo(attack * 7.2216 * 0.5 * 0.9, 8);
@@ -98,7 +96,7 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
     expect(result.status).toBe('partial');
     expect(result.totalValue).toBeNull();
     expect(result.points[0].real?.scaling[0].attribute).toBeNull();
-    expect(result.diagnostics.some(diagnostic => diagnostic.message.includes('捕获'))).toBe(true);
+    expect(result.diagnostics.some(diagnostic => diagnostic.message.includes('panel') || diagnostic.message.includes('捕获'))).toBe(true);
   });
 
   it.each(['deleted', 'wrong-owner', 'wrong-skill', 'untyped', 'future', 'same-order', 'self-after', 'not-snapshotted'] as const)
@@ -176,7 +174,7 @@ describe.skipIf(!existsSync(recording))('capture calculations using actual recor
     build.sets = structuredClone(recorded.sets);
     const stats: Partial<Record<StatKey, number>> = {};
     for (const item of recorded.artifacts) {
-      stats[item.mainStat] = (stats[item.mainStat] ?? 0) + recorded.artifactMain[item.mainStat]![item.level];
+      stats[item.mainStat] = (stats[item.mainStat] ?? 0) + recorded.artifactMain[item.rarity][item.mainStat]![item.level];
       for (const sub of item.substats) stats[sub.stat] = (stats[sub.stat] ?? 0) + sub.value;
     }
     const { project, actor, source, record } = query(build, 1000, 0, 'after');

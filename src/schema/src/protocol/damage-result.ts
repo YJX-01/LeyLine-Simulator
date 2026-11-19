@@ -9,7 +9,8 @@ export interface CalculationIssue { code: 'unknown' | 'unsupported' | 'invalid-i
 export interface Contribution { source: string; stat: StatKey; value: number; category?: AttackType }
 export interface AttributePanel {
   status: CalculationStatus;
-  stats: Record<StatKey, number>;
+  stats: Record<StatKey, number | null>;
+  attributes?: Record<string, number | null>;
   contributions: Contribution[];
   categoryModifiers: Contribution[];
   baseStats?: { hp: number; attack: number; defense: number };
@@ -17,6 +18,7 @@ export interface AttributePanel {
   issues: CalculationIssue[];
 }
 export interface DamageResult {
+  structured?: import('../calculation/result').StructuredDamageEvaluation;
   status: CalculationStatus;
   value: number | null;
   panel: AttributePanel;

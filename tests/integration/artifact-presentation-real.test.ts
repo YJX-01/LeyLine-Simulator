@@ -15,9 +15,9 @@ describe.skipIf(!existsSync(path))('Actual showcase artifact presentation',()=>{
   expect(flower.substats.map(sub=>sub.rolls)).toEqual([1,1,3,3]);
   expect(upgradeCounts(flower).map(count=>count?.min)).toEqual([0,0,2,2]);
   const nahida=preview.rows.find(row=>row.character.build?.character.id==='nahida')!.character.showcase!.build;
-  expect(formatGameStat('critRate',nahida.artifactMain.critRate![20])).toBe('31.1%');
-  expect(formatGameStat('elementalMastery',nahida.artifactMain.elementalMastery![20])).toBe('187');
-  expect(formatGameStat('attackPercent',nahida.artifactMain.attackPercent![20])).toBe('46.6%');
+  expect(formatGameStat('critRate',nahida.artifactMain[5].critRate![20])).toBe('31.1%');
+  expect(formatGameStat('elementalMastery',nahida.artifactMain[5].elementalMastery![20])).toBe('187');
+  expect(formatGameStat('attackPercent',nahida.artifactMain[5].attackPercent![20])).toBe('46.6%');
   for(const row of preview.rows) for(const piece of row.character.showcase!.build.artifacts) {
    const detached=structuredClone(piece);detached.substats.forEach(sub=>delete sub.rolls);const inferred=upgradeCounts(detached);
    piece.substats.forEach((sub,index)=>{if(sub.rolls!==undefined){expect(inferred[index]?.min).toBeLessThanOrEqual(sub.rolls-1);expect(inferred[index]?.max).toBeGreaterThanOrEqual(sub.rolls-1);}});

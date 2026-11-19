@@ -1,28 +1,138 @@
 {
   "id": "retracingbolide",
   "name": "逆飞的流星",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    4,
+    5
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.set.retracingbolide",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/retracingbolide.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.retracingbolide.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "retracingbolide",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.retracingbolide"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.retracingbolide.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "retracingbolide",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.retracingbolide"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.retracingbolide"
+  ],
+  "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：护盾强效提高35%。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.retracingbolide.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：处于护盾庇护下时，额外获得40%普通攻击和重击伤害加成。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.retracingbolide.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/retracingbolide.json"
-  },
-  "rarity": 5
+  ]
 }

@@ -6,7 +6,7 @@ describe('fixed real game snapshot', () => {
     const catalog = await loadCatalog();
     expect(catalog.version).toBe(DATA_VERSION);
     expect([catalog.characters.length, catalog.weapons.length, catalog.sets.length]).toEqual([154, 256, 63]);
-    expect(catalog.characters.filter(entry => entry.supported).map(entry => entry.id).sort()).toEqual(['aether', 'jean', 'kaeya', 'lumine', 'xingqiu']);
+    expect(catalog.characters.filter(entry => entry.supported).map(entry => entry.id).sort()).toEqual(['aether', 'barbara', 'beidou', 'jean', 'kaeya', 'lumine', 'noelle', 'razor', 'vesna', 'xingqiu', 'xinyan']);
     expect(catalog.characters.find(entry => entry.id === 'jean')?.name).toBe('琴');
     expect(catalog.weapons.find(entry => entry.id === 'favoniussword')?.name).toBe('西风剑');
     expect(new Set(catalog.characters.map(entry => entry.id)).size).toBe(154);
@@ -23,7 +23,7 @@ describe('fixed real game snapshot', () => {
         const character=await getCharacter(form.id);
         expect(character.talents).toHaveLength(3);
         expect(character.talents[1].element).toBe(form.element);
-        expect(character.capabilities.calculation.supported).toBe(false);
+        expect(character.talents.every(skill => skill.hits.every(hit => !hit.outputs.length))).toBe(true);
         expect(character.attributes.base).toEqual((await getCharacter(base)).attributes.base);
       }
     }
@@ -31,14 +31,13 @@ describe('fixed real game snapshot', () => {
     expect((await getCharacter('manekin-pyro')).talents.map(skill=>skill.name)).toEqual(['外域剑术·安谨守望','戒惩轰击','禁入限区']);
     for (const base of ['aether','lumine','manekin','manekina']) {
       const character=await getCharacter(base);
-      expect(character.capabilities.text).toBe('complete');
       expect(character.talents.map(talent=>talent.category)).toEqual(['normal']);
       expect(character.constellations).toEqual([]);
       expect(character.talents[0].description).toContain('连续剑击');
     }
     expect((await getCharacter('manekina-hydro')).passives.map(passive=>passive.name)).toEqual(['战域重划','交战持备','灵巧战姿']);
     const catalogDefinitions=await Promise.all(catalog.characters.map(entry=>getCharacter(entry.id)));
-    expect(catalogDefinitions.every(character=>character.capabilities.text==='complete' && character.identity.description.length>0 && character.talents.every(talent=>talent.description.length>0))).toBe(true);
+    expect(catalogDefinitions.every(character=>character.identity.description.length>0 && character.talents.every(talent=>talent.description.length>0))).toBe(true);
     // The ordinary-attack batch must include every form; this is a binding boundary, not full-character acceptance.
     expect(catalogDefinitions.every(character => character.talents.find(talent => talent.category === 'normal')!.hits.length > 0)).toBe(true);
     expect(catalogDefinitions.every(character => character.talents.every(talent => talent.hits.length > 0 || talent.noIndependentDamage))).toBe(true);
@@ -53,7 +52,7 @@ describe('fixed real game snapshot', () => {
     expect(jean.talents.find(skill => skill.id === 'jean.skill')?.parameters[0].values[0]).toBe(2.92);
     expect(kaeya.talents.find(skill => skill.id === 'kaeya.skill')?.parameters[0].values[0]).toBe(1.912);
     expect(xingqiu.talents.find(skill => skill.id === 'xingqiu.skill')?.hits.map(hit => xingqiu.talents.find(skill=>skill.category==='skill')!.parameters.find(parameter=>parameter.id===hit.parameter)!.values[0])).toEqual([1.68, 1.912]);
-    expect(xingqiu.attributes.modifiers).toEqual([{ stat: 'hydroBonus', values: [0.2], minAscension: 4 }]);
+    expect(xingqiu.calculation.bundle.effects.find(effect => effect.identity.id === 'xingqiu.static-hydroBonus')).toMatchObject({ value: { value: { value: 0.2 } }, activation: { ascension: 4 } });
     jean.attributes.base.attack = 999;
     expect((await getCharacter('jean')).attributes.base.attack).toBe(18.62);
     expect(jean.talents.find(skill => skill.category === 'burst')?.hits.map(hit => hit.snapshot?.sourceSkillId ?? null)).toEqual([null, 'jean.burst']);
@@ -62,23 +61,27 @@ describe('fixed real game snapshot', () => {
     const weapon = await getWeapon('favoniussword');
     expect(weapon.baseAttack).toBe(41.0671);
     expect(weapon.promotion[6]).toBe(155.6);
-    expect(weapon.support.supported).toBe(true);
-    expect((await getWeapon('harbingerofdawn')).modifiers[0]).toEqual({ stat: 'critRate', values: [0.14, 0.175, 0.21, 0.245, 0.28], hpAbove: 0.9 });
-    expect((await getWeapon('festeringdesire')).modifiers.find(entry => entry.stat === 'critRate')?.category).toBe('skill');
-    expect((await getWeapon('staffofhoma')).support.supported).toBe(true);
-    expect((await getWeapon('staffofhoma')).combatRules).toHaveLength(1);
-    expect((await getArtifactSet('gladiatorsfinale')).effects[0].modifiers).toEqual([{ stat: 'attackPercent', values: [0.18] }]);
-    expect((await getArtifactSet('gladiatorsfinale')).effects[1].support.supported).toBe(false);
+    expect(weapon.calculation.bundle.coverage[0].resolution).toBe('complete');
+    const harbinger = await getWeapon('harbingerofdawn');
+    expect(harbinger.calculation.bundle.effects.find(effect => effect.identity.id === 'harbingerofdawn.static-critRate')?.value).toMatchObject({ values: [0.14, 0.175, 0.21, 0.245, 0.28] });
+    const festering = await getWeapon('festeringdesire');
+    expect(festering.calculation.bundle.effects.find(effect => effect.identity.id === 'festeringdesire.static-critRate')?.appliesTo.categories).toEqual(['skill']);
+    const homa = await getWeapon('staffofhoma');
+    expect(homa.calculation.bundle.coverage[0].resolution).toBe('complete');
+    expect(homa.calculation.bundle.effects.some(effect => effect.identity.id === 'staffofhoma.hp-to-attack.attack')).toBe(true);
+    const gladiator = await getArtifactSet('gladiatorsfinale');
+    expect(gladiator.calculation.bundle.effects[0]?.value).toMatchObject({ value: { value: 0.18 } });
+    expect(gladiator.calculation.bundle.coverage.find(proof => proof.scope.kind === 'equipment' && proof.scope.pieces === 4)?.resolution).toBe('unavailable');
   });
   it('normalizes five-star main-stat units once and preserves source precision', async () => {
     const main = await getArtifactMain();
-    expect(main.hp[20]).toBe(4780);
-    expect(main.attack[20]).toBe(311);
-    expect(main.attackPercent[20]).toBe(0.466);
-    expect(main.critRate[20]).toBe(0.311);
-    expect(main.hydroBonus[20]).toBe(0.466);
-    expect(main.elementalMastery[20]).toBe(186.5);
-    expect(Object.values(main).every(values => values.length === 21 && values.every(Number.isFinite))).toBe(true);
+    expect(main[5].hp[20]).toBe(4780);
+    expect(main[5].attack[20]).toBe(311);
+    expect(main[5].attackPercent[20]).toBe(0.466);
+    expect(main[5].critRate[20]).toBe(0.311);
+    expect(main[5].hydroBonus[20]).toBe(0.466);
+    expect(main[5].elementalMastery[20]).toBe(186.5);
+    expect(Object.values(main[5]).every(values => values.length === 21 && values.every(Number.isFinite))).toBe(true);
     await expect(getCharacter('missing')).rejects.toThrow('不存在');
   });
 });

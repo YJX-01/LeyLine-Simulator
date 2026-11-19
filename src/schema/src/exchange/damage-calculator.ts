@@ -3,7 +3,7 @@ import { idSchema } from '../common/values';
 import { projectSchema } from '../project/project';
 
 export const damageCalculatorSchema = z.object({
-  schemaVersion: z.literal(1),
+  schemaVersion: z.literal(4),
   kind: z.literal('damage-calculator'),
   project: projectSchema,
   baseline: projectSchema.optional(),

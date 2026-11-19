@@ -10,7 +10,7 @@ import { matchesAxisTask, pendingAxisResult, type AxisRequest, type AxisResponse
 import { fileSignature } from '../domain/file-signature';
 
 const maxProjectBytes = 8 * 1024 * 1024;
-const recoveryKey = 'leyline-axis-recovery-v2';
+const recoveryKey = 'leyline-axis-recovery-v5';
 
 export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const project = ref(createEmptyProject());
@@ -90,7 +90,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     // Invalid editor drafts stay in memory; never overwrite the last recoverable input.
     const parsed = projectSchema.safeParse(project.value);
     if (!parsed.success) return;
-    const content = JSON.stringify({ schemaVersion: 2, project: parsed.data, savedSnapshot: savedSnapshot.value });
+    const content = JSON.stringify({ schemaVersion: 5, project: parsed.data, savedSnapshot: savedSnapshot.value });
     if (new TextEncoder().encode(content).byteLength > maxProjectBytes) return;
     try {
       if (typeof localStorage === 'undefined') return;
@@ -161,7 +161,7 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       if (!content) return false;
       if (new TextEncoder().encode(content).byteLength > maxProjectBytes) throw new Error('恢复副本超过大小限制。');
       const input = JSON.parse(content);
-      if (input.schemaVersion !== 2) throw new Error('恢复副本版本无法识别。');
+      if (input.schemaVersion !== 5) throw new Error('恢复副本版本无法识别。');
       const next = importProject(JSON.stringify(input.project));
       const previousSaved=typeof input.savedSnapshot==='string'?fileSignature(JSON.parse(input.savedSnapshot)):null;
       installProject(next);savedSnapshot.value=previousSaved;

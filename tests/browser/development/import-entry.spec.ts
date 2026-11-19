@@ -22,7 +22,7 @@ test('manual selection opens directly, preserves the list on return, and display
     await dialog.getByRole('button',{name:'返回角色列表',exact:true}).click();
   }
   await page.setViewportSize({width:390,height:844});expect(await dialog.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);await page.screenshot({path:'artifacts/manual-character-list-mobile.png',fullPage:true});
-  await page.keyboard.press('Escape');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2') ?? '{"characters":[]}').characters)).toEqual([]);expect(errors).toEqual([]);
+  await page.keyboard.press('Escape');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v5') ?? '{"characters":[]}').characters)).toEqual([]);expect(errors).toEqual([]);
 });
 
 test('account UID persists, prefills the showcase import, and the three entry dialogs share actions',async({page})=>{
@@ -44,8 +44,8 @@ test('actual Mona export accepts formatting above the former byte cap and still 
   // Only trailing JSON whitespace changes; item contents are the original recorded export.
   const bytes=Buffer.concat([readFileSync('.references/artifacts_mona.json'),Buffer.alloc(8*1024*1024,32)]);
   await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles({name:'recorded-export-with-whitespace.json',mimeType:'application/json',buffer:bytes});
-  await expect(page.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2') ?? '{"artifacts":[]}').artifacts.length)).toBe(0);
-  await page.getByRole('button',{name:'确认导入 458 件五星圣遗物',exact:true}).click();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!).artifacts.length)).toBe(458);
+  await expect(page.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v5') ?? '{"artifacts":[]}').artifacts.length)).toBe(0);
+  await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v5')!).artifacts.length)).toBe(458);
 });
 
 
@@ -57,5 +57,5 @@ test('manual cultivation transcribes the recorded Amber and saves once before re
   await expect(dialog.getByRole('button',{name:'保存角色资料',exact:true})).toBeDisabled();
   await dialog.getByRole('button',{name:'6命',exact:true}).click();await dialog.getByRole('button',{name:'更换武器',exact:true}).click();await dialog.getByLabel('搜索装备武器',{exact:true}).fill('天空之翼');await dialog.getByRole('button',{name:'天空之翼',exact:true}).click();await dialog.getByRole('button',{name:'精炼2阶',exact:true}).click();
   await dialog.getByRole('button',{name:'保存角色资料',exact:true}).click();await expect(dialog).toHaveCount(0);await expect(page.getByRole('dialog',{name:'安柏',exact:true})).toBeVisible();
-  const characters=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v2')!).characters);expect(characters).toHaveLength(1);expect(characters[0].build).toMatchObject({level:90,ascension:6,constellation:6,talents:{normal:10,skill:10,burst:10},weapon:{name:'天空之翼'},weaponLevel:90,weaponAscension:6,refinement:2});
+  const characters=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-v5')!).characters);expect(characters).toHaveLength(1);expect(characters[0].build).toMatchObject({level:90,ascension:6,constellation:6,talents:{normal:10,skill:10,burst:10},weapon:{name:'天空之翼'},weaponLevel:90,weaponAscension:6,refinement:2});
 });

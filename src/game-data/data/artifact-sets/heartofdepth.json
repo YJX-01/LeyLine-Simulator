@@ -1,35 +1,211 @@
 {
   "id": "heartofdepth",
   "name": "沉沦之心",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    4,
+    5
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "genshin-db.heartofdepth.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/heartofdepth.json"
+        },
+        {
+          "id": "content.set.heartofdepth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/heartofdepth.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "heartofdepth.static-hydroBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.heartofdepth.static"
+          ],
+          "activation": {
+            "set": {
+              "id": "heartofdepth",
+              "pieces": 2
+            }
+          },
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "constant",
+            "value": {
+              "kind": "quantity",
+              "unit": "scalar",
+              "value": 0.15
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.hydroBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "heartofdepth.static-hydroBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.heartofdepth.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "heartofdepth",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+          "sources": [
+            "content.set.heartofdepth"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "heartofdepth.static-hydroBonus",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.heartofdepth.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "heartofdepth",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.heartofdepth"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.heartofdepth"
+  ],
+  "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [
+      "ruleIds": [
         {
-          "stat": "hydroBonus",
-          "values": [
-            0.15
-          ]
+          "namespace": "builtin",
+          "id": "heartofdepth.static-hydroBonus",
+          "revision": "1"
         }
       ],
-      "support": {
-        "supported": true,
-        "reason": "获得15%水元素伤害加成。"
-      }
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.heartofdepth.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：施放元素战技后的15秒内，普通攻击与重击造成的伤害提高30%。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.heartofdepth.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/heartofdepth.json"
-  },
-  "rarity": 5
+  ]
 }

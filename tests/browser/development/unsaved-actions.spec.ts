@@ -13,7 +13,7 @@ async function centered(picker:Locator){
   expect(offset).toBeLessThan(1);
 }
 const warning=(page:Page)=>page.getByRole('dialog',{name:'有未保存的修改',exact:true});
-const account=(page:Page)=>page.evaluate(()=>localStorage.getItem('leyline-account-v2'));
+const account=(page:Page)=>page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
 
 test('empty and occupied pickers center titles; role exit continues, rejects failed saves, saves or discards',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});await importShowcase(page);const original=await account(page);

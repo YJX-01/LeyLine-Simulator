@@ -34,7 +34,7 @@ for (let run = -1; run < 7; run++) {
 }
 samples.sort((a,b) => a-b);
 // Empty axes sum to zero independently of engine mechanics; no game events are invented.
-const empty = evaluateTimeline({schemaVersion:2,rulesVersion:'timeline-v1',calculationProfile:'direct',id:'empty-axis',revision:'1',definitions:[],candidate:{id:'empty',actors:[]},conditions:{},timeline:[],objective:{}});
+const empty = evaluateTimeline({schemaVersion: 5, rulesVersion:'timeline-v1',calculationProfile:'direct',id:'empty-axis',revision:'1',definitions:[],candidate:{id:'empty',actors:[]},conditions:{},timeline:[],objective:{}});
 if (empty.status !== 'complete' || empty.totalValue !== 0) throw new Error('Empty aggregation failed.');
 if (samples[6] > 2000) throw new Error('Recorded build resolution exceeded 2 seconds.');
 const report = { measuredAt:new Date().toISOString(),sourceFingerprint:sourceFingerprint(),input,sha256:createHash('sha256').update(bytes).digest('hex'),

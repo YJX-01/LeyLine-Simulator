@@ -1,28 +1,138 @@
 {
   "id": "scrolloftheheroofcindercity",
   "name": "烬城勇者绘卷",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    4,
+    5
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.set.scrolloftheheroofcindercity",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/scrolloftheheroofcindercity.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.scrolloftheheroofcindercity.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "scrolloftheheroofcindercity",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.scrolloftheheroofcindercity"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.scrolloftheheroofcindercity.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "scrolloftheheroofcindercity",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.scrolloftheheroofcindercity"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.scrolloftheheroofcindercity"
+  ],
+  "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：队伍中附近的角色触发「夜魂迸发」时，装备者恢复6点元素能量。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.scrolloftheheroofcindercity.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：装备者触发其对应元素类型的相关反应后，队伍中附近的所有角色的该元素反应相关的元素伤害加成提升12%，持续15秒。若触发该效果时，装备者处于夜魂加持状态下，还将使队伍中附近的所有角色的与该元素反应相关的元素伤害加成提升28%，持续20秒。装备者处于后台时也能触发上述效果。同名圣遗物套装产生的伤害加成效果无法叠加。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.scrolloftheheroofcindercity.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/scrolloftheheroofcindercity.json"
-  },
-  "rarity": 5
+  ]
 }

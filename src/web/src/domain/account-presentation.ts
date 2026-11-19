@@ -1,25 +1,25 @@
-import { getArtifactMain, getReactionRules, loadCatalog } from '@leyline/game-data';
+import { getArtifactMain, getBuildSources, loadCatalog } from '@leyline/game-data';
 import type { Build, StatKey } from '@leyline/schema';
 import type { AccountArtifact, LocalAccount } from './account';
 import { parseAccount } from './account';
 import { ratioStat } from './account-real';
 
-type AccountGameData = { catalog: Awaited<ReturnType<typeof loadCatalog>>; main: Build['artifactMain']; reactions: Awaited<ReturnType<typeof getReactionRules>> };
+type AccountGameData = { catalog: Awaited<ReturnType<typeof loadCatalog>>; main: Build['artifactMain'] } & Pick<Build, 'sources' | 'artifactMainSourceRefs'>;
 let gameData: Promise<AccountGameData> | undefined;
 export function loadAccountGameData(): Promise<AccountGameData> {
-  gameData ??= Promise.all([loadCatalog(), getArtifactMain(), getReactionRules()]).then(([catalog, main, reactions]) => ({ catalog, main, reactions })).catch(error => { gameData = undefined; throw error; });
+  gameData ??= Promise.all([loadCatalog(), getArtifactMain(), getBuildSources()]).then(([catalog, main, sources]) => ({ catalog, main, ...sources })).catch(error => { gameData = undefined; throw error; });
   return gameData;
 }
 export function artifactMainValue(item: AccountArtifact, main?: Build['artifactMain']): number | undefined {
-  return item.real ? main?.[item.real.mainStat]?.[item.real.level] : item.attack;
+  return item.real ? main?.[item.real.rarity][item.real.mainStat]?.[item.real.level] : item.attack;
 }
-export function formatGameStat(stat: StatKey, value: number | undefined, useGrouping = true): string {
-  if (value === undefined || !Number.isFinite(value)) return '—';
+export function formatGameStat(stat: StatKey, value: number | null | undefined, useGrouping = true): string {
+  if (value == null || !Number.isFinite(value)) return '—';
   const percent=ratioStat(stat);
   return `${(value*(percent?100:1)).toLocaleString('zh-CN',{useGrouping,minimumFractionDigits:percent?1:0,maximumFractionDigits:percent?1:0})}${percent?'%':''}`;
 }
 export function formatAccountStat(stat: StatKey, value: number | undefined, maximumFractionDigits = 1): string {
-  if (value === undefined || !Number.isFinite(value)) return '—';
+  if (value == null || !Number.isFinite(value)) return '—';
   return `${(value * (ratioStat(stat) ? 100 : 1)).toLocaleString('zh-CN', { maximumFractionDigits })}${ratioStat(stat) ? '%' : ''}`;
 }
 /** Validate a complete detached edit before replacing anything in the inventory. */

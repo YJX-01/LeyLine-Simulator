@@ -5,7 +5,7 @@ import { effectiveStatOptions, defaultEffectiveStats, effectiveStatGroups } from
 import { parseAccount, type AccountCharacter, type LocalAccount } from '../domain/account';
 
 export interface CharacterLoadout { id: string; name: string; accountId: string; characterId: string; snapshot: LocalAccount }
-const key = 'leyline-character-loadouts-v2';
+const key = 'leyline-character-loadouts-v5';
 export const useCharacterLoadoutsStore = defineStore('character-loadouts', () => {
   const loadouts = ref<CharacterLoadout[]>([]);
   const error = ref('');

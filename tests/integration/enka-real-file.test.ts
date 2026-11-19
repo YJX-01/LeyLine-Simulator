@@ -93,12 +93,12 @@ describe.skipIf(!existsSync(path))('explicit hit conditions derived from recorde
     build.weapon=await getWeapon('harbingerofdawn');build.refinement=1;
     const inactive=resolveBuild(build,{hpRatio:0.9});
     const active=resolveBuild(build,{hpRatio:1});
-    expect(active.stats.critRate-inactive.stats.critRate).toBeCloseTo(0.14,10);
+    expect(active.stats.critRate!-inactive.stats.critRate!).toBeCloseTo(0.14,10);
     const pending=resolveBuild(build);
-    expect(pending.stats.critRate).toBe(inactive.stats.critRate);
-    expect(pending.issues).toContainEqual(expect.objectContaining({code:'unknown',message:'生命比例尚未确认，无法判断生命条件效果。'}));
+    expect(pending.stats.critRate).toBeNull();
+    expect(pending.issues).toContainEqual(expect.objectContaining({code:'unknown',message:expect.stringContaining('hpRatio')}));
     expect(pending.status).toBe('partial');
-    const request={skillId:'xingqiu.skill',hitIndex:0,crit:'noncritical' as const,reaction:'none' as const};
+    const request={skillId:'xingqiu.skill',hitId: 'xingqiu.skill.param1',outputId: 'xingqiu.skill.param1.damage',crit:'noncritical' as const,reaction:'none' as const};
     expect(evaluateDamage(build,{...request,conditions:{hpRatio:1}},undefined).panel.stats.critRate).toBe(active.stats.critRate);
     expect(evaluateDamage(build,{...request,conditions:{hpRatio:0.9}},undefined).panel.stats.critRate).toBe(inactive.stats.critRate);
     expect(build).not.toHaveProperty('hpRatio');
@@ -117,7 +117,7 @@ describe.skipIf(!existsSync(path))('explicit hit conditions derived from recorde
     const result=evaluateTimeline(axis),point=(id:string)=>result.points.find(point=>point.id===id)!;
     expect(point(unknown).value).toBeNull();
     expect(point(high).value).not.toBeNull();expect(point(low).value).not.toBeNull();
-    expect(point(high).real!.panel.stats.critRate-point(low).real!.panel.stats.critRate).toBeCloseTo(0.14,10);
+    expect(point(high).real!.panel.stats.critRate! - point(low).real!.panel.stats.critRate!).toBeCloseTo(0.14,10);
   });
 });
 

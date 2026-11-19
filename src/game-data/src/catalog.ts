@@ -1,72 +1,39 @@
 /** Fixed, independently generated game snapshots. No runtime reference checkout dependency. */
 import version from '../generated/version.json';
+import chunkIndex from '../generated/chunk-index.json';
+import { chunkLoaders } from '../generated/chunk-loaders';
 export const DATA_VERSION = version;
-import type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element, ReactionRules } from '@leyline/schema';
+import type { ArtifactItem, ArtifactMainTable, Build, CharacterActionsDefinition, CharacterDefinition, DefinitionRef, WeaponDefinition, ArtifactSetDefinition, StatKey, Element } from '@leyline/schema';
 export type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element, ContentSource, Support, Modifier } from '@leyline/schema';
 export interface GameCatalog {
   version: string;
   characters: { id: string; name: string; element: Element; weaponType: string; supported: boolean; reason: string }[];
   weapons: { id: string; name: string; weaponType: string; rarity: number; supported: boolean; reason: string }[];
-  sets: { id: string; name: string; rarity: number }[];
+  sets: { id: string; name: string; rarity: number; rarities: number[]; slots: ArtifactItem['slot'][] }[];
 }
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
-const characters = [
-  () => import('../generated/characters-0.json'),
-  () => import('../generated/characters-1.json'),
-  () => import('../generated/characters-2.json'),
-  () => import('../generated/characters-3.json'),
-  () => import('../generated/characters-4.json'),
-  () => import('../generated/characters-5.json'),
-  () => import('../generated/characters-6.json'),
-  () => import('../generated/characters-7.json'),
-  () => import('../generated/characters-8.json'),
-  () => import('../generated/characters-9.json'),
-  () => import('../generated/characters-10.json'),
-  () => import('../generated/characters-11.json'),
-  () => import('../generated/characters-12.json'),
-  () => import('../generated/characters-13.json'),
-  () => import('../generated/characters-14.json'),
-  () => import('../generated/characters-15.json'),
-];
-const weapons = [
-  () => import('../generated/weapons-0.json'),
-  () => import('../generated/weapons-1.json'),
-  () => import('../generated/weapons-2.json'),
-  () => import('../generated/weapons-3.json'),
-  () => import('../generated/weapons-4.json'),
-  () => import('../generated/weapons-5.json'),
-  () => import('../generated/weapons-6.json'),
-];
-const sets = [
-  () => import('../generated/sets-0.json'),
-  () => import('../generated/sets-1.json'),
-  () => import('../generated/sets-2.json'),
-];
-
-export async function loadCatalog(): Promise<GameCatalog> {
-  return clone((await import('../generated/catalog.json')).default as GameCatalog);
+const indices: Record<'characters' | 'weapons' | 'sets', Record<string, string>> = chunkIndex;
+async function loadEntity<T>(kind: keyof typeof indices, id: string): Promise<T> {
+  const chunk = indices[kind][id], loader = chunk && chunkLoaders[chunk];
+  if (!loader) throw new Error('所选内容不存在，请重新选择。');
+  const entries = (await loader()).default as { id: string }[];
+  const entity = entries.find(entry => entry.id === id);
+  if (!entity) throw new Error('内容分块与索引不一致。');
+  return clone(entity) as T;
 }
-export async function getCharacter(id: string): Promise<CharacterDefinition> {
-  const index = (await loadCatalog()).characters.findIndex(entry => entry.id === id);
-  if (index < 0) throw new Error('角色资料不存在，请重新选择。');
-  const entries = (await characters[Math.floor(index / 10)]()).default as CharacterDefinition[];
-  return clone(entries[index % 10]);
+export async function loadCatalog(): Promise<GameCatalog> { return clone((await import('../generated/catalog.json')).default as GameCatalog); }
+export async function getCharacter(id: string): Promise<CharacterDefinition> { return loadEntity('characters', id); }
+export async function getWeapon(id: string): Promise<WeaponDefinition> { return loadEntity('weapons', id); }
+export async function getArtifactSet(id: string): Promise<ArtifactSetDefinition> { return loadEntity('sets', id); }
+export async function getBuildSources(): Promise<Pick<Build, 'sources' | 'artifactMainSourceRefs'>> {
+  return clone((await import('../generated/build-sources.json')).default as unknown as Pick<Build, 'sources' | 'artifactMainSourceRefs'>);
 }
-export async function getWeapon(id: string): Promise<WeaponDefinition> {
-  const index = (await loadCatalog()).weapons.findIndex(entry => entry.id === id);
-  if (index < 0) throw new Error('武器资料不存在，请重新选择。');
-  const entries = (await weapons[Math.floor(index / 40)]()).default as WeaponDefinition[];
-  return clone(entries[index % 40]);
+export async function getArtifactMain(): Promise<ArtifactMainTable> {
+  return clone((await import('../generated/artifact-main.json')).default as ArtifactMainTable);
 }
-export async function getArtifactSet(id: string): Promise<ArtifactSetDefinition> {
-  const index = (await loadCatalog()).sets.findIndex(entry => entry.id === id);
-  if (index < 0) throw new Error('套装资料不存在，请重新选择。');
-  const entries = (await sets[Math.floor(index / 30)]()).default as ArtifactSetDefinition[];
-  return clone(entries[index % 30]);
-}
-export async function getArtifactMain(): Promise<Record<StatKey, number[]>> {
-  return clone((await import('../generated/artifact-main.json')).default as Record<StatKey, number[]>);
-}
-export async function getReactionRules(): Promise<ReactionRules> {
-  return clone((await import('../generated/reactions.json')).default as ReactionRules);
+/** Optional exact-revision companion. Absence never selects a newer character or guessed actions. */
+export async function getCharacterActions(character: DefinitionRef): Promise<CharacterActionsDefinition | null> {
+  const entries = (await import('../generated/actions.json')).default as unknown as CharacterActionsDefinition[];
+  const definition = entries.find(entry => entry.character.namespace === character.namespace && entry.character.id === character.id && entry.character.revision === character.revision);
+  return definition ? clone(definition) : null;
 }

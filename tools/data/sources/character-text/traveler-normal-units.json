@@ -1,0 +1,110 @@
+{
+  "source": {
+    "repository": "Rafs-kk/LunaGC-6.6-res",
+    "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+    "path": "TextMap/TextMapCHS.json"
+  },
+  "parameterSource": "tools/data/sources/lunagc/b0501c5d89767ead5f647869a2412521447f7682/ProudSkillExcelConfigData.json",
+  "method": "Read the base-form skill depot and ProudSkillGroup directly; resolve each missing paramDesc key in the original capture after matching its registered Git blob. F1P explicitly marks a ratio. Preserve all parameter values, IDs and meaningful row order.",
+  "textEntries": [
+    {
+      "characterId": "aether",
+      "sourceTextKey": "103667430",
+      "text": "一段伤害|{param1:F1P}",
+      "sourceDescriptionIndex": 0
+    },
+    {
+      "characterId": "aether",
+      "sourceTextKey": "846647223",
+      "text": "四段伤害|{param4:F1P}",
+      "sourceDescriptionIndex": 3
+    },
+    {
+      "characterId": "aether",
+      "sourceTextKey": "607873546",
+      "text": "重击伤害|{param6:F1P}+{param7:F1P}",
+      "sourceDescriptionIndex": 5
+    },
+    {
+      "characterId": "aether",
+      "sourceTextKey": "746904173",
+      "text": "下坠期间伤害|{param9:F1P}",
+      "sourceDescriptionIndex": 7
+    },
+    {
+      "characterId": "lumine",
+      "sourceTextKey": "1614345078",
+      "text": "一段伤害|{param1:F1P}",
+      "sourceDescriptionIndex": 0
+    },
+    {
+      "characterId": "lumine",
+      "sourceTextKey": "3672756946",
+      "text": "重击伤害|{param6:F1P}+{param7:F1P}",
+      "sourceDescriptionIndex": 5
+    },
+    {
+      "characterId": "lumine",
+      "sourceTextKey": "2651732541",
+      "text": "下坠期间伤害|{param9:F1P}",
+      "sourceDescriptionIndex": 7
+    }
+  ],
+  "bindings": [
+    {
+      "file": "src/game-data/data/characters/aether.json",
+      "parameter": "param1",
+      "unit": "ratio",
+      "sourceTextKey": "103667430"
+    },
+    {
+      "file": "src/game-data/data/characters/aether.json",
+      "parameter": "param4",
+      "unit": "ratio",
+      "sourceTextKey": "846647223"
+    },
+    {
+      "file": "src/game-data/data/characters/aether.json",
+      "parameter": "param6",
+      "unit": "ratio",
+      "sourceTextKey": "607873546"
+    },
+    {
+      "file": "src/game-data/data/characters/aether.json",
+      "parameter": "param7",
+      "unit": "ratio",
+      "sourceTextKey": "607873546"
+    },
+    {
+      "file": "src/game-data/data/characters/aether.json",
+      "parameter": "param9",
+      "unit": "ratio",
+      "sourceTextKey": "746904173"
+    },
+    {
+      "file": "src/game-data/data/characters/lumine.json",
+      "parameter": "param1",
+      "unit": "ratio",
+      "sourceTextKey": "1614345078"
+    },
+    {
+      "file": "src/game-data/data/characters/lumine.json",
+      "parameter": "param6",
+      "unit": "ratio",
+      "sourceTextKey": "3672756946"
+    },
+    {
+      "file": "src/game-data/data/characters/lumine.json",
+      "parameter": "param7",
+      "unit": "ratio",
+      "sourceTextKey": "3672756946"
+    },
+    {
+      "file": "src/game-data/data/characters/lumine.json",
+      "parameter": "param9",
+      "unit": "ratio",
+      "sourceTextKey": "2651732541"
+    }
+  ],
+  "scope": "Normal-attack parameter unit and description completeness only; does not establish full character or new-runtime support."
+}

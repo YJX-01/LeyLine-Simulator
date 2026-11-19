@@ -6,6 +6,7 @@ import { previewMonaImport, confirmMonaImport } from '../../../../src/web/src/do
 
 const path = '.references/artifacts_mona.json';
 const slots = ['flower', 'feather', 'sand', 'cup', 'head'] as const;
+const hasFourStarOriginal = existsSync(path) && slots.some(slot => JSON.parse(readFileSync(path, 'utf8'))[slot]?.some((item: { star: number }) => item.star === 4));
 interface RawArtifact {
   id?: number;
   contentHash?: string;
@@ -47,7 +48,7 @@ describe.skipIf(!existsSync(path))('Mona import boundaries derived from the actu
     const item = preview.additions.find(item => item.real?.source?.key === `id:${source!.id}`)!;
     expect(item.mona?.mainValue).toBe(187);
     expect(item.real?.mainStat).toBe('elementalMastery');
-    expect(main.elementalMastery[20]).toBe(186.5);
+    expect(main[5].elementalMastery[20]).toBe(186.5);
   });
 
   it('keeps same-file identity when source IDs are absent without fabricating inventory items', async () => {
@@ -80,12 +81,28 @@ describe.skipIf(!existsSync(path))('Mona import boundaries derived from the actu
 
   it('reports unsupported rarity derivatives and rejects confirmation after switching accounts', async () => {
     const account = createAccount();
-    const file = input(); file.flower[0].star = 4;
+    const file = input(); file.flower[0].star = 3;
     const preview = await previewMonaImport(JSON.stringify(file), account, sets, main);
     expect(preview.skipped).toHaveLength(1);
     expect(preview.additions).toHaveLength(457);
     const next = createAccount();
     expect(() => confirmMonaImport(next, preview)).toThrow('账号已切换');
     expect(next.artifacts).toEqual([]);
+  });
+
+  it('rejects a four-star level overflow derived from the actual five-star recording', async () => {
+    const account = createAccount(), file = input();
+    file.flower[0].star = 4; // Keep the recorded +20: a deliberate invalid-range derivative.
+    await expect(previewMonaImport(JSON.stringify(file), account, sets, main)).rejects.toThrow('0 到 16');
+    expect(account.artifacts).toEqual([]);
+  });
+
+  it.skipIf(!hasFourStarOriginal)('imports actual four-star original items through preview and confirmation', async () => {
+    const account = createAccount(), preview = await previewMonaImport(original, account, sets, main);
+    const count = slots.flatMap(slot => input()[slot]).filter(item => item.star === 4).length;
+    expect(count).toBeGreaterThan(0);
+    expect(account.artifacts).toEqual([]);
+    confirmMonaImport(account, preview);
+    expect(account.artifacts.filter(item => item.real?.rarity === 4)).toHaveLength(count);
   });
 });

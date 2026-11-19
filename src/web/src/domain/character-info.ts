@@ -8,7 +8,7 @@ export function talentDisplayRows(character:CharacterDefinition) {
   return character.talents.map(talent=>({key:talent.category,name:talent.name,label:{normal:'A',skill:'E',burst:'Q'}[talent.category],
     icon:`${base}-combat${{normal:1,skill:2,burst:3}[talent.category]}`,constellations:character.constellations.filter(item=>item.talentBonuses.some(bonus=>bonus.category===talent.category)).map(item=>item.rank)}));
 }
-export function formatTalentDetail(talent:Talent,template:string,level:number):string {
+export function formatTalentDetail(talent:Pick<CharacterDefinition['talents'][number], 'parameters'>,template:string,level:number):string {
   return template.replace(/\{([^}:]+)(?::([^}]+))?\}/g,(_,id:string,format?:string)=>{
     const value=talent.parameters.find(parameter=>parameter.id===id)?.values[level-1];
     if(value===undefined)return '未收录';

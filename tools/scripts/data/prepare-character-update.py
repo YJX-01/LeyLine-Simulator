@@ -69,7 +69,7 @@ def supplement_character(candidate, binding):
         talent = {'id': f'{candidate["id"]}.{category}', 'name': clean_text(text(source['nameTextMapHash'])),
                   'description': clean_text(re.sub(r'<i>.*?</i>', '', description, flags=re.S)), 'category': category,
                   'element': 'physical' if category == 'normal' else binding['element'], 'parameters': parameters,
-                  'details': details, 'hits': [], 'support': {'supported': False, 'reason': '已收录原始文本和等级参数，伤害与附魔规则尚未核验。'}}
+                  'details': details}
         if flavor:
             talent['flavorText'] = clean_text(flavor[1])
         talents.append(talent)
@@ -81,17 +81,28 @@ def supplement_character(candidate, binding):
         row = next(row for row in proud if row['proudSkillGroupId'] == item['proudSkillGroupId'])
         candidate['passives'].append({'id': f'{candidate["id"]}.passive{len(candidate["passives"]) + 1}',
                                       'name': clean_text(text(row['nameTextMapHash'])), 'description': clean_text(text(row['descTextMapHash'])),
-                                      'unlockAscension': item['needAvatarPromoteLevel'],
-                                      'support': {'supported': False, 'reason': '已收录说明，效果规则尚未核验。'}})
+                                      'unlockAscension': item['needAvatarPromoteLevel']})
     if any(depot['talents']):
         raise ValueError('Supplement constellation bindings require review')
     candidate['constellations'] = []
-    candidate['capabilities'] = {'text': 'complete', 'numbers': 'complete',
-                                  'calculation': {'supported': False, 'reason': '已收录原始文本和数值，角色伤害与效果规则尚未核验。'}}
-    if binding['element'] == 'physical':
-        candidate['capabilities']['notes'] = ['当前是未元素化的基础形态，仅配置普通攻击。元素战技与元素爆发请查看对应元素形态。']
-    if binding['baseId'].startswith('manekin'):
-        candidate['capabilities'].setdefault('notes', []).append('奇偶没有命座；固有天赋与对应元素形态按实际配置收录。')
+def merge_parameters(talent, incoming):
+    existing = {param['id']: param for param in talent['parameters']}
+    received = {param['id']: param for param in incoming}
+    if existing.keys() != received.keys():
+        raise ValueError(f'{talent["id"]}: parameter identities changed; review the bindings before refreshing')
+    changed = any(param['values'] != received[key]['values'] for key, param in existing.items())
+    # The adopted unit semantics and array order are part of the current contract.
+    talent['parameters'] = [{**param, 'values': received[param['id']]['values']} for param in talent['parameters']]
+    return changed
+
+
+def flag_changed_parameters(candidate, skill_id):
+    for proof in candidate['calculation']['bundle']['coverage']:
+        scope = proof['scope']
+        if scope['kind'] == 'context' or scope.get('skillId') == skill_id:
+            proof['evidence'] = 'declared'
+            proof['resolution'] = 'unavailable'
+            proof['reason'] = '候选参数发生变化，须重新核验来源与已绑定的输出。'
 
 
 changes = []
@@ -99,19 +110,29 @@ directory = ROOT / 'src/game-data/data/characters'
 paths = {path.stem: path for path in directory.glob('*.json')}
 paths.update({key: directory / f'{key}.json' for key in supplement['bindings']})
 for identifier, path in sorted(paths.items()):
-    original = read(path) if path.exists() else None
+    original = read(path)
+    if original.get('schemaVersion') != 3:
+        raise ValueError(f'{path}: expected current character metadata version 3')
+    candidate = copy.deepcopy(original)
     if identifier in supplement['bindings']:
         binding = supplement['bindings'][identifier]
-        candidate = copy.deepcopy(read(directory / f'{binding["baseId"]}.json'))
-        candidate['id'] = identifier
-        candidate['revision'] = original['revision'] if original else '1'
-        supplement_character(candidate, binding)
+        text_candidate = {'id': identifier, 'identity': copy.deepcopy(read(directory / f'{binding["baseId"]}.json')['identity'])}
+        supplement_character(text_candidate, binding)
+        for group in ['talents', 'passives']:
+            if [item['id'] for item in candidate[group]] != [item['id'] for item in text_candidate[group]]:
+                raise ValueError(f'{identifier}: {group} identities changed; review the bindings before refreshing')
+            for current, source in zip(candidate[group], text_candidate[group]):
+                if group == 'talents' and merge_parameters(current, source['parameters']):
+                    flag_changed_parameters(candidate, current['id'])
+                for key in ['name', 'description', 'flavorText', 'details']:
+                    if key in source:
+                        current[key] = source[key]
+                    elif key == 'flavorText':
+                        current.pop(key, None)
         if candidate != original:
             changes.append(identifier)
         write(output / 'characters' / path.name, candidate)
         continue
-    candidate = copy.deepcopy(original)
-    identifier = candidate['id']
     traveler = identifier.split('-', 1) if identifier.startswith(('aether-', 'lumine-')) else None
     base = traveler[0] if traveler else identifier
     key = 'traveler' + traveler[1] if traveler else identifier
@@ -141,12 +162,8 @@ for identifier, path in sorted(paths.items()):
                 continue
             formats = [match[1] for detail in talent['details'] for match in re.finditer(r'\{' + re.escape(param) + r':([^}]+)\}', detail['template'])]
             parameters.append({'id': param, 'unit': 'ratio' if any('P' in value for value in formats) else 'unknown', 'values': values})
-        old = {param['id']: param['values'] for param in talent['parameters']}
-        new = {param['id']: param['values'] for param in parameters}
-        if any(old.get(hit['parameter']) != new.get(hit['parameter']) for hit in talent['hits']):
-            talent['support'] = {'supported': False, 'reason': '来源参数发生变化，命中绑定等待重新核验。'}
-            candidate['capabilities']['calculation'] = {'supported': False, 'reason': '来源参数更新候选尚未核验。'}
-        talent['parameters'] = parameters
+        if parameters and merge_parameters(talent, parameters):
+            flag_changed_parameters(candidate, talent['id'])
     for passive in candidate['passives']:
         source = text.get(passive['id'].rsplit('.', 1)[-1], {})
         passive['name'] = source.get('name', passive['name'])
@@ -155,8 +172,6 @@ for identifier, path in sorted(paths.items()):
         source = constellations.get(f'c{constellation["rank"]}', {})
         constellation['name'] = source.get('name', constellation['name'])
         constellation['description'] = source.get('description', '')
-    candidate['capabilities']['text'] = 'complete' if identity and text else 'unavailable'
-    candidate['capabilities']['numbers'] = 'complete' if all(talent['parameters'] for talent in candidate['talents']) else 'partial'
     if candidate != original:
         changes.append(identifier)
     write(output / 'characters' / path.name, candidate)

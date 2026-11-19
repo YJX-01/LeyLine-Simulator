@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "columbina",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "哥伦比娅",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000125,
     "region": "挪德卡莱"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1143.984,
-      "attack": 7.448,
-      "defense": 40.0861,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critRate",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,536 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.columbina.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#columbina"
+        },
+        {
+          "id": "content.columbina.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#columbina/combat1"
+        },
+        {
+          "id": "content.columbina.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#columbina/combat2"
+        },
+        {
+          "id": "content.columbina.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#columbina/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.normal",
+            "hitId": "columbina.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.skill",
+            "hitId": "columbina.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.skill.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.skill",
+            "hitId": "columbina.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "columbina.burst",
+            "hitId": "columbina.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.columbina.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.columbina.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "columbina",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.columbina.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.columbina.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1143.984,
+      "attack": 7.448,
+      "defense": 40.0861,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critRate",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "columbina.normal",
@@ -397,6 +915,40 @@
       "description": "普通攻击\n唤起月光的潮汐，进行至多三段的攻击，造成水元素伤害。\n\n重击\n消耗一定体力，短暂咏唱后，造成水元素范围伤害。\n若拥有至少1枚**草露**，哥伦比娅施放的重击将会被替换为特殊的、不消耗体力的重击月露涤荡：消耗一枚草露，对前方的敌人造成3次草元素范围伤害，该伤害视为月绽放反应伤害。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成水元素范围伤害。",
       "category": "normal",
       "element": "hydro",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param5:F1}点"
+        },
+        {
+          "label": "月露涤荡伤害",
+          "template": "{param6:F2P}生命值上限*3"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param7:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param8:P}/{param9:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -588,88 +1140,396 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param5:F1}点"
-        },
-        {
-          "label": "月露涤荡伤害",
-          "template": "{param6:F2P}生命值上限*3"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param7:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param8:P}/{param9:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "columbina.normal.param1",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "columbina.normal.param2",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "columbina.normal.param3",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "columbina.normal.param4",
+          "element": "hydro",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param7",
+          "id": "columbina.normal.param7",
+          "element": "hydro",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "columbina.normal.param8",
+          "element": "hydro",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "columbina.normal.param9",
+          "element": "hydro",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "hydro"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.columbina.normal.parameters"
+      ]
     },
     {
       "id": "columbina.skill",
@@ -677,6 +1537,40 @@
       "description": "唤起月海的潮汐，造成水元素范围伤害，并唤出**引力涟漪**。\n引力涟漪将跟随场上角色，并持续对周围的敌人造成水元素范围伤害。引力涟漪存在期间，队伍中附近的角色触发月曜反应或造成月曜反应伤害时，将会为哥伦比娅积攒特殊的引力值，积攒至上限时，将会依据为哥伦比娅积攒最多引力值的月曜反应的类型，对敌人造成不同类型的伤害。\n月兆·满辉：引力涟漪会造成范围更大的水元素范围伤害。",
       "category": "skill",
       "element": "hydro",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}生命值上限"
+        },
+        {
+          "label": "引力涟漪·持续伤害",
+          "template": "{param2:F1P}生命值上限"
+        },
+        {
+          "label": "引力干涉·月感电伤害",
+          "template": "{param3:F2P}生命值上限"
+        },
+        {
+          "label": "引力干涉·月绽放伤害",
+          "template": "{param4:F2P}生命值上限*5"
+        },
+        {
+          "label": "引力干涉·月结晶伤害",
+          "template": "{param5:F2P}生命值上限"
+        },
+        {
+          "label": "引力值上限",
+          "template": "{param8:I}"
+        },
+        {
+          "label": "引力涟漪持续时间",
+          "template": "{param9:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param10:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -889,56 +1783,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}生命值上限"
-        },
-        {
-          "label": "引力涟漪·持续伤害",
-          "template": "{param2:F1P}生命值上限"
-        },
-        {
-          "label": "引力干涉·月感电伤害",
-          "template": "{param3:F2P}生命值上限"
-        },
-        {
-          "label": "引力干涉·月绽放伤害",
-          "template": "{param4:F2P}生命值上限*5"
-        },
-        {
-          "label": "引力干涉·月结晶伤害",
-          "template": "{param5:F2P}生命值上限"
-        },
-        {
-          "label": "引力值上限",
-          "template": "{param8:I}"
-        },
-        {
-          "label": "引力涟漪持续时间",
-          "template": "{param9:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param10:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "columbina.skill.param1",
+          "element": "hydro",
           "category": "skill",
-          "scalingStat": "hp"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "hp-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.hp",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "columbina.skill.param2",
+          "element": "hydro",
           "category": "skill",
-          "scalingStat": "hp"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "hp-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.hp",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.skill",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.skill.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.columbina.skill.parameters"
+      ]
     },
     {
       "id": "columbina.burst",
@@ -946,6 +1905,28 @@
       "description": "以无秽的新月之名连接山与海，将身边的大地短暂变换为**月之领域**，并造成水元素范围伤害。",
       "category": "burst",
       "element": "hydro",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}生命值上限"
+        },
+        {
+          "label": "月曜反应伤害提升",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "月之领域持续时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param5:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1053,39 +2034,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}生命值上限"
-        },
-        {
-          "label": "月曜反应伤害提升",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "月之领域持续时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param5:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "columbina.burst.param1",
+          "element": "hydro",
           "category": "burst",
-          "scalingStat": "hp"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "hp-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.hp",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "columbina.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.columbina.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.columbina.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.columbina.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1094,40 +2102,28 @@
       "name": "月亮诱发的疯狂",
       "description": "触发**引力干涉**时，哥伦比娅将获得月诱效果，使自身的暴击率提升5%，持续10秒。该效果至多叠加3层。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "columbina.passive2",
       "name": "新月自己的法则",
       "description": "处于**月之领域**中的角色触发月曜反应时，将分别获得以下效果：\n·月感电反应：雷暴云对符合条件的目标进行雷击时，有33%概率额外进行一次雷击；\n·月绽放反应：触发月绽放反应时，将为队伍提供一枚特殊的**山月草露**，每18秒至多通过这种方式为队伍提供3枚山月草露；\n·月结晶反应：触发月笼谐奏时，每枚月笼有33%概率额外进行一次攻击。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "columbina.passive3",
       "name": "月兆祝赐·借汝月光",
       "description": "队伍中的角色触发感电/绽放/水元素结晶反应时，将转为触发月感电/月绽放/月结晶反应，且基于哥伦比娅的生命值上限，提升队伍中角色造成的月曜反应的基础伤害：每1000点生命值上限都将提升0.2%月曜反应的基础伤害，至多通过这种方式提升7%伤害。\n\n此外，哥伦比娅在队伍中时，队伍的月兆将会上升一级。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "columbina.passive4",
       "name": "月的守望",
       "description": "处于挪德卡莱或霜月区域时，队伍中自己的角色倒下时，哥伦比娅将复苏该角色，并为其恢复生命值，恢复值基于哥伦比娅的好感等级，该效果每100秒至多触发一次。该效果在秘境、征讨领域、深境螺旋中无效。\n此外，对受到月矩力影响的部分小动物，哥伦比娅似乎有着特殊的亲和力…",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1136,20 +2132,14 @@
       "name": "遍照花海，隐入群山",
       "description": "施放元素战技万古潮汐时，还会立刻触发一次等同于**引力干涉**的效果，该效果每15秒至多触发一次。\n月兆·满辉 \n触发引力干涉时，若为哥伦比娅积攒最多引力值的月曜反应类型为：\n·月感电反应：为队伍中自己的当前场上角色恢复6点元素能量；\n·月绽放反应：提升队伍中自己的当前场上角色的抗打断能力，持续8秒；\n·月结晶反应：唤出雨海护盾，伤害吸收量受益于哥伦比娅生命值上限的12%，对水元素伤害有250%的吸收效果，持续8秒。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**1.5%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "为夜增辉，与君遥伴",
       "description": "**引力值**的积攒速度提升34%。\n触发引力干涉时，哥伦比娅将获得皎辉效果，生命值上限提升40%，持续8秒。\n月兆·满辉 ：\n皎辉效果持续期间，若本次触发引力干涉时，为哥伦比娅积攒最多引力值的月曜反应类型为：\n·月感电反应：队伍中自己的当前场上角色攻击力提升，提升值相当于哥伦比娅生命值上限的1%；\n·月绽放反应：队伍中自己的当前场上角色元素精通提升，提升值相当于哥伦比娅生命值上限的0.35%；\n·月结晶反应：队伍中自己的当前场上角色防御力提升，提升值相当于哥伦比娅生命值上限的1%。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**7%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1161,20 +2151,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "花岚云翳，山岩树影",
       "description": "触发**引力干涉**时，还会为哥伦比娅恢复4点元素能量；\n此外，依据为哥伦比娅积攒最多引力值的月曜反应类型，若为月感电/月绽放/月结晶反应，则本次引力干涉造成的月曜反应伤害提升，提升值分别相当于哥伦比娅生命值上限的12.5%/2.5%/12.5%。上述效果每15秒至多触发一次。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**1.5%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1186,28 +2170,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "夜昏且暗，且随月光",
       "description": "处于**月之领域**中的所有角色触发月曜反应后的8秒内，依据参与反应的元素类型，使队伍中的所有角色造成的对应元素类型伤害的暴击伤害提升80%。同种元素类型的暴击伤害提升效果无法叠加。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**7%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.columbina.growth",
+    "content.character-curves"
+  ]
 }

@@ -1,0 +1,203 @@
+{
+  "sources": [
+    {
+      "id": "kqm.web.lunar",
+      "kind": "document",
+      "url": "https://keqingmains.com/misc/lunar-reactions/",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI"
+    },
+    {
+      "id": "kqm.web.stellar",
+      "kind": "document",
+      "url": "https://keqingmains.com/misc/stellar-reaction-guide/",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "7.0"
+    }
+  ],
+  "formulaImages": [
+    {
+      "id": "kqm.web.lunar-charged-individual",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image2-new.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-charged-individual.webp"
+    },
+    {
+      "id": "kqm.web.lunar-charged-aggregate",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image6-new.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-charged-aggregate.webp"
+    },
+    {
+      "id": "kqm.web.lunar-charged-direct",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/Direct-LC.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-charged-direct.webp"
+    },
+    {
+      "id": "kqm.web.lunar-bloom-direct",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/Direct-LB.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-bloom-direct.webp"
+    },
+    {
+      "id": "kqm.web.lunar-crystallize-individual",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image5-new.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-crystallize-individual.webp"
+    },
+    {
+      "id": "kqm.web.lunar-crystallize-aggregate",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image12-new.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-crystallize-aggregate.webp"
+    },
+    {
+      "id": "kqm.web.lunar-crystallize-direct",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/Direct-LCr.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-crystallize-direct.webp"
+    },
+    {
+      "id": "kqm.web.lunar-em-bonus",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/EM-Bonus.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "Luna VI",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/lunar-em-bonus.webp"
+    },
+    {
+      "id": "kqm.web.stellar-conduct-direct",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Direct-Stellar-Conduct-Formula.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "7.0",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/stellar-conduct-direct.webp"
+    },
+    {
+      "id": "kqm.web.stellar-swirl-individual",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Indirect-Stellar-Swirl-Formula.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "7.0",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/stellar-swirl-individual.webp"
+    },
+    {
+      "id": "kqm.web.stellar-swirl-aggregate",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Stellar-Swirl-Contribution.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "7.0",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/stellar-swirl-aggregate.webp"
+    },
+    {
+      "id": "kqm.web.stellar-swirl-direct",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Direct-Stellar-Swirl-Formula.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "7.0",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/stellar-swirl-direct.webp"
+    },
+    {
+      "id": "kqm.web.stellar-em-bonus",
+      "kind": "document",
+      "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/EM-Bonus-Formula.webp",
+      "retrievedAt": "2026-11-15T12:30:41.209Z",
+      "applicableVersion": "7.0",
+      "capture": "artifacts/content-candidates/structured-damage-sources/kqm/stellar-em-bonus.webp"
+    }
+  ],
+  "method": "Read all 13 captured source images symbol by symbol. Store percentages as scalar ratios; the displayed x100% is not an extra numeric multiplier. Flat base damage is added after the base-bonus and EM/reaction factors. CRIT, target resistance and elevation follow. Direct formulas consume explicit stat-times-talent damage, without a level-table read.",
+  "constants": [
+    {
+      "formula": "lunar-em-bonus",
+      "node": "numerator",
+      "value": 6
+    },
+    {
+      "formula": "lunar-em-bonus",
+      "node": "denominator",
+      "value": 2000
+    },
+    {
+      "formula": "stellar-em-bonus",
+      "node": "numerator",
+      "value": 6
+    },
+    {
+      "formula": "stellar-em-bonus",
+      "node": "denominator",
+      "value": 2000
+    },
+    {
+      "formula": "lunar-charged-individual",
+      "node": "reactionCoefficient",
+      "value": 3
+    },
+    {
+      "formula": "lunar-crystallize-individual",
+      "node": "reactionCoefficient",
+      "value": 1.6
+    },
+    {
+      "formula": "lunar-charged-direct",
+      "node": "reactionCoefficient",
+      "value": 3
+    },
+    {
+      "formula": "lunar-bloom-direct",
+      "node": "reactionCoefficient",
+      "value": 1
+    },
+    {
+      "formula": "lunar-crystallize-direct",
+      "node": "reactionCoefficient",
+      "value": 1.6
+    },
+    {
+      "formula": "stellar-swirl-direct",
+      "node": "reactionCoefficient",
+      "value": 1
+    }
+  ],
+  "rankedAggregation": {
+    "weights": [
+      0.6,
+      0.3,
+      0.05,
+      0.05
+    ],
+    "rankMetric": "realized individual damage including CRIT",
+    "rankEvidence": "The individual formulas include the contributor CRIT multiplier, and their computed damage is ranked before summation. This is an interpretation of the combined equations and guide text, not a recorded game observation.",
+    "sources": [
+      "kqm.web.lunar-charged-aggregate",
+      "kqm.web.lunar-crystallize-aggregate",
+      "kqm.web.stellar-swirl-aggregate"
+    ],
+    "scope": "These are the declared rank weights, not a universal participant limit. Unsupported extra ranks must not be silently dropped."
+  },
+  "eventFacts": {
+    "lunarBloomTrigger": "Resource effect; no independent reaction damage output.",
+    "stellarConductTrigger": "Field/state effect; damage comes from character abilities.",
+    "stellarSwirlReactionCoefficients": {
+      "initialAnemo": 0.75,
+      "cryoLevel1": 2,
+      "cryoLevel2": 3
+    }
+  },
+  "scope": "General formula-family component evidence. Character hit bindings, equipment exceptions and event-state rules require their own coverage review; actual game testing is performed by the developer."
+}

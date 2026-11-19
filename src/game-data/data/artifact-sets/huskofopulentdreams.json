@@ -1,35 +1,211 @@
 {
   "id": "huskofopulentdreams",
   "name": "华馆梦醒形骸记",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    4,
+    5
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "genshin-db.huskofopulentdreams.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/huskofopulentdreams.json"
+        },
+        {
+          "id": "content.set.huskofopulentdreams",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/huskofopulentdreams.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "huskofopulentdreams.static-defensePercent",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.huskofopulentdreams.static"
+          ],
+          "activation": {
+            "set": {
+              "id": "huskofopulentdreams",
+              "pieces": 2
+            }
+          },
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "constant",
+            "value": {
+              "kind": "quantity",
+              "unit": "scalar",
+              "value": 0.3
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.defensePercent",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "huskofopulentdreams.static-defensePercent",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.huskofopulentdreams.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "huskofopulentdreams",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+          "sources": [
+            "content.set.huskofopulentdreams"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "huskofopulentdreams.static-defensePercent",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.huskofopulentdreams.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "huskofopulentdreams",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.huskofopulentdreams"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.huskofopulentdreams"
+  ],
+  "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [
+      "ruleIds": [
         {
-          "stat": "defensePercent",
-          "values": [
-            0.3
-          ]
+          "namespace": "builtin",
+          "id": "huskofopulentdreams.static-defensePercent",
+          "revision": "1"
         }
       ],
-      "support": {
-        "supported": true,
-        "reason": "防御力提高30%。"
-      }
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.huskofopulentdreams.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：装备此圣遗物套装的角色在以下情况下，将获得「问答」效果：在场上用岩元素攻击命中敌人后获得一层，每0.3秒至多触发一次；在队伍后台中，每3秒获得一层。问答至多叠加4层，每层能提供6%防御力与6%岩元素伤害加成。每6秒，若未获得问答效果，将损失一层。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.huskofopulentdreams.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/huskofopulentdreams.json"
-  },
-  "rarity": 5
+  ]
 }

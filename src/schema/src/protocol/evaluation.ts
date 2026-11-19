@@ -42,6 +42,7 @@ export interface EvaluationResult {
   effectInstances?: EffectInstance[];
   reads?: AttributeRead[];
   stateReads?: CombatStateRead[];
+  feasibility?: import('../calculation/result').CalculationFeasibility[];
 }
 
 /** Pure v1 evaluation: each candidate rebuilds its effects; no simulation or shared run state. */

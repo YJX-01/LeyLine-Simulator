@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "catalogSource": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
+  },
+  "formulaSource": {
+    "url": "https://keqingmains.com/misc/stellar-reaction-guide/",
+    "applicableVersion": "7.0",
+    "adoptedSymbols": "tools/data/sources/kqm-web/2026-11-15/reaction-formulas.json"
+  },
+  "scope": "Versioned single-hit damage from catalog parameters and explicit combat facts. This record does not claim automatic action scheduling, resource feasibility or game damage observations.",
+  "characters": [
+    {
+      "id": "vesna",
+      "revision": "4",
+      "maxConstellation": 6,
+      "sourceFiles": [
+        "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/vesna.json",
+        "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/constellations/vesna.json",
+        "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json"
+      ],
+      "states": [
+        {
+          "key": "radiance",
+          "scope": "owner",
+          "meaning": "One explicit state: none, stellar-conduct or stellar-swirl. No simultaneous Radiance states or default active state.",
+          "source": "talents/vesna.json#/passive3/description"
+        },
+        {
+          "key": "vesna.stance",
+          "scope": "owner",
+          "meaning": "Whether the owner is in the skill stance at the requested phase.",
+          "source": "talents/vesna.json#/combat2/description"
+        },
+        {
+          "key": "vesna.disciplineStacks",
+          "scope": "owner",
+          "meaning": "Explicit count from 0 to 6 at the read time. Each source stack lasts 20 seconds; entering the skill or leaving the field clears it. C2 grants maximum stacks when entering the stance after A1 is unlocked.",
+          "source": "talents/vesna.json#/passive1/description; constellations/vesna.json#/c2/description"
+        },
+        {
+          "key": "vesna.c6Window",
+          "scope": "owner",
+          "meaning": "Explicit availability within five seconds after a highest-stage special skill. The output separately checks constellation 6.",
+          "source": "constellations/vesna.json#/c6/description"
+        }
+      ],
+      "bindingRules": [
+        "Original normal hit identities stay physical outside the stance; explicit .anemo variants use the same parameters inside it.",
+        "Skill parameters 4/6/8 and burst parameter 1 use ordinary damage outside Stellar Swirl Radiance; 5/7/9 and burst parameter 2 use direct Stellar Swirl damage inside it.",
+        "Each request denotes one damage segment. The two hits of normal attack 3 and four intermediate third-stage spirit hits require separate explicit occurrences.",
+        "A1 multiplies only spirit skill bases. Its ordinary and Stellar Swirl targets remain separate; reaction-specific flat additions stay after the reaction and mastery factors.",
+        "A4 counts current party members from their supplied elemental identities, including the owner. Missing identities stay unknown.",
+        "C2 attack requires A1 and six known stacks. C4 replaces the A4 rates with triple values; it does not add the original rates again.",
+        "The no-ascension linchpin passive applies its attack-based base bonus to the supplied party. It has no invented breakthrough requirement.",
+        "C6 slash and spirit ratios come from the constellation description, with a distinct window and constellation guard. C6 elevation applies only to Stellar Swirl damage.",
+        "No ordinary damage bonus, defense factor or level multiplier is inherited by direct Stellar Swirl outputs.",
+        "Declared state facts supply single-hit conditions. Their history, skill resources, cancellation and automatic scheduling remain separate action work."
+      ],
+      "independentChecks": [
+        "tests/unit/engine/calculation/stellar-character.test.ts",
+        "tools/lib/numeric-audit.mjs"
+      ],
+      "evidence": "adopted single-hit scope; not observed"
+    }
+  ]
+}

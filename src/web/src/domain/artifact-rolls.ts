@@ -1,4 +1,4 @@
-import type { ArtifactItem, StatKey } from '@leyline/schema';
+import { artifactInitialSubstatCounts, type ArtifactItem, type StatKey } from '@leyline/schema';
 import table from '../../generated/artifact-rolls.json';
 import { ratioStat } from './account-real';
 import type {AccountArtifact} from './account';
@@ -38,10 +38,10 @@ function possibleCounts(stat:StatKey,value:number,rarity:number,max:number):numb
   }
   if(candidates.size>2000)candidates.clear();candidates.set(key,counts);return counts;
 }
-/** Enumerate joint configurations, retaining the initial-three/four and level constraints. */
+/** Enumerate joint configurations using the item's rarity and actual enhancement level. */
 function legalRollConfigurations(artifact: ArtifactItem): number[][] {
   const upgrades=Math.floor(artifact.level/4);
-  const totals=[3,4].filter(initial=>Math.min(4,initial+upgrades)===artifact.substats.length).map(initial=>initial+upgrades);
+  const totals=artifactInitialSubstatCounts(artifact.rarity).filter(initial=>Math.min(4,initial+upgrades)===artifact.substats.length).map(initial=>initial+upgrades);
   const choices=artifact.substats.map(sub=>sub.rolls!==undefined?[sub.rolls]:possibleCounts(sub.stat,sub.value,artifact.rarity,upgrades+1));
   const valid:number[][]=[];
   function visit(index:number,counts:number[]) {

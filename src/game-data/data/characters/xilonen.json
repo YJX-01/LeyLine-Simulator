@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "xilonen",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "希诺宁",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000103,
     "region": "纳塔"
-  },
-  "attributes": {
-    "base": {
-      "hp": 965.71313,
-      "attack": 21.413,
-      "defense": 72.3943,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "defensePercent",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,569 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.xilonen.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#xilonen"
+        },
+        {
+          "id": "content.xilonen.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#xilonen/combat1"
+        },
+        {
+          "id": "content.xilonen.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#xilonen/combat2"
+        },
+        {
+          "id": "content.xilonen.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#xilonen/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param8",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.normal",
+            "hitId": "xilonen.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.skill",
+            "hitId": "xilonen.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.burst",
+            "hitId": "xilonen.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.burst.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xilonen.burst",
+            "hitId": "xilonen.burst.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xilonen.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xilonen.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xilonen",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.xilonen.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.xilonen.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 965.71313,
+      "attack": 21.413,
+      "defense": 72.3943,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "defensePercent",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "xilonen.normal",
@@ -397,6 +948,52 @@
       "description": "普通攻击\n进行至多三段的连续剑击。\n\n重击\n消耗一定体力，向前方使出踢击。\n\n下落攻击\n从空中下坠冲击地面，基于希诺宁的防御力，攻击下落路径上的敌人，并在落地时造成范围伤害。\n\n夜魂状态·刃轮巡猎\n在夜魂加持状态下，希诺宁将切换至「刃轮巡猎」模式，在这种状态下，希诺宁的普通攻击将转为以刃轮鞋进行至多四段的连续踢击，无法进行重击。\n在这种状态下进行普通攻击与下落攻击时，将转为基于希诺宁的防御力，造成具有夜魂性质且无法被附魔覆盖的岩元素伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}+{param3:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param6:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param7:F1P}防御力"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param8:F1P}防御力/{param9:F1P}防御力"
+        },
+        {
+          "label": "刃轮巡猎一段伤害",
+          "template": "{param10:F1P}防御力"
+        },
+        {
+          "label": "刃轮巡猎二段伤害",
+          "template": "{param11:F1P}防御力"
+        },
+        {
+          "label": "刃轮巡猎三段伤害",
+          "template": "{param12:F1P}防御力"
+        },
+        {
+          "label": "刃轮巡猎四段伤害",
+          "template": "{param13:F1P}防御力"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -672,106 +1269,451 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}+{param3:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param6:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param7:F1P}防御力"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param8:F1P}防御力/{param9:F1P}防御力"
-        },
-        {
-          "label": "刃轮巡猎一段伤害",
-          "template": "{param10:F1P}防御力"
-        },
-        {
-          "label": "刃轮巡猎二段伤害",
-          "template": "{param11:F1P}防御力"
-        },
-        {
-          "label": "刃轮巡猎三段伤害",
-          "template": "{param12:F1P}防御力"
-        },
-        {
-          "label": "刃轮巡猎四段伤害",
-          "template": "{param13:F1P}防御力"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "xilonen.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "xilonen.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "xilonen.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "xilonen.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "xilonen.normal.param5",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param7",
+          "id": "xilonen.normal.param7",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "defense",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param8",
+          "id": "xilonen.normal.param8",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "defense",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param8",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "xilonen.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "defense",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.xilonen.normal.parameters"
+      ]
     },
     {
       "id": "xilonen.skill",
@@ -780,6 +1722,32 @@
       "flavorText": "从某种意义上来说，锻造宝石与混音的原理或许有一定相通之处：滤除杂质，只保留最为闪耀之物。\n不过希诺宁向来是无所谓的，毕竟两者对她而言都是无比快乐的事情嘛。",
       "category": "skill",
       "element": "geo",
+      "details": [
+        {
+          "label": "突进伤害",
+          "template": "{param1:F1P}防御力"
+        },
+        {
+          "label": "元素抗性降低",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "源音采样激活时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "夜魂值时间限制",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "夜魂值上限",
+          "template": "{param5:F1}点"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param6:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -908,43 +1876,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "突进伤害",
-          "template": "{param1:F1P}防御力"
-        },
-        {
-          "label": "元素抗性降低",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "源音采样激活时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "夜魂值时间限制",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "夜魂值上限",
-          "template": "{param5:F1}点"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param6:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "xilonen.skill.param1",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.skill.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.xilonen.skill.parameters"
+      ]
     },
     {
       "id": "xilonen.burst",
@@ -953,6 +1944,32 @@
       "flavorText": "「好，先在这里停顿一下！」\n「没关系没关系，刚才的节拍我已经记录下来了。让我试试看，把我们的旋律混合在一起，会演奏出怎样的音色吧。」",
       "category": "burst",
       "element": "geo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:F1P}防御力"
+        },
+        {
+          "label": "持续治疗量",
+          "template": "{param2:F1P}防御力+{param3:I}"
+        },
+        {
+          "label": "欢兴律动持续时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "追加节拍伤害",
+          "template": "{param5:F1P}防御力"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param6:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param7:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1102,48 +2119,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:F1P}防御力"
-        },
-        {
-          "label": "持续治疗量",
-          "template": "{param2:F1P}防御力+{param3:I}"
-        },
-        {
-          "label": "欢兴律动持续时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "追加节拍伤害",
-          "template": "{param5:F1P}防御力"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param6:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param7:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "xilonen.burst.param1",
+          "element": "geo",
           "category": "burst",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.burst.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param5",
+          "id": "xilonen.burst.param5",
+          "element": "geo",
           "category": "burst",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xilonen.burst",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xilonen.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xilonen.burst.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.xilonen.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1152,40 +2242,28 @@
       "name": "四境四象回声",
       "description": "在夜魂加持状态下：\n·若希诺宁拥有至少两枚经过元素转化的「源音采样」，在普通攻击与下落攻击命中敌人时，将获得35点夜魂值，该效果每0.1秒至多触发一次；\n·若希诺宁拥有少于两枚经过元素转化的「源音采样」，普通攻击与下落攻击造成的伤害提升30%。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "xilonen.passive2",
       "name": "便携铠装护层",
       "description": "在夜魂加持状态下，希诺宁的夜魂值达到上限时，将触发一次等同于「夜魂迸发」的效果，该效果每14秒至多触发一次。\n此外，队伍中的附近的角色触发「夜魂迸发」时，希诺宁的防御力提升20%，持续15秒。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "xilonen.passive3",
       "name": "夜域赐礼·锻火之祝",
       "description": "在夜魂值耗竭后，希诺宁将会转而消耗燃素来维持夜魂加持。\n在纳塔存在燃素机制的区域时，能够进行夜魂传递·希诺宁。当前场上角色处于冲刺、攀爬或是特定天赋赋予的移动状态下，或是位于一定高度的空中时，切换希诺宁登场时触发：希诺宁将进入夜魂加持状态，并获得20点夜魂值。在这种情况下，希诺宁的夜魂值有4秒的时间限制，超过时间限制后，希诺宁的夜魂值将立刻耗竭，在时间限制内施放音火锻淬后，夜魂值的时间限制将延长9秒。自己的队伍每10秒可以触发一次夜魂传递。\n\n此外，位于纳塔地区时，在夜魂加持状态下，希诺宁攀爬将不再消耗体力。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "xilonen.passive4",
       "name": "丛山锻火驰行",
       "description": "触发夜魂传递时，恢复15点燃素。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1194,20 +2272,14 @@
       "name": "献予慵眠的休假日",
       "description": "希诺宁的夜魂加持状态消耗的夜魂值与燃素降低30%，且夜魂值的时间限制延长45%。\n此外，希诺宁的「源音采样」激活时，还将提升队伍中附近的当前场上角色的抗打断能力。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "献予灼原的五重奏",
       "description": "希诺宁携带的岩元素「源音采样」将始终保持激活状态。此外，希诺宁的「源音采样」激活时，将根据「源音采样」的元素类型，使队伍中附近所有元素类型相同的角色获得对应效果：\n·岩元素：造成的伤害提升50%；\n·火元素：攻击力提升45%；\n·水元素：生命值上限提升45%；\n·冰元素：暴击伤害提升60%；\n·雷元素：恢复25点元素能量，且元素爆发的冷却时间缩短6秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1219,20 +2291,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "献予午后的花之梦",
       "description": "希诺宁施放音火锻淬后，将为队伍中附近的所有角色施加「荣花之赐」效果，持续15秒。\n拥有「荣花之赐」的角色的普通攻击、重击与下落攻击造成的伤害提升，提升值相当于希诺宁的防御力的65%。该效果将在生效6次或持续时间结束时解除。\n同时命中多名敌人时，会依据命中敌人的数量消耗生效次数；队伍中具有「荣花之赐」的角色，其生效次数单独计算。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1244,28 +2310,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "献予永夜的狂欢舞",
       "description": "处于夜魂加持状态下时，希诺宁进行冲刺、腾跃、普通攻击、下落攻击时，将获得「永夜的祝福」，无视夜魂加持状态下的限制，并提升普通攻击与下落攻击造成的伤害，持续5秒。\n持续期间：\n·暂停希诺宁的夜魂值时间限制计时，希诺宁的夜魂值、燃素、体力将不再下降，且夜魂值达到上限时，希诺宁的夜魂加持也不会结束；\n·希诺宁在夜魂加持状态下的普通攻击与下落攻击造成的伤害提升，提升值相当于希诺宁的防御力的300%。\n·每1.5秒为附近的队伍中所有角色恢复生命值，回复量相当于希诺宁的防御力的120%。\n每15秒至多获得一次「永夜的祝福」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.xilonen.growth",
+    "content.character-curves"
+  ]
 }

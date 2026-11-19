@@ -1,0 +1,1601 @@
+{
+  "schemaVersion": 2,
+  "runtimeVersion": 2,
+  "requiredFeatures": [
+    "fixed-templates-v1",
+    "formula-call-v1",
+    "table-lookup-v1",
+    "modifier-port-v1",
+    "aggregate-v1",
+    "bound-aggregate-v1",
+    "probability-enumeration-v1",
+    "combat-binding-v1",
+    "effect-v1"
+  ],
+  "sources": [
+    {
+      "id": "kqm.defense",
+      "kind": "repo",
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/_formulas/enemydef.md"
+    },
+    {
+      "id": "kqm.resistance",
+      "kind": "repo",
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/_formulas/enemyres.md"
+    },
+    {
+      "id": "kqm.amplifying",
+      "kind": "repo",
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/_formulas/amplifying.md"
+    },
+    {
+      "id": "kqm.additive",
+      "kind": "repo",
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/_formulas/additive.md"
+    },
+    {
+      "id": "kqm.ordinary",
+      "kind": "repo",
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/damage/damage-formula.md"
+    },
+    {
+      "id": "kqm.crit",
+      "kind": "repo",
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/damage/damage-formula.md"
+    },
+    {
+      "id": "leyline.binding-read",
+      "kind": "author",
+      "name": "LeyLine Simulator",
+      "reference": "Fixed typed parameter read; no game-specific numeric constants."
+    },
+    {
+      "id": "content.character-curves",
+      "kind": "repo",
+      "repository": "theBowja/genshin-db",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "path": "src/data/curve/characters.json"
+    },
+    {
+      "id": "content.weapon-curves",
+      "kind": "repo",
+      "repository": "theBowja/genshin-db",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+      "path": "src/data/curve/weapons.json"
+    },
+    {
+      "id": "content.artifact-main",
+      "kind": "repo",
+      "repository": "Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "path": "ExcelBinOutput/ReliquaryLevelExcelConfigData.json"
+    }
+  ],
+  "formulas": [
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "attack-counted-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "attack",
+            "attribute": "attribute",
+            "ratio": "ratio",
+            "count": "count"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "attack-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "attack",
+            "attribute": "attribute",
+            "ratio": "ratio"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "attack-panel-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "panel-base",
+        "stat": "attack",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "crit-selected",
+        "revision": "1"
+      },
+      "template": {
+        "id": "crit-selected",
+        "calculation": {
+          "namespace": "builtin",
+          "id": "crit",
+          "revision": "1"
+        },
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "crit",
+        "revision": "1"
+      },
+      "template": {
+        "id": "crit",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.crit"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-2",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 2,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-3",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 3,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-4",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 4,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-5",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 5,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-6",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 6,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-7",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 7,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-8",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 8,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "damage-sum-9",
+        "revision": "1"
+      },
+      "template": {
+        "id": "damage-sum",
+        "terms": 9,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "defense-counted-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "defense",
+            "attribute": "attribute",
+            "ratio": "ratio",
+            "count": "count"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "defense-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "defense",
+            "attribute": "attribute",
+            "ratio": "ratio"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "defense-panel-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "panel-base",
+        "stat": "defense",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "defense",
+        "revision": "1"
+      },
+      "template": {
+        "id": "defense",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "elementalMastery-counted-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "elementalMastery",
+            "attribute": "attribute",
+            "ratio": "ratio",
+            "count": "count"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "elementalMastery-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "elementalMastery",
+            "attribute": "attribute",
+            "ratio": "ratio"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "hp-counted-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "hp",
+            "attribute": "attribute",
+            "ratio": "ratio",
+            "count": "count"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "hp-damage-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "hp",
+            "attribute": "attribute",
+            "ratio": "ratio"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "hp-panel-base",
+        "revision": "1"
+      },
+      "template": {
+        "id": "panel-base",
+        "stat": "hp",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "ordinary-bonus",
+        "revision": "1"
+      },
+      "template": {
+        "id": "ordinary-bonus",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "ordinary-hit",
+        "revision": "1"
+      },
+      "template": {
+        "id": "ordinary-hit",
+        "revision": "1",
+        "baseFlat": "attribute"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "resistance",
+        "revision": "1"
+      },
+      "template": {
+        "id": "resistance",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "schemaVersion": 2,
+      "identity": {
+        "namespace": "builtin",
+        "id": "binding.milliseconds",
+        "revision": "1"
+      },
+      "template": {
+        "id": "read-milliseconds",
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    }
+  ],
+  "tables": [],
+  "attributes": [
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.whiteHp",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "whiteHp"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.flatHp",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "flatHp"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "formula",
+        "formula": {
+          "namespace": "builtin",
+          "id": "hp-panel-base",
+          "revision": "1"
+        },
+        "inputs": {
+          "white": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.whiteHp",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          },
+          "percent": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.hpPercent",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          },
+          "flat": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.flatHp",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          }
+        },
+        "output": "value"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "hpPercent"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.whiteAttack",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "attack"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "whiteAttack"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.flatAttack",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "attack"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "flatAttack"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "attack"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "formula",
+        "formula": {
+          "namespace": "builtin",
+          "id": "attack-panel-base",
+          "revision": "1"
+        },
+        "inputs": {
+          "white": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.whiteAttack",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          },
+          "percent": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.attackPercent",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          },
+          "flat": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.flatAttack",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          }
+        },
+        "output": "value"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "attackPercent"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.whiteDefense",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "defense"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "whiteDefense"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.flatDefense",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "defense"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "flatDefense"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "defense"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "formula",
+        "formula": {
+          "namespace": "builtin",
+          "id": "defense-panel-base",
+          "revision": "1"
+        },
+        "inputs": {
+          "white": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.whiteDefense",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          },
+          "percent": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.defensePercent",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          },
+          "flat": {
+            "kind": "attribute",
+            "actor": {
+              "role": "owner"
+            },
+            "key": {
+              "namespace": "builtin",
+              "id": "attribute.flatDefense",
+              "revision": "1"
+            },
+            "at": {
+              "kind": "current",
+              "phase": "same"
+            }
+          }
+        },
+        "output": "value"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "defensePercent"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "critRate"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "critDamage"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "energyRecharge"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "elementalMastery"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "elementalMastery"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "physicalBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "anemoBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "geoBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "electroBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "hydroBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "pyroBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "cryoBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "dendroBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "healingBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.damageBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.baseDamageBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "damage"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "damage",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.level",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "level"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.defenseIgnore",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "defenseIgnore"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.level",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "level"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.defenseReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "defenseReduction"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.ordinaryDamageReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "ordinaryDamageReduction"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.physical",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.physical"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.anemo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.anemo"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.geo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.geo"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.electro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.electro"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.hydro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.hydro"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.pyro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.pyro"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.cryo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.cryo"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.resistance.dendro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "input",
+        "key": "resistance.dendro"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.baseMultiplier",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 1
+        }
+      },
+      "combine": "product",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.amplifyingReactionBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "amplifyingReactionBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.amplifying"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.additiveReactionBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "additiveReactionBonus"
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.additive"
+      ]
+    }
+  ],
+  "effects": [],
+  "damageFamilies": [
+    "ordinary"
+  ],
+  "stateMachines": [],
+  "aggregates": [],
+  "coverage": []
+}

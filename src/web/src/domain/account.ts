@@ -5,7 +5,7 @@ export { accountSlots, type AccountSlot, type AccountArtifact, type AccountChara
 export const accountSlotLabels: Record<AccountSlot,string>={flower:'生之花',plume:'死之羽',sands:'时之沙',goblet:'空之杯',circlet:'理之冠'};
 export const cloneAccount = (value: LocalAccount): LocalAccount => JSON.parse(JSON.stringify(value)) as LocalAccount;
 export function createAccount(name = '我的本地账号'): LocalAccount {
-  return { schemaVersion: 2, kind: 'account', id: crypto.randomUUID(), name, characters: [], artifacts: [] };
+  return { schemaVersion: 5, kind: 'account', id: crypto.randomUUID(), name, characters: [], artifacts: [] };
 }
 export function parseAccount(input:unknown):LocalAccount {
  const parsed=accountSchema.safeParse(input);

@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "chiori",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "千织",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000094,
     "region": "稻妻"
-  },
-  "attributes": {
-    "base": {
-      "hp": 890.4009,
-      "attack": 25.137,
-      "defense": 74.1892,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critRate",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,635 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.chiori.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#chiori"
+        },
+        {
+          "id": "content.chiori.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#chiori/combat1"
+        },
+        {
+          "id": "content.chiori.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#chiori/combat2"
+        },
+        {
+          "id": "content.chiori.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#chiori/combat3"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param2",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param3",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param4",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param6",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param7",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param7",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param9",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param10",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.normal.param11",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.normal",
+            "hitId": "chiori.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.skill.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.skill",
+            "hitId": "chiori.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.skill.param5",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.skill",
+            "hitId": "chiori.skill.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.burst.param1",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "chiori.burst",
+            "hitId": "chiori.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.chiori.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.chiori.context",
+            "revision": "3"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "chiori",
+            "revision": "3"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.chiori.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.chiori.context",
+        "revision": "3"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 890.4009,
+      "attack": 25.137,
+      "defense": 74.1892,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critRate",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "chiori.normal",
@@ -397,6 +1014,40 @@
       "description": "普通攻击\n进行至多四段的连续剑击。\n\n重击\n消耗一定体力，瞬间向前方挥出两剑。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}+{param4:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param6:F1P}+{param7:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param8:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param9:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param10:P}/{param11:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -630,106 +1281,561 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}+{param4:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param6:F1P}+{param7:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param8:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param9:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param10:P}/{param11:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "chiori.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param1",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "chiori.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param2",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "chiori.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param3",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "chiori.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param4",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "chiori.normal.param5",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param5",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "chiori.normal.param6",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param6",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param7",
+          "id": "chiori.normal.param7",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param7",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param7",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param7"
         },
         {
-          "parameter": "param9",
+          "id": "chiori.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param9",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "chiori.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param10",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "chiori.normal.param11",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "chiori.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.chiori.normal.param11",
+              "revision": "3"
+            }
+          ],
+          "parameter": "param11"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.chiori.normal.parameters"
+      ]
     },
     {
       "id": "chiori.skill",
@@ -738,6 +1844,28 @@
       "flavorText": "「锦绘染绯樱，花色余香缀袖中，几度醉流莺。」",
       "category": "skill",
       "element": "geo",
+      "details": [
+        {
+          "label": "袖伤害",
+          "template": "{param1:P}攻击力+{param2:P}防御力"
+        },
+        {
+          "label": "袖存在时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "袖攻击间隔",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "上挑攻击伤害",
+          "template": "{param5:P}攻击力+{param6:P}防御力"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param7:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -887,56 +2015,219 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "袖伤害",
-          "template": "{param1:P}攻击力+{param2:P}防御力"
-        },
-        {
-          "label": "袖存在时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "袖攻击间隔",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "上挑攻击伤害",
-          "template": "{param5:P}攻击力+{param6:P}防御力"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param7:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "chiori.skill.param1",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "attack",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "chiori.skill",
+                    "parameterId": "param1",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "defense-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.defense",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "chiori.skill",
+                    "parameterId": "param2",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "defense",
-              "parameter": "param2"
+              "namespace": "builtin",
+              "id": "coverage.chiori.skill.param1",
+              "revision": "3"
             }
-          ]
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param5",
+          "id": "chiori.skill.param5",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "attack",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "chiori.skill",
+                    "parameterId": "param5",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "defense-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.defense",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "chiori.skill",
+                    "parameterId": "param6",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "defense",
-              "parameter": "param6"
+              "namespace": "builtin",
+              "id": "coverage.chiori.skill.param5",
+              "revision": "3"
             }
-          ]
+          ],
+          "parameter": "param5"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.chiori.skill.parameters"
+      ]
     },
     {
       "id": "chiori.burst",
@@ -945,6 +2236,20 @@
       "flavorText": "「一理既达，万法皆通。」",
       "category": "burst",
       "element": "geo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:P}攻击力+{param2:P}防御力"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1031,37 +2336,115 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:P}攻击力+{param2:P}防御力"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "chiori.burst.param1",
+          "element": "geo",
           "category": "burst",
-          "scalingStat": "attack",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "chiori.burst",
+                    "parameterId": "param1",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "defense-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.defense",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "chiori.burst",
+                    "parameterId": "param2",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.chiori.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "defense",
-              "parameter": "param2"
+              "namespace": "builtin",
+              "id": "coverage.chiori.burst.param1",
+              "revision": "3"
             }
-          ]
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.chiori.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1070,30 +2453,21 @@
       "name": "量体裁衣",
       "description": "施放羽袖一触的上挑攻击后的短暂时间内，依据不同的后续操作，产生不同的效果：点按元素战技将触发「织锦」；点按普通攻击则触发「裁锦」。\n\n织锦\n·切换角色，使队伍中下一名自己的角色登场；\n·为队伍中所有自己的角色施加「当意即妙」：队伍中自己的当前场上角色的普通攻击、重击和下落攻击命中附近的敌人时，袖将进行协同攻击，在敌人的位置造成相当于羽袖一触的上挑攻击伤害100%的岩元素范围伤害，通过这种方式造成的伤害视为元素战技伤害；\n·「当意即妙」持续8秒，每2秒至多触发一次袖的协同攻击，一次「当意即妙」持续期间，至多触发2次协同攻击。\n\n裁锦\n·千织获得岩元素附魔，持续5秒。\n\n千织在场上时，如果施放羽袖一触的上挑攻击后的短暂时间内没有再次点按元素战技或点按普通攻击，将触发后续效果「裁锦」。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "chiori.passive2",
       "name": "锦上添花",
       "description": "队伍中附近的角色创造岩元素创造物时，千织获得20%岩元素伤害加成，持续20秒。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "chiori.passive3",
       "name": "衣香襟影",
       "description": "队伍中任意自己的角色装备了默认衣装以外的衣装，或初始之翼以外的风之翼时，队伍中自己的角色获得迅行效果：移动速度提升10%。\n该效果在秘境、征讨领域、深境螺旋中无效，迅行效果无法叠加。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1102,20 +2476,14 @@
       "name": "正绢六通",
       "description": "羽袖一触的自动制御人形「袖」的攻击范围提升50%。\n此外，如果队伍中存在千织以外的岩元素角色，羽袖一触的突进结束时，还将触发以下效果：\n·额外唤出一名袖。通过这种方式唤出的千织自己的袖，与通过岩元素创造物额外唤出的千织自己的袖至多同时存在一名；\n·触发突破天赋「锦上添花」，此效果需要解锁突破天赋「锦上添花」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "落染五色",
       "description": "施放二刀之形·比翼后的10秒内，每3秒都将在当前场上自己的角色身边唤出一名简易自动制御人形「绢」。绢将对附近的敌人发起攻击，造成相当于袖170%的岩元素范围伤害，通过这种方式造成的伤害视为元素战技伤害。\n绢将在进行一次攻击或存在3秒后退场。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1127,20 +2495,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "衣裁三礼",
       "description": "触发突破天赋「量体裁衣」的后续效果后的8秒内，队伍中自己的当前场上角色的普通攻击、重击或下落攻击命中附近的敌人时，将在敌人附近唤出一名简易自动制御人形「绢」。每1秒至多通过上述方式唤出一名绢，一次突破天赋「量体裁衣」的当意即妙或裁锦持续期间，至多通过上述方式唤出3名绢。上述效果每15秒最多触发一次。 \n需要解锁突破天赋「量体裁衣」。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1152,28 +2514,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "万理一空",
       "description": "触发突破天赋「量体裁衣」的后续效果后，千织自己的羽袖一触的冷却时间减少12秒。需要解锁突破天赋「量体裁衣」。\n此外，千织自己的普通攻击造成的伤害提升，提升值相当于千织自己的防御力的235%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.chiori.growth",
+    "content.character-curves"
+  ]
 }

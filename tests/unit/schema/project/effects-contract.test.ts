@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { projectSchema } from '../../../../src/schema/src/project/project';
-const base = { schemaVersion: 2, rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'contract', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} };
+const base = { schemaVersion: 5, rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'contract', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} };
 describe('Calculation profile contract', () => {
   it('keeps the current direct profile strict and requires explicit dependency selection', () => {
     expect(projectSchema.safeParse(base).success).toBe(true);

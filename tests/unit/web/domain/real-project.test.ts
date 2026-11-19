@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
-import { getCharacter, getWeapon, getArtifactMain, DATA_VERSION } from '@leyline/game-data';
+import { getCharacter, getWeapon, getArtifactMain, getBuildSources, DATA_VERSION } from '@leyline/game-data';
 import { evaluateTimeline } from '@leyline/engine';
 import { projectSchema, type Build } from '@leyline/schema';
 import { addActorFromBuild, addSkillAction, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
@@ -9,12 +9,12 @@ import { recordedProject } from '../../../helpers/recorded-project';
 const recordedSource = '.references/enka/official-example-2026-11-13.json';
 
 async function build(): Promise<Build> {
-  return { dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
+  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
     artifactMain: await getArtifactMain(), sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 },
     weaponLevel: 90, weaponAscension: 6, refinement: 1, artifacts: [] };
 }
 function empty() {
-  return projectSchema.parse({ schemaVersion: 2, rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
+  return projectSchema.parse({ schemaVersion: 5, rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
 }
 describe('real axis editing and inventory identity', () => {
   it('creates a self-contained axis and detaches it from source data and candidate inputs', async () => {
@@ -44,20 +44,17 @@ describe('real axis editing and inventory identity', () => {
     expect(() => addSkillAction(project, actor, 'jean.burst', -1)).toThrow();
     expect(JSON.stringify(project)).toBe(snapshot);
   });
-  it.skipIf(!existsSync(recordedSource))('rejects duplicate references using the recorded showcase as a format derivative', async () => {
+  it.skipIf(!existsSync(recordedSource))('reports duplicate inventory occupancy separately using the recorded showcase as a format derivative', async () => {
     const source = (await recordedProject(recordedSource)).candidate.actors[0].build!;
     // Software namespace/error edits only; neither a second player account nor observed wearing.
-    source.inventoryAccountId = 'namespace-a';
-    source.artifacts.forEach(item => { item.inventoryAccountId = 'namespace-a'; });
+    source.artifacts.forEach(item => { item.inventory = { accountId: 'namespace-a', itemId: item.id }; });
     const project = empty();
     addActorFromBuild(project, source);
     addActorFromBuild(project, source);
-    expect(projectSchema.safeParse(project).success).toBe(false);
-    project.candidate.actors[1].build!.inventoryAccountId = 'namespace-b';
-    project.candidate.actors[1].build!.artifacts.forEach(item => { item.inventoryAccountId = 'namespace-b'; });
     expect(projectSchema.safeParse(project).success).toBe(true);
-    // A mixed-account build retains the individual piece namespace in its file snapshot.
-    project.candidate.actors[1].build!.inventoryAccountId = 'namespace-a';
-    expect(projectSchema.safeParse(project).success).toBe(true);
+    expect(evaluateTimeline(project).feasibility?.[0].status).toBe('conflict');
+    project.candidate.actors[1].build!.artifacts.forEach(item => { item.inventory!.accountId = 'namespace-b'; });
+    expect(evaluateTimeline(project).feasibility?.[0].status).toBe('pass');
+
   });
 });

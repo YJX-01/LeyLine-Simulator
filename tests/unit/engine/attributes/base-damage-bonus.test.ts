@@ -1,23 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { DATA_VERSION, getArtifactMain, getCharacter, getReactionRules, getWeapon } from '@leyline/game-data';
-import { elements, projectSchema, type Build, type DamageRequest, type Enemy, type Project, type StatKey } from '@leyline/schema';
-import { evaluateDamage, evaluateTimeline, resolveBuild, type DamageAttributeReader } from '@leyline/engine';
-import { addActorFromBuild, addSkillHit, setDamageEffectApplication } from '../../../../src/web/src/domain/real-project';
+import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
+import { elements, projectSchema, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { evaluateDamage, evaluateTimeline, resolveBuild, compileCalculation, evaluateFormula } from '@leyline/engine';
+import { addActorFromBuild, addSkillHit, addAttributeCapture, setDamageEffectApplication } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
 
 // Legal independent single-point settings from pinned growth/weapon/talent sources.
 // No player equipment, recorded sequence or game-observed damage is claimed.
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id = 'jean', weapon = 'cinnabarspindle'): Promise<Build> {
-  return { dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), reactionRules: await getReactionRules(),
+  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     artifactMain: await getArtifactMain(), sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0,
     talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
-function query(build: Build, request: DamageRequest = { skillId: 'jean.skill', hitIndex: 0, crit: 'noncritical', reaction: 'none' }) {
+function query(build: Build, request: DamageRequest = { skillId: 'jean.skill', hitId: 'jean.skill.param1', outputId: 'jean.skill.param1.damage', crit: 'noncritical', reaction: 'none' }) {
   const project = createEmptyProject();
   project.enemy = enemy;
   const actor = addActorFromBuild(project, build);
-  const hit = addSkillHit(project, actor, request.skillId, request.hitIndex, 0, request);
+  const hit = addSkillHit(project, actor, request.skillId, build.character.talents.find(skill => skill.id === request.skillId)!.hits.findIndex(hit => hit.id === request.hitId), 0, request);
   const result = evaluateTimeline(project);
   const instance = result.effectInstances!.find(instance => instance.content?.entity === 'cinnabarspindle');
   return { project, actor, hit, instance };
@@ -62,7 +62,7 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
 
   it('applies recipient Hydro bonus, expected crit and vaporize after adding the Cinnabar base', async () => {
     const build = await setting('xingqiu');
-    const { project, hit, instance } = query(build, { skillId: 'xingqiu.skill', hitIndex: 0, crit: 'expected', reaction: { type: 'vaporize', trigger: 'record-owner' } });
+    const { project, hit, instance } = query(build, { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: 'expected', reaction: { type: 'vaporize', trigger: 'record-owner' } });
     setDamageEffectApplication(project, hit, instance!.id, true);
     const attack = (16.9176 * 8.349 + 60.53229 + 41.0671 * 7.275 + 155.6) * 1.24;
     const defense = (63.51975 * 8.349 + 227.2725) * (1 + 0.150133 * 4.594);
@@ -73,7 +73,7 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
   });
 
   it('ignores the skill-only source for normal attacks and rejects a mismatched application', async () => {
-    const { project, hit, instance } = query(await setting(), { skillId: 'jean.normal', hitIndex: 0, crit: 'noncritical', reaction: 'none' });
+    const { project, hit, instance } = query(await setting(), { skillId: 'jean.normal', hitId: 'jean.normal.param1', outputId: 'jean.normal.param1.damage', crit: 'noncritical', reaction: 'none' });
     expect(evaluateTimeline(project).status).toBe('complete');
     expect(evaluateTimeline(project).totalValue).toBeCloseTo(jeanAttack * 0.88796 * 0.5 * 0.9, 8);
     const before = JSON.stringify(project);
@@ -136,14 +136,18 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
     const build = await setting('kaeya', 'favoniussword');
     const attack = 18.6984 * 8.349 + 66.90411 + 41.0671 * 7.275 + 155.6;
     const shenheAttack = (23.6474 * 8.739 + 97.10191 + 23.245 * 5.968 + 46.7) * 1.288;
-    const panel = resolveBuild(build);
-    const current: DamageAttributeReader = key => key === 'baseDamageBonus' ? shenheAttack * 0.776152 : Object.hasOwn(panel.stats, key) ? panel.stats[key as StatKey] : 0;
-    const captured: DamageAttributeReader = key => key === 'baseDamageBonus' ? 0 : Object.hasOwn(panel.stats, key) ? panel.stats[key as StatKey] : 0;
-    const result = evaluateDamage(build, { skillId: 'kaeya.burst', hitIndex: 0, crit: 'noncritical', reaction: 'none', capture: { recordId: 'explicit-source-context', phase: 'before' } }, enemy,
-      0, current, { read: captured, panel });
+    const { project, actor, hit } = query(build, { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none' });
+    const source = addAttributeCapture(project, actor, 'kaeya.burst', 0);
+    const record = project.timeline.find(record => record.id === hit)!;
+    record.timeMs = 1000;
+    record.damage!.capture = { recordId: source, phase: 'before' };
+    const definition = project.definitions.find(definition => definition.id === actor + '-weapon')!;
+    definition.nodes.push({ id: 'quill-value', op: 'constant', quantity: { value: shenheAttack * 0.776152, unit: 'damage' } });
+    definition.effects.push({ id: 'quill-component', startMs: 0, endMs: 10000, attribute: 'baseDamageBonus', unit: 'damage', value: 'quill-value' });
+    const result = evaluateTimeline(project);
     expect(result.status).toBe('complete');
-    expect(result.baseDamageBonus).toBeCloseTo(shenheAttack * 0.776152, 8);
-    expect(result.value).toBeCloseTo((attack * 1.3192 + shenheAttack * 0.776152) * 0.45, 8);
+    expect(result.points[0].real?.baseDamageBonus).toBeCloseTo(shenheAttack * 0.776152, 8);
+    expect(result.totalValue).toBeCloseTo((attack * 1.3192 + shenheAttack * 0.776152) * 0.45, 8);
   });
 });
 
@@ -152,31 +156,12 @@ describe('Yun Jin source component and canonical unknown boundaries', () => {
     ('checks the actual T%i base component against an independent source DEF and recipient formula', async (level, defense, rate) => {
       // Isolated Q component. The T9 case excludes A4 by scope and is not a full character/team calculation.
       const yunjin = await getCharacter('yunjin');
-      const rule = yunjin.combatRules![0];
-      const parameter = yunjin.talents.find(talent => talent.category === 'burst')!.parameters.find(parameter => parameter.id === 'param2')!;
-      const project = createEmptyProject();
-      project.calculationProfile = 'dependency'; project.enemy = enemy;
-      const source = { kind: 'preset' as const, reference: 'yunjin.burst/source-component', verified: true };
-      const { trigger, ...effect } = rule.effects[0];
-      project.definitions.push(
-        { id: 'source-empty', version: rule.revision, source, nodes: [], effects: [] },
-        { id: 'source-rule', version: rule.revision, source,
-          nodes: rule.nodes.map(node => node.op === 'talent-parameter' ? { id: node.id, op: 'constant' as const, quantity: { value: parameter.values[level - 1], unit: node.unit } } : node),
-          effects: [{ ...effect, action: 'yunjin-cast' }] },
-        { id: 'yunjin-cast', version: rule.revision, source, nodes: [], effects: [] });
-      project.candidate.actors.push({ id: 'source-yunjin', character: 'source-empty', weapon: 'source-rule', inputs: { defense: { value: defense, unit: 'defense' } } });
-      const recipient = addActorFromBuild(project, await setting('kaeya', 'favoniussword'));
-      project.timeline.push({ id: 'component-cast', actor: 'source-yunjin', timeMs: 0, order: 0, kind: 'action', definition: 'yunjin-cast' });
-      const hit = addSkillHit(project, recipient, 'kaeya.normal', 0, 1000, { crit: 'noncritical', reaction: 'none' });
-      const instance = evaluateTimeline(project).effectInstances!.find(instance => instance.definition === 'source-rule')!;
-      setDamageEffectApplication(project, hit, instance.id, true);
-      const result = evaluateTimeline(project);
-      const attack = 18.6984 * 8.349 + 66.90411 + 41.0671 * 7.275 + 155.6;
-      expect(result.status).toBe('complete');
-      expect(result.points[0].real?.baseDamageBonus).toBeCloseTo(defense * rate, 8);
-      expect(result.totalValue).toBeCloseTo((attack * 0.9875 + defense * rate) * 0.45, 8);
-      expect(result.reads?.some(read => read.actor === 'source-yunjin' && read.key === 'defense' && read.value === defense)).toBe(true);
-      expect(result.reads?.some(read => read.actor === recipient && read.key === 'defense')).toBe(false);
+      const formula = yunjin.calculation.bundle.formulas.find(formula => formula.identity.id === 'yunjin.flying-cloud-base')!;
+      const parameter = yunjin.talents.find(skill => skill.id === 'yunjin.burst')!.parameters.find(parameter => parameter.id === 'param2')!;
+      const compiled = compileCalculation(yunjin.calculation.bundle);
+      expect(compiled.ok).toBe(true); if (!compiled.ok) return;
+      const result = evaluateFormula(compiled.program, formula.identity, { def: { kind: 'quantity', unit: 'defense', value: defense }, rate: { kind: 'quantity', unit: 'scalar', value: parameter.values[level - 1] } });
+      expect(result.outputs.bonus).toMatchObject({ state: 'known', value: { value: expect.closeTo(defense * rate, 8) } });
     });
 
   it.each([false, null, true])('respects explicit application %s without promoting the unsupported Yun Jin source', async active => {

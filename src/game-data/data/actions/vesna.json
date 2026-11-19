@@ -1,0 +1,2164 @@
+{
+  "schemaVersion": 1,
+  "kind": "character-actions",
+  "identity": {
+    "namespace": "builtin",
+    "id": "vesna.actions",
+    "revision": "1"
+  },
+  "character": {
+    "namespace": "builtin",
+    "id": "vesna",
+    "revision": "4"
+  },
+  "sources": [
+    "vesna.actions.talents",
+    "vesna.actions.constellations",
+    "vesna.actions.pinion-research"
+  ],
+  "actions": [
+    {
+      "id": "vesna.skill-enter",
+      "skillId": "vesna.skill",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param1",
+          "outputIds": [
+            "vesna.skill.param1.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.special.1",
+      "skillId": "vesna.skill",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param2",
+          "outputIds": [
+            "vesna.skill.param2.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.special.2",
+      "skillId": "vesna.skill",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param3",
+          "outputIds": [
+            "vesna.skill.param3.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param4",
+          "outputIds": [
+            "vesna.skill.param4.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param5",
+          "outputIds": [
+            "vesna.skill.param5.stellar-swirl"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.special.3",
+      "skillId": "vesna.skill",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param6",
+          "outputIds": [
+            "vesna.skill.param6.ordinary"
+          ],
+          "offsetsMs": [
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param7",
+          "outputIds": [
+            "vesna.skill.param7.stellar-swirl"
+          ],
+          "offsetsMs": [
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param8",
+          "outputIds": [
+            "vesna.skill.param8.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param9",
+          "outputIds": [
+            "vesna.skill.param9.stellar-swirl"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.burst",
+      "skillId": "vesna.burst",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.burst",
+          "hitId": "vesna.burst.param1",
+          "outputIds": [
+            "vesna.burst.param1.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.burst",
+          "hitId": "vesna.burst.param2",
+          "outputIds": [
+            "vesna.burst.param2.stellar-swirl"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.special.c6",
+      "skillId": "vesna.skill",
+      "activation": {
+        "constellation": 6
+      },
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.c6.slash",
+          "outputIds": [
+            "vesna.skill.c6.slash.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.c6.spirit",
+          "outputIds": [
+            "vesna.skill.c6.spirit.ordinary",
+            "vesna.skill.c6.spirit.stellar-swirl"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.normal.1",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param1",
+          "outputIds": [
+            "vesna.normal.param1.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param1.anemo",
+          "outputIds": [
+            "vesna.normal.param1.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.normal.2",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param2",
+          "outputIds": [
+            "vesna.normal.param2.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param2.anemo",
+          "outputIds": [
+            "vesna.normal.param2.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.normal.3",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param3",
+          "outputIds": [
+            "vesna.normal.param3.ordinary"
+          ],
+          "offsetsMs": [
+            null,
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param3.anemo",
+          "outputIds": [
+            "vesna.normal.param3.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null,
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.normal.4",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param4",
+          "outputIds": [
+            "vesna.normal.param4.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param4.anemo",
+          "outputIds": [
+            "vesna.normal.param4.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.normal.5",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param5",
+          "outputIds": [
+            "vesna.normal.param5.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param5.anemo",
+          "outputIds": [
+            "vesna.normal.param5.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.normal.6",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param6",
+          "outputIds": [
+            "vesna.normal.param6.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param6.anemo",
+          "outputIds": [
+            "vesna.normal.param6.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.charged",
+      "skillId": "vesna.normal",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param7",
+          "outputIds": [
+            "vesna.normal.param7.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        },
+        {
+          "skillId": "vesna.normal",
+          "hitId": "vesna.normal.param7.anemo",
+          "outputIds": [
+            "vesna.normal.param7.anemo.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.pinion-emitted",
+      "skillId": "vesna.skill",
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [
+        {
+          "skillId": "vesna.skill",
+          "hitId": "vesna.skill.param10",
+          "outputIds": [
+            "vesna.skill.param10.ordinary"
+          ],
+          "offsetsMs": [
+            null
+          ]
+        }
+      ],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    },
+    {
+      "id": "vesna.leave-field",
+      "skillId": null,
+      "activation": {},
+      "durationMs": null,
+      "cancelAfterMs": null,
+      "hits": [],
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations"
+      ]
+    }
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "event-state-v1"
+      ],
+      "sources": [
+        {
+          "id": "vesna.actions.talents",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/vesna.json"
+        },
+        {
+          "id": "vesna.actions.constellations",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/vesna.json"
+        },
+        {
+          "id": "vesna.actions.pinion-research",
+          "kind": "document",
+          "url": "https://meropide.cn/chs/characters/%E8%96%87%E6%96%AF%E7%BA%B3/theorycraft/",
+          "retrievedAt": "2026-11-16T17:34:23Z",
+          "applicableVersion": "7.2",
+          "adoptionRecord": "tools/data/sources/calculation-hits/vesna-actions.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.all.1.yes",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 1,
+            "operator": "all",
+            "negate": false,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.all.1.not",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 1,
+            "operator": "all",
+            "negate": true,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.any.1.yes",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 1,
+            "operator": "any",
+            "negate": false,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.any.1.not",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 1,
+            "operator": "any",
+            "negate": true,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.all.2.yes",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 2,
+            "operator": "all",
+            "negate": false,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.all.2.not",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 2,
+            "operator": "all",
+            "negate": true,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.any.2.yes",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 2,
+            "operator": "any",
+            "negate": false,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.any.2.not",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 2,
+            "operator": "any",
+            "negate": true,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.all.3.yes",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 3,
+            "operator": "all",
+            "negate": false,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.all.3.not",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 3,
+            "operator": "all",
+            "negate": true,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.any.3.yes",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 3,
+            "operator": "any",
+            "negate": false,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.any.3.not",
+            "revision": "1"
+          },
+          "template": {
+            "id": "condition-group",
+            "terms": 3,
+            "operator": "any",
+            "negate": true,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.c0",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "eq",
+            "threshold": 0,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.c1",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "gte",
+            "threshold": 1,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.c6",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "gte",
+            "threshold": 6,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.first-highest",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "eq",
+            "threshold": 0,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.positive-cost",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "gt",
+            "threshold": 0,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.stage.1",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "eq",
+            "threshold": 1,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.stage.2",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "eq",
+            "threshold": 2,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.stage.3",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "eq",
+            "threshold": 3,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.third-highest",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "gte",
+            "threshold": 3,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.fourth-highest",
+            "revision": "1"
+          },
+          "template": {
+            "id": "quantity-condition",
+            "input": "value",
+            "unit": "count",
+            "relation": "gte",
+            "threshold": 4,
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations"
+          ]
+        }
+      ],
+      "attributes": [],
+      "effects": [],
+      "aggregates": [],
+      "coverage": [],
+      "stateMachines": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "vesna.actions.state",
+            "revision": "1"
+          },
+          "template": {
+            "id": "event-state",
+            "revision": "1"
+          },
+          "sources": [
+            "vesna.actions.talents",
+            "vesna.actions.constellations",
+            "vesna.actions.pinion-research"
+          ],
+          "states": [
+            {
+              "key": "vesna.stance",
+              "type": {
+                "kind": "boolean"
+              },
+              "kind": "value",
+              "inactiveValue": {
+                "kind": "boolean",
+                "value": false
+              },
+              "capacity": null,
+              "overflow": "unknown",
+              "expireUpdates": [
+                {
+                  "state": "vesna.swordQiSixths"
+                },
+                {
+                  "state": "vesna.specialStage"
+                },
+                {
+                  "state": "vesna.highestCasts"
+                }
+              ],
+              "duration": {
+                "kind": "formula",
+                "invocation": {
+                  "formula": {
+                    "namespace": "builtin",
+                    "id": "binding.milliseconds",
+                    "revision": "1"
+                  },
+                  "bindings": {
+                    "value": {
+                      "kind": "talent-parameter",
+                      "actor": {
+                        "role": "owner"
+                      },
+                      "skillId": "vesna.skill",
+                      "parameterId": "param12",
+                      "type": {
+                        "kind": "quantity",
+                        "unit": "milliseconds"
+                      }
+                    }
+                  },
+                  "output": "value",
+                  "captures": []
+                }
+              }
+            },
+            {
+              "key": "vesna.disciplineStacks",
+              "type": {
+                "kind": "quantity",
+                "unit": "count"
+              },
+              "kind": "stacked",
+              "inactiveValue": {
+                "kind": "quantity",
+                "unit": "count",
+                "value": 0
+              },
+              "capacity": 6,
+              "overflow": "unknown",
+              "expireUpdates": [],
+              "duration": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "unit": "milliseconds",
+                  "value": 20000
+                }
+              }
+            },
+            {
+              "key": "vesna.c6Window",
+              "type": {
+                "kind": "boolean"
+              },
+              "kind": "value",
+              "inactiveValue": {
+                "kind": "boolean",
+                "value": false
+              },
+              "capacity": null,
+              "overflow": "unknown",
+              "expireUpdates": [],
+              "duration": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "unit": "milliseconds",
+                  "value": 5000
+                }
+              }
+            },
+            {
+              "key": "vesna.specialStage",
+              "type": {
+                "kind": "quantity",
+                "unit": "count"
+              },
+              "kind": "value",
+              "inactiveValue": {
+                "kind": "quantity",
+                "unit": "count",
+                "value": 0
+              },
+              "capacity": 3,
+              "overflow": "unknown",
+              "expireUpdates": []
+            },
+            {
+              "key": "vesna.highestCasts",
+              "type": {
+                "kind": "quantity",
+                "unit": "count"
+              },
+              "kind": "value",
+              "inactiveValue": {
+                "kind": "quantity",
+                "unit": "count",
+                "value": 0
+              },
+              "capacity": 4,
+              "overflow": "unknown",
+              "expireUpdates": []
+            },
+            {
+              "key": "vesna.swordQiSixths",
+              "type": {
+                "kind": "quantity",
+                "unit": "count"
+              },
+              "kind": "value",
+              "inactiveValue": {
+                "kind": "quantity",
+                "unit": "count",
+                "value": 0
+              },
+              "capacity": null,
+              "overflow": "unknown",
+              "expireUpdates": [],
+              "knownCapacityFloor": 12
+            }
+          ],
+          "requirements": [
+            {
+              "id": "special.1",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.1"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.all.3.yes",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "fact",
+                    "key": "vesna.stance",
+                    "type": {
+                      "kind": "boolean"
+                    },
+                    "scope": "owner"
+                  },
+                  "term1": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.stage.1",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "value": {
+                        "kind": "fact",
+                        "key": "vesna.specialStage",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "count"
+                        },
+                        "scope": "owner"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term2": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.positive-cost",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "value": {
+                        "kind": "fact",
+                        "key": "vesna.swordQiCostSixths",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "count"
+                        },
+                        "scope": "query"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            },
+            {
+              "id": "special.2",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.2"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.all.3.yes",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "fact",
+                    "key": "vesna.stance",
+                    "type": {
+                      "kind": "boolean"
+                    },
+                    "scope": "owner"
+                  },
+                  "term1": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.stage.2",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "value": {
+                        "kind": "fact",
+                        "key": "vesna.specialStage",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "count"
+                        },
+                        "scope": "owner"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term2": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.positive-cost",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "value": {
+                        "kind": "fact",
+                        "key": "vesna.swordQiCostSixths",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "count"
+                        },
+                        "scope": "query"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            },
+            {
+              "id": "special.3",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.3"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.all.3.yes",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "fact",
+                    "key": "vesna.stance",
+                    "type": {
+                      "kind": "boolean"
+                    },
+                    "scope": "owner"
+                  },
+                  "term1": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.stage.3",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "value": {
+                        "kind": "fact",
+                        "key": "vesna.specialStage",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "count"
+                        },
+                        "scope": "owner"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term2": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.any.2.yes",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "term0": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.all.2.yes",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "term0": {
+                            "kind": "formula",
+                            "formula": {
+                              "namespace": "builtin",
+                              "id": "vesna.actions.c1",
+                              "revision": "1"
+                            },
+                            "inputs": {
+                              "value": {
+                                "kind": "actor-state",
+                                "actor": {
+                                  "role": "owner"
+                                },
+                                "property": "constellation"
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "kind": "formula",
+                            "formula": {
+                              "namespace": "builtin",
+                              "id": "vesna.actions.first-highest",
+                              "revision": "1"
+                            },
+                            "inputs": {
+                              "value": {
+                                "kind": "fact",
+                                "key": "vesna.highestCasts",
+                                "type": {
+                                  "kind": "quantity",
+                                  "unit": "count"
+                                },
+                                "scope": "owner"
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.positive-cost",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "fact",
+                            "key": "vesna.swordQiCostSixths",
+                            "type": {
+                              "kind": "quantity",
+                              "unit": "count"
+                            },
+                            "scope": "query"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            },
+            {
+              "id": "pinion-in-stance",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.pinion-emitted"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.all.1.yes",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "fact",
+                    "key": "vesna.stance",
+                    "type": {
+                      "kind": "boolean"
+                    },
+                    "scope": "owner"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            },
+            {
+              "id": "c6-window",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.c6"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.all.2.yes",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.c6",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "value": {
+                        "kind": "actor-state",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "property": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "kind": "fact",
+                    "key": "vesna.c6Window",
+                    "type": {
+                      "kind": "boolean"
+                    },
+                    "scope": "owner"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            }
+          ],
+          "transitions": [
+            {
+              "id": "enter",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.skill-enter"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 1,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.disciplineStacks",
+                  "operation": "clear"
+                },
+                {
+                  "state": "vesna.stance",
+                  "operation": "set",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "boolean",
+                      "value": true
+                    }
+                  }
+                },
+                {
+                  "state": "vesna.specialStage",
+                  "operation": "set",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 1
+                    }
+                  }
+                },
+                {
+                  "state": "vesna.highestCasts",
+                  "operation": "set",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "enter-sword-qi",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.skill-enter"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 2,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.swordQiSixths",
+                  "operation": "add",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 12
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "c2-discipline",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.skill-enter"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 3,
+              "activation": {
+                "ascension": 1,
+                "constellation": 2
+              },
+              "updates": [
+                {
+                  "state": "vesna.disciplineStacks",
+                  "operation": "set",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 6
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "burst-sword-qi",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.burst"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 4,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.swordQiSixths",
+                  "operation": "add",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 6
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "pinion-sword-qi",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.pinion-emitted"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 5,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.swordQiSixths",
+                  "operation": "add",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "consume-lower-special",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.1",
+                  "vesna.special.2"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 6,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.swordQiSixths",
+                  "operation": "consume",
+                  "value": {
+                    "kind": "input",
+                    "key": "vesna.swordQiCostSixths",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "count"
+                    },
+                    "scope": "event"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "consume-highest-special",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.3"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 7,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.swordQiSixths",
+                  "operation": "consume",
+                  "value": {
+                    "kind": "input",
+                    "key": "vesna.swordQiCostSixths",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "count"
+                    },
+                    "scope": "event"
+                  }
+                }
+              ],
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.all.1.not",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.all.2.yes",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "term0": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.c1",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "actor-state",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "property": "constellation"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.first-highest",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "fact",
+                            "key": "vesna.highestCasts",
+                            "type": {
+                              "kind": "quantity",
+                              "unit": "count"
+                            },
+                            "scope": "owner"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            },
+            {
+              "id": "advance-stage",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.1",
+                  "vesna.special.2"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 8,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.specialStage",
+                  "operation": "add",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "discipline-after-cast",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.burst",
+                  "vesna.special.1",
+                  "vesna.special.2",
+                  "vesna.special.3"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 9,
+              "activation": {
+                "ascension": 1
+              },
+              "updates": [
+                {
+                  "state": "vesna.disciplineStacks",
+                  "operation": "add",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "count-highest",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.3"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 10,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.highestCasts",
+                  "operation": "add",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "unit": "count",
+                      "value": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "c6-window-open",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.3"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 11,
+              "activation": {
+                "constellation": 6
+              },
+              "updates": [
+                {
+                  "state": "vesna.c6Window",
+                  "operation": "set",
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "boolean",
+                      "value": true
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "leave-after-highest",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.3"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 12,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.stance",
+                  "operation": "clear"
+                }
+              ],
+              "predicate": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "vesna.actions.any.2.yes",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "term0": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.all.2.yes",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "term0": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.c0",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "actor-state",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "property": "constellation"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.third-highest",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "fact",
+                            "key": "vesna.highestCasts",
+                            "type": {
+                              "kind": "quantity",
+                              "unit": "count"
+                            },
+                            "scope": "owner"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "vesna.actions.all.2.yes",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "term0": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.c1",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "actor-state",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "property": "constellation"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "vesna.actions.fourth-highest",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "value": {
+                            "kind": "fact",
+                            "key": "vesna.highestCasts",
+                            "type": {
+                              "kind": "quantity",
+                              "unit": "count"
+                            },
+                            "scope": "owner"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active",
+                "captures": []
+              }
+            },
+            {
+              "id": "leave-field-discipline",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.leave-field"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 13,
+              "activation": {},
+              "updates": [
+                {
+                  "state": "vesna.disciplineStacks",
+                  "operation": "clear"
+                }
+              ]
+            },
+            {
+              "id": "c6-discipline-unverified",
+              "selector": {
+                "kinds": [
+                  "action"
+                ],
+                "actionIds": [
+                  "vesna.special.c6"
+                ],
+                "actor": "owner",
+                "target": "any"
+              },
+              "phase": "after",
+              "priority": 14,
+              "activation": {
+                "ascension": 1,
+                "constellation": 6
+              },
+              "updates": [
+                {
+                  "state": "vesna.disciplineStacks",
+                  "operation": "unknown"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "damageFamilies": []
+    },
+    "stateMachine": {
+      "namespace": "builtin",
+      "id": "vesna.actions.state",
+      "revision": "1"
+    }
+  },
+  "gaps": [
+    {
+      "id": "vesna.action-timing",
+      "area": "timing",
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations",
+        "vesna.actions.pinion-research"
+      ]
+    },
+    {
+      "id": "vesna.sword-qi-capacity-and-cost",
+      "area": "resource",
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations",
+        "vesna.actions.pinion-research"
+      ]
+    },
+    {
+      "id": "vesna.c6-discipline-and-reuse",
+      "area": "transition",
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations",
+        "vesna.actions.pinion-research"
+      ]
+    },
+    {
+      "id": "vesna.radiance-priority",
+      "area": "transition",
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations",
+        "vesna.actions.pinion-research"
+      ]
+    },
+    {
+      "id": "vesna.action-recording",
+      "area": "observation",
+      "sources": [
+        "vesna.actions.talents",
+        "vesna.actions.constellations",
+        "vesna.actions.pinion-research"
+      ]
+    }
+  ]
+}

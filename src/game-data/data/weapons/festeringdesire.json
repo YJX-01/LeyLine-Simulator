@@ -221,114 +221,686 @@
     129.7,
     155.6
   ],
-  "modifiers": [
-    {
-      "stat": "physicalBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
       ],
-      "category": "skill"
+      "sources": [
+        {
+          "id": "genshin-db.festeringdesire.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/festeringdesire.json#r1-r5"
+        },
+        {
+          "id": "content.weapon.festeringdesire",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#festeringdesire"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-anemoBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.anemoBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-anemoBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-critRate",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.06,
+              0.075,
+              0.09,
+              0.105,
+              0.12
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.critRate",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-critRate",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-cryoBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.cryoBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-cryoBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-dendroBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.dendroBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-dendroBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-electroBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.electroBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-electroBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-geoBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.geoBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-geoBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-hydroBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.hydroBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-hydroBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-physicalBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.physicalBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-physicalBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "festeringdesire.static-pyroBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.festeringdesire.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.pyroBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "festeringdesire.static-pyroBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.festeringdesire",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "festeringdesire",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。",
+          "sources": [
+            "content.weapon.festeringdesire",
+            "genshin-db.festeringdesire.static"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-physicalBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-anemoBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-geoBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-electroBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-hydroBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-pyroBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-cryoBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-dendroBonus",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "festeringdesire.static-critRate",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。"
+            }
+          ]
+        }
+      ]
     },
-    {
-      "stat": "anemoBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "geoBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "electroBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "hydroBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "pyroBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "cryoBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "dendroBonus",
-      "values": [
-        0.16,
-        0.2,
-        0.24,
-        0.28,
-        0.32
-      ],
-      "category": "skill"
-    },
-    {
-      "stat": "critRate",
-      "values": [
-        0.06,
-        0.075,
-        0.09,
-        0.105,
-        0.12
-      ],
-      "category": "skill"
-    }
-  ],
-  "support": {
-    "supported": true,
-    "reason": "战技伤害加成与战技专属暴击已支持。"
+    "ruleIds": [
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-physicalBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-anemoBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-geoBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-electroBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-hydroBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-pyroBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-cryoBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-dendroBonus",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-critRate",
+        "revision": "1"
+      }
+    ]
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#festeringdesire"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.festeringdesire",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.festeringdesire",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

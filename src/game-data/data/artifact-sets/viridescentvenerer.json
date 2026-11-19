@@ -1,35 +1,211 @@
 {
   "id": "viridescentvenerer",
   "name": "翠绿之影",
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    4,
+    5
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "genshin-db.viridescentvenerer.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/viridescentvenerer.json"
+        },
+        {
+          "id": "content.set.viridescentvenerer",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/viridescentvenerer.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "viridescentvenerer.static-anemoBonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.viridescentvenerer.static"
+          ],
+          "activation": {
+            "set": {
+              "id": "viridescentvenerer",
+              "pieces": 2
+            }
+          },
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "constant",
+            "value": {
+              "kind": "quantity",
+              "unit": "scalar",
+              "value": 0.15
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.anemoBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "viridescentvenerer.static-anemoBonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.viridescentvenerer.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "viridescentvenerer",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+          "sources": [
+            "content.set.viridescentvenerer"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "viridescentvenerer.static-anemoBonus",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.viridescentvenerer.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "viridescentvenerer",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "该件数全部相关机制尚未闭合。",
+          "sources": [
+            "content.set.viridescentvenerer"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "该件数全部相关机制尚未闭合。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.viridescentvenerer"
+  ],
+  "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "modifiers": [
+      "ruleIds": [
         {
-          "stat": "anemoBonus",
-          "values": [
-            0.15
-          ]
+          "namespace": "builtin",
+          "id": "viridescentvenerer.static-anemoBonus",
+          "revision": "1"
         }
       ],
-      "support": {
-        "supported": true,
-        "reason": "获得15%风元素伤害加成。"
-      }
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.viridescentvenerer.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": false,
-        "reason": "效果未实现：扩散反应造成的伤害提升60%，星扩散反应造成的伤害提升20%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续10秒。对敌人触发星扩散反应时，也会降低其40%的冰元素抗性。同元素类型的抗性降低效果无法叠加。"
-      }
+      "ruleIds": [],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.viridescentvenerer.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/viridescentvenerer.json"
-  },
-  "rarity": 5
+  ]
 }

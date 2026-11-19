@@ -10,11 +10,11 @@ export function addActorFromBuild(project: Project, input: Build, name?: string)
   const build = buildSchema.parse(input);
   const id = crypto.randomUUID();
   const source = { kind: build.character.origin === 'builtin' ? 'preset' as const : 'user' as const, reference: build.dataVersion,
-    verified: build.character.origin === 'builtin' && build.character.capabilities.calculation.supported && build.constellation === 0 };
+    verified: build.character.origin === 'builtin' && build.character.calculation.bundle.coverage.some(record => record.scope.kind === 'context' && record.scope.maxConstellation >= build.constellation && record.resolution === 'complete') };
   project.definitions.push(
     { id: `${id}-character`, name: `${build.character.identity.name} · 角色快照`, version: build.dataVersion, source, nodes: [], effects: [] },
-    { id: `${id}-weapon`, name: `${build.weapon.name} · 武器快照`, version: build.dataVersion, source: {kind:'preset',reference:build.dataVersion,verified:build.weapon.support.supported}, nodes: [], effects: [] },
-    { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source: {...source,verified:source.verified && build.weapon.support.supported && build.sets.every(set=>set.effects.filter(effect=>effect.pieces<=build.artifacts.filter(item=>item.setId===set.id).length).every(effect=>effect.support.supported))},
+    { id: `${id}-weapon`, name: `${build.weapon.name} · 武器快照`, version: build.dataVersion, source: {kind:'preset',reference:build.dataVersion,verified:build.weapon.calculation.bundle.coverage.some(record => record.resolution === 'complete')}, nodes: [], effects: [] },
+    { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source: {...source,verified:source.verified && build.weapon.calculation.bundle.coverage.some(record => record.resolution === 'complete') && build.sets.every(set=>set.effects.filter(effect=>effect.pieces<=build.artifacts.filter(item=>item.setId===set.id).length).every(effect=>effect.coverageRefs.every(reference => set.calculation.bundle.coverage.some(record => record.identity.id === reference.id && record.resolution === 'complete'))))},
       nodes: [{ id: 'real-damage', op: 'game-damage' }], damage: 'real-damage', effects: [] },
   );
   project.candidate.actors.push({ id, name: name || build.character.identity.name, character: `${id}-character`, weapon: `${id}-weapon`, inputs: {}, build: build });
@@ -62,10 +62,12 @@ export function addSkillHit(project: Project, actorId: string, skillId: string, 
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const skill = actor?.build?.character.talents.find(entry => entry.id === skillId);
   if (!actor || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择队员、技能和合法的整数毫秒时间。');
-  if ((!skill.support.supported && (!actor.build || !findDamageCoverage(actor.build.character, actor.build.constellation, { skillId, hitIndex }))) || !Number.isInteger(hitIndex) || !skill.hits[hitIndex]) throw new Error('该技能或命中类型尚未核验。');
+  if (!Number.isInteger(hitIndex) || !skill.hits[hitIndex]?.outputs.length) throw new Error('该技能或命中类型尚未核验。');
+  const selectedHit = skill.hits[hitIndex];
+  if (selectedHit.outputs.length !== 1) throw new Error('请选择明确的伤害输出。');
   const id = nextRecordId(project);
   const record: Project['timeline'][number] = { id, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1,
-    actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitIndex, ...choices } };
+    actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitId: selectedHit.id, outputId: selectedHit.outputs[0].id, ...choices } };
   const parsed = projectSchema.parse({ ...project, timeline: [...project.timeline, record] });
   if (record.damage?.effectApplications?.length && evaluateTimeline(parsed).status === 'invalid') throw new Error('效果适用事实引用或作用范围无效，当前项目保持不变。');
   project.timeline.push(parsed.timeline[parsed.timeline.length - 1]);
@@ -82,6 +84,9 @@ export function setDamageEffectApplication(project: Project, recordId: string, i
   const replacement = { ...record, damage: { ...record.damage, effectApplications } };
   const timeline = project.timeline.map((entry, entryIndex) => entryIndex === index ? replacement : entry);
   const parsed = projectSchema.parse({ ...project, timeline });
-  if (evaluateTimeline(parsed).status === 'invalid') throw new Error('效果适用事实引用或作用范围无效，当前项目保持不变。');
+  const result = evaluateTimeline(parsed);
+  if (result.status === 'invalid' || result.diagnostics.some(diagnostic => diagnostic.code === 'stale-revision' && diagnostic.path.startsWith(`timeline.${recordId}.`))) {
+    throw new Error('效果适用事实引用或作用范围无效，当前项目保持不变。');
+  }
   project.timeline[index] = parsed.timeline[index];
 }

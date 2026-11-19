@@ -221,26 +221,193 @@
     97.3,
     116.7
   ],
-  "modifiers": [
-    {
-      "stat": "critRate",
-      "values": [
-        0.14,
-        0.175,
-        0.21,
-        0.245,
-        0.28
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
       ],
-      "hpAbove": 0.9
-    }
-  ],
-  "support": {
-    "supported": true,
-    "reason": "根据明确提供的生命比例判断严格高于90%的暴击增益。"
+      "sources": [
+        {
+          "id": "genshin-db.harbingerofdawn.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/harbingerofdawn.json#r1-r5"
+        },
+        {
+          "id": "content.weapon.harbingerofdawn",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#harbingerofdawn"
+        }
+      ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "harbingerofdawn.hp-condition",
+            "revision": "1"
+          },
+          "template": {
+            "id": "threshold-condition",
+            "revision": "1",
+            "input": "hpRatio",
+            "relation": "gt",
+            "threshold": 0.9
+          },
+          "sources": [
+            "genshin-db.harbingerofdawn.static"
+          ]
+        }
+      ],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "harbingerofdawn.static-critRate",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.harbingerofdawn.static"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "predicate": {
+            "kind": "formula",
+            "formula": {
+              "namespace": "builtin",
+              "id": "harbingerofdawn.hp-condition",
+              "revision": "1"
+            },
+            "inputs": {
+              "hpRatio": {
+                "kind": "fact",
+                "key": "hpRatio",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                },
+                "scope": "owner"
+              }
+            },
+            "output": "active"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.14,
+              0.175,
+              0.21,
+              0.245,
+              0.28
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.critRate",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "harbingerofdawn.static-critRate",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.harbingerofdawn",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "harbingerofdawn",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。",
+          "sources": [
+            "content.weapon.harbingerofdawn",
+            "genshin-db.harbingerofdawn.static"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "harbingerofdawn.static-critRate",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [
+      {
+        "namespace": "builtin",
+        "id": "harbingerofdawn.static-critRate",
+        "revision": "1"
+      }
+    ]
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#harbingerofdawn"
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.harbingerofdawn",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.harbingerofdawn",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

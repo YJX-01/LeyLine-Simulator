@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "repository": "theBowja/genshin-db",
+  "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "method": "Exact selected fields from fixed git blobs, retaining original strings and refinement order. No player builds or observations.",
+  "weapons": [
+    {
+      "id": "cinnabarspindle",
+      "path": "src/data/ChineseSimplified/weapons/cinnabarspindle.json",
+      "effectTemplateRaw": "元素战技造成的伤害值提高，提高数值相当于防御力的<color=#99FFFFFF>{0}</color>。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。",
+      "refinements": [
+        {
+          "description": "元素战技造成的伤害值提高，提高数值相当于防御力的40%。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。",
+          "values": [
+            "40%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害值提高，提高数值相当于防御力的50%。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。",
+          "values": [
+            "50%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害值提高，提高数值相当于防御力的60%。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。",
+          "values": [
+            "60%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害值提高，提高数值相当于防御力的70%。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。",
+          "values": [
+            "70%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害值提高，提高数值相当于防御力的80%。该效果每1.5秒最多触发一次，并将在元素战技造成伤害后的0.1秒后清除效果。",
+          "values": [
+            "80%"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "festeringdesire",
+      "path": "src/data/ChineseSimplified/weapons/festeringdesire.json",
+      "effectTemplateRaw": "元素战技造成的伤害增加<color=#99FFFFFF>{0}</color>，元素战技的暴击率提升<color=#99FFFFFF>{1}</color>。",
+      "refinements": [
+        {
+          "description": "元素战技造成的伤害增加16%，元素战技的暴击率提升6%。",
+          "values": [
+            "16%",
+            "6%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害增加20%，元素战技的暴击率提升7.5%。",
+          "values": [
+            "20%",
+            "7.5%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害增加24%，元素战技的暴击率提升9%。",
+          "values": [
+            "24%",
+            "9%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害增加28%，元素战技的暴击率提升10.5%。",
+          "values": [
+            "28%",
+            "10.5%"
+          ]
+        },
+        {
+          "description": "元素战技造成的伤害增加32%，元素战技的暴击率提升12%。",
+          "values": [
+            "32%",
+            "12%"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "harbingerofdawn",
+      "path": "src/data/ChineseSimplified/weapons/harbingerofdawn.json",
+      "effectTemplateRaw": "生命值高于90%时，暴击率提升<color=#99FFFFFF>{0}</color>。",
+      "refinements": [
+        {
+          "description": "生命值高于90%时，暴击率提升14%。",
+          "values": [
+            "14%"
+          ]
+        },
+        {
+          "description": "生命值高于90%时，暴击率提升17.5%。",
+          "values": [
+            "17.5%"
+          ]
+        },
+        {
+          "description": "生命值高于90%时，暴击率提升21%。",
+          "values": [
+            "21%"
+          ]
+        },
+        {
+          "description": "生命值高于90%时，暴击率提升24.5%。",
+          "values": [
+            "24.5%"
+          ]
+        },
+        {
+          "description": "生命值高于90%时，暴击率提升28%。",
+          "values": [
+            "28%"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "primordialjadecutter",
+      "path": "src/data/ChineseSimplified/weapons/primordialjadecutter.json",
+      "effectTemplateRaw": "生命值提升<color=#99FFFFFF>{0}</color>。此外，基于装备该武器的角色生命值上限的<color=#99FFFFFF>{1}</color>，获得攻击力加成。",
+      "refinements": [
+        {
+          "description": "生命值提升20%。此外，基于装备该武器的角色生命值上限的1.2%，获得攻击力加成。",
+          "values": [
+            "20%",
+            "1.2%"
+          ]
+        },
+        {
+          "description": "生命值提升25%。此外，基于装备该武器的角色生命值上限的1.5%，获得攻击力加成。",
+          "values": [
+            "25%",
+            "1.5%"
+          ]
+        },
+        {
+          "description": "生命值提升30%。此外，基于装备该武器的角色生命值上限的1.8%，获得攻击力加成。",
+          "values": [
+            "30%",
+            "1.8%"
+          ]
+        },
+        {
+          "description": "生命值提升35%。此外，基于装备该武器的角色生命值上限的2.1%，获得攻击力加成。",
+          "values": [
+            "35%",
+            "2.1%"
+          ]
+        },
+        {
+          "description": "生命值提升40%。此外，基于装备该武器的角色生命值上限的2.4%，获得攻击力加成。",
+          "values": [
+            "40%",
+            "2.4%"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "staffofhoma",
+      "path": "src/data/ChineseSimplified/weapons/staffofhoma.json",
+      "effectTemplateRaw": "生命值提升<color=#99FFFFFF>{0}</color>。此外，基于装备该武器的角色生命值上限的<color=#99FFFFFF>{1}</color>，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得<color=#99FFFFFF>{2}</color>基于生命值上限的攻击力提升。",
+      "refinements": [
+        {
+          "description": "生命值提升20%。此外，基于装备该武器的角色生命值上限的0.8%，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得1%基于生命值上限的攻击力提升。",
+          "values": [
+            "20%",
+            "0.8%",
+            "1%"
+          ]
+        },
+        {
+          "description": "生命值提升25%。此外，基于装备该武器的角色生命值上限的1%，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得1.2%基于生命值上限的攻击力提升。",
+          "values": [
+            "25%",
+            "1%",
+            "1.2%"
+          ]
+        },
+        {
+          "description": "生命值提升30%。此外，基于装备该武器的角色生命值上限的1.2%，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得1.4%基于生命值上限的攻击力提升。",
+          "values": [
+            "30%",
+            "1.2%",
+            "1.4%"
+          ]
+        },
+        {
+          "description": "生命值提升35%。此外，基于装备该武器的角色生命值上限的1.4%，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得1.6%基于生命值上限的攻击力提升。",
+          "values": [
+            "35%",
+            "1.4%",
+            "1.6%"
+          ]
+        },
+        {
+          "description": "生命值提升40%。此外，基于装备该武器的角色生命值上限的1.6%，获得攻击力加成。当装备该武器的角色生命值低于50%时，进一步获得1.8%基于生命值上限的攻击力提升。",
+          "values": [
+            "40%",
+            "1.6%",
+            "1.8%"
+          ]
+        }
+      ]
+    }
+  ],
+  "sets": [
+    {
+      "id": "adaycarvedfromrisingwinds",
+      "path": "src/data/ChineseSimplified/artifacts/adaycarvedfromrisingwinds.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "普通攻击、重击、元素战技或元素爆发命中敌人后，将获得持续6秒的「风与牧歌的眷怜」：攻击力提高25%。若装备者已经完成了「魔女的课业」，则「风与牧歌的眷怜」将会升级为「风与牧歌的决意」，额外使通过考验的装备者的暴击率提升20%。装备者处于队伍后台时，也能触发上述效果。"
+    },
+    {
+      "id": "archaicpetra",
+      "path": "src/data/ChineseSimplified/artifacts/archaicpetra.json",
+      "effect2Pc": "获得15%岩元素伤害加成。",
+      "effect4Pc": "获得结晶反应形成的晶片或触发月结晶反应时，队伍中所有角色获得35%对应元素伤害加成，持续10秒。同时只能通过该效果获得一种元素伤害加成。"
+    },
+    {
+      "id": "aubadeofmorningstarandmoon",
+      "path": "src/data/ChineseSimplified/artifacts/aubadeofmorningstarandmoon.json",
+      "effect2Pc": "元素精通提高80点。",
+      "effect4Pc": "装备者处于队伍后台时，造成的月曜反应伤害提升20%；队伍的月兆等级至少为满辉时，造成的月曜反应伤害进一步提升40%。上述效果将在装备者位于场上3秒后移除。"
+    },
+    {
+      "id": "berserker",
+      "path": "src/data/ChineseSimplified/artifacts/berserker.json",
+      "effect2Pc": "暴击率提高12%。",
+      "effect4Pc": "生命值低于70%时，暴击率额外提升24%。"
+    },
+    {
+      "id": "blizzardstrayer",
+      "path": "src/data/ChineseSimplified/artifacts/blizzardstrayer.json",
+      "effect2Pc": "获得15%冰元素伤害加成。",
+      "effect4Pc": "攻击处于冰元素影响下的敌人时，暴击率提高20%；若敌人处于冻结状态下，则暴击率额外提高20%。"
+    },
+    {
+      "id": "bloodstainedchivalry",
+      "path": "src/data/ChineseSimplified/artifacts/bloodstainedchivalry.json",
+      "effect2Pc": "造成的物理伤害提高25%。",
+      "effect4Pc": "击败敌人后的10秒内，施放重击时不消耗体力，且重击造成的伤害提升50%。"
+    },
+    {
+      "id": "braveheart",
+      "path": "src/data/ChineseSimplified/artifacts/braveheart.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "对生命值高于50%的敌人，造成的伤害增加30%。"
+    },
+    {
+      "id": "celestialgift",
+      "path": "src/data/ChineseSimplified/artifacts/celestialgift.json",
+      "effect2Pc": "元素充能效率提高20%。",
+      "effect4Pc": "若装备者已经完成了魔女的课业，则施放元素战技后，会获得「天光之引」效果：依据装备者的元素类型，使队伍中附近的所有角色获得20%对应元素伤害加成，持续20秒。装备者处于后台时也能触发上述效果，同名圣遗物套装产生的伤害加成效果无法叠加。\n·队伍拥有「魔导·秘仪」效果时，「天光之引」效果将会升级为「凡世颂歌」，除装备者的元素类型外，还会依据队伍中自己的当前场上角色的元素类型，使队伍中附近的所有角色获得对应元素伤害加成，且上述两种元素伤害加成提升至40%，同元素类型的元素伤害加成效果无法叠加。"
+    },
+    {
+      "id": "crimsonwitchofflames",
+      "path": "src/data/ChineseSimplified/artifacts/crimsonwitchofflames.json",
+      "effect2Pc": "获得15%火元素伤害加成。",
+      "effect4Pc": "超载、燃烧、烈绽放反应造成的伤害提升40%，蒸发、融化反应的加成系数提高15%。施放元素战技后的10秒内，2件套的效果提高50%，该效果最多叠加3次。"
+    },
+    {
+      "id": "deepwoodmemories",
+      "path": "src/data/ChineseSimplified/artifacts/deepwoodmemories.json",
+      "effect2Pc": "获得15%草元素伤害加成。",
+      "effect4Pc": "元素战技或元素爆发命中敌人后，使命中目标的草元素抗性降低30%，持续8秒。装备者处于队伍后台时，依然能触发该效果。"
+    },
+    {
+      "id": "defenderswill",
+      "path": "src/data/ChineseSimplified/artifacts/defenderswill.json",
+      "effect2Pc": "防御力提高30%。",
+      "effect4Pc": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+    },
+    {
+      "id": "desertpavilionchronicle",
+      "path": "src/data/ChineseSimplified/artifacts/desertpavilionchronicle.json",
+      "effect2Pc": "获得15%风元素伤害加成。",
+      "effect4Pc": "重击命中敌人后，该角色的普通攻击速度提升10%，普通攻击、重击与下落攻击造成的伤害提升40%，持续15秒。"
+    },
+    {
+      "id": "disenchantmentindeepshadow",
+      "path": "src/data/ChineseSimplified/artifacts/disenchantmentindeepshadow.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "超导反应造成的伤害提升80%，星超导反应造成的伤害提升40%；装备者攻击受到超导或星超导反应影响的敌人时，本次攻击的暴击率提高16%。"
+    },
+    {
+      "id": "echoesofanoffering",
+      "path": "src/data/ChineseSimplified/artifacts/echoesofanoffering.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "普通攻击命中敌人时，有36%概率触发「幽谷祝祀」：普通攻击造成的伤害提高，伤害提高值为攻击力的70%，该效果将在普通攻击造成伤害后的0.05秒后清除。普通攻击未触发「幽谷祝祀」时，会使下次触发概率提升20%；0.2秒内至多判定1次触发与否。"
+    },
+    {
+      "id": "emblemofseveredfate",
+      "path": "src/data/ChineseSimplified/artifacts/emblemofseveredfate.json",
+      "effect2Pc": "元素充能效率提高20%。",
+      "effect4Pc": "基于元素充能效率的25%，提高元素爆发造成的伤害。至多通过这种方式获得75%提升。"
+    },
+    {
+      "id": "finaleofthedeepgalleries",
+      "path": "src/data/ChineseSimplified/artifacts/finaleofthedeepgalleries.json",
+      "effect2Pc": "获得15%冰元素伤害加成。",
+      "effect4Pc": "装备者的元素能量为0时，普通攻击造成的伤害提升60%，元素爆发造成的伤害提升60%。装备者的普通攻击造成伤害后，上述元素爆发伤害提升效果将失效6秒；装备者的元素爆发造成伤害后，上述普通攻击伤害提升效果将失效6秒。角色处于队伍后台也能触发。"
+    },
+    {
+      "id": "flowerofparadiselost",
+      "path": "src/data/ChineseSimplified/artifacts/flowerofparadiselost.json",
+      "effect2Pc": "元素精通提高80点。",
+      "effect4Pc": "装备者绽放、超绽放、烈绽放反应造成的伤害提升40%，造成的月绽放反应伤害提升10%。此外，装备者触发绽放、超绽放、烈绽放、月绽放后，上述效果带来的加成提升25%，该效果持续10秒，至多叠加4次，每1秒至多触发一次。装备者处于队伍后台时依然能触发该效果。"
+    },
+    {
+      "id": "fragmentofharmonicwhimsy",
+      "path": "src/data/ChineseSimplified/artifacts/fragmentofharmonicwhimsy.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "生命之契的数值提升或降低时，角色造成的伤害提升18%，该效果持续6秒，至多叠加3次。"
+    },
+    {
+      "id": "gildeddreams",
+      "path": "src/data/ChineseSimplified/artifacts/gildeddreams.json",
+      "effect2Pc": "元素精通提高80点。",
+      "effect4Pc": "触发元素反应后的8秒内，会根据队伍内其他角色的元素类型，使装备者获得强化：队伍中每存在1个和装备者同类元素的角色，攻击力提升14%；每存在1个和装备者不同元素类型的角色，元素精通提升50点。上述每类效果至多计算3个角色。该效果每8秒至多触发一次。装备者处于队伍后台时，依然能触发该效果。"
+    },
+    {
+      "id": "gladiatorsfinale",
+      "path": "src/data/ChineseSimplified/artifacts/gladiatorsfinale.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "装备该圣遗物套装的角色为单手剑、双手剑、长柄武器角色时，角色普通攻击造成的伤害提高35%。"
+    },
+    {
+      "id": "heartofdepth",
+      "path": "src/data/ChineseSimplified/artifacts/heartofdepth.json",
+      "effect2Pc": "获得15%水元素伤害加成。",
+      "effect4Pc": "施放元素战技后的15秒内，普通攻击与重击造成的伤害提高30%。"
+    },
+    {
+      "id": "heartofthefurnace",
+      "path": "src/data/ChineseSimplified/artifacts/heartofthefurnace.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "装备者触发星烁反应或造成星烁反应伤害后的12秒内，攻击力提升12%，队伍中附近的所有角色造成的星烁反应伤害提升50%。装备者处于后台时也能触发上述效果。同名圣遗物套装产生的伤害加成效果无法叠加。"
+    },
+    {
+      "id": "huskofopulentdreams",
+      "path": "src/data/ChineseSimplified/artifacts/huskofopulentdreams.json",
+      "effect2Pc": "防御力提高30%。",
+      "effect4Pc": "装备此圣遗物套装的角色在以下情况下，将获得「问答」效果：在场上用岩元素攻击命中敌人后获得一层，每0.3秒至多触发一次；在队伍后台中，每3秒获得一层。问答至多叠加4层，每层能提供6%防御力与6%岩元素伤害加成。每6秒，若未获得问答效果，将损失一层。"
+    },
+    {
+      "id": "instructor",
+      "path": "src/data/ChineseSimplified/artifacts/instructor.json",
+      "effect2Pc": "元素精通提高80点。",
+      "effect4Pc": "触发元素反应后，队伍中所有角色的元素精通提高120点，持续8秒。"
+    },
+    {
+      "id": "maidenbeloved",
+      "path": "src/data/ChineseSimplified/artifacts/maidenbeloved.json",
+      "effect2Pc": "角色造成的治疗效果提升15%。",
+      "effect4Pc": "施放元素战技或元素爆发后的10秒内，队伍中所有角色受治疗效果加成提高20%。"
+    },
+    {
+      "id": "nightoftheskysunveiling",
+      "path": "src/data/ChineseSimplified/artifacts/nightoftheskysunveiling.json",
+      "effect2Pc": "元素精通提高80点。",
+      "effect4Pc": "队伍中附近的角色触发月曜反应时，若装备者在场上，将获得持续4秒的「月辉明光·蓄念」效果：队伍的月兆为初辉/满辉时，暴击率提升15%/30%。队伍中的角色每拥有一种不同的「月辉明光」效果，队伍中的所有角色触发的月曜反应造成的伤害提升10%。由「月辉明光」产生的效果无法叠加。"
+    },
+    {
+      "id": "nighttimewhispersintheechoingwoods",
+      "path": "src/data/ChineseSimplified/artifacts/nighttimewhispersintheechoingwoods.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "施放元素战技后的10秒内，岩元素伤害加成提升20%；若处于结晶反应产生的护盾庇护下，或附近存在月结晶反应产生的月笼，上述效果提高150%，进一步提高的效果将在不满足上述条件的1秒后移除。"
+    },
+    {
+      "id": "noblesseoblige",
+      "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json",
+      "effect2Pc": "元素爆发造成的伤害提升20%。",
+      "effect4Pc": "施放元素爆发后，队伍中所有角色攻击力提升20%，持续12秒。该效果不可叠加。"
+    },
+    {
+      "id": "nymphsdream",
+      "path": "src/data/ChineseSimplified/artifacts/nymphsdream.json",
+      "effect2Pc": "获得15%水元素伤害加成。",
+      "effect4Pc": "普通攻击、重击、下落攻击、元素战技或元素爆发命中敌人后，将产生1层持续8秒的「镜中水仙」效果。处于1/2/3层及以上「镜中水仙」效果下时，攻击力将提高7%/16%/25%，水元素伤害加成提升4%/9%/15%。由普通攻击、重击、下落攻击、元素战技或元素爆发产生的「镜中水仙」将分别独立存在。"
+    },
+    {
+      "id": "oceanhuedclam",
+      "path": "src/data/ChineseSimplified/artifacts/oceanhuedclam.json",
+      "effect2Pc": "治疗加成提高15%。",
+      "effect4Pc": "装备此圣遗物套装的角色对队伍中的角色进行治疗时，将产生持续3秒的海染泡沫，记录治疗的生命值回复量（包括溢出值）。持续时间结束时，海染泡沫将会爆炸，对周围的敌人造成90%累计回复量的伤害（该伤害结算方式同感电、超导等元素反应，但不受元素精通、等级或反应伤害加成效果影响）。每3.5秒至多产生一个海染泡沫；海染泡沫至多记录30000点回复量，含溢出部分的治疗量；自己的队伍中同时至多存在一个海染泡沫。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。"
+    },
+    {
+      "id": "paleflame",
+      "path": "src/data/ChineseSimplified/artifacts/paleflame.json",
+      "effect2Pc": "造成的物理伤害提高25%。",
+      "effect4Pc": "元素战技命中敌人后，攻击力提升9%。该效果持续7秒，至多叠加2层，每0.3秒至多触发一次。叠满2层时，2件套的效果提升100%。"
+    },
+    {
+      "id": "resolutionofsojourner",
+      "path": "src/data/ChineseSimplified/artifacts/resolutionofsojourner.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "重击的暴击率提升30%。"
+    },
+    {
+      "id": "scarletproof",
+      "path": "src/data/ChineseSimplified/artifacts/scarletproof.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "装备者触发星扩散反应后的10秒内，暴击率提升16%，星扩散反应伤害提升40%。"
+    },
+    {
+      "id": "scholar",
+      "path": "src/data/ChineseSimplified/artifacts/scholar.json",
+      "effect2Pc": "元素充能效率提高20%。",
+      "effect4Pc": "获得元素微粒或元素晶球时，队伍中所有弓箭和法器角色额外恢复3点元素能量。该效果每3秒只能触发一次。"
+    },
+    {
+      "id": "shimenawasreminiscence",
+      "path": "src/data/ChineseSimplified/artifacts/shimenawasreminiscence.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "施放元素战技时，如果角色的元素能量高于或等于15点，则会流失15点元素能量，使接下来的10秒内，普通攻击、重击、下落攻击造成的伤害提高50%，持续期间内该效果不会再次触发。"
+    },
+    {
+      "id": "silkenmoonsserenade",
+      "path": "src/data/ChineseSimplified/artifacts/silkenmoonsserenade.json",
+      "effect2Pc": "元素充能效率提高20%。",
+      "effect4Pc": "造成元素伤害时，获得持续8秒的「月辉明光·崇信」效果：队伍的月兆为初辉/满辉时，队伍中的所有角色的元素精通提高60点/120点。装备者处于后台时也能触发上述效果。队伍中的角色每拥有一种不同的「月辉明光」效果，队伍中的所有角色触发的月曜反应造成的伤害提升10%。由「月辉明光」产生的效果无法叠加。"
+    },
+    {
+      "id": "songofdayspast",
+      "path": "src/data/ChineseSimplified/artifacts/songofdayspast.json",
+      "effect2Pc": "治疗加成提高15%。",
+      "effect4Pc": "装备者对队伍中的角色进行治疗时，将产生持续6秒的渴盼效果，记录治疗的生命值回复量（包括溢出值）。持续时间结束时，渴盼效果将转变为「彼时的浪潮」效果：队伍中自己的当前场上角色的普通攻击、重击、下落攻击、元素战技与元素爆发命中敌人时，将基于渴盼效果所记录的回复量的8%提高造成的伤害，「彼时的浪潮」将在生效5次或10秒后移除。一次渴盼效果至多记录15000点回复量，同时至多存在一个，能够记录多个装备者的产生的回复量；装备者处于队伍后台时，依然能触发该效果。"
+    },
+    {
+      "id": "tenacityofthemillelith",
+      "path": "src/data/ChineseSimplified/artifacts/tenacityofthemillelith.json",
+      "effect2Pc": "生命值提升20%。",
+      "effect4Pc": "元素战技命中敌人后，使队伍中附近的所有角色攻击力提升20%，护盾强效提升30%，持续3秒。该效果每0.5秒至多触发一次。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。"
+    },
+    {
+      "id": "theexile",
+      "path": "src/data/ChineseSimplified/artifacts/theexile.json",
+      "effect2Pc": "元素充能效率提高20%。",
+      "effect4Pc": "施放元素爆发后，每2秒为队伍中所有角色（不包括自己）恢复2点元素能量。该效果持续6秒，无法叠加。"
+    },
+    {
+      "id": "thunderingfury",
+      "path": "src/data/ChineseSimplified/artifacts/thunderingfury.json",
+      "effect2Pc": "获得15%雷元素伤害加成。",
+      "effect4Pc": "超载、感电、超导、超绽放反应造成的伤害提升40%，超激化反应带来的伤害提升提高20%，月感电、星超导反应造成的伤害提升20%。触发上述元素反应或原激化反应时，元素战技冷却时间减少1秒。该效果每0.8秒最多触发一次。"
+    },
+    {
+      "id": "travelingdoctor",
+      "path": "src/data/ChineseSimplified/artifacts/travelingdoctor.json",
+      "effect2Pc": "角色受到的治疗效果提高20%。",
+      "effect4Pc": "施放元素爆发时，恢复20%生命值。"
+    },
+    {
+      "id": "unfinishedreverie",
+      "path": "src/data/ChineseSimplified/artifacts/unfinishedreverie.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "脱离战斗状态3秒后，造成的伤害提升50%。在战斗状态下，附近不存在处于燃烧状态下的敌人超过6秒后，上述伤害提升效果每秒降低10%，直到降低至0%；存在处于燃烧状态下的敌人时，每秒提升10%，直到达到50%。装备此圣遗物套装的角色处于队伍后台时，依然会触发该效果。"
+    },
+    {
+      "id": "vermillionhereafter",
+      "path": "src/data/ChineseSimplified/artifacts/vermillionhereafter.json",
+      "effect2Pc": "攻击力提高18%。",
+      "effect4Pc": "施放元素爆发后，将产生持续16秒的「潜光」效果：攻击力提升8%；并在角色的生命值降低时，攻击力进一步提升10%，至多通过这种方式提升4次，每0.8秒至多触发一次。「潜光」效果将在角色退场时消失；持续期间再次施放元素爆发，将移除原有的「潜光」。"
+    },
+    {
+      "id": "viridescentvenerer",
+      "path": "src/data/ChineseSimplified/artifacts/viridescentvenerer.json",
+      "effect2Pc": "获得15%风元素伤害加成。",
+      "effect4Pc": "扩散反应造成的伤害提升60%，星扩散反应造成的伤害提升20%。根据扩散的元素类型，降低受到影响的敌人40%的对应元素抗性，持续10秒。对敌人触发星扩散反应时，也会降低其40%的冰元素抗性。同元素类型的抗性降低效果无法叠加。"
+    },
+    {
+      "id": "vourukashasglow",
+      "path": "src/data/ChineseSimplified/artifacts/vourukashasglow.json",
+      "effect2Pc": "生命值提升20%。",
+      "effect4Pc": "元素战技与元素爆发造成的伤害提升10%；装备者受到伤害后的5秒内，上述伤害提升效果提高80%，该提高效果至多叠加5层，每层持续时间独立计算，处于队伍后台时依然能触发该效果。"
+    },
+    {
+      "id": "wandererstroupe",
+      "path": "src/data/ChineseSimplified/artifacts/wandererstroupe.json",
+      "effect2Pc": "元素精通提高80点。",
+      "effect4Pc": "装备该圣遗物套装的角色为法器、弓箭角色时，角色重击造成的伤害提高35%。"
+    }
+  ]
+}

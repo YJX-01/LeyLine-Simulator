@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,onMounted,ref,watch,useId} from 'vue';
-import {artifactItemSchema,type ArtifactItem,type Build,type StatKey} from '@leyline/schema';
+import {artifactItemSchema,artifactMaxLevel,type ArtifactItem,type Build,type StatKey} from '@leyline/schema';
 import {accountSlots,accountSlotLabels,type AccountArtifact,type LocalAccount} from '../domain/account';
 import {accountMainStats,accountSubstats,ratioStat,validateAccountArtifact} from '../domain/account-real';
 import {applyAccountArtifact,loadAccountGameData,artifactMainValue,formatGameStat} from '../domain/account-presentation';
@@ -20,13 +20,22 @@ type Sub=ArtifactItem['substats'][number];
 const subSlots=ref<(Sub|undefined)[]>(Array.from({length:4},(_,index)=>draft.value.real!.substats[index]));
 const setPicker=ref<InstanceType<typeof CatalogPicker>>(),setInvalid=ref(false);
 watch(()=>draft.value.real?.setId,value=>{if(value)setInvalid.value=false;});
-const baseline=ref(JSON.stringify(draft.value)),sets=ref<{id:string;name:string;rarity:number}[]>([]),main=ref<Build['artifactMain']>(),error=ref(''),preview=ref(false);
+const baseline=ref(JSON.stringify(draft.value)),sets=ref<{id:string;name:string;rarity:number;rarities:number[];slots:ArtifactItem['slot'][]}[]>([]),main=ref<Build['artifactMain']>(),error=ref(''),preview=ref(false);
+const availableSets=computed(()=>sets.value.filter(set=>set.rarities.some(rarity=>rarity===4||rarity===5)));
+const slotOptions=computed(()=>(sets.value.find(set=>set.id===draft.value.real?.setId)?.slots ?? accountSlots).map(slot=>({id:slot,name:accountSlotLabels[slot]})));
+const rarityOptions=computed(()=>(sets.value.find(set=>set.id===draft.value.real?.setId)?.rarities ?? [4,5]).filter(rarity=>rarity===4||rarity===5).map(rarity=>({id:String(rarity),name:rarity===4?'四星':'五星'})));
+watch(()=>draft.value.real!.setId,()=>{
+  if(props.item)return;
+  if(!slotOptions.value.some(option=>option.id===draft.value.slot)){draft.value.slot=slotOptions.value[0].id;changeSlot();}
+  if(!rarityOptions.value.some(option=>Number(option.id)===draft.value.real!.rarity))changeRarity(rarityOptions.value.at(-1)?.id ?? '5');
+});
 watch(()=>JSON.stringify(draft.value),value=>emit('dirtyChange',value!==baseline.value));
 const available=computed(()=>accountMainStats[draft.value.slot]),counts=computed(()=>preferredUpgradeCounts(draft.value.real!));
 const histories=computed(()=>legalUpgradeHistories(draft.value.real!));
 function syncSubs(){draft.value.real!.substats=subSlots.value.filter((sub):sub is Sub=>!!sub);}
 let resetting=false;
 function clearHistory(){for(const sub of subSlots.value)if(sub)delete sub.rolls;delete draft.value.rollSource;syncSubs();}
+function changeRarity(value:string){draft.value.real!.rarity=Number(value)===4?4:5;draft.value.real!.level=Math.min(draft.value.real!.level,artifactMaxLevel(draft.value.real!.rarity));clearHistory();}
 watch([()=>draft.value.real!.level,()=>draft.value.real!.mainStat],()=>{if(!resetting)clearHistory();},{flush:'sync'});
 function selectSub(index:number,stat?:StatKey){subSlots.value[index]=stat?{stat,value:NaN}:undefined;clearHistory();}
 function value(index:number,event:Event){const sub=subSlots.value[index];if(!sub)return;const raw=(event.target as HTMLInputElement).value;sub.value=raw.trim()?Number(raw)/(ratioStat(sub.stat)?100:1):NaN;clearHistory();}
@@ -41,7 +50,9 @@ onMounted(async()=>{try{const data=await loadAccountGameData();sets.value=data.c
 function prepare():AccountArtifact|undefined{
   try{
     syncSubs();if(!draft.value.real?.setId){setInvalid.value=true;error.value='';setPicker.value?.focus();return undefined;}if(!props.item){const set=sets.value.find(item=>item.id===draft.value.real!.setId);if(!set)throw new Error('套装目录尚未加载，请重新选择套装。');draft.value.name=`${set.name} · ${accountSlotLabels[draft.value.slot]}`;}
-    if(props.item && (draft.value.name!==props.item.name || draft.value.slot!==props.item.slot || draft.value.real.setId!==props.item.real?.setId))throw new Error('名称、部位和套装属于实物身份，只能通过新建选择。');
+    if(props.item && (draft.value.name!==props.item.name || draft.value.slot!==props.item.slot || draft.value.real.setId!==props.item.real?.setId || draft.value.real.rarity!==props.item.real?.rarity))throw new Error('名称、部位、套装和星级属于实物身份，只能通过新建选择。');
+    const set=sets.value.find(set=>set.id===draft.value.real!.setId);
+    if(set ? !set.rarities.includes(draft.value.real.rarity)||!set.slots.includes(draft.value.slot) : !props.item?.mona?.setIdentityPending)throw new Error('所选套装不接受此星级或部位。');
     const alias=draft.value.alias?.trim();if(alias)draft.value.alias=alias;else delete draft.value.alias;
     draft.value.real.id=draft.value.id;validateAccountArtifact(draft.value.real);draft.value.real=artifactItemSchema.parse(draft.value.real);persistArtifactRolls(draft.value);
     subSlots.value=Array.from({length:4},(_,index)=>draft.value.real!.substats[index]);error.value='';return JSON.parse(JSON.stringify(draft.value));
@@ -54,9 +65,9 @@ defineExpose({prepare,reset});
 <template>
   <div class="artifact-form" :class="{details:details || !item}">
     <template v-if="!preview && draft.real">
-      <div v-if="!item" class="artifact-identity-fields"><CatalogPicker ref="setPicker" :invalid="setInvalid" label="套装" image-kind="artifacts" v-model="draft.real.setId" :options="sets" /><div class="form-field"><span>部位</span><SingleSelectPicker  :model-value="draft.slot" label="部位" image-kind="artifactSlots" :options="accountSlots.map(slot=>({id:slot,name:accountSlotLabels[slot]}))" @update:model-value="draft.slot=$event as typeof draft.slot;changeSlot()" /></div></div>
+      <div v-if="!item" class="artifact-identity-fields"><CatalogPicker ref="setPicker" :invalid="setInvalid" label="套装" image-kind="artifacts" v-model="draft.real.setId" :options="availableSets" /><div class="form-field"><span>部位</span><SingleSelectPicker  :model-value="draft.slot" label="部位" image-kind="artifactSlots" :options="slotOptions" @update:model-value="draft.slot=$event as typeof draft.slot;changeSlot()" /></div><div class="form-field"><span>星级</span><SingleSelectPicker :model-value="String(draft.real.rarity)" label="星级" :options="rarityOptions" @update:model-value="changeRarity" /></div></div>
       <p v-if="item?.mona?.setIdentityPending">套装身份尚待核对，原始资料保留。</p>
-      <div class="form-field"><label :for="levelInputId">强化等级</label><NumberStepper :input-id="levelInputId" v-model="draft.real.level" label="强化等级" :minimum="0" :maximum="20" /></div>
+      <div class="form-field"><label :for="levelInputId">强化等级</label><NumberStepper :input-id="levelInputId" v-model="draft.real.level" label="强化等级" :minimum="0" :maximum="artifactMaxLevel(draft.real.rarity)" /></div>
       <div class="form-field main-field"><span>主词条</span><div class="main-editor"><StatPicker v-model="draft.real.mainStat" :options="available" label="主词条" /><output class="main-stat-value ui-control" aria-label="主词条数值" title="随强化等级自动计算">{{ formatGameStat(draft.real.mainStat,artifactMainValue(draft,main),false) }}</output></div></div>
       <div class="substats-editor" role="group" aria-label="四个副词条槽">
         <div v-for="(sub,index) in subSlots" :key="index" class="sub-row">
@@ -73,5 +84,5 @@ defineExpose({prepare,reset});
   </div>
 </template>
 <style scoped>
-.artifact-form { display:grid; gap:16px; min-width:0; color:var(--ink); }.artifact-form label,.form-field { display:grid; gap:8px; min-width:0; font-size:var(--font-control); font-weight:700; }.artifact-form input.ui-control,.artifact-form select.ui-control { height:40px; min-height:40px; padding:0 10px; font-size:var(--font-control); font-weight:700; }.artifact-form p { font-size:var(--font-body); line-height:1.6; }.artifact-form.details { grid-template-columns:160px minmax(0,1fr); gap:16px; }.artifact-identity-fields,.artifact-form-actions,.artifact-preview { grid-column:1/-1; }.artifact-identity-fields { display:grid; grid-template-columns:minmax(0,2fr) minmax(120px,1fr); gap:16px; }.artifact-form-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; }.artifact-preview { justify-self:center; }.substats-editor,.artifact-alias,.artifact-form.details > p { grid-column:1/-1; }.substats-editor { display:grid; gap:12px; }.sub-row { display:grid; grid-template-columns:minmax(0,1fr) 32px 160px; align-items:center; gap:12px; }.main-editor { display:grid; grid-template-columns:minmax(0,1fr) 88px; gap:8px; }.main-stat-value { display:flex; align-items:center; justify-content:center; height:40px; font-size:var(--font-control); font-weight:700; }.roll-count { display:flex; align-items:center; justify-content:center; width:32px; height:32px; min-height:32px; padding:0; font-size:var(--font-control); font-weight:700; color:var(--ink); background:var(--surface-raised); }.roll-count:disabled { opacity:1; color:var(--muted); }.stat-value { display:flex; align-items:center; gap:4px; height:40px; padding:0 8px; background:var(--surface-raised); }.stat-value:has(input:focus-visible) { outline:2px solid var(--focus); outline-offset:3px; }.artifact-form .stat-value input:focus-visible { outline:none; }.artifact-form .stat-value input { min-width:0; width:100%; height:38px; min-height:0; padding:0; border:0; background:transparent; text-align:center; appearance:textfield; font-size:var(--font-control); font-weight:700; }.stat-value input::-webkit-inner-spin-button,.stat-value input::-webkit-outer-spin-button { appearance:none; }.stat-value b { display:block; flex:0 0 16px; width:16px; text-align:center; font-size:var(--font-control); color:var(--muted); }.form-field :deep(.number-stepper) { width:160px; max-width:100%; }@media(max-width:600px) { .artifact-form.details { grid-template-columns:1fr; }.sub-row { grid-template-columns:minmax(0,1fr) 32px 96px; gap:8px; } }
+.artifact-form { display:grid; gap:16px; min-width:0; color:var(--ink); }.artifact-form label,.form-field { display:grid; gap:8px; min-width:0; font-size:var(--font-control); font-weight:700; }.artifact-form input.ui-control,.artifact-form select.ui-control { height:40px; min-height:40px; padding:0 10px; font-size:var(--font-control); font-weight:700; }.artifact-form p { font-size:var(--font-body); line-height:1.6; }.artifact-form.details { grid-template-columns:160px minmax(0,1fr); gap:16px; }.artifact-identity-fields,.artifact-form-actions,.artifact-preview { grid-column:1/-1; }.artifact-identity-fields { display:grid; grid-template-columns:minmax(0,2fr) minmax(120px,1fr) minmax(96px,1fr); gap:16px; }.artifact-form-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; }.artifact-preview { justify-self:center; }.substats-editor,.artifact-alias,.artifact-form.details > p { grid-column:1/-1; }.substats-editor { display:grid; gap:12px; }.sub-row { display:grid; grid-template-columns:minmax(0,1fr) 32px 160px; align-items:center; gap:12px; }.main-editor { display:grid; grid-template-columns:minmax(0,1fr) 88px; gap:8px; }.main-stat-value { display:flex; align-items:center; justify-content:center; height:40px; font-size:var(--font-control); font-weight:700; }.roll-count { display:flex; align-items:center; justify-content:center; width:32px; height:32px; min-height:32px; padding:0; font-size:var(--font-control); font-weight:700; color:var(--ink); background:var(--surface-raised); }.roll-count:disabled { opacity:1; color:var(--muted); }.stat-value { display:flex; align-items:center; gap:4px; height:40px; padding:0 8px; background:var(--surface-raised); }.stat-value:has(input:focus-visible) { outline:2px solid var(--focus); outline-offset:3px; }.artifact-form .stat-value input:focus-visible { outline:none; }.artifact-form .stat-value input { min-width:0; width:100%; height:38px; min-height:0; padding:0; border:0; background:transparent; text-align:center; appearance:textfield; font-size:var(--font-control); font-weight:700; }.stat-value input::-webkit-inner-spin-button,.stat-value input::-webkit-outer-spin-button { appearance:none; }.stat-value b { display:block; flex:0 0 16px; width:16px; text-align:center; font-size:var(--font-control); color:var(--muted); }.form-field :deep(.number-stepper) { width:160px; max-width:100%; }@media(max-width:600px) { .artifact-form.details,.artifact-identity-fields { grid-template-columns:1fr; }.sub-row { grid-template-columns:minmax(0,1fr) 32px 96px; gap:8px; } }
 </style>

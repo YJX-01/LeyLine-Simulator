@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "kamisatoayato",
   "revision": "5",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "神里绫人",
@@ -14,17 +13,6 @@
     "rarity": 5,
     "gameId": 10000066,
     "region": "稻妻"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1067.7184,
-      "attack": 23.275,
-      "defense": 59.83,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critDamage",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,713 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.kamisatoayato.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#kamisatoayato"
+        },
+        {
+          "id": "content.kamisatoayato.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#kamisatoayato/combat1"
+        },
+        {
+          "id": "content.kamisatoayato.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#kamisatoayato/combat2"
+        },
+        {
+          "id": "content.kamisatoayato.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#kamisatoayato/combat3"
+        },
+        {
+          "id": "genshin-db.kamisatoayato.skill",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/kamisatoayato.json"
+        },
+        {
+          "id": "kqm.kamisatoayato.namisen",
+          "kind": "repo",
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/hydro/kamisato-ayato.md"
+        }
+      ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato-shunsuiken-base",
+            "revision": "1"
+          },
+          "template": {
+            "id": "scaled-damage",
+            "terms": [
+              {
+                "stat": "attack",
+                "attribute": "attack",
+                "ratio": "attackRate"
+              },
+              {
+                "stat": "hp",
+                "attribute": "hp",
+                "ratio": "hpRate",
+                "count": "namisen"
+              }
+            ],
+            "output": "base",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.kamisatoayato.skill",
+            "kqm.kamisatoayato.namisen"
+          ]
+        }
+      ],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param1",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param2",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param3",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param4",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param5",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param6",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param8",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param9",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.normal.param10",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.normal",
+            "hitId": "kamisatoayato.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.skill.param1",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.skill",
+            "hitId": "kamisatoayato.skill.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.skill.param2",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.skill",
+            "hitId": "kamisatoayato.skill.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.skill.param3",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.skill",
+            "hitId": "kamisatoayato.skill.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.skill.param6",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.skill",
+            "hitId": "kamisatoayato.skill.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.burst.param1",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "kamisatoayato.burst",
+            "hitId": "kamisatoayato.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.kamisatoayato.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.kamisatoayato.context",
+            "revision": "5"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "kamisatoayato",
+            "revision": "5"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.kamisatoayato.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.kamisatoayato.context",
+        "revision": "5"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1067.7184,
+      "attack": 23.275,
+      "defense": 59.83,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critDamage",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "kamisatoayato.normal",
@@ -397,6 +1092,44 @@
       "description": "普通攻击\n进行至多五段的连续剑击。\n\n重击\n消耗一定体力，向前冲刺并施展居合。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}*2"
+        },
+        {
+          "label": "五段伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "{param7:F1}点"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param8:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param9:P}/{param10:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -609,104 +1342,506 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}*2"
-        },
-        {
-          "label": "五段伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "{param7:F1}点"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param8:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param9:P}/{param10:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "kamisatoayato.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param1",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "kamisatoayato.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param2",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "kamisatoayato.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param3",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "kamisatoayato.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param4",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "kamisatoayato.normal.param5",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param5",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "kamisatoayato.normal.param6",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param6",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param8",
+          "id": "kamisatoayato.normal.param8",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param8",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param8"
         },
         {
-          "parameter": "param9",
+          "id": "kamisatoayato.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param9",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "kamisatoayato.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.normal.param10",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param10"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.kamisatoayato.normal.parameters"
+      ]
     },
     {
       "id": "kamisatoayato.skill",
@@ -715,6 +1850,68 @@
       "flavorText": "「你什么时候产生了自己得手的错觉？」\n——不止是武艺，权谋之事上也是如此。但是为了照顾其他两方奉行大人的颜面，这句话不方便说出来。因此只有托马、一斗和绫华听过。",
       "category": "skill",
       "element": "hydro",
+      "details": [
+        {
+          "label": "一段瞬水剑伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段瞬水剑伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段瞬水剑伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "泷廻鉴花持续时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "浪闪伤害值提高",
+          "template": "{param5:F2P}生命值上限/层"
+        },
+        {
+          "label": "水影伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "水影持续时间",
+          "template": "{param7:I}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param8:F1}秒"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "namisen",
+          "min": 0,
+          "max": 4,
+          "integer": true,
+          "source": {
+            "repository": "theBowja/genshin-db",
+            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+            "path": "src/data/ChineseSimplified/talents/kamisatoayato.json"
+          },
+          "constellationLimits": [
+            {
+              "rank": 2,
+              "max": 5,
+              "source": {
+                "repository": "theBowja/genshin-db",
+                "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+                "path": "src/data/ChineseSimplified/constellations/kamisatoayato.json"
+              }
+            }
+          ],
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -885,110 +2082,404 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段瞬水剑伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段瞬水剑伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段瞬水剑伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "泷廻鉴花持续时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "浪闪伤害值提高",
-          "template": "{param5:F2P}生命值上限/层"
-        },
-        {
-          "label": "水影伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "水影持续时间",
-          "template": "{param7:I}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param8:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "kamisatoayato.skill.param1",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "kamisatoayato.skill",
+                    "parameterId": "param1",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "hp-counted-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.hp",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "kamisatoayato.skill",
+                    "parameterId": "param5",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  },
+                  "count": {
+                    "kind": "fact",
+                    "key": "namisen",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "count"
+                    },
+                    "scope": "query"
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "hp",
-              "parameter": "param5",
-              "count": "namisen"
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.skill.param1",
+              "revision": "5"
             }
-          ]
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "kamisatoayato.skill.param2",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "kamisatoayato.skill",
+                    "parameterId": "param2",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "hp-counted-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.hp",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "kamisatoayato.skill",
+                    "parameterId": "param5",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  },
+                  "count": {
+                    "kind": "fact",
+                    "key": "namisen",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "count"
+                    },
+                    "scope": "query"
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "hp",
-              "parameter": "param5",
-              "count": "namisen"
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.skill.param2",
+              "revision": "5"
             }
-          ]
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "kamisatoayato.skill.param3",
+          "element": "hydro",
           "category": "normal",
-          "scalingStat": "attack",
-          "additionalScaling": [
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "damage-sum-2",
+              "revision": "1"
+            },
+            "bindings": {
+              "term0": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "attack-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.attack",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "kamisatoayato.skill",
+                    "parameterId": "param3",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "term1": {
+                "kind": "formula",
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "hp-counted-damage-base",
+                  "revision": "1"
+                },
+                "inputs": {
+                  "attribute": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.hp",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "ratio": {
+                    "kind": "talent-parameter",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "skillId": "kamisatoayato.skill",
+                    "parameterId": "param5",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "scalar"
+                    }
+                  },
+                  "count": {
+                    "kind": "fact",
+                    "key": "namisen",
+                    "type": {
+                      "kind": "quantity",
+                      "unit": "count"
+                    },
+                    "scope": "query"
+                  }
+                },
+                "output": "base"
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
             {
-              "stat": "hp",
-              "parameter": "param5",
-              "count": "namisen"
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.skill.param3",
+              "revision": "5"
             }
-          ]
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param6",
+          "id": "kamisatoayato.skill.param6",
+          "element": "hydro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.skill",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.skill.param6",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param6"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、显式层数或愿力的附加缩放；完整触发、状态、捕获、被动及命座仍待接入，不作为完整角色伤害支持。"
-      },
-      "inputs": [
-        {
-          "id": "namisen",
-          "min": 0,
-          "max": 4,
-          "integer": true,
-          "source": {
-            "repository": "theBowja/genshin-db",
-            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-            "path": "src/data/ChineseSimplified/talents/kamisatoayato.json"
-          },
-          "constellationLimits": [
-            {
-              "rank": 2,
-              "max": 5,
-              "source": {
-                "repository": "theBowja/genshin-db",
-                "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-                "path": "src/data/ChineseSimplified/constellations/kamisatoayato.json"
-              }
-            }
-          ]
-        }
+      "sources": [
+        "content.kamisatoayato.skill.parameters"
       ]
     },
     {
@@ -998,6 +2489,28 @@
       "flavorText": "「看到了哦，在这片静水之中，你心跳的波纹。」",
       "category": "burst",
       "element": "hydro",
+      "details": [
+        {
+          "label": "水花剑伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "普通攻击伤害提升",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param5:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1105,39 +2618,66 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "水花剑伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "普通攻击伤害提升",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param5:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "kamisatoayato.burst.param1",
+          "element": "hydro",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "kamisatoayato.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.kamisatoayato.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.kamisatoayato.burst.param1",
+              "revision": "5"
+            }
+          ],
+          "parameter": "param1"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.kamisatoayato.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1146,30 +2686,21 @@
       "name": "神里流·清泷绕峰",
       "description": "神里流·镜花具有如下效果：\n·施放后，神里绫人会获得2层浪闪效果；\n·水影破裂后，神里绫人将获得等同于叠加上限层数的浪闪效果。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "kamisatoayato.passive2",
       "name": "神里流·破月渐盈",
       "description": "神里绫人处于队伍后台时，若元素能量低于40点，每1秒为自己恢复2点元素能量。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "kamisatoayato.passive3",
       "name": "神里流·日常茶饭",
       "description": "完美烹饪食物时，有18%概率额外获得一个「奇怪的」品质的同种料理。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1178,20 +2709,14 @@
       "name": "镜华风姿",
       "description": "对于生命值低于或等于50%的敌人，瞬水剑造成的伤害提升40%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "世有源泉",
       "description": "浪闪叠加上限提升至5层；神里绫人处于至少3层浪闪状态下时，将提升50%生命值上限。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1203,20 +2728,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "不厌细流",
       "description": "施放神里流·水囿后，队伍中附近的角色普通攻击的攻击速度提升15%，持续15秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1228,28 +2747,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "滥觞无底",
       "description": "施放神里流·镜花之后，神里绫人的下一次瞬水剑攻击命中敌人时，将进行2次额外的瞬水剑攻击，各自能造成神里绫人攻击力450%的伤害。\n此两次瞬水剑攻击不会受到浪闪的增益。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  }
+  "sources": [
+    "content.kamisatoayato.growth",
+    "content.character-curves"
+  ]
 }

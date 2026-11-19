@@ -3,6 +3,8 @@ import { damageCalculatorSchema, projectSchema, type AccountCharacter, type Loca
 import { loadAccountGameData } from './account-presentation';
 import { addActorFromBuild } from './real-project';
 import { createEmptyProject, nextRecordId } from './workbench-project';
+import { calculationArtifact } from './build-snapshot';
+import { prepareStructuredBuilds } from '@leyline/engine';
 
 /** Read wearing references even when Mona supplied no cultivation/weapon build. Never borrow a showcase. */
 export async function readCalculatorSource(account: LocalAccount, characterId: string, kind: 'local' | 'showcase') {
@@ -18,10 +20,10 @@ export async function readCalculatorSource(account: LocalAccount, characterId: s
   const artifacts: Build['artifacts'] = Object.entries(character.equipment).map(([slot, id]) => {
     const item = account.artifacts.find(item => item.id === id);
     if (!item?.real || item.mona?.setIdentityPending || item.slot !== slot) throw new Error('本地装备的数值或套装身份待补全。');
-    return { ...JSON.parse(JSON.stringify(item.real)) as Build['artifacts'][number], inventoryAccountId: account.id };
+    return calculationArtifact(JSON.parse(JSON.stringify(item.real)), account.id);
   });
   const sets = await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => character.build?.sets.find(set => set.id === id) ?? getArtifactSet(id)));
-  const equipment = { artifacts, sets, inventoryAccountId: account.id };
+  const equipment = { artifacts, sets };
   if (character.build) Object.assign(character.build, equipment);
   return { character, equipment };
 }
@@ -36,8 +38,8 @@ export async function prepareCalculatorContentUpdate(input: DamageCalculatorDocu
   const [character, weapon, sets, data] = await Promise.all([
     getCharacter(before.character.id), getWeapon(before.weapon.id), Promise.all(before.sets.map(set => getArtifactSet(set.id))), loadAccountGameData(),
   ]);
-  const after: Build = { ...before, character, weapon, sets, artifactMain: data.main, reactionRules: data.reactions, dataVersion: data.catalog.version };
-  const labels = { character: `角色定义（${before.character.revision} → ${character.revision}）`, weapon: '武器定义', sets: '套装定义', artifactMain: '圣遗物主词条表', reactionRules: '反应规则', dataVersion: '内容版本' };
+  const after: Build = { ...before, character, weapon, sets, artifactMain: data.main, sources: [...before.sources, ...data.sources.filter(source => !before.sources.some(existing => existing.id === source.id))], artifactMainSourceRefs: data.artifactMainSourceRefs, dataVersion: data.catalog.version };
+  const labels = { character: `角色定义（${before.character.revision} → ${character.revision}）`, weapon: '武器定义', sets: '套装定义', artifactMain: '圣遗物主词条表', dataVersion: '内容版本' };
   const changes = (Object.keys(labels) as (keyof typeof labels)[]).filter(key => JSON.stringify(before[key]) !== JSON.stringify(after[key])).map(key => labels[key]);
   actor.build = after;
   // Refresh only the metadata of this actor's carried calculation snapshots; keep authored graph rules/revisions intact.
@@ -56,11 +58,16 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
   const actorId = addActorFromBuild(project, build);
   const recordId = nextRecordId(project);
   project.timeline.push({ id: recordId, actor: actorId, timeMs: 0, order: 0, kind: 'damage', definition: `${actorId}-real-damage`, damage });
-  return damageCalculatorSchema.parse({ schemaVersion: 1, kind: 'damage-calculator', project, actorId, recordId });
+  return damageCalculatorSchema.parse({ schemaVersion: 4, kind: 'damage-calculator', project, actorId, recordId });
 }
 
 export function calculatorRequest(input: DamageCalculatorDocument, taskId: number): AxisRequest {
   const document = damageCalculatorSchema.parse(input);
+  for (const project of [document.project, ...document.baseline ? [document.baseline] : []]) {
+    if (project.candidate.actors.some(actor => !actor.build)) throw new Error('计算副本中有尚未补全的队员配装。');
+    const prepared = prepareStructuredBuilds(project.candidate.actors.map(actor => ({ id: actor.id, build: actor.build! })));
+    if (!prepared.ok) throw new Error(prepared.diagnostics.map(diagnostic => diagnostic.message).join('；'));
+  }
   if (!document.baseline) return { taskId, session: 1, revision: taskId, project: document.project };
   const baseline = document.baseline;
   for (const key of ['timeline', 'conditions', 'enemy', 'combatStates', 'objective', 'effectRevisions', 'definitions'] as const) {
@@ -87,5 +94,5 @@ export function copyProjectForCalculator(input: Project): DamageCalculatorDocume
   const record = project.timeline.find(record => record.kind === 'damage' && record.damage);
   const actorId = record?.actor ?? project.candidate.actors.find(actor => actor.build)?.id;
   if (!actorId) throw new Error('当前轴没有完整配装，请先准备队伍。');
-  return damageCalculatorSchema.parse({ schemaVersion: 1, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });
+  return damageCalculatorSchema.parse({ schemaVersion: 4, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });
 }

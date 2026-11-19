@@ -1,10 +1,9 @@
 import { statKeys, reactionBonusKeys, talentLevelBonus, type Project, type Diagnostic, type QuantityUnit, type StatKey, type ReactionBonusKey, type HitDamageKey } from '@leyline/schema';
 import { resolveStaticBuild } from '../attributes/build';
-import { evaluateDamage } from '../attributes/damage';
 import { percentStat, relevantPanelIssues, statUnit } from '../attributes/stat-dependencies';
 import type { DamagePoint, EvaluationResult, EffectInstance, AttributeRead } from '@leyline/schema';
 import { createCombatStateReader } from '../timeline/combat-state';
-import { contentRuleSources } from './content-rules';
+import { prepareProjectRuntime, readRuntimePanel, evaluateRuntimeHit, runtimeEffectViews } from '../calculation/project';
 
 type Definition = Project['definitions'][number];
 type Effect = Definition['effects'][number];
@@ -22,6 +21,8 @@ export interface GraphResult extends EvaluationResult { attributes?: Partial<Rec
 
 /** Demand-driven graph for attributes, effects, captures and historical damage. */
 export function evaluateDependencyGraph(project: Project, options: GraphOptions = {}): GraphResult {
+  const preparedRuntime = project.candidate.actors.some(actor => actor.build) ? prepareProjectRuntime(project) : undefined;
+  const runtime = preparedRuntime?.ok ? preparedRuntime.runtime : undefined;
   const diagnostics: Diagnostic[] = [];
   const report = (code: Diagnostic['code'], path: string, message: string) => {
     if (!diagnostics.some(d => d.code === code && d.path === path && d.message === message)) diagnostics.push({ code, path, message });
@@ -73,11 +74,6 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
       if (!definition) { missing(actor[slot], `candidate.actors.${actor.id}.${slot}`); return []; }
       return [{ slot: slot as string, definition, content: undefined as EffectInstance['content'] }];
     });
-    for (const source of contentRuleSources(actor, () => touch('content.rules'))) {
-      if (definitions.has(source.definition.id)) { report('duplicate-id', source.definition.id, '内容规则定义与项目ID冲突。'); continue; }
-      definitions.set(source.definition.id, source.definition);
-      sources.push({ slot: source.slot, definition: source.definition, content: { entity: source.entity, rule: source.rule } });
-    }
     for (const { slot, definition: d, content } of sources) {
       for (const effect of d.effects) {
         const triggers: { record?: RecordEntry; unconfirmed?: true }[] = [];
@@ -127,7 +123,19 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
     }
     if (exhausted) break;
   }
-  const instanceIds = new Set(instances.map(i => i.view.id));
+  const contentViews = runtime ? runtimeEffectViews(runtime, () => touch('effects.content')) : [];
+  const contentIds = new Set(contentViews.map(view => view.id));
+  if (runtime) {
+    runtime.projectApplications = new Set(instances.map(instance => instance.view.id));
+    runtime.context.effectRevisions = (project.effectRevisions ?? []).filter(revision => contentIds.has(revision.instanceId))
+      .map(({ instanceId, disabled, value }) => ({ instanceId, disabled, ...value ? { value: { kind: 'quantity' as const, ...value } } : {} }));
+  }
+  const instanceIds = new Set([...instances.map(i => i.view.id), ...contentIds]);
+  for (const view of contentViews) {
+    const revision = revisions.get(view.id);
+    view.disabled = revision?.disabled ?? false;
+    if (revision?.value && revision.value.unit !== view.unit) report('unit', `effectRevisions.${view.id}`, '效果修订单位与原效果不匹配。');
+  }
   for (const revision of project.effectRevisions ?? []) if (!instanceIds.has(revision.instanceId)) report('stale-revision', `effectRevisions.${revision.instanceId}`, '来源已删除、换装或版本变化，此修订待核对，未附着到其他实例。');
   const instancesById = new Map(instances.map(instance => [instance.view.id, instance]));
   const applications = new Map<string, Map<string, boolean | null>>();
@@ -136,16 +144,22 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
     if (!filter) return true;
     const damage = record.damage;
     const skill = actors.get(record.actor)?.build?.character.talents.find(talent => talent.id === damage?.skillId);
-    const hit = damage && skill?.hits[damage.hitIndex];
-    return !!damage && (!filter.skillId || filter.skillId === damage.skillId) && (filter.hitIndex === undefined || filter.hitIndex === damage.hitIndex)
+    const hit = damage && skill?.hits.find(hit => hit.id === damage.hitId);
+    return !!damage && (!filter.skillId || filter.skillId === damage.skillId) && (filter.hitIndex === undefined || filter.hitIndex === skill?.hits.findIndex(hit => hit.id === damage.hitId))
       && (!filter.category || !!skill && !!hit && filter.category === (hit.category ?? skill.category))
       && (!filter.element || !!skill && !!hit && filter.element === (hit.element ?? skill.element));
   }
+  const staleApplications = new Set<string>();
   applicationRecords: for (const record of timeline) for (const application of record.damage?.effectApplications ?? []) {
     const instance = instancesById.get(application.instanceId);
     const path = `timeline.${record.id}.damage.effectApplications`;
     if (!touch(path)) break applicationRecords;
-    if (!instance) { report('stale-revision', path, '命中适用事实的来源已删除、换装或版本变化，保留待核对，未附着到其他实例。'); continue; }
+    if (!instance && contentIds.has(application.instanceId)) continue;
+    if (!instance) {
+      staleApplications.add(record.id);
+      report('stale-revision', path, '命中适用事实的来源已删除、换装或版本变化，保留待核对，未附着到其他实例。');
+      continue;
+    }
     const view = instance.view;
     const ordered = !instance.trigger || instance.trigger.timeMs < record.timeMs || instance.trigger.timeMs === record.timeMs && instance.trigger.order < record.order;
     if (!instance.effect.requiresApplication || !matchesHit(instance, record) || record.kind !== 'damage'
@@ -166,9 +180,9 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
     const conditions = combatConditions(actorId, ctx.record);
     const hitRecord = ctx.hitRecord ?? ctx.record;
     const query = actorId === hitRecord.actor ? hitRecord.damage : undefined;
-    const key = JSON.stringify([actorId, conditions, query?.skillId, query?.hitIndex]);
+    const key = JSON.stringify([actorId, ctx.record.id, ctx.phase, conditions, query]);
     let panel = panels.get(key);
-    if (!panel) { panel = resolveStaticBuild(actors.get(actorId)?.build, conditions, query); panels.set(key, panel); }
+    if (!panel) { panel = runtime ? readRuntimePanel(runtime, actorId, ctx.record, conditions, query, ctx.phase) : resolveStaticBuild(actors.get(actorId)?.build, conditions, query); panels.set(key, panel); }
     return panel;
   }
   const readState = createCombatStateReader(project);
@@ -196,14 +210,16 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
   function baseAttribute(actorId: string, key: string, unit: QuantityUnit, ctx: Context): Quantity | null {
     const actor = actors.get(actorId);
     if (!actor) { missing(actorId, `timeline.${ctx.record.id}.attribute`); return null; }
+    if (actor.build) {
+      const panel = actorPanel(actorId, ctx);
+      const issues = relevantPanelIssues(panel, statKeys.includes(key as StatKey) ? [key as StatKey] : []);
+      for (const issue of issues) report(issue.code, `candidate.actors.${actorId}.build`, issue.message);
+      const value = panel.attributes?.[key] ?? panel.stats[key as StatKey];
+      if (value === null || value === undefined) { report('unknown', `candidate.actors.${actorId}.${key}`, '属性所需条件尚未明确：' + key); return null; }
+      return issues.length ? null : { value, unit };
+    }
     if (key === 'damageBonus' || (reactionBonusKeys as readonly string[]).includes(key)) return { value: 0, unit: 'scalar' };
     if (key === 'baseDamageBonus') return { value: 0, unit: 'damage' };
-    if ((statKeys as readonly string[]).includes(key) && actor.build) {
-      const panel = actorPanel(actorId, ctx);
-      const issues = relevantPanelIssues(panel, [key as StatKey]);
-      for (const issue of issues) report(issue.code, `candidate.actors.${actorId}.build`, issue.message);
-      return issues.length ? null : { value: panel.stats[key as StatKey], unit: statUnit(key as StatKey) };
-    }
     const value = Object.hasOwn(actor.inputs, key) ? actor.inputs[key] : undefined;
     if (!value) { report('unknown', `candidate.actors.${actorId}.inputs.${key}`, '属性输入尚未填写。'); return null; }
     if (value.unit !== unit) { report('unit', `candidate.actors.${actorId}.inputs.${key}`, '属性读取单位不匹配。'); return null; }
@@ -238,8 +254,9 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
         const panel = actorPanel(actorId, ctx);
         const adjusted = attribute(actorId, percent, 'scalar', { ...ctx, trace });
         const white = panel.baseStats?.[key as keyof NonNullable<typeof panel.baseStats>];
-        if (!adjusted || white === undefined) valid = false;
-        else value += white * (adjusted.value - panel.stats[percent]);
+        const originalPercent = panel.stats[percent];
+        if (!adjusted || white === undefined || originalPercent === null) valid = false;
+        else value += white * (adjusted.value - originalPercent);
       }
       if (base && base.unit !== unit) { report('unit', path, '属性单位不匹配。'); valid = false; }
       const eligible: Instance[] = [];
@@ -383,22 +400,40 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
         case 'unsupported': report('unsupported', path, `尚未支持：${node.capability}`); return null;
         case 'game-damage': {
           gameDamagePoints.add(ctx.point.id);
-          const bonus = attribute(ctx.actor, 'damageBonus', 'scalar', ctx);
-          const damage = ctx.record.damage ? { ...ctx.record.damage, conditions: combatConditions(ctx.actor, ctx.record) } : undefined;
-          // Project-scoped overrides have already been resolved for the current actor.
-          if (damage) delete damage.stateOverrides;
-          if (damage) delete damage.effectApplications;
-          const capture = ctx.record.damage?.capture;
-          const capturedRecord = capture?.recordId ? records.get(capture.recordId) : undefined;
-          const capturedContext: Context | undefined = capturedRecord && capture?.phase
-            ? { ...ctx, record: capturedRecord, phase: capture.phase, hitRecord: ctx.record } : undefined;
-          const real = evaluateDamage(actors.get(ctx.actor)?.build, damage, project.enemy, (bonus?.value ?? 0) + (options.extraBonus ?? 0),
-            stat => attribute(ctx.actor, stat, statUnit(stat), ctx)?.value ?? null,
-            capturedContext ? { read: stat => attribute(ctx.actor, stat, statUnit(stat), capturedContext)?.value ?? null,
-              panel: actorPanel(ctx.actor, capturedContext) } : undefined);
+          if (staleApplications.has(ctx.record.id)) return null;
+          if (!runtime) {
+            for (const issue of preparedRuntime && !preparedRuntime.ok ? preparedRuntime.issues : [{ code: 'unknown' as const, message: '角色配装尚未明确。' }]) report(issue.code, path, issue.message);
+            return null;
+          }
+          const readProjectAttribute: Parameters<typeof evaluateRuntimeHit>[4] = (actorId, reference, eventId, phase) => {
+            const key = reference.id.replace(/^attribute\./, '');
+            if (key === reference.id || ![...statKeys, ...reactionBonusKeys, 'damageBonus', 'baseDamageBonus', 'defenseIgnore'].includes(key)) return undefined;
+            const sourceRecord = records.get(eventId);
+            if (!sourceRecord) return null;
+            const value = attribute(actorId, key, key === 'damageBonus' || key === 'defenseIgnore' ? 'scalar' : statUnit(key as StatKey | ReactionBonusKey | HitDamageKey), { ...ctx, actor: actorId, record: sourceRecord, phase, hitRecord: ctx.record })?.value;
+            return value == null ? null : { value: value + (key === 'damageBonus' ? options.extraBonus ?? 0 : 0), unit: key === 'damageBonus' || key === 'defenseIgnore' ? 'scalar' : statUnit(key as StatKey | ReactionBonusKey | HitDamageKey), kind: 'quantity' };
+          };
+          const real = evaluateRuntimeHit(runtime, ctx.actor, ctx.record, combatConditions(ctx.actor, ctx.record),
+            instances.length || options.extraBonus ? readProjectAttribute : undefined);
           ctx.point.real = real;
           for (const issue of real.issues) report(issue.code, path, issue.message);
-          return bonus && real.value !== null ? { value: real.value, unit: 'damage' } : null;
+          const projected = real.structured?.trace.filter(node => node.context && ['attribute', 'effect', 'capture'].includes(node.kind)) ?? [];
+          const projectedIds = new Set(projected.map(node => node.id));
+          for (const node of projected) {
+            const location = node.context;
+            if (!location || !['attribute', 'effect'].includes(node.kind)) continue;
+            const record = records.get(location.eventId);
+            if (!record) continue;
+            const id = `structured:${ctx.record.id}:${node.id}`;
+            reads.push({ id, actor: location.actorId ?? ctx.actor, key: node.nodeId.replace(/^attribute\./, ''), unit: node.value?.kind === 'quantity' ? node.value.unit : 'scalar',
+              timeMs: record.timeMs, phase: location.phase, recordId: record.id, value: node.state === 'known' && node.value?.kind === 'quantity' ? node.value.value : null,
+              dependencies: node.dependencies.filter(dependency => projectedIds.has(dependency)).map(dependency => `structured:${ctx.record.id}:${dependency}`), ...location.effectInstanceId ? { instanceId: location.effectInstanceId } : {} });
+            if (location.effectInstanceId) {
+              const view = contentViews.find(view => view.id === location.effectInstanceId);
+              if (view && !ctx.point.formula.effects.some(effect => effect.effect === view.effect && effect.action === view.action)) ctx.point.formula.effects.push({ definition: view.definition, effect: view.effect, action: view.action });
+            }
+          }
+          return real.value !== null ? { value: real.value, unit: 'damage' } : null;
         }
         case 'select': {
           const predicate = nodeValue(d, node.condition, ctx);
@@ -473,6 +508,7 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
   const totalValue = sum(orderedPoints);
   return { status: invalid || diagnostics.some(d => d.code === 'arithmetic') ? 'invalid' : exhausted || diagnostics.some(d => d.code === 'stale-revision') || orderedPoints.some(p => p.value === null)
       || (options.attributeQuery && Object.values(attributes).some(value => value === null)) ? 'partial' : 'complete', points: orderedPoints,
-    objectiveValue, totalValue, diagnostics, plan: project, effectInstances: instances.map(i => i.view), reads, stateReads: [...stateReads.values()],
+    objectiveValue, totalValue, diagnostics, plan: project, effectInstances: [...instances.map(i => i.view), ...contentViews], reads, stateReads: [...stateReads.values()],
+    ...(runtime ? { feasibility: runtime.feasibility } : {}),
     ...(options.attributeQuery ? { attributes } : {}) };
 }

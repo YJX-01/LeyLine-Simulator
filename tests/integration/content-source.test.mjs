@@ -42,8 +42,8 @@ test('supported and unsupported actual characters use one complete metadata sche
   assert.deepEqual(Object.keys(supported), Object.keys(unsupported));
   assert.deepEqual(characterMetadataSchema.parse(supported), supported);
   assert.deepEqual(characterMetadataSchema.parse(unsupported), unsupported);
-  assert.equal(supported.capabilities.calculation.supported, true);
-  assert.equal(unsupported.capabilities.calculation.supported, false);
+  assert.ok(supported.talents.some(talent => talent.hits.some(hit => hit.outputs.length)));
+  assert.ok(unsupported.talents.every(talent => talent.hits.every(hit => hit.outputs.length === 0)));
   const duplicate = structuredClone(supported);
   duplicate.talents.push(duplicate.talents[0]);
   assert.throws(() => characterMetadataSchema.parse(duplicate), /重复/);

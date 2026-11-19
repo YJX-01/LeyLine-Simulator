@@ -5,7 +5,7 @@ import type { ExpressionNode, QuantityUnit } from '@leyline/schema';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { useDefinitionLibraryStore } from '../stores/definition-library';
 import { cloneDefinition, copyDefinitionToProject, createDefinition } from '../domain/definition-library';
-import { localDataErrorLabel, definitionLabel, operationLabel, unitLabel, capabilityLabel, inputLabel } from '../domain/workbench-labels';
+import { localDataErrorLabel, definitionLabel, operationLabel, unitLabel, inputLabel } from '../domain/workbench-labels';
 
 const workspace = useAxisWorkspaceStore();
 const store = useDefinitionLibraryStore();
@@ -15,7 +15,7 @@ const selectedId = ref('');
 const selected = computed(() => store.library.definitions.find(entry => entry.id === selectedId.value));
 const error = ref('');
 const fileInput = ref<HTMLInputElement>();
-const operations = ['constant', 'input', 'add', 'multiply', 'divide', 'condition', 'unsupported'] as const;
+const operations = ['constant', 'input', 'add', 'multiply', 'divide', 'condition'] as const;
 const units: QuantityUnit[] = ['scalar', 'attack', 'damage'];
 const op = ref<(typeof operations)[number]>('constant');
 function create() {
@@ -32,7 +32,6 @@ function addNode() {
   const node: ExpressionNode = operation === 'constant' ? { id, op: operation, quantity: { value: 1, unit: 'scalar' } }
     : operation === 'input' ? { id, op: operation, key: 'attack', unit: 'attack' }
     : operation === 'condition' ? { id, op: operation, key: '触发条件', yes: first, no: first }
-    : operation === 'unsupported' ? { id, op: operation, capability: 'snapshot' }
     : { id, op: operation, left: first, right: first };
   definition.nodes.push(node);
 }
@@ -95,7 +94,6 @@ function conditionName(previous: string, event: Event) {
         <template v-else-if="node.op === 'input'"><label>引用属性<select v-model="node.key" :aria-label="`节点${index + 1}引用属性`"><option value="attack">攻击力</option><option v-if="node.key !== 'attack'" :value="node.key">{{ node.key }}</option></select><button class="ui-action soft" data-accent="anemo" v-if="node.key === 'attack'" @click="node.key = '自定义属性'">使用自定义属性</button><input v-else v-model="node.key" aria-label="自定义引用属性名称"></label><label>单位<select v-model="node.unit" :aria-label="`节点${index + 1}单位`"><option v-for="unit in units" :key="unit" :value="unit">{{ unitLabel(unit) }}</option></select></label></template>
         <template v-else-if="node.op === 'add' || node.op === 'multiply' || node.op === 'divide'"><label>左侧节点<select v-model="node.left" :aria-label="`节点${index + 1}左侧节点`"><option v-for="(entry, n) in selected.nodes" :key="entry.id" :value="entry.id">节点{{ n + 1 }}</option></select></label><label>右侧节点<select v-model="node.right" :aria-label="`节点${index + 1}右侧节点`"><option v-for="(entry, n) in selected.nodes" :key="entry.id" :value="entry.id">节点{{ n + 1 }}</option></select></label></template>
         <template v-else-if="node.op === 'condition'"><label>条件名称<input :value="inputLabel(node.key)" :aria-label="`节点${index + 1}条件名称`" @input="node.key = conditionName(node.key, $event)"></label><label>满足时<select v-model="node.yes"><option v-for="(entry, n) in selected.nodes" :key="entry.id" :value="entry.id">节点{{ n + 1 }}</option></select></label><label>不满足时<select v-model="node.no"><option v-for="(entry, n) in selected.nodes" :key="entry.id" :value="entry.id">节点{{ n + 1 }}</option></select></label></template>
-        <template v-else-if="node.op === 'unsupported'"><label>能力占位<select v-model="node.capability"><option v-for="capability in ['snapshot', 'history', 'probability']" :key="capability" :value="capability">{{ capabilityLabel(capability) }}</option></select></label><span>仅保留文件兼容性，不能完整计算。</span></template>
         <button class="ui-action soft" data-accent="anemo" @click="selected.nodes.splice(index, 1)">删除节点{{ index + 1 }}</button>
       </div>
       <label>伤害根节点<select :value="selected.damage || ''" aria-label="库内伤害根节点" @change="selected.damage = ($event.target as HTMLSelectElement).value || undefined"><option value="">无伤害公式</option><option v-for="(node, index) in selected.nodes" :key="node.id" :value="node.id">节点{{ index + 1 }}</option></select></label>

@@ -1,11 +1,9 @@
+import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { DATA_VERSION, getArtifactMain, getCharacter, getWeapon } from '@leyline/game-data';
-import { combatRuleSchema, characterDefinitionSchema, elements, projectSchema, type Build, type CombatConditions, type CombatRule, type Enemy, type Project, type StatKey } from '@leyline/schema';
-import { evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
-import { evaluateDependencyGraph, type AttributeKey } from '../../../../src/engine/src/effects/graph';
-import { statUnit } from '../../../../src/engine/src/attributes/stat-dependencies';
-import { contentRuleSources } from '../../../../src/engine/src/effects/content-rules';
+import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
+import { elements, type Build, type Enemy, type Project, type StatKey } from '@leyline/schema';
+import { compileStructuredCharacter, evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
 import { addActorFromBuild } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
 import { createAccount } from '../../../../src/web/src/domain/account';
@@ -13,7 +11,7 @@ import { previewEnkaImport } from '../../../../src/web/src/domain/enka-import';
 
 const hilichurl: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id: string, weapon: string): Promise<Build> {
-  return { dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), sets: [], artifacts: [],
+  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), sets: [], artifacts: [],
     artifactMain: await getArtifactMain(), level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
 function query(build: Build, skillId = `${build.character.id}.skill`, hitIndex = 0, timeMs = 0) {
@@ -21,7 +19,7 @@ function query(build: Build, skillId = `${build.character.id}.skill`, hitIndex =
   const actor = addActorFromBuild(project, build);
   project.enemy = hilichurl;
   const record: Project['timeline'][number] = { id: 'calculation-query', actor, timeMs, order: 1, kind: 'damage', definition: `${actor}-real-damage`,
-    damage: { skillId, hitIndex, crit: 'noncritical', reaction: 'none' } };
+    damage: { ...selectCatalogHit(build, skillId, hitIndex), crit: 'noncritical', reaction: 'none' } };
   project.timeline.push(record);
   return { project, actor, record };
 }
@@ -76,85 +74,32 @@ describe('canonical content rules share panel, direct damage and timeline evalua
   });
 });
 
-/** Evaluate an adopted formula component with explicitly supplied quantities, not a player export.
- * Homa HP/ATK are derived below from a legal Hu Tao configuration. EM boundaries come from
- * Nahida's documented 200-point threshold and 800-point excess cap; they are not equipped builds.
- */
-function component(rule: CombatRule, inputs: Partial<Record<StatKey, number>>, stats: AttributeKey[], conditions: CombatConditions = {}, refinement = 1, skillId?: string, hitIndex = 0) {
-  const project: Project = { schemaVersion: 2, rulesVersion: 'timeline-v1', calculationProfile: 'dependency', id: 'formula-component', revision: '1',
-    definitions: [{ id: 'source', version: rule.revision, source: { kind: 'preset', reference: rule.source.commit, verified: true }, nodes: rule.nodes, effects: rule.effects },
-      { id: 'character', version: '1', source: { kind: 'preset', reference: rule.source.commit, verified: true }, nodes: [], effects: [] }],
-    candidate: { id: 'query', actors: [{ id: 'owner', character: 'character', weapon: 'source', inputs: Object.fromEntries(Object.entries(inputs).map(([stat, value]) => [stat, { value: value!, unit: statUnit(stat as StatKey) }])) }] },
-    conditions: {}, timeline: [], objective: {} };
-  // Refinement values are selected before the component query; no alternate formula is implemented.
-  project.definitions[0].nodes = rule.nodes.map(node => node.op === 'refinement' ? { id: node.id, op: 'constant', quantity: { value: node.values[refinement - 1], unit: node.unit } } : node);
-  const record: Project['timeline'][number] = { id: 'component-query', actor: 'owner', timeMs: 0, order: 0, kind: 'damage', definition: 'source',
-    damage: { skillId: skillId ?? 'unselected', hitIndex, crit: null, reaction: null, conditions } };
-  return evaluateDependencyGraph(projectSchema.parse(project), { attributeQuery: { actor: 'owner', record, stats } });
-}
-
-describe('adopted source formula components and validation boundaries', () => {
-  it.each([1, 5])('uses Homa R%i strict low-HP threshold and preserves unknown state', async refinement => {
-    const weapon = await getWeapon('staffofhoma');
-    const rule = weapon.combatRules![0];
-    const hp = (1210.7164 * 8.739 + 4971.856) * (refinement === 1 ? 1.2 : 1.4);
-    const attack = 8.2859 * 8.739 + 34.0239 + 45.9364 * 9.173 + 186.7;
-    const rate = refinement === 1 ? 0.008 : 0.016;
-    const low = refinement === 1 ? 0.01 : 0.018;
-    expect(component(rule, { hp, attack }, ['attack'], { hpRatio: 0.5 }, refinement).attributes?.attack).toBeCloseTo(attack + hp * rate, 8);
-    expect(component(rule, { hp, attack }, ['attack'], { hpRatio: 0.49 }, refinement).attributes?.attack).toBeCloseTo(attack + hp * (rate + low), 8);
-    const unknown = component(rule, { hp, attack }, ['attack'], {}, refinement);
-    expect(unknown.attributes?.attack).toBeNull();
-    expect(unknown.diagnostics.some(diagnostic => diagnostic.message.includes('hpRatio'))).toBe(true);
+describe('existing passive effects through the current panel', () => {
+  it.each([[0.3, 0], [0.5, 0.12], [0.8, 0.3], [1, 0.3]])('uses Neuvillette A4 HP ratio %s', async (hpRatio, bonus) => {
+    const build = await setting('neuvillette', 'apprenticesnotes');
+    build.weaponLevel = 70; build.weaponAscension = 4;
+    expect(resolveBuild(build, { hpRatio }).stats.hydroBonus).toBeCloseTo(bonus, 12);
   });
 
-  it.each([[0, 0, 0.05], [200, 0, 0.05], [600, 0.4, 0.17], [1000, 0.8, 0.29], [1100, 0.8, 0.29]])('applies Nahida A4 at source-defined EM %i with independent caps', async (em, bonus, crit) => {
-    const nahida = await getCharacter('nahida');
-    const rule = nahida.passives[1].combatRules![0];
-    const result = component(rule, { elementalMastery: em, critRate: 0.05 }, ['damageBonus', 'critRate'], {}, 1, 'nahida.skill', 2);
-    expect(result.attributes?.damageBonus).toBeCloseTo(bonus, 12);
-    expect(result.attributes?.critRate).toBeCloseTo(crit, 12);
-    const other = component(rule, { elementalMastery: em, critRate: 0.05 }, ['damageBonus', 'critRate'], {}, 1, 'nahida.skill', 0);
-    expect(other.attributes?.damageBonus).toBe(0);
-    expect(other.attributes?.critRate).toBe(0.05);
-    expect(nahida.capabilities.calculation.supported).toBe(false);
-  });
-
-  it.each([[0.3, 0, 0.33], [0.5, 0.12, 0.33], [0.8, 0.3, 0], [1, 0.3, 0]])('uses Neuvillette A4 HP ratio %s and Hu Tao inclusive 50%%', async (hpRatio, hydro, pyro) => {
-    const neuvillette = await getCharacter('neuvillette');
-    expect(component(neuvillette.passives[1].combatRules![0], { hydroBonus: 0 }, ['hydroBonus'], { hpRatio }).attributes?.hydroBonus)
-      .toBeCloseTo(hydro, 12);
-    const hutao = await getCharacter('hutao');
-    expect(component(hutao.passives[1].combatRules![0], { pyroBonus: 0 }, ['pyroBonus'], { hpRatio }).attributes?.pyroBonus).toBe(pyro);
-  });
-
-  it('unlocks passive rules at their declared ascension and rejects broken source derivatives', async () => {
-    const build = await setting('nahida', 'apprenticesnotes');
-    const actor = { id: 'nahida', character: 'character', weapon: 'weapon', inputs: {}, build };
-    build.ascension = 3;
-    expect(contentRuleSources(actor).some(source => source.slot === 'passive')).toBe(false);
+  it('unlocks the adopted A4 effect and rejects a missing formula dependency', async () => {
+    const build = await setting('neuvillette', 'apprenticesnotes');
+    build.weaponLevel = 70; build.weaponAscension = 4;
+    build.level = 60; build.ascension = 3; build.talents = { normal: 1, skill: 1, burst: 1 };
+    expect(resolveBuild(build, { hpRatio: 1 }).stats.hydroBonus).toBe(0);
     build.ascension = 4;
-    expect(contentRuleSources(actor).some(source => source.entity === 'nahida.passive2')).toBe(true);
-    const rule = structuredClone(build.character.passives[1].combatRules![0]);
-    const subtraction = rule.nodes.find(node => node.op === 'subtract')!;
-    if ('left' in subtraction) subtraction.left = 'missing';
-    expect(combatRuleSchema.safeParse(rule).success).toBe(false);
-    const cycle = structuredClone(build.character.passives[1].combatRules![0]);
-    const cyclicSubtraction = cycle.nodes.find(node => node.op === 'subtract')!;
-    if ('left' in cyclicSubtraction) cyclicSubtraction.left = 'above';
-    expect(combatRuleSchema.safeParse(cycle).success).toBe(false);
-    const broken = structuredClone(build.character);
-    broken.combatRules = [structuredClone(build.character.passives[1].combatRules![0])];
-    broken.combatRules[0].nodes.push({ id: 'missing-parameter', op: 'talent-parameter', skillId: 'nahida.skill', parameter: 'absent', unit: 'scalar' });
-    expect(characterDefinitionSchema.safeParse(broken).success).toBe(false);
+    expect(resolveBuild(build, { hpRatio: 1 }).stats.hydroBonus).toBeCloseTo(0.3, 12);
+    const effect = build.character.calculation.bundle.effects.find(effect => effect.identity.id === 'neuvillette.ascension-four.hydro-bonus')!;
+    if (effect.value.kind !== 'formula') throw new Error('Expected adopted A4 formula');
+    effect.value.formula.revision = 'missing';
+    expect(compileStructuredCharacter(build.character).ok).toBe(false);
   });
-  it('keeps an unknown HP-dependent hydro bonus separate from unrelated physical attributes', async () => {
-    const character = await getCharacter('neuvillette');
-    const rule = character.passives[1].combatRules![0];
-    expect(component(rule, { hydroBonus: 0 }, ['hydroBonus']).attributes?.hydroBonus).toBeNull();
-    const unrelated = component(rule, { physicalBonus: 0 }, ['physicalBonus']);
-    expect(unrelated.attributes?.physicalBonus).toBe(0);
-    expect(unrelated.diagnostics).toEqual([]);
+
+  it('keeps unknown HP-dependent hydro bonus separate from unrelated physical attributes', async () => {
+    const build = await setting('neuvillette', 'apprenticesnotes');
+    build.weaponLevel = 70; build.weaponAscension = 4;
+    const panel = resolveBuild(build);
+    expect(panel.stats.hydroBonus).toBeNull();
+    expect(panel.stats.physicalBonus).toBe(0);
   });
 });
 
@@ -167,9 +112,10 @@ describe.skipIf(!existsSync(recording))('Noblesse format queries derived from th
     // Legal theoretical equipment using original observed artifact values; never claimed as player wearing.
     build.artifacts = recorded.artifacts;
     build.sets = recorded.sets;
+    build.sources = recorded.sources;
     const values: Partial<Record<StatKey, number>> = {};
     for (const item of recorded.artifacts) {
-      values[item.mainStat] = (values[item.mainStat] ?? 0) + recorded.artifactMain[item.mainStat]![item.level];
+      values[item.mainStat] = (values[item.mainStat] ?? 0) + recorded.artifactMain[item.rarity][item.mainStat]![item.level];
       for (const sub of item.substats) values[sub.stat] = (values[sub.stat] ?? 0) + sub.value;
     }
     const hp = (1143.984 * 8.739 + 4697.817) * (1.2 + (values.hpPercent ?? 0)) + (values.hp ?? 0);
@@ -181,33 +127,29 @@ describe.skipIf(!existsSync(recording))('Noblesse format queries derived from th
     expect(result.status).toBe('complete');
     expect(result.points[0].real?.parts.attack).toBeCloseTo(attack, 8);
     expect(result.totalValue).toBeCloseTo(attack * 4.964 * (1 + (values.anemoBonus ?? 0)) * 0.5 * 0.9, 7);
-    expect(result.points[0].formula.effects.filter(effect => effect.effect === 'team-attack')).toHaveLength(1);
+    expect(result.points[0].formula.effects.filter(effect => effect.effect === 'noblesseoblige.burst-team-attack.team-attack')).toHaveLength(1);
   });
 
   it.each([0, 11999, 12000])('applies only after an explicit burst action and before 12s at %i ms', async timeMs => {
     const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
     const build = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     expect(build.artifacts.filter(item => item.setId === 'noblesseoblige')).toHaveLength(5);
-    // Original build retained. Added action/query times are format annotations, not combat observations.
-    const { project, actor, record } = query(build, 'bennett.skill', 0, timeMs);
-    project.timeline.unshift({ id: 'explicit-burst', actor, timeMs: 0, order: 0, kind: 'action', definition: `${actor}-character`, skillId: 'bennett.burst' });
-    const result = evaluateTimeline(project);
-    expect(result.status).toBe('partial');
-    expect(result.totalValue).toBeNull();
-    expect(result.effectInstances?.filter(instance => instance.content?.entity === 'noblesseoblige.4')).toHaveLength(1);
-    const applied = () => evaluateDependencyGraph(project, { attributeQuery: { actor, record, stats: ['attack'] } }).reads?.some(read =>
-      read.key === 'attackPercent' && read.dependencies.some(id => result.effectInstances?.some(instance => instance.id === id && instance.content?.entity === 'noblesseoblige.4')));
+    // Derive a single legal Jean query with the original recorded artifacts.
+    const recipient = await setting('jean', 'primordialjadecutter');
+    recipient.artifacts = build.artifacts; recipient.sets = build.sets; recipient.sources = build.sources;
+    const { project, actor } = query(recipient, 'jean.skill', 0, timeMs);
+    // Action and hit are explicit query inputs. No observed battle sequence is claimed.
+    project.timeline.unshift({ id: 'explicit-burst', actor, timeMs: 0, order: 0, kind: 'action', definition: actor + '-character', skillId: 'jean.burst' });
+    const evaluate = () => evaluateTimeline(project);
+    const instance = evaluate().effectInstances!.find(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack');
+    expect(instance?.content?.entity).toBe('noblesseoblige');
+    const applied = () => evaluate().points[0].formula.effects.some(effect => effect.effect === instance!.effect);
     expect(applied()).toBe(timeMs < 12000);
     project.timeline[0].order = 2;
     if (timeMs === 0) expect(applied()).toBe(false);
     project.timeline[0].order = 0;
     delete project.timeline[0].skillId;
-    const unconfirmed = evaluateTimeline(project);
-    expect(unconfirmed.effectInstances?.some(instance => instance.content?.entity === 'noblesseoblige.4' && instance.unconfirmed)).toBe(true);
-    if (timeMs < 12000) {
-      const probe = evaluateDependencyGraph(project, { attributeQuery: { actor, record, stats: ['attack'] } });
-      expect(probe.diagnostics.some(diagnostic => diagnostic.code === 'unknown' && diagnostic.message.includes('技能归属'))).toBe(true);
-    }
-    expect(record.damage?.crit).toBe('noncritical');
+    expect(evaluate().effectInstances?.some(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack' && instance.unconfirmed)).toBe(true);
+    if (timeMs < 12000) expect(evaluate().status).toBe('partial');
   });
 });

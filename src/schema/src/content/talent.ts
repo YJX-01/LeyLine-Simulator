@@ -3,6 +3,7 @@ import { idSchema, finiteSchema, supportSchema, contentSourceSchema } from '../c
 import { elements, statSchema } from './stats';
 import { attackTypeSchema } from './effects';
 import { combatRulesSchema } from './combat-rules';
+import { definitionRefSchema } from '../calculation/values';
 export const damageScalingStatSchema = z.enum(['attack', 'hp', 'defense', 'elementalMastery']);
 export type DamageScalingStat = z.infer<typeof damageScalingStatSchema>;
 export const damageHitSchema = z.object({
@@ -18,7 +19,7 @@ export const damageHitSchema = z.object({
   }).strict().optional(),
 }).strict();
 export const parameterSchema = z.object({ id: idSchema, unit: z.enum(['ratio','scalar','seconds','energy','stamina','unknown']), values: z.array(finiteSchema).min(1).max(30) }).strict();
-const talentInputSchema = z.object({
+export const talentInputSchema = z.object({
   id: idSchema, min: finiteSchema.nonnegative(), max: finiteSchema.nonnegative(), integer: z.boolean(), source: contentSourceSchema,
   constellationLimits: z.array(z.object({ rank: z.number().int().min(1).max(6), max: finiteSchema.nonnegative(), source: contentSourceSchema }).strict()).max(6).optional(),
 }).strict().refine(input => input.max >= input.min && (!input.integer || (Number.isInteger(input.min) && Number.isInteger(input.max)))
@@ -42,13 +43,13 @@ export const talentSchema = z.object({ id: idSchema, name: idSchema, description
     if (hit.additionalScaling?.some(term => term.count && !inputIds.has(term.count))) context.addIssue({ code: 'custom', message: '命中引用了未声明的技能输入。', path: ['hits', index] });
   }
 });
-export const passiveSchema = z.object({ id: idSchema, name: idSchema, description: z.string().max(40000), unlockAscension:z.number().int().min(0).max(6).nullable(), support:supportSchema, combatRules: combatRulesSchema.optional() }).strict();
+export const passiveSchema = z.object({ id: idSchema, name: idSchema, description: z.string().max(40000), unlockAscension:z.number().int().min(0).max(6).nullable(), support:supportSchema, combatRules: combatRulesSchema.optional(), ruleIds: z.array(definitionRefSchema).max(1000).optional() }).strict();
 export const constellationSchema = z.object({ rank:z.number().int().min(1).max(6), name:idSchema, description:z.string().max(40000),
-  talentBonuses:z.array(z.object({category:z.enum(['normal','skill','burst']),levels:z.literal(3)}).strict()).max(3), support:supportSchema, combatRules: combatRulesSchema.optional() }).strict();
+  talentBonuses:z.array(z.object({category:z.enum(['normal','skill','burst']),levels:z.literal(3)}).strict()).max(3), support:supportSchema, combatRules: combatRulesSchema.optional(), ruleIds: z.array(definitionRefSchema).max(1000).optional() }).strict();
 export type Talent = z.infer<typeof talentSchema>;
 
 /** Missing values stay unknown; supplied values must belong to this talent's source-declared range. */
-export function talentInputIssues(talent: Talent, values: Record<string, number | null> = {}, constellation = 0): string[] {
+export function talentInputIssues(talent: Pick<Talent, 'inputs'>, values: Record<string, number | null> = {}, constellation = 0): string[] {
   return Object.entries(values).flatMap(([id, value]) => {
     const input = talent.inputs?.find(input => input.id === id);
     if (!input) return [`技能未声明此命中输入：${id}`];

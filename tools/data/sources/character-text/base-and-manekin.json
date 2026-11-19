@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "extraction": "Lossless selected raw rows and referenced Chinese text entries, not full original files. TextMapCHS overrides Medium for overlapping keys. Skill hashes are matched explicitly across the two pinned sources; original bytes remain in the local capture. Numeric levels come only from the adopted fixed ProudSkill table.",
+  "extraction": "Lossless selected raw rows and referenced Chinese text entries, not full original files. TextMapCHS overrides Medium for overlapping keys. Skill hashes are matched explicitly across the two pinned sources; original bytes remain in the local capture. Numeric levels come only from the adopted fixed ProudSkill table. Missing base-traveler normal-attack labels are taken from the same pinned LunaGC TextMapCHS; other previously adopted text remains unchanged.",
   "sources": [
     {
       "id": "depots",
@@ -30,6 +30,12 @@
       "id": "text",
       "repository": "Dimbreath/AnimeGameData",
       "commit": "433284d22ef1a704e9d49ae22fb96cf7a245828e",
+      "file": "TextMap/TextMapCHS.json"
+    },
+    {
+      "id": "lunaText",
+      "repository": "Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
       "file": "TextMap/TextMapCHS.json"
     }
   ],
@@ -340,76 +346,6 @@
         0
       ],
       "talentStarName": "Talent_LittleIdolBoy"
-    },
-    "11801": {
-      "AFKDIDBKNKP": 0,
-      "attackModeSkill": 0,
-      "DAEIJGCFNLL": [
-        {
-          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
-          "HNLGOIDBHAN": [],
-          "proudSkillGroupId": 0
-        },
-        {
-          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
-          "HNLGOIDBHAN": [],
-          "proudSkillGroupId": 0
-        }
-      ],
-      "energySkill": 0,
-      "extraAbilities": [
-        "",
-        "",
-        ""
-      ],
-      "id": 11801,
-      "inherentProudSkillOpens": [
-        {
-          "needAvatarPromoteLevel": 1,
-          "proudSkillGroupId": 11721
-        },
-        {
-          "needAvatarPromoteLevel": 4,
-          "proudSkillGroupId": 11722
-        },
-        {
-          "needAvatarPromoteLevel": 0,
-          "proudSkillGroupId": 0
-        },
-        {
-          "needAvatarPromoteLevel": 0,
-          "proudSkillGroupId": 0
-        },
-        {
-          "needAvatarPromoteLevel": 0,
-          "proudSkillGroupId": 11725
-        }
-      ],
-      "leaderTalent": 0,
-      "LGHPDOGMFAG": "None",
-      "ODEAJEINMPN": 0,
-      "PKACHEKBGPP": 0,
-      "skillDepotAbilityGroup": "",
-      "skills": [
-        11171,
-        0,
-        0,
-        0
-      ],
-      "subSkills": [
-        10001,
-        11173,
-        5117010
-      ],
-      "talents": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "talentStarName": "Talent_LittleIdolGirl"
     },
     "11702": {
       "AFKDIDBKNKP": 0,
@@ -900,6 +836,76 @@
         0
       ],
       "talentStarName": "Talent_LittleIdolBoy"
+    },
+    "11801": {
+      "AFKDIDBKNKP": 0,
+      "attackModeSkill": 0,
+      "DAEIJGCFNLL": [
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        },
+        {
+          "DOJJHGDGLFF": "SPECIAL_PROUD_SKILL_OPEN_CONDITION_TYPE_NONE",
+          "HNLGOIDBHAN": [],
+          "proudSkillGroupId": 0
+        }
+      ],
+      "energySkill": 0,
+      "extraAbilities": [
+        "",
+        "",
+        ""
+      ],
+      "id": 11801,
+      "inherentProudSkillOpens": [
+        {
+          "needAvatarPromoteLevel": 1,
+          "proudSkillGroupId": 11721
+        },
+        {
+          "needAvatarPromoteLevel": 4,
+          "proudSkillGroupId": 11722
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 0
+        },
+        {
+          "needAvatarPromoteLevel": 0,
+          "proudSkillGroupId": 11725
+        }
+      ],
+      "leaderTalent": 0,
+      "LGHPDOGMFAG": "None",
+      "ODEAJEINMPN": 0,
+      "PKACHEKBGPP": 0,
+      "skillDepotAbilityGroup": "",
+      "skills": [
+        11171,
+        0,
+        0,
+        0
+      ],
+      "subSkills": [
+        10001,
+        11173,
+        5117010
+      ],
+      "talents": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "talentStarName": "Talent_LittleIdolGirl"
     },
     "11802": {
       "AFKDIDBKNKP": 0,
@@ -1878,6 +1884,7 @@
     "67803476": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
     "81042671": "冷却时间|{param3:F1}秒",
     "84716967": "四段伤害|{param4:F1P}",
+    "103667430": "一段伤害|{param1:F1P}",
     "106407962": "重击体力消耗|{param7:F1}点",
     "123752902": "元素属性转化持续时间|{param2:F1}秒",
     "125675950": "重击伤害|{param5:F1P}+{param6:F1P}",
@@ -1934,6 +1941,7 @@
     "598887886": "技能伤害|{param1:F1P}",
     "600486383": "三段伤害|{param3:F1P}*2",
     "607128834": "重击伤害|{param6:P}+{param7:P}",
+    "607873546": "重击伤害|{param6:F1P}+{param7:F1P}",
     "625108471": "下坠期间伤害|{param8:F1P}",
     "631236031": "禁限区域持续时间|{param3:F1}秒",
     "648807519": "重击体力消耗|{param8:F1}点",
@@ -1945,6 +1953,7 @@
     "708797471": "重击体力消耗|{param8:F1}点",
     "735787102": "禁限区域踏入伤害|{param2:F1P}",
     "742353141": "禁入限区",
+    "746904173": "下坠期间伤害|{param9:F1P}",
     "750458343": "三段伤害|{param3:F1P}",
     "753577052": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
     "774336822": "元素能量|{param5:I}",
@@ -1954,6 +1963,7 @@
     "778179932": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
     "789988659": "奇偶施放元素战技与元素爆发时，会从已有的装扮搭配方案中，随机选择一套进行切换。",
     "796369398": "技能伤害|{param1:F1P}",
+    "846647223": "四段伤害|{param4:F1P}",
     "856049839": "禁限区域持续时间|{param3:F1}秒",
     "880108951": "三段伤害|{param3:F1P}",
     "898313710": "五段伤害|{param5:P}",
@@ -2043,6 +2053,7 @@
     "1588687887": "三段伤害|{param3:F1P}*2",
     "1596679182": "元素属性转化持续时间|{param2:F1}秒",
     "1610843220": "低空/高空坠地冲击伤害|{param10:P}/{param11:P}",
+    "1614345078": "一段伤害|{param1:F1P}",
     "1620291637": "下坠期间伤害|{param9:F1P}",
     "1640371262": "禁限区域踏入伤害|{param2:F1P}",
     "1641603294": "五段伤害|{param5:F1P}",
@@ -2143,6 +2154,7 @@
     "2606959895": "冷却时间|{param4:F1}秒",
     "2635814031": "四段伤害|{param4:F1P}",
     "2642414694": "禁限区域生成伤害|{param1:F1P}",
+    "2651732541": "下坠期间伤害|{param9:F1P}",
     "2655999205": "禁入限区",
     "2673074191": "禁限区域持续时间|{param3:F1}秒",
     "2693166223": "三段伤害|{param3:F1P}",
@@ -2228,6 +2240,7 @@
     "3595921694": "二段伤害|{param2:F1P}",
     "3622619286": "二段伤害|{param2:F1P}",
     "3637038239": "重击体力消耗|{param8:F1}点",
+    "3672756946": "重击伤害|{param6:F1P}+{param7:F1P}",
     "3677380694": "一段伤害|{param1:F1P}",
     "3698762998": "一段伤害|{param1:P}",
     "3705595914": "重击伤害|{param6:F1P}+{param7:P}",

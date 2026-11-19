@@ -62,7 +62,9 @@ function checkImport(from, specifier, runtime) {
     if (target.startsWith('archive/')) fail(from, `active code cannot import archived implementation: ${specifier}`);
     const destination = owner(target);
     if (source && destination && source !== destination) fail(from, `use ${destination.name}'s public exports instead of a relative cross-workspace import`);
-    if (source && source.name !== '@leyline/web' && !test && !target.startsWith(`${source.directory}/src/`) && !(source.name === '@leyline/game-data' && target.startsWith(`${source.directory}/generated/`) && target.endsWith('.json'))) {
+    const generatedGameData = source?.name === '@leyline/game-data' && target.startsWith(`${source.directory}/generated/`)
+      && (target.endsWith('.json') || target === `${source.directory}/generated/chunk-loaders.ts`);
+    if (source && source.name !== '@leyline/web' && !test && !target.startsWith(`${source.directory}/src/`) && !generatedGameData) {
       fail(from, `shared production code cannot import repository adapters or fixtures: ${specifier}`);
     }
     const generatedJson = target.startsWith('src/web/generated/') && target.endsWith('.json');

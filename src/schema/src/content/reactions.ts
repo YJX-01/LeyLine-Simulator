@@ -13,14 +13,8 @@ export type ReactionBonusKey = typeof reactionBonusKeys[number];
 
 const positive = finiteSchema.positive();
 export const reactionRulesSchema = z.object({
-  schemaVersion: z.literal(1), id: z.literal('standard-hit-reactions'), revision: idSchema,
+  schemaVersion: z.literal(2), id: z.literal('standard-hit-reactions'), revision: idSchema, algorithmRevision: z.literal('1'),
   sources: z.object({ levels: contentSourceSchema, amplifying: contentSourceSchema, additive: contentSourceSchema }).strict(),
   levelMultipliers: z.array(positive.nullable()).length(101),
-  amplifying: z.object({
-    emNumerator: positive, emDenominator: positive,
-    vaporize: z.object({ hydro: positive, pyro: positive }).strict(),
-    melt: z.object({ pyro: positive, cryo: positive }).strict(),
-  }).strict(),
-  additive: z.object({ emNumerator: positive, emDenominator: positive, aggravate: positive, spread: positive }).strict(),
 }).strict().refine(rules => rules.levelMultipliers[0] === null, '反应等级0必须明确不可用。');
 export type ReactionRules = z.infer<typeof reactionRulesSchema>;

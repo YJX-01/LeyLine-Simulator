@@ -1,101 +1,345 @@
 {
   "id": "noblesseoblige",
   "name": "昔日宗室之仪",
-  "effects": [
-    {
-      "pieces": 2,
-      "modifiers": [],
-      "support": {
-        "supported": true,
-        "reason": "已核验爆发增伤及明确爆发施放后的12秒全队攻击加成；同组刷新不叠加，动作不生成命中。"
-      },
-      "combatRules": [
+  "slots": [
+    "flower",
+    "plume",
+    "sands",
+    "goblet",
+    "circlet"
+  ],
+  "rarities": [
+    4,
+    5
+  ],
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
         {
-          "id": "burst-bonus",
-          "revision": "1",
-          "source": {
-            "repository": "theBowja/genshin-db",
-            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-            "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json#effect2Pc"
+          "id": "genshin-db.noblesseoblige.burst-bonus",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json#effect2Pc"
+        },
+        {
+          "id": "genshin-db.noblesseoblige.burst-team-attack",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json#effect4Pc"
+        },
+        {
+          "id": "content.set.noblesseoblige",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json"
+        }
+      ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "noblesseoblige.burst-bonus",
+            "revision": "1"
           },
-          "nodes": [
-            {
-              "id": "bonus",
-              "op": "constant",
-              "quantity": {
-                "value": 0.2,
-                "unit": "scalar"
-              }
-            }
-          ],
-          "effects": [
-            {
-              "id": "bonus",
-              "startMs": 0,
-              "endMs": 3600000,
-              "permanent": true,
-              "value": "bonus",
-              "attribute": "damageBonus",
+          "template": {
+            "id": "constant-bonus",
+            "revision": "1",
+            "value": {
+              "kind": "quantity",
               "unit": "scalar",
-              "appliesTo": {
-                "category": "burst"
-              }
+              "value": 0.2
+            },
+            "output": "bonus"
+          },
+          "sources": [
+            "genshin-db.noblesseoblige.burst-bonus"
+          ]
+        },
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "noblesseoblige.burst-team-attack",
+            "revision": "1"
+          },
+          "template": {
+            "id": "constant-bonus",
+            "revision": "1",
+            "value": {
+              "kind": "quantity",
+              "unit": "scalar",
+              "value": 0.2
+            },
+            "output": "bonus"
+          },
+          "sources": [
+            "genshin-db.noblesseoblige.burst-team-attack"
+          ]
+        }
+      ],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "noblesseoblige.burst-bonus.bonus",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.noblesseoblige.burst-bonus"
+          ],
+          "activation": {
+            "set": {
+              "id": "noblesseoblige",
+              "pieces": 2
+            }
+          },
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "formula",
+            "formula": {
+              "namespace": "builtin",
+              "id": "noblesseoblige.burst-bonus",
+              "revision": "1"
+            },
+            "inputs": {},
+            "output": "bonus"
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.damageBonus",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          },
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "noblesseoblige.burst-bonus.bonus",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "noblesseoblige.burst-team-attack.team-attack",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.noblesseoblige.burst-team-attack"
+          ],
+          "activation": {
+            "set": {
+              "id": "noblesseoblige",
+              "pieces": 4
+            }
+          },
+          "recipient": {
+            "role": "team",
+            "excludeOwner": false
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "categories": [
+                "burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "value": {
+            "kind": "formula",
+            "formula": {
+              "namespace": "builtin",
+              "id": "noblesseoblige.burst-team-attack",
+              "revision": "1"
+            },
+            "inputs": {},
+            "output": "bonus"
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.attackPercent",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "noblesseoblige-4pc",
+            "scope": "recipient",
+            "policy": "replace",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
+        }
+      ],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noblesseoblige.2",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noblesseoblige",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 2
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+          "sources": [
+            "content.set.noblesseoblige"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "noblesseoblige.burst-bonus.bonus",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noblesseoblige.4",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noblesseoblige",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment",
+            "pieces": 4
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+          "sources": [
+            "content.set.noblesseoblige"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "noblesseoblige.burst-team-attack.team-attack",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
             }
           ]
         }
       ]
     },
+    "ruleIds": []
+  },
+  "schemaVersion": 3,
+  "kind": "artifact-set-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.set.noblesseoblige"
+  ],
+  "rarity": 5,
+  "effects": [
+    {
+      "pieces": 2,
+      "ruleIds": [
+        {
+          "namespace": "builtin",
+          "id": "noblesseoblige.burst-bonus.bonus",
+          "revision": "1"
+        }
+      ],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.noblesseoblige.2",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+        }
+      ]
+    },
     {
       "pieces": 4,
-      "modifiers": [],
-      "support": {
-        "supported": true,
-        "reason": "已核验爆发增伤及明确爆发施放后的12秒全队攻击加成；同组刷新不叠加，动作不生成命中。"
-      },
-      "combatRules": [
+      "ruleIds": [
         {
-          "id": "burst-team-attack",
-          "revision": "1",
-          "source": {
-            "repository": "theBowja/genshin-db",
-            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-            "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json#effect4Pc"
-          },
-          "nodes": [
-            {
-              "id": "bonus",
-              "op": "constant",
-              "quantity": {
-                "value": 0.2,
-                "unit": "scalar"
-              }
-            }
-          ],
-          "effects": [
-            {
-              "id": "team-attack",
-              "startMs": 0,
-              "endMs": 12000,
-              "value": "bonus",
-              "attribute": "attackPercent",
-              "unit": "scalar",
-              "recipient": "team",
-              "trigger": {
-                "kind": "action",
-                "category": "burst"
-              },
-              "group": "noblesseoblige-4pc",
-              "policy": "replace"
-            }
-          ]
+          "namespace": "builtin",
+          "id": "noblesseoblige.burst-team-attack.team-attack",
+          "revision": "1"
+        }
+      ],
+      "coverageRefs": [
+        {
+          "namespace": "builtin",
+          "id": "coverage.noblesseoblige.4",
+          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
         }
       ]
     }
-  ],
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/ChineseSimplified/artifacts/noblesseoblige.json"
-  },
-  "rarity": 5
+  ]
 }

@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 1,
+  "method": "Explicit source-derived output scope, checked independently against fixed parameters in the new runtime. Catalog presence and previous support flags are not completion evidence.",
+  "hits": [
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param3",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param4",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param5",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param6",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param7",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param9",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param10",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "aether",
+      "skillId": "aether.normal",
+      "hitId": "aether.normal.param11",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param3",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param4",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param5",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param6",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param7",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param9",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param10",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "lumine",
+      "skillId": "lumine.normal",
+      "hitId": "lumine.normal.param11",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param3",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param4",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param5",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param6",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param8",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param9",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.normal",
+      "hitId": "jean.normal.param10",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.skill",
+      "hitId": "jean.skill.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.burst",
+      "hitId": "jean.burst.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "jean",
+      "skillId": "jean.burst",
+      "hitId": "jean.burst.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param3",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param4",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param5",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param6",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param7",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param9",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param10",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.normal",
+      "hitId": "kaeya.normal.param11",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.skill",
+      "hitId": "kaeya.skill.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "kaeya",
+      "skillId": "kaeya.burst",
+      "hitId": "kaeya.burst.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param3",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param4",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param5",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param6",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param7",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param8",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param9",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param11",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param12",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.normal",
+      "hitId": "xingqiu.normal.param13",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.skill",
+      "hitId": "xingqiu.skill.param1",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    },
+    {
+      "characterId": "xingqiu",
+      "skillId": "xingqiu.skill",
+      "hitId": "xingqiu.skill.param2",
+      "maxConstellation": 0,
+      "reason": "逐项保留原始参数、元素与类别；显式单输出范围。零命下相关固有天赋的直接增伤已建模，回复、体力、能量及自动时序不计作伤害输出。"
+    }
+  ],
+  "weapons": [
+    {
+      "id": "dullblade",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/dullblade.json"
+      },
+      "effectName": null,
+      "r1": null,
+      "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。"
+    },
+    {
+      "id": "silversword",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/silversword.json"
+      },
+      "effectName": null,
+      "r1": null,
+      "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。"
+    },
+    {
+      "id": "favoniussword",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/favoniussword.json"
+      },
+      "effectName": "顺风而行",
+      "r1": {
+        "description": "攻击造成暴击时，有60%的几率产生少量元素微粒，能为角色恢复6点元素能量。该效果每12秒只能触发一次。",
+        "values": [
+          "60%",
+          "12"
+        ]
+      },
+      "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。"
+    },
+    {
+      "id": "sacrificialsword",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/sacrificialsword.json"
+      },
+      "effectName": "气定神闲",
+      "r1": {
+        "description": "元素战技造成伤害时，有40%的概率重置该技能的冷却时间，该效果每30秒只能触发一次。",
+        "values": [
+          "40%",
+          "30"
+        ]
+      },
+      "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。"
+    },
+    {
+      "id": "beyondthechrysalis",
+      "source": {
+        "repository": "theBowja/genshin-db",
+        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+        "path": "src/data/ChineseSimplified/weapons/beyondthechrysalis.json"
+      },
+      "effectName": "破茧的自由舞",
+      "r1": {
+        "description": "装备者每次施放元素战技或元素爆发时，将按照以下顺序，依次获得以下三种效果中的一种：\n忠忱之风：装备者的暴击伤害提升56%，持续10秒；\n叛弃之风：装备者造成的星扩散反应伤害提升36%，持续10秒；\n丰获之风：为装备者恢复5点元素能量，每4秒至多通过这种方式恢复5点元素能量。\n装备者退场时，将移除上述效果，并重置其顺序。",
+        "values": [
+          "56%",
+          "36%",
+          "5",
+          "5"
+        ]
+      },
+      "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。"
+    }
+  ],
+  "catalogSource": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
+  },
+  "rawParameterSource": {
+    "repository": "Rafs-kk/LunaGC-6.6-res",
+    "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+    "path": "ExcelBinOutput/ProudSkillExcelConfigData.json"
+  },
+  "sourceScope": "Normal base-traveler parameters use the pinned ProudSkill groups in character-text/base-and-manekin.json; other reviewed parameters use src/data/stats/talents.json and the matching ChineseSimplified talent/constellation records. Certificates cover C0 explicit outputs only, with fixed-source independent arithmetic checks."
+}

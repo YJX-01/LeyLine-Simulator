@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "character": {
+    "namespace": "builtin",
+    "id": "vesna",
+    "revision": "4"
+  },
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "talents": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/vesna.json",
+    "constellations": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/constellations/vesna.json"
+  },
+  "scope": "Source-derived state transitions for explicitly supplied events. No invented rotation, automatic timing, player recording or observed damage is provided.",
+  "states": {
+    "vesna.stance": {
+      "durationParameter": "vesna.skill.param12",
+      "unit": "seconds",
+      "onExpiration": [
+        "vesna.swordQiSixths",
+        "vesna.specialStage",
+        "vesna.highestCasts"
+      ],
+      "doesNotClear": [
+        "vesna.disciplineStacks",
+        "vesna.c6Window"
+      ]
+    },
+    "vesna.disciplineStacks": {
+      "capacity": 6,
+      "individualDurationMs": 20000,
+      "gainAfter": [
+        "burst",
+        "special.1",
+        "special.2",
+        "special.3"
+      ],
+      "clearAfter": [
+        "skill-enter",
+        "leave-field"
+      ],
+      "constellation2Entry": "Maximum stacks, only when ascension passive 1 is unlocked.",
+      "overflow": "The replacement order at full capacity is not established by the adopted primary descriptions. Current count remains six; subsequent expiry is unknown until all possible stacks have expired."
+    },
+    "vesna.c6Window": {
+      "durationMs": 5000,
+      "gainAfter": "special.3",
+      "persistsPastStanceEnd": true
+    },
+    "vesna.specialStage": {
+      "initial": 1,
+      "maximum": 3,
+      "highestCastLimit": 3,
+      "constellation1HighestCastLimit": 4,
+      "constellation1FirstHighestCost": 0
+    }
+  },
+  "resourceResearch": {
+    "source": "https://meropide.cn/chs/characters/%E8%96%87%E6%96%AF%E7%BA%B3/theorycraft/",
+    "retrievedAt": "2026-11-16T17:34:23Z",
+    "adoptedVersion": "7.2",
+    "resourceUnit": "One count equals one sixth of a sword-qi layer.",
+    "perEmission": 1,
+    "hitRequired": false,
+    "normalEmissions": [
+      1,
+      1,
+      2,
+      1,
+      1,
+      3
+    ],
+    "chargedEmissions": 2,
+    "constellation6EmissionsInStance": 3,
+    "entryGrant": 12,
+    "burstGrant": 6,
+    "implementation": "Only explicit pinion-emitted events grant resource. Attack timings and emission scheduling are unavailable. Capacity is unknown; results above the proved two-layer lower bound remain unknown. Non-free specials require an explicit positive swordQiCostSixths fact."
+  },
+  "unavailable": [
+    "Action durations, hit offsets, cancellation frames and emission offsets.",
+    "Sword-qi maximum capacity and exact non-free special cost.",
+    "Whether C6 special grants discipline, and C6 reuse semantics inside its window.",
+    "Team Radiance priority and automatic reaction conversion, reserved for the shared stellar-system work.",
+    "Energy and cooldown feasibility, derived actions and complete event recording."
+  ],
+  "checks": [
+    "tests/unit/engine/calculation/state-machine.test.ts",
+    "tools/lib/numeric-audit.mjs"
+  ],
+  "evidence": "catalog and explicit-condition software checks; not observed"
+}

@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "xinyan",
   "revision": "4",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "辛焱",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000044,
     "region": "璃月"
-  },
-  "attributes": {
-    "base": {
-      "hp": 939.1447,
-      "attack": 20.83536,
-      "defense": 66.95325,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "attackPercent",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,703 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.xinyan.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#xinyan"
+        },
+        {
+          "id": "content.xinyan.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#xinyan/combat1"
+        },
+        {
+          "id": "content.xinyan.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#xinyan/combat2"
+        },
+        {
+          "id": "content.xinyan.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#xinyan/combat3"
+        },
+        {
+          "id": "content.xinyan.review-source-5",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/xinyan.json"
+        },
+        {
+          "id": "content.xinyan.review-source-6",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/xinyan.json"
+        },
+        {
+          "id": "content.xinyan.review-source-7",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "id": "content.xinyan.review-source-8",
+          "kind": "repo",
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/pyro/xinyan.md"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param3",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param4",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param5",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param6",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param9",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param10",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.normal.param11",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.normal",
+            "hitId": "xinyan.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.skill.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.skill",
+            "hitId": "xinyan.skill.param1",
+            "maxConstellation": 3
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至3命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.xinyan.skill.parameters",
+            "kqm.ordinary",
+            "content.xinyan.review-source-5",
+            "content.xinyan.review-source-6",
+            "content.xinyan.review-source-7",
+            "content.xinyan.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "仅热情拂扫初始挥舞火伤，动态攻击缩放；护盾等级和存在性不改变此挥舞倍率，不计算后续脉冲。"
+            },
+            {
+              "id": "xinyan.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "减少护盾所需命中敌人数，不改变初始挥舞火伤。"
+            },
+            {
+              "id": "xinyan.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "护盾保护下物理伤害提高，不作用本次火伤。"
+            },
+            {
+              "id": "xinyan.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "防御食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "暴击后的普攻重击攻速不改变战技挥舞伤害。"
+            },
+            {
+              "id": "constellation:2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "爆发物理暴击与生成三级盾不修饰战技初始挥舞；脉冲存在性不在本证明内。"
+            },
+            {
+              "id": "constellation:3",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "战技加3级，使用共同talentLevelBonus和原参数表。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.skill.param8",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.skill",
+            "hitId": "xinyan.skill.param8",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.skill.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.burst.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.burst",
+            "hitId": "xinyan.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.burst.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "xinyan.burst",
+            "hitId": "xinyan.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.xinyan.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.xinyan.context",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "xinyan",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.xinyan.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.xinyan.context",
+        "revision": "4"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 939.1447,
+      "attack": 20.83536,
+      "defense": 66.95325,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "attackPercent",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "xinyan.normal",
@@ -397,6 +1082,48 @@
       "description": "普通攻击\n进行至多四段的连续挥砍。\n\n重击\n持续消耗体力，旋转大剑攻击周围的敌人。\n停止旋转时，会进行一次格外有力的挥砍。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:F1P}"
+        },
+        {
+          "label": "重击循环伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击终结伤害",
+          "template": "{param6:P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "每秒{param7:F1}点"
+        },
+        {
+          "label": "最大持续时间",
+          "template": "{param8:F1}秒"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param9:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param10:P}/{param11:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -630,108 +1357,506 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:F1P}"
-        },
-        {
-          "label": "重击循环伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击终结伤害",
-          "template": "{param6:P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "每秒{param7:F1}点"
-        },
-        {
-          "label": "最大持续时间",
-          "template": "{param8:F1}秒"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param9:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param10:P}/{param11:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "xinyan.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "xinyan.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "xinyan.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param3",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "xinyan.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param4",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "xinyan.normal.param5",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param5",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "xinyan.normal.param6",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param6",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param9",
+          "id": "xinyan.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param9",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "xinyan.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param10",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "xinyan.normal.param11",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.normal.param11",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param11"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.xinyan.normal.parameters"
+      ]
     },
     {
       "id": "xinyan.skill",
@@ -740,6 +1865,36 @@
       "flavorText": "辛焱坚称这些火花是演奏技术到极致时的表现，是物理现象，和神之眼无关。",
       "category": "skill",
       "element": "pyro",
+      "details": [
+        {
+          "label": "挥舞伤害",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "一级护盾吸收量",
+          "template": "{param2:F1P}防御力+{param3:I}"
+        },
+        {
+          "label": "二级护盾吸收量",
+          "template": "{param4:F1P}防御力+{param5:I}"
+        },
+        {
+          "label": "三级护盾吸收量",
+          "template": "{param6:F1P}防御力+{param7:I}"
+        },
+        {
+          "label": "持续伤害",
+          "template": "{param8:F1P}"
+        },
+        {
+          "label": "护盾持续时间",
+          "template": "{param9:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param10:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -952,52 +2107,598 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "挥舞伤害",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "一级护盾吸收量",
-          "template": "{param2:F1P}防御力+{param3:I}"
-        },
-        {
-          "label": "二级护盾吸收量",
-          "template": "{param4:F1P}防御力+{param5:I}"
-        },
-        {
-          "label": "三级护盾吸收量",
-          "template": "{param6:F1P}防御力+{param7:I}"
-        },
-        {
-          "label": "持续伤害",
-          "template": "{param8:F1P}"
-        },
-        {
-          "label": "护盾持续时间",
-          "template": "{param9:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param10:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "xinyan.skill.param1",
+          "element": "pyro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.skill",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.skill.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "xinyan.skill.param1.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "attack-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.attack",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "xinyan.skill",
+                        "parameterId": "param1",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "pyro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "melt",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.pyroBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.pyro",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "pyro-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none",
+                            "melt",
+                            "vaporize"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.xinyan.skill.param1",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.skill.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param8",
+          "id": "xinyan.skill.param8",
+          "element": "pyro",
           "category": "skill",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.skill",
+                "parameterId": "param8",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.skill.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.skill.param8",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param8"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.xinyan.skill.parameters"
+      ]
     },
     {
       "id": "xinyan.burst",
@@ -1006,6 +2707,28 @@
       "flavorText": "曾经辛焱每次演出结束都会来这么一出。后来不这么弄了倒不是因为危险。要是被喊了「安可」的话，她弄不出更炸裂的闭幕了。",
       "category": "burst",
       "element": "pyro",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param1:P}"
+        },
+        {
+          "label": "火元素持续伤害",
+          "template": "{param2:P}"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param5:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param3:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param4:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1113,45 +2836,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param1:P}"
-        },
-        {
-          "label": "火元素持续伤害",
-          "template": "{param2:P}"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param5:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param3:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param4:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "xinyan.burst.param1",
+          "element": "physical",
           "category": "burst",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.burst.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "xinyan.burst.param2",
+          "element": "pyro",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "xinyan.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.xinyan.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.xinyan.burst.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.xinyan.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1160,30 +2959,21 @@
       "name": "「没听众也要演奏…」",
       "description": "减少热情拂扫的护盾所需的命中敌人数量：\n·二级护盾·歌头节拍：命中一名敌人；\n·三级护盾·舞遍节拍：命中二名或更多敌人。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "xinyan.passive2",
       "name": "「…这才是摇滚！」",
       "description": "处于热情拂扫的护盾保护下的角色造成的物理伤害提高15%。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "xinyan.passive3",
       "name": "摇滚的食谱",
       "description": "完美烹饪防御类食物时，有12%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1192,20 +2982,14 @@
       "name": "绝命的加速",
       "description": "辛焱造成暴击后的5秒内，普通攻击和重击的攻击速度提升12%。\n该效果每5秒只能触发一次。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "开场即兴段",
       "description": "叛逆刮弦造成的物理伤害暴击率提升100%，并会在施放时形成三级护盾·舞遍节拍。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1217,20 +3001,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "节奏的传染",
       "description": "热情拂扫的挥舞伤害，会使敌人的物理抗性降低15%，持续12秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1242,98 +3020,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "地狱里摇摆",
       "description": "辛焱的重击的体力消耗降低30%；此外，进行重击时，将基于防御力的50%获得攻击力加成。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  },
-  "damageCoverage": [
-    {
-      "id": "xinyan-skill-r3",
-      "revision": "4",
-      "skillId": "xinyan.skill",
-      "hitIndices": [
-        0
-      ],
-      "maxConstellation": 3,
-      "sources": [
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/talents/xinyan.json"
-        },
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/constellations/xinyan.json"
-        },
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json"
-        },
-        {
-          "repository": "KQM-git/TCL",
-          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-          "path": "docs/characters/pyro/xinyan.md"
-        }
-      ],
-      "branches": [
-        {
-          "id": "base",
-          "resolution": "irrelevant",
-          "reason": "仅热情拂扫初始挥舞火伤，动态攻击缩放；护盾等级和存在性不改变此挥舞倍率，不计算后续脉冲。"
-        },
-        {
-          "id": "xinyan.passive1",
-          "resolution": "irrelevant",
-          "reason": "减少护盾所需命中敌人数，不改变初始挥舞火伤。"
-        },
-        {
-          "id": "xinyan.passive2",
-          "resolution": "irrelevant",
-          "reason": "护盾保护下物理伤害提高，不作用本次火伤。"
-        },
-        {
-          "id": "xinyan.passive3",
-          "resolution": "irrelevant",
-          "reason": "防御食物烹饪产出不改变本次伤害。"
-        },
-        {
-          "id": "constellation:1",
-          "resolution": "irrelevant",
-          "reason": "暴击后的普攻重击攻速不改变战技挥舞伤害。"
-        },
-        {
-          "id": "constellation:2",
-          "resolution": "irrelevant",
-          "reason": "爆发物理暴击与生成三级盾不修饰战技初始挥舞；脉冲存在性不在本证明内。"
-        },
-        {
-          "id": "constellation:3",
-          "resolution": "talent-level",
-          "reason": "战技加3级，使用共同talentLevelBonus和原参数表。"
-        }
-      ]
-    }
+  "sources": [
+    "content.xinyan.growth",
+    "content.character-curves"
   ]
 }

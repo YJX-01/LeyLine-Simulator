@@ -10,11 +10,11 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));
-  await page.getByRole('button',{name:'确认导入 458 件五星圣遗物',exact:true}).click();
+  await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
   await page.getByTestId('workspace-nav-characters').click();
   await restoreRecordedNoteSetup(page);
   await expect(page.locator('.character-card')).toHaveCount(55);
-  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-v2'));
+  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
   await page.getByLabel('搜索账号角色',{exact:true}).fill('甘雨');
   await page.getByTestId('workspace-nav-loadouts').click();
   await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
@@ -59,6 +59,6 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   expect(tabs).toHaveLength(6);expect(new Set(tabs.map(tab=>tab.top)).size).toBe(2);expect(tabs.every(tab=>Math.abs(tab.height-40)<.5)).toBe(true);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
   await page.screenshot({path:'artifacts/library-artifacts-mobile-after.png',fullPage:true});
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v2'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v5'))).toBe(baseline);
   expect(errors).toEqual([]);
 });

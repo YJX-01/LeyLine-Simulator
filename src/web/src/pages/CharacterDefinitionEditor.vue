@@ -28,7 +28,11 @@ const selectedSkill = computed(() => skills.value.find(skill => skill.id === ski
 const editKey = computed(() => JSON.stringify([selectedSkill.value?.id ?? '', String(hit.value), String(level.value)]));
 const multiplier = computed(() => store.edits[editKey.value] ?? String(selectedSkill.value?.parameters.find(parameter=>parameter.id===selectedSkill.value?.hits[hit.value]?.parameter)?.values[level.value] ?? ''));
 const previewDefinition=computed(()=>{if(!store.draft)return undefined;try{return prepareCharacterDefinition(store.draft,store.edits);}catch{return store.draft;}});
-function receive(content:string) { open(parseCharacterDefinition(content)); }
+async function receive(content:string) {
+  const value = JSON.parse(content);
+  const registry = value.origin === 'builtin' && typeof value.id === 'string' ? [await getCharacter(value.id)] : [];
+  open(parseCharacterDefinition(content, registry));
+}
 function open(file: CharacterDefinitionFile) {
   if (store.dirty) pending.value = file;
   else { store.open(file); skillId.value = ''; hit.value = 0; level.value = 0;  }
@@ -47,7 +51,7 @@ async function importFile(event: Event) {
   try {
     if (file.size > 8 * 1024 * 1024) throw new Error('角色定义超过 8 MiB。');
     const content = await file.text();
-    if (token === request) receive(content);
+    if (token === request) await receive(content);
   } catch (cause) { if (token === request) error.value = cause instanceof Error ? cause.message : '角色定义读取失败。'; }
   finally { element.value = ''; if (token === request) busy.value = false; }
 }
@@ -59,7 +63,7 @@ async function openFile() {
   try {
     const content = await bridge.openProject();
     if (token !== request) return;
-    if (content !== null) receive(content);
+    if (content !== null) await receive(content);
   } catch (cause) { if (token === request) error.value = cause instanceof Error ? cause.message : '角色定义读取失败。'; }
   finally { if (token === request) busy.value = false; }
 }

@@ -7,7 +7,7 @@ import { talentInputIssues } from '../content/talent';
 import { ruleDefinitionSchema, requiresDependencyDefinition } from './expressions';
 import { combatStateIntervalSchema, validateCombatStates } from './combat-state';
 export const projectSchema = z.object({
-  schemaVersion: z.literal(2), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
+  schemaVersion: z.literal(5), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
   definitions: z.array(ruleDefinitionSchema).max(200),
   candidate: z.object({
     id: idSchema, actors: z.array(z.object({ id: idSchema, name: idSchema.optional(), character: idSchema, weapon: idSchema, inputs: z.record(idSchema, quantitySchema), build: buildSchema.optional(),
@@ -40,6 +40,13 @@ export const projectSchema = z.object({
   const captureActors = new Map(project.candidate.actors.map(actor => [actor.id, actor]));
   const captureRecords = new Map(project.timeline.map(record => [record.id, record]));
   project.timeline.forEach((record, index) => {
+    if (record.damage) {
+      const actor = captureActors.get(record.actor), skill = actor?.build?.character.talents.find(skill => skill.id === record.damage!.skillId);
+      const hit = skill?.hits.find(hit => hit.id === record.damage!.hitId);
+      if (record.kind !== 'damage' || !hit?.outputs.some(output => output.id === record.damage!.outputId)) {
+        context.addIssue({ code: 'custom', message: '伤害必须引用当前角色快照中的明确技能、命中和输出。', path: ['timeline', index, 'damage'] });
+      }
+    }
     if (record.damage?.inputs) {
       const talent = captureActors.get(record.actor)?.build?.character.talents.find(talent => talent.id === record.damage!.skillId);
       const messages = record.kind !== 'damage' || !talent ? ['命中输入必须引用当前队员快照中的技能。'] : talentInputIssues(talent, record.damage.inputs, captureActors.get(record.actor)!.build!.constellation);
@@ -58,7 +65,7 @@ export const projectSchema = z.object({
     const capture = record.damage?.capture;
     if (!capture) return;
     const hit = captureActors.get(record.actor)?.build?.character.talents
-      .find(talent => talent.id === record.damage!.skillId)?.hits[record.damage!.hitIndex];
+      .find(talent => talent.id === record.damage!.skillId)?.hits.find(hit => hit.id === record.damage!.hitId);
     const path = ['timeline', index, 'damage', 'capture'];
     const issue = (message: string) => context.addIssue({ code: 'custom', message, path });
     if (!hit?.snapshot) { issue('此命中未声明属性捕获规则，不能附加捕获引用。'); return; }
@@ -73,23 +80,15 @@ export const projectSchema = z.object({
       issue('捕获来源须在命中之前；同刻依赖必须提供明确顺序。');
     }
   });
-  const occupied = new Set<string>();
   project.candidate.actors.forEach((actor, index) => {
-    if (actor.build) {
-      const accountId = actor.build.inventoryAccountId ?? 'local-real-inventory';
-      actor.build.artifacts.forEach((artifact, artifactIndex) => {
-        const key = JSON.stringify([artifact.inventoryAccountId ?? accountId, artifact.id]);
-        if (occupied.has(key)) context.addIssue({ code: 'custom', message: '同一账号的实物圣遗物不能在队伍中重复占用。', path: ['candidate','actors',index,'build','artifacts',artifactIndex] });
-        occupied.add(key);
-      });
-    }
     const snapshot = actor.accountSnapshot;
     if (!snapshot || actor.build) return;
     const slots = new Set<string>();
+    const ids = new Set<string>();
     snapshot.artifacts.forEach((artifact, artifactIndex) => {
-      const key = JSON.stringify([snapshot.accountId, artifact.id]);
-      if (occupied.has(key) || slots.has(artifact.slot)) context.addIssue({ code: 'custom', message: '实物圣遗物不能重复占用，同一角色每个部位只能装备一件。', path: ['candidate', 'actors', index, 'accountSnapshot', 'artifacts', artifactIndex] });
-      occupied.add(key);
+      const key = artifact.id;
+      if (ids.has(key) || slots.has(artifact.slot)) context.addIssue({ code: 'custom', message: '实物圣遗物不能重复占用，同一角色每个部位只能装备一件。', path: ['candidate', 'actors', index, 'accountSnapshot', 'artifacts', artifactIndex] });
+      ids.add(key);
       slots.add(artifact.slot);
     });
   });

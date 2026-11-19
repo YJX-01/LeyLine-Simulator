@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, defineAsyncComponent } from 'vue';
 import { buildSchema } from '@leyline/schema';
+import { calculationArtifact } from '../domain/build-snapshot';
 import { useAccountStore } from '../stores/account';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { useSavedTeamsStore, type SavedTeam } from '../stores/saved-teams';
@@ -41,13 +42,13 @@ async function add(id: string) {
       const item = account.artifacts.find(entry => entry.id === itemId);
       if (!item?.real) throw new Error('实际装备存在未补全词条的物品，请先处理。');
       if (item.mona?.setIdentityPending) throw new Error('实际装备存在套装身份待核对的物品，不能进入计算。');
-      if (project.candidate.actors.some(actor => actor.build?.artifacts.some(piece => piece.id === item.id && (piece.inventoryAccountId ?? actor.build?.inventoryAccountId) === account.id))) throw new Error('队伍已占用这件实物，请先调整试配装备。');
-      return { ...item.real, inventoryAccountId: account.id };
+      if (project.candidate.actors.some(actor => actor.build?.artifacts.some(piece => piece.id === item.id && piece.inventory?.accountId === account.id))) throw new Error('队伍已占用这件实物，请先调整试配装备。');
+      return calculationArtifact(item.real, account.id);
     });
     const data = await import('@leyline/game-data');
     const sets = await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => data.getArtifactSet(id)));
     if (axis.project !== project || accounts.account !== account) throw new Error('账号或轴已切换，请重新选择。');
-    const build = buildSchema.parse({ ...character.build, artifacts, sets, inventoryAccountId: account.id });
+    const build = buildSchema.parse({ ...character.build, artifacts, sets });
     axis.command(draft => { axis.actorId = addActorFromBuild(draft, build, character.name); });
     picking.value = false;
 

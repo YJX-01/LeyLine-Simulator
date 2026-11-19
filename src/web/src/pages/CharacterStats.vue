@@ -6,12 +6,13 @@ import { getArtifactSet } from '@leyline/game-data';
 import type { AccountCharacter, LocalAccount } from '../domain/account';
 import { useAccountStore } from '../stores/account';
 import { accountStatLabels } from '../domain/account-real';
+import { calculationArtifact } from '../domain/build-snapshot';
 import { formatGameStat } from '../domain/account-presentation';
 import type { StatKey } from '@leyline/schema';
 const props = defineProps<{ character: AccountCharacter; showcase?: boolean; account?: LocalAccount }>();
 const store = useAccountStore();
 const inventory = computed(() => props.account ?? store.account);
-const stats = ref<Partial<Record<StatKey, number>>>({});
+const stats = ref<Partial<Record<StatKey, number | null>>>({});
 const message = ref('');
 const selectedBuild = computed(() => props.showcase ? props.character.showcase?.build : props.character.build);
 const element = computed(() => selectedBuild.value?.character.identity.element ?? 'physical');
@@ -29,7 +30,7 @@ watch(() => JSON.stringify({ character: props.character, showcase:props.showcase
   try {
     const items = Object.values(props.character.equipment).map(id => inventory.value.artifacts.find(item => item.id === id));
     if (!props.showcase && items.some(item => !item?.real || item.mona?.setIdentityPending)) throw new Error('装备词条或套装身份待补全，暂不展示计算面板。');
-    const artifacts = props.showcase ? build.artifacts : items.map(item => item!.real!);
+    const artifacts = props.showcase ? build.artifacts : items.map(item => calculationArtifact(item!.real!, inventory.value.id));
     const sets = props.showcase ? build.sets : await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => getArtifactSet(id)));
     if (revision !== current) return;
     const result = resolveBuild({ ...build, artifacts, sets });

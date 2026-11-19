@@ -23,7 +23,7 @@ test('recorded showcase combinations preserve favorite grades; both set filters 
     await page.getByRole('dialog',{name:'保存组合',exact:true}).getByRole('button',{name:'保存',exact:true}).click();
     await role.getByRole('button',{name:`关闭${name}`,exact:true}).click();
   }
-  const inventory=await page.evaluate(()=>localStorage.getItem('leyline-account-v2'));
+  const inventory=await page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.locator('#workspace-main .library-toolbar').getByRole('button',{name:'筛选',exact:true}).click();
   const artifacts=page.getByRole('dialog',{name:'筛选圣遗物',exact:true});
@@ -68,7 +68,7 @@ test('recorded showcase combinations preserve favorite grades; both set filters 
   await page.screenshot({path:'artifacts/combination-favorites-list.png',fullPage:true});
   await first.click({button:'right'});await page.getByRole('menuitem',{name:'取消收藏',exact:true}).click();
   expect((await readCombinations(page)).find(item=>item.id===firstId)?.favorite).toBe(0);
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v2'))).toBe(inventory);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v5'))).toBe(inventory);
   for(const tab of ['characters','loadouts','artifacts','combinations']){
     await page.getByTestId(`workspace-nav-${tab}`).click();await expect(page.locator('#workspace-main .library-page .library-corner-ornaments i')).toHaveCount(4);
     await page.screenshot({path:`artifacts/library-corners-${tab}.png`,fullPage:true});

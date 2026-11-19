@@ -221,87 +221,270 @@
     155.6,
     186.7
   ],
-  "modifiers": [
-    {
-      "stat": "hpPercent",
-      "values": [
-        0.2,
-        0.25,
-        0.3,
-        0.35,
-        0.4
-      ]
-    }
-  ],
-  "support": {
-    "supported": true,
-    "reason": "已核验R1至R5生命上限提升及动态生命转攻击，复用同一属性依赖图。"
-  },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#primordialjadecutter"
-  },
-  "combatRules": [
-    {
-      "id": "hp-to-attack",
-      "revision": "1",
-      "source": {
-        "repository": "theBowja/genshin-db",
-        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-        "path": "src/data/ChineseSimplified/weapons/primordialjadecutter.json#r1-r5"
-      },
-      "nodes": [
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "effect-v1",
+        "coverage-v1"
+      ],
+      "sources": [
         {
-          "id": "hp",
-          "op": "attribute",
-          "key": "hp",
-          "unit": "hp"
+          "id": "genshin-db.primordialjadecutter.hp-to-attack",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/primordialjadecutter.json#r1-r5"
         },
         {
-          "id": "one-hp",
-          "op": "constant",
-          "quantity": {
-            "value": 1,
-            "unit": "hp"
+          "id": "genshin-db.primordialjadecutter.static",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/primordialjadecutter.json#r1-r5"
+        },
+        {
+          "id": "content.weapon.primordialjadecutter",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#primordialjadecutter"
+        }
+      ],
+      "tables": [],
+      "formulas": [
+        {
+          "schemaVersion": 2,
+          "identity": {
+            "namespace": "builtin",
+            "id": "primordialjadecutter.hp-to-attack",
+            "revision": "1"
+          },
+          "template": {
+            "id": "attribute-conversion",
+            "revision": "1",
+            "stat": "hp",
+            "target": "attack",
+            "attribute": "hp",
+            "rate": "rate",
+            "output": "base"
+          },
+          "sources": [
+            "genshin-db.primordialjadecutter.hp-to-attack"
+          ]
+        }
+      ],
+      "attributes": [],
+      "effects": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "primordialjadecutter.hp-to-attack.attack",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.primordialjadecutter.hp-to-attack"
+          ],
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "formula",
+            "formula": {
+              "namespace": "builtin",
+              "id": "primordialjadecutter.hp-to-attack",
+              "revision": "1"
+            },
+            "inputs": {
+              "hp": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.hp",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "rate": {
+                "kind": "refinement-parameter",
+                "values": [
+                  0.012,
+                  0.015,
+                  0.018,
+                  0.021,
+                  0.024
+                ],
+                "type": {
+                  "kind": "quantity",
+                  "unit": "attack"
+                }
+              }
+            },
+            "output": "base"
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.attack",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "primordialjadecutter.hp-to-attack.attack",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
           }
         },
         {
-          "id": "hp-points",
-          "op": "divide",
-          "left": "hp",
-          "right": "one-hp"
-        },
-        {
-          "id": "rate",
-          "op": "refinement",
-          "values": [
-            0.012,
-            0.015,
-            0.018,
-            0.021,
-            0.024
+          "identity": {
+            "namespace": "builtin",
+            "id": "primordialjadecutter.static-hpPercent",
+            "revision": "1"
+          },
+          "sources": [
+            "genshin-db.primordialjadecutter.static"
           ],
-          "unit": "attack"
-        },
-        {
-          "id": "base",
-          "op": "multiply",
-          "left": "hp-points",
-          "right": "rate"
+          "activation": {},
+          "recipient": {
+            "role": "owner"
+          },
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "value": {
+            "kind": "refinement-parameter",
+            "values": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "type": {
+              "kind": "quantity",
+              "unit": "scalar"
+            }
+          },
+          "target": {
+            "kind": "attribute",
+            "attribute": {
+              "namespace": "builtin",
+              "id": "attribute.hpPercent",
+              "revision": "1"
+            }
+          },
+          "appliesTo": {},
+          "application": "always",
+          "priority": 0,
+          "stacking": {
+            "group": "primordialjadecutter.static-hpPercent",
+            "scope": "owner",
+            "policy": "add",
+            "maxStacks": 1,
+            "retain": "latest"
+          }
         }
       ],
-      "effects": [
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
         {
-          "id": "attack",
-          "startMs": 0,
-          "endMs": 3600000,
-          "permanent": true,
-          "value": "base",
-          "attribute": "attack",
-          "unit": "attack"
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.primordialjadecutter",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "primordialjadecutter",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "complete",
+          "evidence": "adopted",
+          "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。",
+          "sources": [
+            "content.weapon.primordialjadecutter",
+            "genshin-db.primordialjadecutter.hp-to-attack"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "implemented",
+              "ruleIds": [
+                {
+                  "namespace": "builtin",
+                  "id": "primordialjadecutter.hp-to-attack.attack",
+                  "revision": "1"
+                },
+                {
+                  "namespace": "builtin",
+                  "id": "primordialjadecutter.static-hpPercent",
+                  "revision": "1"
+                }
+              ],
+              "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。"
+            }
+          ]
         }
       ]
+    },
+    "ruleIds": [
+      {
+        "namespace": "builtin",
+        "id": "primordialjadecutter.hp-to-attack.attack",
+        "revision": "1"
+      },
+      {
+        "namespace": "builtin",
+        "id": "primordialjadecutter.static-hpPercent",
+        "revision": "1"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.primordialjadecutter",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.primordialjadecutter",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
     }
   ]
 }

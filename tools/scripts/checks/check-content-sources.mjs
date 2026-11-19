@@ -15,7 +15,7 @@ for (const directory of ['src/game-data/data', 'assets', 'tools/data']) {
     readContentSource(resolve(root, path)); sources++;
   }
 }
-const audit = numericAudit();
+const audit = await numericAudit();
 assertNumericAudit(audit);
 const documents = walk('docs');
 if (documents.some(path => !path.endsWith('.md'))) throw new Error('docs must contain documentation only');

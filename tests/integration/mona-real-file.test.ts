@@ -43,7 +43,7 @@ describe.skipIf(!existsSync(path))('user-provided Mona inventory (local evidence
     prior.real!.setId = 'mona-unresolved-legacy-heavensgift';
     prior.mona!.setIdentityPending = true;
     prior.name = `HeavensGift（套装待核对） · ${accountSlotLabels[prior.slot]}`;
-    prior.real!.source!.fingerprint = createHash('sha256').update(JSON.stringify({ setId: prior.real!.setId, slot: prior.slot, level: prior.real!.level, main: { stat: prior.real!.mainStat, value: prior.mona!.mainValue }, substats: prior.real!.substats })).digest('hex');
+    prior.real!.source!.fingerprint = createHash('sha256').update(JSON.stringify({ setId: prior.real!.setId, slot: prior.slot, rarity: prior.real!.rarity, level: prior.real!.level, main: { stat: prior.real!.mainStat, value: prior.mona!.mainValue }, substats: prior.real!.substats.map(({stat,value})=>({stat,value})) })).digest('hex');
     const identityOnly = await previewMonaSetRepairs(previous, catalog.sets);
     expect(identityOnly.updates).toHaveLength(1);
     const repaired = cloneAccount(previous);
@@ -53,7 +53,7 @@ describe.skipIf(!existsSync(path))('user-provided Mona inventory (local evidence
     // Inferred rolls are local annotations and never part of the scanner identity.
     const rawIdentity = cloneAccount(previous);
     const rawPrior = rawIdentity.artifacts.find(item => item.id === heaven.id)!;
-    rawPrior.real!.source!.fingerprint = createHash('sha256').update(JSON.stringify({ setId: rawPrior.real!.setId, slot: rawPrior.slot, level: rawPrior.real!.level, main: { stat: rawPrior.real!.mainStat, value: rawPrior.mona!.mainValue }, substats: rawPrior.real!.substats.map(({ stat, value }) => ({ stat, value })) })).digest('hex');
+    rawPrior.real!.source!.fingerprint = createHash('sha256').update(JSON.stringify({ setId: rawPrior.real!.setId, slot: rawPrior.slot, rarity: rawPrior.real!.rarity, level: rawPrior.real!.level, main: { stat: rawPrior.real!.mainStat, value: rawPrior.mona!.mainValue }, substats: rawPrior.real!.substats.map(({ stat, value }) => ({ stat, value })) })).digest('hex');
     const rawRepair = await previewMonaSetRepairs(rawIdentity, catalog.sets);
     expect(rawRepair.updates).toHaveLength(1);
     confirmMonaImport(rawIdentity, rawRepair, true);

@@ -1,9 +1,8 @@
 {
-  "schemaVersion": 2,
   "kind": "character-definition",
   "id": "noelle",
   "revision": "4",
-  "dataVersion": "genshin-db-8e5badd-content-v2",
+  "dataVersion": "genshin-db-8e5badd-content-v3",
   "origin": "builtin",
   "identity": {
     "name": "诺艾尔",
@@ -14,17 +13,6 @@
     "rarity": 4,
     "gameId": 10000034,
     "region": "蒙德"
-  },
-  "attributes": {
-    "base": {
-      "hp": 1012.088,
-      "attack": 16.0272,
-      "defense": 66.95325,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "defensePercent",
-    "modifiers": []
   },
   "progression": {
     "curves": {
@@ -390,6 +378,670 @@
       }
     ]
   },
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "combat-binding-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.noelle.growth",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/characters.json#noelle"
+        },
+        {
+          "id": "content.noelle.normal.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#noelle/combat1"
+        },
+        {
+          "id": "content.noelle.skill.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#noelle/combat2"
+        },
+        {
+          "id": "content.noelle.burst.parameters",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json#noelle/combat3"
+        },
+        {
+          "id": "content.noelle.review-source-5",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/talents/noelle.json"
+        },
+        {
+          "id": "content.noelle.review-source-6",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/constellations/noelle.json"
+        },
+        {
+          "id": "content.noelle.review-source-7",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/talents.json"
+        },
+        {
+          "id": "content.noelle.review-source-8",
+          "kind": "repo",
+          "repository": "KQM-git/TCL",
+          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+          "path": "docs/characters/geo/noelle.md"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param3",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param3",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param4",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param4",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param5",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param5",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param6",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param6",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param9",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param9",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param10",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param10",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.normal.param11",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.normal",
+            "hitId": "noelle.normal.param11",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.normal.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.skill.param6",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.skill",
+            "hitId": "noelle.skill.param6",
+            "maxConstellation": 3
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "单次命中已审核至3命；超出此命座范围或缺少其他队员、武器、套装所需证据时，伤害待确认。",
+          "sources": [
+            "content.noelle.skill.parameters",
+            "kqm.ordinary",
+            "content.noelle.review-source-5",
+            "content.noelle.review-source-6",
+            "content.noelle.review-source-7",
+            "content.noelle.review-source-8"
+          ],
+          "mechanisms": [
+            {
+              "id": "base",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "护心铠施放单次岩伤动态读取防御力；大扫除的防御转攻击不改变此防御缩放，不交付护盾和治疗量。"
+            },
+            {
+              "id": "noelle.passive1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "后台濒血护盾不改变护心铠施放伤害。"
+            },
+            {
+              "id": "noelle.passive2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "普攻重击命中减少战技冷却，不改变此次伤害；不证明施放可行性。"
+            },
+            {
+              "id": "noelle.passive3",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "防御食物烹饪产出不改变本次伤害。"
+            },
+            {
+              "id": "constellation:1",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "双状态提高治疗触发率，不改变本次岩伤。"
+            },
+            {
+              "id": "constellation:2",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "重击体力和伤害增益不修饰战技。"
+            },
+            {
+              "id": "constellation:3",
+              "resolution": "implemented",
+              "ruleIds": [],
+              "reason": "战技加3级，使用共同talentLevelBonus和原参数表。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.burst.param1",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.burst",
+            "hitId": "noelle.burst.param1",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.burst.param2",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "hit",
+            "skillId": "noelle.burst",
+            "hitId": "noelle.burst.param2",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+          "sources": [
+            "content.noelle.burst.parameters",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.noelle.context",
+            "revision": "4"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "noelle",
+            "revision": "4"
+          },
+          "scope": {
+            "kind": "context",
+            "maxConstellation": 0
+          },
+          "resolution": "unavailable",
+          "evidence": "adopted",
+          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+          "sources": [
+            "content.noelle.growth",
+            "kqm.ordinary"
+          ],
+          "mechanisms": [
+            {
+              "id": "explicit-output-scope",
+              "resolution": "unavailable",
+              "ruleIds": [],
+              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": [],
+    "contextCoverageRefs": [
+      {
+        "namespace": "builtin",
+        "id": "coverage.noelle.context",
+        "revision": "4"
+      }
+    ]
+  },
+  "schemaVersion": 3,
+  "namespace": "builtin",
+  "attributes": {
+    "base": {
+      "hp": 1012.088,
+      "attack": 16.0272,
+      "defense": 66.95325,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "defensePercent",
+    "outputs": {
+      "hp": {
+        "namespace": "builtin",
+        "id": "attribute.hp",
+        "revision": "1"
+      },
+      "hpPercent": {
+        "namespace": "builtin",
+        "id": "attribute.hpPercent",
+        "revision": "1"
+      },
+      "attack": {
+        "namespace": "builtin",
+        "id": "attribute.attack",
+        "revision": "1"
+      },
+      "attackPercent": {
+        "namespace": "builtin",
+        "id": "attribute.attackPercent",
+        "revision": "1"
+      },
+      "defense": {
+        "namespace": "builtin",
+        "id": "attribute.defense",
+        "revision": "1"
+      },
+      "defensePercent": {
+        "namespace": "builtin",
+        "id": "attribute.defensePercent",
+        "revision": "1"
+      },
+      "critRate": {
+        "namespace": "builtin",
+        "id": "attribute.critRate",
+        "revision": "1"
+      },
+      "critDamage": {
+        "namespace": "builtin",
+        "id": "attribute.critDamage",
+        "revision": "1"
+      },
+      "energyRecharge": {
+        "namespace": "builtin",
+        "id": "attribute.energyRecharge",
+        "revision": "1"
+      },
+      "elementalMastery": {
+        "namespace": "builtin",
+        "id": "attribute.elementalMastery",
+        "revision": "1"
+      },
+      "physicalBonus": {
+        "namespace": "builtin",
+        "id": "attribute.physicalBonus",
+        "revision": "1"
+      },
+      "anemoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.anemoBonus",
+        "revision": "1"
+      },
+      "geoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.geoBonus",
+        "revision": "1"
+      },
+      "electroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.electroBonus",
+        "revision": "1"
+      },
+      "hydroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.hydroBonus",
+        "revision": "1"
+      },
+      "pyroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.pyroBonus",
+        "revision": "1"
+      },
+      "cryoBonus": {
+        "namespace": "builtin",
+        "id": "attribute.cryoBonus",
+        "revision": "1"
+      },
+      "dendroBonus": {
+        "namespace": "builtin",
+        "id": "attribute.dendroBonus",
+        "revision": "1"
+      },
+      "healingBonus": {
+        "namespace": "builtin",
+        "id": "attribute.healingBonus",
+        "revision": "1"
+      }
+    }
+  },
   "talents": [
     {
       "id": "noelle.normal",
@@ -397,6 +1049,48 @@
       "description": "普通攻击\n进行至多四段的连续挥砍。\n\n重击\n持续消耗体力，旋转大剑攻击周围的敌人。\n停止旋转时，会进行一次格外有力的挥砍。\n\n下落攻击\n从空中下坠冲击地面，攻击下落路径上的敌人，并在落地时造成范围伤害。",
       "category": "normal",
       "element": "physical",
+      "details": [
+        {
+          "label": "一段伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "二段伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "三段伤害",
+          "template": "{param3:F1P}"
+        },
+        {
+          "label": "四段伤害",
+          "template": "{param4:P}"
+        },
+        {
+          "label": "重击循环伤害",
+          "template": "{param5:F1P}"
+        },
+        {
+          "label": "重击终结伤害",
+          "template": "{param6:F1P}"
+        },
+        {
+          "label": "重击体力消耗",
+          "template": "每秒{param7:F1}点"
+        },
+        {
+          "label": "最大持续时间",
+          "template": "{param8:F1}秒"
+        },
+        {
+          "label": "下坠期间伤害",
+          "template": "{param9:F1P}"
+        },
+        {
+          "label": "低空/高空坠地冲击伤害",
+          "template": "{param10:P}/{param11:P}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -630,108 +1324,506 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "一段伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "二段伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "三段伤害",
-          "template": "{param3:F1P}"
-        },
-        {
-          "label": "四段伤害",
-          "template": "{param4:P}"
-        },
-        {
-          "label": "重击循环伤害",
-          "template": "{param5:F1P}"
-        },
-        {
-          "label": "重击终结伤害",
-          "template": "{param6:F1P}"
-        },
-        {
-          "label": "重击体力消耗",
-          "template": "每秒{param7:F1}点"
-        },
-        {
-          "label": "最大持续时间",
-          "template": "{param8:F1}秒"
-        },
-        {
-          "label": "下坠期间伤害",
-          "template": "{param9:F1P}"
-        },
-        {
-          "label": "低空/高空坠地冲击伤害",
-          "template": "{param10:P}/{param11:P}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "noelle.normal.param1",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "noelle.normal.param2",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         },
         {
-          "parameter": "param3",
+          "id": "noelle.normal.param3",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param3",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param3",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param3"
         },
         {
-          "parameter": "param4",
+          "id": "noelle.normal.param4",
+          "element": "physical",
           "category": "normal",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param4",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param4",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param4"
         },
         {
-          "parameter": "param5",
+          "id": "noelle.normal.param5",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param5",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param5",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param5"
         },
         {
-          "parameter": "param6",
+          "id": "noelle.normal.param6",
+          "element": "physical",
           "category": "charged",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param6",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param6"
         },
         {
-          "parameter": "param9",
+          "id": "noelle.normal.param9",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param9",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param9",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param9"
         },
         {
-          "parameter": "param10",
+          "id": "noelle.normal.param10",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param10",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param10",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param10"
         },
         {
-          "parameter": "param11",
+          "id": "noelle.normal.param11",
+          "element": "physical",
           "category": "plunge",
-          "scalingStat": "attack",
-          "element": "physical"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.normal",
+                "parameterId": "param11",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.normal.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.normal.param11",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param11"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对普攻族的单次命中基数；强化、附魔、特殊状态、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.noelle.normal.parameters"
+      ]
     },
     {
       "id": "noelle.skill",
@@ -740,6 +1832,32 @@
       "flavorText": "诺艾尔既是侍奉的女仆，也是坚毅的骑士。",
       "category": "skill",
       "element": "geo",
+      "details": [
+        {
+          "label": "技能伤害",
+          "template": "{param6:P}防御力"
+        },
+        {
+          "label": "吸收量",
+          "template": "{param1:P}防御力+{param7:I}"
+        },
+        {
+          "label": "治疗量",
+          "template": "{param2:F1P}防御力+{param8:I}"
+        },
+        {
+          "label": "治疗触发几率",
+          "template": "{param3:P}"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param5:F1}秒"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -910,43 +2028,539 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "技能伤害",
-          "template": "{param6:P}防御力"
-        },
-        {
-          "label": "吸收量",
-          "template": "{param1:P}防御力+{param7:I}"
-        },
-        {
-          "label": "治疗量",
-          "template": "{param2:F1P}防御力+{param8:I}"
-        },
-        {
-          "label": "治疗触发几率",
-          "template": "{param3:P}"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param5:F1}秒"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param6",
+          "id": "noelle.skill.param6",
+          "element": "geo",
           "category": "skill",
-          "scalingStat": "defense"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "defense-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.defense",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.skill",
+                "parameterId": "param6",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.skill.parameters"
+          ],
+          "outputs": [
+            {
+              "id": "noelle.skill.param6.damage",
+              "family": "ordinary",
+              "origin": "talent",
+              "invocation": {
+                "formula": {
+                  "namespace": "builtin",
+                  "id": "ordinary-hit",
+                  "revision": "1"
+                },
+                "bindings": {
+                  "skillBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense-damage-base",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "attribute": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defense",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ratio": {
+                        "kind": "talent-parameter",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "skillId": "noelle.skill",
+                        "parameterId": "param6",
+                        "type": {
+                          "kind": "quantity",
+                          "unit": "scalar"
+                        }
+                      }
+                    },
+                    "output": "base"
+                  },
+                  "baseMultiplier": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseMultiplier",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "preReactionFlat": {
+                    "kind": "attribute",
+                    "actor": {
+                      "role": "owner"
+                    },
+                    "key": {
+                      "namespace": "builtin",
+                      "id": "attribute.baseDamageBonus",
+                      "revision": "1"
+                    },
+                    "at": {
+                      "kind": "current",
+                      "phase": "same"
+                    }
+                  },
+                  "additiveReactionBase": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "geo-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "added"
+                  },
+                  "ordinaryBonusMinusReduction": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "ordinary-bonus",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "elementBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.geoBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "hitBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.damageBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "targetReduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.ordinaryDamageReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "critFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "crit-selected",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "critMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "noncritical",
+                            "critical",
+                            "expected"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "critRate": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critRate",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "critDamage": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.critDamage",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "defenseFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "defense",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "characterLevel": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "enemyLevel": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.level",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "reduction": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.defenseReduction",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "ignore": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.defenseIgnore",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "resistanceFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "resistance",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "resistance": {
+                        "kind": "enemy",
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "target.resistance.geo",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "value"
+                  },
+                  "amplificationFactor": {
+                    "kind": "formula",
+                    "formula": {
+                      "namespace": "builtin",
+                      "id": "geo-ordinary-reaction",
+                      "revision": "1"
+                    },
+                    "inputs": {
+                      "mode": {
+                        "kind": "fact",
+                        "key": "reactionMode",
+                        "type": {
+                          "kind": "enum",
+                          "values": [
+                            "none"
+                          ]
+                        },
+                        "scope": "query"
+                      },
+                      "em": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.elementalMastery",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "levelMultiplier": {
+                        "kind": "formula",
+                        "formula": {
+                          "namespace": "builtin",
+                          "id": "reaction-level-multiplier",
+                          "revision": "1"
+                        },
+                        "inputs": {
+                          "level": {
+                            "kind": "attribute",
+                            "actor": {
+                              "role": "owner"
+                            },
+                            "key": {
+                              "namespace": "builtin",
+                              "id": "attribute.level",
+                              "revision": "1"
+                            },
+                            "at": {
+                              "kind": "current",
+                              "phase": "same"
+                            }
+                          }
+                        },
+                        "output": "value"
+                      },
+                      "amplifyingBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.amplifyingReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      },
+                      "additiveBonus": {
+                        "kind": "attribute",
+                        "actor": {
+                          "role": "owner"
+                        },
+                        "key": {
+                          "namespace": "builtin",
+                          "id": "attribute.additiveReactionBonus",
+                          "revision": "1"
+                        },
+                        "at": {
+                          "kind": "current",
+                          "phase": "same"
+                        }
+                      }
+                    },
+                    "output": "multiplier"
+                  }
+                },
+                "output": "value",
+                "captures": []
+              },
+              "coverageRefs": [
+                {
+                  "namespace": "builtin",
+                  "id": "coverage.noelle.skill.param6",
+                  "revision": "4"
+                }
+              ]
+            }
+          ],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.skill.param6",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param6"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.noelle.skill.parameters"
+      ]
     },
     {
       "id": "noelle.burst",
@@ -955,6 +2569,32 @@
       "flavorText": "需要扫除的，有时不仅仅是灰尘…",
       "category": "burst",
       "element": "geo",
+      "details": [
+        {
+          "label": "爆发伤害",
+          "template": "{param1:F1P}"
+        },
+        {
+          "label": "技能伤害",
+          "template": "{param2:F1P}"
+        },
+        {
+          "label": "攻击力提高",
+          "template": "{param3:P}防御力"
+        },
+        {
+          "label": "持续时间",
+          "template": "{param4:F1}秒"
+        },
+        {
+          "label": "冷却时间",
+          "template": "{param5:F1}秒"
+        },
+        {
+          "label": "元素能量",
+          "template": "{param6:I}"
+        }
+      ],
       "parameters": [
         {
           "id": "param1",
@@ -1083,48 +2723,121 @@
           ]
         }
       ],
-      "details": [
-        {
-          "label": "爆发伤害",
-          "template": "{param1:F1P}"
-        },
-        {
-          "label": "技能伤害",
-          "template": "{param2:F1P}"
-        },
-        {
-          "label": "攻击力提高",
-          "template": "{param3:P}防御力"
-        },
-        {
-          "label": "持续时间",
-          "template": "{param4:F1}秒"
-        },
-        {
-          "label": "冷却时间",
-          "template": "{param5:F1}秒"
-        },
-        {
-          "label": "元素能量",
-          "template": "{param6:I}"
-        }
-      ],
       "hits": [
         {
-          "parameter": "param1",
+          "id": "noelle.burst.param1",
+          "element": "geo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.burst",
+                "parameterId": "param1",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.burst.param1",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param1"
         },
         {
-          "parameter": "param2",
+          "id": "noelle.burst.param2",
+          "element": "geo",
           "category": "burst",
-          "scalingStat": "attack"
+          "base": {
+            "formula": {
+              "namespace": "builtin",
+              "id": "attack-damage-base",
+              "revision": "1"
+            },
+            "bindings": {
+              "attribute": {
+                "kind": "attribute",
+                "actor": {
+                  "role": "owner"
+                },
+                "key": {
+                  "namespace": "builtin",
+                  "id": "attribute.attack",
+                  "revision": "1"
+                },
+                "at": {
+                  "kind": "current",
+                  "phase": "same"
+                }
+              },
+              "ratio": {
+                "kind": "talent-parameter",
+                "actor": {
+                  "role": "owner"
+                },
+                "skillId": "noelle.burst",
+                "parameterId": "param2",
+                "type": {
+                  "kind": "quantity",
+                  "unit": "scalar"
+                }
+              }
+            },
+            "output": "base",
+            "captures": []
+          },
+          "sources": [
+            "content.noelle.burst.parameters"
+          ],
+          "outputs": [],
+          "coverageRefs": [
+            {
+              "namespace": "builtin",
+              "id": "coverage.noelle.burst.param2",
+              "revision": "4"
+            }
+          ],
+          "parameter": "param2"
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "已核对单次命中基数、类别与元素；触发、状态、捕获、被动及命座仍待接入，不作为完整伤害支持。"
-      }
+      "sources": [
+        "content.noelle.burst.parameters"
+      ]
     }
   ],
   "passives": [
@@ -1133,30 +2846,21 @@
       "name": "全心全意",
       "description": "诺艾尔处于队伍后台，且当前场上自己的角色的生命值低于30%时自动触发：\n为当前场上自己的角色生成一个伤害吸收量等同于诺艾尔防御力400%的护盾，持续20秒。\n·对所有元素伤害与物理伤害有150%的吸收效果。\n该效果60秒内只能触发一次。",
       "unlockAscension": 1,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "noelle.passive2",
       "name": "干净利落",
       "description": "诺艾尔的普通攻击或重击累计命中敌人4次，会减少护心铠1秒的冷却。\n每0.1秒至多计数一次。",
       "unlockAscension": 4,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "id": "noelle.passive3",
       "name": "女仆的态度",
       "description": "完美烹饪防御类食物时，有12%概率获得2倍产出。",
       "unlockAscension": null,
-      "support": {
-        "supported": false,
-        "reason": "文本已收录，效果尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
   "constellations": [
@@ -1165,20 +2869,14 @@
       "name": "支援就交给我吧",
       "description": "同时处于大扫除与护心铠状态时，护心铠的生命值回复效果触发几率提升至100%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 2,
       "name": "旋风女仆",
       "description": "诺艾尔的重击的体力消耗降低20%，伤害提升15%。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 3,
@@ -1190,20 +2888,14 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 4,
       "name": "之后会扫干净的",
       "description": "护心铠在效果结束时，或因伤害破碎时，会对周围的敌人造成400%攻击力的岩元素伤害。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 5,
@@ -1215,98 +2907,18 @@
           "levels": 3
         }
       ],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     },
     {
       "rank": 6,
       "name": "要一尘不染才行",
       "description": "大扫除额外提高诺艾尔防御力50%的攻击力；\n此外，在技能持续时间内，每打倒1个敌人，其持续时间将延长1秒，最多不会超过10秒。",
       "talentBonuses": [],
-      "support": {
-        "supported": false,
-        "reason": "命座说明及天赋加级已收录，完整伤害机制尚未核验。"
-      }
+      "ruleIds": []
     }
   ],
-  "capabilities": {
-    "text": "complete",
-    "numbers": "complete",
-    "calculation": {
-      "supported": false,
-      "reason": "基础数值与技能名称可查；角色被动、命座和伤害规则尚未核验。"
-    }
-  },
-  "damageCoverage": [
-    {
-      "id": "noelle-skill-r3",
-      "revision": "4",
-      "skillId": "noelle.skill",
-      "hitIndices": [
-        0
-      ],
-      "maxConstellation": 3,
-      "sources": [
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/talents/noelle.json"
-        },
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/constellations/noelle.json"
-        },
-        {
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json"
-        },
-        {
-          "repository": "KQM-git/TCL",
-          "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-          "path": "docs/characters/geo/noelle.md"
-        }
-      ],
-      "branches": [
-        {
-          "id": "base",
-          "resolution": "irrelevant",
-          "reason": "护心铠施放单次岩伤动态读取防御力；大扫除的防御转攻击不改变此防御缩放，不交付护盾和治疗量。"
-        },
-        {
-          "id": "noelle.passive1",
-          "resolution": "irrelevant",
-          "reason": "后台濒血护盾不改变护心铠施放伤害。"
-        },
-        {
-          "id": "noelle.passive2",
-          "resolution": "irrelevant",
-          "reason": "普攻重击命中减少战技冷却，不改变此次伤害；不证明施放可行性。"
-        },
-        {
-          "id": "noelle.passive3",
-          "resolution": "irrelevant",
-          "reason": "防御食物烹饪产出不改变本次伤害。"
-        },
-        {
-          "id": "constellation:1",
-          "resolution": "irrelevant",
-          "reason": "双状态提高治疗触发率，不改变本次岩伤。"
-        },
-        {
-          "id": "constellation:2",
-          "resolution": "irrelevant",
-          "reason": "重击体力和伤害增益不修饰战技。"
-        },
-        {
-          "id": "constellation:3",
-          "resolution": "talent-level",
-          "reason": "战技加3级，使用共同talentLevelBonus和原参数表。"
-        }
-      ]
-    }
+  "sources": [
+    "content.noelle.growth",
+    "content.character-curves"
   ]
 }

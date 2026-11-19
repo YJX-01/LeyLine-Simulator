@@ -74,7 +74,7 @@ Mona 的 average 使用显示舍入后的四档值；本项目平均条数采用
 
 [数值审计](audits/numeric-precision.json)记录基线逐字段差异与来源限度，日常 `pnpm data:check` 直接读取当前输入比较。新增机制的系数、阈值、绑定与规则另做来源和独立公式核对。
 
-五星主词条源 level1 对应强化0，level21对应强化20；精通20级原值186.5，游戏或扫描显示可为187。扫描值按来源显示精度和记录容差核对。原表的固定防御行按主词条合法池判断，主词条表行与合法物品分开校验。
+四星主词条采用源level1至17，五星采用源level1至21，显示强化等级均为源level−1；精通20级原值186.5，游戏或扫描显示可为187。扫描值按来源显示精度和记录容差核对。原表的固定防御行按主词条合法池判断，主词条表行与合法物品分开校验。
 
 原表与退休显示表的125处差异包含百分比单位换算尾数及原显示表缺项。正式计算保留采用原表精度，保存文件使用自身表快照。基础属性已与固定 AvatarExcel 原表交叉核对，武器及曲线沿固定来源精度维护；游戏逐步 float32 运算对照状态为待补。
 
@@ -106,7 +106,7 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 
 ### 圣遗物稀有度调查
 
-生产实物契约为五星。扩展目标包含四星与五星，三星以下实物暂缓；来源研究、候选审阅和真实原件检查分别登记。
+当前实物接受四星与五星，三星以下实物暂缓。schema、两条求值路径、Mona/Enka、展示、保存快照和手动表单均按实物星级取表；四星0–16、五星0–20。已采用来源及保守输入边界见[采用记录](sources/artifact-rarity/adoption.json)，套装合法部位见[固定来源字段](sources/artifact-rarity/set-slots.json)。
 
 #### 原始关联
 
@@ -131,37 +131,62 @@ KQM 反应等级曲线收录1至100级，0级为 null。与固定 Mona 社区1�
 | 4 | 17 | 16 | 17 | 40 |
 | 5 | 21 | 20 | 21 | 40 |
 
-addPropLevels为5/9/13/17/21，按物品maxLevel截断后得到源等级候选。appendPropNum有0至4模板，部分模板星级超出正式rarityList；实际生成、掉落、初始条目和升级语义仍待核对。该版本缺heartofthefurnace、scarletproof配置，当前版本相容性与两套部位资料待补。
+addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩家生成模板，不能扩大正式rarityList。已采用KQM的初始条目与每四级强化语义；合法部位来自匹配固定genshin-db提交的实际piece字段，不依据效果件数或图标猜测。旧LunaGC缺heartofthefurnace、scarletproof掉落配置，不以旧模板证明新套装掉落规则。
 
 候选工具为 `node tools/scripts/data/prepare-artifact-rarity.mjs --out=artifacts/content-candidates/<新目录>`，输出analysis.json；首份审阅位置为 artifacts/content-candidates/artifact-rarity-2026-11-13。普通生成使用已采用输入。
 
 #### 直接消费者
 
-| 消费者 | 当前行为 | 扩展所需处理 |
+| 消费者 | 当前行为 | 核对范围 |
 | --- | --- | --- |
-| schema/account/artifact | rarity=5，level≤20，rolls≤6 | 按来源星级、强化、总量校验 |
-| schema/content/manifest、account/build | 每属性21项主词条 | 按星级索引并保存复算表快照 |
-| schema/content/artifact-set | 件数效果，投影最高稀有度 | 完整稀有度集合与合法部位分别维护 |
-| engine/attributes/build | 按属性及等级取主词条 | 同时按实物星级寻址及校验 |
-| web/domain/mona-import | 仅五星，源0至20级 | 保留star并核对星级表、显示精度及有序词条 |
-| Mona来源指纹 | 已有身份按五星内容计算 | 扩展加入星级，保留源ID及无ID出现顺序，先核对冲突 |
-| web/domain/enka-import | rankLevel=5，level减一 | 核对逐星级等级映射、附加词条ID |
-| web/domain/artifact-rolls | 4/5星档位；初始3/4条、每4级强化 | 按对应来源规则枚举联合合法历史 |
-| account-presentation、showcase-inventory | 主词条单表；内容匹配含星级 | 展示、排序、回查及精确匹配口径一致 |
+| schema/account/artifact | 四星0–16、五星0–20 | 四星初始2/3条，单条及完整记录总量校验 |
+| manifest、account/build | 按星级/属性/等级的17/21项表 | 旧单表拒绝，不跨星级补配 |
+| artifact-set | rarities、slots及件数效果 | 最高星级仅展示，原始字段逐项核对 |
+| engine/attributes、calculation/build-context | 读取自身星级表 | 校验套装星级/部位及各星级副词条边界 |
+| Mona | 保留star与扫描值，先预览再确认 | 指纹包含星级与有序词条；源ID及无ID出现顺序保留 |
+| Enka | rankLevel为4/5、level减一 | 核对主词条表、套装、源affix编号及展示舍入 |
+| artifact-rolls | 使用自身401/501池及初始条数 | 联合枚举是推定，不称为观测历史 |
+| account-presentation、showcase-inventory | 按星级显示与匹配 | 保留有序词条及各自表快照 |
 
 手动表单、筛选、组合、角色配置、文件和项目复制沿这些直接消费者核对。有效条数白值、组合冻结、物品身份和现有去重策略分别保持。
 
-GenshinTools 的 src/domain/build/artifact/solver.ts 可供四/五星分支比较，采用规则以原表关联及独立核对为准。升级/初始词条语义、当前版本差异和非五星真实导入原件处于待补状态。
+当前458件Mona原件均为五星，四星玩家导入原件仍缺失。功能检查读取原件；四星数值表、格式边界和读取分派使用固定来源及明确派生设定核对，不生成四星玩家文件替身。
 
 ## 计算支持与验证资料
 
 ### 计算支持与内容绑定
 
+实体calculation字段与data/calculation两个公共库维护模板配置和数据，固定算法在engine的TS模板中维护；来源随拥有配置的bundle保存，装配器拒绝重复所有权；防御/抗性常数采用固定 KQM 的 [公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)，TS增幅/激化常数与现有reaction-facts数值直接比较；其他固定算法常数经describeCalculationTemplate直接核对，JSON不能覆盖通用算法。完整目录的审阅清单由 pnpm data:coverage 生成，未闭合条目保持 unavailable，不沿用旧支持声明作为新运行时验收。
+
+pnpm data:coverage --candidates对当前正式来源和采用记录作只读候选投影，并以共同编译器核对闭包；报告标明review-candidates。逐输出列出证书命座范围、来源和缺口，完整命座、角色与装备条目独立判断。pnpm data:coverage --require-complete只接受正式内容的完整闭合；候选的有界输出不提升为全目录通过，外部declared证据不视为本地采用。报告格式和入口见[内容包说明](../../src/game-data/README.md)。
+
+共同效果的[采用对应](sources/calculation-effects/retained-rules.json)关联现有内容规则、静态修饰与新的直接JSON定义。[固定来源字段](sources/calculation-effects/catalog-facts.json)保留原精炼字符串和套装效果文本；数值审计直接比较所有精炼档、静态数值、被动阈值/上限和持续时间。百分比按十进制指数解析为比例，避免转换时增加一次二进制除法舍入。绑定、属性、状态及捕获组件的独立计算检查见tests/unit/engine/calculation/context.test.ts；这些明确计算设定不声称为玩家配装或实录战斗。
+
+tests/unit/engine/calculation/reaction-events.test.ts按真实技能参数独立核算事件的多个输出、独立剧变与明确多人聚合，并检查单输出选择、未知合计和共享预算。库存占用检查直接读取获授权的Mona原件并派生共享引用，原件不存在时明确skip；不生成替代库存或伪造实际穿戴。此处的数学组件检查不表示正式目录的角色绑定、机制和全流程已全部闭合。
+
+tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行者及兼容武器的实际目录成长值，独立核算配装绑定的星扩散贡献、逐状态排序和换装重算；黎明神剑按精一14%暴击率及生命阈值验证条件读取。独立/联合模型、未知资格、捕获协议派生、事件合计与共享预算分别检查。捕获协议派生不宣称星扩散实际采用该捕获策略，这些组件检查不提升完整角色覆盖。
+
+[普通输出采用范围](sources/calculation-hits/ordinary-bindings.json)固定来源版本、明确命中身份及证书命座范围，不把旧supported标记转为新运行时证明。新v3配装入口逐项对照固定参数表独立核算；等级加级、条件暴击、增幅、HP转攻击、真实库存共享和未知队友机制分别检查。具体脚本为tests/unit/engine/calculation/build-context.test.ts。
+
+正式v3目录包含154份角色与形态、256份武器和63份套装。当前编译闭合报告为4367项，116项完整、4251项尚缺支持，106个输出有明确采用范围，定义校验无失败。106个输出含71个普通输出及35个薇斯纳输出。`pnpm data:coverage`按当前目录重新统计，`--require-complete`用于全目录验收。tests/integration/structured-content.test.mjs逐份核对闭包和原始数值。
+
+[星伤命中采用范围](sources/calculation-hits/stellar-bindings.json)登记薇斯纳的状态、单段规则、来源和C0–C6边界。tests/unit/engine/calculation/stellar-character.test.ts从固定成长与原天赋参数独立推导856组可用条件，另检查未知或不满足条件、层数越界、无突破门槛的星耀祝礼、队友元素身份和离线闭包。角色JSON的talents.hits集中维护34个命中及35个输出。
+
+[星伤装备采用](sources/calculation-effects/stellar-equipment.json)记录蝶变的两种风及血红之证的套装增益。获授权的Enka展柜原件覆盖薇斯纳90级C2、天赋8/10/10、蝶变精一及血红之证四件。`tests/integration/vesna-production-chain.test.ts`和`tests/browser/development/vesna-production-chain.spec.ts`核验同一真实配装经确认导入、显式补足战斗条件、同步和Worker复算、精炼比较、保存重开及角色参数重导入。展柜证明配装，战斗条件属于明确输入，游戏内伤害观测仍待补。原件缺失时跳过对应检查。
+
+[动作采用记录](sources/calculation-hits/vesna-actions.json)保留同版本天赋/命座原文与风翎机制研究的来源关系。data/actions/vesna.json维护15个动作、6类状态和14条转换；18项源条件软件检查核对整肃独立过期、入场清除/C2满层、最高境界次数/C1首次免费、C6独立窗口、资源不足及阶段快照。5项动作导入检查核对独立文件、离线闭包、精确版本和不修改已有快照。数值审计另直接比较14项动作规则，并检查持续/能量参数的来源单位。
+
+动作时长、取消和命中偏移没有录制依据，保持null。剑气以六分之一层为整数单位；每次明确风翎产生可恢复一单位，无须伤害命中，但自动产生时刻仍未接入。资源容量只知来源可证明的下界，非免费消耗必须明确提供；C6是否增加整肃及重复使用规则保持缺口。辉映优先级、能量/冷却可执行性及自动派生事件仍待实现。这些数学和协议检查没有产生玩家轴或录制；实际游戏观测继续单独登记。
+
+无元素旅行者的 [普通攻击单位核对](sources/character-text/traveler-normal-units.json)补齐固定 LunaGC 原表的7条描述键及9项ratio单位，参数数值保持。该记录只确认参数与文本，不扩大机制支持。
+
+月/星公式按 [KQM原图与符号记录](sources/kqm-web/2026-11-15/reaction-formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储。原图采集在忽略的审阅目录；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
+
 逐项定义以 src/game-data/data 为准，运行索引位于 src/game-data/generated/damage-paths.json 与 combat-rules.json；`node tools/scripts/data/audit-damage-paths.mjs` 输出当前绑定摘要。
 
 #### 已审阅单次查询
 
-圣遗物实物契约为五星。四星处于来源调查与候选阶段，三星以下实物暂缓，详情见[稀有度调查](#圣遗物稀有度调查)。
+圣遗物当前实物范围、逐星级资料与接入缺口见[稀有度调查](#圣遗物稀有度调查)。
 
 #### 分项输入
 
@@ -173,11 +198,11 @@ GenshinTools 的 src/domain/build/artifact/solver.ts 可供四/五星分支比�
 
 #### 反应、状态与入口
 
-命中反应已接入蒸发、融化、超激化与蔓激化。独立剧变、延迟/持续反应、月反应和附着历史推演处于待接入状态。[反应事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/reaction-facts.json)及 player.json 保存公式和等级系数。
+命中查询已接入蒸发、融化、超激化、蔓激化及薇斯纳已审阅的直接星扩散输出。独立剧变与月星多人聚合在引擎中具有显式事件入口。延迟或持续反应、元素附着历史推演及普通页面的多人反应入口待接入。[反应事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/reaction-facts.json)及player.json保存来源公式和等级系数。
 
 战斗状态支持生命比例、站场和护盾区间、命中覆盖及读取来源；敌方状态、受击、有效治疗和自动触发待接入。生命比例由黎明神剑等既有条件读取。
 
-独立计算器已提供手动配装、本地/展柜读取、复制轴、已实现条件、独立捕获和同轴比较。现有时间轴的完整条件与区间编辑入口、记录完整性、初始状态、自动次数/冷却、完整修订类型及全目录主要机制仍待接入。
+独立计算器已提供手动配装、本地及展柜读取、复制轴、输出选择、已实现条件、独立捕获、同轴比较和角色JSON往返。现有时间轴的完整条件与区间编辑入口、记录完整性、初始状态、自动次数和冷却、完整修订类型及全目录机制仍待接入。
 
 来源调查、独立公式、真实资料功能检查和游戏观测分别登记。完整实录队伍战斗轴与全面游戏伤害观测材料状态为待补；现有公开展柜提供配装和文件/Worker检查材料。
 

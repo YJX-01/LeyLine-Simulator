@@ -219,29 +219,95 @@
     35,
     46.7
   ],
-  "modifiers": [],
-  "support": {
-    "supported": true,
-    "reason": "R1逐件审阅：一/二星基础武器，无副属性及被动；等级1至70、突破0至4，精炼1；数值与固定源逐项一致。"
+  "calculation": {
+    "bundle": {
+      "schemaVersion": 2,
+      "runtimeVersion": 2,
+      "requiredFeatures": [
+        "fixed-templates-v1",
+        "coverage-v1"
+      ],
+      "sources": [
+        {
+          "id": "content.weapon.seasonedhuntersbow",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/stats/weapons.json#seasonedhuntersbow"
+        },
+        {
+          "id": "content.seasonedhuntersbow.review-source-2",
+          "kind": "repo",
+          "repository": "theBowja/genshin-db",
+          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+          "path": "src/data/ChineseSimplified/weapons/seasonedhuntersbow.json"
+        },
+        {
+          "id": "content.seasonedhuntersbow.review-source-3",
+          "kind": "repo",
+          "repository": "TwiceDrop/genshin_artifact",
+          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+          "path": "mona_core/src/weapon/weapons/bows/seasoned_hunters_bow.rs"
+        }
+      ],
+      "tables": [],
+      "formulas": [],
+      "attributes": [],
+      "effects": [],
+      "damageFamilies": [
+        "ordinary"
+      ],
+      "stateMachines": [],
+      "aggregates": [],
+      "coverage": [
+        {
+          "identity": {
+            "namespace": "builtin",
+            "id": "coverage.weapon.seasonedhuntersbow",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "entity": {
+            "namespace": "builtin",
+            "id": "seasonedhuntersbow",
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          },
+          "scope": {
+            "kind": "equipment"
+          },
+          "resolution": "complete",
+          "evidence": "independently-checked",
+          "reason": "武器原始资料无被动效果，直接伤害仅使用其基础成长。",
+          "sources": [
+            "content.weapon.seasonedhuntersbow",
+            "content.seasonedhuntersbow.review-source-2",
+            "content.seasonedhuntersbow.review-source-3"
+          ],
+          "mechanisms": [
+            {
+              "id": "no-passive",
+              "resolution": "irrelevant",
+              "ruleIds": [],
+              "reason": "已对照原始武器资料，未声明被动。"
+            }
+          ]
+        }
+      ]
+    },
+    "ruleIds": []
   },
-  "source": {
-    "repository": "theBowja/genshin-db",
-    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-    "path": "src/data/stats/weapons.json#seasonedhuntersbow"
-  },
-  "passive": {
-    "kind": "none",
-    "sources": [
-      {
-        "repository": "theBowja/genshin-db",
-        "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-        "path": "src/data/ChineseSimplified/weapons/seasonedhuntersbow.json"
-      },
-      {
-        "repository": "TwiceDrop/genshin_artifact",
-        "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
-        "path": "mona_core/src/weapon/weapons/bows/seasoned_hunters_bow.rs"
-      }
-    ]
-  }
+  "schemaVersion": 3,
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "sources": [
+    "content.weapon.seasonedhuntersbow",
+    "content.weapon-curves"
+  ],
+  "coverageRefs": [
+    {
+      "namespace": "builtin",
+      "id": "coverage.weapon.seasonedhuntersbow",
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  ]
 }

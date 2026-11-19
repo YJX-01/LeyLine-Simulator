@@ -1,0 +1,436 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "theBowja/genshin-db",
+    "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "path": "src/data/ChineseSimplified/artifacts/<id>.json"
+  },
+  "method": "Exact present piece keys in the fixed source JSON, captured offline from the matching checkout. No inference from icon presence or set-piece bonus count.",
+  "sets": {
+    "adaycarvedfromrisingwinds": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "adventurer": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "archaicpetra": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "aubadeofmorningstarandmoon": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "berserker": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "blizzardstrayer": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "bloodstainedchivalry": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "braveheart": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "celestialgift": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "crimsonwitchofflames": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "deepwoodmemories": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "defenderswill": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "desertpavilionchronicle": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "disenchantmentindeepshadow": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "echoesofanoffering": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "emblemofseveredfate": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "finaleofthedeepgalleries": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "flowerofparadiselost": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "fragmentofharmonicwhimsy": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "gambler": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "gildeddreams": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "gladiatorsfinale": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "goldentroupe": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "heartofdepth": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "heartofthefurnace": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "huskofopulentdreams": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "instructor": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "lavawalker": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "longnightsoath": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "luckydog": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "maidenbeloved": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "marechausseehunter": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "martialartist": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "nightoftheskysunveiling": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "nighttimewhispersintheechoingwoods": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "noblesseoblige": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "nymphsdream": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "obsidiancodex": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "oceanhuedclam": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "paleflame": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "prayersfordestiny": [
+      "circlet"
+    ],
+    "prayersforillumination": [
+      "circlet"
+    ],
+    "prayersforwisdom": [
+      "circlet"
+    ],
+    "prayerstospringtime": [
+      "circlet"
+    ],
+    "resolutionofsojourner": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "retracingbolide": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "scarletproof": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "scholar": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "scrolloftheheroofcindercity": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "shimenawasreminiscence": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "silkenmoonsserenade": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "songofdayspast": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "tenacityofthemillelith": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "theexile": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "thunderingfury": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "thundersoother": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "tinymiracle": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "travelingdoctor": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "unfinishedreverie": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "vermillionhereafter": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "viridescentvenerer": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "vourukashasglow": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ],
+    "wandererstroupe": [
+      "flower",
+      "plume",
+      "sands",
+      "goblet",
+      "circlet"
+    ]
+  }
+}

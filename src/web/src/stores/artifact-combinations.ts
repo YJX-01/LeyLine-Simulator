@@ -18,7 +18,7 @@ export const useArtifactCombinationsStore=defineStore('artifact-combinations',()
       if(entry.favorite!==undefined && (!Number.isInteger(entry.favorite) || entry.favorite<0 || entry.favorite>3))throw new Error();
       if(entry.name!==undefined && (typeof entry.name!=='string' || !entry.name.trim() || entry.name.length>160))throw new Error();
       ids.add(entry.id);
-      const account=parseAccount({schemaVersion:2,kind:'account',id:entry.accountId,name:'组合',characters:[],artifacts:entry.items});
+      const account=parseAccount({schemaVersion: 5, kind:'account',id:entry.accountId,name:'组合',characters:[],artifacts:entry.items});
       if(new Set(account.artifacts.map(item=>item.slot)).size!==account.artifacts.length)throw new Error();
       return {id:entry.id,accountId:entry.accountId,items:account.artifacts,stats:normalizeEffectiveStats(entry.stats),referenceName:entry.referenceName,...(entry.nameMode===undefined?{}:{nameMode:entry.nameMode}),basis:readRollBasis(entry.basis),...(entry.name===undefined?{}:{name:entry.name}),...(entry.favorite===undefined?{}:{favorite:entry.favorite})};
     });

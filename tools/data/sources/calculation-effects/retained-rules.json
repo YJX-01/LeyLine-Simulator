@@ -1,0 +1,812 @@
+{
+  "schemaVersion": 1,
+  "basis": "Author-reviewed canonical rules and their pinned original sources; source-derived component calculations, not player recordings. Authored normalized definitions are consumed directly; no legacy runtime conversion.",
+  "rules": [
+    {
+      "entity": "hutao",
+      "owner": "hutao.passive2",
+      "rule": "ascension-four",
+      "effect": {
+        "namespace": "builtin",
+        "id": "hutao.ascension-four.pyro-bonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.hutao.ascension-four",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "nahida",
+      "owner": "nahida.passive2",
+      "rule": "ascension-four",
+      "effect": {
+        "namespace": "builtin",
+        "id": "nahida.ascension-four.tri-karma-bonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.nahida.ascension-four",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "nahida",
+      "owner": "nahida.passive2",
+      "rule": "ascension-four",
+      "effect": {
+        "namespace": "builtin",
+        "id": "nahida.ascension-four.tri-karma-crit",
+        "revision": "1"
+      },
+      "source": "genshin-db.nahida.ascension-four",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "neuvillette",
+      "owner": "neuvillette.passive2",
+      "rule": "ascension-four",
+      "effect": {
+        "namespace": "builtin",
+        "id": "neuvillette.ascension-four.hydro-bonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.neuvillette.ascension-four",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "xingqiu",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "xingqiu.static-hydroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.xingqiu.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "yunjin",
+      "owner": "yunjin",
+      "rule": "flying-cloud-base",
+      "effect": {
+        "namespace": "builtin",
+        "id": "yunjin.flying-cloud-base.base",
+        "revision": "1"
+      },
+      "source": "genshin-db.yunjin.flying-cloud-base",
+      "status": "component-only"
+    },
+    {
+      "entity": "cinnabarspindle",
+      "owner": "cinnabarspindle",
+      "rule": "defense-skill-base",
+      "effect": {
+        "namespace": "builtin",
+        "id": "cinnabarspindle.defense-skill-base.base",
+        "revision": "1"
+      },
+      "source": "genshin-db.cinnabarspindle.defense-skill-base",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-physicalBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 1,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-anemoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 2,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-geoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 3,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-electroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 4,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-hydroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 5,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-pyroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 6,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-cryoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 7,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-dendroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "festeringdesire",
+      "modifierIndex": 8,
+      "effect": {
+        "namespace": "builtin",
+        "id": "festeringdesire.static-critRate",
+        "revision": "1"
+      },
+      "source": "genshin-db.festeringdesire.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "harbingerofdawn",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "harbingerofdawn.static-critRate",
+        "revision": "1"
+      },
+      "source": "genshin-db.harbingerofdawn.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "primordialjadecutter",
+      "owner": "primordialjadecutter",
+      "rule": "hp-to-attack",
+      "effect": {
+        "namespace": "builtin",
+        "id": "primordialjadecutter.hp-to-attack.attack",
+        "revision": "1"
+      },
+      "source": "genshin-db.primordialjadecutter.hp-to-attack",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "primordialjadecutter",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "primordialjadecutter.static-hpPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.primordialjadecutter.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "staffofhoma",
+      "owner": "staffofhoma",
+      "rule": "hp-to-attack",
+      "effect": {
+        "namespace": "builtin",
+        "id": "staffofhoma.hp-to-attack.attack",
+        "revision": "1"
+      },
+      "source": "genshin-db.staffofhoma.hp-to-attack",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "staffofhoma",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "staffofhoma.static-hpPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.staffofhoma.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "adaycarvedfromrisingwinds",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "adaycarvedfromrisingwinds.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.adaycarvedfromrisingwinds.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "archaicpetra",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "archaicpetra.static-geoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.archaicpetra.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "aubadeofmorningstarandmoon",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "aubadeofmorningstarandmoon.static-elementalMastery",
+        "revision": "1"
+      },
+      "source": "genshin-db.aubadeofmorningstarandmoon.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "berserker",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "berserker.static-critRate",
+        "revision": "1"
+      },
+      "source": "genshin-db.berserker.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "blizzardstrayer",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "blizzardstrayer.static-cryoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.blizzardstrayer.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "bloodstainedchivalry",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "bloodstainedchivalry.static-physicalBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.bloodstainedchivalry.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "braveheart",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "braveheart.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.braveheart.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "celestialgift",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "celestialgift.static-energyRecharge",
+        "revision": "1"
+      },
+      "source": "genshin-db.celestialgift.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "crimsonwitchofflames",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "crimsonwitchofflames.static-pyroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.crimsonwitchofflames.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "deepwoodmemories",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "deepwoodmemories.static-dendroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.deepwoodmemories.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "defenderswill",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "defenderswill.static-defensePercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.defenderswill.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "desertpavilionchronicle",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "desertpavilionchronicle.static-anemoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.desertpavilionchronicle.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "disenchantmentindeepshadow",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "disenchantmentindeepshadow.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.disenchantmentindeepshadow.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "echoesofanoffering",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "echoesofanoffering.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.echoesofanoffering.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "emblemofseveredfate",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "emblemofseveredfate.static-energyRecharge",
+        "revision": "1"
+      },
+      "source": "genshin-db.emblemofseveredfate.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "finaleofthedeepgalleries",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "finaleofthedeepgalleries.static-cryoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.finaleofthedeepgalleries.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "flowerofparadiselost",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "flowerofparadiselost.static-elementalMastery",
+        "revision": "1"
+      },
+      "source": "genshin-db.flowerofparadiselost.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "fragmentofharmonicwhimsy",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "fragmentofharmonicwhimsy.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.fragmentofharmonicwhimsy.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "gildeddreams",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "gildeddreams.static-elementalMastery",
+        "revision": "1"
+      },
+      "source": "genshin-db.gildeddreams.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "gladiatorsfinale",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "gladiatorsfinale.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.gladiatorsfinale.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "heartofdepth",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "heartofdepth.static-hydroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.heartofdepth.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "heartofthefurnace",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "heartofthefurnace.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.heartofthefurnace.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "huskofopulentdreams",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "huskofopulentdreams.static-defensePercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.huskofopulentdreams.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "instructor",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "instructor.static-elementalMastery",
+        "revision": "1"
+      },
+      "source": "genshin-db.instructor.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "maidenbeloved",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "maidenbeloved.static-healingBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.maidenbeloved.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "nightoftheskysunveiling",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "nightoftheskysunveiling.static-elementalMastery",
+        "revision": "1"
+      },
+      "source": "genshin-db.nightoftheskysunveiling.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "nighttimewhispersintheechoingwoods",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "nighttimewhispersintheechoingwoods.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.nighttimewhispersintheechoingwoods.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "noblesseoblige",
+      "owner": 2,
+      "rule": "burst-bonus",
+      "effect": {
+        "namespace": "builtin",
+        "id": "noblesseoblige.burst-bonus.bonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.noblesseoblige.burst-bonus",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "noblesseoblige",
+      "owner": 4,
+      "rule": "burst-team-attack",
+      "effect": {
+        "namespace": "builtin",
+        "id": "noblesseoblige.burst-team-attack.team-attack",
+        "revision": "1"
+      },
+      "source": "genshin-db.noblesseoblige.burst-team-attack",
+      "status": "retained-rule"
+    },
+    {
+      "entity": "nymphsdream",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "nymphsdream.static-hydroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.nymphsdream.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "oceanhuedclam",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "oceanhuedclam.static-healingBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.oceanhuedclam.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "paleflame",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "paleflame.static-physicalBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.paleflame.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "resolutionofsojourner",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "resolutionofsojourner.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.resolutionofsojourner.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "scarletproof",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "scarletproof.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.scarletproof.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "scholar",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "scholar.static-energyRecharge",
+        "revision": "1"
+      },
+      "source": "genshin-db.scholar.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "shimenawasreminiscence",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "shimenawasreminiscence.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.shimenawasreminiscence.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "silkenmoonsserenade",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "silkenmoonsserenade.static-energyRecharge",
+        "revision": "1"
+      },
+      "source": "genshin-db.silkenmoonsserenade.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "songofdayspast",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "songofdayspast.static-healingBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.songofdayspast.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "tenacityofthemillelith",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "tenacityofthemillelith.static-hpPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.tenacityofthemillelith.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "theexile",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "theexile.static-energyRecharge",
+        "revision": "1"
+      },
+      "source": "genshin-db.theexile.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "thunderingfury",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "thunderingfury.static-electroBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.thunderingfury.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "travelingdoctor",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "travelingdoctor.static-healingBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.travelingdoctor.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "unfinishedreverie",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "unfinishedreverie.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.unfinishedreverie.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "vermillionhereafter",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "vermillionhereafter.static-attackPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.vermillionhereafter.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "viridescentvenerer",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "viridescentvenerer.static-anemoBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.viridescentvenerer.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "vourukashasglow",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "vourukashasglow.static-hpPercent",
+        "revision": "1"
+      },
+      "source": "genshin-db.vourukashasglow.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "wandererstroupe",
+      "modifierIndex": 0,
+      "effect": {
+        "namespace": "builtin",
+        "id": "wandererstroupe.static-elementalMastery",
+        "revision": "1"
+      },
+      "source": "genshin-db.wandererstroupe.static",
+      "status": "retained-static"
+    },
+    {
+      "entity": "beyondthechrysalis",
+      "owner": "weapon",
+      "rule": "beyondthechrysalis.loyalWind",
+      "effect": {
+        "namespace": "builtin",
+        "id": "beyondthechrysalis.loyalWind",
+        "revision": "1"
+      },
+      "source": "genshin-db.beyondthechrysalis.damage",
+      "status": "adopted-explicit-window"
+    },
+    {
+      "entity": "beyondthechrysalis",
+      "owner": "weapon",
+      "rule": "beyondthechrysalis.betrayalWind",
+      "effect": {
+        "namespace": "builtin",
+        "id": "beyondthechrysalis.betrayalWind",
+        "revision": "1"
+      },
+      "source": "genshin-db.beyondthechrysalis.damage",
+      "status": "adopted-explicit-window"
+    },
+    {
+      "entity": "scarletproof",
+      "owner": 4,
+      "rule": "scarletproof.stellar.critRate",
+      "effect": {
+        "namespace": "builtin",
+        "id": "scarletproof.stellar.critRate",
+        "revision": "1"
+      },
+      "source": "genshin-db.scarletproof.stellar",
+      "status": "adopted-explicit-window"
+    },
+    {
+      "entity": "scarletproof",
+      "owner": 4,
+      "rule": "scarletproof.stellar.reaction.stellar-swirl.damageBonus",
+      "effect": {
+        "namespace": "builtin",
+        "id": "scarletproof.stellar.reaction.stellar-swirl.damageBonus",
+        "revision": "1"
+      },
+      "source": "genshin-db.scarletproof.stellar",
+      "status": "adopted-explicit-window"
+    }
+  ]
+}
