@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, defineAsyncComponent } from 'vue';
-import { buildSchema } from '@leyline/schema';
-import { calculationArtifact } from '../domain/build-snapshot';
+import type { Build } from '@leyline/schema';
 import { useAccountStore } from '../stores/account';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { useSavedTeamsStore, type SavedTeam } from '../stores/saved-teams';
 import { addActorFromBuild } from '../domain/real-project';
 import { removeProjectActor } from '../domain/workbench-project';
+import { prepareTeamMember } from '../domain/team-members';
 import CharacterEquipmentIcons from '../components/CharacterEquipmentIcons.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
@@ -33,25 +33,11 @@ async function add(id: string) {
   if (adding.value) return;
   error.value = '';
   const account = accounts.account, project = axis.project;
-  const character = account.characters.find(entry => entry.id === id);
-  if (!character?.build) { error.value = '该角色尚未设置真实角色与武器，请先在账号角色页补全资料。'; return; }
   try {
     adding.value = true;
-    if (character.showcase && !Object.values(character.equipment).length && character.showcase.build.artifacts.length) throw new Error('该角色目前仅有展柜快照，请先在账号页匹配本地库存配装。');
-    if (project.candidate.actors.length >= 4) throw new Error('队伍已有四位角色，请先移除需要替换的队员。');
-    if (project.candidate.actors.some(actor => actor.build?.character.id === character.build!.character.id)) throw new Error('队伍已经有这位角色。');
-    const artifacts = Object.values(character.equipment).map(itemId => {
-      const item = account.artifacts.find(entry => entry.id === itemId);
-      if (!item?.real) throw new Error('实际装备存在未补全词条的物品，请先处理。');
-      if (item.mona?.setIdentityPending) throw new Error('实际装备存在套装身份待核对的物品，不能进入计算。');
-      if (project.candidate.actors.some(actor => actor.build?.artifacts.some(piece => piece.id === item.id && piece.inventory?.accountId === account.id))) throw new Error('队伍已占用这件实物，请先调整试配装备。');
-      return calculationArtifact(item.real, account.id);
-    });
-    const data = await import('@leyline/game-data');
-    const sets = await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => data.getArtifactSet(id)));
+    const member = await prepareTeamMember(project, account, id);
     if (axis.project !== project || accounts.account !== account) throw new Error('账号或轴已切换，请重新选择。');
-    const build = buildSchema.parse({ ...character.build, artifacts, sets });
-    axis.command(draft => { axis.actorId = addActorFromBuild(draft, build, character.name); });
+    axis.command(draft => { axis.actorId = addActorFromBuild(draft, member.build, member.name); });
     picking.value = false;
 
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '添加失败。'; }
@@ -73,6 +59,12 @@ function newAxis(team: SavedTeam) {
   emit('timeline');
 }
 function remove(id: string) { axis.command(draft => removeProjectActor(draft, id)); }
+function applyBuild(id: string, build: Build) {
+  axis.command(project => {
+    const actor = project.candidate.actors.find(entry => entry.id === id);
+    if (actor) actor.build = build;
+  });
+}
 </script>
 <template>
   <section class="team-workspace panel library-page" aria-label="队伍">
@@ -150,7 +142,7 @@ function remove(id: string) { axis.command(draft => removeProjectActor(draft, id
       <template #header-leading>
         <EditorActions :dirty="!!teamEditor?.dirty" :busy="teamEditor?.busy" @save="teamEditor?.save()" @restore="teamEditor?.restore()" />
       </template>
-      <TeamLoadoutEditor ref="teamEditor" />
+      <TeamLoadoutEditor ref="teamEditor" :project="axis.project" :actor-id="axis.actorId" :apply-build="applyBuild" axis-context />
     </WorkbenchDialog>
     <ConfirmationDialog v-if="pendingRemoval" title="移除队员？" confirm-label="确认移除"
       @cancel="pendingRemoval = undefined" @confirm="remove(pendingRemoval); pendingRemoval = undefined">

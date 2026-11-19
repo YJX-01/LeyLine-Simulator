@@ -65,7 +65,8 @@ test('shared real-character editor protects team drafts and keeps account indepe
   writeFileSync('artifacts/recorded-showcase-ui-harness.json',JSON.stringify(project));
   await page.getByTestId('workspace-nav-timeline').click();
   await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});
-  await page.getByTestId('workspace-nav-team').click();
+  await page.getByTestId('workspace-nav-analysis').click();
+  await page.getByRole('button',{name:'调整候选配装',exact:true}).click();
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'修改所选队员配装',exact:true});
   const dialogBounds=await dialog.boundingBox();
@@ -111,12 +112,12 @@ test('shared real-character editor protects team drafts and keeps account indepe
     }
     if(target==='loadouts' || target==='combinations')await expect(page.getByRole('region',{name:target==='loadouts'?'角色配置':'圣遗物组合',exact:true})).toBeVisible();
     if(target==='loadouts') {
-      await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
+      await page.getByRole('button',{name:'选择角色',exact:true}).click();
       const picker=page.getByRole('dialog',{name:'选择角色',exact:true});
       await expect(picker.locator('.character-card')).toHaveCount(4);
       await picker.getByRole('button',{name:'选择安柏',exact:true}).click();
       await expect(page.locator('.configuration-row')).toHaveCount(1);
-          await expect(page.locator('.configuration-row .equipment-strip-items > .artifact-item-card')).toHaveCount(5);
+      await expect(page.locator('.configuration-row .equipment-strip-items > .artifact-item-card')).toHaveCount(5);
     }
     if(target==='settings')await page.getByText('界面配色 · 七元素三阶',{exact:true}).click();
     const clipped=await page.locator('input:not([type=checkbox]):not([type=file]),select').evaluateAll(nodes=>nodes.filter(node=>{

@@ -17,10 +17,12 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
   await page.getByLabel('搜索账号角色',{exact:true}).fill('甘雨');
   await page.getByTestId('workspace-nav-loadouts').click();
-  await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
+  const chooseRole=page.getByRole('button',{name:'选择角色',exact:true});
+  await chooseRole.click();
   const picker=page.getByRole('dialog',{name:'选择角色',exact:true});
-  await expect(picker.getByLabel('搜索账号角色',{exact:true})).toHaveValue('');
-  await picker.getByLabel('搜索账号角色',{exact:true}).fill('琴');
+  const pickerSearch=picker.getByLabel('搜索账号角色',{exact:true});
+  await expect(pickerSearch).toHaveValue('');
+  await pickerSearch.pressSequentially('琴');
   await picker.getByRole('button',{name:'选择琴',exact:true}).click();
   await expect(page.locator('.configuration-row')).toHaveCount(1);
   await expect(page.locator('.configuration-title')).toContainText('|');
@@ -28,7 +30,7 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await page.getByTestId('workspace-nav-characters').click();
   await expect(page.getByLabel('搜索账号角色',{exact:true})).toHaveValue('甘雨');
   await page.getByTestId('workspace-nav-loadouts').click();
-  await expect(page.getByRole('button',{name:'筛选配置角色',exact:true})).toContainText('琴');
+  await expect(chooseRole).toContainText('琴');
   await expect(page.locator('.configuration-row .equipment-strip-items > .artifact-item-card')).toHaveCount(5);
   await page.screenshot({path:'artifacts/library-configurations-after.png',fullPage:true});
   await page.getByTestId('workspace-nav-artifacts').click();

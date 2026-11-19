@@ -13,7 +13,7 @@ import {useCharacterLoadoutsStore} from '../stores/character-loadouts';
 import {useArtifactCombinationsStore} from '../stores/artifact-combinations';
 import {accountConfigurations} from '../domain/account-configurations';
 import {combinationName} from '../domain/artifact-combinations';
-import {characterLoadoutName} from '../domain/character-loadout-name';
+import {characterLoadoutLabel} from '../domain/character-loadout-name';
 import {artifactReferences,copyArtifact,type ArtifactReferenceTarget} from '../domain/artifact-references';
 import {artifactReferenceNavigation} from '../composables/artifact-reference-navigation';
 import ArtifactPortrait from '../components/ArtifactPortrait.vue';
@@ -55,7 +55,7 @@ const references=computed(()=>{
   const configurations=accountConfigurations(inventory.value,loadouts.loadouts);
   return artifactReferences(inventory.value,configurations,combinations.combinations,display.value.id).map(reference=>{
     if(reference.target.kind==='combination'){const target=reference.target,item=combinations.combinations.find(item=>item.id===target.id);return {...reference,name:item?combinationName(item,sets.value):reference.name};}
-    if(reference.target.kind==='configuration'){const target=reference.target,configuration=configurations.find(item=>item.character.id===target.characterId && item.presetId===target.presetId);if(configuration){const character=configuration.character,stats=loadouts.effectiveStats(inventory.value.id,character.id,character.name);return {...reference,name:`${character.name} · ${configuration.presetId?'备选':'首选'} · ${character.build?character.build.constellation+'命':'培养待补全'} · ${characterLoadoutName(character,configuration.source,stats,sets.value).split(' · ').slice(1).join('|')}`};}}
+    if(reference.target.kind==='configuration'){const target=reference.target,configuration=configurations.find(item=>item.character.id===target.characterId && item.presetId===target.presetId);if(configuration){const character=configuration.character,stats=loadouts.effectiveStats(inventory.value.id,character.id,character.name);return {...reference,name:`${character.name} | ${configuration.presetId?'备选':'首选'} | ${character.build?character.build.constellation+'命':'培养待补全'} | ${characterLoadoutLabel(character,configuration.source,stats,sets.value)}`};}}
     return reference;
   });
 });

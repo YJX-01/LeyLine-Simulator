@@ -34,6 +34,7 @@ const geoEmblem = `${import.meta.env.BASE_URL}assets/game/elements/geo.webp`;
 
 const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue'));
 const TeamWorkspace = defineAsyncComponent(() => import('./TeamWorkspace.vue'));
+const TeamLibrary = defineAsyncComponent(() => import('./TeamLibrary.vue'));
 const pinia = getActivePinia()!;
 const axisStore = shallowRef<ReturnType<typeof useAxisWorkspaceStore>>();
 const axisLoadError = ref('');
@@ -41,8 +42,9 @@ const axisLoadError = ref('');
 const project = computed(() => axisStore.value!.project);
 const result = computed(() => axisStore.value!.result);
 const selectedId = computed({ get: () => axisStore.value!.selectedId, set: id => { axisStore.value!.selectedId = id; } });
-type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'team' | 'timeline' | 'analysis' | 'account' | 'settings' | 'calculator';
+type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'team' | 'team-library' | 'timeline' | 'analysis' | 'account' | 'settings' | 'calculator';
 const page = ref<Page>(window.location.hash === '#axis' ? 'timeline' : 'characters');
+const navPage = computed(() => page.value === 'team-library' ? 'team' : page.value);
 const collapsed = ref(false);
 const mobileOpen = ref(false);
 const mobileQuery = window.matchMedia('(max-width: 700px)');
@@ -76,7 +78,7 @@ watch(page, async () => {
 }, { immediate: true });
 const activeDomain = computed(() => isAxisPage.value || page.value === 'calculator' ? 'project' : page.value === 'settings' ? 'settings' : 'account');
 const titles: Record<Page, string> = {
-  characters: '角色', loadouts: '角色配置', artifacts: '圣遗物', combinations: '圣遗物组合', team: '队伍',
+  characters: '角色', loadouts: '角色配置', artifacts: '圣遗物', combinations: '圣遗物组合', team: '队伍', 'team-library': '队伍',
   calculator: '伤害计算', analysis: '伤害分析', timeline: '时间轴', account: '账号', settings: '设置',
 };
 const groups: { title: string; domain: string; items: { id: Page; icon: string }[] }[] = [
@@ -182,9 +184,9 @@ async function importFile(event: Event) {
       <div class="nav-groups">
         <div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain">
           <p>{{ group.title }}</p>
-          <button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }"
-            :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${titles[item.id]}`"
-            :data-testid="`workspace-nav-${item.id}`" :title="titles[item.id]" @click="navigate(item.id)">
+          <button v-for="item in group.items" :key="item.id" :class="{ active: navPage === item.id }"
+            :aria-current="navPage === item.id ? 'page' : undefined" :aria-label="`导航 ${titles[item.id]}`"
+            :data-testid="`workspace-nav-${item.id}`" :title="titles[item.id]" @click="navigate(item.id === 'team' ? 'team-library' : item.id)">
             <LibraryNavIcon v-if="group.domain === 'account'" :kind="item.icon" />
             <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg>
             <span class="nav-label">{{ titles[item.id] }}</span>
@@ -217,6 +219,7 @@ async function importFile(event: Event) {
 
       <template v-if="axisStore || !needsAxis">
       <DamageCalculator v-if="page === 'calculator'" ref="calculator" />
+      <TeamLibrary v-else-if="page === 'team-library'" ref="teamWorkspace" />
       <TeamWorkspace v-else-if="page === 'team'" ref="teamWorkspace" @timeline="navigate('timeline')" @account="navigate('characters')" />
 
       <section v-else-if="axisStore && isAxisPage" :key="page" class="panel library-page axis-page" :aria-label="titles[page]">

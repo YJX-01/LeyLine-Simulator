@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
+import type { LocalAccount } from '@leyline/schema';
+import { readDocument } from '../../helpers/browser-document';
 
 const source = '.references/enka/official-example.json';
 test.skip(!existsSync(source), 'Requires the saved actual Enka example showcase.');
@@ -11,8 +13,10 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await page.getByRole('button', { name: '展柜导入', exact: true }).click();
   await page.getByLabel('游戏 UID', { exact: true }).fill('618285856');
   await page.getByRole('button', { name: '查询角色展柜', exact: true }).click();
+  await page.getByRole('button', { name: '仅保存展柜', exact: true }).click();
   await page.getByRole('button', { name: '确认导入 4 位角色', exact: true }).click();
   await page.keyboard.press('Escape');
+  const account = async () => readDocument<LocalAccount>(page, 'account', (await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0')))!);
   const cards = page.locator('.character-card-header > strong');
   const shortcuts = page.getByRole('group', { name: '按元素筛选' });
   await expect(cards).toHaveText(['甘雨', '班尼特', '行秋', '安柏']);
@@ -25,7 +29,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await rarity.getByRole('button', { name: '四星', exact: true }).click();
   await page.getByRole('dialog', { name: '筛选角色' }).getByRole('button', { name: '完成', exact: true }).click();
   await expect(cards).toHaveCount(4);
-  await shortcuts.getByRole('button', { name: '全部', exact: true }).click();
+  await shortcuts.getByRole('button', { name: '全部元素', exact: true }).click();
   await page.getByRole('button', { name: '排序', exact: true }).click();
   await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '名称', exact: true }).click();
   await page.getByRole('dialog',{name:'角色排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
@@ -51,7 +55,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await page.getByRole('button', { name: '排序', exact: true }).click();
   await page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级', exact: true }).click();
   await page.getByRole('dialog',{name:'角色排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
-  await shortcuts.getByRole('button', { name: '全部', exact: true }).click();
+  await shortcuts.getByRole('button', { name: '全部元素', exact: true }).click();
   await expect(cards).toHaveCount(4);
   await page.getByRole('button', { name: '排序', exact: true }).click();
   await expect(page.getByRole('dialog', { name: '角色排序' }).getByRole('button', { name: '等级', exact: true })).toHaveAttribute('aria-pressed', 'true');
@@ -98,7 +102,8 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await expect(levelMenu.getByText('自定义等级',{exact:true})).toBeVisible();
   await expect(levelMenu.getByRole('button',{name:'角色等级 1',exact:true})).toHaveCount(0);
   await bennett.getByRole('button',{name:'角色等级 95',exact:true}).click();await bennett.getByRole('button',{name:'保存',exact:true}).click();
-  const expectedHp=await page.evaluate(()=>{const b=JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.characters.find((entry:{name:string})=>entry.name==='班尼特').build;return Math.round(b.character.attributes.base.hp*b.character.progression.curves.hp[95]+b.character.progression.promotion[6].hp).toLocaleString('zh-CN');});
+  const { character } = (await account()).characters.find(entry => entry.name === '班尼特')!.build!;
+  const expectedHp = Math.round(character.attributes.base.hp * character.progression.curves.hp[95] + character.progression.promotion[6].hp).toLocaleString('zh-CN');
   await bennett.getByRole('button',{name:'展开面板',exact:true}).click();await expect(bennett.locator('[data-stat-value="hp"]')).toHaveText(expectedHp);
   await bennett.getByLabel('角色等级',{exact:true}).click();await bennett.getByRole('button',{name:'提高自定义角色等级',exact:true}).click();await expect(bennett.getByLabel('自定义角色等级',{exact:true})).toHaveValue('100');
   await bennett.getByRole('button',{name:'保存',exact:true}).click();
@@ -117,7 +122,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await page.screenshot({path:'artifacts/cultivation-refined-mobile.png',fullPage:true});
   await expect.poll(() => bennett.evaluate(node => node.scrollWidth<=node.clientWidth)).toBe(true);
   // Re-enter the recorded actual showcase cultivation through the manual-add flow.
-  const original=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.characters.find((entry:{name:string})=>entry.name==='班尼特').showcase.build);
+  const original = (await account()).characters.find(entry => entry.name === '班尼特')!.showcase!.build;
   await page.evaluate(()=>{const file=JSON.parse(localStorage.getItem('leyline-account-0.1.0')!);const account=file.document;account.characters=account.characters.filter((entry:{name:string})=>entry.name!=='班尼特');localStorage.setItem('leyline-account-0.1.0',JSON.stringify(file));});
   await page.setViewportSize({width:1440,height:1080});await page.reload();
   await page.getByRole('button',{name:'手动添加',exact:true}).click();
@@ -128,7 +133,7 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await adding.getByRole('button',{name:`${original.constellation}命`,exact:true}).click();
   await adding.getByRole('button',{name:'保存角色资料',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'班尼特',exact:true})).toBeVisible();
-  const manual=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.characters.find((entry:{name:string})=>entry.name==='班尼特').build);
+  const manual = (await account()).characters.find(entry => entry.name === '班尼特')!.build!;
   expect({id:manual.character.id,level:manual.level,ascension:manual.ascension,constellation:manual.constellation,talents:manual.talents,weapon:manual.weapon.id,weaponLevel:manual.weaponLevel,refinement:manual.refinement}).toEqual({id:original.character.id,level:original.level,ascension:original.ascension,constellation:original.constellation,talents:original.talents,weapon:original.weapon.id,weaponLevel:original.weaponLevel,refinement:original.refinement});
   await page.screenshot({path:'artifacts/cultivation-manual-add.png',fullPage:true});
 

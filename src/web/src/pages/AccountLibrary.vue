@@ -43,7 +43,7 @@ import {useInventoryHistoryMerge} from '../composables/use-inventory-history-mer
 import { useLibraryScroll } from '../composables/use-library-scroll';
 import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
-import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, equipmentConfigurationName, configurationSignature } from '../domain/character-loadout-name';
+import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, characterLoadoutLabel, equipmentConfigurationLabel, configurationSignature } from '../domain/character-loadout-name';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
 import { hasLocalConfiguration, hasCharacterInformation, planClearedConfiguration } from '../domain/account-configurations';
 import { characterListGroup } from '../domain/elemental-forms';
@@ -122,7 +122,7 @@ const effectiveBasis=computed(()=>equipmentView.value==='showcase'?buildRollBasi
 const defaultCharacter = computed(()=>account.value.characters.find(item=>item.id===characterId.value));
 const alternateLoadouts = computed(()=>availableLoadouts.value.filter(item=>!defaultCharacter.value || configurationSignature(item.snapshot.characters[0])!==configurationSignature(defaultCharacter.value)));
 function configurationName(entry:AccountCharacter, source:LocalAccount) { return characterLoadoutName(entry,source,loadouts.effectiveStats(source.id,entry.id,entry.name),catalog.value?.sets ?? []); }
-const draftName=computed(()=>character.value?equipmentConfigurationName(character.value.name,accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];}),effectiveStats.value,catalog.value?.sets ?? [],effectiveBasis.value,effectiveBasis.value.weaponName ?? character.value.build?.weapon.name ?? '未配武器'):'');
+const draftLabel=computed(()=>character.value?equipmentConfigurationLabel(accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];}),effectiveStats.value,catalog.value?.sets ?? [],effectiveBasis.value,effectiveBasis.value.weaponName ?? character.value.build?.weapon.name ?? '未配武器'):'');
 function toggleEffectiveStat(stat:StatKey) {
   const values=effectiveStatGroups.filter(group=>effectiveStats.value.includes(group.stat)).map(group=>group.stat);
   setEffectiveChoices(values.includes(stat)?values.filter(value=>value!==stat):[...values,stat]);
@@ -384,7 +384,7 @@ async function openConfiguration(id:string,presetId='') {
   openCharacter(id);if(presetId)tryPreset(presetId);
 }
 const comparisonTargetRevision=ref(0);
-const comparisonOptions=computed(()=>character.value?accountConfigurations(account.value,loadouts.loadouts).filter(item=>item.character.id===character.value!.id && (equipmentView.value==='showcase' || item.presetId!==editingPresetId.value) && hasLocalConfiguration(item.character)).map(item=>({id:item.id,title:(item.presetId?'备选：':'首选：')+characterLoadoutName(item.character,item.source,effectiveStats.value,catalog.value?.sets ?? []).split(' · ').slice(1).join('|'),basis:buildRollBasis(item.character.build),items:accountSlots.flatMap(slot=>{const piece=item.source.artifacts.find(piece=>piece.id===item.character.equipment[slot]);return piece?[piece]:[];})})):[]);
+const comparisonOptions=computed(()=>character.value?accountConfigurations(account.value,loadouts.loadouts).filter(item=>item.character.id===character.value!.id && (equipmentView.value==='showcase' || item.presetId!==editingPresetId.value) && hasLocalConfiguration(item.character)).map(item=>({id:item.id,title:(item.presetId?'备选：':'首选：')+characterLoadoutLabel(item.character,item.source,effectiveStats.value,catalog.value?.sets ?? []),basis:buildRollBasis(item.character.build),items:accountSlots.flatMap(slot=>{const piece=item.source.artifacts.find(piece=>piece.id===item.character.equipment[slot]);return piece?[piece]:[];})})):[]);
 function configurationDeleted(id:string,presetId:string){configurationPickerOpen.value=false;if(id!==characterId.value)return;if(presetId && presetId!==editingPresetId.value)return;const entry=account.value.characters.find(item=>item.id===id);if(!entry || props.configurationDetail && !hasLocalConfiguration(entry)){closeCharacter();return;}resetDraft();}
 function chooseConfiguration(_characterId:string,presetId:string) { configurationPickerOpen.value=false;selectConfiguration(presetId); }
 
@@ -433,7 +433,7 @@ function equip() {
       <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name" @close="requestCloseCharacter">
       <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
       <template #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name" /></template>
-      <template #header-secondary><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftName.split(' · ').slice(1).join('|') }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
+      <template #header-secondary><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftLabel }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
       <template #header-leading><div class="character-header-tools"><div class="equipment-view-tabs" role="group" aria-label="角色资料来源"><button ref="localViewTab" data-view="local" :aria-pressed="equipmentView==='local'" :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地</button><button v-if="character.showcase" data-view="showcase" :aria-pressed="equipmentView==='showcase'" :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜</button></div><EditorActions v-if="equipmentView==='local'" :dirty="detailDirty" :busy="detailBusy" allow-save-as @save="saveDetail()" @save-as="openSaveAs" @restore="restoreConfiguration" /><button class="clear-showcase ui-action soft" data-size="md" data-accent="pyro" @click="requestClearShowcase">删除</button></div></template>
       <div class="account-editor">
         <p v-if="detailError || loadouts.error" role="alert">{{ detailError || loadouts.error }}</p>
@@ -447,7 +447,7 @@ function equip() {
         <ArtifactEquipmentGrid :entries="accountSlots.map(slot=>({slot,item:equipmentItem(slot)}))" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" popup context-menu @menu="equipmentContext" @inspect="openInspectedArtifact" :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.build?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
         </section>
         <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="effectiveBasis" :items="accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
-        <ComparisonPanel v-if="detailOpen" :key="`${character.id}-${editingPresetId}-${comparisonTargetRevision}`" kind="配置" :current="{title:(equipmentView==='showcase'?'展柜：':'当前配置：')+draftName.split(' · ').slice(1).join('|'),basis:effectiveBasis,items:accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})}" :options="comparisonOptions" :stats="effectiveStats" :reference-name="character.name" />
+        <ComparisonPanel v-if="detailOpen" :key="`${character.id}-${editingPresetId}-${comparisonTargetRevision}`" kind="配置" :current="{title:(equipmentView==='showcase'?'展柜：':'当前配置：')+draftLabel,basis:effectiveBasis,items:accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})}" :options="comparisonOptions" :stats="effectiveStats" :reference-name="character.name" />
       </div>
       </WorkbenchDialog>
       <ContextMenu v-if="equipmentMenu" :x="equipmentMenu.x" :y="equipmentMenu.y" label="角色圣遗物操作" :options="[{id:'details',label:'查看详情'},...(equipmentView==='showcase'?[{id:'import',label:'入库',accent:'anemo' as const}]:[{id:'replace',label:'替换'},{id:'remove',label:'卸下',danger:true}])]" @close="equipmentMenu=undefined" @select="equipmentAction" />
@@ -461,7 +461,7 @@ function equip() {
 
       <UnsavedChangesDialog v-if="discardOpen" :busy="detailBusy" @save="saveAndLeave(()=>saveDetail())" @continue="cancelDiscard" @discard="discardChanges" />
       <ConfirmationDialog v-if="clearShowcaseOpen" :title="clearTarget==='local'?'清除本地配装？':'清除展柜信息？'" confirm-label="确认清除" @cancel="clearShowcaseOpen=false" @confirm="clearShowcase"><p>{{ clearTarget==='local'?'清除本地培养与穿戴，圣遗物保留在库存。':'清除该角色的展柜信息。' }}</p><p v-if="clearPreview?.promotedId">保存后由下一套备选接替首选。</p><p v-if="clearPreview?.removedCharacter">已无其他配置及展柜，保存后移除角色。</p><p>保存后生效。</p></ConfirmationDialog>
-      <WorkbenchDialog v-if="saveAsOpen" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="draftName" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名；首选配置和实际穿戴不变。</p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
+      <WorkbenchDialog v-if="saveAsOpen && character" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="`${character.name} | ${draftLabel}`" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名；首选配置和实际穿戴不变。</p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
     </template>
     <template v-else>
 
@@ -479,10 +479,23 @@ function equip() {
 .account-library.configuration-detail-host { display:contents; }
 .account-library .character-detail-dialog { overflow-y:auto; scrollbar-gutter:stable both-edges; width:min(var(--dialog-width-editor),calc(100vw - 32px)); }
 .inline-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:16px 0; }.inline-section-heading h3 { margin:0; }
-.character-card-header { position:relative; display:grid; grid-template-columns:minmax(88px,1fr) 104px minmax(88px,1fr); align-items:center; gap:8px; width:100%; }.character-card-header > strong { grid-column:2; grid-row:1; text-align:center; }.character-card-status { grid-column:1; grid-row:1; justify-self:start; }.character-card-header > strong { font-size:var(--font-control); line-height:22px; }.character-card-status { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; width:88px; }.character-card-open { grid-column:3; grid-row:1; justify-self:end; width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
+.character-card-header { position:relative; display:grid; grid-template-columns:var(--character-card-media-columns); align-items:center; gap:var(--character-card-media-gap); width:100%; }
+.character-card-header > strong { grid-column:2; grid-row:1; text-align:center; font-size:var(--font-control); line-height:22px; overflow-wrap:anywhere; }
+.character-card-status { grid-column:1; grid-row:1; justify-self:start; display:grid; grid-template-columns:repeat(auto-fill,minmax(36px,1fr)); gap:4px; width:var(--character-card-equipment-size); }
+.character-card-open { grid-column:3; grid-row:1; justify-self:end; width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:1.6; }
 .detail-panel { margin-top:16px; }.detail-panel :deep(.character-stats) { margin:0; padding:12px; border:1px solid var(--line); border-radius:10px; }.detail-panel :deep(.character-stats h3) { display:none; }.detail-artifacts { margin-top:18px; }
 .character-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,312px),1fr)); justify-content:center; gap:12px; margin:0; }
-.character-cards .character-card { container-type:inline-size; width:100%; max-width:360px; justify-self:center; display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left; border:1px solid var(--line); border-radius:16px; background:var(--surface-raised); box-shadow:0 2px 8px color-mix(in srgb,var(--neutral-ink) 1.96%,transparent); transition:border-color .15s,box-shadow .15s,transform .15s; }
+.character-cards .character-card {
+  --character-card-media-gap:8px;
+  --character-card-media-width:min(280px,calc(100cqi - 2 * var(--character-card-media-gap)));
+  --character-card-equipment-size:calc(var(--character-card-media-width) * 88 / 280);
+  --character-card-character-size:calc(var(--character-card-media-width) * 104 / 280);
+  --character-card-media-columns:minmax(0,1fr) var(--character-card-character-size) minmax(0,1fr);
+  container-type:inline-size; width:100%; max-width:360px; justify-self:center; display:flex; flex-direction:column;
+  align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left;
+  border:1px solid var(--line); border-radius:16px; background:var(--surface-raised);
+  box-shadow:0 2px 8px color-mix(in srgb,var(--neutral-ink) 1.96%,transparent); transition:border-color .15s,box-shadow .15s,transform .15s;
+}
 .character-cards .character-card:hover { transform:translateY(-2px); border-color:var(--element-anemo-primary); box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 6.27%,transparent); }
 
 @media(prefers-reduced-motion:reduce){.character-cards .character-card { transition:none; }.character-cards .character-card:hover { transform:none; }}

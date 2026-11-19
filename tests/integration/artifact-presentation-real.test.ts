@@ -52,7 +52,7 @@ describe.skipIf(!existsSync(monaPath))('Actual Mona inventory enhancement infere
     const means:Record<string,number>={attack:750*(.0408+.0466+.0525+.0583)/4,attackPercent:(.0408+.0466+.0525+.0583)/4,energyRecharge:(.0453+.0518+.0583+.0648)/4};
     return value+(means[sub.stat]?sub.value/means[sub.stat]:0);
   },0),0);
-  expect(characterLoadoutName(jean,organizedAccount,jeanStats,data.catalog.sets)).toContain(`琴 · ${expectedCount.toFixed(1)}词条`);
+  expect(characterLoadoutName(jean,organizedAccount,jeanStats,data.catalog.sets)).toContain(`琴 | ${expectedCount.toFixed(1)}词条`);
   const jeanPieces=organizedAccount.artifacts.filter(item=>Object.values(jean.equipment).includes(item.id));
   const breakdown=effectiveRollBreakdown(jeanPieces);
   const referenceMeans:Record<string,number>={hp:14000*.04955,hpPercent:.04955,attack:750*.04955,attackPercent:.04955,defense:700*.06195,defensePercent:.06195,elementalMastery:19.815,energyRecharge:.05505,critRate:.03305,critDamage:.06605};

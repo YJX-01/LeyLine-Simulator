@@ -22,7 +22,8 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   const importedCharacter = imported.characters.find(character => character.build?.character.id === 'xingqiu')!;
   expect(Object.keys(importedCharacter.equipment)).toHaveLength(recorded.equipList.filter((item: { reliquary?: unknown }) => item.reliquary).length);
   for (const id of Object.values(importedCharacter.equipment)) expect(imported.artifacts.some((artifact: { id: string }) => artifact.id === id)).toBe(true);
-  await page.getByTestId('workspace-nav-team').click();
+  await page.getByTestId('workspace-nav-timeline').click();
+  await page.getByRole('button', { name: '前往队伍', exact: true }).click();
   await page.getByRole('button', { name: '从账号选择队员', exact: true }).click();
   await page.getByRole('dialog', { name: '从账号选择队员', exact: true }).getByRole('button').filter({ has: page.getByText('行秋', { exact: true }) }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
@@ -65,7 +66,8 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   };
   const before = await readDocument<Project>(page, 'axis', saved);
   expect(before.candidate.actors[0].build!.character.id).toMatch(/^custom-/);
-  await page.getByTestId('workspace-nav-team').click();
+  await page.getByTestId('workspace-nav-analysis').click();
+  await page.getByRole('button', { name: '调整候选配装', exact: true }).click();
   await page.getByRole('button', { name: '查看与修改配装', exact: true }).click();
   const editor = page.getByRole('dialog', { name: '修改所选队员配装', exact: true });
   // A declared candidate trial, not a claim about the player's original refinement.

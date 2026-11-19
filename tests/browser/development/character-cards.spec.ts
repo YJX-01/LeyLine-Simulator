@@ -18,6 +18,33 @@ async function expectStatusAlignment(page:import('@playwright/test').Page) {
   }));
   expect(issues).toEqual([]);
 }
+async function expectPortraitAlignment(page:import('@playwright/test').Page) {
+  const issues=await page.locator('.character-card').evaluateAll(cards=>cards.flatMap(card=>{
+    const name=card.querySelector('.character-card-header > strong')!.getBoundingClientRect();
+    const sets=card.querySelector('.card-sets')!.getBoundingClientRect();
+    const portrait=card.querySelector('.card-portraits > .characters')!.getBoundingClientRect();
+    const weapon=card.querySelector('.card-weapon')!.getBoundingClientRect();
+    const weaponBadge=card.querySelector('.card-weapon .rank-badge')!;
+    const centerX=(box:DOMRect)=>box.left+box.width/2;
+    const centerY=(box:DOMRect)=>box.top+box.height/2;
+    const errors:string[]=[];
+    if([sets,weapon].some(box=>Math.abs(centerY(box)-centerY(portrait))>.5))errors.push('Portraits lack a shared horizontal center');
+    if(Math.abs(centerX(name)-centerX(portrait))>.5 || Math.abs(centerX(sets)+centerX(weapon)-2*centerX(portrait))>.5)errors.push('Portraits lack a centered character column');
+    if(sets.right>portrait.left || portrait.right>weapon.left || Math.abs(sets.width-weapon.width)>.5)errors.push('Equipment frames overlap or have different sizes');
+    const tiles=Array.from(card.querySelectorAll('.card-set'));
+    const paired=card.querySelector('.card-sets')!.classList.contains('paired');
+    for(const [index,tile] of tiles.entries()){
+      const box=tile.getBoundingClientRect(), badge=tile.querySelector('.set-badge')!;
+      const badgeBox=badge.getBoundingClientRect();
+      const size=paired?sets.width/2:sets.width;
+      if(Math.abs(box.left-sets.left-index*size)>.5 || Math.abs(box.top-sets.top-index*size)>.5 || Math.abs(box.width-size)>.5)errors.push('Set images are out of position');
+      if(Math.abs(badgeBox.top-box.top)>.5 || Math.abs(badgeBox.left-box.left)>.5)errors.push('Set badge is out of its upper-left corner');
+      if(getComputedStyle(badge).fontSize!==getComputedStyle(weaponBadge).fontSize || badgeBox.height!==weaponBadge.getBoundingClientRect().height)errors.push('Set badge and refinement badge have different sizes');
+    }
+    return errors;
+  }));
+  expect(issues).toEqual([]);
+}
 test.skip(!existsSync(source), 'Requires the recorded actual public Enka showcase; no synthetic substitute.');
 
 test('Character cards preserve actual showcase set composition and source isolation', async ({ page }) => {
@@ -42,20 +69,18 @@ test('Character cards preserve actual showcase set composition and source isolat
     await expect(card.locator('.character-card-status svg')).toHaveCount(0);
   }
   await expectStatusAlignment(page);
+  await expectPortraitAlignment(page);
   await expect.poll(() => page.locator('.card-set img').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts.length)).toBe(0);
   await page.screenshot({ path: 'artifacts/character-card-redesign-desktop.png', fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await expectStatusAlignment(page);
+  await expectPortraitAlignment(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'artifacts/character-card-redesign-narrow.png', fullPage: true });
   await page.setViewportSize({ width: 360, height: 844 });
   await expectStatusAlignment(page);
-  const overlapping = await page.locator('.card-portraits').evaluateAll(cards => cards.some(card => {
-    const boxes = Array.from(card.querySelectorAll(':scope > .characters, :scope > .card-sets, :scope > .card-weapon')).map(node => node.getBoundingClientRect());
-    return boxes.some((a, i) => boxes.slice(i + 1).some(b => Math.min(a.right, b.right) > Math.max(a.left, b.left) && Math.min(a.bottom, b.bottom) > Math.max(a.top, b.top)));
-  }));
-  expect(overlapping).toBe(false);
+  await expectPortraitAlignment(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'artifacts/character-card-360.png', fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });

@@ -2,6 +2,7 @@ import {defaultRollBasis,buildRollBasis,type EffectiveRollBasis} from './effecti
 import type { StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountCharacter, LocalAccount } from './account';
 import { averageRollCount } from './artifact-rolls';
+import { artifactSetName } from './artifact-set-name';
 import metadata from 'virtual:leyline-display/character-effective-stats';
 
 export const effectiveStatGroups: {stat:StatKey;label:string;icon:string;members:StatKey[]}[] = [
@@ -37,17 +38,14 @@ export function configurationSignature(character: AccountCharacter) {
   return JSON.stringify([character.attack,character.weapon,character.build ?? null, Object.entries(character.equipment).sort(([a],[b])=>a.localeCompare(b))]);
 }
 export function characterLoadoutName(character: AccountCharacter, account: LocalAccount, stats: readonly StatKey[], sets: readonly {id:string;name:string}[]) {
-  const ids=new Set(Object.values(character.equipment));
-  return equipmentConfigurationName(character.name,account.artifacts.filter(item=>ids.has(item.id)),stats,sets,buildRollBasis(character.build),character.build?.weapon.name ?? '未配武器');
+  return `${character.name} | ${characterLoadoutLabel(character,account,stats,sets)}`;
 }
-export function equipmentConfigurationName(characterName:string,pieces:readonly AccountArtifact[],stats:readonly StatKey[],sets:readonly {id:string;name:string}[],basis:EffectiveRollBasis,weaponName:string,rollTotal?:number) {
+export function characterLoadoutLabel(character: AccountCharacter, account: LocalAccount, stats: readonly StatKey[], sets: readonly {id:string;name:string}[]) {
+  const ids=new Set(Object.values(character.equipment));
+  return equipmentConfigurationLabel(account.artifacts.filter(item=>ids.has(item.id)),stats,sets,buildRollBasis(character.build),character.build?.weapon.name ?? '未配武器');
+}
+export function equipmentConfigurationLabel(pieces:readonly AccountArtifact[],stats:readonly StatKey[],sets:readonly {id:string;name:string}[],basis:EffectiveRollBasis,weaponName:string,rollTotal?:number) {
   const total=rollTotal ?? effectiveRollBreakdown(pieces,basis).filter(group=>group.members.some(stat=>stats.includes(stat))).reduce((sum,row)=>sum+(row.value ?? 0),0);
-  const counts = new Map<string,number>();
-  for (const item of pieces) if(item.real && !item.mona?.setIdentityPending) counts.set(item.real.setId,(counts.get(item.real.setId) ?? 0)+1);
-  const groups = [...counts].sort((a,b)=>b[1]-a[1]);
-  const name = (id:string)=>sets.find(set=>set.id===id)?.name ?? '待核对套装';
-  const four = groups.find(([,count])=>count>=4);
-  const pairs = groups.filter(([,count])=>count>=2);
-  const setName = !pieces.length?'未配圣遗物':four?name(four[0]):pairs.length?pairs.map(([id])=>`${name(id)}2`).join('＋')+(pairs.length===1?'＋散件':''):'散件';
-  return `${characterName} · ${stats.length?`${total.toFixed(1)}词条`:'待选词条'} · ${setName} · ${weaponName}`;
+  const setName=pieces.length?artifactSetName(pieces,sets):'未配圣遗物';
+  return `${stats.length?`${total.toFixed(1)}词条`:'待选词条'}|${setName}|${weaponName}`;
 }

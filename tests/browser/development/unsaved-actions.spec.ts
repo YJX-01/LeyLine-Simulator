@@ -70,7 +70,12 @@ test('team candidate Save on exit persists only the project and follows the requ
     const recorded=preview.rows.find((row:{character:{name:string}})=>row.character.name==='安柏').character.showcase.build;
     const result=createEmptyProject();addActorFromBuild(result,recorded,'安柏');return packDocument('axis',result);
   },JSON.parse(readFileSync(recorded,'utf8')));
-  await page.getByTestId('workspace-nav-timeline').click();await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});await page.getByTestId('workspace-nav-team').click();await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();const editor=page.getByRole('dialog',{name:'修改所选队员配装',exact:true});
+  await page.getByTestId('workspace-nav-timeline').click();
+  await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});
+  await page.getByTestId('workspace-nav-analysis').click();
+  await page.getByRole('button',{name:'调整候选配装',exact:true}).click();
+  await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
+  const editor=page.getByRole('dialog',{name:'修改所选队员配装',exact:true});
   // Explicit refinement trial from the recorded R2 weapon, without claiming a new observation.
   await editor.getByRole('button',{name:'精炼3阶',exact:true}).click();await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(editor).toHaveCount(0);expect(await account(page)).toBe(before);
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();await expect(editor.getByRole('button',{name:'精炼3阶',exact:true})).toHaveAttribute('aria-pressed','true');

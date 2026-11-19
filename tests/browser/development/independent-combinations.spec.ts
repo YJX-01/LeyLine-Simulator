@@ -1,6 +1,7 @@
 import { recordedJsonFile } from '../../helpers/recorded-reference';
 import { existsSync,readFileSync } from 'node:fs';
 import { test,expect,type Page } from '@playwright/test';
+import {chooseConfigurationRole} from '../../helpers/choose-configuration-role';
 const showcase='.references/enka/official-example.json';
 test.skip(!existsSync(showcase),'Requires the recorded public showcase.');
 async function importShowcase(page:Page,local=false){
@@ -45,8 +46,8 @@ test('recorded items: explicit standalone save, duplicate reuse, draft applicati
   await page.getByTestId('workspace-nav-characters').click();await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();
   await role.getByRole('button',{name:'管理生之花',exact:true}).click();await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:'卸下',exact:true}).click();
   await role.getByRole('button',{name:'另存',exact:true}).click();await page.getByRole('button',{name:'确认另存',exact:true}).click();await page.keyboard.press('Escape');
-  await page.getByTestId('workspace-nav-loadouts').click();await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
-  await page.getByRole('dialog',{name:'选择角色',exact:true}).getByRole('button',{name:'选择安柏',exact:true}).click();
+  await page.getByTestId('workspace-nav-loadouts').click();
+  await chooseConfigurationRole(page,'安柏');
   await expect(page.locator('.configuration-row')).toHaveCount(2);
   await page.getByRole('button',{name:'查看安柏首选配置',exact:true}).click();const configurationCompare=role.getByLabel('选择对比配置',{exact:true});await configurationCompare.selectOption((await configurationCompare.locator('option').nth(1).getAttribute('value'))!);await expect(role.locator('.comparison-slot').first()).toContainText('未装备');
   await page.screenshot({path:'artifacts/character-configuration-comparison.png',fullPage:true});await page.keyboard.press('Escape');

@@ -1,9 +1,9 @@
 import {artifactValueSignature} from './showcase-inventory';
 import {defaultRollBasis,type EffectiveRollBasis} from './effective-roll-basis';
-import shortNames from 'virtual:leyline-display/artifact-set-short-names';
 import type { StatKey } from '@leyline/schema';
 import { accountSlots, cloneAccount, parseAccount, equipArtifact, type AccountArtifact, type LocalAccount } from './account';
 import { effectiveRollBreakdown, effectiveStatGroups } from './character-loadout-name';
+import { artifactSetName } from './artifact-set-name';
 
 export interface ArtifactCombination {
   id:string; accountId:string; items:AccountArtifact[]; stats:StatKey[]; referenceName:string; name?:string; nameMode?:'auto'|'custom'; basis?:EffectiveRollBasis; favorite?:number;
@@ -20,12 +20,7 @@ export function effectiveTotal(items:readonly AccountArtifact[],stats:readonly S
 }
 export const mainStatInitials:Record<StatKey,string>={hp:'生',hpPercent:'生',attack:'攻',attackPercent:'攻',defense:'防',defensePercent:'防',elementalMastery:'精',energyRecharge:'充',critRate:'暴',critDamage:'爆',healingBonus:'治',anemoBonus:'风',geoBonus:'岩',electroBonus:'雷',dendroBonus:'草',hydroBonus:'水',pyroBonus:'火',cryoBonus:'冰',physicalBonus:'物'};
 export function defaultCombinationName(combination:Pick<ArtifactCombination,'items'|'stats'|'basis'>,sets:readonly {id:string;name:string}[]) {
-  const counts=new Map<string,number>();
-  for(const item of combination.items)if(item.real && !item.mona?.setIdentityPending)counts.set(item.real.setId,(counts.get(item.real.setId) ?? 0)+1);
-  const groups=[...counts].sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0]));
-  const title=(id:string)=>(shortNames as Record<string,string>)[id] ?? sets.find(set=>set.id===id)?.name ?? '待核对套装';
-  const four=groups.find(([,count])=>count>=4),pairs=groups.filter(([,count])=>count>=2).slice(0,2);
-  const set=four?`4${title(four[0])}`:pairs.length?pairs.map(([id])=>`2${title(id)}`).join('+')+(pairs.length===1?'+散件':''):'散件';
+  const set=artifactSetName(combination.items,sets);
   const main=(['sands','goblet','circlet'] as const).map(slot=>{const stat=combination.items.find(item=>item.slot===slot)?.real?.mainStat;return stat?mainStatInitials[stat]:'缺';}).join('');
   const total=effectiveTotal(combination.items,combination.stats,combination.basis);
   return `${set}-${main}${combination.stats.length?(total===undefined?'?':total.toFixed(1))+'词条':'待选词条'}`;
