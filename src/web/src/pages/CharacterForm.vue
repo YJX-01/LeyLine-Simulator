@@ -112,7 +112,7 @@ async function getRollBasis(){
   if(!disposed && request===basisRequest)rollBasis.value=result;
   return result;
 }
-watch([characterId,weaponId,level,ascension,weaponLevel,weaponAscension],()=>{void getRollBasis();},{immediate:true});
+watch([characterId,weaponId,level,ascension,weaponLevel,weaponAscension],()=>{void getRollBasis();},{immediate:!sourceBuild.value});
 const canSave=computed(()=>!!character.value && weapons.value.some(item=>item.id===weaponId.value));
 defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis, selectedDefinition });
 

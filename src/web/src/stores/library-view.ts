@@ -10,7 +10,7 @@ export const useLibraryViewStore = defineStore('library-view', () => {
     characterId:string; query:string; page:number;
     configurationQuery:string; configurationPage:number; configurationFilter:string; configurationSort:string; configurationDirection:'asc'|'desc';
     configurationDensity:'relaxed'|'compact';
-    teamQuery:string; teamPage:number; teamMember:string; teamMemberCount:number; teamSort:string; teamDirection:'asc'|'desc';
+    teamQuery:string; teamPage:number; teamMember:string; teamSort:string; teamDirection:'asc'|'desc';
     expandedConfigurations:string[]; expandedCombinations:string[];
     scroll:Record<string,number>;
   }>>({});
@@ -19,7 +19,7 @@ export const useLibraryViewStore = defineStore('library-view', () => {
       characterId:'', query:'', page:1,
       configurationQuery:'', configurationPage:1, configurationFilter:'all',
       configurationSort:configurationSortDefaults.key, configurationDirection:configurationSortDefaults.direction, configurationDensity:'relaxed',
-      teamQuery:'', teamPage:1, teamMember:'', teamMemberCount:0, teamSort:teamSortDefaults.key, teamDirection:teamSortDefaults.direction,
+      teamQuery:'', teamPage:1, teamMember:'', teamSort:teamSortDefaults.key, teamDirection:teamSortDefaults.direction,
       expandedConfigurations:[], expandedCombinations:[], scroll:{},
     };
   }

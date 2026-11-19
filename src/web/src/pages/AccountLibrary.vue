@@ -2,7 +2,7 @@
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import {artifactValueSignature} from '../domain/showcase-inventory';
 import {buildRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
-import { computed, ref, shallowRef, onMounted, watch, defineAsyncComponent, nextTick } from 'vue';
+import { computed, ref, shallowRef, onMounted, watch, defineAsyncComponent, nextTick, toRaw } from 'vue';
 import { storeToRefs } from 'pinia';
 import type { StatKey } from '@leyline/schema';
 import { cloneAccount, parseAccount, accountSlots, accountSlotLabels, equipArtifact, type AccountSlot, type AccountCharacter, type AccountArtifact, type LocalAccount } from '../domain/account';
@@ -44,7 +44,7 @@ import { useLibraryScroll } from '../composables/use-library-scroll';
 import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, characterLoadoutLabel, equipmentConfigurationLabel, configurationSignature } from '../domain/character-loadout-name';
-import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
+import { useCharacterLoadoutsStore, type CharacterLoadout } from '../stores/character-loadouts';
 import { hasLocalConfiguration, hasCharacterInformation, planClearedConfiguration } from '../domain/account-configurations';
 import { characterListGroup } from '../domain/elemental-forms';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
@@ -64,7 +64,7 @@ const store = useAccountStore();
 useLibraryScroll(()=>props.page,!props.pick && !props.configurationDetail);
 const { account, error, notice } = storeToRefs(store);
 const context = storeToRefs(store);
-const characterId = context.selectedCharacterId;
+const characterId = props.configurationDetail ? ref('') : context.selectedCharacterId;
 const query = props.pick ? ref('') : context.characterQuery;
 const elementFilter = props.pick ? ref<string[]>([]) : context.characterElement;
 const weaponFilter = props.pick ? ref<string[]>([]) : context.characterWeapon;
@@ -74,6 +74,7 @@ const sortDirection = props.pick ? ref<'asc'|'desc'>('desc') : context.character
 const draftAccount = ref<LocalAccount>();
 const editingAccount = computed(() => draftAccount.value ?? account.value);
 const character = computed(() => editingAccount.value.characters.find(entry => entry.id === characterId.value));
+const inventoryIndex = computed(() => new Map(account.value.artifacts.map((item, index) => [item.id, { item, index }])));
 const loadouts = useCharacterLoadoutsStore();
 const characterMenu=ref<{id:string;x:number;y:number}>(),deleteCharacterId=ref('');
 let deleteCharacterBaseline='';
@@ -113,16 +114,24 @@ const editingPresetId = ref('');
 const favoriteFilter=props.pick?ref<string[]>([]):context.characterFavoriteFilter;
 watch(()=>account.value.id,()=>{favoriteFilter.value=[];});
 const previewConfiguration = ref<AccountCharacter>();
-let draftBaseline = '';
+let baselineCharacter = '';
+let baselineArtifacts: AccountArtifact[] = [];
 let baseSnapshot = '';
-const detailDirty = computed(() => cultivationDirty.value || (!!draftAccount.value && JSON.stringify(draftAccount.value) !== draftBaseline));
+let presetBaseline: CharacterLoadout | undefined;
+const detailDirty = computed(() => {
+  const draft = draftAccount.value;
+  if (!draft) return false;
+  // Equipment edits replace the draft inventory array. Cultivation lives in CharacterForm until save.
+  return cultivationDirty.value || JSON.stringify(character.value) !== baselineCharacter
+    || (toRaw(draft.artifacts) !== baselineArtifacts && JSON.stringify(toRaw(draft.artifacts)) !== JSON.stringify(baselineArtifacts));
+});
 const availableLoadouts = computed(() => loadouts.loadouts.filter(item => item.accountId === account.value.id && item.characterId === characterId.value));
 const effectiveStats = computed(()=>loadouts.effectiveStats(account.value.id,characterId.value,character.value?.name));
 const effectiveBasis=computed(()=>equipmentView.value==='showcase'?buildRollBasis(character.value?.showcase?.build):characterForm.value?.rollBasis ?? buildRollBasis(character.value?.build));
 const defaultCharacter = computed(()=>account.value.characters.find(item=>item.id===characterId.value));
 const alternateLoadouts = computed(()=>availableLoadouts.value.filter(item=>!defaultCharacter.value || configurationSignature(item.snapshot.characters[0])!==configurationSignature(defaultCharacter.value)));
 function configurationName(entry:AccountCharacter, source:LocalAccount) { return characterLoadoutName(entry,source,loadouts.effectiveStats(source.id,entry.id,entry.name),catalog.value?.sets ?? []); }
-const draftLabel=computed(()=>character.value?equipmentConfigurationLabel(accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];}),effectiveStats.value,catalog.value?.sets ?? [],effectiveBasis.value,effectiveBasis.value.weaponName ?? character.value.build?.weapon.name ?? '未配武器'):'');
+const draftLabel=computed(()=>character.value?equipmentConfigurationLabel(equippedItems.value,effectiveStats.value,catalog.value?.sets ?? [],effectiveBasis.value,effectiveBasis.value.weaponName ?? character.value.build?.weapon.name ?? '未配武器'):'');
 function toggleEffectiveStat(stat:StatKey) {
   const values=effectiveStatGroups.filter(group=>effectiveStats.value.includes(group.stat)).map(group=>group.stat);
   setEffectiveChoices(values.includes(stat)?values.filter(value=>value!==stat):[...values,stat]);
@@ -143,10 +152,16 @@ function selectConfiguration(id:string) {
   selectedPreset.value=editingPresetId.value;
   requestLeave(()=>{equipmentView.value='local';resetDraft();if(id)tryPreset(id);});
 }
+function setCleanDraft(next: LocalAccount) {
+  baselineCharacter = JSON.stringify(next.characters.find(entry => entry.id === characterId.value));
+  baselineArtifacts = toRaw(next.artifacts);
+  draftAccount.value = next;
+}
 function resetDraft() {
   equipmentPickerOpen.value=false;
-  baseSnapshot = JSON.stringify(account.value);
-  draftAccount.value = cloneAccount(account.value);draftBaseline=JSON.stringify(draftAccount.value);editingPresetId.value='';previewConfiguration.value=undefined;
+  baseSnapshot = JSON.stringify(toRaw(account.value));
+  setCleanDraft(JSON.parse(baseSnapshot) as LocalAccount);
+  editingPresetId.value='';presetBaseline=undefined;previewConfiguration.value=undefined;
   cultivationDirty.value = false; formRevision.value++; artifactId.value='';
   detailError.value = '';  selectedPreset.value = '';
 }
@@ -155,7 +170,7 @@ async function saveDetail(asPreset = false) {
   const draft = draftAccount.value;
   detailBusy.value = true; detailError.value = '';
   try {
-    if (JSON.stringify(account.value) !== baseSnapshot) throw new Error('账号资料已在其他操作中变化，请先核对并还原草稿后重试。');
+    if (JSON.stringify(toRaw(account.value)) !== baseSnapshot) throw new Error('账号资料已在其他操作中变化，请先核对并还原草稿后重试。');
     const next = cloneAccount(draft);
     let entry = next.characters.find(item => item.id === characterId.value)!;
     if (cultivationDirty.value) {
@@ -164,7 +179,10 @@ async function saveDetail(asPreset = false) {
       entry = prepared;
       next.characters[next.characters.findIndex(item => item.id === entry.id)] = entry;
     }
-    if (draftAccount.value !== draft || !detailOpen.value || JSON.stringify(account.value) !== baseSnapshot) throw new Error('编辑对象已变化，未保存。');
+    if (draftAccount.value !== draft || !detailOpen.value || JSON.stringify(toRaw(account.value)) !== baseSnapshot) throw new Error('编辑对象已变化，未保存。');
+    if (!asPreset && presetBaseline && availableLoadouts.value.find(item => item.id === presetBaseline?.id) !== presetBaseline) {
+      throw new Error('原配置已变化，请还原并核对后再保存。');
+    }
     const valid = parseAccount(next);
     if(asPreset && !hasLocalConfiguration(entry))throw new Error('没有本地配置可另存。');
     if(!hasLocalConfiguration(entry) && !asPreset) {
@@ -181,7 +199,8 @@ async function saveDetail(asPreset = false) {
       const name=configurationName(entry,valid);
       if(asPreset)editingPresetId.value=loadouts.save(name,valid,entry);
       else loadouts.update(editingPresetId.value,name,valid,entry);
-      selectedPreset.value=editingPresetId.value;draftAccount.value=valid;draftBaseline=JSON.stringify(valid);cultivationDirty.value=false;formRevision.value++;
+      presetBaseline=availableLoadouts.value.find(item=>item.id===editingPresetId.value);
+      selectedPreset.value=editingPresetId.value;setCleanDraft(valid);cultivationDirty.value=false;formRevision.value++;
       saveAsOpen.value=false;previewConfiguration.value=undefined;
     } else {
       store.commitEdit(valid); resetDraft();
@@ -202,7 +221,8 @@ function tryPreset(id: string) {
       const current = draftAccount.value.artifacts.find(candidate => candidate.id === item.id);
       if (item.inventoryId!==null && (!current || artifactValueSignature(current) !== artifactValueSignature(item))) throw new Error('方案中的实物已缺失或词条发生变化，请先核对库存。');
     }
-    const next = cloneAccount(draftAccount.value);
+    const source = toRaw(draftAccount.value);
+    const next = { ...source, characters: [...source.characters], artifacts: [...source.artifacts] };
     next.artifacts.push(...preset.snapshot.artifacts.filter(item=>item.inventoryId===null && !next.artifacts.some(current=>current.id===item.id)));
     const original = next.characters.find(item => item.id === entry.id)!;
     const snapshot = JSON.parse(JSON.stringify(entry)) as AccountCharacter;
@@ -210,7 +230,7 @@ function tryPreset(id: string) {
     snapshot.equipment = {}; snapshot.showcase = original.showcase;
     next.characters[next.characters.findIndex(item => item.id === snapshot.id)] = snapshot;
     for (const artifact of Object.values(equipment)) equipArtifact(next, snapshot.id, artifact!);
-    draftAccount.value = parseAccount(next);draftBaseline=JSON.stringify(draftAccount.value);editingPresetId.value=id;selectedPreset.value=id;formRevision.value++;cultivationDirty.value=false;
+    setCleanDraft(next);editingPresetId.value=id;presetBaseline=preset;selectedPreset.value=id;formRevision.value++;cultivationDirty.value=false;
 
   } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '方案未载入。'; selectedPreset.value = ''; }
 }
@@ -221,9 +241,10 @@ const pendingCombination=ref<ArtifactCombination>();
 let combinationBaseline='';
 function syncImportedArtifacts(){
   if(!draftAccount.value)return;
-  const artifacts=cloneAccount(account.value).artifacts;
+  baseSnapshot=JSON.stringify(toRaw(account.value));
+  const { artifacts }=JSON.parse(baseSnapshot) as LocalAccount;
+  baselineArtifacts=artifacts;
   draftAccount.value.artifacts=artifacts;
-  const baseline=JSON.parse(draftBaseline) as LocalAccount;baseline.artifacts=artifacts;draftBaseline=JSON.stringify(baseline);baseSnapshot=JSON.stringify(account.value);
 }
 async function saveCurrentCombination(){
   if(!character.value)return;
@@ -232,10 +253,10 @@ async function saveCurrentCombination(){
   try{
     let items:AccountArtifact[],pending:AccountArtifact[]=[];
     if(equipmentView.value==='showcase'){
-      if(JSON.stringify(account.value)!==baseSnapshot)throw new Error('账号已变化，请核对后还原草稿再保存组合。');
+      if(JSON.stringify(toRaw(account.value))!==baseSnapshot)throw new Error('账号已变化，请核对后还原草稿再保存组合。');
       const plan=planShowcaseInventory(account.value,[character.value]);
       items=plan.items[character.value.id];pending=items.filter(item=>!account.value.artifacts.some(current=>current.id===item.id));
-    }else items=accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];});
+    }else items=equippedItems.value;
     const stats=[...effectiveStats.value];
     const basis=equipmentView.value==='showcase'?buildRollBasis(character.value.showcase?.build):await characterForm.value?.getRollBasis() ?? buildRollBasis(character.value.build);
     if(!detailOpen.value || target!==character.value || source!==account.value || sourceView!==equipmentView.value || form!==characterForm.value)return;
@@ -303,7 +324,6 @@ function guardPreferred(action:()=>void) {
   const id=editingPresetId.value;
   requestLeave(()=>{if(detailDirty.value){resetDraft();if(id)tryPreset(id);}action();});
 }
-function requestCloseCharacter() { requestLeave(closeCharacter); }
 const clearTarget = ref<'local'|'showcase'>('local');
 function requestClearShowcase() {
   const target=equipmentView.value;
@@ -353,7 +373,7 @@ const metadata = (entry: typeof account.value.characters[number]) => entry.build
 const characterRelease = (entry: typeof account.value.characters[number]) => releaseMetadata('characters',entry.build?.character.id,entry.name);
 function roleRolls(entry:AccountCharacter) {
   const stats=loadouts.effectiveStats(account.value.id,entry.id,entry.name);
-  const items=account.value.artifacts.filter(item=>Object.values(entry.equipment).includes(item.id));
+  const items=inventoryEquipment(entry);
   return effectiveRollBreakdown(items,buildRollBasis(Object.values(entry.equipment).some(Boolean)?entry.build:entry.showcase?.build ?? entry.build)).filter(group=>group.members.some(stat=>stats.includes(stat))).reduce((sum,row)=>sum+(row.value ?? 0),0);
 }
 const visibleCharacters = computed(() => {
@@ -366,7 +386,10 @@ const visibleCharacters = computed(() => {
   });
   return items.sort((a,b) => characterListGroup(a.build?.character.id ?? catalog.value?.characters.find(item=>item.name===a.name)?.id)-characterListGroup(b.build?.character.id ?? catalog.value?.characters.find(item=>item.name===b.name)?.id) || (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.build?.level??-1)-(a.build?.level??-1) : sort.value==='constellation' ? (b.build?.constellation??-1)-(a.build?.constellation??-1) : sort.value==='rolls' ? roleRolls(b)-roleRolls(a) : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
 });
-const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({...entry,presetId:'',galleryKey:entry.id,gallerySnapshot:account.value})));
+const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({
+  ...entry, presetId:'', galleryKey:entry.id, gallerySnapshot:account.value, ready:configurationReady(account.value,entry),
+  artifacts: Object.keys(entry.equipment).length ? inventoryEquipment(entry) : accountSlots.flatMap(slot=>showcaseArtifact(entry,slot) ?? []),
+})));
 function openGallery(entry:{id:string;presetId:string}) { if(props.pick){emit('select',entry.id);return;}openCharacter(entry.id);if(entry.presetId)tryPreset(entry.presetId); }
 function handleEmptyAction() { if(account.value.characters.length){query.value='';resetFilters();}else{editingCharacter.value=false;modal.value='create';} }
 function resetFilters() { elementFilter.value=[]; weaponFilter.value=[]; rarityFilter.value=[]; favoriteFilter.value=[]; }
@@ -374,25 +397,27 @@ function resetFilters() { elementFilter.value=[]; weaponFilter.value=[]; rarityF
 const equipmentView=ref<'local'|'showcase'>('local');
 watch(()=>character.value?.id,() => { equipmentView.value='local'; },{immediate:true});
 function showImportedCharacter(id:string) { query.value='';resetFilters();modal.value='';characterId.value=id; }
-function equipmentItem(slot:AccountSlot) { return equipmentView.value==='showcase'&&character.value?showcaseArtifact(character.value,slot,account.value):editingAccount.value.artifacts.find(item=>item.id===character.value?.equipment[slot]); }
-
-function localConfigurationComplete(entry:AccountCharacter) { return configurationReady(account.value,entry); }
-async function openConfiguration(id:string,presetId='') {
-  const source=account.value,entry=source.characters.find(item=>item.id===id);if(!entry)return;
-  if(!props.configurationDetail){query.value=entry.name;resetFilters();}await nextTick();if(account.value!==source)return;
-  if(!props.configurationDetail)[...document.querySelectorAll<HTMLButtonElement>('.character-cards > button')].find(button=>button.getAttribute('aria-label')===`查看${entry.name}详情`)?.focus();
+const equipmentEntries=computed(()=>accountSlots.map(slot=>{
+  const entry=character.value;
+  const item=equipmentView.value==='showcase' && entry ? showcaseArtifact(entry,slot,account.value)
+    : editingAccount.value.artifacts.find(piece=>piece.id===entry?.equipment[slot]);
+  return {slot,item};
+}));
+const equippedItems=computed(()=>equipmentEntries.value.flatMap(({item})=>item?[item]:[]));
+function equipmentItem(slot:AccountSlot) { return equipmentEntries.value[accountSlots.indexOf(slot)].item; }
+function openConfiguration(id:string,presetId='') {
+  if(!account.value.characters.some(item=>item.id===id))return false;
   openCharacter(id);if(presetId)tryPreset(presetId);
+  return true;
 }
 const comparisonTargetRevision=ref(0);
-const comparisonOptions=computed(()=>character.value?accountConfigurations(account.value,loadouts.loadouts).filter(item=>item.character.id===character.value!.id && (equipmentView.value==='showcase' || item.presetId!==editingPresetId.value) && hasLocalConfiguration(item.character)).map(item=>({id:item.id,title:(item.presetId?'备选：':'首选：')+characterLoadoutLabel(item.character,item.source,effectiveStats.value,catalog.value?.sets ?? []),basis:buildRollBasis(item.character.build),items:accountSlots.flatMap(slot=>{const piece=item.source.artifacts.find(piece=>piece.id===item.character.equipment[slot]);return piece?[piece]:[];})})):[]);
+const comparisonOptions=computed(()=>character.value?accountConfigurations(account.value,loadouts.loadouts,character.value.id).filter(item=>(equipmentView.value==='showcase' || item.presetId!==editingPresetId.value) && hasLocalConfiguration(item.character)).map(item=>({id:item.id,title:(item.presetId?'备选：':'首选：')+characterLoadoutLabel(item.character,item.source,effectiveStats.value,catalog.value?.sets ?? []),basis:buildRollBasis(item.character.build),items:accountSlots.flatMap(slot=>{const piece=item.source.artifacts.find(piece=>piece.id===item.character.equipment[slot]);return piece?[piece]:[];})})):[]);
 function configurationDeleted(id:string,presetId:string){configurationPickerOpen.value=false;if(id!==characterId.value)return;if(presetId && presetId!==editingPresetId.value)return;const entry=account.value.characters.find(item=>item.id===id);if(!entry || props.configurationDetail && !hasLocalConfiguration(entry)){closeCharacter();return;}resetDraft();}
 function chooseConfiguration(_characterId:string,presetId:string) { configurationPickerOpen.value=false;selectConfiguration(presetId); }
 
-function cardArtifacts(entry: AccountCharacter, context:LocalAccount=account.value) {
-  // Never mix local physical items with the independent public showcase snapshot.
-  return Object.keys(entry.equipment).length
-    ? context.artifacts.filter(item => Object.values(entry.equipment).includes(item.id))
-    : accountSlots.flatMap(slot => { const item = showcaseArtifact(entry, slot); return item ? [item] : []; });
+function inventoryEquipment(entry: AccountCharacter) {
+  return Object.values(entry.equipment).flatMap(id => inventoryIndex.value.get(id) ?? [])
+    .sort((a,b)=>a.index-b.index).map(({item})=>item);
 }
 
 function equip() {
@@ -416,13 +441,13 @@ function equip() {
         <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
           <span class="character-card-header">
             <span class="character-card-status">
-              <StatusBadge :label="localConfigurationComplete(entry) ? '就绪' : '缺失'" :state="localConfigurationComplete(entry) ? 'complete' : 'missing'" :description="localConfigurationComplete(entry) ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全'" :accessible-name="`本地配置${localConfigurationComplete(entry) ? '就绪' : '缺失'}`" />
+              <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'" :description="entry.ready ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全'" :accessible-name="`本地配置${entry.ready ? '就绪' : '缺失'}`" />
               <StatusBadge v-if="entry.showcase" label="展柜" tone="electro" state="complete" description="有独立展柜快照" accessible-name="有展柜信息" />
             </span>
             <strong>{{ entry.name }}</strong>
             <span class="character-card-trailing"><span v-if="loadouts.favoriteLevel(account.id,entry.id)" class="card-favorite" :aria-label="`${loadouts.favoriteLevel(account.id,entry.id)}级收藏`"><FavoriteMark :level="loadouts.favoriteLevel(account.id,entry.id)" /></span><svg class="character-card-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5H5v14h14v-3M13 5h6v6m0-6-9 9"/></svg></span>
           </span>
-          <CharacterCardPortraits :build="entry.build" :name="entry.name" :artifacts="cardArtifacts(entry,entry.gallerySnapshot)" />
+          <CharacterCardPortraits :build="entry.build" :name="entry.name" :artifacts="entry.artifacts" />
         </button>
       </div>
       <ContextMenu v-if="characterMenu && !props.pick" :x="characterMenu.x" :y="characterMenu.y" label="角色操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'彻底删除',danger:true}]" @close="characterMenu=undefined" @select="characterMenuAction" />
@@ -430,7 +455,8 @@ function equip() {
       <LibraryEmptyState v-if="!visibleCharacters.length" :title="account.characters.length?'没有符合条件的角色':'角色库还是空的'" :description="account.characters.length?'清除搜索与筛选后重试。':'导入角色资料，或手动添加角色。'" :action="account.characters.length?'清除搜索与筛选':'手动添加角色'" @action="handleEmptyAction" />
       <ManualCharacterImport v-if="modal==='create'" @saved="openCharacter" @close="modal=''" />
       </template>
-      <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name" @close="requestCloseCharacter">
+      <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name"
+        :dirty="detailDirty" :before-close="protectDraft" @close="closeCharacter">
       <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
       <template #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name" /></template>
       <template #header-secondary><button class="configuration-title-button" :aria-label="`选择${character.name}配置`" title="切换当前角色的配置" @click="configurationPickerOpen=true"><span>{{ draftLabel }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button></template>
@@ -444,10 +470,10 @@ function equip() {
         <CharacterForm v-if="equipmentView==='showcase'" details :character="character" showcase />
         <section class="detail-panel"><DisclosureHeading class="inline-section-heading" title="角色面板" label="面板" controls="character-stat-panel" :expanded="panelOpen" @toggle="panelOpen = !panelOpen" /><div id="character-stat-panel"><p v-if="panelOpen && cultivationDirty && equipmentView==='local'" class="detail-feedback">培养数值尚未保存，保存后更新面板。</p><CharacterStats v-else-if="panelOpen" :account="editingAccount" :character="character" :showcase="equipmentView === 'showcase'" /></div></section>
         <section class="detail-artifacts"><div class="inline-section-heading"><h3>圣遗物</h3><div class="combination-detail-actions"><button v-if="equipmentView==='local'" class="ui-action soft" data-size="md" data-accent="hydro" @click="combinationPickerOpen=true">应用组合</button><button class="ui-action soft" data-size="md" :data-accent="equipmentView==='showcase'?'electro':'anemo'" @click="saveCurrentCombination">保存组合</button></div></div>
-        <ArtifactEquipmentGrid :entries="accountSlots.map(slot=>({slot,item:equipmentItem(slot)}))" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" popup context-menu @menu="equipmentContext" @inspect="openInspectedArtifact" :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.build?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
+        <ArtifactEquipmentGrid :entries="equipmentEntries" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" popup context-menu @menu="equipmentContext" @inspect="openInspectedArtifact" :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.build?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
         </section>
-        <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="effectiveBasis" :items="accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
-        <ComparisonPanel v-if="detailOpen" :key="`${character.id}-${editingPresetId}-${comparisonTargetRevision}`" kind="配置" :current="{title:(equipmentView==='showcase'?'展柜：':'当前配置：')+draftLabel,basis:effectiveBasis,items:accountSlots.flatMap(slot=>{const item=equipmentItem(slot);return item?[item]:[];})}" :options="comparisonOptions" :stats="effectiveStats" :reference-name="character.name" />
+        <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="effectiveBasis" :items="equippedItems" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
+        <ComparisonPanel v-if="detailOpen" :key="`${character.id}-${editingPresetId}-${comparisonTargetRevision}`" kind="配置" :current="{title:(equipmentView==='showcase'?'展柜：':'当前配置：')+draftLabel,basis:effectiveBasis,items:equippedItems}" :options="comparisonOptions" :stats="effectiveStats" :reference-name="character.name" />
       </div>
       </WorkbenchDialog>
       <ContextMenu v-if="equipmentMenu" :x="equipmentMenu.x" :y="equipmentMenu.y" label="角色圣遗物操作" :options="[{id:'details',label:'查看详情'},...(equipmentView==='showcase'?[{id:'import',label:'入库',accent:'anemo' as const}]:[{id:'replace',label:'替换'},{id:'remove',label:'卸下',danger:true}])]" @close="equipmentMenu=undefined" @select="equipmentAction" />

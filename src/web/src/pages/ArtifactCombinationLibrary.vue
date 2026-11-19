@@ -25,9 +25,9 @@ import SortPanel from '../components/SortPanel.vue';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
 import GameIcon from '../components/GameIcon.vue';
 const editorView=ref<InstanceType<typeof ArtifactCombinationEditor>>();
-defineExpose({requestLeave:(action:()=>void)=>editorView.value?editorView.value.requestLeave(action):action(),openCombination:(id:string)=>{editor.value=store.combinations.find(item=>item.id===id && item.accountId===account.account.id);creating.value=false;}});
+defineExpose({requestLeave:(action:()=>void)=>editorView.value?editorView.value.requestLeave(action):action()});
 const props=defineProps<{pick?:boolean;stats?:StatKey[];referenceName?:string}>();
-const emit=defineEmits<{select:[combination:ArtifactCombination];editRole:[characterId:string,presetId:string];closed:[]}>();
+const emit=defineEmits<{select:[combination:ArtifactCombination]}>();
 const account=useAccountStore(),store=useArtifactCombinationsStore(),views=useLibraryViewStore();
 const view=computed(()=>views.forAccount(account.account.id)),localQuery=ref(''),localPage=ref(1);
 const query=computed({get:()=>props.pick?localQuery.value:view.value.query,set:value=>{if(props.pick)localQuery.value=value;else view.value.query=value;page.value=1;}});
@@ -54,7 +54,7 @@ watch(()=>account.account.id,()=>{editor.value=undefined;creating.value=false;de
 onMounted(async()=>{try{const data=await loadAccountGameData();sets.value=data.catalog.sets;characters.value=data.catalog.characters;}catch{error.value='套装目录加载失败，请重新打开。';}});
 function clearFilters(){query.value='';selectedSets.value=[];favoriteFilter.value=[];}
 function emptyAction(){if(all.value.length)clearFilters();else creating.value=true;}
-function saved(id:string,duplicate:boolean){creating.value=false;editor.value=duplicate?store.combinations.find(item=>item.id===id):undefined;if(!duplicate)emit('closed');}
+function saved(id:string,duplicate:boolean){creating.value=false;editor.value=duplicate?store.combinations.find(item=>item.id===id):undefined;}
 function stale(combination:ArtifactCombination){try{validateCombinationItems(account.account,combination.items);return false;}catch{return true;}}
 function referenceId(combination:ArtifactCombination){return characters.value.find(character=>character.name===combination.referenceName)?.id;}
 const menu=ref<{combination:ArtifactCombination;x:number;y:number}>();
@@ -63,7 +63,9 @@ function openMenu(event:MouseEvent,combination:ArtifactCombination){(event.curre
 function menuKey(event:KeyboardEvent,combination:ArtifactCombination){if(event.key==='ContextMenu' || event.shiftKey && event.key==='F10'){event.preventDefault();const box=(event.currentTarget as HTMLElement).getBoundingClientRect();menu.value={combination,x:box.left+12,y:box.top+12};}}
 function menuAction(action:string){const combination=menu.value?.combination;menu.value=undefined;if(!combination)return;if(action==='details'){editor.value=combination;creating.value=false;}else if(action==='favorite'){try{store.setFavorite(account.account.id,combination.id,combination.favorite?0:1);}catch(cause){error.value=cause instanceof Error?cause.message:'收藏未保存。';}}else{deleteFocus=Array.from(library.value?.querySelectorAll<HTMLElement>('.combination-row') ?? []).find(row=>row.dataset.combinationId===combination.id)?.querySelector<HTMLButtonElement>('.combination-open') ?? undefined;deleteId.value=combination.id;}}
 function cancelDelete(){deleteId.value='';nextTick(()=>{if(deleteFocus?.isConnected)deleteFocus.focus({preventScroll:true});});}
-function remove(){try{store.remove(account.account.id,deleteId.value);deleteId.value='';nextTick(()=>library.value?.querySelector<HTMLInputElement>('input[name=library-search]')?.focus({preventScroll:true}));}catch(cause){error.value=cause instanceof Error?cause.message:'删除失败。';}}
+function focusSearch(){void nextTick(()=>library.value?.querySelector<HTMLInputElement>('input[name=library-search]')?.focus({preventScroll:true}));}
+function remove(){try{store.remove(account.account.id,deleteId.value);deleteId.value='';focusSearch();}catch(cause){error.value=cause instanceof Error?cause.message:'删除失败。';deleteId.value='';}}
+function closeEditor(deleted=false){creating.value=false;editor.value=undefined;if(deleted)focusSearch();}
 </script>
 <template>
   <section ref="library" class="combination-library" aria-label="圣遗物组合库">
@@ -82,7 +84,7 @@ function remove(){try{store.remove(account.account.id,deleteId.value);deleteId.v
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="组合操作" :options="pick?[{id:'details',label:'查看详情'}]:[{id:'details',label:'查看详情'},{id:'favorite',label:menu.combination.favorite?'取消收藏':'收藏'},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
     <WorkbenchDialog v-if="filterOpen" title="筛选组合" size="filter" @close="filterOpen=false"><FilterPanel><section><h3>套装</h3><ArtifactSetFilter v-model="selectedSets" label="组合套装" :options="sets" /></section><section><h3>收藏</h3><FavoriteFilter v-model="favoriteFilter" label="组合收藏等级" /></section></FilterPanel><template #footer><FilterActions flush @reset="selectedSets=[];favoriteFilter=[]" @confirm="filterOpen=false" /></template></WorkbenchDialog>
     <WorkbenchDialog v-if="sortOpen" title="组合排序" size="filter" @close="sortOpen=false"><SortPanel v-model="sort" v-model:direction="direction" :options="[{value:'rolls',label:'有效词条数'},{value:'favorite',label:'收藏等级'},{value:'pieces',label:'装备件数'},{value:'saved',label:'保存顺序'}]" @reset="sort='rolls';direction='desc'" @confirm="sortOpen=false" /></WorkbenchDialog>
-    <ArtifactCombinationEditor ref="editorView" v-if="creating || editor" :key="editor?.id ?? 'new'" :combination="editor" @close="creating=false;editor=undefined;emit('closed')" @saved="saved" />
+    <ArtifactCombinationEditor ref="editorView" v-if="creating || editor" :key="editor?.id ?? 'new'" :combination="editor" @close="closeEditor" @saved="saved" />
     <ConfirmationDialog v-if="deleteId" title="删除组合？" confirm-label="删除" @cancel="cancelDelete" @confirm="remove"><p>只删除保存的组合，库存和角色穿戴不变。</p></ConfirmationDialog>
   </section>
 </template>

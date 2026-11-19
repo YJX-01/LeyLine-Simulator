@@ -9,8 +9,10 @@ import { effectiveStatOptions } from '../domain/character-loadout-name';
 const key=storageKeyFor('artifact-combinations');
 export const useArtifactCombinationsStore=defineStore('artifact-combinations',()=>{
   const combinations=ref<ArtifactCombination[]>([]),error=ref('');
+  let stored:string|null=null;
   try {
-    const raw=JSON.parse(localStorage.getItem(key) ?? '[]');
+    stored=localStorage.getItem(key);
+    const raw=JSON.parse(stored ?? '[]');
     if(!Array.isArray(raw) || raw.length>200)throw new Error();
     const ids=new Set<string>();
     combinations.value=raw.map(entry=>{
@@ -28,7 +30,8 @@ export const useArtifactCombinationsStore=defineStore('artifact-combinations',()
     if(error.value)throw new Error(error.value);
     const text=JSON.stringify(next);
     if(new TextEncoder().encode(text).byteLength>8*1024*1024)throw new Error('组合资料超过本地保存上限，请先导出备份并整理。');
-    localStorage.setItem(key,text);combinations.value=next;
+    if(localStorage.getItem(key)!==stored)throw new Error('组合库已在其他窗口更新，请重新打开应用。');
+    localStorage.setItem(key,text);stored=text;combinations.value=next;
   }
   function save(account:LocalAccount,items:AccountArtifact[],stats:StatKey[],referenceName='',id='',commit?:()=>void,name?:string,basis?:EffectiveRollBasis,copy=false) {
     if(copy)id='';
@@ -50,7 +53,10 @@ export const useArtifactCombinationsStore=defineStore('artifact-combinations',()
     try{commit?.();}catch(cause){try{persist(before);}catch{error.value='组合保存回退失败，请保留当前资料并检查本地存储。';}throw cause;}
     return {id:entry.id,duplicate:false};
   }
-  function remove(accountId:string,id:string) {persist(combinations.value.filter(item=>item.accountId!==accountId || item.id!==id));}
+  function remove(accountId:string,id:string) {
+    if(!combinations.value.some(item=>item.id===id && item.accountId===accountId))throw new Error('组合已不存在，请重新打开。');
+    persist(combinations.value.filter(item=>item.accountId!==accountId || item.id!==id));
+  }
   function setFavorite(accountId:string,id:string,value:number) {
     if(!Number.isInteger(value) || value<0 || value>3)throw new Error('收藏等级无效。');
     if(!combinations.value.some(item=>item.id===id && item.accountId===accountId))throw new Error('组合已不存在，请重新打开。');

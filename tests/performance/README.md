@@ -8,4 +8,6 @@
 
 `pnpm build:check`预算为单JS文件500000字节、启动gzip50000字节、工作区静态依赖gzip150000字节。浏览器驱动耗时、进程堆变化和真实设备覆盖按各自测量环境解释。
 
+浏览器角色详情测量见 `tests/browser/development/configuration-performance.spec.ts`。分别在真实莫娜库存和 Enka 展柜导入后预热一次，再记录十次点击至第二个动画帧的耗时，取中位数。Chromium 同步采集 CPU 样本。结果记录在 `artifacts/character-detail-*-chromium.json`。
+
 通用要求见[性能测量](../../docs/evidence-and-validation.md#性能测量)，原件登记见[验证资料](../../tools/data/README.md#验证资料与独立计算记录)。

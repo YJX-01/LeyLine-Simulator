@@ -2,22 +2,20 @@
 import LibraryNavIcon from '../components/LibraryNavIcon.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
-import type { useAccountStore } from '../stores/account';
-import type {ArtifactReferenceOrigin} from '../composables/artifact-reference-navigation';
-import {artifactReferenceNavigation} from '../composables/artifact-reference-navigation';
-import type {ArtifactReferenceTarget} from '../domain/artifact-references';
-import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick, watch,provide, shallowRef } from 'vue';
+import { artifactReferenceNavigation, useArtifactReferenceNavigation } from '../composables/artifact-reference-navigation';
+import type { ArtifactReferenceTarget } from '../domain/artifact-references';
+import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick, watch, provide, shallowRef, type Component } from 'vue';
 const ThirdPartyCredits = defineAsyncComponent(() => import('./ThirdPartyCredits.vue'));
 const creditsOpen = ref(false);
 function focusMainContent() { document.getElementById('workspace-main')?.focus(); }
 const ThemePalette = defineAsyncComponent(() => import('./ThemePalette.vue'));
 const AccountSettings = defineAsyncComponent(() => import('./AccountSettings.vue'));
 const teamWorkspace=ref<{requestLeave:(action:()=>void)=>void}>();
-const accountLibrary = ref<{ requestLeave: (action:()=>void)=>void;openConfiguration:(id:string,presetId?:string)=>void }>();
+const accountLibrary = ref<{ requestLeave: (action:()=>void)=>void }>();
 const AccountConfigurations=defineAsyncComponent(()=>import('./AccountConfigurations.vue'));
 const configurationEditor=ref<{requestLeave:(action:()=>void)=>void;openConfiguration:(id:string,presetId?:string)=>void}>();
 const configurationEditorOpen=ref(false);
-const accountConfigurations=ref<{requestLeave:(action:()=>void)=>void;openCombination:(id:string)=>void}>(),pendingArtifactReference=ref<ArtifactReferenceTarget>();
+const accountConfigurations=ref<{requestLeave:(action:()=>void)=>void}>();
 const pendingAccountConfiguration=ref<{characterId:string;presetId:string}>();
 const AccountLibrary = defineAsyncComponent(() => import('./AccountLibrary.vue'));
 const DamageCalculator = defineAsyncComponent(() => import('./DamageCalculator.vue'));
@@ -44,7 +42,16 @@ const result = computed(() => axisStore.value!.result);
 const selectedId = computed({ get: () => axisStore.value!.selectedId, set: id => { axisStore.value!.selectedId = id; } });
 type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'team' | 'team-library' | 'timeline' | 'analysis' | 'account' | 'settings' | 'calculator';
 const page = ref<Page>(window.location.hash === '#axis' ? 'timeline' : 'characters');
-const navPage = computed(() => page.value === 'team-library' ? 'team' : page.value);
+const { layers: referenceLayers, follow, back: closeReference, clear: clearReferences } = useArtifactReferenceNavigation();
+const ReferenceDetail = shallowRef<Component>();
+let referenceRequest = 0;
+const visiblePage = computed<Page>(() => {
+  const layer = referenceLayers.value.at(-1);
+  if (!layer || layer.keepPage) return page.value;
+  const kind = layer.target.kind;
+  return kind === 'combination' ? 'combinations' : kind === 'configuration' ? 'loadouts' : 'characters';
+});
+const navPage = computed(() => visiblePage.value === 'team-library' ? 'team' : visiblePage.value);
 const collapsed = ref(false);
 const mobileOpen = ref(false);
 const mobileQuery = window.matchMedia('(max-width: 700px)');
@@ -76,7 +83,7 @@ watch(page, async () => {
     axisStore.value = (await import('../stores/axis-workspace')).useAxisWorkspaceStore(pinia);
   } catch { axisLoadError.value = '轴项目未能加载，请重新打开该页面。'; }
 }, { immediate: true });
-const activeDomain = computed(() => isAxisPage.value || page.value === 'calculator' ? 'project' : page.value === 'settings' ? 'settings' : 'account');
+const activeDomain = computed(() => ['timeline', 'analysis', 'calculator'].includes(visiblePage.value) ? 'project' : visiblePage.value === 'settings' ? 'settings' : 'account');
 const titles: Record<Page, string> = {
   characters: '角色', loadouts: '角色配置', artifacts: '圣遗物', combinations: '圣遗物组合', team: '队伍', 'team-library': '队伍',
   calculator: '伤害计算', analysis: '伤害分析', timeline: '时间轴', account: '账号', settings: '设置',
@@ -113,31 +120,43 @@ const selectedTarget = computed(() => !project.value.objective.damageIds || proj
 const num = (value: number | null | undefined) => value === null || value === undefined || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 const realPartsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技能倍率',bonus:'增伤乘区',crit:'暴击乘区',defense:'防御乘区',resistance:'抗性乘区'};
 const number = (event: Event) => { const value = (event.target as HTMLInputElement).value; return value.trim() ? Number(value) : NaN; };
-const ArtifactDetail=defineAsyncComponent(()=>import('./ArtifactDetail.vue'));
-const inventoryAccount = shallowRef<ReturnType<typeof useAccountStore>>();
-const restoredArtifact=ref<ArtifactReferenceOrigin>(),restoredDetail=ref<{requestLeave:(action:()=>void)=>void}>();
-const artifactReturnItem=ref<ArtifactReferenceOrigin>();
-const restoredItem=computed(()=>restoredArtifact.value?inventoryAccount.value?.account.artifacts.find(item=>item.id===restoredArtifact.value!.item.id) ?? restoredArtifact.value.item:undefined);
-function closeRestoredArtifact(){const id=restoredArtifact.value?.item.id;restoredArtifact.value=undefined;nextTick(()=>{Array.from(document.querySelectorAll<HTMLButtonElement>('.inventory-card')).find(button=>button.dataset.artifactId===id)?.focus({preventScroll:true});});}
-const artifactReturnPage=ref<Page>();
-async function returnFromArtifactReference() {
-  const origin = artifactReturnPage.value, item = artifactReturnItem.value;
-  artifactReturnPage.value = undefined;
-  artifactReturnItem.value = undefined;
-  if (!origin) return;
-  if (item) inventoryAccount.value = (await import('../stores/account')).useAccountStore(pinia);
-  await nextTick();
-  navigate(origin, () => { if (item && item.accountId === inventoryAccount.value?.account.id) restoredArtifact.value = item; });
+async function openReference(target: ArtifactReferenceTarget, keepPage = false) {
+  const source = Array.from(document.querySelectorAll<HTMLDialogElement>('dialog[open]')).at(-1);
+  const request = ++referenceRequest;
+  try {
+    if (!ReferenceDetail.value) ReferenceDetail.value = (await import('./ReferenceDetail.vue')).default;
+    if (request === referenceRequest && source?.isConnected && source.open) await follow(target, keepPage);
+  } catch {
+    // The source stays open if the linked editor fails to load.
+  }
 }
-function configurationClosed(){configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;returnFromArtifactReference();}
-function navigate(target: Page,after?:()=>void,reference=false) { const apply=()=>{restoredArtifact.value=undefined;if(!reference){artifactReturnPage.value=undefined;artifactReturnItem.value=undefined;}creditsOpen.value=false;configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;page.value=target;mobileOpen.value=false;if(after)nextTick(after);};if(restoredDetail.value)restoredDetail.value.requestLeave(apply);else if(configurationEditor.value && target!==page.value)configurationEditor.value.requestLeave(apply);else if(accountLibrary.value && target!==page.value)accountLibrary.value.requestLeave(apply);else if(accountConfigurations.value)accountConfigurations.value.requestLeave(apply);else if(teamWorkspace.value && target!==page.value)teamWorkspace.value.requestLeave(apply);else if(calculator.value && target!==page.value)calculator.value.requestLeave(apply);else apply(); }
-provide(artifactReferenceNavigation,(target,item)=>{const origin=artifactReturnPage.value ?? page.value;navigate(target.kind==='combination'?'combinations':target.kind==='configuration'?'loadouts':'characters',()=>{artifactReturnPage.value=origin;artifactReturnItem.value=item;pendingArtifactReference.value=target;},true);});
-watch([accountLibrary,accountConfigurations,pendingArtifactReference],([library,configurations,target])=>{
-  if(!target)return;
-  if(target.kind==='combination' && configurations && page.value==='combinations'){pendingArtifactReference.value=undefined;configurations.openCombination(target.id);}
-  else if(target.kind==='character' && library && page.value==='characters'){pendingArtifactReference.value=undefined;library.openConfiguration(target.characterId);}
-  else if(target.kind==='configuration' && configurations && page.value==='loadouts'){pendingArtifactReference.value=undefined;editAccountConfiguration(target.characterId,target.presetId);}
-},{flush:'post'});
+provide(artifactReferenceNavigation, openReference);
+function inspectTeamConfiguration(characterId: string, presetId: string) {
+  void openReference({ kind: 'configuration', characterId, presetId }, true);
+}
+function invalidateReferences() {
+  referenceRequest++;
+  clearReferences(true);
+}
+function configurationClosed(){configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;}
+function navigate(target: Page, after?: () => void) {
+  const apply = () => {
+    referenceRequest++;
+    clearReferences();
+    creditsOpen.value = false;
+    configurationEditorOpen.value = false;
+    pendingAccountConfiguration.value = undefined;
+    page.value = target;
+    mobileOpen.value = false;
+    if (after) void nextTick(after);
+  };
+  if (configurationEditor.value && target !== page.value) configurationEditor.value.requestLeave(apply);
+  else if (accountLibrary.value && target !== page.value) accountLibrary.value.requestLeave(apply);
+  else if (accountConfigurations.value) accountConfigurations.value.requestLeave(apply);
+  else if (teamWorkspace.value && target !== page.value) teamWorkspace.value.requestLeave(apply);
+  else if (calculator.value && target !== page.value) calculator.value.requestLeave(apply);
+  else apply();
+}
 function editAccountConfiguration(characterId:string,presetId:string) {pendingAccountConfiguration.value={characterId,presetId};configurationEditorOpen.value=true;}
 watch([configurationEditor,pendingAccountConfiguration],([library,pending])=>{if(library && pending){pendingAccountConfiguration.value=undefined;library.openConfiguration(pending.characterId,pending.presetId);}},{flush:'post'});
 function focusClickedControl(event: MouseEvent) {
@@ -208,18 +227,18 @@ async function importFile(event: Event) {
     </nav>
     <button v-if="!narrow" class="sidebar-edge-toggle" :aria-label="collapsed ? '展开侧栏（边缘按钮）' : '收起侧栏（边缘按钮）'" :title="collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="!collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 7 12l8 7Z" /></svg></button>
 
-    <div id="workspace-main" class="workspace-body" role="main" tabindex="-1" :aria-label="titles[page]" :inert="narrow && mobileOpen">
+    <div id="workspace-main" class="workspace-body" role="main" tabindex="-1" :aria-label="titles[visiblePage]" :inert="narrow && mobileOpen">
       <header v-if="narrow" class="design-topbar">
         <button ref="menuButton" class="mobile-menu" aria-label="打开功能导航" :aria-expanded="mobileOpen"
           aria-controls="workspace-navigation" @click="toggleNavigation">☰</button>
-        <span class="mobile-page-label">{{ titles[page] }}</span>
+        <span class="mobile-page-label">{{ titles[visiblePage] }}</span>
       </header>
-      <h1 class="page-accessible-title">{{ titles[page] }}</h1>
+      <h1 class="page-accessible-title">{{ titles[visiblePage] }}</h1>
       <p v-if="needsAxis && !axisStore && axisLoadError" class="axis-load-error" role="alert">{{ axisLoadError }}</p>
 
       <template v-if="axisStore || !needsAxis">
       <DamageCalculator v-if="page === 'calculator'" ref="calculator" />
-      <TeamLibrary v-else-if="page === 'team-library'" ref="teamWorkspace" />
+      <TeamLibrary v-else-if="page === 'team-library'" ref="teamWorkspace" @inspect="inspectTeamConfiguration" />
       <TeamWorkspace v-else-if="page === 'team'" ref="teamWorkspace" @timeline="navigate('timeline')" @account="navigate('characters')" />
 
       <section v-else-if="axisStore && isAxisPage" :key="page" class="panel library-page axis-page" :aria-label="titles[page]">
@@ -349,15 +368,16 @@ async function importFile(event: Event) {
         </details>
       </section>
 
-      <AccountConfigurations ref="accountConfigurations" v-else-if="page==='loadouts' || page==='combinations'" :mode="page==='loadouts'?'characters':'artifacts'" @detail-closed="returnFromArtifactReference" @edit="editAccountConfiguration" />
-      <AccountLibrary ref="accountLibrary" v-else-if="page==='characters' || page==='artifacts'" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('account')" @detail-closed="returnFromArtifactReference" />
+      <AccountConfigurations ref="accountConfigurations" v-else-if="page==='loadouts' || page==='combinations'" :mode="page==='loadouts'?'characters':'artifacts'" @edit="editAccountConfiguration" />
+      <AccountLibrary ref="accountLibrary" v-else-if="page==='characters' || page==='artifacts'" :page="page === 'characters' ? 'characters' : 'artifacts'" @settings="navigate('account')" />
 
       <section v-else-if="page==='account'" class="panel account-page"><AccountSettings /></section>
       <section v-else class="panel settings-page"><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于与支持范围</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、账号管理、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><button class="ui-action soft" data-accent="anemo" @click="creditsOpen = true">开源许可与鸣谢</button><p>原神游戏内容 © miHoYo / HoYoverse。</p></details></section>
 
       </template>
       <AccountLibrary v-if="configurationEditorOpen" ref="configurationEditor" page="characters" configuration-detail @detail-closed="configurationClosed" />
-      <ArtifactDetail v-if="restoredArtifact && restoredItem" ref="restoredDetail" :key="restoredItem.id" :item="restoredItem" :readonly="restoredArtifact.readonly || !inventoryAccount?.account.artifacts.some(item=>item.id===restoredItem!.id)" @close="closeRestoredArtifact" />
+      <component :is="ReferenceDetail" v-for="layer in referenceLayers" :key="layer.id" :target="layer.target"
+        @close="closeReference(layer.id)" @account-changed="invalidateReferences" />
       <WorkbenchDialog v-if="creditsOpen" title="开源许可与鸣谢" @close="creditsOpen = false"><ThirdPartyCredits /></WorkbenchDialog>
     </div>
   </div>

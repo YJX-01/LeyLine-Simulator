@@ -8,9 +8,9 @@ import {useLibraryViewStore} from '../stores/library-view';
 import CharacterConfigurationList from './CharacterConfigurationList.vue';
 import ArtifactCombinationLibrary from './ArtifactCombinationLibrary.vue';
 const combinations=ref<InstanceType<typeof ArtifactCombinationLibrary>>();
-defineExpose({requestLeave:(action:()=>void)=>combinations.value?combinations.value.requestLeave(action):action(),openCombination:(id:string)=>combinations.value?.openCombination(id)});
+defineExpose({requestLeave:(action:()=>void)=>combinations.value?combinations.value.requestLeave(action):action()});
 const props=defineProps<{mode:'characters'|'artifacts'}>();
-const emit=defineEmits<{edit:[characterId:string,presetId:string];detailClosed:[]}>();
+const emit=defineEmits<{edit:[characterId:string,presetId:string]}>();
 const account=useAccountStore(),views=useLibraryViewStore();
 const view=computed(()=>views.forAccount(account.account.id));
 const rolePickerOpen=ref(false);
@@ -26,7 +26,7 @@ useLibraryScroll(()=>props.mode==='characters'?'configurations':'combinations');
   <section class="account-configurations panel library-page" :aria-label="mode==='characters'?'角色配置':'圣遗物组合'">
     <LibraryCornerOrnaments />
     <CharacterConfigurationList v-if="mode==='characters'" @pick-role="rolePickerOpen=true" @select="(characterId,presetId)=>emit('edit',characterId,presetId)" />
-    <ArtifactCombinationLibrary v-else ref="combinations" @closed="emit('detailClosed')" />
+    <ArtifactCombinationLibrary v-else ref="combinations" />
     <CharacterSelectionDialog v-if="rolePickerOpen" allow-all :selected-id="view.characterId" @close="rolePickerOpen=false" @select="selectRole" />
   </section>
 </template>

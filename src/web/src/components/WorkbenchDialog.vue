@@ -1,23 +1,30 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue';
 import CloseButton from './CloseButton.vue';
-defineProps<{ title: string; compact?: boolean; editor?: boolean; size?: 'filter'; stickyFooter?:boolean; centerTitle?:boolean }>();
+import { workbenchDialogClose, type BeforeDialogClose } from '../composables/workbench-dialog-close';
+const props = defineProps<{ title: string; compact?: boolean; editor?: boolean; size?: 'filter'; stickyFooter?:boolean; centerTitle?:boolean;
+  dirty?: boolean; beforeClose?: BeforeDialogClose }>();
 const emit = defineEmits<{ close: [] }>();
 const dialog = ref<HTMLDialogElement>();
+function requestClose(closed?: () => void, canceled?: () => void) {
+  const finish = () => { emit('close'); closed?.(); };
+  if (props.beforeClose) props.beforeClose(finish, canceled);
+  else finish();
+}
 let pressedBackdrop=false;
 function outside(event:MouseEvent) {
   const bounds=dialog.value?.getBoundingClientRect();
   return !!bounds && (event.clientX<bounds.left || event.clientX>bounds.right || event.clientY<bounds.top || event.clientY>bounds.bottom);
 }
 function backdropClick(event:MouseEvent) {
-  if(event.target===dialog.value && pressedBackdrop && outside(event))emit('close');
+  if(event.target===dialog.value && pressedBackdrop && outside(event))requestClose();
   pressedBackdrop=false;
 }
 function cancel(event:Event) {
   if(event.target!==dialog.value)return;
   event.preventDefault();
   event.stopPropagation();
-  emit('close');
+  requestClose();
 }
 let previous: HTMLElement | null = null;
 let focusObserver:MutationObserver|undefined;
@@ -30,13 +37,20 @@ function recoverFocus(){
 onMounted(() => {
   previous = document.activeElement as HTMLElement;dialog.value?.showModal();
   focusObserver=new MutationObserver(()=>queueMicrotask(recoverFocus));
-  if(dialog.value)focusObserver.observe(dialog.value,{subtree:true,childList:true,attributes:true,attributeFilter:['disabled','hidden','style','open']});
+  if(dialog.value){
+    workbenchDialogClose.set(dialog.value,{isDirty:()=>!!props.dirty,close:requestClose});
+    focusObserver.observe(dialog.value,{subtree:true,childList:true,attributes:true,attributeFilter:['disabled','hidden','style','open']});
+  }
 });
-onBeforeUnmount(() => { focusObserver?.disconnect();dialog.value?.close(); queueMicrotask(() => previous?.isConnected && previous.focus({preventScroll:true})); });
+onBeforeUnmount(() => {
+  focusObserver?.disconnect();
+  if (dialog.value) { workbenchDialogClose.delete(dialog.value); dialog.value.close(); }
+  queueMicrotask(() => previous?.isConnected && previous.focus({preventScroll:true}));
+});
 </script>
 <template>
-  <dialog ref="dialog" class="workbench-dialog" :class="{'compact-dialog':compact,'editor-dialog':editor,'filter-dialog':size==='filter','sticky-footer-dialog':stickyFooter,'center-title-dialog':centerTitle}" :aria-label="title" @keydown.esc.prevent.stop="emit('close')" @cancel="cancel" @pointerdown="pressedBackdrop=$event.target===dialog && outside($event)" @click="backdropClick">
-    <header :class="{'has-secondary':!!$slots['header-secondary']}"><div v-if="$slots['header-leading']" class="dialog-leading"><slot name="header-leading" /></div><slot name="title"><h2>{{ title }}</h2></slot><div class="dialog-trailing"><div v-if="$slots['header-trailing']" class="dialog-extra"><slot name="header-trailing" /></div><div v-if="$slots['header-secondary']" class="dialog-secondary"><slot name="header-secondary" /></div><CloseButton autofocus :label="`关闭${title}`" @click="emit('close')" /></div></header>
+  <dialog ref="dialog" class="workbench-dialog" :class="{'compact-dialog':compact,'editor-dialog':editor,'filter-dialog':size==='filter','sticky-footer-dialog':stickyFooter,'center-title-dialog':centerTitle}" :aria-label="title" @keydown.esc.prevent.stop="requestClose()" @cancel="cancel" @pointerdown="pressedBackdrop=$event.target===dialog && outside($event)" @click="backdropClick">
+    <header :class="{'has-secondary':!!$slots['header-secondary']}"><div v-if="$slots['header-leading']" class="dialog-leading"><slot name="header-leading" /></div><slot name="title"><h2>{{ title }}</h2></slot><div class="dialog-trailing"><div v-if="$slots['header-trailing']" class="dialog-extra"><slot name="header-trailing" /></div><div v-if="$slots['header-secondary']" class="dialog-secondary"><slot name="header-secondary" /></div><CloseButton autofocus :label="`关闭${title}`" @click="requestClose()" /></div></header>
     <div class="dialog-content"><slot /></div>
     <footer v-if="$slots.footer"><slot name="footer" /></footer>
   </dialog>

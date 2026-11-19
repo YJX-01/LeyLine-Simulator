@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {buildRollBasis,defaultRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, shallowRef, onMounted } from 'vue';
 import type { AccountArtifact, AccountSlot } from '../domain/account';
 import { accountSlots, accountSlotLabels, cloneAccount } from '../domain/account';
 import type { StatKey } from '@leyline/schema';
 import { defaultCombinationName, combinationName, usesAutomaticCombinationName, type ArtifactCombination } from '../domain/artifact-combinations';
+import { fileSignature } from '../domain/file-signature';
 import { defaultEffectiveStats, effectiveStatGroups } from '../domain/character-loadout-name';
 import { loadAccountGameData } from '../domain/account-presentation';
 import { useAccountStore } from '../stores/account';
@@ -13,6 +14,7 @@ import { useArtifactCombinationsStore } from '../stores/artifact-combinations';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import EditorActions from '../components/EditorActions.vue';
+import EditorNameField from '../components/EditorNameField.vue';
 import FavoriteControl from '../components/FavoriteControl.vue';
 import ArtifactEquipmentGrid from '../components/ArtifactEquipmentGrid.vue';
 import EffectiveRollSummary from '../components/EffectiveRollSummary.vue';
@@ -24,7 +26,7 @@ import ArtifactDetail from './ArtifactDetail.vue';
 import ContextMenu from '../components/ContextMenu.vue';
 import ArtifactPickerDialog from '../components/ArtifactPickerDialog.vue';
 const props=defineProps<{combination?:ArtifactCombination;seed?:{items:AccountArtifact[];stats:StatKey[];referenceName:string;name?:string;basis?:EffectiveRollBasis};pendingArtifacts?:AccountArtifact[]}>();
-const emit=defineEmits<{close:[];saved:[id:string,duplicate:boolean]}>();
+const emit=defineEmits<{close:[deleted?:boolean];saved:[id:string,duplicate:boolean]}>();
 const account=useAccountStore(),combinations=useArtifactCombinationsStore(),loadouts=useCharacterLoadoutsStore();
 const owner=account.account.id,inventoryBaseline=JSON.stringify(account.account);
 const initial={items:props.combination?.items ?? props.seed?.items ?? [],stats:props.combination?.stats ?? props.seed?.stats ?? [],referenceName:props.combination?.referenceName ?? props.seed?.referenceName ?? '',name:props.combination && !usesAutomaticCombinationName(props.combination)?props.combination.name:props.combination?undefined:props.seed?.name,basis:props.combination?.basis ?? props.seed?.basis ?? defaultRollBasis()};
@@ -46,9 +48,30 @@ const guard=useUnsavedChanges(dirty);
 defineExpose({requestLeave:guard.requestLeave});
 const inventory=computed(()=>{const next=cloneAccount(account.account);next.artifacts.push(...(props.pendingArtifacts ?? []).filter(item=>!next.artifacts.some(current=>current.id===item.id)));return next;});
 const imports=computed(()=>draft.value.items.filter(item=>item.inventoryId!==null && !account.account.artifacts.some(current=>current.id===item.id)));
-const favorite=computed(()=>combinations.combinations.find(item=>item.id===props.combination?.id && item.accountId===owner)?.favorite ?? 0);
+const savedCombination=computed(()=>combinations.combinations.find(item=>item.id===props.combination?.id && item.accountId===owner));
+function savedContent(item?:ArtifactCombination){
+  if(!item)return undefined;
+  const {favorite, ...content}=item;
+  return fileSignature(content);
+}
+const savedBaseline=savedContent(props.combination);
+const favorite=computed(()=>savedCombination.value?.favorite ?? 0);
+const deleting=shallowRef<ArtifactCombination>();
+function requestDelete(){
+  if(!savedCombination.value){error.value='组合已不存在，请重新打开。';return;}
+  deleting.value=savedCombination.value;
+}
+function remove(){
+  const target=deleting.value;
+  deleting.value=undefined;
+  if(!target)return;
+  try{
+    if(account.account.id!==owner || savedCombination.value!==target)throw new Error('组合已变化，请重新确认删除。');
+    combinations.remove(owner,target.id);
+    emit('close',true);
+  }catch(cause){error.value=cause instanceof Error?cause.message:'组合未能删除，请重试。';}
+}
 function setFavorite(value:number){try{if(props.combination)combinations.setFavorite(owner,props.combination.id,value);error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'收藏未保存。';}}
-function close(){guard.requestLeave(()=>emit('close'));}
 function restore(){draft.value=JSON.parse(baseline);error.value='';}
 function chooseReference(name:string){draft.value.referenceName=name;const character=account.account.characters.find(item=>item.name===name);if(name)draft.value.stats=character?loadouts.effectiveStats(owner,character.id,name):defaultEffectiveStats(name);draft.value.basis=buildRollBasis(character?.build);}
 function toggle(stat:StatKey){const group=effectiveStatGroups.find(item=>item.stat===stat)!;draft.value.stats=group.members.some(item=>draft.value.stats.includes(item))?draft.value.stats.filter(item=>!group.members.includes(item)):[...draft.value.stats,...group.members];}
@@ -56,6 +79,7 @@ function save(confirmed=false,copy=false){
   try{
     error.value='';
     if(account.account.id!==owner)throw new Error('账号已切换，请重新打开。');
+    if(props.combination && !copy && savedContent(savedCombination.value)!==savedBaseline)throw new Error('原组合已变化，请重新打开核对。');
     if(draft.value.name!==undefined && !draft.value.name.trim())throw new Error('请输入组合名称，或使用自动命名。');
     if(confirmed && saveBaseline!==JSON.stringify(draft.value))throw new Error('组合草稿已变化，请重新保存。');
     if(imports.value.length){
@@ -73,9 +97,15 @@ function cancelImport(){importOpen.value=false;guard.cancelDiscard();}
 function select(item:AccountArtifact){draft.value.items=[...draft.value.items.filter(entry=>entry.slot!==item.slot),JSON.parse(JSON.stringify(item))];pickerOpen.value=false;}
 </script>
 <template>
-  <WorkbenchDialog editor :title="combination?'编辑组合':seed?'保存组合':'新建组合'" @close="close"><template #header-leading><EditorActions :dirty="modified" :can-save="canSave" :allow-save-as="!!combination" :can-save-as="canGenerateName" @save-as="save(false,true)" @save="save()" @restore="restore" /></template><template v-if="combination" #header-trailing><FavoriteControl :level="favorite" label="设置组合收藏" @change="setFavorite" /></template>
+  <WorkbenchDialog editor :title="combination?'编辑组合':seed?'保存组合':'新建组合'" :dirty="dirty" :before-close="guard.requestLeave" @close="emit('close')">
+    <template #header-leading>
+      <EditorActions :dirty="modified" :can-save="canSave" :allow-save-as="!!combination" :can-save-as="canGenerateName" @save-as="save(false,true)" @save="save()" @restore="restore" />
+      <button v-if="combination" type="button" class="ui-action soft" data-size="md" data-accent="pyro" @click="requestDelete">删除</button>
+    </template>
+    <template v-if="combination" #header-trailing><FavoriteControl :level="favorite" label="设置组合收藏" @change="setFavorite" /></template>
     <p v-if="error" role="alert">{{ error }}</p>
-    <div class="combination-name-row"><label>组合名称<input :value="draft.name ?? automaticName" aria-label="组合名称" maxlength="160" @input="draft.name=($event.target as HTMLInputElement).value"></label><button class="ui-action soft" data-size="md" :aria-pressed="draft.name===undefined" :disabled="!canGenerateName" @click="draft.name=undefined">自动命名</button></div>
+    <EditorNameField class="combination-name-row" label="组合名称" :model-value="draft.name ?? automaticName"
+      :automatic="draft.name===undefined" :can-generate="canGenerateName" @update:model-value="draft.name=$event" @generate="draft.name=undefined" />
     <ArtifactEquipmentGrid density="compact" :effective-stats="draft.stats" :entries="accountSlots.map(slot=>({slot,item:draft.items.find(item=>item.slot===slot)}))" :account="inventory" popup context-menu inspect-primary @inspect="inspect" @menu="equipmentContext" @change="slot=$event;pickerOpen=true" />
     <div class="combination-effective"><div class="combination-reference-row"><EffectiveReferencePicker :name="draft.referenceName" @select="chooseReference" /></div><section class="combination-rolls" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="draft.basis" :items="draft.items" :selected-stats="draft.stats" selectable @toggle="toggle" /></section></div>
     <ComparisonPanel kind="组合" :current="{title:draft.name ?? automaticName,items:draft.items,basis:draft.basis}" :options="comparisonOptions" :stats="draft.stats" :reference-name="draft.referenceName" />
@@ -83,9 +113,13 @@ function select(item:AccountArtifact){draft.value.items=[...draft.value.items.fi
     <ArtifactDetail v-if="detailItem" :item="detailItem" readonly @close="detailItem=undefined" />
     <ArtifactPickerDialog v-if="pickerOpen" :slot="slot" :account="inventory" :current="draft.items.find(item=>item.slot===slot)" @close="pickerOpen=false" @remove="draft.items=draft.items.filter(item=>item.slot!==slot);pickerOpen=false" @select="select" />
     <ConfirmationDialog v-if="importOpen" title="入库并保存组合？" :danger="false" confirm-label="保存组合" @cancel="cancelImport" @confirm="confirmImport"><p>圣遗物新增 {{ imports.length }} 件，随后保存组合。</p><p>已有物品和当前穿戴保持不变。</p></ConfirmationDialog>
+    <ConfirmationDialog v-if="deleting" title="删除组合？" confirm-label="删除" @cancel="deleting=undefined" @confirm="remove">
+      <p>将删除已保存的「{{ combinationName(deleting,sets) }}」。</p>
+      <p v-if="dirty">此组合的编辑草稿也会一并删除。</p>
+    </ConfirmationDialog>
     <UnsavedChangesDialog v-if="guard.discardOpen.value" @save="guard.saveAndLeave(()=>save())" @continue="guard.cancelDiscard" @discard="guard.discardChanges" />
   </WorkbenchDialog>
 </template>
 <style scoped>
-.combination-name-row { display:flex; align-items:end; flex-wrap:wrap; gap:12px; margin:0 0 20px; }.combination-name-row label { display:grid; flex:1; min-width:200px; gap:8px; font-size:var(--font-control); font-weight:700; }.combination-name-row input { width:100%; height:40px; box-sizing:border-box; font-size:var(--font-control); font-weight:700; }.combination-effective { display:grid; gap:12px; margin-top:20px; border-top:1px solid var(--line); padding-top:16px; }.combination-rolls { display:grid; gap:8px; border-top:1px solid var(--line); padding-top:16px; }.combination-effective h3 { font-size:var(--font-control); margin:0; }
+.combination-name-row { margin-bottom:20px; }.combination-effective { display:grid; gap:12px; margin-top:20px; border-top:1px solid var(--line); padding-top:16px; }.combination-rolls { display:grid; gap:8px; border-top:1px solid var(--line); padding-top:16px; }.combination-effective h3 { font-size:var(--font-control); margin:0; }
 .combination-reference-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; }</style>

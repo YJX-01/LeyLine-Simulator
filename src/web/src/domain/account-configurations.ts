@@ -13,13 +13,15 @@ export function localConfigurationComplete(account:LocalAccount,character:Accoun
 }
 
 /** References existing local objects only; public showcase equipment is never inferred as inventory. */
-export function accountConfigurations(account:LocalAccount,saved:readonly SavedConfiguration[]):AccountConfiguration[] {
-  return account.characters.flatMap(character=>[
-    {id:`current-${character.id}`,character,source:account,presetId:''},
-    ...saved.filter(item=>item.accountId===account.id && item.characterId===character.id)
-      .filter(item=>configurationSignature(item.snapshot.characters[0])!==configurationSignature(character))
-      .map(item=>({id:item.id,character:item.snapshot.characters[0],source:item.snapshot,presetId:item.id})),
-  ]);
+export function accountConfigurations(account:LocalAccount,saved:readonly SavedConfiguration[],characterId?:string):AccountConfiguration[] {
+  const characters=characterId ? account.characters.filter(character=>character.id===characterId) : account.characters;
+  return characters.flatMap(character=>{
+    const alternatives=saved.filter(item=>item.accountId===account.id && item.characterId===character.id);
+    const current=alternatives.length ? configurationSignature(character) : '';
+    return [{id:`current-${character.id}`,character,source:account,presetId:''},
+      ...alternatives.filter(item=>configurationSignature(item.snapshot.characters[0])!==current)
+        .map(item=>({id:item.id,character:item.snapshot.characters[0],source:item.snapshot,presetId:item.id}))];
+  });
 }
 
 export function artifactCombinations(configurations:readonly AccountConfiguration[]) {

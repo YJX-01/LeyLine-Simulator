@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref,inject,nextTick,onMounted } from 'vue';
+import { computed, ref,inject,onMounted } from 'vue';
 import type { AccountArtifact, LocalAccount } from '../domain/account';
 import { cloneAccount,accountSlotLabels } from '../domain/account';
 import { applyAccountArtifact,loadAccountGameData } from '../domain/account-presentation';
@@ -59,16 +59,27 @@ const references=computed(()=>{
     return reference;
   });
 });
-function jump(target:ArtifactReferenceTarget){if(!navigate)return;requestLeave(()=>{emit('close');void nextTick(()=>navigate(target,{accountId,item:JSON.parse(JSON.stringify(display.value)),readonly:props.readonly}));});}
+function jump(target:ArtifactReferenceTarget){navigate?.(target);}
 defineExpose({requestLeave});
 </script>
 <template>
-  <WorkbenchDialog editor class="artifact-detail-dialog" :title="display.name" @close="requestLeave(()=>emit('close'))">
+  <WorkbenchDialog editor class="artifact-detail-dialog" :title="display.name" :dirty="dirty" :before-close="requestLeave" @close="emit('close')">
     <template #header-leading><div class="artifact-edit-actions"><EditorActions v-if="!readonly" :dirty="dirty" :busy="busy" allow-save-as :can-save-as="!!display.real" @save="save()" @save-as="save(true)" @restore="restore" /><button v-if="!readonly && !account && display.inventoryId!==null" class="ui-action soft" data-size="md" data-accent="pyro" @click="requestDelete">删除</button></div></template>
     <template #header-trailing><ArtifactFavorite v-if="!readonly" :account-id="inventory.id" :item-id="display.id" /></template>
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="artifact-detail-body"><ArtifactPortrait class="artifact-portrait" :item="display" main /><fieldset class="artifact-editor-fields" :disabled="readonly"><ArtifactForm ref="form" :key="revision" details inline :item="display" :target-account="props.account" @dirty-change="dirty=$event" /></fieldset></div>
-    <section v-if="references.length" class="artifact-references" aria-label="引用关系"><h3>引用关系</h3><div v-for="group in [{kind:'character',title:'角色'},{kind:'configuration',title:'角色配置'},{kind:'combination',title:'圣遗物组合'}]" :key="group.kind" class="reference-row" role="group" :aria-label="group.title"><h4>{{ group.title }}</h4><div><button v-for="reference in references.filter(item=>item.kind===group.kind)" :key="reference.key" :title="reference.name" class="ui-action soft" data-size="md" data-accent="hydro" :disabled="!navigate" @click="jump(reference.target)"><span class="reference-name">{{ reference.name }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></button></div></div></section>
+    <section v-if="references.length" class="artifact-references" aria-label="引用关系">
+      <h3>引用关系</h3>
+      <div v-for="group in [{kind:'character',title:'角色'},{kind:'configuration',title:'角色配置'},{kind:'combination',title:'圣遗物组合'}]" :key="group.kind" class="reference-row" role="group" :aria-label="group.title">
+        <h4>{{ group.title }}</h4>
+        <div>
+          <button v-for="reference in references.filter(item=>item.kind===group.kind)" :key="reference.key"
+            :title="reference.name" class="ui-action soft" data-size="md" data-accent="hydro" :disabled="!navigate" @click="jump(reference.target)">
+            <span class="reference-name">{{ reference.name }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
   </WorkbenchDialog>
   <ConfirmationDialog v-if="deleting" title="删除圣遗物？" confirm-label="删除" @cancel="deleting=false" @confirm="remove"><p>仅删除库存身份，保留佩戴和装备内容。</p><p>配置和组合保留装备内容，改为未入库快照。</p></ConfirmationDialog>
   <UnsavedChangesDialog v-if="discardOpen" :busy="busy" @save="saveAndLeave(()=>save())" @continue="cancelDiscard" @discard="discardChanges" />

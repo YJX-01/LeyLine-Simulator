@@ -108,9 +108,6 @@ function applyBuild(id: string, build: Build) {
     <section class="team-saved" aria-labelledby="saved-teams-heading">
       <header class="library-page-toolbar">
         <h2 id="saved-teams-heading">已保存的队伍</h2>
-        <div v-if="saved.teams.length" class="library-page-actions">
-          <button class="ui-action soft" data-size="md" @click="saved.exportTeams">导出队伍备份</button>
-        </div>
       </header>
       <div v-if="saved.teams.length" class="saved-teams">
         <article v-for="team in saved.teams" :key="team.id" class="library-section saved-team">

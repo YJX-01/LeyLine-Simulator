@@ -21,7 +21,12 @@ test('empty and occupied pickers center titles; role exit continues, rejects fai
   await page.setViewportSize({width:1440,height:1000});await importShowcase(page);const original=await account(page);
   await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});
   const badges=role.locator('.constellation-number');await expect(badges).toHaveCount(7);expect(await badges.evaluateAll(nodes=>nodes.every(node=>getComputedStyle(node).backgroundColor==='rgba(0, 0, 0, 0)'))).toBe(true);
-  await role.getByRole('button',{name:'装备生之花',exact:true}).click();const picker=page.getByRole('dialog',{name:'选择生之花',exact:true});await centered(picker);await picker.locator('.inventory-card').first().click();
+  const imported=await readDocument<LocalAccount>(page,'account',original!);
+  const flowerId=imported.characters.find(entry=>entry.name==='安柏')!.equipment.flower;
+  await role.getByRole('button',{name:'管理生之花',exact:true}).press('Shift+F10');
+  await page.getByRole('menuitem',{name:'卸下',exact:true}).click();
+  await role.getByRole('button',{name:'装备生之花',exact:true}).click();const picker=page.getByRole('dialog',{name:'选择生之花',exact:true});await centered(picker);
+  await picker.locator(`.inventory-card:not([data-artifact-id="${flowerId}"])`).first().click();
   await role.getByRole('button',{name:'管理生之花',exact:true}).click();await centered(picker);await page.screenshot({path:'artifacts/unsaved-picker-centered.png',fullPage:true});const remove=await picker.getByRole('button',{name:'卸下',exact:true}).boundingBox();expect(remove!.width).toBe(64);expect(remove!.height).toBe(32);
   await page.setViewportSize({width:390,height:844});await centered(picker);await page.screenshot({path:'artifacts/unsaved-picker-centered-mobile.png',fullPage:true});await page.keyboard.press('Escape');await page.setViewportSize({width:1440,height:1000});
   await page.keyboard.press('Escape');await expect(warning(page).getByRole('button',{name:'保存',exact:true})).toBeVisible();await expect(warning(page).getByRole('button',{name:'放弃修改',exact:true})).toBeVisible();await page.screenshot({path:'artifacts/unsaved-three-actions.png',fullPage:true});await warning(page).getByRole('button',{name:'继续编辑',exact:true}).click();await expect(role.getByRole('button',{name:'管理生之花',exact:true})).toBeVisible();expect(await account(page)).toBe(original);
@@ -35,7 +40,7 @@ test('empty and occupied pickers center titles; role exit continues, rejects fai
 
 test('artifact exit validation keeps draft; Save persists then closes',async({page})=>{
   await importShowcase(page);await page.getByTestId('workspace-nav-artifacts').click();await page.locator('.inventory-card').first().click();const detail=page.locator('.artifact-detail-dialog'),value=detail.locator('.sub-row input').first(),initial=await value.inputValue(),before=await account(page);
-  await value.fill('');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toBeVisible();await expect(detail.getByText('圣遗物副词条无效，不能重复或与主词条相同。',{exact:true})).toBeVisible();expect(await account(page)).toBe(before);
+  await value.fill('');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toBeVisible();await expect(detail.getByText('请核对强化等级与词条数值。',{exact:true})).toBeVisible();expect(await account(page)).toBe(before);
   await value.fill(initial);await detail.getByLabel('圣遗物别名',{exact:true}).fill('界面别名试改');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toHaveCount(0);expect((await readDocument<LocalAccount>(page, 'account', (await account(page))!)).artifacts.some((item:{alias?:string})=>item.alias==='界面别名试改')).toBe(true);
 });
 

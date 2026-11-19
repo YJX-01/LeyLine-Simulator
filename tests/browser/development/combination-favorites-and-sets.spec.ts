@@ -68,6 +68,18 @@ test('recorded showcase combinations preserve favorite grades; both set filters 
   await page.screenshot({path:'artifacts/combination-favorites-list.png',fullPage:true});
   await first.click({button:'right'});await page.getByRole('menuitem',{name:'取消收藏',exact:true}).click();
   expect((await readCombinations(page)).find(item=>item.id===firstId)?.favorite).toBe(0);
+  await second.locator('.combination-open').click();
+  const combinationName=editor.getByLabel('组合名称',{exact:true}),automatic=editor.getByRole('button',{name:'自动命名',exact:true});
+  const generated=await combinationName.inputValue();
+  await expect(automatic).toHaveCSS('height','40px');
+  await combinationName.press('ControlOrMeta+A');await combinationName.pressSequentially('临时名称');
+  await automatic.click();await expect(combinationName).toHaveValue(generated);
+  const remove=editor.getByRole('button',{name:'删除',exact:true}),confirmation=page.getByRole('dialog',{name:'删除组合？',exact:true});
+  await remove.click();await confirmation.getByRole('button',{name:'取消',exact:true}).click();
+  await expect(remove).toBeFocused();expect(await readCombinations(page)).toHaveLength(2);
+  await remove.click();await confirmation.getByRole('button',{name:'删除',exact:true}).click();
+  await expect(editor).toHaveCount(0);await expect(rows).toHaveCount(1);
+  expect((await readCombinations(page)).map(item=>item.id)).toEqual([firstId]);
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(inventory);
   for(const tab of ['characters','loadouts','artifacts','combinations']){
     await page.getByTestId(`workspace-nav-${tab}`).click();await expect(page.locator('#workspace-main .library-page .library-corner-ornaments i')).toHaveCount(4);

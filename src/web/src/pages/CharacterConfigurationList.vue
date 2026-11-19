@@ -25,7 +25,7 @@ import {effectiveTotal} from '../domain/artifact-combinations';
 import {hasLocalConfiguration,planConfigurationRemoval} from '../domain/account-configurations';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
 import { configurationSignature } from '../domain/character-loadout-name';
-const props=defineProps<{characterId?:string;selectable?:boolean;currentPresetId?:string;beforeAdopt?:(action:()=>void)=>void}>();
+const props=defineProps<{characterId?:string;selectable?:boolean;selectionOnly?:boolean;currentPresetId?:string;beforeAdopt?:(action:()=>void)=>void}>();
 const emit=defineEmits<{select:[characterId:string,presetId:string];pickRole:[];adopted:[];deleted:[characterId:string,presetId:string]}>();
 const account=useAccountStore(),loadouts=useCharacterLoadoutsStore();
 const data=ref<Awaited<ReturnType<typeof loadAccountGameData>>>(),error=ref('');
@@ -67,7 +67,8 @@ function resetConditions(){
   resetSort();
   if(!props.selectable)view.value.characterId='';
 }
-const allConfigurations=computed(()=>accountConfigurations(account.account,loadouts.loadouts).filter(item=>(!props.characterId || item.character.id===props.characterId) && (item.presetId || hasLocalConfiguration(item.character))));
+const allConfigurations=computed(()=>accountConfigurations(account.account,loadouts.loadouts,props.characterId)
+  .filter(item=>props.selectionOnly ? !!item.character.build : item.presetId || hasLocalConfiguration(item.character)));
 const presentations=computed(()=>{
   const sets=data.value?.catalog.sets ?? [];
   const fullSetNames=new Map(sets.map(set=>[set.id,set.name]));
@@ -105,8 +106,8 @@ watch([query,filter,sort,direction,selectedRole,()=>props.characterId],()=>{page
 watch(pages,value=>{page.value=Math.max(1,Math.min(page.value,value));});
 function open(configuration:AccountConfiguration){if(!(props.selectable && props.currentPresetId===configuration.presetId))emit('select',configuration.character.id,configuration.presetId);}
 const menu=ref<{configuration:AccountConfiguration;x:number;y:number}>();
-function openMenu(event:MouseEvent,configuration:AccountConfiguration){menu.value={configuration,x:event.clientX,y:event.clientY};}
-function menuKey(event:KeyboardEvent,configuration:AccountConfiguration){if(event.key==='ContextMenu' || event.shiftKey && event.key==='F10'){event.preventDefault();const box=(event.currentTarget as HTMLElement).getBoundingClientRect();menu.value={configuration,x:box.left+12,y:box.top+12};}}
+function openMenu(event:MouseEvent,configuration:AccountConfiguration){if(!props.selectionOnly)menu.value={configuration,x:event.clientX,y:event.clientY};}
+function menuKey(event:KeyboardEvent,configuration:AccountConfiguration){if(!props.selectionOnly && (event.key==='ContextMenu' || event.shiftKey && event.key==='F10')){event.preventDefault();const box=(event.currentTarget as HTMLElement).getBoundingClientRect();menu.value={configuration,x:box.left+12,y:box.top+12};}}
 function menuAction(id:string){const configuration=menu.value?.configuration;menu.value=undefined;if(!configuration)return;if(id==='details')open(configuration);else requestDelete(configuration);}
 const deleting=ref<AccountConfiguration>(),deletePlan=ref<ReturnType<typeof planConfigurationRemoval>>();let deleteBaseline='';let deleteFocus:HTMLButtonElement|undefined;
 function cancelDelete(){deleting.value=undefined;nextTick(()=>{if(deleteFocus?.isConnected)deleteFocus.focus();});}
@@ -140,7 +141,7 @@ function confirmDelete(){const configuration=deleting.value;if(!configuration)re
         :open-label="`${selectable?'选择':'查看'}${configuration.character.name}${configuration.presetId?'备选':'首选'}配置`"
         :data-preset-id="configuration.presetId" :data-configuration-id="configuration.id"
         @open="open(configuration)" @open-keydown="menuKey($event,configuration)" @contextmenu.prevent="openMenu($event,configuration)">
-        <template v-if="selectable && configuration.presetId" #actions>
+        <template v-if="selectable && !selectionOnly && configuration.presetId" #actions>
           <button type="button" class="ui-action soft configuration-prefer" data-size="md"
             :aria-label="`设${configuration.character.name}此配置为首选`" @click="requestPreferred(configuration)">设为首选</button>
         </template>
