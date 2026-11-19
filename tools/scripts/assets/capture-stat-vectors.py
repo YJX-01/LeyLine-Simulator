@@ -9,6 +9,7 @@ import time
 import urllib.request
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'lib'))
+from asset_capture import read_capture, write_candidate
 from content_source import read_content, write_content
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -22,9 +23,9 @@ candidate_root = (ROOT / 'artifacts/content-candidates').resolve()
 if not output.is_relative_to(candidate_root) or output == candidate_root or output.exists():
     parser.error('--out must be a new directory beneath artifacts/content-candidates')
 
-manifest = read_content(ROOT / 'assets/manifest.json')
-if manifest['formatVersion'] != 3:
-    raise ValueError('Asset manifest formatVersion must be 3')
+manifest = read_capture(ROOT)
+if manifest['formatVersion'] != 4:
+    raise ValueError('Asset manifest formatVersion must be 4')
 candidate = copy.deepcopy(manifest)
 kind = 'artifactSlots' if args.artifact_slots else 'stats'
 entries = [entry for entry in candidate['assets'] if entry['kind'] == kind]
@@ -96,10 +97,9 @@ for entry in entries:
     prepared.append((destination, content))
 
 candidate['totalBytes'] = sum(entry['bytes'] for entry in candidate['assets'])
-candidate['totalSourceBytes'] = sum(entry['sourceBytes'] for entry in candidate['assets'])
 output.mkdir(parents=True, exist_ok=False)
 for destination, content in prepared:
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(content)
-write_content(output / 'manifest.json', candidate)
+write_candidate(output, candidate)
 print(json.dumps({'vectors': len(entries), 'bundledSvg': sum(bool(entry.get('sourceModule')) for entry in entries), 'output': str(output)}))

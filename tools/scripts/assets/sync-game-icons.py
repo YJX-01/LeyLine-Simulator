@@ -17,12 +17,13 @@ from PIL import Image, ImageOps
 import xml.etree.ElementTree as ET
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[2] / 'lib'))
+from asset_capture import read_capture, write_candidate
 from content_source import read_content
 
 ROOT = Path(__file__).resolve().parents[3]
-MANIFEST = read_content(ROOT / 'assets/manifest.json')
-if MANIFEST['formatVersion'] != 3:
-    raise ValueError('Asset manifest formatVersion must be 3')
+MANIFEST = read_capture(ROOT)
+if MANIFEST['formatVersion'] != 4:
+    raise ValueError('Asset manifest formatVersion must be 4')
 MONA = ROOT / '.references/mona-community'
 DB = ROOT / '.references/genshin-db/src/data'
 CACHE = ROOT / '.references/game-icon-downloads'
@@ -74,7 +75,8 @@ if subprocess.check_output(['git', '-C', str(DB.parents[1]), 'rev-parse', 'HEAD'
     raise RuntimeError('genshin-db reference commit changed; review first')
 locale = read(MONA / 'src/i18n/generated/zh-cn.json')
 metadata = {kind: {locale[item['nameLocale']]: item for item in generated(group).values()} for kind, group in [('characters', 'character'), ('weapons', 'weapon'), ('artifacts', 'artifact')]}
-catalog = read(ROOT / 'src/game-data/generated/catalog.json')
+catalog = {key: [read(file) for file in sorted((ROOT / 'src/game-data/data' / folder).glob('*.json'))]
+           for key, folder in [('characters', 'characters'), ('weapons', 'weapons'), ('sets', 'artifact-sets')]}
 previous = MANIFEST
 existing = {(item['kind'], item['key']): item for item in previous['assets']}
 
@@ -117,7 +119,8 @@ def expected_transform(kind, key, entry):
 tasks = []
 for kind, group, size in [('characters', 'characters', 128), ('weapons', 'weapons', 128), ('artifacts', 'sets', 128)]:
     images = read(DB / f'image/{kind}.json')
-    for entry in catalog[group]:
+    for row in catalog[group]:
+        entry = {**row, **row.get('identity', {})}
         if kind == 'characters' and re.match(r'^(aether|lumine|manekin|manekina)-(anemo|geo|electro|dendro|hydro|pyro|cryo)$',entry['id']):
             continue  # Element forms reuse the base portrait in the runtime index.
         community = metadata[kind].get(entry['name'], {})
@@ -304,7 +307,7 @@ total = sum(asset['bytes'] for asset in assets)
 if total > 16 * 1024 * 1024:
     raise RuntimeError('Offline icon library exceeds 16 MiB')
 assets.sort(key=lambda asset: (asset['kind'], asset['key']))
-manifest = {**previous, 'totalBytes': total, 'totalSourceBytes': sum(asset['sourceBytes'] for asset in assets), 'assets': assets, 'excluded': excluded}
+manifest = {**previous, 'totalBytes': total, 'assets': assets, 'excluded': excluded}
 (OUTPUT / 'missing-icons.json').write_bytes((json.dumps(missing,ensure_ascii=False,indent=2)+'\n').encode())
-(OUTPUT / 'manifest.json').write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode())
+write_candidate(OUTPUT, manifest)
 print(json.dumps({'icons': len(assets), 'bytes': total, 'missing': len(missing), 'excludedPassives': len(excluded), 'sharedNormalAttackIcons': len(normal_attacks)}, ensure_ascii=True))

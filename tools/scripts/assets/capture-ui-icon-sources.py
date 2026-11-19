@@ -5,15 +5,16 @@ from pathlib import Path
 import urllib.request
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'lib'))
+from asset_capture import read_capture
 from content_source import read_content, write_content
 
 ROOT = Path(__file__).resolve().parents[3]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--from-cache', action='store_true', help='Verify existing .references trees without network access')
 args = parser.parse_args()
-manifest = read_content(ROOT / 'assets/manifest.json')
-if manifest['formatVersion'] != 3:
-    raise ValueError('Asset manifest formatVersion must be 3')
+manifest = read_capture(ROOT)
+if manifest['formatVersion'] != 4:
+    raise ValueError('Asset manifest formatVersion must be 4')
 
 counts = {}
 for source in manifest['capture']['spriteRepositories']:

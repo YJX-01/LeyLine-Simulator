@@ -7,7 +7,7 @@ import { writeGeneratedFile, pruneGeneratedFiles } from '../../lib/generated-fil
 const check=process.argv.includes('--check');
 const root = resolve(import.meta.dirname, '../../..');
 const manifest = JSON.parse(readFileSync(resolve(root, 'assets/manifest.json'), 'utf8'));
-if (manifest.formatVersion !== 3) throw new Error('Asset manifest formatVersion must be 3');
+if (manifest.formatVersion !== 4) throw new Error('Asset manifest formatVersion must be 4');
 const publicRoot = resolve(root, '.cache/public');
 const revisions = {};
 const copies = new Map();

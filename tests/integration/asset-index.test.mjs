@@ -1,3 +1,4 @@
+import { readAssetCapture } from '../../tools/lib/asset-capture.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -29,7 +30,8 @@ test('removing the actual Manekin skill reports every affected form instead of a
 
 test('stat and buff icons follow Yatta critical and percentage attribute usage',()=>{
   // Yatta's FIGHT_PROP_CRITICAL is hollow; CRITICAL_HURT has the filled star and ring.
-  const stats=Object.fromEntries(manifest.assets.filter(asset=>asset.kind==='stats').map(asset=>[asset.key,asset]));
+  const { inputs } = readAssetCapture();
+  const stats=Object.fromEntries(manifest.assets.filter(asset=>asset.kind==='stats').map(asset=>[asset.key,inputs.get(asset.file)]));
   const index=createAssetIndex(manifest,characters,{});
   assert.equal(stats.critRate.sourceFilename,'CritRateIcon');
   assert.equal(stats.critDamage.sourceFilename,'CritDmgIcon');

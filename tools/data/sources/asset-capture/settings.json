@@ -1,0 +1,528 @@
+{
+  "sourceCommits": {
+    "PathOfGenshin/resources": "015a2493b5672b28576ab78ffbcffde2ea0c9844",
+    "frzyc/genshin-optimizer": "aa908fd1d3d9f64fcc11704c748915a109a8f3b8",
+    "TwiceDrop/genshin_artifact": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+    "CMHopeSunshine/GenshinWikiMap": "7fafe2e18011008d47e347f0f68216d05da0c1f1",
+    "genshin-db": "8e5badd60b5d894284ccc927a56c9683529d2592",
+    "legacy-mona": "beaced4d82619aa86920d0054ab6114b5fc5608f",
+    "legacy-PathOfGenshin/resources": "015a2493b5672b28576ab78ffbcffde2ea0c9844"
+  },
+  "capture": {
+    "spriteRepositories": [
+      {
+        "repository": "frzyc/genshin-optimizer",
+        "cacheFile": "optimizer-tree.json",
+        "pathPrefix": "libs/gi/assets/src/gen/"
+      },
+      {
+        "repository": "CMHopeSunshine/GenshinWikiMap",
+        "cacheFile": "wiki-tree.json",
+        "pathPrefix": "resources/talent/Skill_A_"
+      }
+    ],
+    "passives": {
+      "defaultCombatPassives": [
+        "passive1",
+        "passive2"
+      ],
+      "extraCombatPassives": [
+        "aino-passive3",
+        "alyosha-passive3",
+        "arlecchino-passive3",
+        "chasca-passive3",
+        "chasca-passive4",
+        "citlali-passive3",
+        "citlali-passive4",
+        "columbina-passive3",
+        "emilie-passive3",
+        "flins-passive3",
+        "iansan-passive3",
+        "iansan-passive4",
+        "ifa-passive3",
+        "ifa-passive4",
+        "illuga-passive3",
+        "ineffa-passive3",
+        "jahoda-passive3",
+        "kachina-passive3",
+        "kinich-passive3",
+        "lauma-passive3",
+        "linnea-passive3",
+        "lohen-passive3",
+        "mavuika-passive3",
+        "mavuika-passive4",
+        "mitya-passive3",
+        "mualani-passive3",
+        "nefer-passive3",
+        "odette-passive3",
+        "ororon-passive3",
+        "sandrone-passive3",
+        "sangonomiyakokomi-passive4",
+        "skirk-passive3",
+        "tartaglia-passive3",
+        "travelercryo-passive3",
+        "valeriy-passive3",
+        "varesa-passive3",
+        "varka-passive3",
+        "vesna-passive3",
+        "xilonen-passive3",
+        "xilonen-passive4",
+        "zibai-passive3"
+      ]
+    }
+  },
+  "excluded": [
+    {
+      "kind": "skills",
+      "key": "albedo-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "amber-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "barbara-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "beidou-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "bennett-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "chongyun-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "diluc-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "diona-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "eula-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "fischl-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "ganyu-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "hutao-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "jean-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kaedeharakazuha-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kaeya-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kamisatoayaka-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "keqing-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "klee-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "lisa-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "mona-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "ningguang-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "noelle-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "qiqi-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "razor-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "rosaria-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "sayu-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "sucrose-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "venti-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "xiangling-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "xiao-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "xingqiu-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "xinyan-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yanfei-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yoimiya-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "zhongli-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "raidenshogun-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "sangonomiyakokomi-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kujousara-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "aloy-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "thoma-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "gorou-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "aratakiitto-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "shenhe-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yunjin-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yaemiko-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kamisatoayato-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yelan-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kukishinobu-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "shikanoinheizou-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "collei-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "dori-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "tighnari-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "nilou-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "cyno-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "candace-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "nahida-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "layla-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "wanderer-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "faruzan-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yaoyao-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "alhaitham-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "dehya-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "mika-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kaveh-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "baizhu-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kirara-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "lynette-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "lyney-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "freminet-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "wriothesley-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "neuvillette-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "charlotte-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "furina-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "chevreuse-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "navia-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "gaming-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "xianyun-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "chiori-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "sigewinne-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "sethos-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "clorinde-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "kachina-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "kinich-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "mualani-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "ororon-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "lanyan-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "yumemizukimizuki-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "varesa-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "escoffier-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "dahlia-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "ineffa-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "lauma-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "flins-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "aino-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "manekin-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "manekina-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "nefer-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "durin-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "jahoda-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "columbina-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "zibai-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "illuga-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "linnea-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "nicole-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "prune-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "sandrone-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "alyosha-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "odette-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "vodyanitsa-passive3"
+    },
+    {
+      "kind": "skills",
+      "key": "vodyanitsa-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "vesna-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "mitya-passive4"
+    },
+    {
+      "kind": "skills",
+      "key": "valeriy-passive4"
+    }
+  ]
+}
