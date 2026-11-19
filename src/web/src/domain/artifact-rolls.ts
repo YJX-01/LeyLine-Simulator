@@ -1,5 +1,5 @@
 import { artifactInitialSubstatCounts, type ArtifactItem, type StatKey } from '@leyline/schema';
-import table from '../../generated/artifact-rolls.json';
+import table from 'virtual:leyline-display/artifact-rolls';
 import { ratioStat } from './account-real';
 import type {AccountArtifact} from './account';
 type Affix = {stat:string;value:number;rarity:number};

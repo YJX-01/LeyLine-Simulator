@@ -24,21 +24,21 @@
 
 计算定义由lib/calculation-library.mjs装配实体calculation与两个公共库；源所有权重复即失败。数值审计从同一维护位置读取，通过引擎模板描述同时核对TS算法常数和JSON参数，直接与固定采用资料比较，不依赖生成快照或旧碎片路径。numericAudit为异步入口，调用者须await。prepare-character-update保留本实体专属定义，基础形态的所有权不会复制到其他形态。
 
-content-linking按精确身份解析角色命中、参数绑定及输出条件，装配逐实体的运行闭包。生成器读取维护JSON并写出派生分块。数值审计直接核对星伤倍率、层数阈值、队伍增益、基础增益上限、命座参数及已采用的装备效果。
+content-linking 按精确身份解析角色命中、参数绑定及输出条件，在内存中装配实体的实际依赖。build/catalog-plugin.mjs 用这些输入提供按需加载的 Vite 模块。数值审计直接核对星伤倍率、层数阈值、队伍增益、基础增益上限、命座参数及已采用的装备效果。
 
-manifest.actions枚举可选动作文件。convert-real-game-data逐份核对角色精确版本、状态守卫、参数单位及命中/输出引用，生成actions.json的闭合快照并再次离线编译。共同库包含各动作拥有的定义，但角色单次闭包不会因目录存在动作而自动带入。数值审计另核对状态容量、独立时效、资源来源下界、命座入口及退出次数；未知动作时刻不生成占位调度。
+data/actions 目录枚举可选动作文件。convert-real-game-data逐份核对角色精确版本、状态守卫、参数单位及命中/输出引用，在内存中装配实际依赖并离线编译。共同库包含各动作拥有的定义，但角色单次闭包不会因目录存在动作而自动带入。数值审计另核对状态容量、独立时效、资源来源下界、命座入口及退出次数；未知动作时刻不生成占位调度。
 
 仓库根使用Node.js 22.12+、pnpm 11.3.0，CI使用Node.js 24。依赖安装为 `pnpm install --frozen-lockfile`，安装按供应链策略执行。Python及Pillow用于显式维护采集。
 
 | 根命令 | 输入、输出与写入范围 |
 | --- | --- |
-| data:build | 正式JSON与资源，写game-data/generated、web/generated、.cache/public；离线、复用相同字节并移除废弃派生物 |
-| data:check | 直接数值、模板及生成结果比较，只读 |
+| data:build | 读取正式 JSON 与资源，复制图片到 .cache/public；离线、复用相同字节并移除废弃派生物 |
+| data:check | 核对来源数值、目录完整性、装配结果与资源缓存，只读 |
 | data:capture | 显式读取固定.references/genshin-db，原字节写新artifacts/content-candidates子目录 |
 | data:prepare-characters --out artifacts/content-candidates/<新目录> | 当前来源与规则生成待审角色定义和差异 |
 | data:audit | 逐字段比较数值族，更新tools/data/audits摘要 |
 | assets:check、architecture:check、docs:check | 资源、模块依赖、文档内容与链接、命令检查 |
-| dev、build、build:subpath | 先离线生成，再启动Vite或写src/web/dist、dist-subpath |
+| dev、build、build:subpath | 准备离线资源缓存，再由 Vite 读取正式输入，启动服务或写入 src/web/dist、dist-subpath |
 | desktop:build、desktop:preview:build | 临时工作区构建，共用artifacts/desktop/releases两版成功包 |
 | desktop:start | 启动最新本地产物 |
 | typecheck、test、test:content | TypeScript、Vitest单元与集成、Node内容文件检查 |
@@ -54,11 +54,11 @@ manifest.actions枚举可选动作文件。convert-real-game-data逐份核对角
 | outputs:prune --dry-run | 两版成功包保留预览；移除dry-run才处理更早成功包 |
 | clean:outputs --dry-run、clean:cache --dry-run | 解析路径、目录链接与tracked文件核对及清理预览；移除dry-run执行 |
 
-`data:build --check`与普通检查只读，失败指出来源、字段或产物。套装简称维护于src/game-data/data/tables/artifact-set-short-names.json，运行投影由data:build生成，简称清单以正式JSON为准。
+带 `--check` 的 data:build 只读，失败指出来源、字段或产物。套装简称维护于 src/game-data/data/tables/artifact-set-short-names.json，由 Vite 的展示模块直接读取。
 
-`node tools/scripts/data/audit-damage-paths.mjs`只读输出绑定摘要；完整索引与内容规则清单由正式生成写入game-data/generated。文档维护独立于数据生成。
+`node tools/scripts/data/audit-damage-paths.mjs`只读输出绑定摘要；完整索引按需从实体目录核对。文档维护独立于数据生成。
 
-素材工具位于tools/scripts/assets：capture-stat-vectors.py --out准备矢量候选，capture-ui-icon-sources.py刷新忽略的上游树缓存，sync-game-icons.py --out按assets/manifest.json准备待审图片；普通构建从assets复制与生成索引。
+素材工具位于 tools/scripts/assets。capture-stat-vectors.py 与 sync-game-icons.py 使用正式资源表及采集输入准备候选，capture-ui-icon-sources.py 刷新忽略的上游树缓存。日常构建复制正式资源，按需计算索引。详见[资源维护](../assets/README.md#生成与验证)。
 
 `clean:outputs`处理generated、资源缓存、网页构建、报告和旧中转；最终两版包、内容候选、基线备份和用户原件保留。`clean:cache`显式处理.cache，执行中的打包工作区由清理检查保护。进程按本次创建记录管理。
 
@@ -70,7 +70,7 @@ manifest.actions枚举可选动作文件。convert-real-game-data逐份核对角
 
 ### 构建与验证
 
-1. `pnpm install --frozen-lockfile`、`pnpm data:build`准备依赖和运行分块，执行数据、架构、类型及相关行为检查。
+1. `pnpm install --frozen-lockfile`、`pnpm data:build` 准备依赖与本地资源缓存，执行数据、架构、类型及相关行为检查。
 2. `pnpm build`、`pnpm build:check`、`pnpm perf:engine`检查网页、体积和真实输入性能。
 3. `pnpm exec playwright install chromium firefox webkit`准备浏览器，再执行`pnpm test:e2e`；Linux按需要使用`--with-deps`安装系统库。
 4. `pnpm build:subpath`、`pnpm test:production`验证根路径及/leyline/。报告位于artifacts/playwright，trace分别在test-results/development与production。

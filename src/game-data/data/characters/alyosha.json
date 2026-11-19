@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "alyosha",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "阿罗夏",
     "title": "疾掠弋缇",
@@ -14,317 +14,21 @@
     "gameId": 10000148,
     "region": "至冬"
   },
+  "attributes": {
+    "base": {
+      "hp": 1002.9701,
+      "attack": 22.26,
+      "defense": 58.94175,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "energyRecharge"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.165,
-        1.248,
-        1.33,
-        1.413,
-        1.495,
-        1.578,
-        1.661,
-        1.743,
-        1.826,
-        1.908,
-        1.991,
-        2.073,
-        2.156,
-        2.239,
-        2.321,
-        2.404,
-        2.486,
-        2.569,
-        2.651,
-        2.734,
-        2.817,
-        2.899,
-        2.982,
-        3.064,
-        3.147,
-        3.229,
-        3.312,
-        3.394,
-        3.477,
-        3.56,
-        3.642,
-        3.725,
-        3.807,
-        3.89,
-        3.972,
-        4.055,
-        4.138,
-        4.22,
-        4.303,
-        4.385,
-        4.468,
-        4.55,
-        4.633,
-        4.716,
-        4.798,
-        4.881,
-        4.963,
-        5.046,
-        5.128,
-        5.211,
-        5.294,
-        5.376,
-        5.459,
-        5.541,
-        5.624,
-        5.706,
-        5.789,
-        5.872,
-        5.954,
-        6.037,
-        6.119,
-        6.202,
-        6.284,
-        6.367,
-        6.45,
-        6.532,
-        6.615,
-        6.697,
-        6.78,
-        6.862,
-        6.945,
-        7.028,
-        7.11,
-        7.193,
-        7.275,
-        7.358,
-        7.44,
-        7.523,
-        7.606,
-        7.688,
-        7.771,
-        7.853,
-        7.936,
-        8.018,
-        8.101,
-        8.183,
-        8.266,
-        8.349,
-        8.431,
-        8.514,
-        8.596,
-        8.679,
-        8.761,
-        8.844,
-        8.927,
-        9.009,
-        9.092,
-        9.174
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.165,
-        1.248,
-        1.33,
-        1.413,
-        1.495,
-        1.578,
-        1.661,
-        1.743,
-        1.826,
-        1.908,
-        1.991,
-        2.073,
-        2.156,
-        2.239,
-        2.321,
-        2.404,
-        2.486,
-        2.569,
-        2.651,
-        2.734,
-        2.817,
-        2.899,
-        2.982,
-        3.064,
-        3.147,
-        3.229,
-        3.312,
-        3.394,
-        3.477,
-        3.56,
-        3.642,
-        3.725,
-        3.807,
-        3.89,
-        3.972,
-        4.055,
-        4.138,
-        4.22,
-        4.303,
-        4.385,
-        4.468,
-        4.55,
-        4.633,
-        4.716,
-        4.798,
-        4.881,
-        4.963,
-        5.046,
-        5.128,
-        5.211,
-        5.294,
-        5.376,
-        5.459,
-        5.541,
-        5.624,
-        5.706,
-        5.789,
-        5.872,
-        5.954,
-        6.037,
-        6.119,
-        6.202,
-        6.284,
-        6.367,
-        6.45,
-        6.532,
-        6.615,
-        6.697,
-        6.78,
-        6.862,
-        6.945,
-        7.028,
-        7.11,
-        7.193,
-        7.275,
-        7.358,
-        7.44,
-        7.523,
-        7.606,
-        7.688,
-        7.771,
-        7.853,
-        7.936,
-        8.018,
-        8.101,
-        8.183,
-        8.266,
-        8.349,
-        8.653,
-        8.957,
-        9.262,
-        9.566,
-        9.87,
-        10.174,
-        10.479,
-        10.783,
-        11.087,
-        11.392
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.165,
-        1.248,
-        1.33,
-        1.413,
-        1.495,
-        1.578,
-        1.661,
-        1.743,
-        1.826,
-        1.908,
-        1.991,
-        2.073,
-        2.156,
-        2.239,
-        2.321,
-        2.404,
-        2.486,
-        2.569,
-        2.651,
-        2.734,
-        2.817,
-        2.899,
-        2.982,
-        3.064,
-        3.147,
-        3.229,
-        3.312,
-        3.394,
-        3.477,
-        3.56,
-        3.642,
-        3.725,
-        3.807,
-        3.89,
-        3.972,
-        4.055,
-        4.138,
-        4.22,
-        4.303,
-        4.385,
-        4.468,
-        4.55,
-        4.633,
-        4.716,
-        4.798,
-        4.881,
-        4.963,
-        5.046,
-        5.128,
-        5.211,
-        5.294,
-        5.376,
-        5.459,
-        5.541,
-        5.624,
-        5.706,
-        5.789,
-        5.872,
-        5.954,
-        6.037,
-        6.119,
-        6.202,
-        6.284,
-        6.367,
-        6.45,
-        6.532,
-        6.615,
-        6.697,
-        6.78,
-        6.862,
-        6.945,
-        7.028,
-        7.11,
-        7.193,
-        7.275,
-        7.358,
-        7.44,
-        7.523,
-        7.606,
-        7.688,
-        7.771,
-        7.853,
-        7.936,
-        8.018,
-        8.101,
-        8.183,
-        8.266,
-        8.349,
-        8.431,
-        8.514,
-        8.596,
-        8.679,
-        8.761,
-        8.844,
-        8.927,
-        9.009,
-        9.092,
-        9.174
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S4",
+      "attack": "GROW_CURVE_ATTACK_S4",
+      "defense": "GROW_CURVE_HP_S4"
     },
     "promotion": [
       {
@@ -377,635 +81,6 @@
         "specialized": 0.2667
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.alyosha.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#alyosha"
-        },
-        {
-          "id": "content.alyosha.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#alyosha/combat1"
-        },
-        {
-          "id": "content.alyosha.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#alyosha/combat2"
-        },
-        {
-          "id": "content.alyosha.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#alyosha/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param4",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param6",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param6",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param8",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param9",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.normal.param10",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.normal",
-            "hitId": "alyosha.normal.param10",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.skill.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.skill",
-            "hitId": "alyosha.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.skill.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.skill",
-            "hitId": "alyosha.skill.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.burst.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.burst",
-            "hitId": "alyosha.burst.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.burst.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "alyosha.burst",
-            "hitId": "alyosha.burst.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.alyosha.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.alyosha.context",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "alyosha",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.alyosha.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.alyosha.context",
-        "revision": "3"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 1002.9701,
-      "attack": 22.26,
-      "defense": 58.94175,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "energyRecharge",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1265,500 +340,128 @@
           "id": "alyosha.normal.param1",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param2",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param3",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param4",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param4",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param5",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param5",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param6",
           "element": "physical",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param6",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param6",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param6",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param6"
             }
           ],
-          "parameter": "param6"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param8",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param8",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param9",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param9",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.normal.param10",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.normal",
-                "parameterId": "param10",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param10",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.normal.param10",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param10"
             }
           ],
-          "parameter": "param10"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.alyosha.normal.parameters"
       ]
     },
     {
@@ -1927,115 +630,30 @@
           "id": "alyosha.skill.param1",
           "element": "electro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.skill",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.skill.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.skill.param2",
           "element": "electro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.skill",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.skill.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.alyosha.skill.parameters"
       ]
     },
     {
@@ -2179,115 +797,30 @@
           "id": "alyosha.burst.param1",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.burst",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.burst.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "alyosha.burst.param2",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "alyosha.burst",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.alyosha.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.alyosha.burst.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.alyosha.burst.parameters"
       ]
     }
   ],
@@ -2296,29 +829,25 @@
       "id": "alyosha.passive1",
       "name": "惊醒沉睡的林线",
       "description": "**图加林**进行攻击时，还会为队伍中附近的当前场上角色恢复生命值，回复量相当于阿罗夏攻击力的120%。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "alyosha.passive2",
       "name": "告别冬麦与残叶",
       "description": "基于阿罗夏的元素充能效率，提升阿罗夏的元素战技与元素爆发造成的伤害：每1%元素充能效率都会使上述伤害提升0.35%，至多提升至70%。",
-      "unlockAscension": 4,
-      "ruleIds": []
+      "unlockAscension": 4
     },
     {
       "id": "alyosha.passive3",
       "name": "星赴险域",
       "description": "处于**极星辉域**中时，阿罗夏将会进入辉映·星超导状态。\n辉映·星超导：激活**弋猎印记**时获得的猎者之准效果还会使角色处于场上时造成的星超导反应伤害提升20%。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     },
     {
       "id": "alyosha.passive4",
       "name": "树梢察伺",
       "description": "在小地图上显示周围的至冬区域特产的位置，在影域中亦能提供相同的佑助。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2326,15 +855,13 @@
       "rank": 1,
       "name": "寒谷轰雷",
       "description": "队伍中附近的角色对敌人触发雷元素相关反应后，将为阿罗夏恢复15点元素能量，该效果每18秒至多触发一次。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "长嗥远讯",
       "description": "元素爆发守猎进踞的持续时间延长6秒。\n此外，**图加林**每次攻击敌人前，还会为一名目标施加**弋猎印记**；该效果不会激活已有的弋猎印记。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2345,15 +872,13 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "衔取猎品",
       "description": "**图加林**进行攻击时，还会为队伍中附近的生命值百分比最低的角色恢复生命值，回复量相当于阿罗夏攻击力的60%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2364,19 +889,40 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "复夺旌幡",
       "description": "激活**弋猎印记**时获得的猎者之准效果可以叠加。该效果至多叠加2层，叠加至2层时，还会使处于该效果影响下的当前场上角色的元素精通提升100点。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.alyosha.growth",
-    "content.character-curves"
-  ]
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

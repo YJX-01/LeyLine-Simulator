@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": "0.1.0",
   "basis": "Author-reviewed canonical rules and their pinned original sources; source-derived component calculations, not player recordings. Authored normalized definitions are consumed directly; no legacy runtime conversion.",
   "rules": [
     {

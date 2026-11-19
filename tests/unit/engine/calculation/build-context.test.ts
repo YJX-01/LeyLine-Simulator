@@ -1,3 +1,4 @@
+import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -9,7 +10,7 @@ import { createAccount } from '../../../../src/web/src/domain/account';
 import { confirmMonaImport, previewMonaImport } from '../../../../src/web/src/domain/mona-import';
 
 const root = new URL('../../../../', import.meta.url);
-const read = (path: string) => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
+const read = (path: string) => readCalculationData(new URL(path, root));
 const reviews: { characterId: string; skillId: string; hitId: string }[] = read('tools/data/sources/calculation-hits/ordinary-bindings.json').hits;
 const quantity = (unit: Extract<schemas.Value, { kind: 'quantity' }>['unit'], value: number): schemas.Value => ({ kind: 'quantity', unit, value });
 const fact = (value: schemas.Value | null): schemas.CalculationFact => ({ value, provenance: 'explicit', sourceRefs: [] });
@@ -18,10 +19,10 @@ const numeric = (result: schemas.StructuredDamageEvaluation): number => {
   const value = result.totals.all; return value.state === 'known' && value.value.kind === 'quantity' ? value.value.value : NaN;
 };
 
-describe('v3 snapshot assembly and parameter-bound catalog outputs', () => {
+describe('current snapshot assembly and parameter-bound catalog outputs', () => {
   let prepare: ReturnType<typeof createContentLinker>, main: schemas.StructuredBuild['artifactMain'];
   const characters = new Map<string, schemas.StructuredCharacterDefinition>(), weapons = new Map<string, schemas.StructuredWeaponDefinition>();
-  const manifest = read('src/game-data/data/manifest.json'), text = read('tools/data/sources/character-text/base-and-manekin.json');
+  const manifest = catalogInventory(), text = read('tools/data/sources/character-text/base-and-manekin.json');
   const upstream = read('tools/data/sources/catalog/genshin-db/characters.json'), curves = read('tools/data/sources/catalog/genshin-db/character-curves.json');
   const talents = read('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json');
   const proud = new Map(read(text.proudSkillsFile).map((row: { proudSkillGroupId: number; level: number; paramList: number[] }) => [`${row.proudSkillGroupId}/${row.level}`, row]));
@@ -33,7 +34,7 @@ describe('v3 snapshot assembly and parameter-bound catalog outputs', () => {
     for (const id of ['favoniussword', 'harbingerofdawn', 'primordialjadecutter']) weapons.set(id, await prepare.weapon(read('src/game-data/data/weapons/' + id + '.json')));
   });
   function build(id: string, weaponId = 'favoniussword'): schemas.StructuredBuild {
-    return { schemaVersion: 3, kind: 'calculation-build', dataVersion: manifest.dataVersion, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: manifest.dataVersion, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: structuredClone(main), level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }

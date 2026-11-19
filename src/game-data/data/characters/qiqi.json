@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "qiqi",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "七七",
     "title": "冻冻回魂夜",
@@ -14,317 +14,21 @@
     "gameId": 10000035,
     "region": "璃月"
   },
+  "attributes": {
+    "base": {
+      "hp": 962.8532,
+      "attack": 22.344,
+      "defense": 71.796,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "healingBonus"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        9.028,
-        9.317,
-        9.606,
-        9.895,
-        10.184,
-        10.473,
-        10.762,
-        11.051,
-        11.34,
-        11.629
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S5",
+      "attack": "GROW_CURVE_ATTACK_S5",
+      "defense": "GROW_CURVE_HP_S5"
     },
     "promotion": [
       {
@@ -377,635 +81,6 @@
         "specialized": 0.2215
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.qiqi.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#qiqi"
-        },
-        {
-          "id": "content.qiqi.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#qiqi/combat1"
-        },
-        {
-          "id": "content.qiqi.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#qiqi/combat2"
-        },
-        {
-          "id": "content.qiqi.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#qiqi/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param4",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param6",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param6",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param8",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param9",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.normal.param10",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.normal",
-            "hitId": "qiqi.normal.param10",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.skill.param8",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.skill",
-            "hitId": "qiqi.skill.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.skill.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.skill",
-            "hitId": "qiqi.skill.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.skill.param9",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.skill",
-            "hitId": "qiqi.skill.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.burst.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "qiqi.burst",
-            "hitId": "qiqi.burst.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.qiqi.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.qiqi.context",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "qiqi",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.qiqi.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.qiqi.context",
-        "revision": "3"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 962.8532,
-      "attack": 22.344,
-      "defense": 71.796,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "healingBonus",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1269,500 +344,128 @@
           "id": "qiqi.normal.param1",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param2",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param3",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param4",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param4",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param5",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param5",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param6",
           "element": "physical",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param6",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param6",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param6",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param6"
             }
           ],
-          "parameter": "param6"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param8",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param8",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param9",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param9",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param10",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.normal",
-                "parameterId": "param10",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param10",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.normal.param10",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param10"
             }
           ],
-          "parameter": "param10"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.qiqi.normal.parameters"
       ]
     },
     {
@@ -2048,170 +751,44 @@
           "id": "qiqi.skill.param8",
           "element": "cryo",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.skill",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.skill.param8",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.skill.param5",
           "element": "cryo",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.skill",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.skill.param5",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "qiqi.skill.param9",
           "element": "cryo",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.skill",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.skill.param9",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.qiqi.skill.parameters"
       ]
     },
     {
@@ -2401,60 +978,16 @@
           "id": "qiqi.burst.param3",
           "element": "cryo",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "qiqi.burst",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.qiqi.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.qiqi.burst.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.qiqi.burst.parameters"
       ]
     }
   ],
@@ -2463,22 +996,19 @@
       "id": "qiqi.passive1",
       "name": "延命妙法",
       "description": "处于仙法·寒病鬼差状态下的角色触发元素反应时，受治疗加成提升20%，持续8秒。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "qiqi.passive2",
       "name": "玉签偶开",
       "description": "七七的普通攻击与重击命中敌人时，有50%的几率为敌人添加一枚度厄真符，持续6秒。该效果每30秒只能触发一次。",
-      "unlockAscension": 4,
-      "ruleIds": []
+      "unlockAscension": 4
     },
     {
       "id": "qiqi.passive3",
       "name": "前尘旧忆",
       "description": "在小地图上显示周围的璃月区域特产的位置。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2486,15 +1016,13 @@
       "rank": 1,
       "name": "寒苦回向",
       "description": "寒病鬼差命中被度厄真符标记的敌人时，为七七恢复2点元素能量。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "冰寒蚀骨",
       "description": "对受到冰元素影响的敌人，七七的普通攻击与重击造成的伤害提升15%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2505,15 +1033,13 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "天威压众",
       "description": "被度厄真符标记的目标，攻击力下降20%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2524,19 +1050,40 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "起死回骸",
       "description": "施放仙法·救苦度厄时，复苏附近队伍中所有倒下的角色，并将其生命值恢复至50%。\n该效果每15分钟只能触发一次。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.qiqi.growth",
-    "content.character-curves"
-  ]
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

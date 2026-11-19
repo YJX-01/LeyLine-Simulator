@@ -1,5 +1,5 @@
 import type {Build} from '@leyline/schema';
-import defaults from '../../generated/effective-roll-basis.json';
+import defaults from 'virtual:leyline-display/effective-roll-basis';
 
 export interface EffectiveRollBasis {
   hp:number;attack:number;defense:number;source:'build'|'default';

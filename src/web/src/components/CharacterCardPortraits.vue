@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import type { Build } from '@leyline/schema';
 import type { AccountArtifact } from '../domain/account';
-import talentDisplay from '../../generated/character-talent-display.json';
+import talentDisplay from 'virtual:leyline-display/character-talent-display';
 import GameIcon from './GameIcon.vue';
 import CornerBadge from './CornerBadge.vue';
 import WeaponPlaceholder from './WeaponPlaceholder.vue';

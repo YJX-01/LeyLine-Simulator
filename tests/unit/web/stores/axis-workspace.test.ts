@@ -1,3 +1,4 @@
+import { packDocument } from '../../../../src/web/src/domain/content-document';
 import { existsSync } from 'node:fs';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, disposePinia, setActivePinia } from 'pinia';
@@ -52,7 +53,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
     expect(store.project.candidate.actors[0].build).toEqual(recorded.candidate.actors[0].build);
     expect(store.project.timeline).toEqual([]);
     expect(store.dirty).toBe(false);
-    data.set('leyline-axis-recovery-v5', '{');
+    data.set('leyline-axis-recovery-0.1.0', '{');
     expect(store.recover()).toBe(false);
     expect(store.project.id).toBe(recorded.id);
   });
@@ -99,7 +100,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
     expect(await store.saveProject()).toBe(false);
     finish(true);
     expect(await pending).toBe(true);
-    expect(JSON.parse(save.mock.calls[0][0]).revision).toBe('2');
+    expect(JSON.parse(save.mock.calls[0][0]).document.revision).toBe('2');
     expect(store.dirty).toBe(true);
     const previous = store.saveProject();
     store.createProject('next-axis');
@@ -123,7 +124,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
     expect(store.error).toContain('非法');
     store.replaceProject(snapshot());
     expect(await store.saveProject()).toBe(true);
-    expect(adapters.download.mock.calls[0]).toEqual([store.project, `${store.project.id}.json`]);
+    expect(adapters.download.mock.calls[0]).toEqual([packDocument('axis', store.project), `${store.project.id}.json`]);
     expect(store.dirty).toBe(false);
   });
 
@@ -138,7 +139,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
     await store.openNativeProject();
     expect(store.error).toContain('当前项目保持不变');
     expect(store.project.revision).toBe('2');
-    adapters.bridge = nativeBridge({ openProject: vi.fn(async () => JSON.stringify(recorded)) });
+    adapters.bridge = nativeBridge({ openProject: vi.fn(async () => JSON.stringify(packDocument('axis', recorded))) });
     await store.openNativeProject();
     expect(store.project).toEqual(recorded);
     expect(store.dirty).toBe(false);
@@ -147,7 +148,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
 
   it('validates browser files and rejects oversized files before reading', async () => {
     const store = workspace();
-    await store.inputFile(new File([JSON.stringify(recorded)], 'axis.json'));
+    await store.inputFile(new File([JSON.stringify(packDocument('axis', recorded))], 'axis.json'));
     const oversized = new File([new Uint8Array(8 * 1024 * 1024 + 1)], 'large.json');
     const text = vi.spyOn(oversized, 'text');
     await store.inputFile(oversized);

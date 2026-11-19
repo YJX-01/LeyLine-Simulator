@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "tighnari",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "提纳里",
     "title": "浅蔚轻行",
@@ -14,317 +14,21 @@
     "gameId": 10000069,
     "region": "须弥"
   },
+  "attributes": {
+    "base": {
+      "hp": 844.64154,
+      "attack": 20.8544,
+      "defense": 49.0606,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "dendroBonus"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        9.028,
-        9.317,
-        9.606,
-        9.895,
-        10.184,
-        10.473,
-        10.762,
-        11.051,
-        11.34,
-        11.629
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S5",
+      "attack": "GROW_CURVE_ATTACK_S5",
+      "defense": "GROW_CURVE_HP_S5"
     },
     "promotion": [
       {
@@ -377,668 +81,6 @@
         "specialized": 0.288
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.tighnari.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#tighnari"
-        },
-        {
-          "id": "content.tighnari.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#tighnari/combat1"
-        },
-        {
-          "id": "content.tighnari.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#tighnari/combat2"
-        },
-        {
-          "id": "content.tighnari.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#tighnari/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param4",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param6",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param6",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param7",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param7",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param8",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param9",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param10",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param10",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.normal.param11",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.normal",
-            "hitId": "tighnari.normal.param11",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.skill.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.skill",
-            "hitId": "tighnari.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.burst.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.burst",
-            "hitId": "tighnari.burst.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.burst.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "tighnari.burst",
-            "hitId": "tighnari.burst.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.tighnari.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tighnari.context",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tighnari",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.tighnari.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.tighnari.context",
-        "revision": "3"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 844.64154,
-      "attack": 20.8544,
-      "defense": 49.0606,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "dendroBonus",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1327,610 +369,156 @@
           "id": "tighnari.normal.param1",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param2",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param3",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param4",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param4",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param5",
           "element": "physical",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param5",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param6",
           "element": "dendro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param6",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param6",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param6",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param6"
             }
           ],
-          "parameter": "param6"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param7",
           "element": "dendro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param7",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param7",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param7",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param7"
             }
           ],
-          "parameter": "param7"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param8",
           "element": "dendro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param8",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param9",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param9",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param10",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param10",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param10",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param10",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param10"
             }
           ],
-          "parameter": "param10"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param11",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.normal",
-                "parameterId": "param11",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param11",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.normal.param11",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param11"
             }
           ],
-          "parameter": "param11"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.tighnari.normal.parameters"
       ]
     },
     {
@@ -2049,60 +637,16 @@
           "id": "tighnari.skill.param1",
           "element": "dendro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.skill",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.skill.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.tighnari.skill.parameters"
       ]
     },
     {
@@ -2221,115 +765,30 @@
           "id": "tighnari.burst.param1",
           "element": "dendro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.burst",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.burst.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "tighnari.burst.param2",
           "element": "dendro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "tighnari.burst",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.tighnari.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.tighnari.burst.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.tighnari.burst.parameters"
       ]
     }
   ],
@@ -2338,22 +797,19 @@
       "id": "tighnari.passive1",
       "name": "眼识殊明",
       "description": "提纳里发射花筥箭后，元素精通提升50点，持续4秒。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "tighnari.passive2",
       "name": "诸叶辨通",
       "description": "提纳里的每点元素精通，都会使其重击与造生缠藤箭造成的伤害提升0.06%。\n通过这种方式，至多使上述攻击造成的伤害提升60%。",
-      "unlockAscension": 4,
-      "ruleIds": []
+      "unlockAscension": 4
     },
     {
       "id": "tighnari.passive3",
       "name": "闳览博物",
       "description": "在小地图上显示周围的须弥区域特产的位置。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2361,15 +817,13 @@
       "rank": 1,
       "name": "由根须断定肇始",
       "description": "提纳里重击的暴击率提高15%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "由茎干剖析来缘",
       "description": "当识果种雷的识蕴领域中存在敌人时，提纳里获得20%草元素伤害加成。\n识蕴领域持续时间结束或其中不存在敌人后，该效果至多持续6秒。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2380,15 +834,13 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "由片叶管窥枯荣",
       "description": "施放造生缠藤箭时，队伍中附近的所有角色的元素精通提升60点，持续8秒。若造生缠藤箭触发了燃烧、绽放、月绽放、原激化或蔓激化反应，元素精通将进一步提升60点，并刷新该状态的持续时间。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2399,19 +851,40 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "由硕实品论应果",
       "description": "花筥箭所需的蓄力时间减少0.9秒，并在命中后能产生1枚额外的藏蕴花矢，能造成提纳里攻击力150%的伤害。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.tighnari.growth",
-    "content.character-curves"
-  ]
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

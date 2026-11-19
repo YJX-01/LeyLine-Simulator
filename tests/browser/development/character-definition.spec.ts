@@ -1,3 +1,5 @@
+import { readDocument } from '../../helpers/browser-document';
+import type { LocalAccount, Project } from '@leyline/schema';
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
@@ -26,7 +28,7 @@ test('verified Jean metadata supports sequential decimal editing, guarded replac
   const download = await downloadEvent;
   const content = readFileSync((await download.path())!, 'utf8'), file = JSON.parse(content);
   expect(file.kind).toBe('character-definition');
-  expect(file.origin).toBe('custom');
+  expect(file.namespace).toMatch(/^custom:/);
   expect(file.derivedFrom.id).toBe('jean');
   expect(file.talents.find((skill: { category: string }) => skill.category === 'skill').parameters[0].values[0]).toBe(2.92);
   expect(file).not.toHaveProperty('artifacts');
@@ -36,6 +38,17 @@ test('verified Jean metadata supports sequential decimal editing, guarded replac
   await panel.getByLabel('导入角色定义文件', { exact: true }).setInputFiles({ name: 'invalid-version.character.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ ...file, schemaVersion: 2 })) });
   await expect(panel.getByRole('alert')).toContainText('格式无效');
   await expect(name).toHaveValue('琴 · 元数据往返');
+  const exportRevision = async () => {
+    const waiting = page.waitForEvent('download');
+    await panel.getByRole('button', { name: '导出角色定义', exact: true }).click();
+    return JSON.parse(readFileSync((await (await waiting).path())!, 'utf8')).revision;
+  };
+  expect(await exportRevision()).toBe(file.revision);
+  await name.press('End');
+  await name.pressSequentially('2');
+  const nextRevision = await exportRevision();
+  expect(nextRevision).not.toBe(file.revision);
+  expect(await exportRevision()).toBe(nextRevision);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(panel).toBeVisible();
   expect(await panel.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
@@ -55,10 +68,10 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   await page.getByRole('button', { name: '确认导入 1 位角色', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   // Confirmed import-and-merge already equips the selected character; no independent combination is created.
-  const account = await page.evaluate(() => localStorage.getItem('leyline-account-v5'));
-  const imported = JSON.parse(account!);
+  const account = await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'));
+  const imported = await readDocument<LocalAccount>(page, 'account', account!);
   const recorded = JSON.parse(readFileSync(source, 'utf8')).avatarInfoList.find((avatar: { avatarId: number }) => avatar.avatarId === 10000025);
-  const importedCharacter = imported.characters.find((character: { build?: { character: { id: string } } }) => character.build?.character.id === 'xingqiu');
+  const importedCharacter = imported.characters.find(character => character.build?.character.id === 'xingqiu')!;
   expect(Object.keys(importedCharacter.equipment)).toHaveLength(recorded.equipList.filter((item: { reliquary?: unknown }) => item.reliquary).length);
   for (const id of Object.values(importedCharacter.equipment)) expect(imported.artifacts.some((artifact: { id: string }) => artifact.id === id)).toBe(true);
   await page.getByTestId('workspace-nav-team').click();
@@ -72,20 +85,24 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   const name = panel.getByLabel('角色元数据名称', { exact: true });
   await name.clear(); await name.pressSequentially('行秋 · 自定义保存核对');
   await panel.getByRole('button', { name: '应用到所选队员', exact: true }).click();
-  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project.candidate.actors[0].build.character.id)).toMatch(/^custom-/);
-  const before = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project);
-  expect(before.candidate.actors[0].build.character.id).toMatch(/^custom-/);
+  const recovered = async () => {
+    const text = await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.1.0'));
+    return text ? (await readDocument<{ project: Project }>(page, 'axis-recovery', text)).project : undefined;
+  };
+  await expect.poll(async () => (await recovered())?.candidate.actors[0]?.build?.character.id).toMatch(/^custom-/);
+  const before = (await recovered())!;
+  expect(before.candidate.actors[0].build!.character.id).toMatch(/^custom-/);
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('button', { name: '查看与修改配装', exact: true }).click();
   const editor = page.getByRole('dialog', { name: '修改所选队员配装', exact: true });
   // A declared candidate trial, not a claim about the player's original refinement.
-  const refinement = before.candidate.actors[0].build.refinement === 1 ? 2 : 1;
+  const refinement = before.candidate.actors[0].build!.refinement === 1 ? 2 : 1;
   await editor.getByRole('button', { name: `精炼${refinement}阶`, exact: true }).click();
   await editor.getByRole('button', { name: '保存', exact: true }).click();
   await expect(editor.getByRole('button', { name: '保存', exact: true })).toBeDisabled();
-  const after = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project);
-  expect(after.candidate.actors[0].build.character).toEqual(before.candidate.actors[0].build.character);
-  expect(after.candidate.actors[0].build.refinement).toBe(refinement);
-  expect(after.candidate.actors[0].build.artifacts).toEqual(before.candidate.actors[0].build.artifacts);
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-v5'))).toBe(account);
+  const after = (await recovered())!;
+  expect(after.candidate.actors[0].build!.character).toEqual(before.candidate.actors[0].build!.character);
+  expect(after.candidate.actors[0].build!.refinement).toBe(refinement);
+  expect(after.candidate.actors[0].build!.artifacts).toEqual(before.candidate.actors[0].build!.artifacts);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(account);
 });

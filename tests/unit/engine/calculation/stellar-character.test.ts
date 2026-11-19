@@ -1,3 +1,4 @@
+import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { collectCalculationClosure, collectCalculationRoots, compileStructuredCh
 import { getArtifactMain } from '@leyline/game-data';
 import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
 
-const read = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
+const read = (path: string) => readCalculationData(path);
 const quantity = (unit: Extract<schemas.Value, { kind: 'quantity' }>['unit'], value: number): schemas.Value => ({ kind: 'quantity', unit, value });
 const fact = (value: schemas.Value): schemas.CalculationFact => ({ value, provenance: 'explicit', sourceRefs: [] });
 type Hit = schemas.StructuredCharacterDefinition['talents'][number]['hits'][number];
@@ -26,13 +27,13 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
   beforeAll(async () => {
     main = await getArtifactMain();
     prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library: readCalculationLibrary(),
-      manifest: read('src/game-data/data/manifest.json'), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
+      manifest: catalogInventory(), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
       retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
     for (const id of ['vesna', 'kaeya', 'xingqiu']) characters.set(id, await prepare.character(read('src/game-data/data/characters/' + id + '.json')));
     weapon = await prepare.weapon(read('src/game-data/data/weapons/favoniussword.json'));
   });
   function build(id: string, rank = 0): schemas.StructuredBuild {
-    return { schemaVersion: 3, kind: 'calculation-build', dataVersion: read('src/game-data/data/manifest.json').dataVersion,
+    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: catalogInventory().dataVersion,
       character: characters.get(id)!, weapon, sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: rank,
       talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };

@@ -1,3 +1,4 @@
+import { packDocument } from '../../../../src/web/src/domain/content-document';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
@@ -10,7 +11,7 @@ import { addAttributeCapture, defaultEnemy } from '../../../../src/web/src/domai
 
 // Independent legal calculation settings from pinned genshin-db and KQM. No player build/observed axis.
 async function buildFor(id: string, weapon: string, constellation = 0): Promise<Build> {
-  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
+  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
     level: 90, ascension: 6, constellation, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1, artifacts: [], sets: [] };
 }
 const request = (build: Build): DamageRequest => ({ ...selectCatalogHit(build, `${build.character.id}.skill`, 0), crit: 'noncritical', reaction: 'none', ...(build.character.id === 'beidou' ? { inputs: { counterCharge: 2 } } : {}) });
@@ -28,7 +29,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     const original = JSON.stringify(document);
     const attack = 18.6984 * 8.349 + 66.90411 + 23.245 * 5.968 + 46.7;
     const expected = attack * 1.3192 * 0.45;
-    const reopened = parseDamageCalculator(original);
+    const reopened = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', document)));
     const output = evaluateTimeline(reopened.project);
     expect(output.status).toBe('complete');
     expect(output.totalValue).toBeCloseTo(expected, 8);
@@ -80,7 +81,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(direct.status).toBe('complete');
     expect(direct.value).toBeCloseTo(expected, 8);
     const document = createDamageCalculation(build, request(build), defaultEnemy());
-    const reopened = parseDamageCalculator(JSON.stringify(document));
+    const reopened = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', document)));
     expect(evaluateTimeline(reopened.project).totalValue).toBeCloseTo(expected, 8);
     expect(reopened.project.candidate.actors[0].build!.talents.skill).toBe(9);
   });
@@ -151,7 +152,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(comparison.candidates[2].delta).toBe(0);
     document.baseline = JSON.parse(JSON.stringify(document.project));
     document.project.candidate.actors[0].build = candidate;
-    const reopened = parseDamageCalculator(JSON.stringify(document));
+    const reopened = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', document)));
     const response = evaluateLoadoutComparison(calculatorRequest(reopened, 7));
     expect(response.taskId).toBe(7);
     expect(response.comparison!.candidates[0].result.totalValue).toBeCloseTo(expectedAfter, 8);

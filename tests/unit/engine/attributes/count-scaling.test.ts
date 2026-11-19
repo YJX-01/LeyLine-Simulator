@@ -11,7 +11,7 @@ import { createEmptyProject } from '../../../../src/web/src/domain/workbench-pro
 // These are legal independent single-point calculation settings, not player builds or observed timelines.
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function calculation(id: string, weapon: string): Promise<Build> {
-  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     artifactMain: await getArtifactMain(), sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0,
     talents: { normal: 1, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1 };
 }

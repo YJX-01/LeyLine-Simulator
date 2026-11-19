@@ -1,16 +1,18 @@
+import { storageKeyFor } from '@leyline/schema/version';
+import { packDocument, unpackDocument } from '../domain/content-document';
 import { formatJson } from '@leyline/schema';
 import { defineStore } from 'pinia';
 import { computed, ref, shallowRef, watch, onScopeDispose } from 'vue';
 import { evaluateTimeline } from '@leyline/engine';
 import { projectSchema, type Project } from '@leyline/schema';
-import { createEmptyProject, importProject } from '../domain/workbench-project';
+import { validateProject, createEmptyProject, importProject } from '../domain/workbench-project';
 import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 import { matchesAxisTask, pendingAxisResult, type AxisRequest, type AxisResponse } from '../domain/axis-task';
 import { fileSignature } from '../domain/file-signature';
 
 const maxProjectBytes = 8 * 1024 * 1024;
-const recoveryKey = 'leyline-axis-recovery-v5';
+const recoveryKey = storageKeyFor('axis-recovery');
 
 export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
   const project = ref(createEmptyProject());
@@ -90,10 +92,10 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     // Invalid editor drafts stay in memory; never overwrite the last recoverable input.
     const parsed = projectSchema.safeParse(project.value);
     if (!parsed.success) return;
-    const content = JSON.stringify({ schemaVersion: 5, project: parsed.data, savedSnapshot: savedSnapshot.value });
-    if (new TextEncoder().encode(content).byteLength > maxProjectBytes) return;
     try {
       if (typeof localStorage === 'undefined') return;
+      const content = JSON.stringify(packDocument('axis-recovery', { project: parsed.data, savedProject: savedSnapshot.value ? JSON.parse(savedSnapshot.value) : null }));
+      if (new TextEncoder().encode(content).byteLength > maxProjectBytes) return;
       localStorage.setItem(recoveryKey, content);
       recoveryAvailable.value = true;
     } catch { error.value = '本地恢复副本写入失败，请保存项目文件以保留修改。'; }
@@ -160,10 +162,9 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
       const content = localStorage.getItem(recoveryKey);
       if (!content) return false;
       if (new TextEncoder().encode(content).byteLength > maxProjectBytes) throw new Error('恢复副本超过大小限制。');
-      const input = JSON.parse(content);
-      if (input.schemaVersion !== 5) throw new Error('恢复副本版本无法识别。');
-      const next = importProject(JSON.stringify(input.project));
-      const previousSaved=typeof input.savedSnapshot==='string'?fileSignature(JSON.parse(input.savedSnapshot)):null;
+      const input = unpackDocument('axis-recovery', JSON.parse(content)) as { project: unknown; savedProject: unknown };
+      const next = validateProject(input.project);
+      const previousSaved=input.savedProject ? fileSignature(projectSchema.parse(input.savedProject)) : null;
       installProject(next);savedSnapshot.value=previousSaved;
       notice.value='已恢复本地编辑副本，并重新计算；请保存项目文件。';
       return true;
@@ -220,20 +221,21 @@ export const useAxisWorkspaceStore = defineStore('axis-workspace', () => {
     }
     const snapshot = fileSignature(parsed.data);
     const savingSession = session;
-    const content = formatJson(parsed.data);
-    if (new TextEncoder().encode(content).byteLength > maxProjectBytes) {
-      error.value = '项目超过 8 MiB，未写入文件。';
-      return false;
-    }
     busy.value = true;
     try {
+      const portable = packDocument('axis', parsed.data);
+      const content = formatJson(portable);
+      if (new TextEncoder().encode(content).byteLength > maxProjectBytes) {
+        error.value = '项目超过 8 MiB，未写入文件。';
+        return false;
+      }
       const bridge = getDesktopBridge();
       if (bridge) {
         const saved = await bridge.saveProject(content);
         if (!saved) { notice.value = '已取消轴项目保存，当前编辑保留。'; return false; }
         notice.value = '项目已保存，包含完整轴、定义、候选配装及未知条件。';
       } else {
-        downloadJson(parsed.data, `${parsed.data.id}.json`);
+        downloadJson(portable, `${parsed.data.id}.json`);
         notice.value = '已导出项目文件。再次打开该文件即可重新求值。';
       }
       // Inputs may change while the native dialog is open. Only the written snapshot is saved.

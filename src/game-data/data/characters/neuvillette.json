@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "neuvillette",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "那维莱特",
     "title": "谕告的潮音",
@@ -14,317 +14,21 @@
     "gameId": 10000087,
     "region": "枫丹"
   },
+  "attributes": {
+    "base": {
+      "hp": 1143.984,
+      "attack": 16.21802,
+      "defense": 44.8725,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critDamage"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        9.028,
-        9.317,
-        9.606,
-        9.895,
-        10.184,
-        10.473,
-        10.762,
-        11.051,
-        11.34,
-        11.629
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S5",
+      "attack": "GROW_CURVE_ATTACK_S5",
+      "defense": "GROW_CURVE_HP_S5"
     },
     "promotion": [
       {
@@ -377,775 +81,6 @@
         "specialized": 0.384
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.neuvillette.ascension-four",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/talents/neuvillette.json#passive2"
-        },
-        {
-          "id": "content.neuvillette.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#neuvillette"
-        },
-        {
-          "id": "content.neuvillette.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#neuvillette/combat1"
-        },
-        {
-          "id": "content.neuvillette.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#neuvillette/combat2"
-        },
-        {
-          "id": "content.neuvillette.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#neuvillette/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [
-        {
-          "schemaVersion": 2,
-          "identity": {
-            "namespace": "builtin",
-            "id": "neuvillette.ascension-four",
-            "revision": "1"
-          },
-          "template": {
-            "id": "bounded-stat-bonus",
-            "revision": "1",
-            "input": "hp-ratio",
-            "stat": "scalar",
-            "threshold": 0.3,
-            "channels": [
-              {
-                "output": "bonus",
-                "rate": 0.6,
-                "cap": 0.3
-              }
-            ]
-          },
-          "sources": [
-            "genshin-db.neuvillette.ascension-four"
-          ]
-        }
-      ],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "neuvillette.ascension-four.hydro-bonus",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.neuvillette.ascension-four"
-          ],
-          "activation": {
-            "ascension": 4
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "formula",
-            "formula": {
-              "namespace": "builtin",
-              "id": "neuvillette.ascension-four",
-              "revision": "1"
-            },
-            "inputs": {
-              "hp-ratio": {
-                "kind": "fact",
-                "key": "hpRatio",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                },
-                "scope": "owner"
-              }
-            },
-            "output": "bonus"
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.hydroBonus",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "neuvillette.ascension-four.hydro-bonus",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param4",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param11",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param11",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param12",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param12",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.normal.param13",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.normal",
-            "hitId": "neuvillette.normal.param13",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.skill.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.skill",
-            "hitId": "neuvillette.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.skill.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.skill",
-            "hitId": "neuvillette.skill.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.burst.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.burst",
-            "hitId": "neuvillette.burst.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.burst.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "neuvillette.burst",
-            "hitId": "neuvillette.burst.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.neuvillette.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.neuvillette.context",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "neuvillette",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.neuvillette.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "neuvillette.ascension-four.hydro-bonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.neuvillette.context",
-        "revision": "3"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 1143.984,
-      "attack": 16.21802,
-      "defense": 44.8725,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critDamage",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1476,445 +411,114 @@
           "id": "neuvillette.normal.param1",
           "element": "hydro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param2",
           "element": "hydro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param3",
           "element": "hydro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param4",
           "element": "hydro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param4",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param5",
           "element": "hydro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "hp-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.hp",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param5",
-              "revision": "3"
+              "stat": "hp",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param11",
           "element": "hydro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param11",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param11",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param11",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param11"
             }
           ],
-          "parameter": "param11"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param12",
           "element": "hydro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param12",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param12",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param12",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param12"
             }
           ],
-          "parameter": "param12"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param13",
           "element": "hydro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.normal",
-                "parameterId": "param13",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param13",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.normal.param13",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param13"
             }
           ],
-          "parameter": "param13"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.neuvillette.normal.parameters"
       ]
     },
     {
@@ -2058,115 +662,30 @@
           "id": "neuvillette.skill.param1",
           "element": "hydro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "hp-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.hp",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.skill",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.skill.param1",
-              "revision": "3"
+              "stat": "hp",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.skill.param2",
           "element": "hydro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.skill",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.skill.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.neuvillette.skill.parameters"
       ]
     },
     {
@@ -2285,115 +804,30 @@
           "id": "neuvillette.burst.param1",
           "element": "hydro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "hp-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.hp",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.burst",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.burst.param1",
-              "revision": "3"
+              "stat": "hp",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.burst.param2",
           "element": "hydro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "hp-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.hp",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "neuvillette.burst",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.neuvillette.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.neuvillette.burst.param2",
-              "revision": "3"
+              "stat": "hp",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.neuvillette.burst.parameters"
       ]
     }
   ],
@@ -2402,28 +836,22 @@
       "id": "neuvillette.passive1",
       "name": "古海孑遗的权柄",
       "description": "队伍中的角色对敌人触发蒸发、冻结、感电、月感电、绽放、月绽放、水元素扩散、水元素结晶或月结晶反应时，将为那维莱特产生持续30秒，至多叠加3层的「遗龙之荣」效果，使重击·衡平推裁造成原本110%/125%/160%的伤害。\n每种元素反应产生的「遗龙之荣」分别独立存在。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "neuvillette.passive2",
       "name": "至高仲裁的纪律",
       "description": "基于当前生命值超出生命值上限30%的部分，每1%使那维莱特获得0.6%水元素伤害加成，通过这种方式，至多提升30%。",
       "unlockAscension": 4,
-      "ruleIds": [
-        {
-          "namespace": "builtin",
-          "id": "neuvillette.ascension-four.hydro-bonus",
-          "revision": "1"
-        }
+      "effects": [
+        "neuvillette.ascension-four.hydro-bonus"
       ]
     },
     {
       "id": "neuvillette.passive3",
       "name": "汇聚如浪潮一般",
       "description": "队伍中自己的角色进行水下冲刺时，移动速度提升15%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2431,15 +859,13 @@
       "rank": 1,
       "name": "尊荣的创定",
       "description": "那维莱特登场时，获得一层突破天赋「古海孑遗的权柄」的「遗龙之荣」。需要解锁突破天赋「古海孑遗的权柄」。\n此外，进行重击蓄力·诉论心证与重击·衡平推裁时，提高那维莱特的抗打断能力。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "律法的命诫",
       "description": "突破天赋「古海孑遗的权柄」获得强化：每存在一层「遗龙之荣」，就使重击·衡平推裁的暴击伤害提升14%，至多通过这种方式提升42%。\n需要解锁突破天赋「古海孑遗的权柄」。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2450,15 +876,13 @@
           "category": "normal",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "悲悯的冠冕",
       "description": "那维莱特处于当前场上并受到治疗时，将产生1枚源水之滴。此效果每4秒至多触发一次。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2469,19 +893,92 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "忿怒的报偿",
       "description": "施放重击·衡平推裁时，那维莱特可以吸收附近一定范围内的源水之滴，每吸收一枚源水之滴，都将使重击·衡平推裁的持续时间延长1秒。\n此外，重击·衡平推裁命中敌人时，每2秒，将额外释放两道洪流，每道洪流造成相当于那维莱特生命值上限10%的水元素伤害。通过这种方式造成的伤害视为重击·衡平推裁造成的伤害。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.neuvillette.growth",
-    "content.character-curves"
-  ]
+  "formulas": [
+    {
+      "id": "neuvillette.ascension-four",
+      "template": {
+        "id": "bounded-stat-bonus",
+        "revision": "1",
+        "input": "hp-ratio",
+        "stat": "scalar",
+        "threshold": 0.3,
+        "channels": [
+          {
+            "output": "bonus",
+            "rate": 0.6,
+            "cap": 0.3
+          }
+        ]
+      }
+    }
+  ],
+  "effects": [
+    {
+      "id": "neuvillette.ascension-four.hydro-bonus",
+      "target": "attribute.hydroBonus",
+      "value": {
+        "call": "neuvillette.ascension-four",
+        "inputs": {
+          "hp-ratio": {
+            "fact": "hpRatio"
+          }
+        },
+        "output": "bonus"
+      },
+      "activation": {
+        "ascension": 4
+      }
+    }
+  ],
+  "facts": {
+    "hpRatio": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      }
+    }
+  },
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable",
+          "rules": [
+            "neuvillette.ascension-four.hydro-bonus"
+          ]
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable",
+          "rules": [
+            "neuvillette.ascension-four.hydro-bonus"
+          ]
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

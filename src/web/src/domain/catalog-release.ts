@@ -1,4 +1,4 @@
-import metadata from '../../generated/catalog-release-metadata.json';
+import metadata from 'virtual:leyline-display/catalog-release-metadata';
 import { elementalForm } from './elemental-forms';
 
 export type ReleaseMetadata = { name: string; version: string; gameId: number; rarity?: number };

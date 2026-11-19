@@ -1,3 +1,4 @@
+import { APP_VERSION } from '@leyline/schema/version';
 import { calculationClosureRequestSchema, calculationJsonPointer, definitionKey, inspectCalculationStructure, structuredCharacterDefinitionSchema,
   type CalculationBinding, type CalculationBundle, type CalculationDiagnostic, type DefinitionRef } from '@leyline/schema';
 import { compileCalculation, compiledData } from './compile';
@@ -72,7 +73,7 @@ export function collectCalculationRoots(library: unknown, input: unknown): Calcu
   }
   const stateMachines = filter(data.stateMachines);
   if (stateMachines.length) { features.add('event-state-v1'); features.add('combat-binding-v1'); }
-  return { ok: true, diagnostics, bundle: structuredClone({ schemaVersion: 2, runtimeVersion: 2, requiredFeatures: [...features],
+  return { ok: true, diagnostics, bundle: structuredClone({ schemaVersion: APP_VERSION, runtimeVersion: APP_VERSION, requiredFeatures: [...features],
     sources: data.sources.filter(source => sources.has(source.id)), formulas, tables: filter(data.tables), attributes, effects, aggregates, coverage, stateMachines, damageFamilies: [...families] }) };
 }
 

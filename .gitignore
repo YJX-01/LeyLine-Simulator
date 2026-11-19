@@ -31,6 +31,6 @@ venv/
 # Derived distribution copy of the central license archive
 /src/web/public/licenses/
 
-# Runtime content and catalog projections (pnpm data:build)
+# Retired catalog snapshots that may remain in local checkouts
 /src/game-data/generated/
 /src/web/generated/

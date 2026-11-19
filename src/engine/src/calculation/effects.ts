@@ -30,16 +30,16 @@ export function hitMatches(selector: CalculationHitSelector, hit: CombatFrame['h
     && (!selector.families || selector.families.includes(hit.family)) && (!selector.origins || selector.origins.includes(hit.origin))
     && (!selector.reactionIds || hit.reactionId !== null && selector.reactionIds.includes(hit.reactionId));
 }
+export function effectUnlocked(activation: EffectDefinition['activation'], owner: Pick<CombatActor, 'ascension' | 'constellation' | 'refinement' | 'setCounts'>): boolean {
+  return owner.ascension >= (activation.ascension ?? 0) && owner.constellation >= (activation.constellation ?? 0)
+    && owner.refinement >= (activation.refinement ?? 1) && (!activation.set || (owner.setCounts[activation.set.id] ?? 0) >= activation.set.pieces);
+}
 export function collectEffectInstances(data: CompiledData, context: CombatContext, targetId: string, visit: () => boolean): EffectInstance[] {
   const result: EffectInstance[] = [];
   for (const owner of context.actors) for (const reference of owner.effects) {
     if (!visit()) return result;
     const definition = data.effects.get(definitionKey(reference))!;
-    const { activation } = definition;
-    if (activation.ascension !== undefined && owner.ascension < activation.ascension
-      || activation.constellation !== undefined && owner.constellation < activation.constellation
-      || activation.refinement !== undefined && owner.refinement < activation.refinement
-      || activation.set && (owner.setCounts[activation.set.id] ?? 0) < activation.set.pieces) continue;
+    if (!effectUnlocked(definition.activation, owner)) continue;
     if (definition.trigger.kind === 'permanent') result.push({ id: calculationEffectInstanceId(owner.id, reference, null), owner, definition, source: null, triggerKnown: true });
     else for (const source of context.events) {
       if (!visit()) return result;

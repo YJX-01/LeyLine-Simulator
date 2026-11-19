@@ -2,7 +2,7 @@ import {defaultRollBasis,buildRollBasis,type EffectiveRollBasis} from './effecti
 import type { StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountCharacter, LocalAccount } from './account';
 import { averageRollCount } from './artifact-rolls';
-import metadata from '../../generated/character-effective-stats.json';
+import metadata from 'virtual:leyline-display/character-effective-stats';
 
 export const effectiveStatGroups: {stat:StatKey;label:string;icon:string;members:StatKey[]}[] = [
   { stat:'critDamage', label:'暴击伤害', icon:'critDamage', members:['critDamage'] },

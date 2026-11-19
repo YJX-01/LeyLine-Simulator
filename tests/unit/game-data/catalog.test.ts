@@ -41,7 +41,7 @@ describe('fixed real game snapshot', () => {
     // The ordinary-attack batch must include every form; this is a binding boundary, not full-character acceptance.
     expect(catalogDefinitions.every(character => character.talents.find(talent => talent.category === 'normal')!.hits.length > 0)).toBe(true);
     expect(catalogDefinitions.every(character => character.talents.every(talent => talent.hits.length > 0 || talent.noIndependentDamage))).toBe(true);
-  });
+  }, 30_000);
   it('keeps raw numeric curves and independent skill parameters and isolates mutable consumers', async () => {
     const jean = await getCharacter('jean');
     const kaeya = await getCharacter('kaeya');

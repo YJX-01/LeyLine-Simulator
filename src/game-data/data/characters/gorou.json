@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "gorou",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "五郎",
     "title": "戎犬锵锵",
@@ -14,317 +14,21 @@
     "gameId": 10000055,
     "region": "稻妻"
   },
+  "attributes": {
+    "base": {
+      "hp": 802.3761,
+      "attack": 15.31488,
+      "defense": 54.36375,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "geoBonus"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.165,
-        1.248,
-        1.33,
-        1.413,
-        1.495,
-        1.578,
-        1.661,
-        1.743,
-        1.826,
-        1.908,
-        1.991,
-        2.073,
-        2.156,
-        2.239,
-        2.321,
-        2.404,
-        2.486,
-        2.569,
-        2.651,
-        2.734,
-        2.817,
-        2.899,
-        2.982,
-        3.064,
-        3.147,
-        3.229,
-        3.312,
-        3.394,
-        3.477,
-        3.56,
-        3.642,
-        3.725,
-        3.807,
-        3.89,
-        3.972,
-        4.055,
-        4.138,
-        4.22,
-        4.303,
-        4.385,
-        4.468,
-        4.55,
-        4.633,
-        4.716,
-        4.798,
-        4.881,
-        4.963,
-        5.046,
-        5.128,
-        5.211,
-        5.294,
-        5.376,
-        5.459,
-        5.541,
-        5.624,
-        5.706,
-        5.789,
-        5.872,
-        5.954,
-        6.037,
-        6.119,
-        6.202,
-        6.284,
-        6.367,
-        6.45,
-        6.532,
-        6.615,
-        6.697,
-        6.78,
-        6.862,
-        6.945,
-        7.028,
-        7.11,
-        7.193,
-        7.275,
-        7.358,
-        7.44,
-        7.523,
-        7.606,
-        7.688,
-        7.771,
-        7.853,
-        7.936,
-        8.018,
-        8.101,
-        8.183,
-        8.266,
-        8.349,
-        8.431,
-        8.514,
-        8.596,
-        8.679,
-        8.761,
-        8.844,
-        8.927,
-        9.009,
-        9.092,
-        9.174
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.165,
-        1.248,
-        1.33,
-        1.413,
-        1.495,
-        1.578,
-        1.661,
-        1.743,
-        1.826,
-        1.908,
-        1.991,
-        2.073,
-        2.156,
-        2.239,
-        2.321,
-        2.404,
-        2.486,
-        2.569,
-        2.651,
-        2.734,
-        2.817,
-        2.899,
-        2.982,
-        3.064,
-        3.147,
-        3.229,
-        3.312,
-        3.394,
-        3.477,
-        3.56,
-        3.642,
-        3.725,
-        3.807,
-        3.89,
-        3.972,
-        4.055,
-        4.138,
-        4.22,
-        4.303,
-        4.385,
-        4.468,
-        4.55,
-        4.633,
-        4.716,
-        4.798,
-        4.881,
-        4.963,
-        5.046,
-        5.128,
-        5.211,
-        5.294,
-        5.376,
-        5.459,
-        5.541,
-        5.624,
-        5.706,
-        5.789,
-        5.872,
-        5.954,
-        6.037,
-        6.119,
-        6.202,
-        6.284,
-        6.367,
-        6.45,
-        6.532,
-        6.615,
-        6.697,
-        6.78,
-        6.862,
-        6.945,
-        7.028,
-        7.11,
-        7.193,
-        7.275,
-        7.358,
-        7.44,
-        7.523,
-        7.606,
-        7.688,
-        7.771,
-        7.853,
-        7.936,
-        8.018,
-        8.101,
-        8.183,
-        8.266,
-        8.349,
-        8.653,
-        8.957,
-        9.262,
-        9.566,
-        9.87,
-        10.174,
-        10.479,
-        10.783,
-        11.087,
-        11.392
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.165,
-        1.248,
-        1.33,
-        1.413,
-        1.495,
-        1.578,
-        1.661,
-        1.743,
-        1.826,
-        1.908,
-        1.991,
-        2.073,
-        2.156,
-        2.239,
-        2.321,
-        2.404,
-        2.486,
-        2.569,
-        2.651,
-        2.734,
-        2.817,
-        2.899,
-        2.982,
-        3.064,
-        3.147,
-        3.229,
-        3.312,
-        3.394,
-        3.477,
-        3.56,
-        3.642,
-        3.725,
-        3.807,
-        3.89,
-        3.972,
-        4.055,
-        4.138,
-        4.22,
-        4.303,
-        4.385,
-        4.468,
-        4.55,
-        4.633,
-        4.716,
-        4.798,
-        4.881,
-        4.963,
-        5.046,
-        5.128,
-        5.211,
-        5.294,
-        5.376,
-        5.459,
-        5.541,
-        5.624,
-        5.706,
-        5.789,
-        5.872,
-        5.954,
-        6.037,
-        6.119,
-        6.202,
-        6.284,
-        6.367,
-        6.45,
-        6.532,
-        6.615,
-        6.697,
-        6.78,
-        6.862,
-        6.945,
-        7.028,
-        7.11,
-        7.193,
-        7.275,
-        7.358,
-        7.44,
-        7.523,
-        7.606,
-        7.688,
-        7.771,
-        7.853,
-        7.936,
-        8.018,
-        8.101,
-        8.183,
-        8.266,
-        8.349,
-        8.431,
-        8.514,
-        8.596,
-        8.679,
-        8.761,
-        8.844,
-        8.927,
-        9.009,
-        9.092,
-        9.174
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S4",
+      "attack": "GROW_CURVE_ATTACK_S4",
+      "defense": "GROW_CURVE_HP_S4"
     },
     "promotion": [
       {
@@ -377,602 +81,6 @@
         "specialized": 0.24
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.gorou.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#gorou"
-        },
-        {
-          "id": "content.gorou.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#gorou/combat1"
-        },
-        {
-          "id": "content.gorou.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#gorou/combat2"
-        },
-        {
-          "id": "content.gorou.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#gorou/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param4",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param6",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param6",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param7",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param7",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param8",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.normal.param9",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.normal",
-            "hitId": "gorou.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.skill.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.skill",
-            "hitId": "gorou.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.burst.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.burst",
-            "hitId": "gorou.burst.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.burst.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "gorou.burst",
-            "hitId": "gorou.burst.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.gorou.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.gorou.context",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "gorou",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.gorou.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.gorou.context",
-        "revision": "3"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 802.3761,
-      "attack": 15.31488,
-      "defense": 54.36375,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "geoBonus",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1211,500 +319,128 @@
           "id": "gorou.normal.param1",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param2",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param3",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param4",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param4",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param5",
           "element": "physical",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param5",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param6",
           "element": "geo",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param6",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param6",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param6",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param6"
             }
           ],
-          "parameter": "param6"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param7",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param7",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param7",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param7",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param7"
             }
           ],
-          "parameter": "param7"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param8",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param8",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.normal.param9",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.normal.param9",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.gorou.normal.parameters"
       ]
     },
     {
@@ -1848,60 +584,16 @@
           "id": "gorou.skill.param1",
           "element": "geo",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.skill",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.skill.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.gorou.skill.parameters"
       ]
     },
     {
@@ -2045,115 +737,30 @@
           "id": "gorou.burst.param1",
           "element": "geo",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "defense-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.defense",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.burst",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.burst.param1",
-              "revision": "3"
+              "stat": "defense",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "gorou.burst.param2",
           "element": "geo",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "defense-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.defense",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "gorou.burst",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.gorou.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.gorou.burst.param2",
-              "revision": "3"
+              "stat": "defense",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.gorou.burst.parameters"
       ]
     }
   ],
@@ -2162,22 +769,19 @@
       "id": "gorou.passive1",
       "name": "不畏风雨",
       "description": "施放兽牙逐突形胜战法后的12秒内，附近的队伍中所有角色的防御力提升25%。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "gorou.passive2",
       "name": "报恩之守",
       "description": "基于防御力，五郎的以下攻击造成的伤害提高：\n·犬坂吠吠方圆阵的技能伤害提高值：防御力的156%；\n·兽牙逐突形胜战法的技能伤害与岩晶崩破伤害提高值：防御力的15.6%。",
-      "unlockAscension": 4,
-      "ruleIds": []
+      "unlockAscension": 4
     },
     {
       "id": "gorou.passive3",
       "name": "亮晶晶发现术",
       "description": "在小地图上显示周围的稻妻区域特产的位置。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2185,15 +789,13 @@
       "rank": 1,
       "name": "犬奔·疾如风",
       "description": "处于五郎自己的大将旗指物或大将威仪领域中的当前场上角色（除了五郎自己）对敌人造成岩元素伤害后，五郎自己的犬坂吠吠方圆阵冷却时间减少2秒。\n该效果每10秒至多触发一次。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "犬坐·稳如钟",
       "description": "在大将威仪的持续期间，附近的当前场上角色获取结晶反应产生的晶片或触发月结晶反应后，五郎自己的大将威仪的持续时间延长1秒。\n该效果每0.1秒至多触发一次，至多通过这种方式延长3秒持续时间。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2204,15 +806,13 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "犬舐·温如水",
       "description": "大将威仪在具有「难破」或「摧碎」的效果时，每1.5秒，为领域内的当前场上角色恢复生命值，回复量相当于五郎自己防御力的50%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2223,19 +823,40 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "犬勇·忠如山",
       "description": "施放犬坂吠吠方圆阵或兽牙逐突形胜战法后的12秒内，依据施放时的领域等级，提高附近的队伍中所有角色岩元素伤害的暴击伤害：\n·「坚牢」：提高10%；\n·「难破」：提高20%；\n·「摧碎」：提高40%。\n\n该效果无法叠加，以后生效的为准。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.gorou.growth",
-    "content.character-curves"
-  ]
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

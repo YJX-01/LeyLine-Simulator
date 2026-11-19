@@ -1,3 +1,5 @@
+import { readCalculationLibrary } from '../../tools/lib/calculation-library.mjs';
+import { readCalculationData } from '../../tools/lib/catalog-data.mjs';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
@@ -7,10 +9,10 @@ import { collectFormulaClosure } from '../../tools/lib/calculation-closure.mjs';
 import { loadContentSchema } from '../../tools/lib/load-content-schema.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const read = file => JSON.parse(readFileSync(resolve(root, file), 'utf8'));
+const read = file => readCalculationData(resolve(root, file));
 
 test('a real lunar aggregate exports just its exact reachable formula/source snapshot', async () => {
-  const library = read('src/game-data/generated/calculation-formulas.json');
+  const library = readCalculationLibrary();
   const closure = await collectFormulaClosure([{ namespace: 'builtin', id: 'lunar-charged', revision: '1' }], library);
   assert.deepEqual(closure.formulas.map(formula => formula.identity.id).sort(), ['lunar-charged-individual', 'lunar-em-bonus']);
   assert.equal(closure.aggregates.length, 1);
@@ -24,7 +26,7 @@ test('a real lunar aggregate exports just its exact reachable formula/source sna
 });
 
 test('a real Nahida formula closure compiles and evaluates after an offline JSON round trip', async () => {
-  const library = read('src/game-data/generated/calculation-formulas.json');
+  const library = readCalculationLibrary();
   const reference = { namespace: 'builtin', id: 'nahida.skill.tri-karma.base', revision: '1' };
   const closure = JSON.parse(JSON.stringify(await collectFormulaClosure([reference], library)));
   assert.equal(closure.formulas.length, 1);
@@ -42,7 +44,7 @@ test('a real Nahida formula closure compiles and evaluates after an offline JSON
 });
 
 test('Jade Cutter effect roots retain their exact transitive HP and ATK attribute dependencies offline', async () => {
-  const library = read('src/game-data/generated/calculation-formulas.json');
+  const library = readCalculationLibrary();
   const roots = ['primordialjadecutter.static-hpPercent', 'primordialjadecutter.hp-to-attack.attack'].map(id => ({ namespace: 'builtin', id, revision: '1' }));
   const closure = await collectFormulaClosure(roots, library);
   assert.equal(closure.effects.length, 2);

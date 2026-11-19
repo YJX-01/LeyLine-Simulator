@@ -1,3 +1,5 @@
+import { readCalculationLibrary } from '../../tools/lib/calculation-library.mjs';
+import { catalogInventory, readCalculationData } from '../../tools/lib/catalog-data.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,17 +10,17 @@ import { createContentLinker } from '../../tools/lib/content-linking.mjs';
 import { calculationCoverage } from '../../tools/lib/calculation-coverage.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const read = file => JSON.parse(readFileSync(resolve(root, file), 'utf8'));
+const read = file => readCalculationData(resolve(root, file));
 
 test('all actual catalog snapshots retain exact growth and parameters with stable hit identities and closed dependencies', async () => {
   const schemas = await loadContentSchema(), engine = await loadContentSchema('/src/engine/src/index.ts');
-  const manifest = read('src/game-data/data/manifest.json'), counts = { characters: 0, weapons: 0, sets: 0, hits: 0, outputs: 0 };
+  const manifest = catalogInventory(), counts = { characters: 0, weapons: 0, sets: 0, hits: 0, outputs: 0 };
   const candidates = { characters: [], weapons: [], sets: [] };
   const prepare = createContentLinker({ schemas, collectCalculationRoots: engine.collectCalculationRoots, describeCalculationTemplate: engine.describeCalculationTemplate, manifest,
-    library: read('src/game-data/generated/calculation-formulas.json'), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
+    library: readCalculationLibrary(), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
     retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
   for (const id of manifest.characters) {
-    const path = resolve(root, 'src/game-data/data/characters', id + '.json'), before = readFileSync(path, 'utf8'), original = JSON.parse(before), candidate = await prepare.character(original);
+    const path = resolve(root, 'src/game-data/data/characters', id + '.json'), before = readFileSync(path, 'utf8'), original = read(path), candidate = await prepare.character(original);
     candidates.characters.push(candidate);
     assert.deepEqual(candidate.progression, original.progression);
     assert.deepEqual(candidate.attributes.base, original.attributes.base);

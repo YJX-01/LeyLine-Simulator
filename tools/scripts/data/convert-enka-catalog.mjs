@@ -1,10 +1,8 @@
-import { writeGeneratedFile } from '../../lib/generated-files.mjs';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { readContentSource } from '../../lib/content-source.mjs';
 const root=resolve(import.meta.dirname, '../../..');
 const canonical=resolve(root,'tools/data/sources/catalog/enka/catalog.json');
-const output=resolve(root,'src/web/generated/enka-catalog.json');
 const read=path=>readContentSource(resolve(root,path));
 const supplements=read('tools/data/sources/catalog/enka/skill-supplements.json');
 if(process.argv.includes('--capture')) {
@@ -37,7 +35,4 @@ for(const [avatarId,item] of Object.entries(supplements.characters)) {
   const entry=snapshot.mapping.characters[avatarId];
   if(entry?.id!==item.id || JSON.stringify(entry.skills)!==JSON.stringify(item.skills) || entry.skillDepotId!==item.skillDepotId) throw new Error(`Supplement needs recapture: ${avatarId}`);
 }
-const expected=`${JSON.stringify(snapshot.mapping)}\n`;
-if(process.argv.includes('--check')) { if(readFileSync(output,'utf8')!==expected)throw new Error('Enka catalog needs regeneration.'); }
-else writeGeneratedFile(output,expected);
 console.log(JSON.stringify({characters:Object.keys(snapshot.mapping.characters).length,weapons:Object.keys(snapshot.mapping.weapons).length,sets:Object.keys(snapshot.mapping.sets).length,sourceCommit:snapshot.source.commit}));

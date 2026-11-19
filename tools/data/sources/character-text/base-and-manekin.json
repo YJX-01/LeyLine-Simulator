@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": "0.1.0",
   "extraction": "Lossless selected raw rows and referenced Chinese text entries, not full original files. TextMapCHS overrides Medium for overlapping keys. Skill hashes are matched explicitly across the two pinned sources; original bytes remain in the local capture. Numeric levels come only from the adopted fixed ProudSkill table. Missing base-traveler normal-attack labels are taken from the same pinned LunaGC TextMapCHS; other previously adopted text remains unchanged.",
   "sources": [
     {

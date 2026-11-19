@@ -69,7 +69,7 @@ calculation/templates.ts按已注册模板及精确revision装配计算；templa
 
 formula-ir.ts与template-builder.ts属于私有执行层，保留单位检查、惰性读取、共享预算和逐步追踪；它们不属于文档契约。describeCalculationTemplate提供独立的签名、常数及依赖描述，不导出可执行图。collectCalculationRoots只导出模板配置及实际可达数据。
 
-CalculationBundle为版本2/runtimeVersion=2，声明fixed-templates-v1；模板revision目前只接受1。新增算法或不兼容变化先升级TS模板及明确版本，未知版本拒绝，既有JSON不能定义新算法。
+CalculationBundle 的 schemaVersion 与 runtimeVersion 均使用当前软件版本（0.1.0），声明fixed-templates-v1；模板revision目前只接受1。新增算法或不兼容变化先升级TS模板及明确版本，未知版本拒绝，既有JSON不能定义新算法。
 
 固定模板还提供有单位的线性转换、数量/枚举条件与布尔组合。组合条件在已知项足以决定结果时隔离无关未知，非法值和预算失败仍拒绝。直接反应模板可显式启用技能基数倍率；该倍率只作用于基数，专属固定加值仍在反应和精通增益之后，普通增伤与防御不进入星伤分支。
 

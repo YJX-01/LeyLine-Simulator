@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "nefer",
   "revision": "3",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "奈芙尔",
     "title": "湮沙的秘闻",
@@ -14,317 +14,21 @@
     "gameId": 10000122,
     "region": "挪德卡莱"
   },
+  "attributes": {
+    "base": {
+      "hp": 988.9742,
+      "attack": 26.8128,
+      "defense": 62.2232,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "critDamage"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        9.028,
-        9.317,
-        9.606,
-        9.895,
-        10.184,
-        10.473,
-        10.762,
-        11.051,
-        11.34,
-        11.629
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S5",
+      "attack": "GROW_CURVE_ATTACK_S5",
+      "defense": "GROW_CURVE_HP_S5"
     },
     "promotion": [
       {
@@ -377,569 +81,6 @@
         "specialized": 0.384
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.nefer.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#nefer"
-        },
-        {
-          "id": "content.nefer.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#nefer/combat1"
-        },
-        {
-          "id": "content.nefer.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#nefer/combat2"
-        },
-        {
-          "id": "content.nefer.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#nefer/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param2",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param4",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param5",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param8",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param9",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.normal.param10",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.normal",
-            "hitId": "nefer.normal.param10",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.skill.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.skill",
-            "hitId": "nefer.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.burst.param1",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.burst",
-            "hitId": "nefer.burst.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.burst.param3",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nefer.burst",
-            "hitId": "nefer.burst.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nefer.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nefer.context",
-            "revision": "3"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nefer",
-            "revision": "3"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.nefer.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.nefer.context",
-        "revision": "3"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 988.9742,
-      "attack": 26.8128,
-      "defense": 62.2232,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "critDamage",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1228,445 +369,114 @@
           "id": "nefer.normal.param1",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param2",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param2",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param3",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param4",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param4",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param5",
           "element": "dendro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param5",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param8",
           "element": "dendro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param8",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param9",
           "element": "dendro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param9",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param10",
           "element": "dendro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nefer.normal",
-                "parameterId": "param10",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param10",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.normal.param10",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param10"
             }
           ],
-          "parameter": "param10"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.nefer.normal.parameters"
       ]
     },
     {
@@ -1973,109 +783,20 @@
           "id": "nefer.skill.param1",
           "element": "dendro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nefer.skill",
-                    "parameterId": "param1",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "elementalMastery-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.elementalMastery",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nefer.skill",
-                    "parameterId": "param2",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.skill.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.nefer.skill.parameters"
       ]
     },
     {
@@ -2261,213 +982,38 @@
           "id": "nefer.burst.param1",
           "element": "dendro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nefer.burst",
-                    "parameterId": "param1",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "elementalMastery-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.elementalMastery",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nefer.burst",
-                    "parameterId": "param2",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.burst.param1",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param1"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nefer.burst.param3",
           "element": "dendro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nefer.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "elementalMastery-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.elementalMastery",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nefer.burst",
-                    "parameterId": "param4",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nefer.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nefer.burst.param3",
-              "revision": "3"
+              "stat": "attack",
+              "parameter": "param3"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.nefer.burst.parameters"
       ]
     }
   ],
@@ -2476,29 +1022,25 @@
       "id": "nefer.passive1",
       "name": "月下的豪赌",
       "description": "依据队伍的月兆，奈芙尔将获得对应的强化效果。\n\n月兆·满辉：施放元素战技**弈术·千夜一舞**时，将使当前场上的草原核转化为「诳言之核」，且附近所有角色在接下来的15秒内触发月绽放反应时，将取代草原核与丰穰之核产生诳言之核。诳言之核无法触发超绽放与烈绽放反应，也无法迸发。\n奈芙尔施放重击或**幻戏**时，可以吸收附近一定范围内的诳言之核，每吸收一枚诳言之核，奈芙尔便会获得一层**「伪秘之帷」**效果；该效果叠加至3层或3层的持续时间刷新时，奈芙尔的元素精通提升100点，持续8秒。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "nefer.passive2",
       "name": "尘沙的女儿",
       "description": "奈芙尔处于**「影舞」**状态下时，队伍中的角色触发月绽放反应后的5秒内，奈芙尔的**蛇行**状态还会额外为队伍提供**草露**；依据奈芙尔的元素精通超过500的部分，每100点元素精通都将使上述提供草露的效果提升10%，至多通过这种方式提升50%。",
-      "unlockAscension": 4,
-      "ruleIds": []
+      "unlockAscension": 4
     },
     {
       "id": "nefer.passive3",
       "name": "月兆祝赐·廊下暮影",
       "description": "队伍中的角色触发绽放反应时，将转为触发月绽放反应，且基于奈芙尔的元素精通，提升队伍中角色造成的月绽放反应的基础伤害：每点元素精通都将提升0.0175%月绽放反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，奈芙尔在队伍中时，队伍的月兆将会上升一级。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     },
     {
       "id": "nefer.passive4",
       "name": "金室的密谋",
       "description": "在挪德卡莱执行时长为20小时的探索派遣任务时，获得的奖励增加25%。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2506,15 +1048,13 @@
       "rank": 1,
       "name": "谋篇乃成败之始",
       "description": "奈芙尔的**幻戏**造成的月绽放反应伤害的基础伤害提升，提升值相当于奈芙尔的元素精通的60%。该效果同样会受到**「伪秘之帷」**的加成。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "明察为筹算之先",
       "description": "突破天赋**「月下的豪赌」**的效果获得强化：**「伪秘之帷」**的持续时间延长5秒，上限提升至5层，且至多使**幻戏**造成原本140%的伤害；奈芙尔施放元素战技**弈术·千夜一舞**时，将立刻获得2层「伪秘之帷」。此外，「伪秘之帷」叠加至5层或5层的持续时间刷新时，奈芙尔的元素精通改为提升200点，持续8秒。\n需要解锁突破天赋「月下的豪赌」。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2525,15 +1065,13 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "眩惑入谜局之网",
       "description": "奈芙尔在场上且处于**「影舞」**状态下时，获取草露的速度提升25%。\n此外，奈芙尔处于「影舞」状态下时，还会使附近敌人的草元素抗性降低20%，当奈芙尔不处于「影舞」状态或离开敌人一定距离后，该效果会在4.5秒后移除。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2544,19 +1082,40 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "决胜于逆转之时",
       "description": "奈芙尔施放**幻戏**时，自身的第二段伤害将转为造成相当于奈芙尔元素精通85%的草元素范围伤害；此外，幻戏的攻击结束时，还会造成一次相当于奈芙尔元素精通120%的草元素范围伤害。上述伤害均视为由幻戏造成的月绽放反应伤害。\n\n月兆·满辉 \n奈芙尔造成的月绽放反应伤害**擢升**15%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.nefer.growth",
-    "content.character-curves"
-  ]
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

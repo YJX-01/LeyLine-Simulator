@@ -1,4 +1,5 @@
 import { readAssetCapture } from '../../lib/asset-capture.mjs';
+import { currentAssetIndex } from '../../lib/display-data.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { missingCharacterIcons, characterIconReferences } from '../../lib/asset-index.mjs';
@@ -7,7 +8,7 @@ const iconDirectory = new URL('../../../', import.meta.url);
 const icons = JSON.parse(await readFile(new URL('assets/manifest.json', iconDirectory), 'utf8'));
 if (icons.formatVersion !== 4) throw new Error('Asset manifest formatVersion must be 4');
 const capture = readAssetCapture();
-const index = { ...JSON.parse(await readFile(new URL('../../../src/web/generated/game-icon-index.json', import.meta.url), 'utf8')), ...JSON.parse(await readFile(new URL('../../../src/web/generated/game-detail-icon-index.json', import.meta.url), 'utf8')) };
+const index = currentAssetIndex();
 let iconBytes = 0;
 const files = new Set();
 for (const entry of icons.assets) {

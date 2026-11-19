@@ -1,17 +1,19 @@
+import { storageKeyFor } from '@leyline/schema/version';
+import { packDocument, unpackDocument } from '../domain/content-document';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { projectSchema, type Project } from '@leyline/schema';
 import { downloadJson } from '../domain/download';
 
 export interface SavedTeam { id: string; name: string; project: Project }
-const key = 'leyline-saved-teams-v5';
+const key = storageKeyFor('saved-teams');
 export const useSavedTeamsStore = defineStore('saved-teams', () => {
   const teams = ref<SavedTeam[]>([]);
   const error = ref('');
   try {
     const stored = localStorage.getItem(key);
     if (stored) {
-      const input: unknown = JSON.parse(stored);
+      const input: unknown = unpackDocument('saved-teams', JSON.parse(stored));
       if (!Array.isArray(input) || input.length > 100) throw new Error();
       const next:SavedTeam[]=input.map(entry=>{
         if (!entry || typeof entry.id !== 'string' || typeof entry.name !== 'string' || !entry.name.trim() || entry.name.length > 160) throw new Error();
@@ -29,9 +31,9 @@ export const useSavedTeamsStore = defineStore('saved-teams', () => {
     snapshot.timeline = [];
     snapshot.objective = {};
     const next = [...teams.value, { id: crypto.randomUUID(), name: name.trim(), project: snapshot }];
-    localStorage.setItem(key, JSON.stringify(next));
+    localStorage.setItem(key, JSON.stringify(packDocument('saved-teams', next)));
     teams.value = next;
   }
-  function exportTeams() { downloadJson(teams.value, 'leyline-teams.json'); }
+  function exportTeams() { downloadJson(packDocument('saved-teams', teams.value), 'leyline-teams.json'); }
   return { teams, error, save, exportTeams };
 });

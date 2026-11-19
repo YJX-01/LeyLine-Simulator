@@ -1,14 +1,14 @@
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { compileCalculation, evaluateFormula, describeCalculationTemplate } from '@leyline/engine';
 import type { CalculationBundle, FormulaDefinition } from '@leyline/schema';
 
-const original: FormulaDefinition = JSON.parse(readFileSync(new URL('../../../../src/game-data/data/characters/nahida.json', import.meta.url), 'utf8')).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'nahida.skill.tri-karma.base');
+const original: FormulaDefinition = readCalculationData(new URL('../../../../src/game-data/data/characters/nahida.json', import.meta.url)).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'nahida.skill.tri-karma.base');
 function library(): CalculationBundle {
-  return { schemaVersion: 2, runtimeVersion: 2, requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
-    sources: [{ id: 'genshin-db.nahida.skill', kind: 'repo', repository: 'theBowja/genshin-db',
-      commit: '8e5badd60b5d894284ccc927a56c9683529d2592', path: 'src/data/ChineseSimplified/talents/nahida.json' }],
+  return { schemaVersion: '0.1.0', runtimeVersion: '0.1.0', requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
+    sources: [{ id: 'character.builtin.nahida', kind: 'definition' }],
     formulas: [structuredClone(original)], tables: [], attributes: [], effects: [], stateMachines: [], aggregates: [], coverage: [] };
 }
 
@@ -20,7 +20,7 @@ describe('fixed TS template compilation from real catalog configurations', () =>
     if (recipe.template.id === 'scaled-damage') recipe.template.terms.splice(0);
     expect(compileCalculation(bundle).ok).toBe(false);
     if (result.ok) {
-      expect(result.program.runtimeVersion).toBe(2);
+      expect(result.program.runtimeVersion).toBe('0.1.0');
       expect(evaluateFormula(result.program, original.identity, {}, { outputs: ['base'] }).execution).toBe('partial');
     }
     expect(describeCalculationTemplate(original).outputs.base).toEqual({ kind: 'quantity', unit: 'damage' });

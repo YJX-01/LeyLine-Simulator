@@ -1,15 +1,16 @@
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { compileCalculation, evaluateFormula } from '@leyline/engine';
 import type { CalculationBundle, FormulaDefinition, Value } from '@leyline/schema';
 
 const root = new URL('../../../../', import.meta.url);
-const formula: FormulaDefinition = JSON.parse(readFileSync(new URL('src/game-data/data/characters/nahida.json', root), 'utf8')).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'nahida.skill.tri-karma.base');
-const character = JSON.parse(readFileSync(new URL('src/game-data/data/characters/nahida.json', root), 'utf8'));
+const formula: FormulaDefinition = readCalculationData(new URL('src/game-data/data/characters/nahida.json', root)).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'nahida.skill.tri-karma.base');
+const character = readCalculationData(new URL('src/game-data/data/characters/nahida.json', root));
 const recording = new URL('.references/enka/uid-107590923.json', root);
 function library(definition = structuredClone(formula)): CalculationBundle {
-  return { schemaVersion: 2, runtimeVersion: 2, requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
-    sources: [{ id: 'genshin-db.nahida.skill', kind: 'repo', repository: 'theBowja/genshin-db', commit: '8e5badd60b5d894284ccc927a56c9683529d2592', path: 'src/data/ChineseSimplified/talents/nahida.json' }],
+  return { schemaVersion: '0.1.0', runtimeVersion: '0.1.0', requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
+    sources: [{ id: 'character.builtin.nahida', kind: 'definition' }],
     formulas: [definition], tables: [], attributes: [], effects: [], stateMachines: [], aggregates: [], coverage: [] };
 }
 function compile(bundle = library()) {
@@ -76,8 +77,8 @@ describe('pure interpretation of real Tri-Karma scaling', () => {
   });
 
   it('does not read Ayato HP scaling at the source-declared zero Namisen count', () => {
-    const definition: FormulaDefinition = JSON.parse(readFileSync(new URL('src/game-data/data/characters/kamisatoayato.json', root), 'utf8')).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'kamisatoayato-shunsuiken-base');
-    const ayato = JSON.parse(readFileSync(new URL('src/game-data/data/characters/kamisatoayato.json', root), 'utf8'));
+    const definition: FormulaDefinition = readCalculationData(new URL('src/game-data/data/characters/kamisatoayato.json', root)).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'kamisatoayato-shunsuiken-base');
+    const ayato = readCalculationData(new URL('src/game-data/data/characters/kamisatoayato.json', root));
     const sources = ayato.calculation.bundle.sources;
     const bundle = library(definition);
     bundle.sources = sources;

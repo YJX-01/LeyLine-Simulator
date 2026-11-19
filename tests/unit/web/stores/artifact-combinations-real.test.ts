@@ -62,10 +62,10 @@ describe.skipIf(!existsSync(path))('recorded showcase to independent local combi
     const plan=planShowcaseInventory(account,account.characters),character=account.characters[0],items=plan.items[character.id],stats=defaultEffectiveStats(character.name);
     const first=store.save(plan.next,items,stats,character.name,'',undefined,'安柏物伤组合');
     expect(store.combinations[0].name).toBe('安柏物伤组合');
-    const before=JSON.stringify(store.combinations),raw=memory.get('leyline-artifact-combinations-v1');
+    const before=JSON.stringify(store.combinations),raw=memory.get('leyline-artifact-combinations-0.1.0');
     expect(store.save(plan.next,[...items].reverse(),[...stats].reverse(),character.name)).toEqual({id:first.id,duplicate:true});
     expect(()=>store.save(plan.next,items,[...stats,'defense'],character.name,'',()=>{throw new Error('inventory write failed');})).toThrow('inventory write failed');
-    expect(JSON.stringify(store.combinations)).toBe(before);expect(memory.get('leyline-artifact-combinations-v1')).toBe(raw);
+    expect(JSON.stringify(store.combinations)).toBe(before);expect(memory.get('leyline-artifact-combinations-0.1.0')).toBe(raw);
     store.remove(plan.next.id,first.id);expect(store.combinations).toEqual([]);expect(plan.next.artifacts).toHaveLength(20);
   }finally{vi.unstubAllGlobals();}
  });
@@ -89,18 +89,18 @@ describe.skipIf(!existsSync(path))('recorded showcase to independent local combi
     expect(store.combinations[0].favorite).toBe(3);
     const copy=store.save(plan.next,items,stats,character.name,original,undefined,undefined,undefined,true).id;
     expect(store.combinations.find(item=>item.id===copy)?.favorite ?? 0).toBe(0);
-    const before=JSON.stringify(store.combinations),raw=memory.get('leyline-artifact-combinations-v1');
+    const before=JSON.stringify(store.combinations),raw=memory.get('leyline-artifact-combinations-0.1.0');
     expect(()=>store.setFavorite('another-account',original,1)).toThrow('组合已不存在');
     expect(()=>store.setFavorite(account.id,original,4)).toThrow('收藏等级无效');
     vi.spyOn(localStorage,'setItem').mockImplementationOnce(()=>{throw new Error('storage full');});
     expect(()=>store.setFavorite(account.id,original,0)).toThrow('storage full');
-    expect(JSON.stringify(store.combinations)).toBe(before);expect(memory.get('leyline-artifact-combinations-v1')).toBe(raw);
+    expect(JSON.stringify(store.combinations)).toBe(before);expect(memory.get('leyline-artifact-combinations-0.1.0')).toBe(raw);
     store.setFavorite(account.id,original,0);expect(store.combinations.find(item=>item.id===original)?.favorite).toBe(0);
     expect(JSON.stringify(plan.next)).toBe(inventory);
-    const invalid=JSON.parse(memory.get('leyline-artifact-combinations-v1')!);invalid[0].favorite=4;
-    memory.set('leyline-artifact-combinations-v1',JSON.stringify(invalid));setActivePinia(createPinia());store=useArtifactCombinationsStore();
+    const invalid=JSON.parse(memory.get('leyline-artifact-combinations-0.1.0')!);invalid[0].favorite=4;
+    memory.set('leyline-artifact-combinations-0.1.0',JSON.stringify(invalid));setActivePinia(createPinia());store=useArtifactCombinationsStore();
     expect(store.error).toContain('无法读取');expect(()=>store.setFavorite(account.id,original,1)).toThrow();
-    expect(memory.get('leyline-artifact-combinations-v1')).toBe(JSON.stringify(invalid));
+    expect(memory.get('leyline-artifact-combinations-0.1.0')).toBe(JSON.stringify(invalid));
   }finally{vi.restoreAllMocks();vi.unstubAllGlobals();}
  });
 

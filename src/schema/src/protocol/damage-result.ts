@@ -26,7 +26,7 @@ export interface DamageResult {
   baseDamage: number | null;
   baseDamageBonus?: number | null;
   scaling: { stat: DamageScalingStat; parameter: string; attribute: number | null; multiplier: number | null; contribution: number | null; count?: { input: string; value: number | null } }[];
-  capture?: { recordId: string | null; phase: 'before' | 'after' | null; attributes: StatKey[]; source: ContentSource };
+  capture?: { recordId: string | null; phase: 'before' | 'after' | null; attributes: StatKey[]; source?: ContentSource };
   reaction?: {
     type: HitReactionType; family: 'amplifying' | 'additive'; trigger: 'record-owner' | null; element: Element;
     elementalMastery: number | null; bonus: number | null; coefficient: number | null; levelMultiplier: number | null;

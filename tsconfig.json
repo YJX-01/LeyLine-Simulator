@@ -12,12 +12,14 @@
       "@leyline/schema": [
         "./src/schema/src/index.ts"
       ],
+      "@leyline/schema/version": ["./src/schema/src/version.d.mts"],
       "@leyline/schema/enka": [
         "./src/schema/src/exchange/enka.ts"
       ],
       "@leyline/engine": [
         "./src/engine/src/index.ts"
       ],
+      "@leyline/game-data/character-file": ["./src/game-data/src/character-file.d.mts"],
       "@leyline/game-data": [
         "./src/game-data/src/index.ts"
       ],
@@ -32,6 +34,7 @@
   "include": [
     "src/engine/**/*.ts",
     "src/schema/**/*.ts",
+    "src/web/src/**/*.d.ts",
     "src/game-data/**/*.ts",
     "tests/**/*.ts",
     "playwright*.config.ts",

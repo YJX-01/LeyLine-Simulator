@@ -1,3 +1,4 @@
+import { DATA_VERSION } from '../../../src/game-data/src/version.mjs';
 import { mkdir, cp, readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -43,10 +44,9 @@ await withBuildWorkspace(root, 'web', async workspace => {
   }
   for (const path of ['licenses/THIRD_PARTY_NOTICES.md', 'licenses/npm-LICENSES.txt', 'licenses/bundled-packages.json']) if (!files.some(file => file.path === path)) throw new Error(`Missing release notice: ${path}`);
   const pkg = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'));
-  const data = JSON.parse(await readFile(resolve(root, 'src/game-data/data/manifest.json'), 'utf8'));
   const engine = (await readFile(resolve(root, 'src/engine/src/version.ts'), 'utf8')).match(/['"]([\d.]+)['"]/)[1];
   const manifest = { formatVersion: 1, status: 'local-candidate', version: pkg.version, createdAt: new Date().toISOString(), commit, sourceFingerprint: fingerprint,
-    versions: { engine, data: data.dataVersion, rules: 'timeline-v1' }, base: '/', evidence, files };
+    versions: { engine, data: DATA_VERSION, rules: 'timeline-v1' }, base: '/', evidence, files };
   await writeFile(resolve(destination, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
   await mkdir(resolve(destination, 'tools/scripts/dev'), { recursive: true }); await cp(resolve(root, 'tools/scripts/dev/serve-dist.mjs'), resolve(destination, 'tools/scripts/dev/serve-dist.mjs'));
   await mkdir(resolve(destination, 'src/web/server'), { recursive: true });

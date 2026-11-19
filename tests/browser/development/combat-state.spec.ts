@@ -8,7 +8,7 @@ const source = '.references/enka/official-example-2026-11-13.json';
 test('Cinnabar flat damage recalculates through actual Worker and file round-trip with an explicit application', async ({ page }) => {
   // Source-derived legal single-point calculation, not a player build or game observation.
   const build: Build = {
-    ...catalogSnapshotFields('jean', 'cinnabarspindle'),
+    ...await catalogSnapshotFields('jean', 'cinnabarspindle'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 },
     weaponLevel: 90, weaponAscension: 6, refinement: 1,
   };
@@ -33,7 +33,9 @@ test('Cinnabar flat damage recalculates through actual Worker and file round-tri
       const unknown = await evaluate(project, 1);
       const instance = unknown.result.effectInstances!.find(instance => instance.content?.entity === 'cinnabarspindle')!;
       setDamageEffectApplication(project, hit, instance.id, true);
-      const reopened: Project = importProject(JSON.stringify(project));
+      // @ts-expect-error Vite browser source URL.
+      const { packDocument } = await import('/src/domain/content-document.ts');
+      const reopened: Project = importProject(JSON.stringify(packDocument('axis', project)));
       const complete = await evaluate(reopened, 2);
       return { unknown, complete, reopened, original: project };
     } finally { worker.terminate(); }
@@ -52,7 +54,7 @@ test('Cinnabar flat damage recalculates through actual Worker and file round-tri
 test('R1 counter coverage survives files and Worker while a missing tier stays unknown', async ({ page }) => {
   // A legal C0 calculation query, not a player export or recorded combat sequence.
   const build: Build = {
-    ...catalogSnapshotFields('beidou', 'wastergreatsword'),
+    ...await catalogSnapshotFields('beidou', 'wastergreatsword'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 9, burst: 9 },
     weaponLevel: 70, weaponAscension: 4, refinement: 1,
   };
@@ -67,7 +69,9 @@ test('R1 counter coverage survives files and Worker while a missing tier stays u
     project.enemy = { level: 90, resistances: { physical: 0.1, anemo: 0.1, geo: 0.1, electro: 0.1, hydro: 0.1, pyro: 0.1, cryo: 0.1, dendro: 0.1 }, defenseReduction: 0, defenseIgnore: 0 };
     project.timeline.push({ id: 'counter-input-query', actor, timeMs: 0, order: 0, kind: 'damage', definition: `${actor}-real-damage`,
       damage: { skillId: 'beidou.skill', hitId: 'beidou.skill.param3', outputId: 'beidou.skill.param3.damage', crit: 'noncritical', reaction: 'none', inputs: { counterCharge: 2 } } });
-    const reopened: Project = importProject(JSON.stringify(project));
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    const reopened: Project = importProject(JSON.stringify(packDocument('axis', project)));
     const worker = new Worker('/src/workers/axis.worker.ts?worker_file&type=module', { type: 'module' });
     const evaluate = (input: Project, taskId: number) => new Promise<AxisResponse>((resolve, reject) => {
       const timeout = setTimeout(() => reject(new Error('Axis Worker timed out.')), 10000);
@@ -77,7 +81,7 @@ test('R1 counter coverage survives files and Worker while a missing tier stays u
     });
     try {
       const known = await evaluate(reopened, 1);
-      const unknownProject = importProject(JSON.stringify(reopened));
+      const unknownProject = importProject(JSON.stringify(packDocument('axis', reopened)));
       unknownProject.timeline[0].damage!.inputs!.counterCharge = null;
       const unknown = await evaluate(unknownProject, 2);
       return { known, unknown, reopened, original: project };
@@ -97,7 +101,7 @@ test('R1 counter coverage survives files and Worker while a missing tier stays u
 test('source-backed Kaeya burst capture survives file parsing and the actual Worker', async ({ page }) => {
   // An independent legal calculation setting from pinned source numbers, not a player export or observed combat.
   const build: Build = {
-    ...catalogSnapshotFields('kaeya', 'favoniussword'),
+    ...await catalogSnapshotFields('kaeya', 'favoniussword'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 9, burst: 9 },
     weaponLevel: 90, weaponAscension: 6, refinement: 1,
   };
@@ -112,7 +116,9 @@ test('source-backed Kaeya burst capture survives file parsing and the actual Wor
     project.enemy = { level: 90, resistances: { physical: 0.1, anemo: 0.1, geo: 0.1, electro: 0.1, hydro: 0.1, pyro: 0.1, cryo: 0.1, dendro: 0.1 }, defenseReduction: 0, defenseIgnore: 0 };
     const source = addSkillAction(project, actor, 'kaeya.burst', 0);
     addSkillHit(project, actor, 'kaeya.burst', 0, 1000, { crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'before' } });
-    const reopened: Project = importProject(JSON.stringify(project));
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    const reopened: Project = importProject(JSON.stringify(packDocument('axis', project)));
     const worker = new Worker('/src/workers/axis.worker.ts?worker_file&type=module', { type: 'module' });
     try {
       const reply = await new Promise<AxisResponse>((resolve, reject) => {
@@ -161,7 +167,9 @@ test('recorded showcase state annotations survive file parsing and the actual ax
       damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: null, reaction: { type: 'vaporize', trigger: 'record-owner' } } });
     setCombatStateInterval(project, { id: 'worker-hp-annotation', actor, startMs: 0, endMs: 1000, values: { hpRatio: 1, shielded: false } });
     setDamageStateOverride(project, 'worker-state-query', actor, { hpRatio: null });
-    const reopened: Project = importProject(JSON.stringify(project));
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    const reopened: Project = importProject(JSON.stringify(packDocument('axis', project)));
     const worker = new Worker('/src/workers/axis.worker.ts?worker_file&type=module', { type: 'module' });
     try {
       const reply = await new Promise<AxisResponse>((resolve, reject) => {
@@ -201,7 +209,9 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
     const row = preview.rows.find((row: { character: { showcase: { build: { character: { id: string } } } } }) => row.character.showcase.build.character.id === 'xingqiu');
     const project = createEmptyProject();
     addActorFromBuild(project, row.character.showcase.build);
-    return project;
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    return packDocument('axis', project);
   }, JSON.parse(readFileSync(source, 'utf8')));
   // A format derivative. Added UI records are test edits, not an observed gameplay sequence.
   await page.getByTestId('workspace-nav-projects').click();
@@ -221,7 +231,7 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
   await page.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(2);
   await expect(page.locator('.desk-record.damage')).toHaveCount(1);
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project as Project);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.1.0')!).document.project as Project);
   expect(saved.timeline[0]).toMatchObject({ kind: 'action', skillId: 'xingqiu.skill' });
   expect(saved.timeline[1]).toMatchObject({ kind: 'damage', timeMs: 1234, damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param2', outputId: 'xingqiu.skill.param2.damage', crit: null, reaction: null } });
   // The new ordinary-attack binding is another explicit format edit, never an inferred combat sequence.
@@ -233,7 +243,7 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
   await page.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(3);
   await expect(page.locator('.desk-record.damage')).toHaveCount(2);
-  const withNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-v5')!).project as Project);
+  const withNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.1.0')!).document.project as Project);
   expect(withNormal.timeline[2]).toMatchObject({ kind: 'damage', timeMs: 1235,
     damage: { skillId: 'xingqiu.normal', hitId: 'xingqiu.normal.param3', outputId: 'xingqiu.normal.param3.damage', crit: null, reaction: null } });
 });

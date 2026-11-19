@@ -1,6 +1,7 @@
+import { readDocument } from '../../helpers/browser-document';
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import type { CharacterDefinition, DamageCalculatorDocument, LocalAccount } from '@leyline/schema';
+import type { CharacterMetadata, DamageCalculatorDocument, LocalAccount } from '@leyline/schema';
 import { recordedVesnaDamage, vesnaRecording } from '../../helpers/recorded-vesna';
 
 test('recorded Vesna goes through showcase confirmation, Worker comparison, file reopening and JSON-only edits', async ({ page }, info) => {
@@ -19,13 +20,13 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await preview.getByRole('button', { name: '查询角色展柜', exact: true }).click();
   await preview.getByRole('button', { name: '清空选择', exact: true }).click();
   await preview.getByRole('button', { name: '导入薇斯纳', exact: true }).click();
-  const storage = () => page.evaluate(() => [localStorage.getItem('leyline-account-v5'), localStorage.getItem('leyline-axis-recovery-v5')]);
+  const storage = () => page.evaluate(() => [localStorage.getItem('leyline-account-0.1.0'), localStorage.getItem('leyline-axis-recovery-0.1.0')]);
   const pending = (await storage())[0];
-  expect(pending ? JSON.parse(pending).characters : []).toHaveLength(0);
+  expect(pending ? JSON.parse(pending).document.characters : []).toHaveLength(0);
   await preview.getByRole('button', { name: '确认导入 1 位角色', exact: true }).click();
   await expect(preview).toBeHidden();
   const before = await storage();
-  const account: LocalAccount = JSON.parse(before[0]!);
+  const account: LocalAccount = await readDocument(page, 'account', before[0]!);
   expect(account.characters).toHaveLength(1);
   expect(account.artifacts).toHaveLength(5);
   expect(account.characters[0].showcase?.build).toMatchObject({ constellation: 2, level: 90, refinement: 1, weapon: { id: 'beyondthechrysalis' } });
@@ -61,7 +62,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await button('保存计算').click();
   const saved = await download;
   await saved.saveAs(info.outputPath('vesna-comparison.json'));
-  const document: DamageCalculatorDocument = JSON.parse(readFileSync(info.outputPath('vesna-comparison.json'), 'utf8'));
+  const document: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', readFileSync(info.outputPath('vesna-comparison.json'), 'utf8'));
   expect(document.baseline!.candidate.actors[0].build!.refinement).toBe(1);
   expect(document.project.candidate.actors[0].build!.refinement).toBe(2);
   expect(document.project.timeline[0].damage?.outputId).toBe('vesna.skill.param5.stellar-swirl');
@@ -75,11 +76,19 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await button('导出角色定义副本').click();
   const definitionFile = await definitionDownload;
   await definitionFile.saveAs(info.outputPath('vesna-original.character.json'));
-  const modified: CharacterDefinition = JSON.parse(readFileSync(info.outputPath('vesna-original.character.json'), 'utf8'));
+  const modified: CharacterMetadata = JSON.parse(readFileSync(info.outputPath('vesna-original.character.json'), 'utf8'));
   modified.talents.find(talent => talent.id === 'vesna.skill')!.parameters.find(parameter => parameter.id === 'param5')!.values[9] *= 1.1;
   await calculator.getByLabel('导入计算器角色定义', { exact: true }).setInputFiles({ name: 'vesna-adjusted.character.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(modified, null, 2) + '\n') });
   await number('calculator-value').toBeCloseTo(recordedVesnaDamage(2, 1.1), 5);
   await expect(select('命中类型')).toHaveValue('vesna.skill.param5.stellar-swirl');
   expect(await storage()).toEqual(before);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await calculator.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  const navigation = page.getByRole('button', { name: '打开功能导航', exact: true });
+  await navigation.click();
+  const entry = page.locator('.nav-group[data-domain="project"]').getByTestId('workspace-nav-calculator');
+  await expect(entry).toHaveAttribute('aria-current', 'page');
+  await entry.press('Escape');
+  await expect(navigation).toBeFocused();
   expect(errors).toEqual([]);
 });

@@ -1,10 +1,8 @@
-import { buildSchema, elements, findDamageCoverage, projectSchema, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { buildSchema, findDamageCoverage, projectSchema, type Build, type DamageRequest, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 import { nextRecordId } from './workbench-project';
 
-export function defaultEnemy(): Enemy {
-  return { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
-}
+export { defaultEnemy } from './axis-input';
 
 export function addActorFromBuild(project: Project, input: Build, name?: string): string {
   const build = buildSchema.parse(input);

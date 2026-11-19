@@ -4,8 +4,8 @@ type IconIndex = Record<string, Record<string, Icon>>;
 let library: Promise<IconIndex> | undefined;
 let detailLibrary: Promise<IconIndex> | undefined;
 function loadIcons(kind: string) {
-  if (['skills', 'constellations', 'buffs'].includes(kind)) return detailLibrary ??= import('../../generated/game-detail-icon-index.json').then(module => module.default);
-  return library ??= import('../../generated/game-icon-index.json').then(module => module.default);
+  if (['skills', 'constellations', 'buffs'].includes(kind)) return detailLibrary ??= import('virtual:leyline-display/game-detail-icon-index').then(module => module.default);
+  return library ??= import('virtual:leyline-display/game-icon-index').then(module => module.default);
 }
 </script>
 <script setup lang="ts">

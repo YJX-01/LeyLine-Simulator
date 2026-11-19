@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema, millisecondsSchema } from '../common/values';
 import { calculationBundleSchema } from '../calculation/bundle';
@@ -5,7 +6,7 @@ import { definitionRefSchema } from '../calculation/values';
 
 /** Optional companion to one exact character revision. Unknown timing is never zero delay. */
 export const characterActionsDefinitionSchema = z.object({
-  schemaVersion: z.literal(1), kind: z.literal('character-actions'), identity: definitionRefSchema, character: definitionRefSchema,
+  schemaVersion: z.literal(APP_VERSION), kind: z.literal('character-actions'), identity: definitionRefSchema, character: definitionRefSchema,
   sources: z.array(idSchema).min(1).max(1000),
   actions: z.array(z.object({
     id: idSchema, skillId: idSchema.nullable(),

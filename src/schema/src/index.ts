@@ -1,3 +1,4 @@
+export { APP_VERSION, storageKeyFor } from './version.mjs';
 export * from './common/values';
 export * from './calculation/values';
 export * from './calculation/diagnostic';
@@ -27,7 +28,6 @@ export * from './content/character';
 export * from './content/damage-coverage';
 export * from './content/weapon';
 export * from './content/artifact-set';
-export * from './content/manifest';
 export * from './account/artifact';
 export * from './account/build';
 export * from './account/account';

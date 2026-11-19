@@ -1,7 +1,8 @@
+import { APP_VERSION } from '../../src/schema/src/version.mjs';
 import { combatRuleAudit, damagePathAudit } from './damage-path-audit.mjs';
 
 const definitionKey = reference => JSON.stringify([reference.namespace, reference.id, reference.revision]);
-const structured = entity => entity.schemaVersion === 3 && entity.calculation?.bundle !== undefined;
+const structured = entity => entity.schemaVersion === APP_VERSION && entity.calculation?.bundle !== undefined;
 
 /** Audit supplied snapshots only. Candidate preparation is an explicit caller action, never a fallback. */
 export function calculationCoverage(manifest, characters, weapons, sets, options = {}) {
@@ -99,7 +100,7 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
     }
     if (complete.length && complete.every(Boolean)) { root.resolution = 'complete'; root.reason = '套装全部件数分支有已采用覆盖。'; }
   }
-  return { schemaVersion: 1, dataVersion: manifest.dataVersion, material,
+  return { schemaVersion: APP_VERSION, dataVersion: manifest.dataVersion, material,
     meaning: 'Compiled coverage certificates describe their exact adopted scope. Candidate scopes are not canonical adoption, full-kit acceptance or game observations. C0 scopes never close C0-C6 entries.',
     summary: { characters: characters.length, weapons: weapons.length, sets: sets.length, entries: entries.length,
       complete: entries.filter(entry => entry.resolution === 'complete').length, unavailable: entries.filter(entry => entry.resolution === 'unavailable').length,

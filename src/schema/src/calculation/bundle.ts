@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema } from '../common/values';
 import { calculationValueSchema, calculationValueTypeSchema, definitionRefSchema, valueMatchesType } from './values';
@@ -30,7 +31,7 @@ export const calculationTableSchema = z.discriminatedUnion('kind', [
 
 /** Portable data definitions; algorithms and event-state operations are fixed by the runtime. */
 export const calculationBundleSchema = z.object({
-  schemaVersion: z.literal(2), runtimeVersion: z.literal(2),
+  schemaVersion: z.literal(APP_VERSION), runtimeVersion: z.literal(APP_VERSION),
   requiredFeatures: z.array(idSchema).max(100).refine(features => new Set(features).size === features.length, '运行能力声明重复。'),
   sources: z.array(calculationSourceSchema).max(20000),
   tables: z.array(calculationTableSchema).max(1000),

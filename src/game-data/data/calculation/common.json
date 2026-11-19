@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "runtimeVersion": 2,
+  "schemaVersion": "0.1.0",
+  "runtimeVersion": "0.1.0",
   "requiredFeatures": [
     "fixed-templates-v1",
     "formula-call-v1",
@@ -15,45 +15,27 @@
   "sources": [
     {
       "id": "kqm.defense",
-      "kind": "repo",
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/_formulas/enemydef.md"
+      "kind": "definition"
     },
     {
       "id": "kqm.resistance",
-      "kind": "repo",
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/_formulas/enemyres.md"
+      "kind": "definition"
     },
     {
       "id": "kqm.amplifying",
-      "kind": "repo",
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/_formulas/amplifying.md"
+      "kind": "definition"
     },
     {
       "id": "kqm.additive",
-      "kind": "repo",
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/_formulas/additive.md"
+      "kind": "definition"
     },
     {
       "id": "kqm.ordinary",
-      "kind": "repo",
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/damage/damage-formula.md"
+      "kind": "definition"
     },
     {
       "id": "kqm.crit",
-      "kind": "repo",
-      "repository": "KQM-git/TCL",
-      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-      "path": "docs/combat-mechanics/damage/damage-formula.md"
+      "kind": "definition"
     },
     {
       "id": "leyline.binding-read",
@@ -63,29 +45,20 @@
     },
     {
       "id": "content.character-curves",
-      "kind": "repo",
-      "repository": "theBowja/genshin-db",
-      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-      "path": "src/data/curve/characters.json"
+      "kind": "definition"
     },
     {
       "id": "content.weapon-curves",
-      "kind": "repo",
-      "repository": "theBowja/genshin-db",
-      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-      "path": "src/data/curve/weapons.json"
+      "kind": "definition"
     },
     {
       "id": "content.artifact-main",
-      "kind": "repo",
-      "repository": "Rafs-kk/LunaGC-6.6-res",
-      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
-      "path": "ExcelBinOutput/ReliquaryLevelExcelConfigData.json"
+      "kind": "definition"
     }
   ],
   "formulas": [
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-counted-damage-base",
@@ -109,7 +82,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-damage-base",
@@ -132,7 +105,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-panel-base",
@@ -148,7 +121,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "crit-selected",
@@ -168,7 +141,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "crit",
@@ -183,7 +156,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-2",
@@ -199,7 +172,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-3",
@@ -215,7 +188,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-4",
@@ -231,7 +204,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-5",
@@ -247,7 +220,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-6",
@@ -263,7 +236,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-7",
@@ -279,7 +252,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-8",
@@ -295,7 +268,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-9",
@@ -311,7 +284,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-counted-damage-base",
@@ -335,7 +308,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-damage-base",
@@ -358,7 +331,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-panel-base",
@@ -374,7 +347,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense",
@@ -389,7 +362,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "elementalMastery-counted-damage-base",
@@ -413,7 +386,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "elementalMastery-damage-base",
@@ -436,7 +409,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-counted-damage-base",
@@ -460,7 +433,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-damage-base",
@@ -483,7 +456,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-panel-base",
@@ -499,7 +472,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "ordinary-bonus",
@@ -514,7 +487,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "ordinary-hit",
@@ -530,7 +503,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "resistance",
@@ -545,7 +518,7 @@
       ]
     },
     {
-      "schemaVersion": 2,
+      "schemaVersion": "0.1.0",
       "identity": {
         "namespace": "builtin",
         "id": "binding.milliseconds",

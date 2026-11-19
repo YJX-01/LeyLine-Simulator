@@ -1,24 +1,18 @@
-import { characterDefinitionSchema, definitionKey, projectSchema, type CharacterDefinition, type Project } from '@leyline/schema';
-import { compileStructuredCharacter } from '@leyline/engine';
+import { describeCharacter, linkCharacterFile } from '@leyline/game-data/character-file';
+import { characterDefinitionSchema, projectSchema, type CharacterDefinition, type Project } from '@leyline/schema';
+import { collectCalculationRoots, compileStructuredCharacter } from '@leyline/engine';
 import { prepareCharacterImport, preparedCharacterSnapshot } from './structured-character-import';
 
 export function copyCharacterDefinition(character: CharacterDefinition, dataVersion: string): CharacterDefinition {
   const copy = characterDefinitionSchema.parse(character), token = crypto.randomUUID(), namespace = 'custom:' + token;
-  const coverageKeys = new Set(copy.calculation.bundle.coverage.map(record => definitionKey(record.identity)));
-  copy.origin = 'custom'; copy.namespace = namespace; copy.id = 'custom-' + token; copy.revision = '1'; copy.dataVersion = dataVersion;
-  copy.derivedFrom = { id: character.derivedFrom?.id ?? character.id, name: character.derivedFrom?.name ?? character.identity.name, revision: character.revision };
-  copy.identity.name = character.identity.name + ' · 自定义';
-  function relink(value: unknown): void {
-    if (!value || typeof value !== 'object') return;
-    if (Array.isArray(value)) { value.forEach(relink); return; }
-    const object = value as Record<string, unknown>;
-    if (typeof object.namespace === 'string' && typeof object.id === 'string' && typeof object.revision === 'string'
-      && coverageKeys.has(definitionKey({ namespace: object.namespace, id: object.id, revision: object.revision }))) object.namespace = namespace;
-    Object.values(object).forEach(relink);
-  }
-  relink(copy);
-  for (const record of copy.calculation.bundle.coverage) { record.entity = { namespace, id: copy.id, revision: copy.revision }; record.evidence = 'declared'; }
-  return characterDefinitionSchema.parse(copy);
+  const metadata = describeCharacter(copy);
+  metadata.namespace = namespace;
+  metadata.id = 'custom-' + token;
+  metadata.revision = '1';
+  metadata.derivedFrom = { id: character.derivedFrom?.id ?? character.id, name: character.derivedFrom?.name ?? character.identity.name, revision: character.revision };
+  metadata.identity.name += ' · 自定义';
+  for (const profile of Object.values(metadata.support)) profile.evidence = 'declared';
+  return linkCharacterFile(metadata, dataVersion, collectCalculationRoots);
 }
 export function parseCharacterDefinition(content: string, registry: readonly CharacterDefinition[] = []): CharacterDefinition {
   const prepared = prepareCharacterImport(content, registry);

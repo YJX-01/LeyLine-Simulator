@@ -1,6 +1,7 @@
+import { storageKeyFor } from '@leyline/schema/version';
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-const key='leyline-artifact-favorites-v1';
+const key=storageKeyFor('artifact-favorites');
 export const useArtifactFavoritesStore=defineStore('artifact-favorites',()=>{
   const levels=ref<Record<string,number>>({});
   try{const raw=JSON.parse(localStorage.getItem(key) ?? '{}');if(raw && typeof raw==='object' && !Array.isArray(raw))for(const [id,value] of Object.entries(raw))if(Number.isInteger(value) && Number(value)>=1 && Number(value)<=3)levels.value[id]=Number(value);}catch{ /* Preferences never replace inventory data. */ }

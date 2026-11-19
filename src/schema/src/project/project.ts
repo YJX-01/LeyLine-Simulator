@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema,millisecondsSchema,quantitySchema } from '../common/values';
 import { buildSchema } from '../account/build';
@@ -7,7 +8,7 @@ import { talentInputIssues } from '../content/talent';
 import { ruleDefinitionSchema, requiresDependencyDefinition } from './expressions';
 import { combatStateIntervalSchema, validateCombatStates } from './combat-state';
 export const projectSchema = z.object({
-  schemaVersion: z.literal(5), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
+  schemaVersion: z.literal(APP_VERSION), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
   definitions: z.array(ruleDefinitionSchema).max(200),
   candidate: z.object({
     id: idSchema, actors: z.array(z.object({ id: idSchema, name: idSchema.optional(), character: idSchema, weapon: idSchema, inputs: z.record(idSchema, quantitySchema), build: buildSchema.optional(),

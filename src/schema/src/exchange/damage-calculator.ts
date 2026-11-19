@@ -1,9 +1,10 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema } from '../common/values';
 import { projectSchema } from '../project/project';
 
 export const damageCalculatorSchema = z.object({
-  schemaVersion: z.literal(4),
+  schemaVersion: z.literal(APP_VERSION),
   kind: z.literal('damage-calculator'),
   project: projectSchema,
   baseline: projectSchema.optional(),

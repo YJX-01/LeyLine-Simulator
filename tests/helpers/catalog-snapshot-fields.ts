@@ -1,12 +1,12 @@
-import { readFileSync } from 'node:fs';
 import type { Build } from '@leyline/schema';
+import { createRuntimeCatalog } from '../../tools/lib/runtime-catalog.mjs';
+import { readCalculationData } from '../../tools/lib/catalog-data.mjs';
+let catalog: ReturnType<typeof createRuntimeCatalog>;
 
-/** Read generated, closed snapshots for Node-side browser driver data. */
-export function catalogSnapshotFields(characterId: string, weaponId: string): Pick<Build, 'schemaVersion' | 'kind' | 'character' | 'weapon' | 'artifactMain' | 'dataVersion' | 'sources' | 'artifactMainSourceRefs'> {
-  const read = (name: string) => JSON.parse(readFileSync(`src/game-data/generated/${name}`, 'utf8'));
-  const index = read('chunk-index.json');
-  const character = read(index.characters[characterId]).find((character: Build['character']) => character.id === characterId);
-  const weapon = read(index.weapons[weaponId]).find((weapon: Build['weapon']) => weapon.id === weaponId);
-  return { schemaVersion: 3, kind: 'calculation-build', dataVersion: character.dataVersion, character, weapon,
-    artifactMain: read('artifact-main.json'), ...read('build-sources.json') };
+export async function catalogSnapshotFields(characterId: string, weaponId: string) {
+  const runtime = await (catalog ??= createRuntimeCatalog());
+  const character = await runtime.get('characters', characterId), weapon = await runtime.get('weapons', weaponId);
+  const artifactMain = readCalculationData('src/game-data/data/tables/artifact-main.json');
+  return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: character.dataVersion, character, weapon, artifactMain,
+    sources: runtime.library.sources.filter((s: Build['sources'][number]) => s.id === 'content.artifact-main'), artifactMainSourceRefs: ['content.artifact-main'] } satisfies Pick<Build, 'schemaVersion' | 'kind' | 'dataVersion' | 'character' | 'weapon' | 'artifactMain' | 'sources' | 'artifactMainSourceRefs'>;
 }

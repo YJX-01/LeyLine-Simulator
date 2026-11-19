@@ -14,7 +14,7 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await page.getByTestId('workspace-nav-characters').click();
   await restoreRecordedNoteSetup(page);
   await expect(page.locator('.character-card')).toHaveCount(55);
-  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
+  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
   await page.getByLabel('搜索账号角色',{exact:true}).fill('甘雨');
   await page.getByTestId('workspace-nav-loadouts').click();
   await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
@@ -59,6 +59,6 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   expect(tabs).toHaveLength(6);expect(new Set(tabs.map(tab=>tab.top)).size).toBe(2);expect(tabs.every(tab=>Math.abs(tab.height-40)<.5)).toBe(true);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
   await page.screenshot({path:'artifacts/library-artifacts-mobile-after.png',fullPage:true});
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v5'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(baseline);
   expect(errors).toEqual([]);
 });

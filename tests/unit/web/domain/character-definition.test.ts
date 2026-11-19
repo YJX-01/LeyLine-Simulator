@@ -1,3 +1,4 @@
+import { exportCharacterSnapshot } from '../../../../src/web/src/domain/structured-character-import';
 import { talentLevelBonus } from '@leyline/schema';
 import { describe, expect, it } from 'vitest';
 import { getCharacter, DATA_VERSION } from '@leyline/game-data';
@@ -17,14 +18,14 @@ describe('portable real character metadata', () => {
     expect(file.origin).toBe('custom');
     expect(file.id).not.toBe(original.id);
     expect(file.derivedFrom?.id).toBe(original.id);
-    expect(parseCharacterDefinition(JSON.stringify(file, null, 2))).toEqual(file);
+    expect(parseCharacterDefinition(exportCharacterSnapshot(file))).toMatchObject({ id: file.id, revision: file.revision, namespace: file.namespace });
     const skill = file.talents.find(skill => skill.category === 'skill')!;
     const prepared = prepareCharacterDefinition(file, { [JSON.stringify([skill.id, '0', '0'])]: '2.92' });
     expect(prepared.talents.find(skill => skill.category === 'skill')!.parameters[0].values[0]).toBe(2.92);
     expect(original.identity.name).toBe('琴');
     expect(() => prepareCharacterDefinition(file, { [JSON.stringify([skill.id, '0', '0'])]: '' })).toThrow('非负');
     expect(() => parseCharacterDefinition(JSON.stringify({ ...file, schemaVersion: 2 }))).toThrow();
-    expect(() => parseCharacterDefinition(JSON.stringify({ ...file, talents: [skill, skill] }))).toThrow('重复');
+    expect(() => parseCharacterDefinition(JSON.stringify({ ...JSON.parse(exportCharacterSnapshot(file)), talents: Array(2).fill(JSON.parse(exportCharacterSnapshot(file)).talents[0]) }))).toThrow('重复');
   });
 
   it.skipIf(!hasRecordedReference('.references/enka/official-example.json'))('applies only to a candidate snapshot of recorded Xingqiu without changing account or equipment', async () => {

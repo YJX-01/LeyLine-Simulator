@@ -34,10 +34,5 @@ function copyDirectory(path) {
 copyDirectory(resolve(root,'assets/ui'));
 pruneGeneratedFiles(root, resolve(publicRoot, 'assets'), [...copies.keys()].map(path=>relative(resolve(publicRoot, 'assets'), path)), check);
 if(!check) for (const [target, bytes] of copies) writeGeneratedFile(target, bytes);
-const directory = resolve(root,'src/web/generated'); if(!check)mkdirSync(directory,{recursive:true});
-for (const [name,groups] of [['game-icon-index',['characters','weapons','artifacts','artifactSlots','elements','stats']],['game-detail-icon-index',['skills','constellations','buffs']]]) {
-  const path=resolve(directory,`${name}.json`),text=JSON.stringify(Object.fromEntries(groups.map(kind=>[kind,index[kind]])))+'\n';
-  if(check){if(readFileSync(path,'utf8')!==text)throw new Error(`${name}: asset index needs regeneration`);}else writeGeneratedFile(path,text);
-}
 console.log(`Prepared ${manifest.assets.length} assets from the single resource manifest.`);
 console.log(`Resolved ${characterIconReferences(characters).length} current character icon references; no missing artwork.`);

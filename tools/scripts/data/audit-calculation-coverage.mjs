@@ -1,14 +1,14 @@
+import { readCalculationLibrary } from '../../lib/calculation-library.mjs';
 import { resolve } from 'node:path';
 import { calculationCoverage } from '../../lib/calculation-coverage.mjs';
-import { readContentSource } from '../../lib/content-source.mjs';
+import { catalogInventory, readCalculationData as read } from '../../lib/catalog-data.mjs';
 import { loadContentSchema } from '../../lib/load-content-schema.mjs';
 import { createContentLinker } from '../../lib/content-linking.mjs';
 
 const flags = new Set(process.argv.slice(2));
 for (const flag of flags) if (!['--json', '--require-complete', '--candidates'].includes(flag)) throw new Error(`Unknown coverage argument: ${flag}`);
 const root = resolve(import.meta.dirname, '../../..');
-const read = file => readContentSource(resolve(root, file));
-const manifest = read('src/game-data/data/manifest.json');
+const manifest = catalogInventory();
 const entities = { characters: manifest.characters.map(id => read(`src/game-data/data/characters/${id}.json`)),
   weapons: manifest.weapons.map(id => read(`src/game-data/data/weapons/${id}.json`)),
   sets: manifest.sets.map(id => read(`src/game-data/data/artifact-sets/${id}.json`)) };
@@ -20,7 +20,7 @@ const validate = (kind, entity) => {
   return engine.compileCalculation(parsed.data.calculation.bundle);
 };
 const prepare = createContentLinker({ schemas, collectCalculationRoots: engine.collectCalculationRoots,
-  library: read('src/game-data/generated/calculation-formulas.json') });
+  library: readCalculationLibrary() });
 for (const [group, transform] of [['characters', prepare.character], ['weapons', prepare.weapon], ['sets', prepare.set]]) {
   const linked = [];
   for (const entity of entities[group]) linked.push(await transform(entity));

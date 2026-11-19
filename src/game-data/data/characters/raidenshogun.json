@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "raidenshogun",
   "revision": "4",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "雷电将军",
     "title": "一心净土",
@@ -14,317 +14,21 @@
     "gameId": 10000052,
     "region": "稻妻"
   },
+  "attributes": {
+    "base": {
+      "hp": 1004.79926,
+      "attack": 26.2542,
+      "defense": 61.44541,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "energyRecharge"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        9.028,
-        9.317,
-        9.606,
-        9.895,
-        10.184,
-        10.473,
-        10.762,
-        11.051,
-        11.34,
-        11.629
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S5",
+      "attack": "GROW_CURVE_ATTACK_S5",
+      "defense": "GROW_CURVE_HP_S5"
     },
     "promotion": [
       {
@@ -377,1024 +81,6 @@
         "specialized": 0.32
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.raidenshogun.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#raidenshogun"
-        },
-        {
-          "id": "content.raidenshogun.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#raidenshogun/combat1"
-        },
-        {
-          "id": "content.raidenshogun.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#raidenshogun/combat2"
-        },
-        {
-          "id": "content.raidenshogun.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#raidenshogun/combat3"
-        }
-      ],
-      "tables": [],
-      "formulas": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "raidenshogun.resolve-damage-base",
-            "revision": "1"
-          },
-          "template": {
-            "id": "scaled-damage",
-            "revision": "1",
-            "terms": [
-              {
-                "stat": "attack",
-                "attribute": "attribute",
-                "ratio": "ratio",
-                "count": "count",
-                "countUnit": "scalar"
-              }
-            ],
-            "output": "base"
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "schemaVersion": 2
-        }
-      ],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param1",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param2",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param3",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param4",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param5",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param6",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param6",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param7",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param7",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param9",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param10",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param10",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.normal.param11",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.normal",
-            "hitId": "raidenshogun.normal.param11",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.skill.param1",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.skill",
-            "hitId": "raidenshogun.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.skill.param2",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.skill",
-            "hitId": "raidenshogun.skill.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param1",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param5",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param6",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param6",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param7",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param7",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param8",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param9",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param10",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param10",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param11",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param11",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param12",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param12",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param14",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param14",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param15",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param15",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.burst.param16",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "raidenshogun.burst",
-            "hitId": "raidenshogun.burst.param16",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.raidenshogun.burst.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.raidenshogun.context",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "raidenshogun",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.raidenshogun.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.raidenshogun.context",
-        "revision": "4"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 1004.79926,
-      "attack": 26.2542,
-      "defense": 61.44541,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "energyRecharge",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1679,555 +365,142 @@
           "id": "raidenshogun.normal.param1",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param1",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param2",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param2",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param3",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param3",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param4",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param4",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param5",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param5",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param6",
           "element": "physical",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param6",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param6",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param6",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param6"
             }
           ],
-          "parameter": "param6"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param7",
           "element": "physical",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param7",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param7",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param7",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param7"
             }
           ],
-          "parameter": "param7"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param9",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param9",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param10",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param10",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param10",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param10",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param10"
             }
           ],
-          "parameter": "param10"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.normal.param11",
           "element": "physical",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.normal",
-                "parameterId": "param11",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param11",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.normal.param11",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param11"
             }
           ],
-          "parameter": "param11"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.raidenshogun.normal.parameters"
       ]
     },
     {
@@ -2371,115 +644,30 @@
           "id": "raidenshogun.skill.param1",
           "element": "electro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.skill",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.skill.param1",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.skill.param2",
           "element": "electro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "raidenshogun.skill",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.skill.param2",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.raidenshogun.skill.parameters"
       ]
     },
     {
@@ -2561,11 +749,6 @@
           "min": 0,
           "max": 60,
           "integer": false,
-          "source": {
-            "repository": "theBowja/genshin-db",
-            "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-            "path": "src/data/ChineseSimplified/talents/raidenshogun.json"
-          },
           "type": {
             "kind": "quantity",
             "unit": "scalar"
@@ -2999,1361 +1182,254 @@
           "id": "raidenshogun.burst.param1",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param1",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param2",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param1",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param1"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param2",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param5",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param5",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param5",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param5"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param6",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param6",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param6",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param6",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param6"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param6"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param7",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param7",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param7",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param7",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param7"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param7"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param8",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param8",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param8",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param8"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param9",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param9",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param9",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param9"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param10",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param10",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param10",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param10",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param10"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param10"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param11",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param11",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param11",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param11",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param11"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param11"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param12",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param12",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param12",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param12",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param12"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param12"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param14",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param14",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param14",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param14",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param14"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param14"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param15",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param15",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param15",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param15",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param15"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param15"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "raidenshogun.burst.param16",
           "element": "electro",
           "category": "burst",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param16",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "raidenshogun.resolve-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "raidenshogun.burst",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  },
-                  "count": {
-                    "kind": "fact",
-                    "key": "resolve",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    },
-                    "scope": "query"
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.raidenshogun.burst.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param16",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.raidenshogun.burst.param16",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param16"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "count": "resolve",
+              "countUnit": "scalar",
+              "formula": "raidenshogun.resolve-damage-base"
             }
           ],
-          "parameter": "param16"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.raidenshogun.burst.parameters"
       ]
     }
   ],
@@ -4362,22 +1438,19 @@
       "id": "raidenshogun.passive1",
       "name": "万千的愿望",
       "description": "队伍中附近的角色获得元素晶球或元素微粒时，会为诸愿百眼之轮积攒2层愿力。\n该效果每3秒至多触发一次。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "raidenshogun.passive2",
       "name": "殊胜之御体",
       "description": "基于元素充能效率超过100%的部分，每1%使雷电将军获得下列效果：\n·梦想一心状态提供的元素能量恢复提高0.6%；\n·雷元素伤害加成提升0.4%。",
-      "unlockAscension": 4,
-      "ruleIds": []
+      "unlockAscension": 4
     },
     {
       "id": "raidenshogun.passive3",
       "name": "天下名物狩",
       "description": "突破单手剑和长柄武器时，消耗的摩拉数量减少50%。",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -4385,15 +1458,13 @@
       "rank": 1,
       "name": "恶曜卜词",
       "description": "诸愿百眼之轮能更加迅速地积攒愿力。元素类型为雷元素的角色施放元素爆发后，积攒的愿力提升80%；其他元素类型的角色施放元素爆发后，积攒的愿力提升20%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "斩铁断金",
       "description": "奥义·梦想真说的梦想一刀与梦想一心状态下的雷电将军的攻击将无视敌人60%的防御力。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -4404,15 +1475,13 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "誓奉常道",
       "description": "奥义·梦想真说施加的梦想一心状态结束后，附近的队伍中所有角色（不包括雷电将军自己）的攻击力提升30%，持续10秒。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -4423,19 +1492,59 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "负愿前行",
       "description": "处于奥义·梦想真说施加的梦想一心状态下时，雷电将军的元素爆发伤害命中敌人时，使附近的队伍中所有角色（不包括雷电将军自己）元素爆发的冷却时间缩短1秒。\n该效果每1秒至多触发一次，在持续期间内至多触发5次。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.raidenshogun.growth",
-    "content.character-curves"
-  ]
+  "formulas": [
+    {
+      "id": "raidenshogun.resolve-damage-base",
+      "template": {
+        "id": "scaled-damage",
+        "revision": "1",
+        "terms": [
+          {
+            "stat": "attack",
+            "attribute": "attribute",
+            "ratio": "ratio",
+            "count": "count",
+            "countUnit": "scalar"
+          }
+        ],
+        "output": "base"
+      }
+    }
+  ],
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

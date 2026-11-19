@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": "0.1.0",
   "repository": "theBowja/genshin-db",
   "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
   "method": "Exact selected fields from fixed git blobs, retaining original strings and refinement order. No player builds or observations.",

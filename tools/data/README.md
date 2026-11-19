@@ -64,6 +64,8 @@ Mona 的 average 使用显示舍入后的四档值；本项目平均条数采用
 
 #### 数值来源
 
+角色、装备及模板配置以稳定身份关联规则和支持记录。下表及对应的采用记录负责追溯仓库、提交、网站与原始数值。展柜、库存与用户输入各自保留实际记录身份。
+
 | 数值族 | 固定来源与采用位置 |
 | --- | --- |
 | 角色基础、成长、突破及天赋参数 | genshin-db `8e5badd60b5d894284ccc927a56c9683529d2592`；sources/catalog/genshin-db 及 sources/genshin-db 原件 |
@@ -182,7 +184,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 月/星公式按 [KQM原图与符号记录](sources/kqm-web/2026-11-15/reaction-formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储。原图采集在忽略的审阅目录；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
 
-逐项定义以 src/game-data/data 为准，运行索引位于 src/game-data/generated/damage-paths.json 与 combat-rules.json；`node tools/scripts/data/audit-damage-paths.mjs` 输出当前绑定摘要。
+逐项定义以 src/game-data/data 为准，`node tools/scripts/data/audit-damage-paths.mjs` 输出当前绑定摘要。
 
 #### 已审阅单次查询
 

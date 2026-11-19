@@ -1,3 +1,5 @@
+import { APP_VERSION } from '../../src/schema/src/version.mjs';
+import { readCalculationData } from './catalog-data.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,7 +9,7 @@ import { loadContentSchema } from './load-content-schema.mjs';
 const root = fileURLToPath(new URL('../../',import.meta.url));
 const commit = '8e5badd60b5d894284ccc927a56c9683529d2592';
 const luna = 'b0501c5d89767ead5f647869a2412521447f7682';
-export const readAuditJson = path => JSON.parse(readFileSync(resolve(root,path),'utf8'));
+export const readAuditJson = readCalculationData;
 
 /** Compare actual numeric fields on every run; no maintained file-hash inventory. */
 export async function numericAudit(read = readAuditJson) {
@@ -235,7 +237,7 @@ export async function numericAudit(read = readAuditJson) {
   check('effect-formulas', formulaDefinition('noblesseoblige.burst-bonus').template.value.value, numbers(noblesse.effect2Pc)[0], 'noblesse/2pc');
   check('effect-formulas', formulaDefinition('noblesseoblige.burst-team-attack').template.value.value, numbers(noblesse.effect4Pc)[0], 'noblesse/4pc');
   check('effect-duration', effectDefinition('noblesseoblige.burst-team-attack.team-attack').lifetime.durationMs, numbers(noblesse.effect4Pc)[1] * 1000, 'noblesse/duration');
-  return {schemaVersion:1,sourceCommit:commit,independentRawCommit:luna,
+  return {schemaVersion:APP_VERSION,sourceCommit:commit,independentRawCommit:luna,
     method:'Exact numeric equality of maintained JSON parameters and fixed TS algorithm constants against adopted sources; no stored file hashes. Does not prove game float32 evaluation equivalence.',
     comparedValues:counts,differences,templateParameterGaps,independentBaseDifferences,
     mainStatChanges:read(`tools/data/sources/lunagc/${luna}/audit.json`).mainStats,

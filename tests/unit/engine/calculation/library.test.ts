@@ -1,3 +1,4 @@
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -27,8 +28,8 @@ describe('authored ordinary formula library', () => {
 
   it('evaluates the source-derived Kaeya level-90 ordinary setting with fractional defense reduction', async () => {
     const bundle = readCalculationLibrary(), program = prepared(bundle);
-    const kaeya = JSON.parse(readFileSync(new URL('src/game-data/data/characters/kaeya.json', root), 'utf8'));
-    const weapon = JSON.parse(readFileSync(new URL('src/game-data/data/weapons/favoniussword.json', root), 'utf8'));
+    const kaeya = readCalculationData(new URL('src/game-data/data/characters/kaeya.json', root));
+    const weapon = readCalculationData(new URL('src/game-data/data/weapons/favoniussword.json', root));
     // Same traceable component setting as damage-pipeline.test.ts; no inventory/recording claim.
     const attack = 18.6984 * 8.349 + 66.90411 + 41.0671 * 7.275 + 155.6;
     expect(kaeya.attributes.base.attack).toBe(18.6984);
@@ -60,10 +61,10 @@ describe('authored ordinary formula library', () => {
 
   it('uses the adopted exact reaction level table and distinguishes a missing index from an unknown value', async () => {
     const bundle = readCalculationLibrary();
-    const reactions = JSON.parse(readFileSync(new URL('src/game-data/data/calculation/reactions.json', root), 'utf8')).rules;
+    const reactions = readCalculationData(new URL('src/game-data/data/calculation/reactions.json', root)).rules;
     const additive = bundle.formulas.find(formula => formula.identity.id === 'additive')!;
     const table = bundle.tables.find(table => table.identity.id === 'reaction-level')!;
-    const lookup: FormulaDefinition = { schemaVersion: 2, identity: { namespace: 'custom:reaction-table-test', id: 'adopted-level-lookup', revision: '1' },
+    const lookup: FormulaDefinition = { schemaVersion: '0.1.0', identity: { namespace: 'custom:reaction-table-test', id: 'adopted-level-lookup', revision: '1' },
       template: { id: 'level-multiplier', revision: '1', table: table.identity }, sources: ['kqm.additive'] };
     bundle.formulas.push(lookup);
     const program = prepared(bundle);
@@ -88,10 +89,10 @@ describe('authored ordinary formula library', () => {
 
   it('evaluates the source-defined Hyperbloom component without ordinary damage, defense or implicit crit', async () => {
     const bundle = readCalculationLibrary(), program = prepared(bundle);
-    const kuki = JSON.parse(readFileSync(new URL('src/game-data/data/characters/kukishinobu.json', root), 'utf8'));
-    const weapon = JSON.parse(readFileSync(new URL('src/game-data/data/weapons/ironsting.json', root), 'utf8'));
+    const kuki = readCalculationData(new URL('src/game-data/data/characters/kukishinobu.json', root));
+    const weapon = readCalculationData(new URL('src/game-data/data/weapons/ironsting.json', root));
     const em = weapon.baseStat * weapon.statCurve[90];
-    const rules = JSON.parse(readFileSync(new URL('src/game-data/data/calculation/reactions.json', root), 'utf8')).rules;
+    const rules = readCalculationData(new URL('src/game-data/data/calculation/reactions.json', root)).rules;
     expect(kuki.identity.element).toBe('electro');
     const result = evaluateFormula(program, { namespace: 'builtin', id: 'transformative', revision: '1' }, {
       levelMultiplier: quantity('damage', rules.levelMultipliers[90]), reactionCoefficient: quantity('scalar', 3),

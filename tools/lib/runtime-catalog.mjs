@@ -1,0 +1,53 @@
+import { catalogInventory, readCalculationData } from './catalog-data.mjs';
+import { readContentSource } from './content-source.mjs';
+import { readCalculationLibrary } from './calculation-library.mjs';
+import { createContentLinker } from './content-linking.mjs';
+import { loadContentSchema } from './load-content-schema.mjs';
+
+const data = new URL('../../src/game-data/data/', import.meta.url);
+const read = name => readContentSource(new URL(name, data));
+const folders = { characters: 'characters', weapons: 'weapons', sets: 'artifact-sets', actions: 'actions' };
+function supported(complete) {
+  return { supported: complete, reason: complete ? '具有已核验的明确查询范围；以所选输出为准。' : '相关查询机制尚未闭合。' };
+}
+export function catalogList(inventory = catalogInventory()) {
+  return { version: inventory.dataVersion,
+    characters: inventory.characters.map(id => {
+      const { identity, support } = read('characters/' + id + '.json');
+      return { id, name: identity.name, element: identity.element, weaponType: identity.weaponType, ...supported(Object.values(support).some(s => s.resolution === 'complete')) };
+    }),
+    weapons: inventory.weapons.map(id => {
+      const w = read('weapons/' + id + '.json');
+      return { id, name: w.name, weaponType: w.weaponType, rarity: w.rarity, ...supported(w.calculation.bundle.coverage.some(s => s.resolution === 'complete')) };
+    }),
+    sets: inventory.sets.map(id => {
+      const { name, rarity, rarities, slots } = read('artifact-sets/' + id + '.json');
+      return { id, name, rarity, rarities, slots };
+    }),
+  };
+}
+
+export async function createRuntimeCatalog() {
+  const schemas = await loadContentSchema(), engine = await loadContentSchema('/src/engine/src/index.ts');
+  const inventory = catalogInventory(), library = readCalculationLibrary(readCalculationData);
+  const linker = createContentLinker({ schemas, ...engine, library });
+  async function get(group, id) {
+    if (!inventory[group]?.includes(id)) throw new Error('Undefined catalog entry: ' + group + '/' + id);
+    const file = new URL(folders[group] + '/' + id + '.json', data);
+    if (group === 'characters') {
+      schemas.characterMetadataSchema.parse(readContentSource(file));
+      return linker.character(readCalculationData(file));
+    }
+    const raw = readContentSource(file);
+    if (group === 'weapons') return linker.weapon(raw);
+    if (group === 'sets') return linker.set(raw);
+    const actions = schemas.characterActionsDefinitionSchema.parse(raw);
+    const checked = engine.compileCharacterActions(actions, await get('characters', actions.character.id), library);
+    if (!checked.ok) throw new Error(JSON.stringify(checked.diagnostics));
+    const closure = engine.collectCalculationRoots(checked.bundle, { roots: [actions.calculation.stateMachine],
+      sourceIds: [...new Set([...actions.sources, ...actions.actions.flatMap(a => a.sources), ...actions.gaps.flatMap(g => g.sources)])], families: [] });
+    if (!closure.ok) throw new Error(JSON.stringify(closure.diagnostics));
+    return { ...actions, calculation: { ...actions.calculation, bundle: closure.bundle } };
+  }
+  return { inventory, library, get };
+}

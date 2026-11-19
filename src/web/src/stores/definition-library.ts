@@ -1,3 +1,4 @@
+import { APP_VERSION, storageKeyFor } from '@leyline/schema/version';
 import { formatJson } from '@leyline/schema';
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
@@ -6,9 +7,9 @@ import { downloadJson } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 import { fileSignature } from '../domain/file-signature';
 
-const storageKey = 'leyline-definition-library-v2';
+const storageKey = storageKeyFor('definition-library');
 export const useDefinitionLibraryStore = defineStore('definition-library', () => {
-  const library = ref<DefinitionLibraryFile>({ schemaVersion: 2, kind: 'definition-library', id: crypto.randomUUID(), name: '本地内容定义库', definitions: [] });
+  const library = ref<DefinitionLibraryFile>({ schemaVersion: APP_VERSION, kind: 'definition-library', id: crypto.randomUUID(), name: '本地内容定义库', definitions: [] });
   const error = ref('');
   const notice = ref('定义库独立保存；复制到轴后保留当时版本。');
   const busy = ref(false);

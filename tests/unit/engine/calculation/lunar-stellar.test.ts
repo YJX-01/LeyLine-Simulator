@@ -1,3 +1,4 @@
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -5,7 +6,7 @@ import { compileCalculation, describeCalculationTemplate, evaluateFormula } from
 import type { Value } from '@leyline/schema';
 
 const root = new URL('../../../../', import.meta.url);
-const read = (file: string) => JSON.parse(readFileSync(new URL(file, root), 'utf8'));
+const read = (file: string) => readCalculationData(new URL(file, root));
 const zibai = read('src/game-data/data/characters/zibai.json');
 const ironSting = read('src/game-data/data/weapons/ironsting.json');
 const reactions = read('src/game-data/data/calculation/reactions.json').rules;

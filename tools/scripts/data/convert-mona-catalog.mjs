@@ -1,11 +1,10 @@
-import { writeGeneratedFile } from '../../lib/generated-files.mjs';
+import { catalogList } from '../../lib/runtime-catalog.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../../..');
 const canonical = resolve(root, 'tools/data/sources/catalog/mona-community/catalog.json');
-const aliasesPath = resolve(root, 'src/web/generated/mona-set-aliases.json');
 if (process.argv.includes('--capture')) {
   const reference = resolve(root, '.references/mona-community');
   const expected = '589ac6919057709924c0c20d5a9d673fe9b0be1a';
@@ -18,7 +17,7 @@ if (process.argv.includes('--capture')) {
   // Generated modules contain JSON data. Parse the data, never evaluate remote JS.
   const generated = kind => JSON.parse(read(`src/assets/_gen_${kind}.js`).split('export default')[1].trim().replace(/;$/, ''));
   const locale = JSON.parse(read('src/i18n/generated/zh-cn.json'));
-  const catalog = JSON.parse(readFileSync(resolve(root, 'src/game-data/generated/catalog.json'), 'utf8'));
+  const catalog = catalogList();
   const sets = Object.entries(generated('artifact')).map(([key, value]) => {
     const name = locale[value.nameLocale];
     const entry = catalog.sets.find(entry => entry.name === name);
@@ -44,8 +43,4 @@ for (const set of snapshot.sets) {
     aliases[key] = set.canonicalId;
   }
 }
-const result = `${JSON.stringify(aliases, null, 2)}\n`;
-if (process.argv.includes('--check')) {
-  if (readFileSync(aliasesPath, 'utf8') !== result) throw new Error('Mona set aliases need regeneration.');
-} else writeGeneratedFile(aliasesPath, result);
 console.log(JSON.stringify({ release: snapshot.release, sets: snapshot.sets.length, characters: snapshot.characters.length, weapons: snapshot.weapons.length, aliases: Object.keys(aliases).length }));

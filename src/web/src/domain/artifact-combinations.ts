@@ -1,6 +1,6 @@
 import {artifactValueSignature} from './showcase-inventory';
 import {defaultRollBasis,type EffectiveRollBasis} from './effective-roll-basis';
-import shortNames from '../../generated/artifact-set-short-names.json';
+import shortNames from 'virtual:leyline-display/artifact-set-short-names';
 import type { StatKey } from '@leyline/schema';
 import { accountSlots, cloneAccount, parseAccount, equipArtifact, type AccountArtifact, type LocalAccount } from './account';
 import { effectiveRollBreakdown, effectiveStatGroups } from './character-loadout-name';

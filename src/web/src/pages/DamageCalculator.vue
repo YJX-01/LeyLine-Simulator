@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { APP_VERSION } from '@leyline/schema/version';
 import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue';
+import { effectUnlocked, hitMatches } from '@leyline/engine';
 import { getArtifactSet } from '@leyline/game-data';
 import { damageCalculatorSchema, type CalculationFact, type ValueType, elements, talentLevelBonus, type AxisResponse, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
 import { accountSlots, accountSlotLabels, type AccountArtifact, type AccountCharacter, type AccountSlot } from '../domain/account';
@@ -9,6 +11,7 @@ import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { calculationArtifact } from '../domain/build-snapshot';
 import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefinition } from '../domain/character-definition';
 import { exportCharacterSnapshot } from '../domain/structured-character-import';
+import { packDocument } from '../domain/content-document';
 import { downloadJson, downloadJsonText } from '../domain/download';
 import { realElementLabel, realStatLabel, statusLabel, recordLabel, actorLabel } from '../domain/workbench-labels';
 import { useAccountStore } from '../stores/account';
@@ -63,21 +66,33 @@ const factNames: Record<string, string> = {
   'beyondthechrysalis.loyalWind': '蝶变 · 忠忱之风（10秒内）', 'beyondthechrysalis.betrayalWind': '蝶变 · 叛弃之风（10秒内）',
   'scarletproof.stellarWindow': '血红之证四件效果（10秒内）',
 };
-const factEnums: Record<string, string> = { none: '无', 'stellar-conduct': '星感电', 'stellar-swirl': '星扩散' };
+const factEnums: Record<string, string> = { none: '无', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散' };
 const factFields = computed(() => {
   const build = hitOwner.value?.build, fields = new Map<string, ValueType>();
   function visit(value: unknown): void {
     if (Array.isArray(value)) { value.forEach(visit); return; }
     if (!value || typeof value !== 'object') return;
     const binding = value as { kind?: string; scope?: string; key?: string; type?: ValueType };
-    if (binding.kind === 'fact' && binding.scope === 'owner' && binding.key && binding.type && factNames[binding.key]
-      && (binding.key !== 'vesna.c6Window' || (build?.constellation ?? 0) >= 6)) fields.set(binding.key, binding.type);
+    if (binding.kind === 'fact' && binding.scope === 'owner' && binding.key && binding.type && !['hpRatio','shielded','onField'].includes(binding.key)) fields.set(binding.key, binding.type);
     Object.values(value).forEach(visit);
   }
-  visit(queryCharacter.value?.calculation.bundle);
-  visit(build?.weapon.calculation.bundle);
-  for (const set of build?.sets ?? []) if (build!.artifacts.filter(item => item.setId === set.id).length >= 4) visit(set.calculation.bundle);
-  return [...fields].map(([key, type]) => ({ key, type, label: factNames[key] }));
+  const hit = selectedHit.value, output = selectedOutput.value;
+  if (!build || !hit || !output) return [];
+  visit(output.invocation.predicate);
+  const setCounts: Record<string, number> = {};
+  for (const item of build.artifacts) setCounts[item.setId] = (setCounts[item.setId] ?? 0) + 1;
+  const frame = { skillId: damage.value.skillId, hitId: hit.id, element: hit.element, category: hit.category,
+    family: output.family, origin: output.origin, reactionId: typeof damage.value.reaction === 'object' ? damage.value.reaction?.type ?? null : null };
+  for (const entity of [queryCharacter.value, build.weapon, ...build.sets]) {
+    for (const effect of entity?.calculation.bundle.effects ?? []) {
+      if (!effectUnlocked(effect.activation, { ...build, setCounts }) || !hitMatches(effect.appliesTo, frame)) continue;
+      const target = effect.target.kind === 'attribute' ? effect.target.attribute.id : '';
+      if (target.startsWith('attribute.reaction.') && !target.startsWith('attribute.reaction.' + output.family + '.')) continue;
+      visit(effect.predicate);
+      visit(effect.value);
+    }
+  }
+  return [...fields].map(([key, type]) => ({ key, type, label: factNames[key] ?? key }));
 });
 function factInput(key: string): string | number { const value = damage.value.facts?.[key]?.value; return value?.kind === 'quantity' ? value.value : value ? String(value.value) : ''; }
 function setFact(key: string, type: ValueType, event: Event) {
@@ -112,9 +127,6 @@ async function importMetadata(event: Event) {
     if (document.value.recordId) await calculate();
   } catch (cause) { showError(cause); }
 }
-const calculationSources = computed(() => hitOwner.value?.build?.character.calculation.bundle.sources.filter(source =>
-  hitOwner.value?.build?.character.calculation.bundle.coverage.some(proof => proof.scope.kind === 'hit' && proof.scope.skillId === damage.value.skillId && proof.sources.includes(source.id)))
-  .map(source => ({ id: source.id, label: source.kind === 'repo' ? `${source.repository} · ${source.commit.slice(0, 7)} · ${source.path}` : source.kind === 'document' ? source.url : source.reference ?? source.id })) ?? []);
 const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
 const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
 const baselinePoint = computed(() => response.value?.comparison?.baseline.points.find(point => point.id === document.value?.recordId));
@@ -175,7 +187,7 @@ async function loadSource() {
     }
     const project = createEmptyProject();
     const actorId = addActorFromBuild(project, next.character.build);
-    install({ schemaVersion: 4, kind: 'damage-calculator', project, actorId });
+    install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId });
   } catch (cause) { showError(cause); }
 }
 async function prepareBuild() {
@@ -185,7 +197,7 @@ async function prepareBuild() {
   if (!document.value) {
     const project = createEmptyProject();
     const actorId = addActorFromBuild(project, prepared.build);
-    document.value = { schemaVersion: 4, kind: 'damage-calculator', project, actorId };
+    document.value = { schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId };
   } else if (actor.value) actor.value.build = prepared.build;
   pendingSource.value = undefined; formDirty.value = false; formRevision.value++;
   return true;
@@ -280,7 +292,7 @@ async function applyContent() {
 async function pinBaseline() { await calculate(); if (document.value?.recordId) { document.value.baseline = JSON.parse(JSON.stringify(document.value.project)); await calculate(); } }
 async function save() {
   error.value = '';
-  try { const next = await prepareDocument(); if (!next) return false; calculatorRequest(next, 0); if (JSON.stringify(document.value) !== JSON.stringify(next)) document.value = next; downloadJson(next, '伤害计算.json'); savedSignature.value = signature(); return true; }
+  try { const next = await prepareDocument(); if (!next) return false; calculatorRequest(next, 0); if (JSON.stringify(document.value) !== JSON.stringify(next)) document.value = next; downloadJson(packDocument('damage-calculator', next), '伤害计算.json'); savedSignature.value = signature(); return true; }
   catch (cause) { showError(cause); return false; }
 }
 async function openFile(event: Event) {
@@ -317,9 +329,9 @@ defineExpose({ requestLeave });
 
 <template>
   <section class="damage-calculator" aria-label="伤害计算器">
-    <header class="calculator-heading"><div><h2>计算器</h2><span>{{ dirty ? '未保存' : document ? '已保存' : '独立计算设定' }}</span></div><div class="calculator-actions">
+    <header class="calculator-heading"><div><h2>伤害计算器</h2><span>{{ dirty ? '未保存' : document ? '已保存' : '' }}</span></div><div class="calculator-actions">
       <button class="ui-action soft" data-accent="anemo" @click="newCalculation">新建计算</button>
-      <button class="ui-action soft" data-accent="anemo" @click="copyAxis">复制当前轴</button>
+
       <button class="ui-action soft" data-accent="anemo" @click="requestLeave(() => file?.click())">打开计算</button>
       <button class="ui-action" data-accent="anemo" @click="save">保存计算</button>
     </div></header>
@@ -327,7 +339,7 @@ defineExpose({ requestLeave });
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="calculator-layout">
       <section class="panel calculator-build"><h3>角色与配装</h3>
-        <div v-if="sources.length" class="calculator-source"><label for="calculator-source">资料来源</label><select id="calculator-source" v-model="source"><option value="">选择已保存的资料</option><option v-for="entry in sources" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select><button class="ui-action soft" data-accent="hydro" :disabled="!source" @click="requestLeave(loadSource)">读取配装</button></div>
+        <div class="calculator-source"><template v-if="sources.length"><label for="calculator-source">资料来源</label><select id="calculator-source" v-model="source"><option value="">选择已保存的资料</option><option v-for="entry in sources" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select><button class="ui-action soft" data-accent="hydro" :disabled="!source" @click="requestLeave(loadSource)">读取配装</button></template><button class="ui-action soft" data-accent="anemo" @click="copyAxis">复制当前轴</button></div>
         <label v-if="document && document.project.candidate.actors.length > 1">试配队员<select :value="document.actorId" @change="switchActor(($event.target as HTMLSelectElement).value)"><option v-for="actor in document.project.candidate.actors" :key="actor.id" :value="actor.id">{{ actorLabel(document.project, actor.id) }}</option></select></label>
         <CharacterForm ref="form" :key="formRevision" candidate detached details resolve-identity :character="character" @dirty-change="formDirty = $event" />
         <button class="ui-action soft" data-accent="anemo" @click="prepareBuild">应用配装</button>
@@ -345,7 +357,7 @@ defineExpose({ requestLeave });
             <label>暴击<select v-model="damage.crit"><option :value="null">待确认</option><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
             <label>反应<select v-model="reactionType"><option value="">待确认</option><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
             <label v-for="input in skill?.inputs" :key="input.id">{{ inputNames[input.id] ?? input.id }}<select v-if="input.id === 'counterCharge'" :value="damage.inputs?.[input.id] ?? ''" @change="setInput(input.id, $event)"><option value="">待确认</option><option :value="0">0 · 无反击加成</option><option :value="1">1 · 一档反击</option><option :value="2">2 · 满档／完美反击</option></select><input v-else type="number" :min="input.min" :max="input.max" :step="input.integer ? 1 : 'any'" :value="damage.inputs?.[input.id] ?? ''" placeholder="待确认" @input="setInput(input.id, $event)"></label>
-            <label v-for="field in factFields" :key="field.key">{{ field.label }}<select v-if="field.type.kind !== 'quantity'" :value="factInput(field.key)" @change="setFact(field.key, field.type, $event)"><option value="">待确认</option><template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template><template v-else><option v-for="value in field.type.values" :key="value" :value="value">{{ factEnums[value] ?? value }}</option></template></select><input v-else type="number" min="0" :max="field.key === 'vesna.disciplineStacks' ? 6 : undefined" step="1" :value="factInput(field.key)" placeholder="待确认" @input="setFact(field.key, field.type, $event)"></label>
+            <label v-for="field in factFields" :key="field.key">{{ field.label }}<select v-if="field.type.kind !== 'quantity'" :value="factInput(field.key)" @change="setFact(field.key, field.type, $event)"><option value="">待确认</option><template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template><template v-else><option v-for="value in field.type.values" :key="value" :value="value">{{ factEnums[value] ?? value }}</option></template></select><input v-else type="number" min="0" :max="field.key === 'vesna.disciplineStacks' ? 6 : undefined" :step="field.type.unit === 'count' ? 1 : 'any'" :value="factInput(field.key)" placeholder="待确认" @input="setFact(field.key, field.type, $event)"></label>
             <label>生命比例（%）<input type="number" min="0" max="100" step="any" :value="damage.conditions?.hpRatio == null ? '' : damage.conditions.hpRatio * 100" placeholder="待确认" @input="setHp"></label>
             <label v-for="field in (['onField', 'shielded'] as const)" :key="field">{{ field === 'onField' ? '站场' : '护盾存在' }}<select :value="damage.conditions?.[field] == null ? '' : String(damage.conditions[field])" @change="damage.conditions = { ...damage.conditions, [field]: ($event.target as HTMLSelectElement).value === '' ? null : ($event.target as HTMLSelectElement).value === 'true' }"><option value="">待确认</option><option value="true">是</option><option value="false">否</option></select></label>
             <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option value="">待确认</option><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} · {{ recordLabel(document!.project, record.id) }} · {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="">待确认</option><option value="before">记录生效前</option><option value="after">记录生效后</option></select></label></template>
@@ -360,8 +372,8 @@ defineExpose({ requestLeave });
         <section class="panel calculator-result" aria-label="计算结果"><h3>伤害结果</h3><template v-if="result">
           <p role="status">{{ statusLabel(result.status) }}</p><output data-testid="calculator-value">{{ number(point?.value) }}</output>
           <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(response.comparison.candidates[0]?.points.find(entry => entry.id === document?.recordId)?.delta) }}</td></tr></tbody></table>
-          <template v-if="point?.real"><h3>计算分项</h3><table><tbody><tr v-for="(term, index) in point.real.scaling" :key="index"><th>{{ realStatLabel(term.stat) }}缩放</th><td>{{ number(term.attribute) }} × {{ number(term.multiplier) }}<template v-if="term.count"> × {{ number(term.count.value) }}</template> = {{ number(term.contribution) }}</td></tr><tr><th>技能基础伤害</th><td>{{ number(point.real.baseDamage) }}</td></tr><tr><th>附加基础伤害</th><td>{{ number(point.real.baseDamageBonus) }}</td></tr><tr v-for="(label, key) in partLabels" :key="key"><th>{{ key === 'bonus' && selectedOutput?.family === 'stellar-swirl' ? '星扩散增伤乘区' : label }}</th><td>{{ number(point.real.parts[key]) }}</td></tr><template v-if="point.real.reaction"><tr><th>反应倍率</th><td>{{ number(point.real.reaction.multiplier) }}</td></tr><tr><th>反应基础加值</th><td>{{ number(point.real.reaction.addedBaseDamage) }}</td></tr></template></tbody></table>
-          <details><summary>配装属性与来源</summary><p v-if="queryCharacter?.origin === 'custom'">角色来源 · 自定义声明</p><p v-if="actor?.build && skill">{{ skill.name }} · 天赋 {{ actor.build.talents[skill.category] }} + {{ talentLevelBonus(actor.build.character, skill.category, actor.build.constellation) }}</p><dl><template v-for="(value, key) in point.real.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl><p v-for="entry in point.real.panel.contributions" :key="`${entry.source}:${entry.stat}:${entry.value}`">{{ entry.source }} · {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p><p v-for="source in calculationSources" :key="source.id">{{ source.label }}</p></details>
+          <template v-if="point?.real"><details><summary>计算分项</summary><table><tbody><tr v-for="(term, index) in point.real.scaling" :key="index"><th>{{ realStatLabel(term.stat) }}缩放</th><td>{{ number(term.attribute) }} × {{ number(term.multiplier) }}<template v-if="term.count"> × {{ number(term.count.value) }}</template> = {{ number(term.contribution) }}</td></tr><tr><th>技能基础伤害</th><td>{{ number(point.real.baseDamage) }}</td></tr><tr><th>附加基础伤害</th><td>{{ number(point.real.baseDamageBonus) }}</td></tr><tr v-for="(label, key) in partLabels" :key="key"><th>{{ key === 'bonus' && selectedOutput?.family === 'stellar-swirl' ? '星扩散增伤乘区' : label }}</th><td>{{ number(point.real.parts[key]) }}</td></tr><template v-if="point.real.reaction"><tr><th>反应倍率</th><td>{{ number(point.real.reaction.multiplier) }}</td></tr><tr><th>反应基础加值</th><td>{{ number(point.real.reaction.addedBaseDamage) }}</td></tr></template></tbody></table>
+          </details><details><summary>配装属性与来源</summary><p v-if="queryCharacter?.origin === 'custom'">角色来源 · 自定义声明</p><p v-if="actor?.build && skill">{{ skill.name }} · 天赋 {{ actor.build.talents[skill.category] }} + {{ talentLevelBonus(actor.build.character, skill.category, actor.build.constellation) }}</p><dl><template v-for="(value, key) in point.real.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl><p v-for="entry in point.real.panel.contributions" :key="`${entry.source}:${entry.stat}:${entry.value}`">{{ entry.source }} · {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p></details>
           </template>
           <ul v-if="result.diagnostics.length" aria-label="未完成的计算条件"><li v-for="(diagnostic, index) in result.diagnostics" :key="index">{{ diagnostic.message }}</li></ul>
         </template><p v-else>选择配装与命中条件后计算。</p></section>
@@ -394,6 +406,7 @@ h3 { font-size:var(--font-control); margin:0 0 20px; }.calculator-build > h3:not
 label { display:grid; gap:8px; min-width:0; }select,input { width:100%; min-width:0; box-sizing:border-box; font-size:var(--font-body); height:var(--control-height-lg); }
 fieldset { min-width:0; border:0; padding:0; margin:0; }details { margin:20px 0; }summary { cursor:pointer; margin-bottom:16px; }
 output { display:block; font-size:var(--font-title); font-weight:700; margin:20px 0; color:var(--element-anemo-deep); }
+.calculator-result thead th { width:auto; }
 table { width:100%; border-collapse:collapse; table-layout:fixed; }th,td { padding:12px 4px; border-bottom:1px solid var(--neutral-line); text-align:left; overflow-wrap:anywhere; font-size:var(--font-body); }th { width:42%; }
 dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; }dd { margin:0; text-align:right; }p,li { line-height:1.8; overflow-wrap:anywhere; }ul { padding-left:20px; }
 @media(max-width:1250px) { .calculator-layout { grid-template-columns:minmax(0,1fr); } }

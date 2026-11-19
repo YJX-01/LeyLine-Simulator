@@ -1,3 +1,5 @@
+import { readCalculationLibrary } from '../../tools/lib/calculation-library.mjs';
+import { catalogInventory, readCalculationData } from '../../tools/lib/catalog-data.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,8 +10,8 @@ import { loadContentSchema } from '../../tools/lib/load-content-schema.mjs';
 import { createContentLinker } from '../../tools/lib/content-linking.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const read = file => JSON.parse(readFileSync(resolve(root, file), 'utf8'));
-const manifest = read('src/game-data/data/manifest.json');
+const read = file => readCalculationData(resolve(root, file));
+const manifest = catalogInventory();
 const characters = manifest.characters.map(id => read(`src/game-data/data/characters/${id}.json`));
 const weapons = manifest.weapons.map(id => read(`src/game-data/data/weapons/${id}.json`));
 const sets = manifest.sets.map(id => read(`src/game-data/data/artifact-sets/${id}.json`));
@@ -36,7 +38,7 @@ test('structured coverage follows real scoped certificates and loses support whe
   const schemas = await loadContentSchema(), engine = await loadContentSchema('/src/engine/src/index.ts');
   const reviews = read('tools/data/sources/calculation-hits/ordinary-bindings.json');
   const prepare = createContentLinker({ schemas, collectCalculationRoots: engine.collectCalculationRoots, describeCalculationTemplate: engine.describeCalculationTemplate, manifest,
-    library: read('src/game-data/generated/calculation-formulas.json'), hitReviews: reviews,
+    library: readCalculationLibrary(), hitReviews: reviews,
     retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
   const kaeya = await prepare.character(characters.find(character => character.id === 'kaeya'));
   const dullblade = await prepare.weapon(weapons.find(weapon => weapon.id === 'dullblade'));

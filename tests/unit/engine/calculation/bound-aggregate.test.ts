@@ -1,3 +1,4 @@
+import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -6,7 +7,7 @@ import { collectCalculationRoots, createStructuredCombatContext, describeCalcula
 import { getArtifactMain } from '@leyline/game-data';
 import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
 
-const read = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
+const read = (path: string) => readCalculationData(path);
 const ref = (id: string): schemas.DefinitionRef => ({ namespace: 'builtin', id, revision: '1' });
 const quantity = (unit: Extract<schemas.Value, { kind: 'quantity' }>['unit'], value: number): schemas.Value => ({ kind: 'quantity', unit, value });
 const fact = (value: schemas.Value | null): schemas.CalculationFact => ({ value, provenance: 'explicit', sourceRefs: [] });
@@ -23,13 +24,13 @@ describe('build-bound stellar contributions and per-state ranking', () => {
   beforeAll(async () => {
     library = readCalculationLibrary(); main = await getArtifactMain();
     prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library,
-      manifest: read('src/game-data/data/manifest.json'), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
+      manifest: catalogInventory(), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
       retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
     for (const id of ['vesna', 'aether-cryo']) characters.set(id, await prepare.character(read('src/game-data/data/characters/' + id + '.json')));
     for (const id of ['favoniussword', 'ironsting', 'harbingerofdawn']) weapons.set(id, await prepare.weapon(read('src/game-data/data/weapons/' + id + '.json')));
   });
   function build(id: string, weaponId: string): schemas.StructuredBuild {
-    return { schemaVersion: 3, kind: 'calculation-build', dataVersion: 'genshin-db-8e5badd-content-v2', character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: 'genshin-db-8e5badd-content-v2', character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }

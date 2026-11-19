@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { contentSourceSchema, finiteSchema, idSchema } from '../common/values';
 
@@ -13,7 +14,7 @@ export type ReactionBonusKey = typeof reactionBonusKeys[number];
 
 const positive = finiteSchema.positive();
 export const reactionRulesSchema = z.object({
-  schemaVersion: z.literal(2), id: z.literal('standard-hit-reactions'), revision: idSchema, algorithmRevision: z.literal('1'),
+  schemaVersion: z.literal(APP_VERSION), id: z.literal('standard-hit-reactions'), revision: idSchema, algorithmRevision: z.literal('1'),
   sources: z.object({ levels: contentSourceSchema, amplifying: contentSourceSchema, additive: contentSourceSchema }).strict(),
   levelMultipliers: z.array(positive.nullable()).length(101),
 }).strict().refine(rules => rules.levelMultipliers[0] === null, '反应等级0必须明确不可用。');

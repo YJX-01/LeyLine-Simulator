@@ -1,3 +1,4 @@
+import { catalogInventory } from '../../../tools/lib/catalog-data.mjs';
 import { recordedJsonFile } from '../../helpers/recorded-reference';
 import {existsSync,readFileSync} from 'node:fs';
 import {test,expect} from '@playwright/test';
@@ -6,19 +7,19 @@ test('native file cancellation keeps the import dialog, preview and account unch
   test.skip(!existsSync('.references/artifacts_mona.json'),'Requires actual inventory.');
   await page.goto('/');await page.getByTestId('workspace-nav-artifacts').click();await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'导入莫娜圣遗物',exact:true}),file=dialog.getByLabel('导入莫娜圣遗物文件',{exact:true});
-  const before=await page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
+  const before=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
   // File inputs emit a bubbling cancel event when the native chooser is dismissed.
   await file.dispatchEvent('cancel',{bubbles:true});await expect(dialog).toBeVisible();
   await file.setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
   await file.dispatchEvent('cancel',{bubbles:true});await expect(dialog).toBeVisible();await expect(dialog.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-v5'))).toBe(before);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(before);
   await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);
 });
 
 test('showcase preview has bulk selection and the shared reference picker has the complete catalog',async({page})=>{
   // Compare UI membership against authored data, independently of generated browser projections.
   // The uninitialized traveler bases are intentionally not selectable reference forms.
-  const manifest=JSON.parse(readFileSync('src/game-data/data/manifest.json','utf8')) as {characters:string[]};
+  const manifest=catalogInventory() as {characters:string[]};
   const referenceNames=manifest.characters.filter(id=>!['aether','lumine'].includes(id)).map(id=>
     (JSON.parse(readFileSync(`src/game-data/data/characters/${id}.json`,'utf8')) as {identity:{name:string}}).identity.name);
   test.skip(!existsSync('.references/enka/official-example.json'),'Requires recorded public showcase.');

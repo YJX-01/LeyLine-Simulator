@@ -1,3 +1,4 @@
+import { packDocument } from '../../src/web/src/domain/content-document';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { projectSchema, type Project } from '@leyline/schema';
@@ -98,7 +99,7 @@ describe.skipIf(!existsSync(source))('combat-state format derivatives of the rec
 
   it('round-trips annotations, returns state provenance and retains missing combat facts', async () => {
     const project = await queryProject();
-    const roundTrip = importProject(JSON.stringify(project));
+    const roundTrip = importProject(JSON.stringify(packDocument('axis', project)));
     expect(roundTrip).toEqual(project);
     const result = evaluateTimeline(roundTrip);
     expect(result.status).toBe('partial'); // Recorded C6 and absent enemy/crit/reaction remain unresolved.

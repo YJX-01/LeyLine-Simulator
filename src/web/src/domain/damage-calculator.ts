@@ -1,3 +1,5 @@
+import { APP_VERSION } from '@leyline/schema/version';
+import { unpackDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
 import { damageCalculatorSchema, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
 import { loadAccountGameData } from './account-presentation';
@@ -58,7 +60,7 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
   const actorId = addActorFromBuild(project, build);
   const recordId = nextRecordId(project);
   project.timeline.push({ id: recordId, actor: actorId, timeMs: 0, order: 0, kind: 'damage', definition: `${actorId}-real-damage`, damage });
-  return damageCalculatorSchema.parse({ schemaVersion: 4, kind: 'damage-calculator', project, actorId, recordId });
+  return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, recordId });
 }
 
 export function calculatorRequest(input: DamageCalculatorDocument, taskId: number): AxisRequest {
@@ -84,7 +86,7 @@ export function calculatorRequest(input: DamageCalculatorDocument, taskId: numbe
 
 export function parseDamageCalculator(content: string): DamageCalculatorDocument {
   if (new TextEncoder().encode(content).byteLength > 8 * 1024 * 1024) throw new Error('计算文件超过8 MiB。');
-  const document = damageCalculatorSchema.parse(JSON.parse(content));
+  const document = damageCalculatorSchema.parse(unpackDocument('damage-calculator', JSON.parse(content)));
   calculatorRequest(document, 0);
   return document;
 }
@@ -94,5 +96,5 @@ export function copyProjectForCalculator(input: Project): DamageCalculatorDocume
   const record = project.timeline.find(record => record.kind === 'damage' && record.damage);
   const actorId = record?.actor ?? project.candidate.actors.find(actor => actor.build)?.id;
   if (!actorId) throw new Error('当前轴没有完整配装，请先准备队伍。');
-  return damageCalculatorSchema.parse({ schemaVersion: 4, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });
+  return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });
 }

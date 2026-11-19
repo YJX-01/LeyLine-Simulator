@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { finiteSchema, idSchema } from '../common/values';
 import { elements } from '../content/stats';
@@ -60,7 +61,7 @@ export const calculationTemplateSchema = z.discriminatedUnion('id', [
 });
 /** Data-only template selection. Operations, signatures, stages and ports belong to TS. */
 export const formulaDefinitionSchema = z.object({
-  schemaVersion: z.literal(2), identity: definitionRefSchema, template: calculationTemplateSchema,
+  schemaVersion: z.literal(APP_VERSION), identity: definitionRefSchema, template: calculationTemplateSchema,
   sources: z.array(idSchema).min(1).max(1000).refine(ids => new Set(ids).size === ids.length, '来源标识重复。'),
 }).strict();
 export const calculationTemplateIds = Object.freeze(calculationTemplateSchema.options.map(option => option.shape.id.value));

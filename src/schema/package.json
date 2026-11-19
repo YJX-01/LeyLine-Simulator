@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./version": "./src/version.mjs",
     "./enka": "./src/exchange/enka.ts"
   },
   "dependencies": {

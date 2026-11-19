@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema } from '../common/values';
 import { characterFieldsSchema, weaponFieldsSchema, artifactSetFieldsSchema } from './entity-fields';
@@ -24,7 +25,7 @@ function validateProfile(bundle: CalculationBundle, ruleIds: z.infer<typeof refs
   if (ruleIds.some(reference => !effects.has(definitionKey(reference)))) validation.addIssue({ code: 'custom', path: ['calculation', 'ruleIds'], message: '内容快照缺少规则的精确版本。' });
 }
 export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend({
-  schemaVersion: z.literal(3), namespace: definitionRefSchema.shape.namespace, attributes: characterFieldsSchema.shape.attributes.extend({ outputs: z.record(statSchema, definitionRefSchema) }),
+  schemaVersion: z.literal(APP_VERSION), namespace: definitionRefSchema.shape.namespace, attributes: characterFieldsSchema.shape.attributes.extend({ outputs: z.record(statSchema, definitionRefSchema) }),
   talents: z.array(structuredTalentSchema).max(30), passives: z.array(structuredPassiveSchema).max(30),
   constellations: z.array(structuredConstellationSchema).max(6), sources, calculation: profile.extend({ contextCoverageRefs: refs.min(1) }).strict(),
 }).strict().superRefine((character, validation) => {
@@ -91,7 +92,7 @@ export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend(
 });
 
 export const structuredWeaponDefinitionSchema = weaponFieldsSchema.extend({
-  schemaVersion: z.literal(3), kind: z.literal('weapon-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, calculation: profile, coverageRefs: refs.min(1),
+  schemaVersion: z.literal(APP_VERSION), kind: z.literal('weapon-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, calculation: profile, coverageRefs: refs.min(1),
 }).strict().superRefine((weapon, validation) => {
   validateProfile(weapon.calculation.bundle, weapon.calculation.ruleIds, validation);
   for (const reference of weapon.coverageRefs) {
@@ -100,7 +101,7 @@ export const structuredWeaponDefinitionSchema = weaponFieldsSchema.extend({
   }
 });
 export const structuredArtifactSetDefinitionSchema = artifactSetFieldsSchema.extend({
-  schemaVersion: z.literal(3), kind: z.literal('artifact-set-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, rarity: z.number().int().min(1).max(5),
+  schemaVersion: z.literal(APP_VERSION), kind: z.literal('artifact-set-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, rarity: z.number().int().min(1).max(5),
   effects: z.array(z.object({ pieces: z.number().int().min(1).max(5), ruleIds: refs, coverageRefs: refs.min(1) }).strict()).max(5), calculation: profile,
 }).strict().superRefine((set, validation) => {
   validateProfile(set.calculation.bundle, [...set.calculation.ruleIds, ...set.effects.flatMap(effect => effect.ruleIds)], validation);

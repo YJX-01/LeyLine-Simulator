@@ -1,3 +1,4 @@
+import { APP_VERSION, storageKeyFor } from '@leyline/schema/version';
 import {readRollBasis,type EffectiveRollBasis} from '../domain/effective-roll-basis';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -5,7 +6,7 @@ import type { StatKey } from '@leyline/schema';
 import { parseAccount, type AccountArtifact, type LocalAccount } from '../domain/account';
 import { combinationSignature, normalizeEffectiveStats, type ArtifactCombination } from '../domain/artifact-combinations';
 import { effectiveStatOptions } from '../domain/character-loadout-name';
-const key='leyline-artifact-combinations-v1';
+const key=storageKeyFor('artifact-combinations');
 export const useArtifactCombinationsStore=defineStore('artifact-combinations',()=>{
   const combinations=ref<ArtifactCombination[]>([]),error=ref('');
   try {
@@ -18,7 +19,7 @@ export const useArtifactCombinationsStore=defineStore('artifact-combinations',()
       if(entry.favorite!==undefined && (!Number.isInteger(entry.favorite) || entry.favorite<0 || entry.favorite>3))throw new Error();
       if(entry.name!==undefined && (typeof entry.name!=='string' || !entry.name.trim() || entry.name.length>160))throw new Error();
       ids.add(entry.id);
-      const account=parseAccount({schemaVersion: 5, kind:'account',id:entry.accountId,name:'组合',characters:[],artifacts:entry.items});
+      const account=parseAccount({schemaVersion: APP_VERSION, kind:'account',id:entry.accountId,name:'组合',characters:[],artifacts:entry.items});
       if(new Set(account.artifacts.map(item=>item.slot)).size!==account.artifacts.length)throw new Error();
       return {id:entry.id,accountId:entry.accountId,items:account.artifacts,stats:normalizeEffectiveStats(entry.stats),referenceName:entry.referenceName,...(entry.nameMode===undefined?{}:{nameMode:entry.nameMode}),basis:readRollBasis(entry.basis),...(entry.name===undefined?{}:{name:entry.name}),...(entry.favorite===undefined?{}:{favorite:entry.favorite})};
     });

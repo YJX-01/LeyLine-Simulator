@@ -9,7 +9,7 @@ import { boundFormulaSchema, calculationBindingSchema } from '../calculation/bin
 export const structuredHitSchema = z.object({
   id: idSchema, element: z.enum(elements), category: z.enum(['normal', 'charged', 'plunge', 'skill', 'burst']),
   parameter: idSchema.optional(),
-  snapshot: z.object({ sourceSkillId: idSchema, attributes: z.array(statSchema).min(1).max(30), source: contentSourceSchema }).strict().optional(),
+  snapshot: z.object({ sourceSkillId: idSchema, attributes: z.array(statSchema).min(1).max(30), source: contentSourceSchema.optional() }).strict().optional(),
   base: boundFormulaSchema, sources: z.array(idSchema).min(1).max(1000),
   outputs: z.array(z.object({ id: idSchema, family: idSchema, origin: z.enum(['talent', 'triggered']), invocation: boundFormulaSchema,
     coverageRefs: z.array(definitionRefSchema).min(1).max(1000) }).strict()).max(1000),

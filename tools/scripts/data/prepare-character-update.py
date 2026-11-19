@@ -97,22 +97,27 @@ def merge_parameters(talent, incoming):
 
 
 def flag_changed_parameters(candidate, skill_id):
-    for proof in candidate['calculation']['bundle']['coverage']:
-        scope = proof['scope']
-        if scope['kind'] == 'context' or scope.get('skillId') == skill_id:
-            proof['evidence'] = 'declared'
-            proof['resolution'] = 'unavailable'
-            proof['reason'] = '候选参数发生变化，须重新核验来源与已绑定的输出。'
+    talent = next(t for t in candidate['talents'] if t['id'] == skill_id)
+    def invalidate(key):
+        name = key + '-pending'
+        candidate['support'][name] = {**candidate['support'][key], 'evidence': 'declared',
+            'resolution': 'unavailable', 'reason': '候选参数发生变化，须重新核验。'}
+        return name
+    for hit in talent['hits']:
+        hit['support'] = invalidate(hit['support'])
+    if not candidate['contextSupport'].endswith('-pending'):
+        candidate['contextSupport'] = invalidate(candidate['contextSupport'])
 
 
+app_version = read(ROOT / 'package.json')['version']
 changes = []
 directory = ROOT / 'src/game-data/data/characters'
 paths = {path.stem: path for path in directory.glob('*.json')}
 paths.update({key: directory / f'{key}.json' for key in supplement['bindings']})
 for identifier, path in sorted(paths.items()):
     original = read(path)
-    if original.get('schemaVersion') != 3:
-        raise ValueError(f'{path}: expected current character metadata version 3')
+    if original.get('schemaVersion') != app_version:
+        raise ValueError(f'{path}: expected character metadata version {app_version}')
     candidate = copy.deepcopy(original)
     if identifier in supplement['bindings']:
         binding = supplement['bindings'][identifier]

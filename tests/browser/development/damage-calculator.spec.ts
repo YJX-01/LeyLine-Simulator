@@ -1,3 +1,4 @@
+import { readDocument } from '../../helpers/browser-document';
 import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
@@ -48,7 +49,7 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
   const download = await downloadPromise;
   const content = readFileSync((await download.path())!, 'utf8');
-  const savedDocument: DamageCalculatorDocument = JSON.parse(content);
+  const savedDocument: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', content);
   expect(savedDocument.project.candidate.actors[0].build!.weapon.id).toBe('oldmercspal');
   expect(savedDocument.baseline!.candidate.actors[0].build!.weapon.id).toBe('wastergreatsword');
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '伤害计算.json', mimeType: 'application/json', buffer: Buffer.from(content) });
@@ -105,11 +106,12 @@ test('calculator creates a named independent Kaeya capture, saves it and recompu
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-delta').textContent())?.replaceAll(',', ''))).toBeCloseTo(changed - expected, 5);
   const downloadPromise = page.waitForEvent('download');
   await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
-  const saved = JSON.parse(readFileSync((await (await downloadPromise).path())!, 'utf8')) as DamageCalculatorDocument;
+  const savedFile = readFileSync((await (await downloadPromise).path())!, 'utf8');
+  const saved = await readDocument<DamageCalculatorDocument>(page, 'damage-calculator', savedFile);
   expect(saved.project.timeline.filter(record => record.kind === 'action')).toHaveLength(0);
   expect(saved.project.timeline.filter(record => record.kind === 'capture')).toHaveLength(1);
   expect(saved.project.timeline.filter(record => record.kind === 'damage')).toHaveLength(1);
-  await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '独立捕获计算.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(saved)) });
+  await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '独立捕获计算.json', mimeType: 'application/json', buffer: Buffer.from(savedFile) });
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(changed, 5);
   await page.screenshot({ path: 'artifacts/r2-calculator-capture.png', fullPage: true });
 });
@@ -151,7 +153,7 @@ test('Kaeya C3 sequential talent editing, dirty navigation and formal Worker res
 
 test('actual comparison Worker recomputes Kaeya C3 after current document serialization', async ({ page }) => {
   const build: Build = {
-    ...catalogSnapshotFields('kaeya', 'dullblade'),
+    ...await catalogSnapshotFields('kaeya', 'dullblade'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 3, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1,
   };
   await page.goto('/');
@@ -164,7 +166,9 @@ test('actual comparison Worker recomputes Kaeya C3 after current document serial
     document.baseline = JSON.parse(JSON.stringify(document.project));
     const candidate = document.project.candidate.actors[0].build;
     candidate.talents.skill = 8;
-    const reopened = parseDamageCalculator(JSON.stringify(document));
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    const reopened = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', document)));
     const worker = new Worker('/src/workers/axis.worker.ts?worker_file&type=module', { type: 'module' });
     try {
       return await new Promise<AxisResponse>((resolve, reject) => {
@@ -201,7 +205,7 @@ test('calculator reads the recorded public showcase explicitly without writing l
     const selected = preview.rows.find((row: { character: { showcase: { build: Build } } }) => row.character.showcase.build.character.id === 'xingqiu');
     confirmEnkaImport(next, preview, [selected.character.id], false);
     const store = useAccountStore();
-    store.importContent(JSON.stringify(next));
+    store.commitEdit(next);
     return { account: JSON.stringify(store.account), axis: JSON.stringify(useAxisWorkspaceStore().project), build: selected.character.showcase.build as Build };
   }, JSON.parse(readFileSync(source, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
@@ -245,7 +249,7 @@ test('missing-build derivative of the original account stays selectable and carr
     confirmEnkaImport(next, preview, [row.character.id], true);
     // Missing-field format derivative, never a claim about the recorded player's missing cultivation.
     delete next.characters[0].build;
-    useAccountStore().importContent(JSON.stringify(next));
+    useAccountStore().commitEdit(next);
     return { account: JSON.stringify(useAccountStore().account), equipment: next.characters[0].equipment };
   }, JSON.parse(readFileSync(source, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
@@ -265,17 +269,17 @@ test('missing-build derivative of the original account stays selectable and carr
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
   const downloadPromise = page.waitForEvent('download');
   await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
-  const saved: DamageCalculatorDocument = JSON.parse(readFileSync((await (await downloadPromise).path())!, 'utf8'));
+  const saved: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', readFileSync((await (await downloadPromise).path())!, 'utf8'));
   const copied = saved.project.candidate.actors[0].build!;
   expect(copied.artifacts.map(item => item.id)).toEqual(Object.values(before.equipment));
   expect(copied.artifacts).toHaveLength(5);
   expect(copied.weapon.id).toBe('dullblade');
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-v5'))).toBe(before.account);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(before.account);
 });
 
 test('old saved content changes only after review and explicit adoption in the calculator copy', async ({ page }) => {
   const build: Build = {
-    ...catalogSnapshotFields('kaeya', 'dullblade'),
+    ...await catalogSnapshotFields('kaeya', 'dullblade'),
     sets: [], artifacts: [], level: 90, ascension: 6, constellation: 3, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1,
   };
   // An earlier proof scope carried in a current-format derivative.
@@ -290,7 +294,9 @@ test('old saved content changes only after review and explicit adoption in the c
     const { createDamageCalculation } = await import('/src/domain/damage-calculator.ts');
     // @ts-expect-error Vite browser source URL.
     const { defaultEnemy } = await import('/src/domain/real-project.ts');
-    return JSON.stringify(createDamageCalculation(build, { skillId: 'kaeya.skill', hitId: 'kaeya.skill.param1', outputId: 'kaeya.skill.param1.damage', crit: 'noncritical', reaction: 'none' }, defaultEnemy()));
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    return JSON.stringify(packDocument('damage-calculator', createDamageCalculation(build, { skillId: 'kaeya.skill', hitId: 'kaeya.skill.param1', outputId: 'kaeya.skill.param1.damage', crit: 'noncritical', reaction: 'none' }, defaultEnemy())));
   }, build);
   await page.getByTestId('workspace-nav-calculator').click();
   const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
@@ -355,7 +361,7 @@ for (const entry of [
   const downloadPromise = page.waitForEvent('download');
   await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
   const content = readFileSync((await (await downloadPromise).path())!, 'utf8');
-  const saved = JSON.parse(content) as DamageCalculatorDocument;
+  const saved = await readDocument<DamageCalculatorDocument>(page, 'damage-calculator', content);
   expect(saved.project.timeline).toHaveLength(1);
   expect(saved.project.candidate.actors[0].build!.character.calculation.bundle.coverage.some(proof => proof.scope.kind === 'context' && proof.resolution === 'unavailable')).toBe(true);
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: `${entry.name}单次计算.json`, mimeType: 'application/json', buffer: Buffer.from(content) });

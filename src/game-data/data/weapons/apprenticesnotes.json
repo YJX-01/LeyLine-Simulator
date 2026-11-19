@@ -221,8 +221,8 @@
   ],
   "calculation": {
     "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
+      "schemaVersion": "0.1.0",
+      "runtimeVersion": "0.1.0",
       "requiredFeatures": [
         "fixed-templates-v1",
         "coverage-v1"
@@ -230,24 +230,15 @@
       "sources": [
         {
           "id": "content.weapon.apprenticesnotes",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/weapons.json#apprenticesnotes"
+          "kind": "definition"
         },
         {
           "id": "content.apprenticesnotes.review-source-2",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/weapons/apprenticesnotes.json"
+          "kind": "definition"
         },
         {
           "id": "content.apprenticesnotes.review-source-3",
-          "kind": "repo",
-          "repository": "TwiceDrop/genshin_artifact",
-          "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
-          "path": "mona_core/src/weapon/weapons/catalysts/apprentices_notes.rs"
+          "kind": "definition"
         }
       ],
       "tables": [],
@@ -295,7 +286,7 @@
     },
     "ruleIds": []
   },
-  "schemaVersion": 3,
+  "schemaVersion": "0.1.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
   "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",

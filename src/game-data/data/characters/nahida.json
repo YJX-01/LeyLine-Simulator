@@ -1,9 +1,9 @@
 {
+  "schemaVersion": "0.1.0",
   "kind": "character-definition",
+  "namespace": "builtin",
   "id": "nahida",
   "revision": "4",
-  "dataVersion": "genshin-db-8e5badd-content-v3",
-  "origin": "builtin",
   "identity": {
     "name": "纳西妲",
     "title": "白草净华",
@@ -14,317 +14,21 @@
     "gameId": 10000073,
     "region": "须弥"
   },
+  "attributes": {
+    "base": {
+      "hp": 806.5087,
+      "attack": 23.275,
+      "defense": 49.0606,
+      "critRate": 0.05,
+      "critDamage": 0.5
+    },
+    "specialized": "elementalMastery"
+  },
   "progression": {
-    "curves": {
-      "hp": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ],
-      "attack": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        9.028,
-        9.317,
-        9.606,
-        9.895,
-        10.184,
-        10.473,
-        10.762,
-        11.051,
-        11.34,
-        11.629
-      ],
-      "defense": [
-        0,
-        1,
-        1.083,
-        1.166,
-        1.25,
-        1.333,
-        1.417,
-        1.5,
-        1.584,
-        1.668,
-        1.751,
-        1.835,
-        1.919,
-        2.003,
-        2.088,
-        2.172,
-        2.256,
-        2.341,
-        2.425,
-        2.51,
-        2.594,
-        2.679,
-        2.764,
-        2.849,
-        2.934,
-        3.019,
-        3.105,
-        3.19,
-        3.275,
-        3.361,
-        3.446,
-        3.532,
-        3.618,
-        3.704,
-        3.789,
-        3.875,
-        3.962,
-        4.048,
-        4.134,
-        4.22,
-        4.307,
-        4.393,
-        4.48,
-        4.567,
-        4.653,
-        4.74,
-        4.827,
-        4.914,
-        5.001,
-        5.089,
-        5.176,
-        5.263,
-        5.351,
-        5.438,
-        5.526,
-        5.614,
-        5.702,
-        5.79,
-        5.878,
-        5.966,
-        6.054,
-        6.142,
-        6.23,
-        6.319,
-        6.407,
-        6.496,
-        6.585,
-        6.673,
-        6.762,
-        6.851,
-        6.94,
-        7.029,
-        7.119,
-        7.208,
-        7.297,
-        7.387,
-        7.476,
-        7.566,
-        7.656,
-        7.746,
-        7.836,
-        7.926,
-        8.016,
-        8.106,
-        8.196,
-        8.286,
-        8.377,
-        8.467,
-        8.558,
-        8.649,
-        8.739,
-        8.83,
-        8.921,
-        9.012,
-        9.103,
-        9.195,
-        9.286,
-        9.377,
-        9.469,
-        9.56,
-        9.652
-      ]
+    "curveIds": {
+      "hp": "GROW_CURVE_HP_S5",
+      "attack": "GROW_CURVE_ATTACK_S5",
+      "defense": "GROW_CURVE_HP_S5"
     },
     "promotion": [
       {
@@ -377,922 +81,6 @@
         "specialized": 115.2
       }
     ]
-  },
-  "calculation": {
-    "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.nahida.ascension-four",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/talents/nahida.json#passive2"
-        },
-        {
-          "id": "content.nahida.growth",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/characters.json#nahida"
-        },
-        {
-          "id": "content.nahida.normal.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#nahida/combat1"
-        },
-        {
-          "id": "content.nahida.skill.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#nahida/combat2"
-        },
-        {
-          "id": "content.nahida.burst.parameters",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/talents.json#nahida/combat3"
-        },
-        {
-          "id": "genshin-db.nahida.skill",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/talents/nahida.json"
-        }
-      ],
-      "tables": [],
-      "formulas": [
-        {
-          "schemaVersion": 2,
-          "identity": {
-            "namespace": "builtin",
-            "id": "nahida.ascension-four",
-            "revision": "1"
-          },
-          "template": {
-            "id": "bounded-stat-bonus",
-            "revision": "1",
-            "input": "em",
-            "stat": "elementalMastery",
-            "threshold": 200,
-            "channels": [
-              {
-                "output": "bonus",
-                "rate": 0.001,
-                "cap": 0.8
-              },
-              {
-                "output": "crit",
-                "rate": 0.0003,
-                "cap": 0.24
-              }
-            ]
-          },
-          "sources": [
-            "genshin-db.nahida.ascension-four"
-          ]
-        },
-        {
-          "schemaVersion": 2,
-          "identity": {
-            "namespace": "builtin",
-            "id": "nahida.skill.tri-karma.base",
-            "revision": "1"
-          },
-          "template": {
-            "id": "scaled-damage",
-            "terms": [
-              {
-                "stat": "attack",
-                "attribute": "attack",
-                "ratio": "attackRate"
-              },
-              {
-                "stat": "elementalMastery",
-                "attribute": "em",
-                "ratio": "emRate"
-              }
-            ],
-            "output": "base",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.nahida.skill"
-          ]
-        }
-      ],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "nahida.ascension-four.tri-karma-bonus",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.nahida.ascension-four"
-          ],
-          "activation": {
-            "ascension": 4
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "formula",
-            "formula": {
-              "namespace": "builtin",
-              "id": "nahida.ascension-four",
-              "revision": "1"
-            },
-            "inputs": {
-              "em": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.elementalMastery",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              }
-            },
-            "output": "bonus"
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.damageBonus",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {
-            "skillIds": [
-              "nahida.skill"
-            ],
-            "hitIds": [
-              "nahida.skill.param3"
-            ]
-          },
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "nahida.ascension-four.tri-karma-bonus",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "nahida.ascension-four.tri-karma-crit",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.nahida.ascension-four"
-          ],
-          "activation": {
-            "ascension": 4
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "formula",
-            "formula": {
-              "namespace": "builtin",
-              "id": "nahida.ascension-four",
-              "revision": "1"
-            },
-            "inputs": {
-              "em": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.elementalMastery",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              }
-            },
-            "output": "crit"
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.critRate",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {
-            "skillIds": [
-              "nahida.skill"
-            ],
-            "hitIds": [
-              "nahida.skill.param3"
-            ]
-          },
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "nahida.ascension-four.tri-karma-crit",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param1",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param2",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param3",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param4",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param4",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param5",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param5",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param7",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param7",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param8",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param8",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.normal.param9",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.normal",
-            "hitId": "nahida.normal.param9",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.normal.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.skill.param1",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.skill",
-            "hitId": "nahida.skill.param1",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.skill.param2",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.skill",
-            "hitId": "nahida.skill.param2",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.skill.param3",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "hit",
-            "skillId": "nahida.skill",
-            "hitId": "nahida.skill.param3",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
-          "sources": [
-            "content.nahida.skill.parameters",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.nahida.context",
-            "revision": "4"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "nahida",
-            "revision": "4"
-          },
-          "scope": {
-            "kind": "context",
-            "maxConstellation": 0
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
-          "sources": [
-            "content.nahida.growth",
-            "kqm.ordinary"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-bonus",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "nahida.ascension-four.tri-karma-crit",
-                  "revision": "1"
-                }
-              ],
-              "reason": "角色的队伍影响及未表达机制仍待逐项核验。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": [],
-    "contextCoverageRefs": [
-      {
-        "namespace": "builtin",
-        "id": "coverage.nahida.context",
-        "revision": "4"
-      }
-    ]
-  },
-  "schemaVersion": 3,
-  "namespace": "builtin",
-  "attributes": {
-    "base": {
-      "hp": 806.5087,
-      "attack": 23.275,
-      "defense": 49.0606,
-      "critRate": 0.05,
-      "critDamage": 0.5
-    },
-    "specialized": "elementalMastery",
-    "outputs": {
-      "hp": {
-        "namespace": "builtin",
-        "id": "attribute.hp",
-        "revision": "1"
-      },
-      "hpPercent": {
-        "namespace": "builtin",
-        "id": "attribute.hpPercent",
-        "revision": "1"
-      },
-      "attack": {
-        "namespace": "builtin",
-        "id": "attribute.attack",
-        "revision": "1"
-      },
-      "attackPercent": {
-        "namespace": "builtin",
-        "id": "attribute.attackPercent",
-        "revision": "1"
-      },
-      "defense": {
-        "namespace": "builtin",
-        "id": "attribute.defense",
-        "revision": "1"
-      },
-      "defensePercent": {
-        "namespace": "builtin",
-        "id": "attribute.defensePercent",
-        "revision": "1"
-      },
-      "critRate": {
-        "namespace": "builtin",
-        "id": "attribute.critRate",
-        "revision": "1"
-      },
-      "critDamage": {
-        "namespace": "builtin",
-        "id": "attribute.critDamage",
-        "revision": "1"
-      },
-      "energyRecharge": {
-        "namespace": "builtin",
-        "id": "attribute.energyRecharge",
-        "revision": "1"
-      },
-      "elementalMastery": {
-        "namespace": "builtin",
-        "id": "attribute.elementalMastery",
-        "revision": "1"
-      },
-      "physicalBonus": {
-        "namespace": "builtin",
-        "id": "attribute.physicalBonus",
-        "revision": "1"
-      },
-      "anemoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.anemoBonus",
-        "revision": "1"
-      },
-      "geoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.geoBonus",
-        "revision": "1"
-      },
-      "electroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.electroBonus",
-        "revision": "1"
-      },
-      "hydroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.hydroBonus",
-        "revision": "1"
-      },
-      "pyroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.pyroBonus",
-        "revision": "1"
-      },
-      "cryoBonus": {
-        "namespace": "builtin",
-        "id": "attribute.cryoBonus",
-        "revision": "1"
-      },
-      "dendroBonus": {
-        "namespace": "builtin",
-        "id": "attribute.dendroBonus",
-        "revision": "1"
-      },
-      "healingBonus": {
-        "namespace": "builtin",
-        "id": "attribute.healingBonus",
-        "revision": "1"
-      }
-    }
   },
   "talents": [
     {
@@ -1531,445 +319,114 @@
           "id": "nahida.normal.param1",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param1",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param2",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param2",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param3",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param3",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param3",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param3"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param4",
           "element": "dendro",
           "category": "normal",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param4",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param4",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param4",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param4"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param5",
           "element": "dendro",
           "category": "charged",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param5",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param5",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param5",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param5"
             }
           ],
-          "parameter": "param5"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param7",
           "element": "dendro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param7",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param7",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param7",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param7"
             }
           ],
-          "parameter": "param7"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param8",
           "element": "dendro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param8",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param8",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param8",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param8"
             }
           ],
-          "parameter": "param8"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.normal.param9",
           "element": "dendro",
           "category": "plunge",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.normal",
-                "parameterId": "param9",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.normal.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param9",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.normal.param9",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param9"
             }
           ],
-          "parameter": "param9"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.nahida.normal.parameters"
       ]
     },
     {
@@ -2184,219 +641,48 @@
           "id": "nahida.skill.param1",
           "element": "dendro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.skill",
-                "parameterId": "param1",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param1",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.skill.param1",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param1"
             }
           ],
-          "parameter": "param1"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.skill.param2",
           "element": "dendro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "attack-damage-base",
-              "revision": "1"
-            },
-            "bindings": {
-              "attribute": {
-                "kind": "attribute",
-                "actor": {
-                  "role": "owner"
-                },
-                "key": {
-                  "namespace": "builtin",
-                  "id": "attribute.attack",
-                  "revision": "1"
-                },
-                "at": {
-                  "kind": "current",
-                  "phase": "same"
-                }
-              },
-              "ratio": {
-                "kind": "talent-parameter",
-                "actor": {
-                  "role": "owner"
-                },
-                "skillId": "nahida.skill",
-                "parameterId": "param2",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                }
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param2",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.skill.param2",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param2"
             }
           ],
-          "parameter": "param2"
+          "outputs": [],
+          "support": "hit-unavailable"
         },
         {
           "id": "nahida.skill.param3",
           "element": "dendro",
           "category": "skill",
-          "base": {
-            "formula": {
-              "namespace": "builtin",
-              "id": "damage-sum-2",
-              "revision": "1"
-            },
-            "bindings": {
-              "term0": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "attack-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.attack",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nahida.skill",
-                    "parameterId": "param3",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              },
-              "term1": {
-                "kind": "formula",
-                "formula": {
-                  "namespace": "builtin",
-                  "id": "elementalMastery-damage-base",
-                  "revision": "1"
-                },
-                "inputs": {
-                  "attribute": {
-                    "kind": "attribute",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "key": {
-                      "namespace": "builtin",
-                      "id": "attribute.elementalMastery",
-                      "revision": "1"
-                    },
-                    "at": {
-                      "kind": "current",
-                      "phase": "same"
-                    }
-                  },
-                  "ratio": {
-                    "kind": "talent-parameter",
-                    "actor": {
-                      "role": "owner"
-                    },
-                    "skillId": "nahida.skill",
-                    "parameterId": "param4",
-                    "type": {
-                      "kind": "quantity",
-                      "unit": "scalar"
-                    }
-                  }
-                },
-                "output": "base"
-              }
-            },
-            "output": "base",
-            "captures": []
-          },
-          "sources": [
-            "content.nahida.skill.parameters"
-          ],
-          "outputs": [],
-          "coverageRefs": [
+          "parameter": "param3",
+          "scaling": [
             {
-              "namespace": "builtin",
-              "id": "coverage.nahida.skill.param3",
-              "revision": "4"
+              "stat": "attack",
+              "parameter": "param3"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param4"
             }
           ],
-          "parameter": "param3"
+          "outputs": [],
+          "support": "hit-unavailable"
         }
-      ],
-      "sources": [
-        "content.nahida.skill.parameters"
       ]
     },
     {
@@ -2636,10 +922,7 @@
           ]
         }
       ],
-      "hits": [],
-      "sources": [
-        "content.nahida.burst.parameters"
-      ]
+      "hits": []
     }
   ],
   "passives": [
@@ -2647,33 +930,23 @@
       "id": "nahida.passive1",
       "name": "净善摄受明论",
       "description": "施放心景幻成时，摩耶之殿将获得以下效果：\n依据队伍中元素精通最高的角色的元素精通数值的25%，提高领域内当前场上角色的元素精通。\n通过这种方式，至多提升250点元素精通。",
-      "unlockAscension": 1,
-      "ruleIds": []
+      "unlockAscension": 1
     },
     {
       "id": "nahida.passive2",
       "name": "慧明缘觉智论",
       "description": "基于纳西妲元素精通超过200点的部分，每1点元素精通能使所闻遍计的灭净三业造成的伤害提升0.1%，暴击率提升0.03%。\n通过这种方式，至多使灭净三业造成的伤害提升80%，暴击率提升24%。",
       "unlockAscension": 4,
-      "ruleIds": [
-        {
-          "namespace": "builtin",
-          "id": "nahida.ascension-four.tri-karma-bonus",
-          "revision": "1"
-        },
-        {
-          "namespace": "builtin",
-          "id": "nahida.ascension-four.tri-karma-crit",
-          "revision": "1"
-        }
+      "effects": [
+        "nahida.ascension-four.tri-karma-bonus",
+        "nahida.ascension-four.tri-karma-crit"
       ]
     },
     {
       "id": "nahida.passive3",
       "name": "诸相随念净行",
       "description": "纳西妲能够通过所闻遍计，与一定范围内的部分采集物进行交互。\n或许还有其他的效果…",
-      "unlockAscension": null,
-      "ruleIds": []
+      "unlockAscension": null
     }
   ],
   "constellations": [
@@ -2681,15 +954,13 @@
       "rank": 1,
       "name": "心识蕴藏之种",
       "description": "展开摩耶之殿计算队伍中特定元素类型的角色数量时，额外计入火元素、雷元素、水元素的角色各1名。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 2,
       "name": "正等善见之根",
       "description": "处于纳西妲自身施加的蕴种印状态下的敌人，将受到以下效果影响：\n·受到的燃烧、绽放、超绽放、烈绽放反应伤害能够造成暴击，暴击率固定为20%，暴击伤害固定为100%，该效果提供的暴击率可以与使对应元素反应能够造成暴击的同类效果提供的暴击率叠加；\n·受到原激化、超激化、蔓激化反应影响后的8秒内，防御力降低30%；\n·受到月绽放反应伤害的暴击率提升10%，暴击伤害提升20%。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 3,
@@ -2700,15 +971,13 @@
           "category": "skill",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 4,
       "name": "比量现行之茎",
       "description": "附近处于所闻遍计的蕴种印状态下的敌人数量为1/2/3/4或更多时，纳西妲的元素精通提升100/120/140/160点。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     },
     {
       "rank": 5,
@@ -2719,19 +988,142 @@
           "category": "burst",
           "levels": 3
         }
-      ],
-      "ruleIds": []
+      ]
     },
     {
       "rank": 6,
       "name": "大辨圆成之实",
       "description": "施放心景幻成后，纳西妲的普通攻击或重击命中处于所闻遍计的蕴种印状态下的敌人时，将对该敌人及其所处连结中的所有敌人释放灭净三业·业障除，基于纳西妲攻击力的200%与元素精通的400%，造成草元素伤害。\n灭净三业·业障除造成的伤害视为元素战技伤害，每0.2秒至多触发一次。\n该效果至多持续10秒，将在纳西妲释放6次灭净三业·业障除后移除。",
-      "talentBonuses": [],
-      "ruleIds": []
+      "talentBonuses": []
     }
   ],
-  "sources": [
-    "content.nahida.growth",
-    "content.character-curves"
-  ]
+  "formulas": [
+    {
+      "id": "nahida.ascension-four",
+      "template": {
+        "id": "bounded-stat-bonus",
+        "revision": "1",
+        "input": "em",
+        "stat": "elementalMastery",
+        "threshold": 200,
+        "channels": [
+          {
+            "output": "bonus",
+            "rate": 0.001,
+            "cap": 0.8
+          },
+          {
+            "output": "crit",
+            "rate": 0.0003,
+            "cap": 0.24
+          }
+        ]
+      }
+    },
+    {
+      "id": "nahida.skill.tri-karma.base",
+      "template": {
+        "id": "scaled-damage",
+        "terms": [
+          {
+            "stat": "attack",
+            "attribute": "attack",
+            "ratio": "attackRate"
+          },
+          {
+            "stat": "elementalMastery",
+            "attribute": "em",
+            "ratio": "emRate"
+          }
+        ],
+        "output": "base",
+        "revision": "1"
+      }
+    }
+  ],
+  "effects": [
+    {
+      "id": "nahida.ascension-four.tri-karma-bonus",
+      "target": "attribute.damageBonus",
+      "value": {
+        "call": "nahida.ascension-four",
+        "inputs": {
+          "em": {
+            "stat": "elementalMastery"
+          }
+        },
+        "output": "bonus"
+      },
+      "activation": {
+        "ascension": 4
+      },
+      "appliesTo": {
+        "skillIds": [
+          "nahida.skill"
+        ],
+        "hitIds": [
+          "nahida.skill.param3"
+        ]
+      }
+    },
+    {
+      "id": "nahida.ascension-four.tri-karma-crit",
+      "target": "attribute.critRate",
+      "value": {
+        "call": "nahida.ascension-four",
+        "inputs": {
+          "em": {
+            "stat": "elementalMastery"
+          }
+        },
+        "output": "crit"
+      },
+      "activation": {
+        "ascension": 4
+      },
+      "appliesTo": {
+        "skillIds": [
+          "nahida.skill"
+        ],
+        "hitIds": [
+          "nahida.skill.param3"
+        ]
+      }
+    }
+  ],
+  "support": {
+    "hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable",
+          "rules": [
+            "nahida.ascension-four.tri-karma-bonus",
+            "nahida.ascension-four.tri-karma-crit"
+          ]
+        }
+      ]
+    },
+    "context-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "explicit-output-scope",
+          "resolution": "unavailable",
+          "rules": [
+            "nahida.ascension-four.tri-karma-bonus",
+            "nahida.ascension-four.tri-karma-crit"
+          ]
+        }
+      ]
+    }
+  },
+  "contextSupport": "context-unavailable"
 }

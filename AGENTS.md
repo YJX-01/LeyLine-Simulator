@@ -6,7 +6,7 @@ The foundation refactor and its item-by-item review are complete. U1 was explici
 
 ## Current work boundary
 
-Keep implemented code, validated contracts, source evidence and essential product requirements. Historical stage plans, batch ledgers and handoff narratives are available through Git; the pre-reset snapshot is commit 37ab994. No replacement product implementation plan is approved.
+Keep implemented code, validated contracts, source evidence and essential product requirements. Historical stage plans, batch ledgers and handoff narratives are available through Git; the pre-reset snapshot is commit 37ab994. The approved character metadata change covers compact character files, direct catalog loading, source cleanup and moving the independent damage calculator into the Project group.
 
 Current requirements live in docs/product-direction.md; concrete capabilities and evidence live in tools/data/README.md#计算支持与验证资料. docs is a flat collection of merged topic documents containing ideas, rationale, standards and general workflows. Dates, specific entities, cases, source records and operational details live with their owning data or module. Follow docs/documentation.md and keep established developer decisions when consolidating.
 
@@ -14,7 +14,7 @@ Consolidate each module's implementation details, operations and retained decisi
 
 ## Project Structure & Module Organization
 
-Four workspaces under src: schema owns shared validated contracts; game-data owns canonical JSON and generated runtime chunks; engine owns attribute/damage and dependency/timeline evaluation; web owns UI, state, Worker, desktop and server adapters. Each implementation lives in its own src; web/desktop and web/server contain platform application code.
+Four workspaces under src: schema owns shared validated contracts; game-data owns canonical JSON and on-demand catalog loading; engine owns attribute/damage and dependency/timeline evaluation; web owns UI, state, Worker, desktop and server adapters. Each implementation lives in its own src; web/desktop and web/server contain platform application code.
 
 All tests and helpers belong in tests, grouped by unit package, integration, browser/development, browser/production, desktop and performance. Assets have one canonical root assets. tools/scripts groups data, assets, checks, build, release, dev and licenses; shared helpers live in tools/lib. docs contains Markdown only; current standards are indexed by docs/README.md. History in archive is excluded from every default command.
 
@@ -25,7 +25,7 @@ Use Node.js 22.12+ and pnpm 11.3.0; CI uses Node.js 24. Run from the repository 
 - `pnpm install --frozen-lockfile`: install declared dependencies and patches.
 - `pnpm dev`: start Vite; `pnpm build`: build production output.
 - `pnpm architecture:check`: enforce workspace boundaries, runtime cycle checks, and archive isolation.
-- `pnpm data:check`: verify canonical content and generated inputs.
+- `pnpm data:check`: validate canonical inputs and compare adopted numerical evidence.
 - `pnpm typecheck` / `pnpm test`: check types and run unit tests.
 - `pnpm build:check` / `pnpm perf:engine`: check size and performance budgets.
 - `pnpm test:e2e`: run browser tests after installing Playwright browsers.
@@ -43,15 +43,15 @@ Import workspace public exports through `@leyline/*`. Only web depends on engine
 
 Add regression tests for changed behavior, with independent expected calculations for mechanics. No numeric coverage threshold is configured. Run relevant data checks, architecture checks, types, tests, and build validation; UI/Worker changes also require browser tests.
 
-Production metadata is strict two-space UTF-8/LF JSON under src/game-data/data. Each character has one complete CharacterDefinition (identity/text, growth, talent parameters and hit bindings, passives, constellations, static rules and honest capabilities), shared by builtin/custom definitions, UI, engine and export. Weapon/set entities and current tables share corresponding schemas. Edit canonical data, run pnpm data:build, and review numeric comparisons with pnpm data:check. Upstream evidence belongs in tools/data/sources, images in assets, derived files in package generated directories. Never read archived tables in active tools. See docs/content.md and tools/data/README.md#内容与装备来源.
+Production metadata is strict two-space UTF-8/LF JSON under src/game-data/data. Each character has one compact CharacterMetadata definition (identity/text, growth, talent parameters and hit bindings, passives, constellations, static rules and honest capabilities), shared by builtin/custom definitions, UI, engine and export. Weapon/set entities and current tables share corresponding schemas. Edit canonical data, run pnpm data:build, and review numeric comparisons with pnpm data:check. Upstream evidence belongs in tools/data/sources, images in assets, runtime projections in Vite modules. Never read archived tables in active tools. See docs/content.md and tools/data/README.md#内容与装备来源.
 
-User update on 2026-11-10: this is a breaking refactor. Support only current document schemas and storage namespaces; remove old document migration, preview/conversion adapters and fallback reads. Reject unsupported file versions. Do not delete existing user files or browser storage as part of code cleanup. Mona/Enka external import previews remain part of the current product.
+User update on 2026-11-10: this is a breaking refactor. Use the root package version (currently 0.1.0) for first-party schema tags and storage namespaces. Support only current document schemas and storage namespaces; remove old document migration, preview/conversion adapters and fallback reads. Reject unsupported file versions. Do not delete existing user files or browser storage as part of code cleanup. Mona/Enka external import previews remain part of the current product.
 
 User update on 2026-11-10 supersedes the YAML choice: JSON first, one common character metadata contract. Use two-space indentation, UTF-8 without BOM, LF and one final newline. Preserve precision, units, IDs and meaningful array order; provenance/support explanations use defined fields; general rationale belongs in docs and entity-specific evidence belongs in tools/data. No YAML/JSONC/JSON5 metadata sources or YAML parser dependency. The shared content-source.mjs and Python content_source.py helpers handle strict JSON.
 
-Generated snapshots belong in src/game-data/generated and web indices in src/web/generated. All maintained assets belong in assets. Asset identity, paths and aliases are maintained in assets/manifest.json. Acquisition inputs belong in tools/data/sources/asset-capture and rights in assets/README.md; canonical vectors live once under assets/game. Upstream image trees and extraction caches live in ignored .references, and capture tools prepare review candidates. Adopted source evidence belongs in tools/data/sources. Archive is excluded from active builds and checks; no active script may read archived tables.
+Read canonical input directly. Derive catalog and display modules on demand in Vite. All maintained assets belong in assets. Asset identity, paths and aliases are maintained in assets/manifest.json. Acquisition inputs belong in tools/data/sources/asset-capture and rights in assets/README.md; canonical vectors live once under assets/game. Upstream image trees and extraction caches live in ignored .references, and capture tools prepare review candidates. Adopted source evidence belongs in tools/data/sources. Archive is excluded from active builds and checks; no active script may read archived tables.
 
-Regenerate with pnpm data:build and review snapshots and direct numeric comparisons with pnpm data:check. Capture sources and prepare candidates explicitly; review before adopting canonical JSON. Ordinary generation stays offline and never overwrites authored metadata. Update content support and assumptions when content changes.
+Prepare local assets with pnpm data:build and review direct numeric comparisons with pnpm data:check. Capture sources and prepare candidates explicitly; review before adopting canonical JSON. Ordinary generation stays offline and never overwrites authored metadata. Update content support and assumptions when content changes.
 
 ## Commits & Repository Hygiene
 

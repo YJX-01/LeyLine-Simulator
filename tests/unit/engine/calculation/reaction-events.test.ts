@@ -1,3 +1,4 @@
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -9,7 +10,7 @@ import { createAccount } from '../../../../src/web/src/domain/account';
 import { confirmMonaImport, previewMonaImport } from '../../../../src/web/src/domain/mona-import';
 
 const root = new URL('../../../../', import.meta.url);
-const read = (path: string) => JSON.parse(readFileSync(new URL('src/game-data/data/' + path + '.json', root), 'utf8'));
+const read = (path: string) => readCalculationData(new URL('src/game-data/data/' + path + '.json', root));
 const ref = (id: string): DefinitionRef => ({ namespace: 'builtin', id, revision: '1' });
 const quantity = (unit: Extract<Value, { kind: 'quantity' }>['unit'], value: number): Value => ({ kind: 'quantity', unit, value });
 const constant = (unit: Extract<Value, { kind: 'quantity' }>['unit'], value: number): CalculationBinding => ({ kind: 'constant', value: quantity(unit, value) });

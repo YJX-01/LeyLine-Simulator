@@ -4,7 +4,7 @@ game保存游戏图标及唯一正式矢量，ui保存装饰。[manifest.json](m
 
 ## 生成与验证
 
-`pnpm data:build`离线校验并复制到.cache/public/assets，生成src/web/generated中的游戏及详情图标索引；Vite分发该构建副本。游戏图片运行时使用本地资源。
+`pnpm data:build`离线校验并复制到.cache/public/assets，由 Vite 从正式资源按需提供游戏及详情图标索引；Vite分发该构建副本。游戏图片运行时使用本地资源。
 
 `pnpm assets:check` 核对当前正式定义的全部图标引用、实际文件、格式、来源配置、别名、预算和缓存版本。浏览器解码实际图标，检查 128px 自然尺寸和可见像素，并验证角色培养页的图标展示。覆盖统计从当前定义实时计算。
 

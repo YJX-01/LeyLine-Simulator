@@ -1,3 +1,5 @@
+import { storageKeyFor } from '@leyline/schema/version';
+import { packDocument, unpackDocument } from '../domain/content-document';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { StatKey } from '@leyline/schema';
@@ -5,13 +7,13 @@ import { effectiveStatOptions, defaultEffectiveStats, effectiveStatGroups } from
 import { parseAccount, type AccountCharacter, type LocalAccount } from '../domain/account';
 
 export interface CharacterLoadout { id: string; name: string; accountId: string; characterId: string; snapshot: LocalAccount }
-const key = 'leyline-character-loadouts-v5';
+const key = storageKeyFor('character-loadouts');
 export const useCharacterLoadoutsStore = defineStore('character-loadouts', () => {
   const loadouts = ref<CharacterLoadout[]>([]);
   const error = ref('');
   const favorites=ref<Record<string,number>>({});
   try {
-    const raw=JSON.parse(localStorage.getItem('leyline-character-favorites-v1') ?? '{}');
+    const raw=JSON.parse(localStorage.getItem(storageKeyFor('character-favorites')) ?? '{}');
     if(raw && typeof raw==='object' && !Array.isArray(raw))for(const [id,level] of Object.entries(raw)) {
       if(typeof level==='number' && Number.isInteger(level) && level>=1 && level<=3)favorites.value[id]=level;
     }
@@ -21,12 +23,12 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     if(!Number.isInteger(level) || level<0 || level>3)throw new Error('收藏等级无效。');
     const next={...favorites.value};
     if(level)next[`${accountId}/${characterId}`]=level;else delete next[`${accountId}/${characterId}`];
-    localStorage.setItem('leyline-character-favorites-v1',JSON.stringify(next));favorites.value=next;
+    localStorage.setItem(storageKeyFor('character-favorites'),JSON.stringify(next));favorites.value=next;
   }
 
   const effective = ref<Record<string,StatKey[]>>({});
   try {
-    const raw=JSON.parse(localStorage.getItem('leyline-effective-stats-v1') ?? '{}');
+    const raw=JSON.parse(localStorage.getItem(storageKeyFor('effective-stats')) ?? '{}');
     if(raw && typeof raw==='object' && !Array.isArray(raw)) for(const [id,stats] of Object.entries(raw)) {
       if(Array.isArray(stats) && stats.every(stat=>effectiveStatOptions.includes(stat))) effective.value[id]=[...new Set(stats)] as StatKey[];
     }
@@ -37,10 +39,10 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
   }
   function setEffectiveStats(accountId:string,characterId:string,stats:StatKey[]) {
     const next={...effective.value,[`${accountId}/${characterId}`]:[...new Set(stats.filter(stat=>effectiveStatOptions.includes(stat)))]};
-    localStorage.setItem('leyline-effective-stats-v1',JSON.stringify(next)); effective.value=next;
+    localStorage.setItem(storageKeyFor('effective-stats'),JSON.stringify(next)); effective.value=next;
   }
   function persist(next:CharacterLoadout[]) {
-    const content=JSON.stringify(next);
+    const content=JSON.stringify(packDocument('character-loadouts', next));
     if(new TextEncoder().encode(content).byteLength>8*1024*1024)throw new Error('配装方案超过本地保存大小上限。');
     localStorage.setItem(key,content);loadouts.value=next;
   }
@@ -53,8 +55,8 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     if(error.value)throw new Error(error.value);
     const next=loadouts.value.filter(item=>!ids.includes(item.id));
     if(next.length===loadouts.value.length){commit();return;}
-    const previous=JSON.stringify(loadouts.value);
-    localStorage.setItem(key,JSON.stringify(next));
+    const previous=JSON.stringify(packDocument('character-loadouts', loadouts.value));
+    localStorage.setItem(key,JSON.stringify(packDocument('character-loadouts', next)));
     try { commit(); }
     catch(cause) {
       try{localStorage.setItem(key,previous);}catch{error.value='配置保存回退失败，请保留账号备份并检查本地存储。';}
@@ -68,7 +70,7 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     const next=loadouts.value.filter(item=>item.accountId!==accountId || item.characterId!==characterId);
     const nextFavorites={...favorites.value},nextEffective={...effective.value};
     delete nextFavorites[preferenceId];delete nextEffective[preferenceId];
-    const writes:[[string,unknown],[string,unknown],[string,unknown]]=[[key,next],['leyline-character-favorites-v1',nextFavorites],['leyline-effective-stats-v1',nextEffective]];
+    const writes:[[string,unknown],[string,unknown],[string,unknown]]=[[key,packDocument('character-loadouts', next)],[storageKeyFor('character-favorites'),nextFavorites],[storageKeyFor('effective-stats'),nextEffective]];
     const previous=writes.map(([storageKey])=>[storageKey,localStorage.getItem(storageKey)] as const);
     try{
       for(const [storageKey,value] of writes)localStorage.setItem(storageKey,JSON.stringify(value));
@@ -92,7 +94,7 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
   try {
     const raw = localStorage.getItem(key);
     if (raw) {
-      const input = JSON.parse(raw);
+      const input = unpackDocument('character-loadouts', JSON.parse(raw));
       if (!Array.isArray(input) || input.length > 50) throw new Error();
       const ids = new Set<string>();
       const next:CharacterLoadout[] = input.map(entry => {
@@ -113,10 +115,7 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     const snapshot = parseAccount({ ...account, characters:[character], artifacts:account.artifacts.filter(item => selected.has(item.id)) });
     const entry = { id:crypto.randomUUID(), name:name.trim(), accountId:account.id, characterId:character.id, snapshot };
     const next = [...loadouts.value, entry];
-    const content = JSON.stringify(next);
-    if (new TextEncoder().encode(content).byteLength > 8 * 1024 * 1024) throw new Error('配装方案超过本地保存大小上限。');
-    localStorage.setItem(key, content);
-    loadouts.value = next;
+    persist(next);
     return entry.id;
   }
   return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, removeCharacter, replaceAll, effectiveStats, setEffectiveStats };

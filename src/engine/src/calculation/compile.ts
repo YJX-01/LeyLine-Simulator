@@ -1,3 +1,4 @@
+import { APP_VERSION } from '@leyline/schema/version';
 import { calculationBundleSchema, calculationJsonPointer, calculationRuntimeFeatures, calculationTemplateIds, definitionKey, inspectCalculationStructure, sameValueType, valueTypeAssignable,
   type AggregateDefinition, type AttributeDefinition, type EffectDefinition, type SourceRecord, type CalculationBundle, type CalculationCoverageRecord, type CalculationDiagnostic, type CalculationDiagnosticCode, type DefinitionRef, type FormulaDefinition, type StateMachineDefinition, type StateValueSource, type TableDefinition, type ValueType } from '@leyline/schema';
 import { validateBinding, validateBoundFormula } from './binding-validation';
@@ -27,7 +28,7 @@ export interface CompiledData {
   features: readonly string[];
 }
 declare const compiledBrand: unique symbol;
-export interface CompiledCalculation { readonly [compiledBrand]: true; readonly runtimeVersion: 2; readonly formulaCount: number }
+export interface CompiledCalculation { readonly [compiledBrand]: true; readonly runtimeVersion: typeof APP_VERSION; readonly formulaCount: number }
 const programs = new WeakMap<CompiledCalculation, CompiledData>();
 export function compiledData(program: CompiledCalculation): CompiledData | undefined { return programs.get(program); }
 export type CompileResult = { ok: true; program: CompiledCalculation; diagnostics: CalculationDiagnostic[] }
@@ -55,8 +56,8 @@ export function compileCalculation(input: unknown): CompileResult {
   };
   if (input && typeof input === 'object') {
     const raw = input as Record<string, unknown>;
-    if (raw.schemaVersion !== 2 || raw.runtimeVersion !== 2) {
-      report('unsupported-version', raw.schemaVersion !== 2 ? '/schemaVersion' : '/runtimeVersion', '计算库或运行时版本不受支持。');
+    if (raw.schemaVersion !== APP_VERSION || raw.runtimeVersion !== APP_VERSION) {
+      report('unsupported-version', raw.schemaVersion !== APP_VERSION ? '/schemaVersion' : '/runtimeVersion', '计算库或运行时版本不受支持。');
       return { ok: false, diagnostics };
     }
     if (Array.isArray(raw.requiredFeatures)) for (const [index, feature] of raw.requiredFeatures.entries()) {
@@ -332,7 +333,7 @@ export function compileCalculation(input: unknown): CompileResult {
     }
   }
   if (diagnostics.length) return { ok: false, diagnostics };
-  const program = Object.freeze({ runtimeVersion: 2 as const, formulaCount: compiled.size }) as CompiledCalculation;
+  const program = Object.freeze({ runtimeVersion: APP_VERSION, formulaCount: compiled.size }) as CompiledCalculation;
   programs.set(program, data);
   return { ok: true, program, diagnostics };
 }

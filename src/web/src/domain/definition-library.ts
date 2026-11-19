@@ -1,3 +1,4 @@
+import { APP_VERSION } from '@leyline/schema/version';
 import { definitionLibrarySchema, expressionReferences, requiresDependencyDefinition, type DefinitionLibraryFile, type Project } from '@leyline/schema';
 
 export type ContentDefinition = Project['definitions'][number];
@@ -21,7 +22,7 @@ export function parseDefinitionLibrary(input: unknown): DefinitionLibraryFile {
   const definitions = parsed.data.definitions;
   if (new Set(definitions.map(entry => entry.id)).size !== definitions.length) throw new Error('内容定义标识重复，现有资料保持不变。');
   for (const definition of definitions) validateDefinitionReferences(definition, definitions);
-  return { schemaVersion: 2, kind: 'definition-library', id: value.id, name: value.name, definitions };
+  return { schemaVersion: APP_VERSION, kind: 'definition-library', id: value.id, name: value.name, definitions };
 }
 export function validateDefinitionReferences(definition: ContentDefinition, definitions: ContentDefinition[]): void {
   const nodes = new Map(definition.nodes.map(node => [node.id, node]));

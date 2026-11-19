@@ -1,6 +1,6 @@
 {
   "rules": {
-    "schemaVersion": 2,
+    "schemaVersion": "0.1.0",
     "id": "standard-hit-reactions",
     "revision": "1",
     "sources": {
@@ -126,8 +126,8 @@
     "algorithmRevision": "1"
   },
   "calculation": {
-    "schemaVersion": 2,
-    "runtimeVersion": 2,
+    "schemaVersion": "0.1.0",
+    "runtimeVersion": "0.1.0",
     "requiredFeatures": [
       "fixed-templates-v1",
       "formula-call-v1",
@@ -141,127 +141,76 @@
     "sources": [
       {
         "id": "kqm.web.lunar",
-        "kind": "document",
-        "url": "https://keqingmains.com/misc/lunar-reactions/",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.stellar",
-        "kind": "document",
-        "url": "https://keqingmains.com/misc/stellar-reaction-guide/",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "7.0"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-charged-individual",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image2-new.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-charged-aggregate",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image6-new.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-charged-direct",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/Direct-LC.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-bloom-direct",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/Direct-LB.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-crystallize-individual",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image5-new.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-crystallize-aggregate",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/05/image12-new.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-crystallize-direct",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/Direct-LCr.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.lunar-em-bonus",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/01/EM-Bonus.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "Luna VI"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.stellar-conduct-direct",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Direct-Stellar-Conduct-Formula.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "7.0"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.stellar-swirl-individual",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Indirect-Stellar-Swirl-Formula.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "7.0"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.stellar-swirl-aggregate",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Stellar-Swirl-Contribution.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "7.0"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.stellar-swirl-direct",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/Direct-Stellar-Swirl-Formula.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "7.0"
+        "kind": "definition"
       },
       {
         "id": "kqm.web.stellar-em-bonus",
-        "kind": "document",
-        "url": "https://kqm-uploads.keqingmains.com/wp-content/uploads/2026/08/EM-Bonus-Formula.webp",
-        "retrievedAt": "2026-11-15T12:30:41.209Z",
-        "applicableVersion": "7.0"
+        "kind": "definition"
       },
       {
         "id": "kqm.transformative",
-        "kind": "repo",
-        "repository": "KQM-git/TCL",
-        "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-        "path": "docs/combat-mechanics/_formulas/transformative.md"
+        "kind": "definition"
       },
       {
         "id": "kqm.reaction-levels",
-        "kind": "repo",
-        "repository": "KQM-git/TCL",
-        "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-        "path": "src/data/elemental_curves/player.json"
+        "kind": "definition"
       }
     ],
     "formulas": [
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "additive",
@@ -277,7 +226,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "amplifying",
@@ -293,7 +242,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "anemo-ordinary-reaction",
@@ -309,7 +258,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "cryo-ordinary-reaction",
@@ -330,7 +279,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "dendro-ordinary-reaction",
@@ -351,7 +300,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "electro-ordinary-reaction",
@@ -372,7 +321,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "geo-ordinary-reaction",
@@ -388,7 +337,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "hydro-ordinary-reaction",
@@ -409,7 +358,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-bloom-direct",
@@ -432,7 +381,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-charged-direct",
@@ -455,7 +404,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-charged-individual",
@@ -478,7 +427,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-crystallize-direct",
@@ -501,7 +450,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-crystallize-individual",
@@ -524,7 +473,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-em-bonus",
@@ -541,7 +490,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "physical-ordinary-reaction",
@@ -557,7 +506,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "pyro-ordinary-reaction",
@@ -578,7 +527,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "reaction-level-multiplier",
@@ -598,7 +547,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-conduct-direct",
@@ -621,7 +570,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-em-bonus",
@@ -638,7 +587,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-swirl-direct",
@@ -661,7 +610,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-swirl-individual",
@@ -684,7 +633,7 @@
         ]
       },
       {
-        "schemaVersion": 2,
+        "schemaVersion": "0.1.0",
         "identity": {
           "namespace": "builtin",
           "id": "transformative",

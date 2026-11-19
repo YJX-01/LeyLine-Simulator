@@ -1,3 +1,4 @@
+import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -5,17 +6,17 @@ import * as schemas from '@leyline/schema';
 import { collectCalculationRoots, describeCalculationTemplate, compileStructuredCharacter, evaluateStructuredHit, prepareStructuredBuilds } from '@leyline/engine';
 import { getArtifactMain } from '@leyline/game-data';
 import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
-import { applyCharacterImport, exportCharacterSnapshot, prepareCharacterImport, preparedCharacterSnapshot } from '../../../../src/web/src/domain/structured-character-import';
+import { applyCharacterImport, exportCharacterSnapshot, prepareCharacterImport, prepareResolvedCharacterImport, preparedCharacterSnapshot } from '../../../../src/web/src/domain/structured-character-import';
 
 const root = new URL('../../../../', import.meta.url);
-const read = (path: string) => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
+const read = (path: string) => readCalculationData(new URL(path, root));
 const format = (value: unknown) => JSON.stringify(value, null, 2) + '\n';
 
 describe('current self-contained character import transactions', () => {
   let original: schemas.StructuredCharacterDefinition, weapon: schemas.StructuredWeaponDefinition, main: schemas.StructuredBuild['artifactMain'];
   let prepare: ReturnType<typeof createContentLinker>;
   beforeAll(async () => {
-    prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library: readCalculationLibrary(), manifest: read('src/game-data/data/manifest.json'),
+    prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library: readCalculationLibrary(), manifest: catalogInventory(),
       hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'), retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
     original = await prepare.character(read('src/game-data/data/characters/kaeya.json'));
     weapon = await prepare.weapon(read('src/game-data/data/weapons/favoniussword.json')); main = await getArtifactMain();
@@ -35,7 +36,7 @@ describe('current self-contained character import transactions', () => {
 
   it('prepares before writing, downgrades external evidence and returns an owned atomic registry', () => {
     const current = [original], before = format(current), file = custom();
-    const result = prepareCharacterImport(format(file), current); expect(result.ok).toBe(true); if (!result.ok) return;
+    const result = prepareResolvedCharacterImport(file, current); expect(result.ok).toBe(true); if (!result.ok) return;
     expect(result.prepared.disposition).toBe('add'); expect(result.prepared.conflicts).toEqual([]);
     const preview = preparedCharacterSnapshot(result.prepared);
     expect(preview.calculation.bundle.coverage.every(record => record.evidence === 'declared')).toBe(true);
@@ -43,31 +44,31 @@ describe('current self-contained character import transactions', () => {
     const next = applyCharacterImport(current, result.prepared);
     expect(next).toHaveLength(2); expect(next[1].identity.name).toBe(original.identity.name); expect(format(current)).toBe(before);
     next[0].identity.name = 'edited returned copy'; expect(format(current)).toBe(before);
-    const again = prepareCharacterImport(format(file), applyCharacterImport(current, result.prepared)); expect(again.ok).toBe(true);
+    const again = prepareResolvedCharacterImport(file, applyCharacterImport(current, result.prepared)); expect(again.ok).toBe(true);
     if (again.ok) expect(again.prepared.disposition).toBe('reuse');
   });
 
   it('requires local authority for builtin claims and refuses exact-identity content conflicts', () => {
-    const claim = prepareCharacterImport(format(original), []); expect(claim.ok).toBe(true);
+    const claim = prepareResolvedCharacterImport(original, []); expect(claim.ok).toBe(true);
     if (claim.ok) { expect(claim.prepared.conflicts.some(conflict => conflict.kind === 'builtin-claim')).toBe(true); expect(() => applyCharacterImport([], claim.prepared)).toThrow('冲突'); }
-    const reuse = prepareCharacterImport(format(original), [original]); expect(reuse.ok).toBe(true);
+    const reuse = prepareResolvedCharacterImport(original, [original]); expect(reuse.ok).toBe(true);
     if (reuse.ok) { expect(reuse.prepared.disposition).toBe('reuse'); expect(applyCharacterImport([original], reuse.prepared)).toHaveLength(1); }
     const derivative = custom(), formula = derivative.calculation.bundle.formulas.find(formula => formula.identity.id === 'ordinary-hit')!;
     formula.sources.push('kqm.crit'); // Valid metadata change under the same immutable shared identity.
-    const conflict = prepareCharacterImport(format(derivative), [original]); expect(conflict.ok).toBe(true);
+    const conflict = prepareResolvedCharacterImport(derivative, [original]); expect(conflict.ok).toBe(true);
     if (conflict.ok) { expect(conflict.prepared.conflicts.some(conflict => conflict.kind === 'calculation')).toBe(true); expect(() => applyCharacterImport([original], conflict.prepared)).toThrow('冲突'); }
   });
 
   it('refuses stale preparation and invalid current-format derivatives without mutating the registry', () => {
-    const current = [structuredClone(original)], before = format(current), valid = prepareCharacterImport(format(custom()), current); expect(valid.ok).toBe(true); if (!valid.ok) return;
+    const current = [structuredClone(original)], before = format(current), valid = prepareResolvedCharacterImport(custom(), current); expect(valid.ok).toBe(true); if (!valid.ok) return;
     current[0].identity.name += ' changed';
     expect(() => applyCharacterImport(current, valid.prepared)).toThrow('变化');
     const legacy = { ...original, schemaVersion: 2 };
     expect(prepareCharacterImport(format(legacy), [original]).ok).toBe(false);
-    const duplicate = format(original).replace('"schemaVersion": 3', '"schemaVersion": 3, "schemaVersion": 3');
+    const duplicate = exportCharacterSnapshot(original).replace('"schemaVersion": "0.1.0"', '"schemaVersion": "0.1.0", "schemaVersion": "0.1.0"');
     expect(prepareCharacterImport(duplicate, [original]).ok).toBe(false);
     const missing = custom(); missing.calculation.bundle.formulas = missing.calculation.bundle.formulas.filter(formula => formula.identity.id !== 'ordinary-hit');
-    expect(prepareCharacterImport(format(missing), [original]).ok).toBe(false);
+    expect(prepareResolvedCharacterImport(missing, [original]).ok).toBe(false);
     expect(format([original])).toBe(before);
   });
 
@@ -78,7 +79,7 @@ describe('current self-contained character import transactions', () => {
     // Transparent error derivatives of Flying Cloud's real param2 binding; no player data is constructed.
     if (change === 'missing') burst.parameters = burst.parameters.filter(parameter => parameter.id !== 'param2');
     else burst.parameters.find(parameter => parameter.id === 'param2')!.unit = 'seconds';
-    for (const result of [compileStructuredCharacter(file), prepareCharacterImport(format(file), current)]) {
+    for (const result of [compileStructuredCharacter(file), prepareResolvedCharacterImport(file, current)]) {
       expect(result.ok).toBe(false);
       expect(result.diagnostics).toContainEqual(expect.objectContaining({ code: change === 'missing' ? 'missing-dependency' : 'unit-mismatch',
         jsonPointer: expect.stringMatching(/^\/calculation\/bundle\/effects\/\d+\/value\/inputs\/rate\//) }));
@@ -102,13 +103,13 @@ describe('current self-contained character import transactions', () => {
     expect(compileStructuredCharacter(yunjin).ok).toBe(true);
   });
 
-  it('recomputes a JSON-only parameter edit offline through the same v3 build evaluator', () => {
+  it('recomputes a JSON-only parameter edit offline through the shared build evaluator', () => {
     const file = custom(), skill = file.talents.find(talent => talent.id === 'kaeya.skill')!, parameter = skill.parameters.find(parameter => parameter.id === 'param1')!;
     const previous = parameter.values[0]; parameter.values[0] *= 1.01;
-    const imported = prepareCharacterImport(format(file), [original]); expect(imported.ok).toBe(true); if (!imported.ok) return;
+    const imported = prepareResolvedCharacterImport(file, [original]); expect(imported.ok).toBe(true); if (!imported.ok) return;
     const next = applyCharacterImport([original], imported.prepared), reopened = JSON.parse(format(next[1]));
     const compiled = compileStructuredCharacter(reopened); expect(compiled.ok).toBe(true);
-    const build: schemas.StructuredBuild = { schemaVersion: 3, kind: 'calculation-build', dataVersion: original.dataVersion, character: reopened, weapon, sets: [], artifacts: [], artifactMain: main,
+    const build: schemas.StructuredBuild = { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: original.dataVersion, character: reopened, weapon, sets: [], artifacts: [], artifactMain: main,
       level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'main', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['main'] };
     const prepared = prepareStructuredBuilds([{ id: 'kaeya-query', build }]); expect(prepared.ok).toBe(true); if (!prepared.ok) return;
@@ -130,8 +131,9 @@ describe('current self-contained character import transactions', () => {
     for (const source of library.sources.filter(source => unused.sources.includes(source.id))) if (!file.calculation.bundle.sources.some(entry => entry.id === source.id)) file.calculation.bundle.sources.push(structuredClone(source));
     const before = format(file), exported = exportCharacterSnapshot(file), value = JSON.parse(exported);
     expect(exported.endsWith('\n')).toBe(true); expect(exported.includes('\r')).toBe(false); expect(exported.startsWith('{\n  "')).toBe(true);
-    expect(value.calculation.bundle.formulas.some((formula: schemas.FormulaDefinition) => formula.identity.id === unused.identity.id)).toBe(false);
-    expect(Object.keys(value.attributes.outputs)).toHaveLength(schemas.statKeys.length);
+    expect(value.formulas?.some((formula: { id: string }) => formula.id === unused.identity.id) ?? false).toBe(false);
+    expect(value.attributes).not.toHaveProperty('outputs');
+    expect(value.schemaVersion).toBe('0.1.0');
     expect(prepareCharacterImport(exported, [original]).ok).toBe(true);
     expect(format(file)).toBe(before);
   });

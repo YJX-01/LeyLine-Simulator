@@ -9,12 +9,12 @@ import { recordedProject } from '../../../helpers/recorded-project';
 const recordedSource = '.references/enka/official-example-2026-11-13.json';
 
 async function build(): Promise<Build> {
-  return { schemaVersion: 3, kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
+  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
     artifactMain: await getArtifactMain(), sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 },
     weaponLevel: 90, weaponAscension: 6, refinement: 1, artifacts: [] };
 }
 function empty() {
-  return projectSchema.parse({ schemaVersion: 5, rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
+  return projectSchema.parse({ schemaVersion: '0.1.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'real-edit-test', revision: '1', definitions: [], candidate: { id: 'candidate', actors: [] }, conditions: {}, timeline: [], objective: {} });
 }
 describe('real axis editing and inventory identity', () => {
   it('creates a self-contained axis and detaches it from source data and candidate inputs', async () => {

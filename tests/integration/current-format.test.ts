@@ -1,3 +1,6 @@
+import { APP_VERSION } from '@leyline/schema/version';
+import { packDocument, unpackDocument } from '../../src/web/src/domain/content-document';
+import { exportCharacterSnapshot } from '../../src/web/src/domain/structured-character-import';
 import { existsSync, readFileSync } from 'node:fs';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createPinia, disposePinia, setActivePinia } from 'pinia';
@@ -23,22 +26,32 @@ async function recordedDocuments() {
   const build=account.characters[0].showcase!.build;
   const project=createEmptyProject();
   addActorFromBuild(project,build);
-  const library={schemaVersion:2,kind:'definition-library',id:project.id,name:'公开展柜定义快照',definitions:project.definitions};
+  const library={schemaVersion:'0.1.0',kind:'definition-library',id:project.id,name:'公开展柜定义快照',definitions:project.definitions};
   return {account,build,project,library};
 }
 
 it.skipIf(!existsSync('.references/enka/official-example.json'))('accepts current documents and rejects old version tags without converting recorded snapshots', async () => {
   const {account,build,project,library}=await recordedDocuments();
   const before=JSON.stringify({account,build,project,library});
-  expect(parseAccount(account)).toEqual(account);
-  expect(importProject(JSON.stringify(project))).toEqual(project);
-  expect(parseCharacterDefinition(JSON.stringify(build.character), [build.character])).toEqual(build.character);
+  const axisFile = packDocument('axis', project);
+  const accountFile = packDocument('account', account);
+  const characterFile = JSON.parse(exportCharacterSnapshot(build.character));
+  const softwareVersion = JSON.parse(readFileSync('package.json', 'utf8')).version;
+  expect(APP_VERSION).toBe(softwareVersion);
+  for (const file of [axisFile, accountFile, characterFile, library, build, build.weapon, build.character.calculation.bundle]) {
+    expect(file.schemaVersion).toBe(softwareVersion);
+  }
+  expect(build.character.calculation.bundle.runtimeVersion).toBe(softwareVersion);
+  expect(parseAccount(unpackDocument('account', accountFile))).toEqual(account);
+  expect(importProject(JSON.stringify(axisFile))).toEqual(project);
+  expect(parseCharacterDefinition(JSON.stringify(characterFile), [build.character])).toEqual(build.character);
   expect(parseDefinitionLibrary(library)).toEqual(library);
-  // Version-tag derivatives test a file boundary, not original player exports or combat records.
-  expect(()=>parseAccount({...account,schemaVersion:1})).toThrow();
-  expect(()=>importProject(JSON.stringify({...project,schemaVersion:1}))).toThrow();
-  expect(()=>parseCharacterDefinition(JSON.stringify({...build.character,schemaVersion:1}))).toThrow();
-  expect(()=>parseDefinitionLibrary({...library,schemaVersion:1})).toThrow();
+
+  // Each boundary case changes only the tag of a current document derived from the recording.
+  expect(() => unpackDocument('account', { ...accountFile, schemaVersion: 6 })).toThrow();
+  expect(() => importProject(JSON.stringify({ ...axisFile, schemaVersion: 6 }))).toThrow();
+  expect(() => parseCharacterDefinition(JSON.stringify({ ...characterFile, schemaVersion: 4 }))).toThrow();
+  expect(() => parseDefinitionLibrary({ ...library, schemaVersion: 2 })).toThrow();
   expect(JSON.stringify({account,build,project,library})).toBe(before);
 });
 
@@ -68,9 +81,9 @@ it.skipIf(!existsSync('.references/enka/official-example.json'))('restores curre
   const configurations=[{id:character.id,name:character.name,accountId:account.id,characterId:character.id,snapshot:{...account,characters:[character]}}];
   const teams=[{id:project.id,name:character.name,project}];
   const memory=new Map([
-    ['leyline-account-v5',JSON.stringify(account)],['leyline-character-loadouts-v5',JSON.stringify(configurations)],
-    ['leyline-saved-teams-v5',JSON.stringify(teams)],['leyline-definition-library-v2',JSON.stringify(library)],
-    ['leyline-axis-recovery-v5',JSON.stringify({schemaVersion:5,project,savedSnapshot:null})],
+    ['leyline-account-0.1.0',JSON.stringify(packDocument('account',account))],['leyline-character-loadouts-0.1.0',JSON.stringify(packDocument('character-loadouts',configurations))],
+    ['leyline-saved-teams-0.1.0',JSON.stringify(packDocument('saved-teams',teams))],['leyline-definition-library-0.1.0',JSON.stringify(library)],
+    ['leyline-axis-recovery-0.1.0',JSON.stringify(packDocument('axis-recovery',{project,savedProject:null}))],
   ]);
   vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key)??null,setItem:(key:string,value:string)=>memory.set(key,value)});
   const pinia=createPinia();setActivePinia(pinia);

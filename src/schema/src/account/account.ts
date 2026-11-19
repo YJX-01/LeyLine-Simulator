@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { artifactItemSchema } from './artifact';
 import { buildSchema } from './build';
@@ -22,7 +23,7 @@ export const accountCharacterSchema = z.object({
   showcase: z.object({ uid, avatarId: z.number().int(), fetchedAt: z.string().refine(value => Number.isFinite(Date.parse(value))), rawHash: z.string().regex(/^[a-f0-9]{64}$/), build: buildSchema }).strict().optional(),
 }).strict();
 export const accountSchema = z.object({
-  schemaVersion: z.literal(5), kind: z.literal('account'), id: text, name: text, uid: uid.optional(),
+  schemaVersion: z.literal(APP_VERSION), kind: z.literal('account'), id: text, name: text, uid: uid.optional(),
   characters: z.array(accountCharacterSchema).max(1000), artifacts: z.array(accountArtifactSchema).max(10000),
 }).strict().superRefine((account, ctx) => {
   const ids = [...account.characters, ...account.artifacts].map(item => item.id);

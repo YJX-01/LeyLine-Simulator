@@ -223,8 +223,8 @@
   ],
   "calculation": {
     "bundle": {
-      "schemaVersion": 2,
-      "runtimeVersion": 2,
+      "schemaVersion": "0.1.0",
+      "runtimeVersion": "0.1.0",
       "requiredFeatures": [
         "fixed-templates-v1",
         "combat-binding-v1",
@@ -234,17 +234,11 @@
       "sources": [
         {
           "id": "genshin-db.festeringdesire.static",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/ChineseSimplified/weapons/festeringdesire.json#r1-r5"
+          "kind": "definition"
         },
         {
           "id": "content.weapon.festeringdesire",
-          "kind": "repo",
-          "repository": "theBowja/genshin-db",
-          "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-          "path": "src/data/stats/weapons.json#festeringdesire"
+          "kind": "definition"
         }
       ],
       "tables": [],
@@ -888,7 +882,7 @@
       }
     ]
   },
-  "schemaVersion": 3,
+  "schemaVersion": "0.1.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
   "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",

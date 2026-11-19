@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import LibraryNavIcon from '../components/LibraryNavIcon.vue';
-import {useAccountStore} from '../stores/account';
+import type { useAccountStore } from '../stores/account';
 import type {ArtifactReferenceOrigin} from '../composables/artifact-reference-navigation';
 import {artifactReferenceNavigation} from '../composables/artifact-reference-navigation';
 import type {ArtifactReferenceTarget} from '../domain/artifact-references';
-import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick, watch,provide } from 'vue';
+import { computed, ref, defineAsyncComponent, onMounted, onBeforeUnmount, nextTick, watch,provide, shallowRef } from 'vue';
 const ThirdPartyCredits = defineAsyncComponent(() => import('./ThirdPartyCredits.vue'));
 const creditsOpen = ref(false);
 function focusMainContent() { document.getElementById('workspace-main')?.focus(); }
@@ -23,22 +23,27 @@ const calculator = ref<{ requestLeave: (action: () => void) => void }>();
 const DefinitionLibrary = defineAsyncComponent(() => import('./DefinitionLibrary.vue'));
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
-import { defaultEnemy } from '../domain/real-project';
 import { elements } from '@leyline/schema';
 import { realElementLabel } from '../domain/workbench-labels';
 import { actorLabel, definitionLabel, recordLabel, nodeLabel, effectLabel, projectLabel, unitLabel, operationLabel, diagnosticLabel, statusLabel, errorLabel } from '../domain/workbench-labels';
 
-import { storeToRefs } from 'pinia';
+import { getActivePinia } from 'pinia';
 import type { ExpressionNode } from '@leyline/schema';
-import { useAxisWorkspaceStore } from '../stores/axis-workspace';
-import { removeTimelineRecord, setDamageSelected } from '../domain/workbench-project';
+import type { useAxisWorkspaceStore } from '../stores/axis-workspace';
+import { defaultEnemy, removeTimelineRecord, setDamageSelected } from '../domain/axis-input';
 import { getDamagePresentation, formatWorkbenchExpression } from '../domain/workbench-display';
 const geoEmblem = `${import.meta.env.BASE_URL}assets/game/elements/geo.webp`;
 
 const TimelineEditor = defineAsyncComponent(() => import('./TimelineEditor.vue'));
 const TeamWorkspace = defineAsyncComponent(() => import('./TeamWorkspace.vue'));
-const workspace = useAxisWorkspaceStore();
-const { project, result, selectedId, dirty, busy, error } = storeToRefs(workspace);
+const pinia = getActivePinia()!;
+const axisStore = shallowRef<ReturnType<typeof useAxisWorkspaceStore>>();
+const axisLoadError = ref('');
+const timelineCount = computed(() => pinia.state.value['axis-workspace']?.project.timeline.length ?? 0);
+// These computed fields are consumed inside the loaded axis view.
+const project = computed(() => axisStore.value!.project);
+const result = computed(() => axisStore.value!.result);
+const selectedId = computed({ get: () => axisStore.value!.selectedId, set: id => { axisStore.value!.selectedId = id; } });
 type Page = 'characters' | 'artifacts' | 'loadouts' | 'combinations' | 'projects' | 'team' | 'timeline' | 'analysis' | 'definitions' | 'account' | 'settings' | 'calculator';
 const page = ref<Page>(window.location.hash === '#axis' ? 'timeline' : 'characters');
 const collapsed = ref(false);
@@ -58,18 +63,24 @@ function toggleNavigation() {
   if (mobileOpen.value) nextTick(() => sidebar.value?.querySelector<HTMLButtonElement>('[aria-current="page"], .nav-group button')?.focus());
 }
 const targetOpen = ref(false);
-function openTarget() { if (!project.value.enemy) workspace.command(draft => { draft.enemy = defaultEnemy(); }); targetOpen.value = true; }
+function openTarget() { if (!project.value.enemy) axisStore.value!.command(draft => { draft.enemy = defaultEnemy(); }); targetOpen.value = true; }
 const definitionFilter = ref('all');
 const fileInput = ref<HTMLInputElement>();
 const isAccountPage = computed(() => ['characters','artifacts','loadouts','combinations','account'].includes(page.value));
-const isProjectPage = computed(() => ['projects', 'team', 'timeline', 'analysis'].includes(page.value));
-const activeDomain = computed(() => isAccountPage.value ? 'account' : isProjectPage.value ? 'project' : page.value === 'definitions' ? 'content' : 'settings');
-const titles: Record<Page, string> = { characters: '角色', artifacts: '圣遗物', loadouts:'角色配置', combinations:'圣遗物组合', projects: '轴项目', team: '队伍与候选方案', timeline: '时间轴', analysis: '伤害分析', definitions: '内容定义库', account:'账号', settings: '设置', calculator: '计算器' };
+const isAxisPage = computed(() => ['projects', 'team', 'timeline', 'analysis'].includes(page.value));
+watch(() => isAxisPage.value || page.value === 'definitions', async needed => {
+  if (!needed || axisStore.value) return;
+  try {
+    axisLoadError.value = '';
+    axisStore.value = (await import('../stores/axis-workspace')).useAxisWorkspaceStore(pinia);
+  } catch { axisLoadError.value = '轴项目未能加载，请重新打开该页面。'; }
+}, { immediate: true });
+const activeDomain = computed(() => isAccountPage.value ? 'account' : (isAxisPage.value || page.value === 'calculator') ? 'project' : page.value === 'definitions' ? 'content' : 'settings');
+const titles: Record<Page, string> = { characters: '角色', artifacts: '圣遗物', loadouts:'角色配置', combinations:'圣遗物组合', projects: '轴项目', team: '队伍与候选方案', timeline: '时间轴', analysis: '伤害分析', definitions: '内容定义库', account:'账号', settings: '设置', calculator: '伤害计算器' };
 const groups: { title: string; domain: string; items: { id: Page; name: string; icon: string }[] }[] = [
   { title: '库', domain: 'account', items: [{ id: 'characters', name: '角色', icon: 'person' }, {id:'loadouts',name:'角色配置',icon:'equipment'}, { id: 'artifacts', name: '圣遗物', icon: 'diamond' }, {id:'combinations',name:'圣遗物组合',icon:'pieces'}] },
-  { title: '项目', domain: 'project', items: [{ id: 'projects', name: '项目', icon: 'folder' }, { id: 'team', name: '队伍', icon: 'team' }, { id: 'timeline', name: '时间轴', icon: 'timeline' }, { id: 'analysis', name: '伤害分析', icon: 'chart' }] },
+  { title: '项目', domain: 'project', items: [{ id: 'projects', name: '项目', icon: 'folder' }, { id: 'team', name: '队伍', icon: 'team' }, { id: 'timeline', name: '时间轴', icon: 'timeline' }, { id: 'calculator', name: '伤害计算器', icon: 'calculator' }, { id: 'analysis', name: '伤害分析', icon: 'chart' }] },
   { title: '自定义', domain: 'content', items: [{ id: 'definitions', name: '内容定义库', icon: 'layers' }] },
-  { title: '工具', domain: 'tools', items: [{ id: 'calculator', name: '计算器', icon: 'calculator' }] },
 ];
 const icons: Record<string, string> = {
   calculator: 'M5 3h14v18H5Z M8 6h8v4H8Z M8 13h2 M14 13h2 M8 17h2 M14 17h2',
@@ -93,12 +104,21 @@ const num = (value: number | null | undefined) => value === null || value === un
 const realPartsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技能倍率',bonus:'增伤乘区',crit:'暴击乘区',defense:'防御乘区',resistance:'抗性乘区'};
 const number = (event: Event) => { const value = (event.target as HTMLInputElement).value; return value.trim() ? Number(value) : NaN; };
 const ArtifactDetail=defineAsyncComponent(()=>import('./ArtifactDetail.vue'));
-const inventoryAccount=useAccountStore(),restoredArtifact=ref<ArtifactReferenceOrigin>(),restoredDetail=ref<{requestLeave:(action:()=>void)=>void}>();
+const inventoryAccount = shallowRef<ReturnType<typeof useAccountStore>>();
+const restoredArtifact=ref<ArtifactReferenceOrigin>(),restoredDetail=ref<{requestLeave:(action:()=>void)=>void}>();
 const artifactReturnItem=ref<ArtifactReferenceOrigin>();
-const restoredItem=computed(()=>restoredArtifact.value?inventoryAccount.account.artifacts.find(item=>item.id===restoredArtifact.value!.item.id) ?? restoredArtifact.value.item:undefined);
+const restoredItem=computed(()=>restoredArtifact.value?inventoryAccount.value?.account.artifacts.find(item=>item.id===restoredArtifact.value!.item.id) ?? restoredArtifact.value.item:undefined);
 function closeRestoredArtifact(){const id=restoredArtifact.value?.item.id;restoredArtifact.value=undefined;nextTick(()=>{Array.from(document.querySelectorAll<HTMLButtonElement>('.inventory-card')).find(button=>button.dataset.artifactId===id)?.focus({preventScroll:true});});}
 const artifactReturnPage=ref<Page>();
-function returnFromArtifactReference(){const origin=artifactReturnPage.value,item=artifactReturnItem.value;artifactReturnPage.value=undefined;artifactReturnItem.value=undefined;if(origin)void nextTick(()=>navigate(origin,()=>{if(item?.accountId===inventoryAccount.account.id)restoredArtifact.value=item;}));}
+async function returnFromArtifactReference() {
+  const origin = artifactReturnPage.value, item = artifactReturnItem.value;
+  artifactReturnPage.value = undefined;
+  artifactReturnItem.value = undefined;
+  if (!origin) return;
+  if (item) inventoryAccount.value = (await import('../stores/account')).useAccountStore(pinia);
+  await nextTick();
+  navigate(origin, () => { if (item && item.accountId === inventoryAccount.value?.account.id) restoredArtifact.value = item; });
+}
 function configurationClosed(){configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;returnFromArtifactReference();}
 function navigate(target: Page,after?:()=>void,reference=false) { const apply=()=>{restoredArtifact.value=undefined;if(!reference){artifactReturnPage.value=undefined;artifactReturnItem.value=undefined;}creditsOpen.value=false;configurationEditorOpen.value=false;pendingAccountConfiguration.value=undefined;page.value=target;mobileOpen.value=false;if(after)nextTick(after);};if(restoredDetail.value)restoredDetail.value.requestLeave(apply);else if(configurationEditor.value && target!==page.value)configurationEditor.value.requestLeave(apply);else if(accountLibrary.value && target!==page.value)accountLibrary.value.requestLeave(apply);else if(accountConfigurations.value)accountConfigurations.value.requestLeave(apply);else if(teamWorkspace.value && target!==page.value)teamWorkspace.value.requestLeave(apply);else if(calculator.value && target!==page.value)calculator.value.requestLeave(apply);else apply(); }
 provide(artifactReferenceNavigation,(target,item)=>{const origin=artifactReturnPage.value ?? page.value;navigate(target.kind==='combination'?'combinations':target.kind==='configuration'?'loadouts':'characters',()=>{artifactReturnPage.value=origin;artifactReturnItem.value=item;pendingArtifactReference.value=target;},true);});
@@ -115,17 +135,17 @@ function focusClickedControl(event: MouseEvent) {
 }
 function openPoint(id: string) { selectedId.value = id; navigate('timeline'); }
 function updateTime(event: Event) { if (selected.value) selected.value.timeMs = number(event); }
-function updateTarget(event: Event) { if (selected.value?.kind === 'damage') workspace.command(draft => setDamageSelected(draft, selectedId.value, (event.target as HTMLInputElement).checked)); }
+function updateTarget(event: Event) { if (selected.value?.kind === 'damage') axisStore.value!.command(draft => setDamageSelected(draft, selectedId.value, (event.target as HTMLInputElement).checked)); }
 function constant(node: ExpressionNode) { return node.op === 'constant' ? node.quantity : undefined; }
 function removeRecord(id: string) {
-  workspace.command(draft => removeTimelineRecord(draft, id));
+  axisStore.value!.command(draft => removeTimelineRecord(draft, id));
   if (selectedId.value === id) selectedId.value = project.value.timeline[0]?.id ?? '';
 }
-async function openProject() { if (!await workspace.openNativeProject()) fileInput.value?.click(); }
+async function openProject() { if (!await axisStore.value!.openNativeProject()) fileInput.value?.click(); }
 async function importFile(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
-  if (file) await workspace.inputFile(file);
+  if (file) await axisStore.value!.inputFile(file);
   input.value = '';
 }
 </script>
@@ -138,29 +158,31 @@ async function importFile(event: Event) {
       <div class="sidebar-top">
         <button class="sidebar-control sidebar-toggle" :aria-label="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :title="narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="narrow ? mobileOpen : !collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.collapse" /></svg><span class="nav-label">{{ narrow ? '关闭导航' : collapsed ? '展开侧栏' : '收起侧栏' }}</span></button>
       </div>
-      <div class="nav-groups"><div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain"><p>{{ group.title }}</p><button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }" :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${item.name}`" :data-testid="`workspace-nav-${item.id}`" :title="item.name" @click="navigate(item.id)"><LibraryNavIcon v-if="group.domain==='account'" :kind="item.icon" /><svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg><span class="nav-label">{{ item.name }}</span><span v-if="item.id === 'timeline'" class="nav-count">{{ project.timeline.length }}</span></button></div></div><div class="nav-utilities"><button class="sidebar-control" :class="{active:page==='account'}" aria-label="导航 账号" data-testid="workspace-nav-account" title="账号" :aria-current="page==='account'?'page':undefined" @click="navigate('account')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 21v-2a7 7 0 0 1 14 0v2"/></svg><span class="nav-label">账号</span></button><button class="sidebar-control" :class="{ active: page === 'settings' }" aria-label="导航 设置" title="设置" :aria-current="page === 'settings' ? 'page' : undefined" @click="navigate('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.settings" /></svg><span class="nav-label">设置</span></button></div>
+      <div class="nav-groups"><div v-for="group in groups" :key="group.title" class="nav-group" :data-domain="group.domain"><p>{{ group.title }}</p><button v-for="item in group.items" :key="item.id" :class="{ active: page === item.id }" :aria-current="page === item.id ? 'page' : undefined" :aria-label="`导航 ${item.name}`" :data-testid="`workspace-nav-${item.id}`" :title="item.name" @click="navigate(item.id)"><LibraryNavIcon v-if="group.domain==='account'" :kind="item.icon" /><svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="icons[item.icon]" /></svg><span class="nav-label">{{ item.name }}</span><span v-if="item.id === 'timeline'" class="nav-count">{{ timelineCount }}</span></button></div></div><div class="nav-utilities"><button class="sidebar-control" :class="{active:page==='account'}" aria-label="导航 账号" data-testid="workspace-nav-account" title="账号" :aria-current="page==='account'?'page':undefined" @click="navigate('account')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 21v-2a7 7 0 0 1 14 0v2"/></svg><span class="nav-label">账号</span></button><button class="sidebar-control" :class="{ active: page === 'settings' }" aria-label="导航 设置" title="设置" :aria-current="page === 'settings' ? 'page' : undefined" @click="navigate('settings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="icons.settings" /></svg><span class="nav-label">设置</span></button></div>
     </nav>
     <button v-if="!narrow" class="sidebar-edge-toggle" :aria-label="collapsed ? '展开侧栏（边缘按钮）' : '收起侧栏（边缘按钮）'" :title="collapsed ? '展开侧栏' : '收起侧栏'" :aria-expanded="!collapsed" aria-controls="workspace-navigation" @click="toggleSidebar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 7 12l8 7Z" /></svg></button>
 
     <div id="workspace-main" class="workspace-body" role="main" tabindex="-1" :aria-label="titles[page]" :inert="narrow && mobileOpen">
-      <header v-if="isProjectPage || narrow" class="design-topbar" :class="{ 'mobile-only-bar': !isProjectPage }">
+      <header v-if="isAxisPage || narrow" class="design-topbar" :class="{ 'mobile-only-bar': !isAxisPage }">
         <button v-if="narrow" ref="menuButton" class="mobile-menu" aria-label="打开功能导航" :aria-expanded="mobileOpen" aria-controls="workspace-navigation" @click="toggleNavigation">☰</button>
-        <div v-if="isProjectPage" class="topbar-context"><strong>{{ projectLabel(project) }}</strong><span class="snapshot-tag">{{ dirty ? '未保存' : '已保存' }}</span><span v-if="project.timeline.length" class="run-status" role="status">{{ workspace.runState }}</span></div>
+        <div v-if="axisStore && isAxisPage" class="topbar-context"><strong>{{ projectLabel(project) }}</strong><span class="snapshot-tag">{{ axisStore.dirty ? '未保存' : '已保存' }}</span><span v-if="project.timeline.length" class="run-status" role="status">{{ axisStore!.runState }}</span></div>
         <span v-else class="mobile-page-label">{{ titles[page] }}</span>
-        <div v-if="isProjectPage" class="topbar-actions">
-          <button class="ui-action soft" data-accent="anemo" :disabled="!workspace.canUndo" @click="workspace.undo()">撤销</button><button class="ui-action soft" data-accent="anemo" :disabled="!workspace.canRedo" @click="workspace.redo()">重做</button>
+        <div v-if="axisStore && isAxisPage" class="topbar-actions">
+          <button class="ui-action soft" data-accent="anemo" :disabled="!axisStore!.canUndo" @click="axisStore!.undo()">撤销</button><button class="ui-action soft" data-accent="anemo" :disabled="!axisStore!.canRedo" @click="axisStore!.redo()">重做</button>
           <span v-if="damageRecords.length" class="header-objective">全轴 <strong data-testid="workspace-total">{{ num(result.totalValue) }}</strong></span>
-          <button class="ui-action soft" data-accent="anemo" v-if="workspace.runState === '计算中'" @click="workspace.cancelRun()">取消计算</button>
-          <button class="ui-action soft" data-accent="anemo" :disabled="busy" @click="openProject">打开轴</button><button class="ui-action" data-accent="anemo" :disabled="busy" @click="workspace.saveProject()">保存轴</button>
-          <details class="toolbar-more"><summary>更多</summary><div><button class="ui-action soft" data-accent="anemo" @click="workspace.run()">重新计算</button><button class="ui-action soft" data-accent="anemo" :disabled="!workspace.recoveryAvailable" @click="workspace.recover()">恢复上次编辑</button></div></details>
+          <button class="ui-action soft" data-accent="anemo" v-if="axisStore!.runState === '计算中'" @click="axisStore!.cancelRun()">取消计算</button>
+          <button class="ui-action soft" data-accent="anemo" :disabled="axisStore!.busy" @click="openProject">打开轴</button><button class="ui-action" data-accent="anemo" :disabled="axisStore!.busy" @click="axisStore!.saveProject()">保存轴</button>
+          <details class="toolbar-more"><summary>更多</summary><div><button class="ui-action soft" data-accent="anemo" @click="axisStore!.run()">重新计算</button><button class="ui-action soft" data-accent="anemo" :disabled="!axisStore!.recoveryAvailable" @click="axisStore!.recover()">恢复上次编辑</button></div></details>
         </div>
       </header>
       <h1 class="page-accessible-title">{{ titles[page] }}</h1>
-      <input ref="fileInput" type="file" accept=".json,application/json" aria-label="导入轴项目文件" class="shell-file-input" @change="importFile">
-      <div v-if="isProjectPage && error" class="shell-notices">
-        <div v-if="error" role="alert" class="shell-error">{{ errorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
+      <input v-if="axisStore" ref="fileInput" type="file" accept=".json,application/json" aria-label="导入轴项目文件" class="shell-file-input" @change="importFile">
+      <div v-if="axisStore && isAxisPage && axisStore.error" class="shell-notices">
+        <div v-if="axisStore?.error" role="alert" class="shell-error">{{ errorLabel(axisStore.error) }}<details><summary>技术详情</summary>{{ axisStore.error }}</details></div>
       </div>
 
+      <p v-if="(isAxisPage || page === 'definitions') && !axisStore && axisLoadError" role="alert">{{ axisLoadError }}</p>
+      <template v-if="axisStore || !(isAxisPage || page === 'definitions')">
       <DamageCalculator v-if="page === 'calculator'" ref="calculator" />
       <div v-else-if="page === 'timeline'" class="timeline-layout">
         <section class="timeline-main panel">
@@ -177,9 +199,9 @@ async function importFile(event: Event) {
 
       <section v-else-if="page === 'team'"><TeamWorkspace ref="teamWorkspace" @timeline="navigate('timeline')" @account="navigate('characters')" /></section>
 
-      <div v-else-if="page === 'analysis'" class="analysis-layout"><section class="panel"><div class="panel-heading"><div><h2>伤害构成</h2><p>来自当前轴的真实求值结果；目标筛选不删除记录。</p></div><span class="subtle-tag">{{ statusLabel(result.status) }}</span></div><div class="analysis-stats"><div><small>全轴总伤害</small><strong>{{ num(result.totalValue) }}</strong></div><div><small>目标伤害</small><strong>{{ num(result.objectiveValue) }}</strong></div><div><small>伤害点</small><strong>{{ result.points.length }}</strong></div></div><h3 class="chart-title">逐点贡献 <span>点击定位到时间轴</span></h3><div class="contribution-chart"><div v-for="point in result.points" :key="point.id" class="shell-analysis-row"><label><input type="checkbox" :aria-label="`目标 ${recordLabel(project, point.id)}`" :checked="!project.objective.damageIds || project.objective.damageIds.includes(point.id)" @change="workspace.command(draft => setDamageSelected(draft, point.id, ($event.target as HTMLInputElement).checked))"></label><button class="ui-action soft" data-accent="anemo" :data-analysis-id="point.id" :aria-label="`分析定位 ${recordLabel(project, point.id)}`" @click="openPoint(point.id)"><span>{{ recordLabel(project, point.id) }}<small>{{ project.timeline.find(r => r.id === point.id)?.timeMs }} 毫秒</small></span><div class="contribution-track"><i :style="{ width: `${result.totalValue && point.value ? Math.max(0, Math.min(100, point.value / result.totalValue * 100)) : 0}%` }"></i></div><strong>{{ num(point.value) }}</strong><span class="chart-arrow">↗</span></button></div></div></section><aside class="panel"><h2>当前目标</h2><p class="muted">默认统计整条轴。勾选只改变目标集合，队友、条件和其他记录仍保留。</p><p class="design-callout">正式配装搜索和属性收益分析尚未支持。</p><button class="ui-action soft" data-accent="anemo" @click="navigate('team')">调整候选配装</button></aside></div>
+      <div v-else-if="page === 'analysis'" class="analysis-layout"><section class="panel"><div class="panel-heading"><div><h2>伤害构成</h2><p>来自当前轴的真实求值结果；目标筛选不删除记录。</p></div><span class="subtle-tag">{{ statusLabel(result.status) }}</span></div><div class="analysis-stats"><div><small>全轴总伤害</small><strong>{{ num(result.totalValue) }}</strong></div><div><small>目标伤害</small><strong>{{ num(result.objectiveValue) }}</strong></div><div><small>伤害点</small><strong>{{ result.points.length }}</strong></div></div><h3 class="chart-title">逐点贡献 <span>点击定位到时间轴</span></h3><div class="contribution-chart"><div v-for="point in result.points" :key="point.id" class="shell-analysis-row"><label><input type="checkbox" :aria-label="`目标 ${recordLabel(project, point.id)}`" :checked="!project.objective.damageIds || project.objective.damageIds.includes(point.id)" @change="axisStore!.command(draft => setDamageSelected(draft, point.id, ($event.target as HTMLInputElement).checked))"></label><button class="ui-action soft" data-accent="anemo" :data-analysis-id="point.id" :aria-label="`分析定位 ${recordLabel(project, point.id)}`" @click="openPoint(point.id)"><span>{{ recordLabel(project, point.id) }}<small>{{ project.timeline.find(r => r.id === point.id)?.timeMs }} 毫秒</small></span><div class="contribution-track"><i :style="{ width: `${result.totalValue && point.value ? Math.max(0, Math.min(100, point.value / result.totalValue * 100)) : 0}%` }"></i></div><strong>{{ num(point.value) }}</strong><span class="chart-arrow">↗</span></button></div></div></section><aside class="panel"><h2>当前目标</h2><p class="muted">默认统计整条轴。勾选只改变目标集合，队友、条件和其他记录仍保留。</p><p class="design-callout">正式配装搜索和属性收益分析尚未支持。</p><button class="ui-action soft" data-accent="anemo" @click="navigate('team')">调整候选配装</button></aside></div>
 
-      <section v-else-if="page === 'projects'" class="panel project-library"><div class="panel-heading"><div><h2>当前轴文件</h2><label>轴名称<input v-model="project.name" aria-label="轴名称" maxlength="160" placeholder="给这条轴命名"></label><p>{{ projectLabel(project) }} · 修订 {{ project.revision }} · 规则快照</p></div><button class="ui-action soft" data-accent="anemo" @click="workspace.createProject(); navigate('team')">新建空轴</button></div><p class="design-callout">项目保存轴、定义版本、候选配置和目标；不需要视频或账号在线。新建后前往队伍页准备角色和公式，在时间轴添加动作和伤害。</p><div class="shell-project-actions"><button class="ui-action soft" data-accent="anemo" :disabled="busy" @click="openProject">打开项目文件</button><button class="ui-action soft" data-accent="anemo" :disabled="busy" @click="workspace.saveProject()">保存当前轴文件</button></div></section>
+      <section v-else-if="page === 'projects'" class="panel project-library"><div class="panel-heading"><div><h2>当前轴文件</h2><label>轴名称<input v-model="project.name" aria-label="轴名称" maxlength="160" placeholder="给这条轴命名"></label><p>{{ projectLabel(project) }} · 修订 {{ project.revision }} · 规则快照</p></div><button class="ui-action soft" data-accent="anemo" @click="axisStore!.createProject(); navigate('team')">新建空轴</button></div><p class="design-callout">项目保存轴、定义版本、候选配置和目标；不需要视频或账号在线。新建后前往队伍页准备角色和公式，在时间轴添加动作和伤害。</p><div class="shell-project-actions"><button class="ui-action soft" data-accent="anemo" :disabled="axisStore!.busy" @click="openProject">打开项目文件</button><button class="ui-action soft" data-accent="anemo" :disabled="axisStore!.busy" @click="axisStore!.saveProject()">保存当前轴文件</button></div></section>
 
       <section v-else-if="page === 'definitions'" class="panel definition-library"><DefinitionLibrary /><div class="panel-heading"><div><h2>当前轴使用的定义快照</h2><p>这里调整轴内快照；不会自动回写独立定义库。</p></div><span class="subtle-tag">{{ project.definitions.length }} 个定义</span></div><ChoiceGroup class="definition-tabs" :model-value="definitionFilter" :options="[{value:'all',label:'全部定义'},{value:'preset',label:'内置预设'},{value:'user',label:'用户自定义'}]" label="定义来源" tone="electro" @update:model-value="definitionFilter=$event==='preset'?'preset':$event==='user'?'user':'all'" /><article v-for="definition in visibleDefinitions" :key="definition.id" class="shell-definition-editor"><h3>{{ definitionLabel(project, definition.id) }} · 版本{{ definition.version }}</h3><div class="candidate-form"><label>内容来源<select v-model="definition.source.kind"><option value="user">用户定义</option><option value="preset">预设内容</option></select></label><label v-if="definition.damage">伤害根节点<select v-model="definition.damage"><option v-for="node in definition.nodes" :key="node.id" :value="node.id">{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</option></select></label></div><div v-for="node in definition.nodes" :key="node.id" class="shell-node-row"><code>{{ nodeLabel(project, definition.id, node.id) }} · {{ operationLabel(node.op) }}</code><label v-if="constant(node)">常量 {{ nodeLabel(project, definition.id, node.id) }}<input :aria-label="`常量 ${nodeLabel(project, definition.id, node.id)}`" type="number" step="any" :value="constant(node)?.value" @input="node.op === 'constant' && (node.quantity.value = number($event))"><small>{{ unitLabel(constant(node)?.unit ?? '') }}</small></label><code v-else>{{ formatWorkbenchExpression(project, definition.id, node.id) }}</code></div></article><p v-if="!visibleDefinitions.length">暂无此类定义。</p></section>
 
@@ -189,11 +211,12 @@ async function importFile(event: Event) {
       <section v-else-if="page==='account'" class="panel account-page"><AccountSettings /></section>
       <section v-else class="panel settings-page"><details class="theme-settings"><summary>界面配色 · 七元素三阶</summary><ThemePalette /></details><details class="settings-about"><summary>关于与支持范围</summary><img :src="geoEmblem" alt="" width="40" height="40" class="library-emblem"><span class="section-eyebrow">地脉工作台</span><h2>支持范围</h2><div class="settings-grid"><div><h3>当前支持</h3><p>普通伤害、候选配装重求值、明确/未知条件、区间效果、记录编辑与目标选择、独立账号和定义库、空轴创作、撤销重做、恢复、后台计算及文件保存重开；首批真实角色配装验算、莫娜圣遗物导入与 Enka UID 公开展柜预览导入；属性转换、来源修订、属性捕获、历史累计与计数。</p></div><div><h3>后续能力</h3><p>米游社／HoYoLAB 全账号导入、视频、概率和配装搜索。</p></div></div><button class="ui-action soft" data-accent="anemo" @click="creditsOpen = true">开源许可与鸣谢</button><p>原神游戏内容 © miHoYo / HoYoverse。</p></details></section>
 
+      </template>
       <AccountLibrary v-if="configurationEditorOpen" ref="configurationEditor" page="characters" configuration-detail @detail-closed="configurationClosed" />
-      <ArtifactDetail v-if="restoredArtifact && restoredItem" ref="restoredDetail" :key="restoredItem.id" :item="restoredItem" :readonly="restoredArtifact.readonly || !inventoryAccount.account.artifacts.some(item=>item.id===restoredItem!.id)" @close="closeRestoredArtifact" />
+      <ArtifactDetail v-if="restoredArtifact && restoredItem" ref="restoredDetail" :key="restoredItem.id" :item="restoredItem" :readonly="restoredArtifact.readonly || !inventoryAccount?.account.artifacts.some(item=>item.id===restoredItem!.id)" @close="closeRestoredArtifact" />
       <WorkbenchDialog v-if="creditsOpen" title="开源许可与鸣谢" @close="creditsOpen = false"><ThirdPartyCredits /></WorkbenchDialog>
-      <section v-if="isProjectPage && result.diagnostics.length" class="panel shell-diagnostics"><h2>条件与诊断</h2><ul aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}/${diagnostic.path}/${diagnostic.message}`"><strong>{{ diagnosticLabel(diagnostic.code) }}</strong> · <details><summary>技术详情</summary>{{ diagnostic.message }}<code>{{ diagnostic.code }} · {{ diagnostic.path }}</code></details></li></ul></section>
-      <details v-if="isProjectPage" class="project-technical"><summary>技术详情：项目原始数据</summary><pre>{{ JSON.stringify(project, null, 2) }}</pre></details>
+      <section v-if="axisStore && isAxisPage && result.diagnostics.length" class="panel shell-diagnostics"><h2>条件与诊断</h2><ul aria-label="计算诊断"><li v-for="diagnostic in result.diagnostics" :key="`${diagnostic.code}/${diagnostic.path}/${diagnostic.message}`"><strong>{{ diagnosticLabel(diagnostic.code) }}</strong> · <details><summary>技术详情</summary>{{ diagnostic.message }}<code>{{ diagnostic.code }} · {{ diagnostic.path }}</code></details></li></ul></section>
+      <details v-if="axisStore && isAxisPage" class="project-technical"><summary>技术详情：项目原始数据</summary><pre>{{ JSON.stringify(project, null, 2) }}</pre></details>
     </div>
   </div>
 </template>

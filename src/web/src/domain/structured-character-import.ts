@@ -1,5 +1,8 @@
+import * as schemas from '@leyline/schema';
+import { DATA_VERSION } from '@leyline/game-data';
+import { describeCharacter, linkCharacterFile } from '@leyline/game-data/character-file';
 import { definitionKey, parseCalculationJson, type CalculationDiagnostic, type DefinitionRef, type StructuredCharacterDefinition } from '@leyline/schema';
-import { collectCalculationClosure, compileStructuredCharacter } from '@leyline/engine';
+import { collectCalculationClosure, collectCalculationRoots, compileStructuredCharacter } from '@leyline/engine';
 
 export interface CharacterImportConflict { kind: 'builtin-claim' | 'character' | 'calculation' | 'source'; identity: string; message: string }
 declare const preparedBrand: unique symbol;
@@ -21,7 +24,17 @@ type ImportResult = { ok: true; prepared: PreparedCharacterImport; diagnostics: 
 export function prepareCharacterImport(text: string, registry: readonly StructuredCharacterDefinition[]): ImportResult {
   const json = parseCalculationJson(text);
   if (!json.ok) return json;
-  const incoming = compileStructuredCharacter(json.value);
+  const parsed = schemas.characterMetadataSchema.safeParse(json.value);
+  if (!parsed.success) return { ok: false, diagnostics: parsed.error.issues.map(issue => ({ code: 'invalid-range', severity: 'error', jsonPointer: schemas.calculationJsonPointer(issue.path), message: issue.message, affectedOutputIds: [] })) };
+  try {
+    return prepareResolvedCharacterImport(linkCharacterFile(parsed.data, DATA_VERSION, collectCalculationRoots), registry);
+  } catch (cause) {
+    return { ok: false, diagnostics: [{ code: 'missing-dependency', severity: 'error', jsonPointer: '/', message: cause instanceof Error ? cause.message : '角色依赖无效。', affectedOutputIds: [] }] };
+  }
+}
+
+export function prepareResolvedCharacterImport(value: unknown, registry: readonly StructuredCharacterDefinition[]): ImportResult {
+  const incoming = compileStructuredCharacter(value);
   if (!incoming.ok) return incoming;
   const diagnostics: CalculationDiagnostic[] = [], current: StructuredCharacterDefinition[] = [];
   const seenCharacters = new Set<string>();
@@ -89,7 +102,7 @@ export function exportCharacterSnapshot(input: unknown): string {
   if (!character.ok) throw new Error(character.diagnostics.map(diagnostic => diagnostic.message).join('\n'));
   const closure = collectCalculationClosure(character.character);
   if (!closure.ok) throw new Error(closure.diagnostics.map(diagnostic => diagnostic.message).join('\n'));
-  const value = { ...character.character, calculation: { ...character.character.calculation, bundle: closure.bundle } };
+  const value = schemas.characterMetadataSchema.parse(describeCharacter({ ...character.character, calculation: { ...character.character.calculation, bundle: closure.bundle } }));
   const text = JSON.stringify(value, null, 2) + '\n', parsed = parseCalculationJson(text);
   if (!parsed.ok) throw new Error(parsed.diagnostics.map(diagnostic => diagnostic.message).join('\n'));
   return text;

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": "0.1.0",
   "character": {
     "namespace": "builtin",
     "id": "vesna",

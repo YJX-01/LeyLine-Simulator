@@ -1,3 +1,5 @@
+import type { LocalAccount } from '@leyline/schema';
+import { readDocument } from '../../helpers/browser-document';
 import {existsSync,readFileSync} from 'node:fs';
 import {test,expect,type Page,type Locator} from '@playwright/test';
 const recorded='.references/enka/official-example.json';
@@ -13,7 +15,7 @@ async function centered(picker:Locator){
   expect(offset).toBeLessThan(1);
 }
 const warning=(page:Page)=>page.getByRole('dialog',{name:'有未保存的修改',exact:true});
-const account=(page:Page)=>page.evaluate(()=>localStorage.getItem('leyline-account-v5'));
+const account=(page:Page)=>page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
 
 test('empty and occupied pickers center titles; role exit continues, rejects failed saves, saves or discards',async({page})=>{
   await page.setViewportSize({width:1440,height:1000});await importShowcase(page);const original=await account(page);
@@ -34,18 +36,18 @@ test('empty and occupied pickers center titles; role exit continues, rejects fai
 test('artifact exit validation keeps draft; Save persists then closes',async({page})=>{
   await importShowcase(page);await page.getByTestId('workspace-nav-artifacts').click();await page.locator('.inventory-card').first().click();const detail=page.locator('.artifact-detail-dialog'),value=detail.locator('.sub-row input').first(),initial=await value.inputValue(),before=await account(page);
   await value.fill('');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toBeVisible();await expect(detail.getByText('圣遗物副词条无效，不能重复或与主词条相同。',{exact:true})).toBeVisible();expect(await account(page)).toBe(before);
-  await value.fill(initial);await detail.getByLabel('圣遗物别名',{exact:true}).fill('界面别名试改');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toHaveCount(0);expect(JSON.parse((await account(page))!).artifacts.some((item:{alias?:string})=>item.alias==='界面别名试改')).toBe(true);
+  await value.fill(initial);await detail.getByLabel('圣遗物别名',{exact:true}).fill('界面别名试改');await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(detail).toHaveCount(0);expect((await readDocument<LocalAccount>(page, 'account', (await account(page))!)).artifacts.some((item:{alias?:string})=>item.alias==='界面别名试改')).toBe(true);
 });
 
 test('manual Save on return records actual Amber and returns to the same character list',async({page})=>{
   await page.goto('/');await page.getByRole('button',{name:'手动添加角色',exact:true}).click();const dialog=page.getByRole('dialog',{name:'手动添加角色',exact:true});await dialog.getByLabel('搜索游戏角色',{exact:true}).fill('安柏');await dialog.getByRole('button',{name:'选择安柏',exact:true}).click();await dialog.getByRole('button',{name:'6命',exact:true}).click();await dialog.getByRole('button',{name:'更换武器',exact:true}).click();await dialog.getByLabel('搜索装备武器',{exact:true}).fill('天空之翼');await dialog.getByRole('button',{name:'天空之翼',exact:true}).click();await dialog.getByRole('button',{name:'精炼2阶',exact:true}).click();
-  await dialog.getByRole('button',{name:'返回角色列表',exact:true}).click();await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(dialog.getByLabel('搜索游戏角色',{exact:true})).toBeVisible();await expect(dialog.getByLabel('搜索游戏角色',{exact:true})).toHaveValue('安柏');await expect(page.getByRole('dialog',{name:'安柏',exact:true})).toHaveCount(0);expect(JSON.parse((await account(page))!).characters[0].build).toMatchObject({constellation:6,weapon:{name:'天空之翼'},refinement:2});
+  await dialog.getByRole('button',{name:'返回角色列表',exact:true}).click();await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(dialog.getByLabel('搜索游戏角色',{exact:true})).toBeVisible();await expect(dialog.getByLabel('搜索游戏角色',{exact:true})).toHaveValue('安柏');await expect(page.getByRole('dialog',{name:'安柏',exact:true})).toHaveCount(0);expect((await readDocument<LocalAccount>(page, 'account', (await account(page))!)).characters[0].build).toMatchObject({constellation:6,weapon:{name:'天空之翼'},refinement:2});
 });
 
 test('showcase Save on exit still requires import confirmation; cancel retains draft and writes nothing',async({page})=>{
   await importShowcase(page,false);await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});await role.getByRole('button',{name:'展柜',exact:true}).click();await role.getByRole('button',{name:'保存组合',exact:true}).click();const editor=page.getByRole('dialog',{name:'保存组合',exact:true});const before=await account(page);
   await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();const confirmation=page.getByRole('dialog',{name:'入库并保存组合？',exact:true});await expect(confirmation).toBeVisible();expect(await account(page)).toBe(before);await confirmation.getByRole('button',{name:'取消',exact:true}).click();await expect(editor).toBeVisible();expect(await account(page)).toBe(before);
-  await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await confirmation.getByRole('button',{name:'保存组合',exact:true}).click();await expect(editor).toHaveCount(0);expect(JSON.parse((await account(page))!).artifacts).toHaveLength(5);expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-artifact-combinations-v1')!))).toHaveLength(1);await expect(role).toBeVisible();
+  await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await confirmation.getByRole('button',{name:'保存组合',exact:true}).click();await expect(editor).toHaveCount(0);expect((await readDocument<LocalAccount>(page, 'account', (await account(page))!)).artifacts).toHaveLength(5);expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-artifact-combinations-0.1.0')!))).toHaveLength(1);await expect(role).toBeVisible();
 });
 
 test('team candidate Save on exit persists only the project and follows the requested close',async({page})=>{

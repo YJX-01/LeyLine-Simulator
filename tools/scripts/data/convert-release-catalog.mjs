@@ -1,10 +1,8 @@
-import { writeGeneratedFile } from '../../lib/generated-files.mjs';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 const root = new URL('../../../', import.meta.url);
 const canonical = new URL('src/game-data/data/tables/catalog-release-metadata.json', root);
-const target = new URL('src/web/generated/catalog-release-metadata.json', root);
 const commit = '8e5badd60b5d894284ccc927a56c9683529d2592';
 if (process.argv.includes('--capture')) {
   const reference = new URL('.references/genshin-db/', root);
@@ -24,8 +22,5 @@ if (process.argv.includes('--capture')) {
   writeFileSync(canonical, `${JSON.stringify(output, null, 2)}\n`);
 }
 const content = readFileSync(canonical, 'utf8');
-if (process.argv.includes('--check')) {
-  if (readFileSync(target, 'utf8') !== content) throw new Error('Release metadata needs regeneration.');
-} else writeGeneratedFile(target, content);
 const data = JSON.parse(content);
 console.log(Object.fromEntries(['characters', 'weapons', 'artifacts'].map(group => [group, Object.keys(data[group]).length])));

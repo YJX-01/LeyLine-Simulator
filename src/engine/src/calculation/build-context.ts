@@ -1,3 +1,4 @@
+import { APP_VERSION } from '@leyline/schema/version';
 import { artifactSubstatLimits, calculationBundleSchema, calculationJsonPointer, combatContextSchema, definitionKey, inspectCalculationStructure, inventoryAllocationsSchema, statKeys, structuredBuildActorsSchema, structuredCombatSetupSchema, structuredHitRequestSchema, valueMatchesType,
   talentInputIssues, talentLevelBonus, type CalculationBundle, type CalculationDiagnostic, type CalculationFact, type CombatActor, type CombatContext, type EvaluatedValue,
   type DefinitionRef, type InventoryAllocation, type StructuredBuild, type StructuredDamageEvaluation, type Value, type ValueType } from '@leyline/schema';
@@ -24,14 +25,14 @@ const allowedMain: Record<StructuredBuild['artifacts'][number]['slot'], readonly
   circlet: ['hpPercent', 'attackPercent', 'defensePercent', 'elementalMastery', 'critRate', 'critDamage', 'healingBonus'],
 };
 
-/** Current v3 snapshots only. Growth and equipment inputs never execute static or combat modifiers. */
+/** Current build snapshots only. Growth and equipment inputs never execute static or combat modifiers. */
 export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unknown): PreparedTeamResult {
   const diagnostics: CalculationDiagnostic[] = [input, ...dependenciesInput === undefined ? [] : [dependenciesInput]].flatMap(value => inspectCalculationStructure(value));
   const report = (code: CalculationDiagnostic['code'], pointer: string, message: string) => diagnostics.push({ code, severity: 'error', jsonPointer: pointer, message, affectedOutputIds: [] });
   if (diagnostics.length) return { ok: false, diagnostics };
   const parsed = structuredBuildActorsSchema.safeParse(input);
   if (!parsed.success) { for (const issue of parsed.error.issues) report('invalid-range', calculationJsonPointer(issue.path), issue.message); return { ok: false, diagnostics }; }
-  const merged: CalculationBundle = { schemaVersion: 2, runtimeVersion: 2, requiredFeatures: ['fixed-templates-v1'], sources: [], formulas: [], tables: [], attributes: [], effects: [], aggregates: [], coverage: [], stateMachines: [], damageFamilies: [] };
+  const merged: CalculationBundle = { schemaVersion: APP_VERSION, runtimeVersion: APP_VERSION, requiredFeatures: ['fixed-templates-v1'], sources: [], formulas: [], tables: [], attributes: [], effects: [], aggregates: [], coverage: [], stateMachines: [], damageFamilies: [] };
   const features = new Set(merged.requiredFeatures), families = new Set<string>(), identities = new Map<string, string>();
   const data: TeamData = { builds: new Map(), actors: [], inventory: [] };
   const appendBundle = (bundle: CalculationBundle) => {

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": "0.1.0",
   "method": "Explicit source-derived output scope, checked independently against fixed parameters in the new runtime. Catalog presence and previous support flags are not completion evidence.",
   "hits": [
     {

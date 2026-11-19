@@ -9,5 +9,5 @@ export const useCharacterDefinitionStore = defineStore('character-definition-dra
   const baseline = ref('');
   const dirty = computed(() => !!draft.value && (Object.keys(edits.value).length > 0 || JSON.stringify(draft.value) !== baseline.value));
   function open(file: CharacterDefinitionFile) { draft.value = file; edits.value = {}; baseline.value = JSON.stringify(file); }
-  return { draft, edits, dirty, open };
+  return { draft, edits, baseline, dirty, open };
 });

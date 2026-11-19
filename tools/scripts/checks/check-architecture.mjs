@@ -35,6 +35,7 @@ for (const path of ['apps', 'packages', 'scripts', 'patches', 'fixtures', 'tests
   if (existsSync(resolve(root, path))) fail(path, 'retired root directory; use src/, tools/, or .cache/ instead');
 }
 for (const workspace of workspaces) {
+  if (workspace.version !== read('package.json').version) fail(workspace.directory, 'workspace version must match the application release');
   if (!Object.hasOwn(allowed, workspace.name)) fail(workspace.directory, `define an architecture dependency policy for ${workspace.name}`);
 }
 
@@ -54,6 +55,8 @@ function localTarget(from, specifier) {
 
 function checkImport(from, specifier, runtime) {
   const source = owner(from);
+  if (source?.name === '@leyline/web' && specifier.startsWith('virtual:leyline-display/')) return;
+  if (source?.name === '@leyline/game-data' && ['virtual:leyline-catalog/loaders', 'virtual:leyline-catalog/list'].includes(specifier)) return;
   const test = /\.(test|spec)\.ts$/.test(from);
   let target;
   if (specifier.startsWith('.')) {
@@ -62,13 +65,13 @@ function checkImport(from, specifier, runtime) {
     if (target.startsWith('archive/')) fail(from, `active code cannot import archived implementation: ${specifier}`);
     const destination = owner(target);
     if (source && destination && source !== destination) fail(from, `use ${destination.name}'s public exports instead of a relative cross-workspace import`);
-    const generatedGameData = source?.name === '@leyline/game-data' && target.startsWith(`${source.directory}/generated/`)
-      && (target.endsWith('.json') || target === `${source.directory}/generated/chunk-loaders.ts`);
-    if (source && source.name !== '@leyline/web' && !test && !target.startsWith(`${source.directory}/src/`) && !generatedGameData) {
+    const canonicalGameData = source?.name === '@leyline/game-data' && target.startsWith(`${source.directory}/data/`)
+      && target.endsWith('.json');
+    const releaseVersion = from === 'src/schema/src/version.mjs' && target === 'package.json';
+    if (!releaseVersion && source && source.name !== '@leyline/web' && !test && !target.startsWith(`${source.directory}/src/`) && !canonicalGameData) {
       fail(from, `shared production code cannot import repository adapters or fixtures: ${specifier}`);
     }
-    const generatedJson = target.startsWith('src/web/generated/') && target.endsWith('.json');
-    if (!test && from.startsWith('src/web/src/domain/') && target.startsWith('src/web/src/') && !target.startsWith('src/web/src/domain/') && !generatedJson) {
+    if (!test && from.startsWith('src/web/src/domain/') && target.startsWith('src/web/src/') && !target.startsWith('src/web/src/domain/')) {
       fail(from, `domain modules cannot depend on UI, state, or lifecycle modules: ${specifier}`);
     }
   } else {

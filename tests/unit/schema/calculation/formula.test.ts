@@ -1,8 +1,9 @@
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { formulaDefinitionSchema, parseCalculationJson, calculationValueSchema } from '@leyline/schema';
 
-const character = JSON.parse(readFileSync(new URL('../../../../src/game-data/data/characters/nahida.json', import.meta.url), 'utf8'));
+const character = readCalculationData(new URL('../../../../src/game-data/data/characters/nahida.json', import.meta.url));
 const document = JSON.stringify(character.calculation.bundle.formulas.find((item: { identity: { id: string } }) => item.identity.id === 'nahida.skill.tri-karma.base'), null, 2);
 const definition = () => JSON.parse(document);
 

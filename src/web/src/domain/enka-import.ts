@@ -1,7 +1,7 @@
 import { enkaAvatarSchema, enkaResponseSchema } from '@leyline/schema/enka';
 import { buildSchema, type ArtifactItem, type StatKey } from '@leyline/schema';
 import { getCharacter, getWeapon, getArtifactSet } from '@leyline/game-data';
-import mapping from '../../generated/enka-catalog.json';
+import mapping from 'virtual:leyline-display/enka-catalog';
 import { loadAccountGameData } from './account-presentation';
 import { accountSlotLabels, cloneAccount, parseAccount, type LocalAccount, type AccountCharacter, type AccountSlot } from './account';
 import { planShowcaseInventory } from './showcase-inventory';

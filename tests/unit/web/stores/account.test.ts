@@ -17,41 +17,41 @@ describe('account repository', () => {
     const getItem = vi.fn((key: string) => memory.get(key) ?? null);
     vi.stubGlobal('localStorage', { getItem, setItem: (key: string, value: string) => memory.set(key, value) });
     const store = useAccountStore();
-    expect(store.account.schemaVersion).toBe(5);
+    expect(store.account.schemaVersion).toBe('0.1.0');
     expect(getItem.mock.calls.some(([key]) => key === 'leyline-account-v2')).toBe(false);
     expect(() => store.importContent(old)).toThrow();
     store.create('当前账号');
     expect(memory.get('leyline-account-v2')).toBe(old);
-    expect(JSON.parse(memory.get('leyline-account-v5')!).schemaVersion).toBe(5);
+    expect(JSON.parse(memory.get('leyline-account-0.1.0')!).schemaVersion).toBe('0.1.0');
   });
   it('protects an unreadable empty-document derivative until an explicit replacement is backed up', () => {
     // File-version boundary derived from the app's empty document; no player data is invented.
     const raw = JSON.stringify({...createAccount(), schemaVersion:1});
-    const memory = new Map([['leyline-account-v5', raw]]);
+    const memory = new Map([['leyline-account-0.1.0', raw]]);
     let failBackup = false;
     vi.stubGlobal('localStorage', {
       getItem: (key:string) => memory.get(key) ?? null,
       setItem: (key:string,value:string) => {
-        if (failBackup && key==='leyline-account-v5-previous') throw new Error('backup failed');
+        if (failBackup && key==='leyline-account-0.1.0-previous') throw new Error('backup failed');
         memory.set(key,value);
       },
     });
     const store = useAccountStore();
     expect(store.error).toContain('本地账号草稿无法读取');
     store.account.name = '尚未载入的编辑';
-    expect(memory.get('leyline-account-v5')).toBe(raw);
+    expect(memory.get('leyline-account-0.1.0')).toBe(raw);
     expect(() => store.commitEdit(store.account)).toThrow('未覆盖原始草稿');
     expect(() => store.importContent('{')).toThrow();
-    expect(memory.get('leyline-account-v5')).toBe(raw);
+    expect(memory.get('leyline-account-0.1.0')).toBe(raw);
     failBackup = true;
     store.create('新账号');
-    expect(memory.get('leyline-account-v5')).toBe(raw);
+    expect(memory.get('leyline-account-0.1.0')).toBe(raw);
     failBackup = false;
     store.create('新账号');
-    expect(memory.get('leyline-account-v5-previous')).toBe(raw);
-    expect(JSON.parse(memory.get('leyline-account-v5')!).name).toBe('新账号');
+    expect(memory.get('leyline-account-0.1.0-previous')).toBe(raw);
+    expect(JSON.parse(memory.get('leyline-account-0.1.0')!).document.name).toBe('新账号');
     store.account.name = '继续编辑';
-    expect(JSON.parse(memory.get('leyline-account-v5')!).name).toBe('继续编辑');
+    expect(JSON.parse(memory.get('leyline-account-0.1.0')!).document.name).toBe('继续编辑');
   });
   it('roundtrips an independent file and preserves existing account on invalid import', async () => {
     const store = useAccountStore();

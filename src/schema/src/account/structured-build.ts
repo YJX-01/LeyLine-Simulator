@@ -1,3 +1,4 @@
+import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema } from '../common/values';
 import { buildFieldsSchema } from './build-fields';
@@ -10,7 +11,7 @@ export const structuredArtifactItemSchema = z.object(artifactItemSchema.shape).e
   inventory: z.object({ accountId: idSchema, itemId: idSchema }).strict().nullable(), sourceRefs: z.array(idSchema).max(1000),
 }).strict().superRefine(validateArtifactEnhancement);
 export const structuredBuildSchema = buildFieldsSchema.extend({
-  schemaVersion: z.literal(3), kind: z.literal('calculation-build'), character: structuredCharacterDefinitionSchema, weapon: structuredWeaponDefinitionSchema,
+  schemaVersion: z.literal(APP_VERSION), kind: z.literal('calculation-build'), character: structuredCharacterDefinitionSchema, weapon: structuredWeaponDefinitionSchema,
   sets: z.array(structuredArtifactSetDefinitionSchema).max(100), artifacts: z.array(structuredArtifactItemSchema).max(5),
   sources: z.array(calculationSourceSchema).max(1000), artifactMainSourceRefs: z.array(idSchema).min(1).max(1000),
 }).strict();

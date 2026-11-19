@@ -8,7 +8,7 @@ const groups = ['flower', 'feather', 'sand', 'cup', 'head'] as const;
 const aliases: Record<string, string> = { feather: 'plume', sand: 'sands', cup: 'goblet', head: 'circlet' };
 const statMap: Record<string, StatKey> = { lifeStatic: 'hp', lifePercentage: 'hpPercent', attackStatic: 'attack', attackPercentage: 'attackPercent', defendStatic: 'defense', defendPercentage: 'defensePercent', critical: 'critRate', criticalDamage: 'critDamage', recharge: 'energyRecharge', elementalMastery: 'elementalMastery', windBonus: 'anemoBonus', rockBonus: 'geoBonus', thunderBonus: 'electroBonus', waterBonus: 'hydroBonus', fireBonus: 'pyroBonus', iceBonus: 'cryoBonus', dendroBonus: 'dendroBonus', physicalBonus: 'physicalBonus', cureEffect: 'healingBonus' };
 // Identity mapping captured from TwiceDrop Mona 7.2.02, matched by exact Chinese catalog names.
-import monaSetAliases from '../../generated/mona-set-aliases.json';
+import monaSetAliases from 'virtual:leyline-display/mona-set-aliases';
 const setAliases: Record<string, string> = monaSetAliases;
 
 type SetEntry = { id: string; name: string; rarities: number[]; slots: AccountSlot[] };

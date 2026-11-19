@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { formatJson } from '@leyline/schema';
+import { exportCharacterSnapshot } from '../domain/structured-character-import';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { getCharacter, loadCatalog, DATA_VERSION } from '@leyline/game-data';
 import type { CharacterDefinitionFile } from '@leyline/schema';
 import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefinition, prepareCharacterDefinition } from '../domain/character-definition';
-import { downloadJson } from '../domain/download';
+import { downloadJsonText } from '../domain/download';
 import { getDesktopBridge } from '../platform/desktop';
 import { useCharacterDefinitionStore } from '../stores/character-definition';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
@@ -30,7 +30,7 @@ const multiplier = computed(() => store.edits[editKey.value] ?? String(selectedS
 const previewDefinition=computed(()=>{if(!store.draft)return undefined;try{return prepareCharacterDefinition(store.draft,store.edits);}catch{return store.draft;}});
 async function receive(content:string) {
   const value = JSON.parse(content);
-  const registry = value.origin === 'builtin' && typeof value.id === 'string' ? [await getCharacter(value.id)] : [];
+  const registry = value.namespace === 'builtin' && typeof value.id === 'string' ? [await getCharacter(value.id)] : [];
   open(parseCharacterDefinition(content, registry));
 }
 function open(file: CharacterDefinitionFile) {
@@ -69,7 +69,24 @@ async function openFile() {
 }
 function prepared() {
   if (!store.draft) throw new Error('请先复制或打开角色定义。');
-  return prepareCharacterDefinition(store.draft, store.edits);
+  let file = prepareCharacterDefinition(store.draft, store.edits);
+  if (!store.dirty) return file;
+  if (file.origin === 'builtin') {
+    const name = file.identity.name;
+    file = copyCharacterDefinition(file, DATA_VERSION);
+    file.identity.name = name;
+  } else {
+    const nextRevision = crypto.randomUUID();
+    const namespace = file.namespace;
+    function revise(value: unknown) {
+      if (!value || typeof value !== 'object') return;
+      const record = value as Record<string, unknown>;
+      if (record.namespace === namespace && typeof record.revision === 'string') record.revision = nextRevision;
+      Object.values(record).forEach(revise);
+    }
+    revise(file);
+  }
+  return file;
 }
 async function exportFile() {
   if (busy.value) return;
@@ -77,8 +94,8 @@ async function exportFile() {
   try {
     const signature = JSON.stringify([store.draft, store.edits]), file = prepared(), bridge = getDesktopBridge();
     if (bridge) {
-      if (!await bridge.saveProject(formatJson(file))) {  return; }
-    } else downloadJson(file, `${file.identity.name}.character.json`);
+      if (!await bridge.saveProject(exportCharacterSnapshot(file))) {  return; }
+    } else downloadJsonText(exportCharacterSnapshot(file), `${file.identity.name}.character.json`);
     if (JSON.stringify([store.draft, store.edits]) === signature) store.open(file);
 
   }
@@ -88,8 +105,10 @@ async function exportFile() {
 function apply() {
   error.value = '';
   try {
-    const next = applyCharacterDefinition(workspace.project, workspace.actorId, prepared());
+    const file = prepared();
+    const next = applyCharacterDefinition(workspace.project, workspace.actorId, file);
     workspace.command(project => { Object.assign(project, next); });
+    store.open(file);
 
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '角色定义应用失败。'; }
 }

@@ -15,13 +15,13 @@ export const damageHitSchema = z.object({
   snapshot: z.object({
     sourceSkillId: idSchema,
     attributes: z.array(statSchema).min(1).max(30).refine(attributes => new Set(attributes).size === attributes.length, '捕获属性不得重复。'),
-    source: contentSourceSchema,
+    source: contentSourceSchema.optional(),
   }).strict().optional(),
 }).strict();
 export const parameterSchema = z.object({ id: idSchema, unit: z.enum(['ratio','scalar','seconds','energy','stamina','unknown']), values: z.array(finiteSchema).min(1).max(30) }).strict();
 export const talentInputSchema = z.object({
-  id: idSchema, min: finiteSchema.nonnegative(), max: finiteSchema.nonnegative(), integer: z.boolean(), source: contentSourceSchema,
-  constellationLimits: z.array(z.object({ rank: z.number().int().min(1).max(6), max: finiteSchema.nonnegative(), source: contentSourceSchema }).strict()).max(6).optional(),
+  id: idSchema, min: finiteSchema.nonnegative(), max: finiteSchema.nonnegative(), integer: z.boolean(), source: contentSourceSchema.optional(),
+  constellationLimits: z.array(z.object({ rank: z.number().int().min(1).max(6), max: finiteSchema.nonnegative(), source: contentSourceSchema.optional() }).strict()).max(6).optional(),
 }).strict().refine(input => input.max >= input.min && (!input.integer || (Number.isInteger(input.min) && Number.isInteger(input.max)))
   && (input.constellationLimits ?? []).every(limit => limit.max >= input.min && (!input.integer || Number.isInteger(limit.max)))
   && new Set(input.constellationLimits?.map(limit => limit.rank)).size === (input.constellationLimits ?? []).length, '技能输入范围无效。');
