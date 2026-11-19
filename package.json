@@ -10,7 +10,6 @@
     "architecture:check": "node tools/scripts/checks/check-architecture.mjs",
     "data:check": "node tools/scripts/checks/check-content-sources.mjs && node tools/scripts/data/build.mjs --check",
     "test:content": "node --test tests/integration/*.test.mjs",
-    "test:content:desktop": "node tests/desktop/character-definition.mjs",
     "assets:check": "node tools/scripts/checks/check-ui-assets.mjs",
     "dev": "pnpm data:build && pnpm --filter @leyline/web dev",
     "desktop:build": "pnpm data:build && node tools/scripts/build/package-desktop.mjs",

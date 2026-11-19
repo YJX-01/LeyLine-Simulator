@@ -214,9 +214,8 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
     return packDocument('axis', project);
   }, JSON.parse(readFileSync(source, 'utf8')));
   // A format derivative. Added UI records are test edits, not an observed gameplay sequence.
-  await page.getByTestId('workspace-nav-projects').click();
-  await page.getByLabel('导入轴项目文件', { exact: true }).setInputFiles({ name: 'recorded-showcase-format.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(project)) });
   await page.getByTestId('workspace-nav-timeline').click();
+  await page.getByLabel('导入轴项目文件', { exact: true }).setInputFiles({ name: 'recorded-showcase-format.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(project)) });
   await page.locator('.skill-palette').getByRole('button').filter({ hasText: '古华剑·画雨笼山' }).click();
   await page.getByRole('button', { name: '在光标处记录动作', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(1);

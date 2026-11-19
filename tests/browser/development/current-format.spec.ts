@@ -28,40 +28,8 @@ test('recorded showcase files use the current contract and retired local account
   await expect(page.getByRole('dialog')).toHaveCount(0);
 });
 
-test('base traveler and Manekin metadata expose real texts, parameters and element-specific files',async({page})=>{
-  test.setTimeout(90000);
+test('Manekin elemental cultivation uses the shared character form',async({page})=>{
   await page.goto('/');
-  await page.getByTestId('workspace-nav-definitions').click();
-  const panel=page.getByRole('region',{name:'自定义角色元数据',exact:true});
-  for(const id of ['aether','lumine','manekin','manekina','manekin-pyro','manekina-hydro']) {
-    await panel.getByLabel('角色定义来源',{exact:true}).selectOption(id);
-    await panel.getByRole('button',{name:'复制角色元数据',exact:true}).click();
-    const details=panel.locator('.character-metadata-panel');
-    if(!await details.evaluate(node=>node.hasAttribute('open')))await details.locator('summary').click();
-    await expect(details.getByRole('heading',{name:new RegExp(id.startsWith('manekin')?'外域剑术·安谨守望':'故去的追忆')})).toBeVisible();
-    if(id.includes('-')) {
-      await expect(details.getByRole('heading',{name:/戒惩轰击/})).toBeVisible();
-      await expect(details.getByRole('heading',{name:/禁入限区/})).toBeVisible();
-    } else await expect(details).toContainText('未元素化的基础形态');
-    if(id.startsWith('manekin')) {
-      for(const name of ['战域重划','交战持备','灵巧战姿'])await expect(details.getByRole('heading',{name,exact:true})).toBeVisible();
-    }
-  }
-  const downloading=page.waitForEvent('download');
-  await panel.getByRole('button',{name:'导出角色定义',exact:true}).click();
-  const file=JSON.parse(readFileSync((await (await downloading).path())!,'utf8'));
-  expect(file.derivedFrom.id).toBe('manekina-hydro');
-  expect(file.identity.element).toBe('hydro');
-  expect(file.schemaVersion).toBe('0.1.0');
-  expect(file.identity.description).toBeTruthy();
-  expect(file.constellations).toEqual([]);
-  expect(file.talents.map((talent:{category:string})=>talent.category)).toEqual(['normal','skill','burst']);
-  const before=await panel.getByLabel('角色元数据名称',{exact:true}).inputValue();
-  await panel.getByLabel('导入角色定义文件',{exact:true}).setInputFiles({name:'unsupported.character.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...file,schemaVersion:1}))});
-  await expect(panel.getByRole('alert')).toBeVisible();
-  await expect(panel.getByLabel('角色元数据名称',{exact:true})).toHaveValue(before);
-  // Catalog-only cultivation preview; no player build, equipment or combat evidence is invented.
-  await page.getByTestId('workspace-nav-characters').click();
   await page.getByRole('button',{name:'手动添加',exact:true}).click();
   const manual=page.getByRole('dialog',{name:'手动添加角色',exact:true});
   await manual.getByLabel('搜索游戏角色',{exact:true}).fill('奇偶·女性（水）');

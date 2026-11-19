@@ -14,33 +14,22 @@
 .workspace-design .equipment-slots img { display: block; max-width: 100%; object-fit: contain; }
 .workspace-design .sidebar-version .element-emblem { width: 20px; height: 20px; object-fit: contain; opacity: .85; flex-shrink: 0; }
 .workspace-design .library-emblem { float: right; width: 40px; height: 40px; object-fit: contain; margin: 0 12px 12px; }
-.workspace-design .shell-file-input { display: none; }
-.workspace-design .shell-notices { margin: 12px 30px 0; color: var(--neutral-muted); font-size:var(--font-body); }
 .workspace-design .shell-error { color: var(--element-pyro-deep); background: var(--element-pyro-light); padding: 12px; border: 1px solid var(--neutral-line); border-radius: 6px; }
 .workspace-design .shell-record-list { padding: 16px 22px; border-top: 1px solid var(--line); }
 .workspace-design .shell-record-list summary { cursor: pointer; margin-bottom: 12px; color: var(--neutral-muted); }
 .workspace-design .shell-record-row { display: flex; justify-content: space-between; gap: 10px; margin: 7px 0; }
 .workspace-design .shell-record-row > button:first-child { flex: 1; text-align: left; overflow-wrap: anywhere; }
-.workspace-design .shell-effect-group, .workspace-design .shell-definition-editor { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+.workspace-design .shell-effect-group { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
 .workspace-design .shell-effect-editor { margin-top: 16px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; }
 .workspace-design .shell-effect-editor > label { margin-top: 14px; }
-.workspace-design .shell-project-actions, .workspace-design .shell-tool-links { display: flex; gap: 14px; flex-wrap: wrap; margin: 22px 0; }
-.workspace-design .shell-node-row { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
-.workspace-design .shell-node-row input { max-width: 180px; }
-.workspace-design .shell-analysis-row { display: flex; align-items: center; gap: 12px; }
-.workspace-design .shell-analysis-row > label { flex: 0; }
-.workspace-design .shell-analysis-row input { width: 16px; height: 16px; }
-.workspace-design .shell-analysis-row > button { flex: 1; min-width: 0; }
+.workspace-design .shell-tool-links { display: flex; gap: 14px; flex-wrap: wrap; margin: 22px 0; }
 .workspace-design .shell-diagnostics { margin: 22px 30px; }
 .workspace-design .shell-diagnostics li { margin: 12px 0; line-height: 1.7; overflow-wrap: anywhere; }
 .workspace-design .shell-diagnostics code { display: block; font-size:var(--font-body); }
 .workspace-design .formula-box strong { overflow-wrap: anywhere; white-space: normal; font-size:var(--font-body); }
-.workspace-design .project-card { display: grid; gap: 10px; text-align: left; }
-.workspace-design .project-card > small { color: var(--muted); line-height: 1.7; }
 @media (max-width: 700px) {
-  .workspace-design .shell-notices, .workspace-design .shell-diagnostics { margin-inline: 15px; }
+  .workspace-design .shell-diagnostics { margin-inline: 15px; }
   .workspace-design .design-topbar { height: auto; min-height: 59px; flex-wrap: wrap; padding-block: 10px; }
-  .workspace-design .topbar-actions { flex-wrap: wrap; }
   .workspace-design .shell-record-row { flex-wrap: wrap; }
 }
 .workspace-design h1, .workspace-design h2, .workspace-design h3 { color: var(--neutral-ink); }
@@ -82,7 +71,6 @@
 .workspace-design .nav-group > button:not(:disabled):hover { color: var(--element-geo-light); background: color-mix(in srgb,var(--neutral-line) 4.31%,transparent); border-color: color-mix(in srgb,var(--element-geo-primary) 25.10%,transparent); }
 .workspace-design .nav-group > button.active { color: var(--element-geo-light); background: linear-gradient(90deg, color-mix(in srgb,var(--element-geo-primary) 18.82%,transparent), color-mix(in srgb,var(--element-geo-primary) 4.31%,transparent)); border-color: color-mix(in srgb,var(--element-geo-primary) 47.84%,transparent); box-shadow: inset 3px 0 var(--element-geo-primary); }
 .workspace-design .nav-group > button.active svg { color:var(--element-geo-deep); }
-.workspace-design .nav-count { color:var(--muted); background: color-mix(in srgb,var(--element-geo-primary) 18.04%,transparent); border: 1px solid color-mix(in srgb,var(--element-geo-primary) 21.18%,transparent); }
 .workspace-design .sidebar-bottom { border-color: color-mix(in srgb,var(--element-geo-primary) 25.88%,transparent); }
 .workspace-design .sidebar-bottom > button { color:var(--muted); background: transparent; }
 .workspace-design .sidebar-bottom > button:not(:disabled):hover { color: var(--element-geo-light); background: color-mix(in srgb,var(--neutral-line) 4.31%,transparent); border-color: transparent; }
@@ -92,9 +80,6 @@
 /* Paper surfaces and the approved Celtic vine corner. */
 .workspace-design .design-topbar { background: var(--neutral-canvas); border-color: var(--neutral-line); box-shadow: 0 1px 0 var(--neutral-surface); }
 .workspace-design .breadcrumb-slash { color:var(--element-geo-deep); }
-.workspace-design .topbar-actions a { color: var(--neutral-muted); }
-.workspace-design .header-objective { color: var(--neutral-muted); }
-.workspace-design .header-objective strong { color: var(--element-cryo-deep); }
 .workspace-design .page-heading { position: relative; }
 .workspace-design .project-context { background: var(--neutral-canvas); border-color: var(--neutral-line); }
 .workspace-design .mini-avatar, .workspace-design .role-avatar { color: var(--neutral-muted); background: var(--element-anemo-light); border: 1px solid var(--neutral-line); }
@@ -124,14 +109,8 @@
 .workspace-design .marker-diamond { background: var(--element-anemo-primary); border-color: var(--element-dendro-light); }
 .workspace-design .effect-bar { color: var(--element-geo-deep); background: var(--element-geo-light); border-color: var(--element-geo-primary); }
 .workspace-design .effect-bar small { color: var(--element-pyro-deep); }
-.workspace-design .timeline-footer, .workspace-design .timeline-footer > p { color: var(--neutral-muted); border-color: var(--neutral-line); }
 .workspace-design .legend-diamond { background: var(--element-anemo-primary); }
 .workspace-design .legend-bar { background: var(--element-geo-primary); }
-.workspace-design .axis-summary { background: var(--element-dendro-light); border-color: var(--neutral-line); }
-.workspace-design .axis-summary small { color: var(--neutral-muted); }
-.workspace-design .axis-summary strong { color: var(--element-anemo-deep); }
-.workspace-design .axis-summary > div:nth-child(2) strong { color: var(--neutral-muted); }
-.workspace-design .axis-summary .summary-state { color: var(--neutral-muted); }
 .workspace-design .status-dot, .workspace-design .design-statusbar i { background: var(--element-anemo-primary); }
 .workspace-design .inspector-damage { color: var(--element-anemo-deep); }
 .workspace-design .inspector-damage small, .workspace-design .inspector-fields label, .workspace-design .field-line > span { color: var(--neutral-muted); }
@@ -171,37 +150,9 @@
 .workspace-design .artifact-lines > span { background: var(--neutral-line); }
 .workspace-design .artifact-card footer { color: var(--neutral-muted); border-color: var(--neutral-line); }
 .workspace-design .artifact-card footer code { color: var(--neutral-muted); }
-.workspace-design .project-card-top { color:var(--element-dendro-deep); }
-.workspace-design .mini-axis > span { background: var(--neutral-line); }
-.workspace-design .mini-axis > i { background: var(--element-cryo-primary); border-color: var(--element-dendro-light); }
-.workspace-design .axis-project-card h3 { color: var(--element-cryo-deep); }
-.workspace-design .axis-project-card > p, .workspace-design .project-card-bottom { color: var(--neutral-muted); border-color: var(--neutral-line); }
-.workspace-design .project-card-bottom strong { color: var(--element-cryo-deep); }
-.workspace-design .empty-project > span { color:var(--element-geo-deep); }
-.workspace-design .empty-project h3 { color: var(--neutral-muted); }
 .workspace-design .team-role-card { border-color: var(--neutral-line); }
 .workspace-design .candidate-form label { color: var(--neutral-muted); }
 .workspace-design .candidate-form input, .workspace-design .candidate-form select { background: var(--neutral-surface); }
-.workspace-design .analysis-stats, .workspace-design .analysis-stats > div { border-color: var(--neutral-line); }
-.workspace-design .analysis-stats > div > small, .workspace-design .analysis-stats strong small { color: var(--neutral-muted); }
-.workspace-design .analysis-stats strong { color: var(--element-cryo-deep); }
-.workspace-design .chart-title { color: var(--neutral-muted); }
-.workspace-design .chart-title > span, .workspace-design .contribution-chart small, .workspace-design .analysis-footnote { color: var(--neutral-muted); }
-.workspace-design .contribution-chart button { border-color: var(--neutral-line); }
-.workspace-design .contribution-chart button > span:first-child { color: var(--neutral-muted); }
-.workspace-design .contribution-track { background: var(--neutral-line); }
-.workspace-design .contribution-track i { background: linear-gradient(90deg, var(--neutral-muted), var(--element-cryo-primary)); }
-.workspace-design .contribution-chart strong { color: var(--element-cryo-deep); }
-.workspace-design .chart-arrow { color:var(--element-geo-deep); }
-.workspace-design .analysis-flow > div { background: var(--element-dendro-light); border-color: var(--neutral-line); }
-.workspace-design .analysis-flow span { color:var(--element-geo-deep); }
-.workspace-design .analysis-flow strong { color: var(--neutral-muted); }
-.workspace-design .analysis-flow > i { color:var(--element-geo-deep); }
-.workspace-design .definition-tile { background: var(--neutral-surface); border-color: var(--neutral-line); }
-.workspace-design .definition-symbol { color:var(--element-geo-deep); background: var(--element-geo-light); border: 1px solid var(--neutral-line); }
-.workspace-design .definition-tile h3 { color: var(--element-cryo-deep); }
-.workspace-design .definition-tile p, .workspace-design .definition-empty { color: var(--neutral-muted); }
-.workspace-design .definition-tile footer { color: var(--neutral-muted); border-color: var(--neutral-line); }
 .workspace-design .settings-page > p, .workspace-design .settings-grid p { color: var(--neutral-muted); }
 .workspace-design .settings-grid > div { background: var(--element-dendro-light); border-color: var(--neutral-line); }
 .workspace-design .settings-grid h3 { color: var(--neutral-muted); }
@@ -219,12 +170,10 @@
 
 
 .workspace-design .design-topbar { height:auto; min-height:72px; flex-wrap:wrap; padding-block:12px; gap:12px; }
-.workspace-design .topbar-actions { flex-wrap:wrap; }
 .workspace-design .page-heading p { font-size:var(--font-body); line-height:1.8; }
 .workspace-design .nav-group > button { font-size:var(--font-body); }
 .workspace-design .nav-group > p { font-size:var(--font-body); }
 .workspace-design .advanced-workspace { margin:24px 30px; border:1px solid var(--neutral-line); padding:16px; border-radius:8px; }
 .workspace-design .record-inspector { align-self:start; position:sticky; top:16px; }
-.workspace-design .timeline-layout { align-items:start; }
 .workspace-design .workspace-body { min-width:0; }
-@media(max-width:700px) { .workspace-design .design-topbar { padding-inline:15px; }.workspace-design .header-objective { display:none; }.workspace-design .advanced-workspace { margin-inline:15px; }.workspace-design .record-inspector { position:static; } }
+@media(max-width:700px) { .workspace-design .design-topbar { padding-inline:15px; }.workspace-design .advanced-workspace { margin-inline:15px; }.workspace-design .record-inspector { position:static; } }

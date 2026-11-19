@@ -32,10 +32,10 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   expect(account.characters[0].showcase?.build).toMatchObject({ constellation: 2, level: 90, refinement: 1, weapon: { id: 'beyondthechrysalis' } });
 
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器' });
+  const calculator = page.getByRole('region', { name: '伤害计算' });
   const select = (name: string) => calculator.getByRole('combobox', { name, exact: true });
   const button = (name: string) => calculator.getByRole('button', { name, exact: true });
-  await select('资料来源').selectOption({ label: '展柜 · 薇斯纳' });
+  await select('资料来源').selectOption({ label: '展柜 / 薇斯纳' });
   await button('读取配装').click();
   await select('技能').selectOption('vesna.skill');
   await select('命中类型').selectOption('vesna.skill.param5.stellar-swirl');

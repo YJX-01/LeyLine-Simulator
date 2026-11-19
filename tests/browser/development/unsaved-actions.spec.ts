@@ -54,7 +54,7 @@ test('team candidate Save on exit persists only the project and follows the requ
   await importShowcase(page);const before=await account(page);
   // A UI-format project built from the recorded public snapshot, not a player project export.
   const project=await page.evaluate(async raw=>{
-    const [{previewEnkaImport},{createAccount},{createEmptyProject},{addActorFromBuild}]=await Promise.all([
+    const [{previewEnkaImport},{createAccount},{createEmptyProject},{addActorFromBuild},{packDocument}]=await Promise.all([
       // @ts-expect-error Vite browser URL.
       import('/src/domain/enka-import.ts'),
       // @ts-expect-error Vite browser URL.
@@ -63,12 +63,14 @@ test('team candidate Save on exit persists only the project and follows the requ
       import('/src/domain/workbench-project.ts'),
       // @ts-expect-error Vite browser URL.
       import('/src/domain/real-project.ts'),
+      // @ts-expect-error Vite browser URL.
+      import('/src/domain/content-document.ts'),
     ]);
     const preview=await previewEnkaImport(raw,'618285856',createAccount());
     const recorded=preview.rows.find((row:{character:{name:string}})=>row.character.name==='安柏').character.showcase.build;
-    const result=createEmptyProject();addActorFromBuild(result,recorded,'安柏');return result;
+    const result=createEmptyProject();addActorFromBuild(result,recorded,'安柏');return packDocument('axis',result);
   },JSON.parse(readFileSync(recorded,'utf8')));
-  await page.getByTestId('workspace-nav-projects').click();await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});await page.getByTestId('workspace-nav-team').click();await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();const editor=page.getByRole('dialog',{name:'修改所选队员配装',exact:true});
+  await page.getByTestId('workspace-nav-timeline').click();await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});await page.getByTestId('workspace-nav-team').click();await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();const editor=page.getByRole('dialog',{name:'修改所选队员配装',exact:true});
   // Explicit refinement trial from the recorded R2 weapon, without claiming a new observation.
   await editor.getByRole('button',{name:'精炼3阶',exact:true}).click();await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(editor).toHaveCount(0);expect(await account(page)).toBe(before);
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();await expect(editor.getByRole('button',{name:'精炼3阶',exact:true})).toHaveAttribute('aria-pressed','true');

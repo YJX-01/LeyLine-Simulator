@@ -17,7 +17,6 @@
 .workspace-design.compact .nav-groups { margin-top:12px; }
 .workspace-design.compact .nav-group > button,.workspace-design.compact .sidebar-control { grid-template-columns:36px minmax(0,1fr); gap:0; padding:0 8px; justify-content:initial; }
 .workspace-design.compact .nav-group > button > .nav-label,.workspace-design.compact .sidebar-control > .nav-label { display:block; opacity:0; width:0; }
-.workspace-design.compact .nav-count { display:none; }
 .workspace-design .sidebar-toggle svg,.workspace-design .sidebar-edge-toggle svg { transition:transform .18s ease; }
 .workspace-design.compact .sidebar-toggle svg,.workspace-design.compact .sidebar-edge-toggle svg { transform:rotate(180deg); }
 .workspace-design .sidebar-edge-toggle { position:fixed; top:50dvh; left:calc(var(--sidebar-width) - 10px); transform:translateY(-50%); z-index:25; display:grid; place-items:center; width:20px; min-width:20px; height:var(--control-height-lg); min-height:var(--control-height-lg); padding:0; border:1px solid var(--nav-border); border-radius:6px; color:var(--nav-muted); background:var(--nav-surface); box-shadow:0 2px 6px color-mix(in srgb,var(--neutral-ink) 7.06%,transparent); transition:left .18s ease; }

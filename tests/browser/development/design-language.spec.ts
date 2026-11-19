@@ -30,8 +30,6 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(source,'utf8'))}));
   await page.goto('/');
   await expect(page.getByTestId('workspace-nav-characters')).toBeVisible();
-  await expect(page.locator('.nav-group[data-domain=account] button')).toHaveText(['角色','角色配置','圣遗物','圣遗物组合']);
-  await expect(page.locator('.nav-group > p')).toHaveText(['库','项目','自定义']);
   await expect(page.locator('.account-heading')).toHaveCount(0);
   const footer=await page.locator('.nav-utilities').evaluate(node=>({bottom:node.getBoundingClientRect().bottom,height:innerHeight,labels:Array.from(node.querySelectorAll('button')).map(button=>button.textContent?.trim())}));
   expect(footer.labels).toEqual(['账号','设置']);expect(footer.height-footer.bottom).toBeLessThanOrEqual(16);
@@ -48,7 +46,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
   // UI format harness derived from the recorded public snapshot; not a player export or physical inventory.
   const project=await page.evaluate(async raw=>{
     // These are Vite browser URLs inside page.evaluate, not Node module imports.
-    const [{previewEnkaImport},{createAccount},{createEmptyProject},{addActorFromBuild}]=await Promise.all([
+    const [{previewEnkaImport},{createAccount},{createEmptyProject},{addActorFromBuild},{packDocument}]=await Promise.all([
       // @ts-expect-error Resolved by Vite in the browser.
       import('/src/domain/enka-import.ts'),
       // @ts-expect-error Resolved by Vite in the browser.
@@ -57,13 +55,15 @@ test('shared real-character editor protects team drafts and keeps account indepe
       import('/src/domain/workbench-project.ts'),
       // @ts-expect-error Resolved by Vite in the browser.
       import('/src/domain/real-project.ts'),
+      // @ts-expect-error Resolved by Vite in the browser.
+      import('/src/domain/content-document.ts'),
     ]);
     const preview=await previewEnkaImport(raw,'618285856',createAccount());
     const recorded=preview.rows.find((row:{character:{name:string}})=>row.character.name==='安柏').character.showcase.build;
-    const project=createEmptyProject();addActorFromBuild(project,recorded,'安柏');return project;
+    const project=createEmptyProject();addActorFromBuild(project,recorded,'安柏');return packDocument('axis',project);
   },JSON.parse(readFileSync(source,'utf8')));
   writeFileSync('artifacts/recorded-showcase-ui-harness.json',JSON.stringify(project));
-  await page.getByTestId('workspace-nav-projects').click();
+  await page.getByTestId('workspace-nav-timeline').click();
   await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
@@ -102,10 +102,13 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'精炼3阶',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.keyboard.press('Escape');
-  for(const target of ['loadouts','combinations','account','settings','definitions','projects','timeline']) {
+  for(const target of ['team','calculator','analysis','timeline','loadouts','combinations','account','settings']) {
     await page.setViewportSize({width:1280,height:720});
     if(target==='settings')await page.getByRole('button',{name:'导航 设置',exact:true}).click();else await page.getByTestId(`workspace-nav-${target}`).click();
-    if(target==='definitions')await expect(page.getByRole('heading',{name:'独立内容定义库',exact:true})).toBeVisible();
+    if (['team', 'calculator', 'analysis', 'timeline'].includes(target)) {
+      const title = await page.getByTestId(`workspace-nav-${target}`).getAttribute('title');
+      await expect(page.getByRole('region', { name: title!, exact: true })).toBeVisible();
+    }
     if(target==='loadouts' || target==='combinations')await expect(page.getByRole('region',{name:target==='loadouts'?'角色配置':'圣遗物组合',exact:true})).toBeVisible();
     if(target==='loadouts') {
       await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();

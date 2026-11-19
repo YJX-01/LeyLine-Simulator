@@ -20,6 +20,7 @@ import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import CharacterForm from './CharacterForm.vue';
 import ArtifactBrowser from './ArtifactBrowser.vue';
 import ArtifactEquipmentGrid from '../components/ArtifactEquipmentGrid.vue';
+import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 
@@ -141,8 +142,8 @@ const reactionChoices = computed(() => {
     return ['none', ...(choices[element ?? 'physical'] ?? [])] as (keyof typeof reactionNames)[];
 });
 const sources = computed(() => account.account.characters.flatMap(character => [
-  { id: `local:${character.id}`, name: `本地 · ${character.name}${character.build ? '' : '（待补全培养与武器）'}` },
-  ...(character.showcase ? [{ id: `showcase:${character.id}`, name: `展柜 · ${character.name}` }] : []),
+  { id: `local:${character.id}`, name: `本地 / ${character.name}${character.build ? '' : '（待补全培养与武器）'}` },
+  ...(character.showcase ? [{ id: `showcase:${character.id}`, name: `展柜 / ${character.name}` }] : []),
 ]));
 const records = computed(() => document.value?.project.timeline.filter(record => record.kind === 'damage' && record.damage) ?? []);
 const captures = computed(() => document.value?.project.timeline.filter(record => record.actor === hitOwner.value?.id
@@ -328,52 +329,61 @@ defineExpose({ requestLeave });
 </script>
 
 <template>
-  <section class="damage-calculator" aria-label="伤害计算器">
-    <header class="calculator-heading"><div><h2>伤害计算器</h2><span>{{ dirty ? '未保存' : document ? '已保存' : '' }}</span></div><div class="calculator-actions">
-      <button class="ui-action soft" data-accent="anemo" @click="newCalculation">新建计算</button>
-
-      <button class="ui-action soft" data-accent="anemo" @click="requestLeave(() => file?.click())">打开计算</button>
-      <button class="ui-action" data-accent="anemo" @click="save">保存计算</button>
-    </div></header>
+  <section class="damage-calculator panel library-page" aria-label="伤害计算">
+    <LibraryCornerOrnaments />
+    <header class="library-page-toolbar">
+      <span v-if="dirty || document" class="library-page-status">{{ dirty ? '未保存' : '已保存' }}</span>
+      <div class="library-page-actions">
+        <button class="ui-action soft" @click="newCalculation">新建计算</button>
+        <button class="ui-action soft" @click="requestLeave(() => file?.click())">打开计算</button>
+        <button class="ui-action" @click="save">保存计算</button>
+      </div>
+    </header>
     <input ref="file" hidden type="file" accept=".json,application/json" aria-label="打开伤害计算文件" @change="openFile">
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="calculator-layout">
-      <section class="panel calculator-build"><h3>角色与配装</h3>
+      <section class="library-section calculator-build"><h3>角色与配装</h3>
         <div class="calculator-source"><template v-if="sources.length"><label for="calculator-source">资料来源</label><select id="calculator-source" v-model="source"><option value="">选择已保存的资料</option><option v-for="entry in sources" :key="entry.id" :value="entry.id">{{ entry.name }}</option></select><button class="ui-action soft" data-accent="hydro" :disabled="!source" @click="requestLeave(loadSource)">读取配装</button></template><button class="ui-action soft" data-accent="anemo" @click="copyAxis">复制当前轴</button></div>
         <label v-if="document && document.project.candidate.actors.length > 1">试配队员<select :value="document.actorId" @change="switchActor(($event.target as HTMLSelectElement).value)"><option v-for="actor in document.project.candidate.actors" :key="actor.id" :value="actor.id">{{ actorLabel(document.project, actor.id) }}</option></select></label>
         <CharacterForm ref="form" :key="formRevision" candidate detached details resolve-identity :character="character" @dirty-change="formDirty = $event" />
-        <button class="ui-action soft" data-accent="anemo" @click="prepareBuild">应用配装</button>
-        <button v-if="actor?.build" class="ui-action soft" data-accent="hydro" :disabled="!!document?.baseline || working" @click="reviewContent">检查当前内容</button>
-        <template v-if="actor?.build"><button class="ui-action soft" data-accent="hydro" :disabled="!!document?.baseline || formDirty" @click="exportMetadata">导出角色定义副本</button><button class="ui-action soft" data-accent="hydro" :disabled="!!document?.baseline || formDirty" @click="metadataFile?.click()">导入角色定义</button><input ref="metadataFile" hidden type="file" accept=".json,application/json" aria-label="导入计算器角色定义" @change="importMetadata"></template>
+        <div class="library-page-actions">
+          <button class="ui-action soft" @click="prepareBuild">应用配装</button>
+          <template v-if="actor?.build">
+            <button class="ui-action soft" data-accent="hydro" :disabled="!!document?.baseline || working" @click="reviewContent">检查当前内容</button>
+            <button class="ui-action soft" data-accent="hydro" :disabled="!!document?.baseline || formDirty" @click="exportMetadata">导出角色定义副本</button>
+            <button class="ui-action soft" data-accent="hydro" :disabled="!!document?.baseline || formDirty" @click="metadataFile?.click()">导入角色定义</button>
+            <input ref="metadataFile" hidden type="file" accept=".json,application/json" aria-label="导入计算器角色定义" @change="importMetadata">
+          </template>
+        </div>
         <template v-if="actor?.build || pendingSource?.equipment"><h3>圣遗物</h3><ArtifactEquipmentGrid :entries="entries" :wearers="[]" @change="slot = $event" @remove="equip(undefined, $event)" /></template>
       </section>
       <div class="calculator-right">
-        <section class="panel calculator-conditions"><h3>命中条件</h3>
-          <label v-if="records.length > 1">查看记录<select :value="document?.recordId" @change="selectRecord(($event.target as HTMLSelectElement).value)"><option v-for="record in records" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} · {{ recordLabel(document!.project, record.id) }} · {{ record.timeMs / 1000 }}秒</option></select></label>
+        <section class="library-section calculator-conditions"><h3>命中条件</h3>
+          <label v-if="records.length > 1">查看记录<select :value="document?.recordId" @change="selectRecord(($event.target as HTMLSelectElement).value)"><option v-for="record in records" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label>
           <fieldset :disabled="!!document?.baseline"><div class="calculator-fields">
             <label>技能<select v-model="damage.skillId" :disabled="!queryCharacter" @change="chooseSkill"><option value="">选择技能</option><option v-for="talent in queryCharacter?.talents.filter(talent => talent.hits.length)" :key="talent.id" :value="talent.id">{{ talent.name }}</option></select></label>
             <label>命中类型<select v-model="outputChoice" :disabled="!skill"><option value="">选择输出</option><option v-for="choice in outputChoices" :key="choice.outputId" :value="choice.outputId">{{ choice.label }}</option></select></label>
             <label>命中时刻（秒）<input v-model.number="hitTime" type="number" min="0" max="3600" step="0.001"></label>
             <label>暴击<select v-model="damage.crit"><option :value="null">待确认</option><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
             <label>反应<select v-model="reactionType"><option value="">待确认</option><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
-            <label v-for="input in skill?.inputs" :key="input.id">{{ inputNames[input.id] ?? input.id }}<select v-if="input.id === 'counterCharge'" :value="damage.inputs?.[input.id] ?? ''" @change="setInput(input.id, $event)"><option value="">待确认</option><option :value="0">0 · 无反击加成</option><option :value="1">1 · 一档反击</option><option :value="2">2 · 满档／完美反击</option></select><input v-else type="number" :min="input.min" :max="input.max" :step="input.integer ? 1 : 'any'" :value="damage.inputs?.[input.id] ?? ''" placeholder="待确认" @input="setInput(input.id, $event)"></label>
+            <label v-for="input in skill?.inputs" :key="input.id">{{ inputNames[input.id] ?? input.id }}<select v-if="input.id === 'counterCharge'" :value="damage.inputs?.[input.id] ?? ''" @change="setInput(input.id, $event)"><option value="">待确认</option><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select><input v-else type="number" :min="input.min" :max="input.max" :step="input.integer ? 1 : 'any'" :value="damage.inputs?.[input.id] ?? ''" placeholder="待确认" @input="setInput(input.id, $event)"></label>
             <label v-for="field in factFields" :key="field.key">{{ field.label }}<select v-if="field.type.kind !== 'quantity'" :value="factInput(field.key)" @change="setFact(field.key, field.type, $event)"><option value="">待确认</option><template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template><template v-else><option v-for="value in field.type.values" :key="value" :value="value">{{ factEnums[value] ?? value }}</option></template></select><input v-else type="number" min="0" :max="field.key === 'vesna.disciplineStacks' ? 6 : undefined" :step="field.type.unit === 'count' ? 1 : 'any'" :value="factInput(field.key)" placeholder="待确认" @input="setFact(field.key, field.type, $event)"></label>
             <label>生命比例（%）<input type="number" min="0" max="100" step="any" :value="damage.conditions?.hpRatio == null ? '' : damage.conditions.hpRatio * 100" placeholder="待确认" @input="setHp"></label>
             <label v-for="field in (['onField', 'shielded'] as const)" :key="field">{{ field === 'onField' ? '站场' : '护盾存在' }}<select :value="damage.conditions?.[field] == null ? '' : String(damage.conditions[field])" @change="damage.conditions = { ...damage.conditions, [field]: ($event.target as HTMLSelectElement).value === '' ? null : ($event.target as HTMLSelectElement).value === 'true' }"><option value="">待确认</option><option value="true">是</option><option value="false">否</option></select></label>
-            <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option value="">待确认</option><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} · {{ recordLabel(document!.project, record.id) }} · {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="">待确认</option><option value="before">记录生效前</option><option value="after">记录生效后</option></select></label></template>
-          </div><details><summary>目标条件 · 计算设定</summary><div class="calculator-fields">
+            <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option value="">待确认</option><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="">待确认</option><option value="before">记录生效前</option><option value="after">记录生效后</option></select></label></template>
+          </div><details><summary>目标与计算条件</summary><div class="calculator-fields">
             <label>目标等级<input v-model.number="enemy.level" type="number" min="1" max="200"></label>
             <label>减防比例<input v-model.number="enemy.defenseReduction" type="number" min="0" max="1" step="0.01"></label><label>无视防御比例<input v-model.number="enemy.defenseIgnore" type="number" min="0" max="1" step="0.01"></label>
             <label v-for="element in elements" :key="element">{{ realElementLabel(element) }}抗性（比例）<input v-model.number="enemy.resistances[element]" type="number" step="0.01"></label>
           </div></details></fieldset>
           <fieldset v-if="selectedHit?.snapshot" :disabled="!!document?.baseline"><label>独立捕获时刻（秒）<input v-model="captureTime" type="number" min="0" max="3600" step="0.001" placeholder="填写已确认时刻"></label><button class="ui-action soft" data-accent="hydro" @click="createCapture">添加属性捕获点</button></fieldset>
-          <div class="calculator-actions"><button class="ui-action" data-accent="anemo" :disabled="working" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button><button v-if="!document?.baseline" class="ui-action soft" data-accent="anemo" :disabled="!point || formDirty" @click="pinBaseline">设为比较基准</button><button v-else class="ui-action soft" data-accent="pyro" @click="delete document!.baseline">结束对照</button></div>
+          <div class="library-page-actions"><button class="ui-action" data-accent="anemo" :disabled="working" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button><button v-if="!document?.baseline" class="ui-action soft" data-accent="anemo" :disabled="!point || formDirty" @click="pinBaseline">设为比较基准</button><button v-else class="ui-action soft" data-accent="pyro" @click="delete document!.baseline">结束对照</button></div>
         </section>
-        <section class="panel calculator-result" aria-label="计算结果"><h3>伤害结果</h3><template v-if="result">
+        <section class="library-section calculator-result" aria-label="计算结果"><h3>伤害结果</h3><template v-if="result">
           <p role="status">{{ statusLabel(result.status) }}</p><output data-testid="calculator-value">{{ number(point?.value) }}</output>
           <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(response.comparison.candidates[0]?.points.find(entry => entry.id === document?.recordId)?.delta) }}</td></tr></tbody></table>
           <template v-if="point?.real"><details><summary>计算分项</summary><table><tbody><tr v-for="(term, index) in point.real.scaling" :key="index"><th>{{ realStatLabel(term.stat) }}缩放</th><td>{{ number(term.attribute) }} × {{ number(term.multiplier) }}<template v-if="term.count"> × {{ number(term.count.value) }}</template> = {{ number(term.contribution) }}</td></tr><tr><th>技能基础伤害</th><td>{{ number(point.real.baseDamage) }}</td></tr><tr><th>附加基础伤害</th><td>{{ number(point.real.baseDamageBonus) }}</td></tr><tr v-for="(label, key) in partLabels" :key="key"><th>{{ key === 'bonus' && selectedOutput?.family === 'stellar-swirl' ? '星扩散增伤乘区' : label }}</th><td>{{ number(point.real.parts[key]) }}</td></tr><template v-if="point.real.reaction"><tr><th>反应倍率</th><td>{{ number(point.real.reaction.multiplier) }}</td></tr><tr><th>反应基础加值</th><td>{{ number(point.real.reaction.addedBaseDamage) }}</td></tr></template></tbody></table>
-          </details><details><summary>配装属性与来源</summary><p v-if="queryCharacter?.origin === 'custom'">角色来源 · 自定义声明</p><p v-if="actor?.build && skill">{{ skill.name }} · 天赋 {{ actor.build.talents[skill.category] }} + {{ talentLevelBonus(actor.build.character, skill.category, actor.build.constellation) }}</p><dl><template v-for="(value, key) in point.real.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl><p v-for="entry in point.real.panel.contributions" :key="`${entry.source}:${entry.stat}:${entry.value}`">{{ entry.source }} · {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p></details>
+          </details><details><summary>配装属性与来源</summary><p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p><p v-if="actor?.build && skill">{{ skill.name }} / 天赋 {{ actor.build.talents[skill.category] }} + {{ talentLevelBonus(actor.build.character, skill.category, actor.build.constellation) }}</p><dl><template v-for="(value, key) in point.real.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl><p v-for="entry in point.real.panel.contributions" :key="`${entry.source}:${entry.stat}:${entry.value}`">{{ entry.source }} / {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p></details>
           </template>
           <ul v-if="result.diagnostics.length" aria-label="未完成的计算条件"><li v-for="(diagnostic, index) in result.diagnostics" :key="index">{{ diagnostic.message }}</li></ul>
         </template><p v-else>选择配装与命中条件后计算。</p></section>
@@ -386,14 +396,14 @@ defineExpose({ requestLeave });
 </template>
 
 <style scoped>
-.damage-calculator { margin:24px 30px; font-size:var(--font-body); min-width:0; }
-.calculator-heading,.calculator-actions,.calculator-source { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.calculator-heading { justify-content:space-between; margin-bottom:24px; }.calculator-heading h2 { font-size:var(--font-title); margin:0 0 8px; }
-.calculator-layout { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(340px,1fr); gap:20px; align-items:start; }
-.calculator-build,.calculator-conditions,.calculator-result { padding:20px; min-width:0; }.calculator-right { display:grid; gap:20px; min-width:0; }
-h3 { font-size:var(--font-control); margin:0 0 20px; }.calculator-build > h3:not(:first-child),.calculator-result h3:not(:first-child) { margin-top:24px; }
-.calculator-source { margin-bottom:20px; }.calculator-source select { flex:1; min-width:150px; }.calculator-build > button { margin:20px 0; }
+.damage-calculator,.calculator-right,.calculator-build,.calculator-conditions,.calculator-result {
+  display:grid; gap:12px; min-width:0;
+}
+.calculator-layout { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(340px,1fr); gap:12px; align-items:start; }
+.calculator-source { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.calculator-source select { flex:1 1 180px; }
 .calculator-build { container-type:inline-size; }
+.calculator-build > .library-page-actions { padding-block:4px; }
 @container(max-width:650px) {
   .calculator-build :deep(.cultivation-groups) { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .calculator-build :deep(.talent-group) { grid-column:1/-1; width:240px; padding-top:0; }
@@ -402,13 +412,21 @@ h3 { font-size:var(--font-control); margin:0 0 20px; }.calculator-build > h3:not
   .calculator-build :deep(.refinement-field) { grid-column:2; grid-row:3; }
   .calculator-build :deep(.constellation-row) { grid-column:1/-1; grid-row:4; }
 }
-.calculator-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:20px; }
-label { display:grid; gap:8px; min-width:0; }select,input { width:100%; min-width:0; box-sizing:border-box; font-size:var(--font-body); height:var(--control-height-lg); }
-fieldset { min-width:0; border:0; padding:0; margin:0; }details { margin:20px 0; }summary { cursor:pointer; margin-bottom:16px; }
-output { display:block; font-size:var(--font-title); font-weight:700; margin:20px 0; color:var(--element-anemo-deep); }
-.calculator-result thead th { width:auto; }
-table { width:100%; border-collapse:collapse; table-layout:fixed; }th,td { padding:12px 4px; border-bottom:1px solid var(--neutral-line); text-align:left; overflow-wrap:anywhere; font-size:var(--font-body); }th { width:42%; }
-dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; }dd { margin:0; text-align:right; }p,li { line-height:1.8; overflow-wrap:anywhere; }ul { padding-left:20px; }
+.calculator-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+label { min-width:0; }
+select,input { min-width:0; box-sizing:border-box; }
+fieldset { min-width:0; border:0; padding:0; margin:0; }
+.calculator-conditions fieldset + fieldset { display:grid; justify-items:start; gap:8px; }
+.calculator-conditions details { margin-top:12px; }
+.damage-calculator summary { color:var(--muted); font-weight:700; line-height:var(--control-height-md); }
+.calculator-conditions details[open] > summary { margin-bottom:8px; }
+output { color:var(--element-anemo-deep); font-size:var(--font-title); font-weight:700; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.calculator-result table { width:100%; border-collapse:collapse; table-layout:fixed; font-variant-numeric:tabular-nums; }
+th,td { padding:8px 4px; border-bottom:1px solid var(--line); text-align:left; overflow-wrap:anywhere; font-size:var(--font-body); }
+dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; font-variant-numeric:tabular-nums; }
+dd { margin:0; text-align:right; }
+p,li { overflow-wrap:anywhere; }
+ul { margin:0; padding-left:20px; }
 @media(max-width:1250px) { .calculator-layout { grid-template-columns:minmax(0,1fr); } }
-@media(max-width:700px) { .damage-calculator { margin:16px; }.calculator-fields { grid-template-columns:minmax(0,1fr); }.calculator-heading { align-items:flex-start; }.calculator-build,.calculator-conditions,.calculator-result { padding:16px; } }
+@media(max-width:600px) { .calculator-fields { grid-template-columns:minmax(0,1fr); } }
 </style>

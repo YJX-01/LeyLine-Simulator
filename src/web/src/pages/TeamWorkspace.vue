@@ -8,6 +8,8 @@ import { useSavedTeamsStore, type SavedTeam } from '../stores/saved-teams';
 import { addActorFromBuild } from '../domain/real-project';
 import { removeProjectActor } from '../domain/workbench-project';
 import CharacterEquipmentIcons from '../components/CharacterEquipmentIcons.vue';
+import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
+import LibraryEmptyState from '../components/LibraryEmptyState.vue';
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import EditorActions from '../components/EditorActions.vue';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
@@ -73,21 +75,116 @@ function newAxis(team: SavedTeam) {
 function remove(id: string) { axis.command(draft => removeProjectActor(draft, id)); }
 </script>
 <template>
-  <section class="team-workspace panel">
-    <header><span class="team-count">当前队伍 · {{ axis.project.candidate.actors.length }} / 4</span><button class="ui-action" data-accent="anemo" @click="picking = true">＋ 从账号选择队员</button></header>
+  <section class="team-workspace panel library-page" aria-label="队伍">
+    <LibraryCornerOrnaments />
+    <header class="library-page-toolbar">
+      <h2>当前队伍 <span class="team-count">{{ axis.project.candidate.actors.length }} / 4</span></h2>
+      <div class="library-page-actions">
+        <button class="ui-action soft" :disabled="!axis.canUndo" @click="axis.undo()">撤销</button>
+        <button class="ui-action soft" :disabled="!axis.canRedo" @click="axis.redo()">重做</button>
+        <button class="ui-action" :disabled="axis.project.candidate.actors.length >= 4" @click="picking = true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>从账号选择队员
+        </button>
+      </div>
+    </header>
     <p v-if="error || saved.error" role="alert">{{ error || saved.error }}</p>
-    <div class="team-cards"><article v-for="actor in axis.project.candidate.actors" :key="actor.id" :class="{ active: axis.actorId === actor.id }"><button class="actor-select" @click="axis.actorId = actor.id"><CharacterEquipmentIcons :build="actor.build" :name="actor.name" :size="88" /><strong>{{ actor.name ?? actor.build?.character.identity.name }}</strong><small>{{ actor.build?.weapon.name ?? '旧版配装' }}</small><small>{{ actor.build?.artifacts.length ?? 0 }} 件试配圣遗物</small></button><button class="ui-action soft" data-accent="anemo" @click="axis.actorId = actor.id; editing = true">查看与修改配装</button><button class="ui-action soft" data-accent="pyro" @click="pendingRemoval=actor.id">移除队员</button></article><button v-if="axis.project.candidate.actors.length < 4" class="empty-slot" @click="picking = true">＋<br>选择队员</button></div>
-    <div class="team-save"><label>队伍名称<input v-model="name" aria-label="保存队伍名称" maxlength="160" placeholder="为这套队伍与试配命名"></label><button class="ui-action soft" data-accent="anemo" @click="save">保存为新队伍</button><button class="ui-action" data-accent="anemo" :disabled="!axis.project.candidate.actors.length" @click="emit('timeline')">进入当前轴 →</button></div>
-    <h3>已保存的队伍</h3><p v-if="!saved.teams.length">保存后可以从同一队伍创建不同的轴。已有轴始终保留自己的配装快照。</p>
-    <div class="saved-teams"><article v-for="team in saved.teams" :key="team.id"><h4>{{ team.name }}</h4><p>{{ team.project.candidate.actors.map(actor => actor.name ?? actor.build?.character.identity.name).join(' / ') }}</p><button class="ui-action soft" data-accent="anemo" @click="pendingTeam = team">以此队伍新建轴</button></article></div><button class="ui-action soft" data-accent="anemo" v-if="saved.teams.length" @click="saved.exportTeams">导出队伍备份</button>
-    <WorkbenchDialog v-if="picking" title="从账号选择队员" @close="picking = false"><p>只复制当前资料，之后的试配与账号独立。</p><p v-if="error" role="alert">{{ error }}</p><div class="saved-teams"><button class="ui-action soft" data-accent="anemo" v-for="character in characters" :key="character.id" @click="add(character.id)"><CharacterEquipmentIcons :build="character.build" :name="character.name" :size="80" /><strong>{{ character.name }}</strong><p>{{ character.build?.weapon.name ?? '资料待补全' }}</p></button></div><p v-if="!characters.length">账号还没有角色资料。</p><button class="ui-action soft" data-accent="anemo" @click="picking = false; emit('account')">前往账号角色页</button></WorkbenchDialog>
-    <WorkbenchDialog v-if="editing" editor title="修改所选队员配装" @close="requestLeave(()=>editing=false)"><template #header-leading><EditorActions :dirty="!!teamEditor?.dirty" :busy="teamEditor?.busy" @save="teamEditor?.save()" @restore="teamEditor?.restore()" /></template><TeamLoadoutEditor ref="teamEditor" /></WorkbenchDialog>
-    <ConfirmationDialog v-if="pendingRemoval" title="移除队员？" confirm-label="确认移除" @cancel="pendingRemoval=undefined" @confirm="remove(pendingRemoval);pendingRemoval=undefined"><p>移除该队员及其轴内记录，可撤销。</p></ConfirmationDialog>
-    <ConfirmationDialog v-if="pendingTeam" title="从保存队伍新建轴" :danger="false" confirm-label="确认新建独立轴" @cancel="pendingTeam=undefined" @confirm="newAxis(pendingTeam)"><p>使用「{{ pendingTeam.name }}」新建独立轴。当前编辑请先保存。</p><button class="ui-action soft" data-accent="anemo" @click="axis.saveProject()">先保存当前轴</button></ConfirmationDialog>
+    <div v-if="axis.project.candidate.actors.length" class="team-cards">
+      <article v-for="actor in axis.project.candidate.actors" :key="actor.id"
+        class="library-section team-member" :class="{ active: axis.actorId === actor.id }">
+        <button class="actor-select" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
+          <strong>{{ actor.name ?? actor.build?.character.identity.name }}</strong>
+          <CharacterEquipmentIcons :build="actor.build" :name="actor.name" :size="72" />
+          <small>{{ actor.build?.weapon.name ?? '配装资料待补全' }}</small>
+          <small>{{ actor.build?.artifacts.length ?? 0 }} 件试配圣遗物</small>
+        </button>
+        <div class="library-page-actions">
+          <button class="ui-action soft" data-size="md" @click="axis.actorId = actor.id; editing = true">查看与修改配装</button>
+          <button class="ui-action soft" data-accent="pyro" data-size="md" @click="pendingRemoval = actor.id">移除队员</button>
+        </div>
+      </article>
+    </div>
+    <p v-else class="team-empty">还没有队员</p>
+
+    <div class="team-save">
+      <label>队伍名称<input v-model="name" name="team-name" autocomplete="off" aria-label="保存队伍名称" maxlength="160" placeholder="输入队伍名称"></label>
+      <div class="library-page-actions">
+        <button class="ui-action" @click="save">保存为新队伍</button>
+        <button class="ui-action soft" :disabled="!axis.project.candidate.actors.length" @click="emit('timeline')">进入时间轴</button>
+      </div>
+    </div>
+
+    <section class="team-saved" aria-labelledby="saved-teams-heading">
+      <header class="library-page-toolbar">
+        <h2 id="saved-teams-heading">已保存的队伍</h2>
+        <div v-if="saved.teams.length" class="library-page-actions">
+          <button class="ui-action soft" data-size="md" @click="saved.exportTeams">导出队伍备份</button>
+        </div>
+      </header>
+      <div v-if="saved.teams.length" class="saved-teams">
+        <article v-for="team in saved.teams" :key="team.id" class="library-section saved-team">
+          <div>
+            <h3>{{ team.name }}</h3>
+            <p>{{ team.project.candidate.actors.map(actor => actor.name ?? actor.build?.character.identity.name).join(' / ') }}</p>
+          </div>
+          <button class="ui-action soft" data-size="md" @click="pendingTeam = team">以此队伍新建轴</button>
+        </article>
+      </div>
+      <p v-else class="library-page-status">还没有保存的队伍</p>
+    </section>
+
+    <WorkbenchDialog v-if="picking" title="从账号选择队员" @close="picking = false">
+      <p v-if="error" role="alert">{{ error }}</p>
+      <div v-if="characters.length" class="team-cards team-picker">
+        <button v-for="character in characters" :key="character.id" type="button" :disabled="adding" @click="add(character.id)">
+          <strong>{{ character.name }}</strong>
+          <CharacterEquipmentIcons :build="character.build" :name="character.name" :size="72" />
+          <small>{{ character.build?.weapon.name ?? '资料待补全' }}</small>
+        </button>
+      </div>
+      <LibraryEmptyState v-else title="账号还没有角色资料" action="前往角色库" @action="picking = false; emit('account')" />
+      <template v-if="characters.length" #footer>
+        <button class="ui-action soft" @click="picking = false; emit('account')">前往角色库</button>
+      </template>
+    </WorkbenchDialog>
+    <WorkbenchDialog v-if="editing" editor title="修改所选队员配装" @close="requestLeave(() => editing = false)">
+      <template #header-leading>
+        <EditorActions :dirty="!!teamEditor?.dirty" :busy="teamEditor?.busy" @save="teamEditor?.save()" @restore="teamEditor?.restore()" />
+      </template>
+      <TeamLoadoutEditor ref="teamEditor" />
+    </WorkbenchDialog>
+    <ConfirmationDialog v-if="pendingRemoval" title="移除队员？" confirm-label="确认移除"
+      @cancel="pendingRemoval = undefined" @confirm="remove(pendingRemoval); pendingRemoval = undefined">
+      <p>移除该队员及其轴内记录，可撤销。</p>
+    </ConfirmationDialog>
+    <ConfirmationDialog v-if="pendingTeam" title="从保存队伍新建轴" :danger="false" confirm-label="确认新建独立轴"
+      @cancel="pendingTeam = undefined" @confirm="newAxis(pendingTeam)">
+      <p>使用「{{ pendingTeam.name }}」新建独立轴。当前编辑请先保存。</p>
+      <button class="ui-action soft" @click="axis.saveProject()">先保存当前轴</button>
+    </ConfirmationDialog>
   </section>
 </template>
+
 <style scoped>
-.team-workspace { margin:0 30px; } header { display:flex; justify-content:space-between; align-items:center; gap:20px; } .team-count { font-size:var(--font-body); font-weight:600; } p { font-size:var(--font-body); line-height:1.8; } .team-cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin:24px 0; }.team-cards article { padding:16px; background:var(--surface); border:1px solid var(--neutral-line); border-radius:12px; }.team-cards .active { border-color:var(--element-cryo-deep); }.actor-select { display:grid; gap:12px; width:100%; border:0; text-align:left; background:transparent; }.actor-select small { font-size:var(--font-body); }.empty-slot { min-height:200px; border:1px dashed var(--element-cryo-primary); background:transparent; line-height:2.5; }.team-save { display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin:24px 0; } label { display:grid; gap:8px; font-size:var(--font-body); } .saved-teams { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin:20px 0; }.saved-teams article,.saved-teams > button { padding:16px; border:1px solid var(--neutral-line); border-radius:8px; text-align:left; background:var(--surface); } details { font-size:var(--font-body); margin-top:16px; }
-@media(max-width:1000px) { .team-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } } @media(max-width:600px) { .team-workspace { margin:0 15px; } header { display:block; } }
-.actor-select { color:var(--ink); padding:0 0 16px; }.actor-select > .character-equipment-icons { margin-inline:auto; }.team-cards article { background:linear-gradient(160deg,var(--surface),var(--neutral-canvas)); border-color:var(--neutral-line); box-shadow:0 4px 18px color-mix(in srgb,var(--neutral-ink) 3.14%,transparent); }.team-cards .active { box-shadow:0 0 0 2px color-mix(in srgb,var(--element-cryo-primary) 20.00%,transparent); border-color:var(--element-anemo-primary); }.empty-slot { color:var(--neutral-muted); border-color:var(--neutral-line); border-radius:12px; background:var(--element-anemo-light); }.saved-teams > button { color:var(--ink); display:grid; gap:10px; }.saved-teams > button .character-equipment-icons { margin:auto; }.team-workspace { margin-inline:0; }
+.team-workspace,.team-saved,.saved-teams { display:grid; gap:12px; }
+.team-workspace h2 { font-size:var(--font-control); }
+.team-count { margin-inline-start:8px; color:var(--muted); font-size:var(--font-body); font-variant-numeric:tabular-nums; }
+.team-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,208px),1fr)); gap:12px; }
+.team-workspace .team-member { display:grid; align-content:start; gap:12px; border-top-width:3px; }
+.team-workspace .team-member.active { border-top-color:var(--element-anemo-primary); }
+.actor-select,.team-picker > button {
+  display:grid; justify-items:start; gap:6px; min-width:0; text-align:left; overflow-wrap:anywhere;
+}
+.team-member > .actor-select { padding:0; border:0; background:transparent; }
+.actor-select > strong,.team-picker strong { font-size:var(--font-control); }
+.actor-select > small,.team-picker small,.saved-team p { color:var(--muted); }
+.team-empty { padding:24px 12px; border:1px solid var(--line); border-radius:10px; color:var(--muted); text-align:center; }
+.team-save {
+  display:flex; flex-wrap:wrap; align-items:end; gap:10px; padding:12px 0;
+  border-block:1px solid var(--line);
+}
+.team-save > label { flex:1 1 200px; max-width:320px; }
+.team-save > .library-page-actions { margin-inline-start:auto; }
+.team-saved .saved-team { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 12px; }
+.saved-team > div { min-width:0; overflow-wrap:anywhere; }
+.team-picker > button { padding:12px; border-radius:10px; }
 </style>

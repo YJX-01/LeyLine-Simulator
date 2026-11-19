@@ -6,7 +6,7 @@ import { accountSlots, accountSlotLabels, artifactOwners, type AccountArtifact, 
 import { accountStatLabels } from '../domain/account-real';
 import { useAccountStore } from '../stores/account';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
-import { useViewportPage } from '../composables/use-viewport-page';
+import { useInventoryPageSize } from '../composables/use-inventory-page-size';
 import { loadAccountGameData } from '../domain/account-presentation';
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import ArtifactDetail from './ArtifactDetail.vue';
@@ -54,7 +54,7 @@ const subMatch=props.pick?ref('all'):context.inventorySubMatch;
 const storedPage=props.pick?ref(1):context.inventoryPage;
 const selectedId=ref(''),filterOpen=ref(false),sortOpen=ref(false);
 const grid=ref<HTMLElement>();
-const pageSize=useViewportPage(grid,()=>density.value,!props.pick,props.pick?undefined:context.inventoryPageSize);
+const pageSize = props.pick ? ref(30) : useInventoryPageSize(grid, density, context.inventoryPageSize);
 const activeFilters=computed(()=>[statFilter,ownerFilter,setFilter,subFilter,levelFilter,favoriteFilter].reduce((count,filter)=>count+filter.value.length,0));
 function clearConditions(){slotFilter.value=[];statFilter.value=[];ownerFilter.value=[];favoriteFilter.value=[];setFilter.value=[];subFilter.value=[];levelFilter.value=[];subMatch.value='all';sort.value='release';sortDirection.value='desc';}
 function resetFilters() { query.value='';slotFilter.value=[];statFilter.value=[];ownerFilter.value=[];favoriteFilter.value=[];setFilter.value=[];subFilter.value=[];levelFilter.value=[]; }

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@leyline/schema": ["../../src/schema/src/index.ts"],
+      "@leyline/schema/version": ["../../src/schema/src/version.mjs"],
+      "@leyline/schema/enka": ["../../src/schema/src/exchange/enka.ts"],
+      "@leyline/engine": ["../../src/engine/src/index.ts"],
+      "@leyline/game-data": ["../../src/game-data/src/index.ts"],
+      "@leyline/game-data/character-file": ["../../src/game-data/src/character-file.mjs"],
+      "vue": ["../../src/web/node_modules/vue"],
+      "pinia": ["../../src/web/node_modules/pinia"]
+    }
+  }
+}

@@ -13,7 +13,7 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await page.setViewportSize({ width: 1500, height: 1100 });
   await page.goto('/');
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   await calculator.getByLabel('搜索游戏角色', { exact: true }).pressSequentially('北斗');
   await calculator.getByRole('button', { name: '北斗', exact: true }).click();
@@ -71,7 +71,7 @@ test('calculator creates a named independent Kaeya capture, saves it and recompu
   page.setDefaultTimeout(8000);
   await page.goto('/');
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   await calculator.getByLabel('搜索游戏角色', { exact: true }).pressSequentially('凯亚');
   await calculator.getByRole('button', { name: '凯亚', exact: true }).click();
@@ -121,7 +121,7 @@ test('Kaeya C3 sequential talent editing, dirty navigation and formal Worker res
   page.setDefaultTimeout(8000);
   await page.goto('/');
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   await calculator.getByLabel('搜索游戏角色', { exact: true }).pressSequentially('凯亚');
   await calculator.getByRole('button', { name: '凯亚', exact: true }).click();
@@ -209,8 +209,8 @@ test('calculator reads the recorded public showcase explicitly without writing l
     return { account: JSON.stringify(store.account), axis: JSON.stringify(useAxisWorkspaceStore().project), build: selected.character.showcase.build as Build };
   }, JSON.parse(readFileSync(source, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
-  await calculator.getByLabel('资料来源', { exact: true }).selectOption({ label: '展柜 · 行秋' });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
+  await calculator.getByLabel('资料来源', { exact: true }).selectOption({ label: '展柜 / 行秋' });
   await calculator.getByRole('button', { name: '读取配装', exact: true }).click();
   await calculator.getByRole('combobox', { name: '技能', exact: true }).selectOption('xingqiu.skill');
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
@@ -253,8 +253,8 @@ test('missing-build derivative of the original account stays selectable and carr
     return { account: JSON.stringify(useAccountStore().account), equipment: next.characters[0].equipment };
   }, JSON.parse(readFileSync(source, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
-  await calculator.getByLabel('资料来源', { exact: true }).selectOption({ label: '本地 · 行秋（待补全培养与武器）' });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
+  await calculator.getByLabel('资料来源', { exact: true }).selectOption({ label: '本地 / 行秋（待补全培养与武器）' });
   await calculator.getByRole('button', { name: '读取配装', exact: true }).click();
   await expect(calculator.getByRole('button', { name: '更换武器', exact: true })).toBeVisible();
   await calculator.getByRole('button', { name: '更换武器', exact: true }).click();
@@ -299,7 +299,7 @@ test('old saved content changes only after review and explicit adoption in the c
     return JSON.stringify(packDocument('damage-calculator', createDamageCalculation(build, { skillId: 'kaeya.skill', hitId: 'kaeya.skill.param1', outputId: 'kaeya.skill.param1.damage', crit: 'noncritical', reaction: 'none' }, defaultEnemy())));
   }, build);
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '内容快照.json', mimeType: 'application/json', buffer: Buffer.from(content) });
   await expect(calculator.getByTestId('calculator-value')).toHaveText('待确认');
   await calculator.getByRole('button', { name: '检查当前内容', exact: true }).click();
@@ -327,7 +327,7 @@ for (const entry of [
   await page.setViewportSize({ width: 1280, height: 1000 });
   await page.goto('/');
   await page.getByTestId('workspace-nav-calculator').click();
-  const calculator = page.getByRole('region', { name: '伤害计算器', exact: true });
+  const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByRole('button', { name: '选择游戏角色', exact: true }).click();
   await calculator.getByLabel('搜索游戏角色', { exact: true }).pressSequentially(entry.name);
   await calculator.getByRole('button', { name: entry.name, exact: true }).click();

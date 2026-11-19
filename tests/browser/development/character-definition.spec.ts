@@ -3,58 +3,6 @@ import type { LocalAccount, Project } from '@leyline/schema';
 import { existsSync, readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 
-test('verified Jean metadata supports sequential decimal editing, guarded replacement and file round-trip', async ({ page }) => {
-  await page.goto('/');
-  await page.getByTestId('workspace-nav-definitions').click();
-  const panel = page.getByRole('region', { name: '自定义角色元数据', exact: true });
-  await expect(panel.getByRole('button', { name: '复制角色元数据', exact: true })).toBeEnabled();
-  await panel.getByRole('button', { name: '复制角色元数据', exact: true }).click();
-  const name = panel.getByLabel('角色元数据名称', { exact: true });
-  await name.clear(); await name.pressSequentially('琴 · 元数据往返');
-  const multiplier = panel.getByLabel('元数据技能倍率', { exact: true });
-  await multiplier.clear(); await multiplier.pressSequentially('2.92');
-  await expect(multiplier).toHaveValue('2.92');
-  await panel.getByText('角色介绍与技能说明',{exact:true}).click();
-  await expect(panel.getByText('正直严谨的蒲公英骑士，蒙德西风骑士团的代理团长。',{exact:true})).toBeVisible();
-  await expect(panel.getByText('292%',{exact:true})).toBeVisible();
-  await page.getByRole('button', { name: '导航 设置', exact: true }).click();
-  await page.getByTestId('workspace-nav-definitions').click();
-  await expect(name).toHaveValue('琴 · 元数据往返');
-  await expect(multiplier).toHaveValue('2.92');
-  await panel.getByRole('button', { name: '复制角色元数据', exact: true }).click();
-  await page.getByRole('dialog', { name: '替换角色元数据草稿', exact: true }).getByRole('button', { name: '保留草稿', exact: true }).click();
-  const downloadEvent = page.waitForEvent('download');
-  await panel.getByRole('button', { name: '导出角色定义', exact: true }).click();
-  const download = await downloadEvent;
-  const content = readFileSync((await download.path())!, 'utf8'), file = JSON.parse(content);
-  expect(file.kind).toBe('character-definition');
-  expect(file.namespace).toMatch(/^custom:/);
-  expect(file.derivedFrom.id).toBe('jean');
-  expect(file.talents.find((skill: { category: string }) => skill.category === 'skill').parameters[0].values[0]).toBe(2.92);
-  expect(file).not.toHaveProperty('artifacts');
-  expect(file).not.toHaveProperty('account');
-  await panel.getByLabel('导入角色定义文件', { exact: true }).setInputFiles({ name: 'jean.character.json', mimeType: 'application/json', buffer: Buffer.from(content) });
-  await expect(name).toHaveValue('琴 · 元数据往返');
-  await panel.getByLabel('导入角色定义文件', { exact: true }).setInputFiles({ name: 'invalid-version.character.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ ...file, schemaVersion: 2 })) });
-  await expect(panel.getByRole('alert')).toContainText('格式无效');
-  await expect(name).toHaveValue('琴 · 元数据往返');
-  const exportRevision = async () => {
-    const waiting = page.waitForEvent('download');
-    await panel.getByRole('button', { name: '导出角色定义', exact: true }).click();
-    return JSON.parse(readFileSync((await (await waiting).path())!, 'utf8')).revision;
-  };
-  expect(await exportRevision()).toBe(file.revision);
-  await name.press('End');
-  await name.pressSequentially('2');
-  const nextRevision = await exportRevision();
-  expect(nextRevision).not.toBe(file.revision);
-  expect(await exportRevision()).toBe(nextRevision);
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(panel).toBeVisible();
-  expect(await panel.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
-  await page.screenshot({ path: 'artifacts/character-definition-mobile.png', fullPage: true });
-});
-
 test('recorded Xingqiu candidate retains custom metadata through cultivation editing', async ({ page }) => {
   const source = '.references/enka/official-example.json';
   test.skip(!existsSync(source), 'Requires the recorded public showcase; no synthetic substitute.');
@@ -75,22 +23,47 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   expect(Object.keys(importedCharacter.equipment)).toHaveLength(recorded.equipList.filter((item: { reliquary?: unknown }) => item.reliquary).length);
   for (const id of Object.values(importedCharacter.equipment)) expect(imported.artifacts.some((artifact: { id: string }) => artifact.id === id)).toBe(true);
   await page.getByTestId('workspace-nav-team').click();
-  await page.getByRole('button', { name: '＋ 从账号选择队员', exact: true }).click();
+  await page.getByRole('button', { name: '从账号选择队员', exact: true }).click();
   await page.getByRole('dialog', { name: '从账号选择队员', exact: true }).getByRole('button').filter({ has: page.getByText('行秋', { exact: true }) }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  await page.getByTestId('workspace-nav-definitions').click();
-  const panel = page.getByRole('region', { name: '自定义角色元数据', exact: true });
-  await panel.getByLabel('角色定义来源', { exact: true }).selectOption('xingqiu');
-  await panel.getByRole('button', { name: '复制角色元数据', exact: true }).click();
-  const name = panel.getByLabel('角色元数据名称', { exact: true });
-  await name.clear(); await name.pressSequentially('行秋 · 自定义保存核对');
-  await panel.getByRole('button', { name: '应用到所选队员', exact: true }).click();
+  // Apply a custom copy of the actual showcase build as a current-format axis file.
+  const content = await page.evaluate(async () => {
+    const [{ useAxisWorkspaceStore }, { applyCharacterDefinition, copyCharacterDefinition }, { packDocument }] = await Promise.all([
+      // @ts-expect-error Vite browser source URL.
+      import('/src/stores/axis-workspace.ts'),
+      // @ts-expect-error Vite browser source URL.
+      import('/src/domain/character-definition.ts'),
+      // @ts-expect-error Vite browser source URL.
+      import('/src/domain/content-document.ts'),
+    ]);
+    const axis = useAxisWorkspaceStore();
+    const { character, dataVersion } = axis.actor!.build!;
+    const next = applyCharacterDefinition(axis.project, axis.actorId, copyCharacterDefinition(character, dataVersion));
+    return JSON.stringify(packDocument('axis', next));
+  });
+  await page.getByTestId('workspace-nav-timeline').click();
+  const timeline = page.getByRole('region', { name: '时间轴', exact: true });
+  const file = timeline.getByLabel('导入轴项目文件', { exact: true });
+  await file.setInputFiles({ name: 'recorded-showcase-custom-axis.json', mimeType: 'application/json', buffer: Buffer.from(content) });
+  await expect(timeline.getByRole('group', { name: '时间轴队员' })).toContainText('行秋 · 自定义');
+
+  const axisName = timeline.getByLabel('轴名称', { exact: true });
+  await axisName.pressSequentially('行秋试配');
+  const download = page.waitForEvent('download');
+  await timeline.getByRole('button', { name: '保存轴', exact: true }).click();
+  const saved = readFileSync((await (await download).path())!, 'utf8');
+  expect((await readDocument<Project>(page, 'axis', saved)).name).toBe('行秋试配');
+  await timeline.getByText('更多', { exact: true }).click();
+  await timeline.getByRole('button', { name: '新建空轴', exact: true }).click();
+  await expect(page.getByRole('region', { name: '队伍', exact: true })).toContainText('还没有队员');
+  await page.getByTestId('workspace-nav-timeline').click();
+  await file.setInputFiles({ name: 'recorded-showcase-custom-axis.json', mimeType: 'application/json', buffer: Buffer.from(saved) });
+  await expect(axisName).toHaveValue('行秋试配');
   const recovered = async () => {
     const text = await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.1.0'));
     return text ? (await readDocument<{ project: Project }>(page, 'axis-recovery', text)).project : undefined;
   };
-  await expect.poll(async () => (await recovered())?.candidate.actors[0]?.build?.character.id).toMatch(/^custom-/);
-  const before = (await recovered())!;
+  const before = await readDocument<Project>(page, 'axis', saved);
   expect(before.candidate.actors[0].build!.character.id).toMatch(/^custom-/);
   await page.getByTestId('workspace-nav-team').click();
   await page.getByRole('button', { name: '查看与修改配装', exact: true }).click();
@@ -105,4 +78,19 @@ test('recorded Xingqiu candidate retains custom metadata through cultivation edi
   expect(after.candidate.actors[0].build!.refinement).toBe(refinement);
   expect(after.candidate.actors[0].build!.artifacts).toEqual(before.candidate.actors[0].build!.artifacts);
   expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(account);
+
+  // Record a hit for the UI round-trip without supplying unrecorded combat conditions.
+  await page.keyboard.press('Escape');
+  await page.getByTestId('workspace-nav-timeline').click();
+  await timeline.getByRole('button', { name: '伤害层', exact: true }).click();
+  await timeline.locator('.skill-palette').getByRole('button', { name: /古华剑·画雨笼山/ }).click();
+  await timeline.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
+  await page.getByTestId('workspace-nav-analysis').click();
+  const analysis = page.getByRole('region', { name: '逐点贡献', exact: true });
+  const target = analysis.getByRole('checkbox', { name: /^目标 / });
+  await expect(target).toBeChecked();
+  await target.uncheck();
+  await expect(target).not.toBeChecked();
+  await analysis.getByRole('button', { name: /^分析定位 / }).click();
+  await expect(timeline.getByRole('complementary', { name: '所选记录详情' })).toContainText('古华剑·画雨笼山');
 });

@@ -97,15 +97,127 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
 </script>
 <template>
   <section class="editing-desk" aria-label="剪辑式时间轴编辑">
-    <div class="roster"><button v-for="(actor, index) in axis.project.candidate.actors" :key="actor.id" :class="{ active: axis.actorId === actor.id }" @click="axis.actorId = actor.id"><GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation" :level="actor.build?.level" :size="32" /><kbd>{{ index + 1 }}</kbd> {{ actor.name ?? actor.build?.character.identity.name }}</button><p v-if="!axis.project.candidate.actors.length">先到队伍页，从账号选择角色。</p></div>
-    <div class="edit-tools"><ChoiceGroup :model-value="layer" :options="[{value:'action',label:'动作层'},{value:'damage',label:'伤害层'}]" label="标注图层" joined @update:model-value="layer=$event==='damage'?'damage':'action'" /><button class="ui-action soft" data-accent="anemo" :aria-pressed="playing" @click="toggleClock">{{ playing ? '暂停标注时钟' : '播放标注时钟' }}</button><label>光标时间 / 毫秒<input v-model.number="cursor" aria-label="标注光标时间" type="number" min="0" max="3600000" step="10" @focus="pause"></label><label>缩放<input v-model.number="scale" aria-label="时间轴缩放" type="range" min="15" max="180"></label></div>
-    <div class="skill-palette"><button v-for="item in skills" :key="item.id" :class="{ active: skill?.id === item.id }" @click="skillId = item.id; hitIndex = 0">{{ item.name }}<small>{{ item.hits.some(hit => hit.outputs.length) ? '可计算' : '可记动作 · 伤害待支持' }}</small></button><label v-if="layer === 'damage' && skill">命中段数<select v-model.number="hitIndex" aria-label="标注技能段数"><option v-for="(_, index) in skill.hits" :key="index" :value="index">第 {{ index + 1 }} 段</option></select></label><button class="ui-action" data-accent="anemo" :disabled="!skill" @click="add()">在光标处记录{{ layer === 'action' ? '动作' : '伤害点' }}</button></div>
-    <p class="key-help">空格 播放/暂停标注时钟 · 1–4 选角色 · E 战技 · Q 爆发 · Enter 记录所选技能 · ←/→ 移动 10 毫秒（Shift 为 1 秒）。拖动记录细调，默认吸附 10 毫秒，Alt 精确到 1 毫秒。动作与命中分别记录，时钟本身不会生成记录。</p><p v-if="error" role="alert">{{ error }}</p>
-    <div class="desk-scroll"><div class="desk-tracks" :style="{ width: `${width + 120}px` }"><div class="desk-ruler"><span>角色 / 信息层</span><div :style="{ width: `${width}px` }" @click="seek"><i v-for="tick in Math.ceil(duration / 1000) + 1" :key="tick" :style="{ left: `${(tick - 1) * scale}px` }">{{ tick - 1 }}s</i><b class="playhead" :style="{ left: `${cursor / 1000 * scale}px` }"></b></div></div><template v-for="actor in axis.project.candidate.actors" :key="actor.id"><div v-for="kind in ['action', 'damage']" :key="kind" class="desk-row" :class="{ dim: layer !== kind }"><div class="desk-label"><GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation" :level="actor.build?.level" :size="28" />{{ actor.name ?? '角色' }}<small>{{ kind === 'action' ? '动作' : '伤害' }}</small></div><div class="desk-lane" @click="seek"><span class="cursor-line" :style="{ left: `${cursor / 1000 * scale}px` }"></span><button v-for="record in records(actor.id, kind)" :key="record.id" class="desk-record" :class="{ selected: axis.selectedId === record.id, damage: kind === 'damage' }" :style="{ left: `${record.timeMs / 1000 * scale}px` }" :aria-label="`选择${kind === 'action' ? '动作' : '伤害点'} ${recordLabel(axis.project, record.id)}`" :data-record-id="record.id" @click.stop="axis.selectedId = record.id; axis.actorId = record.actor" @pointerdown="drag($event, record)">{{ recordLabel(axis.project, record.id) }}<small>{{ record.timeMs }} ms</small></button></div></div></template></div></div>
-    <p v-if="!axis.project.timeline.length" class="empty-axis">轴里还没有记录。选择角色与技能，在光标位置记录动作；切到伤害层记录实际命中，再补充条件。</p>
+    <div v-if="axis.project.candidate.actors.length" class="desk-roster" role="group" aria-label="时间轴队员">
+      <button v-for="(actor, index) in axis.project.candidate.actors" :key="actor.id"
+        class="desk-option" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
+        <GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation"
+          :level="actor.build?.level" :size="28" />
+        <span><kbd>{{ index + 1 }}</kbd> {{ actor.name ?? actor.build?.character.identity.name }}</span>
+      </button>
+    </div>
+    <div class="edit-tools">
+      <div class="library-page-actions">
+        <ChoiceGroup :model-value="layer" :options="[{ value: 'action', label: '动作层' }, { value: 'damage', label: '伤害层' }]"
+          label="标注图层" joined @update:model-value="layer = $event === 'damage' ? 'damage' : 'action'" />
+        <button class="ui-action soft" :aria-pressed="playing" @click="toggleClock">{{ playing ? '暂停标注时钟' : '播放标注时钟' }}</button>
+      </div>
+      <label class="desk-time">光标时间（毫秒）
+        <input v-model.number="cursor" aria-label="标注光标时间" type="number" min="0" max="3600000" step="10" @focus="pause">
+      </label>
+      <label class="desk-zoom">缩放
+        <input v-model.number="scale" aria-label="时间轴缩放" type="range" min="15" max="180">
+      </label>
+    </div>
+    <div v-if="skills.length" class="skill-palette">
+      <button v-for="item in skills" :key="item.id" class="desk-option" :aria-pressed="skill?.id === item.id"
+        @click="skillId = item.id; hitIndex = 0">
+        <span>{{ item.name }}</span>
+        <small v-if="!item.hits.some(hit => hit.outputs.length)">仅可记动作</small>
+      </button>
+      <label v-if="layer === 'damage' && skill">命中段数
+        <select v-model.number="hitIndex" aria-label="标注技能段数">
+          <option v-for="(_, index) in skill.hits" :key="index" :value="index">第 {{ index + 1 }} 段</option>
+        </select>
+      </label>
+      <button class="ui-action" :disabled="!skill" @click="add()">在光标处记录{{ layer === 'action' ? '动作' : '伤害点' }}</button>
+    </div>
+    <p v-if="error" role="alert">{{ error }}</p>
+    <div class="desk-scroll" role="region" aria-label="时间轴轨道" tabindex="0">
+      <div class="desk-tracks" :style="{ width: `${width + 120}px`, '--second-width': `${scale}px` }">
+        <div class="desk-ruler">
+          <span>角色 / 图层</span>
+          <div :style="{ width: `${width}px` }" @click="seek">
+            <i v-for="tick in Math.ceil(duration / 1000) + 1" :key="tick" :style="{ left: `${(tick - 1) * scale}px` }">{{ tick - 1 }}s</i>
+            <b class="playhead" :style="{ left: `${cursor / 1000 * scale}px` }"></b>
+          </div>
+        </div>
+        <template v-for="actor in axis.project.candidate.actors" :key="actor.id">
+          <div v-for="kind in ['action', 'damage']" :key="kind" class="desk-row" :class="{ dim: layer !== kind }">
+            <div class="desk-label">
+              <GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation"
+                :level="actor.build?.level" :size="28" />
+              {{ actor.name ?? '角色' }}
+              <small>{{ kind === 'action' ? '动作' : '伤害' }}</small>
+            </div>
+            <div class="desk-lane" @click="seek">
+              <span class="cursor-line" :style="{ left: `${cursor / 1000 * scale}px` }"></span>
+              <button v-for="record in records(actor.id, kind)" :key="record.id" class="desk-record"
+                :class="{ selected: axis.selectedId === record.id, damage: kind === 'damage' }"
+                :style="{ left: `${record.timeMs / 1000 * scale}px` }"
+                :aria-label="`选择${kind === 'action' ? '动作' : '伤害点'} ${recordLabel(axis.project, record.id)}`" :data-record-id="record.id"
+                @click.stop="axis.selectedId = record.id; axis.actorId = record.actor" @pointerdown="drag($event, record)">
+                {{ recordLabel(axis.project, record.id) }}<small>{{ record.timeMs }} ms</small>
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <p v-if="!axis.project.timeline.length" class="empty-axis">还没有轴记录</p>
+    <details class="timeline-shortcuts">
+      <summary>快捷键与时间规则</summary>
+      <p>空格播放或暂停，1–4 选择队员，E 选战技，Q 选爆发，Enter 记录所选技能。←/→ 移动 10 毫秒，按住 Shift 时移动 1 秒。</p>
+      <p>拖动记录默认吸附至 10 毫秒，按住 Alt 时精确到 1 毫秒。时间采用整数毫秒，区间左闭右开。</p>
+    </details>
   </section>
 </template>
+
 <style scoped>
-.editing-desk { padding:18px; }.roster,.edit-tools,.skill-palette,.layers { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }.roster { border-bottom:1px solid var(--neutral-line); padding-bottom:16px; }.roster > button.active,.skill-palette > button.active { background:var(--element-anemo-light); color:var(--element-anemo-deep); border-color:var(--element-anemo-primary); }.edit-tools { justify-content:space-between; padding:16px 0; } label { display:grid; gap:7px; font-size:var(--font-body); } input[type=number] { width:140px; }.skill-palette button small { display:block; margin-top:6px; font-size:var(--font-body); }.key-help { font-size:var(--font-body); line-height:1.8; color:var(--neutral-muted); margin:16px 0; }.desk-scroll { overflow:auto; max-height:480px; border:1px solid var(--neutral-line); border-radius:8px; }.desk-tracks { min-width:100%; }.desk-ruler,.desk-row { display:flex; }.desk-ruler { position:sticky; top:0; background:var(--neutral-line); height:36px; z-index:3; }.desk-ruler > span,.desk-label { width:120px; flex-shrink:0; padding:10px; box-sizing:border-box; position:sticky; left:0; background:var(--element-dendro-light); z-index:2; font-size:var(--font-body); }.desk-ruler > div { position:relative; cursor:crosshair; }.desk-ruler i { position:absolute; top:8px; font-size:var(--font-body); font-style:normal; }.playhead { position:absolute; height:100%; border-left:2px solid var(--element-pyro-deep); }.desk-lane { position:relative; flex:1; height:80px; cursor:crosshair; background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--neutral-line) 20.00%,transparent) 0 1px,transparent 1px 60px),var(--neutral-canvas); border-top:1px solid var(--neutral-line); }.desk-label small { display:block; margin-top:10px; color:var(--neutral-muted); }.desk-record { position:absolute; top:12px; min-width:92px; max-width:150px; padding:7px 10px; background:var(--neutral-line); border:1px solid var(--element-cryo-primary); border-radius:5px; text-align:left; font-size:var(--font-body); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; touch-action:none; cursor:grab; }.desk-record.damage { background:var(--element-anemo-light); border-color:var(--element-anemo-primary); }.desk-record.selected { outline:2px solid var(--element-geo-primary); z-index:1; }.desk-record small { display:block; margin-top:5px; }.cursor-line { position:absolute; top:0; bottom:0; border-left:1px solid var(--element-pyro-deep); pointer-events:none; }.dim .desk-lane { background-color:var(--element-dendro-light); }.empty-axis { text-align:center; padding:30px 15px; font-size:var(--font-body); line-height:1.8; } kbd { padding-right:6px; }
-.roster > button { display:flex; align-items:center; gap:8px; }.desk-label > .game-icon { float:left; margin-right:8px; }
+section.editing-desk { display:grid; gap:12px; padding:12px 16px; }
+.desk-roster,.edit-tools,.skill-palette { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:0; }
+.desk-roster { padding-bottom:12px; border-bottom:1px solid var(--line); }
+.edit-tools,.skill-palette { align-items:end; }
+.edit-tools > .library-page-actions { margin-inline-end:auto; }
+.desk-time { width:136px; }
+.desk-zoom { width:116px; }
+.desk-zoom > input[type=range] { padding:0; border:0; background:transparent; accent-color:var(--element-anemo-deep); }
+.desk-option {
+  display:flex; align-items:center; gap:8px; max-width:100%; min-height:var(--control-height-lg);
+  padding:4px 8px; overflow-wrap:anywhere; text-align:left;
+}
+.desk-option[aria-pressed=true] { background:var(--element-anemo-light); color:var(--element-anemo-deep); border-color:var(--element-anemo-primary); font-weight:700; }
+.skill-palette .desk-option { display:grid; gap:0; }
+.skill-palette small,.desk-option kbd { color:var(--muted); }
+.desk-scroll { overflow:auto; max-height:480px; border:1px solid var(--line); border-radius:var(--control-radius); }
+.desk-scroll:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.desk-tracks { min-width:100%; font-variant-numeric:tabular-nums; }
+.desk-ruler,.desk-row { display:flex; }
+.desk-ruler { position:sticky; top:0; background:var(--surface-subtle); height:var(--control-height-lg); z-index:3; }
+.desk-ruler > span,.desk-label {
+  width:120px; flex-shrink:0; padding:8px; position:sticky; left:0; z-index:2;
+  border-right:1px solid var(--line); background:var(--surface); overflow-wrap:anywhere;
+}
+.desk-ruler > span { font-weight:700; }
+.desk-ruler > div { position:relative; cursor:crosshair; }
+.desk-ruler i { position:absolute; top:8px; color:var(--muted); font-style:normal; }
+.desk-lane {
+  position:relative; flex:1; height:72px; cursor:crosshair; border-top:1px solid var(--line);
+  background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px var(--second-width)),var(--surface-raised);
+}
+.desk-label small { display:block; margin-top:6px; color:var(--muted); }
+.desk-label > .game-icon { float:left; margin-right:6px; }
+.desk-record {
+  position:absolute; top:12px; min-width:92px; max-width:150px; padding:4px 8px; color:var(--ink);
+  border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface);
+  text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; touch-action:none; cursor:grab;
+}
+.desk-record.damage { color:var(--element-anemo-deep); background:var(--element-anemo-light); border-color:var(--element-anemo-primary); }
+.desk-record.selected { border-color:var(--element-hydro-deep); box-shadow:inset 0 0 0 1px var(--element-hydro-deep); z-index:1; }
+.desk-record small { display:block; }
+.playhead,.cursor-line { position:absolute; top:0; bottom:0; border-left:1px solid var(--element-pyro-deep); pointer-events:none; }
+.dim .desk-lane { background-color:var(--surface-subtle); }
+.empty-axis,.timeline-shortcuts { color:var(--muted); }
+.empty-axis { text-align:center; }
+.timeline-shortcuts summary { width:fit-content; line-height:var(--control-height-md); }
+.timeline-shortcuts p + p { margin-top:4px; }
 </style>

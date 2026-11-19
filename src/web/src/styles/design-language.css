@@ -60,4 +60,9 @@ html { scrollbar-gutter:stable; }
 .workspace-design button.ui-action[data-size=md][data-width=short] { min-width:var(--control-width-short); font-size:var(--font-control); font-weight:700; }
 
 .workspace-design .workspace-body > .panel.library-page { margin:0 var(--library-page-margin); padding:var(--library-page-padding); min-width:0; }
+.workspace-design .library-page-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; min-width:0; }
+.workspace-design .library-page-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:0; }
+.workspace-design .library-page-toolbar > .library-page-actions { margin-inline-start:auto; }
+.workspace-design .library-page-status { color:var(--muted); font-size:var(--font-body); }
+.workspace-design .library-page .library-section { min-width:0; padding:16px; border:1px solid var(--line); border-radius:10px; background:var(--surface-raised); }
 @media(max-width:700px) { .workspace-design .workspace-body > .panel.library-page { --library-page-margin:12px; --library-page-padding:18px; } }
