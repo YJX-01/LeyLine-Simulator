@@ -7,7 +7,11 @@ export function compareTimelineLoadouts(input: Project, candidates: LoadoutCandi
   const entries = loadoutCandidatesSchema.parse(candidates);
   const baseline = evaluateTimeline(project);
   const originalSources = new Set((baseline.effectInstances ?? []).map(instance => instance.id));
-  const delta = (before: number | null, after: number | null) => before === null || after === null ? null : after - before;
+  const difference = (before: number | null, after: number | null, modeledBefore?: number, modeledAfter?: number) => {
+    if (before !== null && after !== null) return { delta: after - before };
+    const left = before ?? modeledBefore, right = after ?? modeledAfter;
+    return { delta: null, ...(left !== undefined && right !== undefined ? { modeledDelta: right - left } : {}) };
+  };
   return { baseline, candidates: entries.map(candidate => {
     const next = projectSchema.parse(project);
     const builds: LoadoutComparison['candidates'][number]['sources']['builds'] = [];
@@ -37,11 +41,12 @@ export function compareTimelineLoadouts(input: Project, candidates: LoadoutCandi
     // Revisions/applications keep their identities. Changed sources remain stale, never silently rebound.
     const result = evaluateTimeline(projectSchema.parse(next));
     const sources = new Set((result.effectInstances ?? []).map(instance => instance.id));
+    const points = new Map(result.points.map(point => [point.id, point]));
     return { id: candidate.id, ...(candidate.name ? { name: candidate.name } : {}), result,
-      delta: delta(baseline.objectiveValue, result.objectiveValue),
+      ...difference(baseline.objectiveValue, result.objectiveValue, baseline.modeledObjectiveValue, result.modeledObjectiveValue),
       points: baseline.points.map(before => {
-        const after = result.points.find(point => point.id === before.id)?.value ?? null;
-        return { id: before.id, before: before.value, after, delta: delta(before.value, after) };
+        const after = points.get(before.id);
+        return { id: before.id, before: before.value, after: after?.value ?? null, ...difference(before.value, after?.value ?? null, before.modeledValue, after?.modeledValue) };
       }),
       sources: { added: [...sources].filter(id => !originalSources.has(id)), removed: [...originalSources].filter(id => !sources.has(id)), builds } };
   }) };

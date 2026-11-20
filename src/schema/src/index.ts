@@ -31,6 +31,7 @@ export * from './account/artifact';
 export * from './account/build';
 export * from './account/account';
 export * from './project/damage';
+export * from './project/reaction-event';
 export * from './project/combat-conditions';
 export * from './project/combat-state';
 export * from './project/enemy';

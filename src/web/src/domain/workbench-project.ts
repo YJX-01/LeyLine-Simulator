@@ -4,7 +4,7 @@ import { projectSchema, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 
 export function createEmptyProject(id:string=crypto.randomUUID()):Project {
-  return projectSchema.parse({schemaVersion: APP_VERSION, rulesVersion:'timeline-v1',calculationProfile:'direct',id,revision:'1',definitions:[],candidate:{id:`${id}-candidate`,actors:[]},conditions:{},timeline:[],objective:{}});
+  return projectSchema.parse({schemaVersion: APP_VERSION, rulesVersion:'timeline-v1',id,revision:'1',definitions:[],candidate:{id:`${id}-candidate`,actors:[]},conditions:{},timeline:[],objective:{}});
 }
 
 export function importProject(content: string): Project {
@@ -24,12 +24,14 @@ export function validateProject(input: unknown): Project {
 export { removeTimelineRecord, setDamageSelected } from './axis-input';
 
 export function removeProjectActor(project: Project, id: string): void {
-  const removed = new Set(project.timeline.filter(record => record.actor === id).map(record => record.id));
+  const removed = new Set(project.timeline.filter(record => record.actor === id || record.reactionEvent?.contributors.some(contributor => contributor.actorId === id)).map(record => record.id));
   project.timeline = project.timeline.filter(record => !removed.has(record.id));
   project.candidate.actors = project.candidate.actors.filter(actor => actor.id !== id);
   if (project.combatStates) project.combatStates = project.combatStates.filter(interval => interval.actor !== id);
+  if (project.actionStates) project.actionStates = project.actionStates.filter(state => state.actorId !== id);
   for (const record of project.timeline) {
     if (record.damage?.stateOverrides) record.damage.stateOverrides = record.damage.stateOverrides.filter(override => override.actor !== id);
+    if (record.sourceEventIds) record.sourceEventIds = record.sourceEventIds.filter(source => !removed.has(source));
   }
   if (project.objective.damageIds) project.objective.damageIds = project.objective.damageIds.filter(record => !removed.has(record));
 }

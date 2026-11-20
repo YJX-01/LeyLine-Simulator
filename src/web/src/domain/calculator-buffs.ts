@@ -1,5 +1,5 @@
 import { calculationEffectInstanceId, effectUnlocked, eventMatches, hitMatches, projectCalculationEvent } from '@leyline/engine';
-import { calculatorProjectSchema, definitionKey, ordinaryTrialId, type Build, type CalculationBinding, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
+import { projectSchema, definitionKey, ordinaryTrialId, type Build, type CalculationBinding, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
 import { addSkillAction } from './real-project';
 import { realElementLabel, realStatLabels } from './workbench-labels';
 import { calculatorIntervals, hpChoice, hpMatches, ownerFactFields, selectionFacts, setTrialFact, stackChoice, trialValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
@@ -163,7 +163,7 @@ export function resolveBuffSelection(choices: readonly CalculatorBuff[], damage:
 /** Apply explicit trial choices to the calculator copy. Timed effects retain a real source record and event order. */
 export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choices: CalculatorBuff[], changes: ReadonlyMap<string,boolean>, time: number, recordId?: string) {
   if (!changes.size) return { project: input, applications: damage.effectApplications };
-  const project = calculatorProjectSchema.parse(input);
+  const project = projectSchema.parse(input);
   let applications = [...damage.effectApplications ?? []];
   const addedActions = new Map<string, string>();
   for (const option of choices) {
@@ -174,7 +174,7 @@ export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choi
       const key = JSON.stringify([option.ownerId,option.triggerSkill]);
       let event = addedActions.get(key);
       if (!event) {
-        event = addSkillAction(project, option.ownerId, option.triggerSkill, time, calculatorProjectSchema);
+        event = addSkillAction(project, option.ownerId, option.triggerSkill, time);
         addedActions.set(key, event);
         const action = project.timeline.find(record => record.id === event)!;
         const hit = project.timeline.find(record => record.id === recordId);
@@ -193,7 +193,7 @@ export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choi
       if (revision) {
         revision.disabled = !enabled;
         if (enabled && !revision.value) project.effectRevisions = revisions.filter(entry => entry !== revision);
-      } else if (!enabled) { project.calculationProfile = 'dependency'; project.effectRevisions = [...revisions, { instanceId: id, disabled: true }]; }
+      } else if (!enabled) { project.effectRevisions = [...revisions, { instanceId: id, disabled: true }]; }
     }
   }
   return { project, applications: applications.length ? applications : undefined };

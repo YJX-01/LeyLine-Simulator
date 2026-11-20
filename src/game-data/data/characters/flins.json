@@ -3,7 +3,7 @@
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "flins",
-  "revision": "3",
+  "revision": "4",
   "identity": {
     "name": "菲林斯",
     "title": "诡灯陌影",
@@ -1053,6 +1053,44 @@
           ],
           "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "flins.burst.param2",
+          "element": "electro",
+          "category": "burst",
+          "parameter": "param2",
+          "scaling": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "outputs": [
+            {
+              "id": "flins.burst.param2.lunar-charged",
+              "family": "lunar-charged"
+            }
+          ],
+          "support": "lunar-hit-unavailable"
+        },
+        {
+          "id": "flins.burst.param3",
+          "element": "electro",
+          "category": "burst",
+          "parameter": "param3",
+          "scaling": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "outputs": [
+            {
+              "id": "flins.burst.param3.lunar-charged",
+              "family": "lunar-charged"
+            }
+          ],
+          "support": "lunar-hit-unavailable"
         }
       ]
     }
@@ -1152,6 +1190,22 @@
       "mechanisms": [
         {
           "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "lunar-hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单段月伤倍率和乘区已接入，角色及装备的附加机制待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "direct-lunar-formula",
+          "resolution": "implemented"
+        },
+        {
+          "id": "lunar-kit",
           "resolution": "unavailable"
         }
       ]

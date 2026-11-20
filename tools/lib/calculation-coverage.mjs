@@ -101,6 +101,7 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
     meaning: 'Compiled certificates describe their adopted constellation range, inputs and sources.',
     summary: { characters: characters.length, weapons: weapons.length, sets: sets.length, entries: entries.length,
       complete: entries.filter(entry => entry.resolution === 'complete').length, unavailable: entries.filter(entry => entry.resolution === 'unavailable').length,
+      boundOutputs: paths.summary.outputs,
       supportedOutputs: entries.filter(entry => entry.kind === 'hit').reduce((sum, entry) => sum + entry.scopes.filter(scope => scope.resolution === 'complete').length, 0),
       invalidDefinitions: [...validations.values()].filter(result => !result.ok).length },
     entries, bindings: paths, rules,

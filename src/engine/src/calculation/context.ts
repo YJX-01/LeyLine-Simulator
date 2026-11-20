@@ -105,7 +105,10 @@ class BoundEvaluator {
     if (binding.kind === 'formula') return this.formula(binding.formula, binding.inputs, binding.output, frame, depth + 1, false).outputs[binding.output];
     if (binding.kind === 'actor-state') {
       const actorId = this.actor(binding.actor, frame, origin);
-      return typeof actorId !== 'string' ? actorId : this.session.known(origin, binding.property, { kind: 'quantity', unit: 'count', value: this.actors.get(actorId)![binding.property] });
+      if (typeof actorId !== 'string') return actorId;
+      const value = this.actors.get(actorId)![binding.property];
+      return value === null ? this.missing(origin, binding.property, { kind: 'quantity', unit: 'count' }, 'actor-build')
+        : this.session.known(origin, binding.property, { kind: 'quantity', unit: 'count', value });
     }
     if (binding.kind === 'team-count') {
       let count = 0;
@@ -122,12 +125,15 @@ class BoundEvaluator {
     }
     if (binding.kind === 'refinement-parameter') {
       const actor = this.actors.get(frame.ownerId)!;
+      if (actor.refinement === null) return this.missing(origin, 'refinement', binding.type, 'actor-build');
       return this.session.known(origin, 'refinement', { kind: 'quantity', unit: binding.type.unit, value: binding.values[actor.refinement - 1] }, [], binding.type);
     }
     if (binding.kind === 'talent-parameter') {
       const actorId = this.actor(binding.actor, frame, origin);
       if (typeof actorId !== 'string') return actorId;
-      const talent = this.actors.get(actorId)!.talents.find(candidate => candidate.id === binding.skillId);
+      const actor = this.actors.get(actorId)!;
+      if (actor.ascension === null && !actor.talents.length) return this.missing(origin, binding.parameterId, binding.type, 'actor-build');
+      const talent = actor.talents.find(candidate => candidate.id === binding.skillId);
       const parameter = talent?.parameters.find(candidate => candidate.id === binding.parameterId);
       const pointer = () => '/context/actors/' + this.context.actors.findIndex(actor => actor.id === actorId) + '/talents';
       if (!parameter) return this.session.invalid(origin, binding.parameterId, pointer(), '队员缺少绑定的技能参数：' + binding.skillId + '.' + binding.parameterId, 'missing-dependency');

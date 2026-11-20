@@ -46,7 +46,8 @@ test('the linked catalog preserves authored values and reports every entity and 
   const dullblade = weapons.find(weapon => weapon.id === 'dullblade');
   assert.equal(dullblade.calculation.bundle.formulas.length, 0);
   assert.equal(dullblade.calculation.bundle.coverage[0].resolution, 'complete');
-  assert.equal(report.summary.supportedOutputs, outputs);
+  assert.equal(report.summary.boundOutputs, outputs);
+  assert.ok(report.summary.supportedOutputs < outputs);
   assert.equal(report.entries.find(entry => entry.kind === 'character' && entry.entityId === 'vesna').resolution, 'complete');
 });
 

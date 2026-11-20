@@ -2,7 +2,7 @@
 import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
 import { loadCatalog, type GameCatalog } from '@leyline/game-data';
-import { calculatorProjectSchema, damageCalculatorSchema, projectSchema, type ValueType, elements, talentLevelBonus, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
+import { damageCalculatorSchema, projectSchema, type ValueType, elements, talentLevelBonus, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
 import type { AccountCharacter } from '../domain/account';
 import { calculatorRequest, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
 import { addActorFromBuild, addAttributeCapture, defaultEnemy } from '../domain/real-project';
@@ -118,7 +118,7 @@ async function importMetadata(event: Event) {
     const definition = parseCharacterDefinition(await file.text(), [selected]);
     if (before !== signature()) throw new Error('计算副本已变化，请重新导入。');
     const current = prepareDocument()!;
-    const next = { ...current, project: applyCharacterDefinition(current.project, actorId, definition, calculatorProjectSchema) };
+    const next = { ...current, project: applyCharacterDefinition(current.project, actorId, definition) };
     calculatorRequest(next, 0);
     document.value = next;
     if (document.value.recordId) await calculate();
@@ -127,14 +127,13 @@ async function importMetadata(event: Event) {
 const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
 const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
 const expectedPoint = computed(() => expectedResult.value?.points.find(point => point.id === document.value?.recordId));
-function modeledValue(record: typeof point.value) {
-  if (record?.value != null || record?.real?.status !== 'partial' || record.real.issues.some(issue => issue.code !== 'unsupported')) return;
-  const value = record.real.structured?.outputs.find(output => output.outputId === damage.value.outputId)?.modeledValue?.value;
-  if (value?.kind === 'quantity' && value.unit === 'damage') return value.value;
-}
-const trial = computed(() => modeledValue(point.value));
-const expectedTrial = computed(() => modeledValue(expectedPoint.value));
+const trial = computed(() => point.value?.modeledValue);
+const expectedTrial = computed(() => expectedPoint.value?.modeledValue);
 const baselinePoint = computed(() => response.value?.comparison?.baseline.points.find(point => point.id === document.value?.recordId));
+const comparisonPoint = computed(() => response.value?.comparison?.candidates[0]?.points.find(point => point.id === document.value?.recordId));
+function comparisonNumber(value: number | null | undefined, modeled?: number) {
+  return value == null && modeled !== undefined ? '试算 ' + number(modeled) : number(value);
+}
 const inputNames: Record<string, string> = { counterCharge: '反击档位', namisen: '浪闪层数', resolve: '施放时消耗的愿力', lightfallEnergy: '光降之剑能量层数' };
 const factLabels: Record<string, string> = { ...buffFactNames, ...inputNames, critMode: '暴击', reactionMode: '反应' };
 function diagnosticText(message: string) {
@@ -338,7 +337,6 @@ function prepareDocument() {
     const index = timeline.findIndex(record => record.id === next.recordId);
     if (index >= 0) timeline[index] = { ...timeline[index], timeMs, damage: damage.value };
     else {
-      if (!next.team && (timeline.some(record => record.kind === 'damage') || next.project.candidate.actors.length > 1)) throw new Error('请在复制的轴中选择已有命中。');
       next.recordId = nextRecordId(next.project);
       timeline.push({ id: next.recordId, actor: next.actorId, kind: 'damage', definition: `${next.actorId}-real-damage`,
         timeMs, order: Math.max(-1, ...timeline.map(record => record.order)) + 1, damage: damage.value });
@@ -353,7 +351,7 @@ async function createCapture() {
     if (String(captureTime.value).trim() === '') throw new Error('请填写已确认的属性捕获时刻。');
     const timeMs = Math.round(Number(captureTime.value) * 1000);
     const next = damageCalculatorSchema.parse(document.value);
-    const recordId = addAttributeCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs, calculatorProjectSchema);
+    const recordId = addAttributeCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs);
     document.value = next;
     damage.value.capture = { recordId, phase: null };
     captureTime.value = '';
@@ -415,8 +413,8 @@ async function applyContent() {
   if (document.value?.recordId) await calculate();
 }
 async function pinBaseline() {
-  if (!document.value?.recordId || point.value?.value == null) return;
-  document.value = { ...document.value, baseline: calculatorProjectSchema.parse(document.value.project) };
+  if (!document.value?.recordId || (point.value?.value ?? trial.value) == null) return;
+  document.value = { ...document.value, baseline: projectSchema.parse(document.value.project) };
   await calculate();
 }
 function endComparison() {
@@ -534,7 +532,7 @@ defineExpose({ requestLeave: leaveCalculator });
     <p v-if="error" role="alert">{{ error }}</p>
     <section class="library-section calculator-result" aria-label="计算结果">
       <header class="result-heading"><h3>伤害结果</h3><div class="library-page-actions">
-        <button class="ui-action soft" v-if="!document?.baseline && point?.value != null" data-accent="anemo" :disabled="working" @click="pinBaseline">设为比较基准</button>
+        <button class="ui-action soft" v-if="!document?.baseline && (point?.value ?? trial) != null" data-accent="anemo" :disabled="working" @click="pinBaseline">设为比较基准</button>
         <button v-if="document?.baseline" class="ui-action soft" data-accent="pyro" @click="endComparison">结束对照</button>
         <button class="ui-action" data-accent="anemo" :disabled="working || !selectedChoice" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
       </div></header>
@@ -550,7 +548,7 @@ defineExpose({ requestLeave: leaveCalculator });
           <button v-if="missingBuff && !document?.baseline" type="button" class="ui-action soft" data-size="md" @click="picker = 'buff'">补充增益条件</button>
         </details>
         <CalculatorFactorCards v-if="point?.real" :real="point.real" :damage="damage" :buffs="buffs" />
-        <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(response.comparison.candidates[0]?.points.find(entry => entry.id === document?.recordId)?.delta) }}</td></tr></tbody></table>
+        <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ comparisonNumber(baselinePoint?.value, baselinePoint?.modeledValue) }}</td><td>{{ comparisonNumber(point?.value, point?.modeledValue) }}</td><td data-testid="calculator-delta">{{ comparisonNumber(comparisonPoint?.delta, comparisonPoint?.modeledDelta) }}</td></tr></tbody></table>
         <details v-if="point?.real" class="result-support"><summary>配装属性与来源</summary>
           <p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p>
           <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentLevelBonus(hitOwner.build.character, skill.category, hitOwner.build.constellation) }}</p>
@@ -613,7 +611,7 @@ defineExpose({ requestLeave: leaveCalculator });
         <CatalogBrowser :options="catalog?.characters ?? []" kind="characters" label="游戏角色" :selected-id="queryCharacter?.id" @select="chooseCharacter" />
       </template>
     </CharacterSelectionDialog>
-    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :selected="damage.outputId" @close="picker = undefined" @select="selectDamage" />
+    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :selected="damage.outputId ?? undefined" @close="picker = undefined" @select="selectDamage" />
     <CalculatorBuffPicker v-if="picker === 'buff' && hitOwner" :choices="buffs" :damage="damage" :actor-id="hitOwner.id" :intervals="intervals"
       :fields="factFields" :hit-facts="hitFacts" :time="hitTime" @close="picker = undefined" @apply="applyBuffs" />
     <CharacterSelectionDialog v-if="picker === 'candidate' && document" title="试配队员" :members="document.project.candidate.actors" :selected-id="document.actorId" @close="picker = undefined" @select="switchActor" />

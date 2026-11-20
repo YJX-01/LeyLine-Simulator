@@ -19,7 +19,7 @@
 | 角色定义 | kind=character-definition，文件根对象直接保存角色元数据 |
 | 账号、轴项目 | kind=account 或 axis，document 保存编辑状态，content 保存引用的定义 |
 | 定义库 | kind=definition-library，保存定义集合 |
-| 轴项目规则 | rulesVersion=timeline-v1，calculationProfile 为 direct 或 dependency |
+| 轴项目规则 | rulesVersion=timeline-v1，统一依赖求值 |
 | 独立计算器 | kind=damage-calculator，document 内含 project、可选 baseline、actorId 和可选 recordId，最大 8 MiB |
 
 浏览器按用途分别存储账号、项目恢复、角色配置、队伍、定义库、收藏与偏好。键名由 storageKeyFor 生成，例如 `leyline-account-0.1.0`。
@@ -28,11 +28,13 @@
 
 计算器的actorId须指向有Build的队员，recordId须指向项目中的伤害记录。保存设定与快照，重开重新求值。内容更新通过显式审阅采用，文件打开保持自身定义。
 
-独立计算文件可以用 `<hitId>.ordinary-trial` 记录用户对已有倍率命中的普通直伤试算选择。计算器校验队员、技能、命中、输入及捕获关系，求值时临时连接同一套普通直伤公式。原始定义和支持证据随文件保存。轴项目仍要求每条记录引用角色快照中声明的输出。
+轴项目和独立计算文件共用命中契约。明确已有命中后，outputId 可引用正式输出、用 null 保留待建模记录，或对适用的绑定写入 `<hitId>.ordinary-trial`。求值从快照绑定普通直伤公式。现有 0.1.0 文件可携带原 calculationProfile 字段。
 
 kind=capture的独立记录关联同队员技能与合法时间，其定义无公式和效果，记录无damage。来源与命中的先后依order明确；before/after阶段按捕获契约执行。当前命中可以明确关联自身before阶段，自身after作为来源时拒绝；同刻缺order保持待确认，ID用于稳定排序而非补足依赖事实。
 
 combatStates包含id、actor、startMs、endMs、values；值支持hpRatio、onField、shielded及明确null。damage.conditions覆盖当前队员，stateOverrides按actor覆盖上下文中其他队员，重复字段覆盖拒绝。stateReads保留实际查询及intervalId、source和值。
+
+多人反应记录使用 reactionEvent，包含伤害族、元素、贡献者和暴击口径。联合概率表可显式指定各状态的暴击结果。reactionRules 保存采用的公式闭包。actionStates 保存当前角色修订的动作定义、状态起点和初始值，timeline 的 actionId 及 facts 明确执行事件。
 
 damage.reaction 为 none、null 或严格的 type/trigger 对象。反应规则表使用当前 schemaVersion，algorithmRevision=1 选择引擎固定算法。damage.capture 关联 recordId 与 phase，damage.inputs 提供本技能输入，damage.effectApplications 关联 instanceId 与 active。
 

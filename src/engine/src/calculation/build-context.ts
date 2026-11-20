@@ -1,8 +1,9 @@
 import { APP_VERSION } from '@leyline/schema/version';
+import { canTryOrdinaryHit, ordinaryHitInvocation, ordinaryTrialId } from '@leyline/schema/hit-bindings';
 import { artifactSubstatLimits, calculationBundleSchema, calculationJsonPointer, combatContextSchema, definitionKey, inspectCalculationStructure, inventoryAllocationsSchema, statKeys, structuredBuildActorsSchema, structuredCombatSetupSchema, structuredHitRequestSchema, valueMatchesType,
   talentInputIssues, talentLevelBonus, type CalculationBundle, type CalculationDiagnostic, type CalculationFact, type CombatActor, type CombatContext, type EvaluatedValue,
-  type DefinitionRef, type InventoryAllocation, type StructuredBuild, type StructuredDamageEvaluation, type Value, type ValueType } from '@leyline/schema';
-import { calculationBudgets, compileCalculation, compiledData, type CompiledCalculation } from './compile';
+  type DamageOccurrence, type DefinitionRef, type InventoryAllocation, type StructuredBuild, type StructuredDamageEvaluation, type Value, type ValueType } from '@leyline/schema';
+import { calculationBudgets, compileCalculation, compiledData, type CompiledCalculation, type CompiledData } from './compile';
 import { validateCharacterBindings } from './character';
 import { evaluateDamageQuery } from './queries';
 import type { BoundAttributeReader } from './context';
@@ -39,8 +40,8 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
     bundle.requiredFeatures.forEach(feature => features.add(feature)); (bundle.damageFamilies ?? []).forEach(family => families.add(family));
     for (const key of ['sources', 'formulas', 'tables', 'attributes', 'effects', 'aggregates', 'coverage', 'stateMachines'] as const) (merged[key] as unknown[]).push(...bundle[key]);
   };
-  if (dependenciesInput !== undefined) {
-    const dependencies = calculationBundleSchema.safeParse(dependenciesInput);
+  for (const input of Array.isArray(dependenciesInput) ? dependenciesInput : dependenciesInput === undefined ? [] : [dependenciesInput]) {
+    const dependencies = calculationBundleSchema.safeParse(input);
     if (!dependencies.success) {
       for (const issue of dependencies.error.issues) report('invalid-range', '/dependencies' + calculationJsonPointer(issue.path), issue.message);
       return { ok: false, diagnostics };
@@ -54,6 +55,11 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
     appendBundle(entity.calculation.bundle);
   };
   for (const [index, entry] of parsed.data.entries()) {
+    if (!entry.build) {
+      data.actors.push({ id: entry.id, inputs: {}, facts: {}, actorFacts: {}, ascension: null, constellation: null, refinement: null,
+        ...(entry.element ? { identity: { element: entry.element, sourceRefs: [] } } : {}), setCounts: {}, effects: [], talents: [] });
+      continue;
+    }
     const { build, id } = entry, character = build.character, weapon = build.weapon, pointer = `/${index}/build`;
     data.builds.set(id, build); append(character); if (weapon) append(weapon); build.sets.forEach(append); merged.sources.push(...build.sources);
     const validLevel = (level: number, ascension: number) => level >= minLevels[ascension] && level <= maxLevels[ascension];
@@ -155,12 +161,26 @@ export function createStructuredCombatContext(team: PreparedStructuredTeam, setu
 }
 
 export function structuredTeamFeasibility(team: PreparedStructuredTeam) {
-  return checkInventoryFeasibility(teams.get(team)?.inventory);
+  const data = teams.get(team), result = checkInventoryFeasibility(data?.inventory);
+  if (result.status === 'pass' && data && data.inventory.length !== data.actors.length) result.status = 'unknown';
+  return result;
+}
+
+export function evaluateStructuredReaction(team: PreparedStructuredTeam, context: CombatContext, output: DamageOccurrence, attributeReader?: BoundAttributeReader) {
+  const data = teams.get(team)!;
+  const result = evaluateDamageQuery(team.program, context, { kind: 'event', eventId: output.eventId, outputs: [output], inventoryAllocations: data.inventory },
+    { limits: { trace: calculationBudgets.trace - 2 }, attributeReader });
+  const program = compiledData(team.program)!;
+  applyDamageCoverage(result, coverageGaps(data, program, result, output.family, undefined, [], !!attributeReader));
+  return result;
 }
 export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unknown, requestInput: unknown, options: { attributeReader?: BoundAttributeReader; context?: CombatContext } = {}): StructuredDamageEvaluation {
   const data = teams.get(team), request = inspectCalculationStructure(requestInput).length ? null : structuredHitRequestSchema.safeParse(requestInput);
   if (!data || !request?.success) return evaluateDamageQuery(team?.program, {}, {});
-  const query = request.data, build = data.builds.get(query.actorId), talent = build?.character.talents.find(talent => talent.id === query.skillId), hit = talent?.hits.find(hit => hit.id === query.hitId), output = hit?.outputs.find(output => output.id === query.outputId);
+  const query = request.data, build = data.builds.get(query.actorId), talent = build?.character.talents.find(talent => talent.id === query.skillId), hit = talent?.hits.find(hit => hit.id === query.hitId);
+  const trial = !!(talent && hit && query.outputId === ordinaryTrialId(hit.id) && canTryOrdinaryHit(talent, hit));
+  const output = trial && hit ? { id: query.outputId!, family: 'ordinary', origin: 'talent' as const, invocation: ordinaryHitInvocation(hit), coverageRefs: hit.coverageRefs }
+    : hit?.outputs.find(output => output.id === query.outputId);
   let context: CombatContext;
   try { context = options.context ? combatContextSchema.parse(options.context) : createStructuredCombatContext(team, setup); }
   catch { return evaluateDamageQuery(team.program, {}, {}); }
@@ -178,11 +198,13 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
   if (!build || !talent || !hit || !output) {
     const result = evaluateDamageQuery(team.program, context, { kind: 'event', eventId: query.frame.eventId, outputs: [] });
     const reason = `diagnostic-${result.diagnostics.length + 1}`;
-    const unreviewed = hit !== undefined && hit.outputs.length === 0;
-    result.diagnostics.push({ code: unreviewed ? 'unreviewed-mechanism' : 'stale-reference', severity: 'error', jsonPointer: '/hitId', affectedOutputIds: [], message: unreviewed ? '此命中的完整输出机制尚未闭合。' : '角色、技能、命中或输出引用已失效。' });
-    const state = unreviewed && result.execution !== 'invalid' ? 'unknown' : 'invalid';
+    const pending = hit !== undefined && query.outputId === null;
+    const pendingBuild = !build && data.actors.some(actor => actor.id === query.actorId);
+    result.diagnostics.push({ code: pending ? 'unreviewed-mechanism' : pendingBuild ? 'missing-fact' : 'stale-reference', severity: 'error', jsonPointer: '/hitId', affectedOutputIds: [],
+      message: pending ? '此命中尚未选择计算输出。' : pendingBuild ? '命中归属队员的配装尚未提供。' : '角色、技能、命中或输出引用已失效。' });
+    const state = (pending || pendingBuild) && result.execution !== 'invalid' ? 'unknown' : 'invalid';
     const traceId = `trace-${result.trace.length + 1}`;
-    result.trace.push({ id: traceId, kind: 'coverage', definition: hit?.coverageRefs[0] ?? reference(data.builds.values().next().value!.character), nodeId: 'unavailable-output', dependencies: [result.totals.all.traceId], value: null, state, sourceRefs: hit?.sources ?? [] });
+    result.trace.push({ id: traceId, kind: 'coverage', definition: hit?.coverageRefs[0] ?? reference({ namespace: 'builtin', id: 'runtime.damage-query', revision: '1' }), nodeId: 'unavailable-output', dependencies: [result.totals.all.traceId], value: null, state, sourceRefs: hit?.sources ?? [] });
     const value: EvaluatedValue = { state, reasons: [reason], traceId };
     result.work.traceNodes = result.trace.length;
     result.execution = state === 'unknown' ? 'partial' : 'invalid'; result.totals = { all: value, objective: value }; result.events.forEach(event => { event.total = value; }); return result;
@@ -198,70 +220,93 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
   const evidenceOrder = ['declared', 'adopted', 'independently-checked', 'observed'] as const;
   const evidence = Math.min(...refs.map(reference => evidenceOrder.indexOf(program.coverage.get(definitionKey(reference))!.evidence)));
   for (const occurrence of result.outputs) occurrence.evidence = evidenceOrder[evidence] ?? 'declared';
-  for (const [actorId, actorBuild] of data.builds) {
-    // The selected hit certifies its owner's exact scope. For other actors,
-    // only their separate context certificates cover possible team effects.
-    if (actorId !== query.actorId) refs.push(...actorBuild.character.calculation.contextCoverageRefs);
-    if (actorBuild.weapon) refs.push(...actorBuild.weapon.coverageRefs);
-    const actor = data.actors.find(actor => actor.id === actorId)!;
-    for (const set of actorBuild.sets) for (const effect of set.effects) if ((actor.setCounts[set.id] ?? 0) >= effect.pieces) refs.push(...effect.coverageRefs);
-  }
-  const gaps = [...new Set(refs.map(definitionKey))].filter(key => {
-    const record = program.coverage.get(key)!;
-    if (record.resolution !== 'complete') {
-      const unknown = record.mechanisms.filter(mechanism => mechanism.resolution === 'unavailable');
-      if (!options.attributeReader && record.scope.kind === 'context' && unknown.length && unknown.every(mechanism => mechanism.ruleIds.length)) {
-        const scope = new Set(unknown.flatMap(mechanism => mechanism.ruleIds.map(definitionKey)));
-        return result.trace.some(node => node.kind === 'effect' && scope.has(definitionKey(node.definition)));
-      }
-      return true;
-    }
-    if (record.scope.kind === 'hit' || record.scope.kind === 'context') return [...data.builds.values()].some(actorBuild => definitionKey(reference(actorBuild.character)) === definitionKey(record.entity) && actorBuild.constellation > (record.scope.kind === 'hit' || record.scope.kind === 'context' ? record.scope.maxConstellation : 6));
-    return false;
-  });
-  if (gaps.length) {
-    const reasons: string[] = [];
-    for (const key of gaps) {
-      const record = program.coverage.get(key)!;
-      const entity = definitionKey(record.entity), scope = record.scope;
-      const owners: string[] = [];
-      for (const actorBuild of data.builds.values()) {
-        const name = actorBuild.character.identity.name;
-        if (definitionKey(actorBuild.character) === entity) {
-          owners.push(record.resolution === 'complete' && scope.kind !== 'equipment' && actorBuild.constellation > scope.maxConstellation
-            ? `${name}的命座为${actorBuild.constellation}命，此项仅核验至${scope.maxConstellation}命`
-            : name);
-        } else if (actorBuild.weapon && definitionKey(actorBuild.weapon) === entity) owners.push(name + '的' + actorBuild.weapon.name);
-        else if (scope.kind === 'equipment') {
-          const set = actorBuild.sets.find(set => definitionKey(set) === entity);
-          if (set && actorBuild.artifacts.filter(item => item.setId === set.id).length >= (scope.pieces ?? 1)) {
-            owners.push(name + '的' + set.name + (scope.pieces ? scope.pieces + '件套' : ''));
-          }
-        }
-      }
-      const targets = new Set(record.mechanisms.filter(mechanism => mechanism.resolution === 'unavailable').flatMap(mechanism => mechanism.ruleIds).flatMap(reference => {
-        const effect = program.effects.get(definitionKey(reference));
-        return effect?.target.kind === 'attribute' ? [effect.target.attribute.id] : [];
-      }));
-      reasons.push(`diagnostic-${result.diagnostics.length + 1}`);
-      result.diagnostics.push({ code: 'unreviewed-mechanism', severity: 'error', jsonPointer: '/coverage', affectedOutputIds: result.outputs.map(output => output.id), message: [...owners, record.reason].join(' · '),
-        ...(targets.size === 1 ? { nodeId: [...targets][0] } : {}) });
-    }
-    const invalid = result.execution === 'invalid';
-    const gate = (original: EvaluatedValue, nodeId: string): EvaluatedValue => {
-      const state = invalid ? 'invalid' : 'unknown', traceId = `trace-${result.trace.length + 1}`;
-      result.trace.push({ id: traceId, kind: 'coverage', definition: program.coverage.get(gaps[0])!.identity, nodeId, dependencies: [original.traceId], value: null, state,
-        sourceRefs: [...new Set(gaps.flatMap(key => program.coverage.get(key)!.sources))], context: { eventId: frame.eventId, phase: frame.phase, actorId: query.actorId } });
-      return { state, traceId, reasons: [...new Set([...original.state !== 'known' ? original.reasons : [], ...reasons])] };
-    };
-    for (const output of result.outputs) if (output.value.state !== 'invalid') {
-      if (result.execution === 'complete' && output.value.state === 'known') output.modeledValue = output.value;
-      output.value = gate(output.value, output.outputId);
-      output.execution = invalid ? 'invalid' : 'partial'; output.diagnosticIds.push(...reasons);
-    }
-    const value = gate(result.totals.all, 'event-total');
-    result.execution = invalid ? 'invalid' : 'partial'; result.totals = { all: value, objective: value }; result.events.forEach(event => { event.total = value; });
-    result.work.traceNodes = result.trace.length;
-  }
+  const gaps = coverageGaps(data, program, result, output.family, query.actorId, refs, !!options.attributeReader);
+  if (trial) gaps.unshift({ definition: hit.coverageRefs[0], sources: hit.sources, message: '按本次选定的普通直伤公式试算。' });
+  applyDamageCoverage(result, gaps);
   return result;
+}
+
+interface CoverageGap {
+  definition: DefinitionRef;
+  sources: string[];
+  message: string;
+  nodeId?: string;
+}
+
+function coverageGaps(data: TeamData, program: CompiledData, result: StructuredDamageEvaluation, family: string,
+  actorId?: string, hitRefs: DefinitionRef[] = [], externalAttributes = false): CoverageGap[] {
+  const gaps: CoverageGap[] = [];
+  const attributes = result.trace.filter(node => node.kind === 'attribute');
+  const effects = result.trace.filter(node => node.kind === 'effect');
+  const fallback = hitRefs[0] ?? result.outputs[0]?.computation.definition;
+  for (const actor of data.actors) {
+    const build = data.builds.get(actor.id);
+    if (!build) {
+      if (fallback) gaps.push({ definition: fallback, sources: [], message: '队员 ' + actor.id + ' 的装备效果尚未提供。' });
+      continue;
+    }
+    const name = build.character.identity.name;
+    const add = (refs: DefinitionRef[], owner: string) => {
+      for (const ref of new Map(refs.map(ref => [definitionKey(ref), ref])).values()) {
+        const record = program.coverage.get(definitionKey(ref))!;
+        const { scope } = record;
+        const outOfRange = scope.kind !== 'equipment' && build.constellation > scope.maxConstellation;
+        const missing = record.mechanisms.filter(mechanism => mechanism.resolution === 'unavailable');
+        const relevant = missing.filter(({ impact, ruleIds }) => {
+          if (impact?.families && !impact.families.includes(family)) return false;
+          if (impact?.recipient === 'owner' && !externalAttributes) {
+            return attributes.some(node => node.context?.actorId === actor.id && (!impact.attributes || impact.attributes.includes(node.nodeId)));
+          }
+          if (impact?.attributes && !externalAttributes && !attributes.some(node => impact.attributes!.includes(node.nodeId))) return false;
+          if (scope.kind === 'context' && ruleIds.length && !externalAttributes) {
+            return effects.some(node => ruleIds.some(ref => definitionKey(ref) === definitionKey(node.definition))
+              && node.context?.actorId === actor.id);
+          }
+          return true;
+        });
+        if (record.resolution === 'complete' ? !outOfRange : missing.length > 0 && !relevant.length) continue;
+        const targets = new Set(relevant.flatMap(mechanism => mechanism.ruleIds).flatMap(reference => {
+          const effect = program.effects.get(definitionKey(reference));
+          return effect?.target.kind === 'attribute' ? [effect.target.attribute.id] : [];
+        }));
+        gaps.push({ definition: ref, sources: record.sources,
+          message: record.resolution === 'complete' && outOfRange
+            ? `${owner}的命座为${build.constellation}命，此项仅核验至${scope.maxConstellation}命 · ${record.reason}`
+            : owner + ' · ' + record.reason,
+          ...(targets.size === 1 ? { nodeId: [...targets][0] } : {}) });
+      }
+    };
+    add(actor.id === actorId ? hitRefs : build.character.calculation.contextCoverageRefs, name);
+    if (build.weapon) add(build.weapon.coverageRefs, name + '的' + build.weapon.name);
+    for (const set of build.sets) for (const effect of set.effects) {
+      if ((actor.setCounts[set.id] ?? 0) >= effect.pieces) add(effect.coverageRefs, name + '的' + set.name + effect.pieces + '件套');
+    }
+  }
+  return gaps;
+}
+
+function applyDamageCoverage(result: StructuredDamageEvaluation, gaps: CoverageGap[]) {
+  if (!gaps.length || result.execution === 'invalid') return;
+  const reasons = gaps.map(({ message, nodeId }) => {
+    const id = `diagnostic-${result.diagnostics.length + 1}`;
+    result.diagnostics.push({ code: 'unreviewed-mechanism', severity: 'warning', jsonPointer: '/coverage', affectedOutputIds: result.outputs.map(output => output.id), message, ...(nodeId ? { nodeId } : {}) });
+    return id;
+  });
+  const sources = [...new Set(gaps.flatMap(gap => gap.sources))];
+  const gate = (original: EvaluatedValue, nodeId: string): EvaluatedValue => {
+    const traceId = `trace-${result.trace.length + 1}`;
+    result.trace.push({ id: traceId, kind: 'coverage', definition: gaps[0].definition, nodeId, dependencies: [original.traceId], value: null, state: 'unknown', sourceRefs: sources });
+    return { state: 'unknown', traceId, reasons: [...new Set([...(original.state === 'known' ? [] : original.reasons), ...reasons])] };
+  };
+  for (const output of result.outputs) {
+    if (output.value.state === 'known') output.modeledValue = output.value;
+    output.value = gate(output.value, output.outputId);
+    output.execution = 'partial';
+    output.diagnosticIds.push(...reasons);
+  }
+  const value = gate(result.totals.all, 'event-total');
+  result.execution = 'partial';
+  result.totals = { all: value, objective: value };
+  for (const event of result.events) event.total = value;
+  result.work.traceNodes = result.trace.length;
 }

@@ -48,8 +48,3 @@ export function expressionReferences(node: ExpressionNode): string[] {
   if (node.op === 'condition') return [node.yes, node.no];
   return node.op === 'capture' ? [node.value] : [];
 }
-
-export function requiresDependencyDefinition(definition: RuleDefinition): boolean {
-  return definition.nodes.some(node => ['attribute', 'capture', 'history', 'refinement', 'talent-parameter', 'combat-state'].includes(node.op))
-    || definition.effects.some(effect => ['recipient', 'attribute', 'unit', 'group', 'policy', 'maxStacks', 'captureAt', 'trigger', 'appliesTo', 'permanent', 'requiresApplication'].some(key => Object.hasOwn(effect, key)));
-}

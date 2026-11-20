@@ -3,12 +3,12 @@ import { resolveStaticBuild } from '../attributes/build';
 import { percentStat, relevantPanelIssues, statUnit } from '../attributes/stat-dependencies';
 import type { DamagePoint, EvaluationResult, EffectInstance, AttributeRead } from '@leyline/schema';
 import { createCombatStateReader } from '../timeline/combat-state';
-import { prepareProjectRuntime, readRuntimePanel, evaluateRuntimeHit, runtimeEffectViews } from '../calculation/project';
+import { prepareProjectRuntime, readRuntimePanel, evaluateRuntimeHit, runtimeEffectViews, evaluateProjectStates } from '../calculation/project';
 
 type Definition = Project['definitions'][number];
 type Effect = Definition['effects'][number];
 type RecordEntry = Project['timeline'][number];
-type Quantity = { value: number; unit: QuantityUnit };
+type Quantity = { value: number; unit: QuantityUnit; modeled?: boolean };
 interface Instance { view: EffectInstance; definition: Definition; effect: Effect; trigger?: RecordEntry; index: number }
 interface Context { actor: string; record: RecordEntry; phase: 'before' | 'after'; excluded?: string; point: DamagePoint; trace?: AttributeRead; hitRecord?: RecordEntry }
 
@@ -21,7 +21,7 @@ export interface GraphResult extends EvaluationResult { attributes?: Partial<Rec
 
 /** Demand-driven graph for attributes, effects, captures and historical damage. */
 export function evaluateDependencyGraph(project: Project, options: GraphOptions = {}): GraphResult {
-  const preparedRuntime = project.candidate.actors.some(actor => actor.build) ? prepareProjectRuntime(project) : undefined;
+  const preparedRuntime = project.candidate.actors.some(actor => actor.build) || project.timeline.some(record => record.reactionEvent) ? prepareProjectRuntime(project) : undefined;
   const runtime = preparedRuntime?.ok ? preparedRuntime.runtime : undefined;
   const diagnostics: Diagnostic[] = [];
   const report = (code: Diagnostic['code'], path: string, message: string) => {
@@ -131,6 +131,7 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
     runtime.context.effectRevisions = (project.effectRevisions ?? []).filter(revision => contentIds.has(revision.instanceId))
       .map(({ instanceId, disabled, value }) => ({ instanceId, disabled, ...value ? { value: { kind: 'quantity' as const, ...value } } : {} }));
   }
+  const actionStateRuns = runtime && project.actionStates?.length ? evaluateProjectStates(runtime, project.actionStates) : undefined;
   const instanceIds = new Set([...instances.map(i => i.view.id), ...contentIds]);
   for (const view of contentViews) {
     const revision = revisions.get(view.id);
@@ -250,6 +251,7 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
       const base = baseAttribute(actorId, key, unit, ctx);
       let value = base?.value ?? 0;
       let valid = base !== null;
+      let modeled = base?.modeled ?? false;
       const percent = percentStat(key as StatKey);
       if (percent && actors.get(actorId)?.build) {
         const panel = actorPanel(actorId, ctx);
@@ -257,7 +259,10 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
         const white = panel.baseStats?.[key as keyof NonNullable<typeof panel.baseStats>];
         const originalPercent = panel.stats[percent];
         if (!adjusted || white === undefined || originalPercent === null) valid = false;
-        else value += white * (adjusted.value - originalPercent);
+        else {
+          value += white * (adjusted.value - originalPercent);
+          modeled ||= !!adjusted.modeled;
+        }
       }
       if (base && base.unit !== unit) { report('unit', path, '属性单位不匹配。'); valid = false; }
       const eligible: Instance[] = [];
@@ -315,11 +320,12 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
           if (!q) { valid = false; continue; }
           if (q.unit !== unit || instance.view.unit !== unit) { report('unit', path, '效果与接收属性的单位不匹配。'); valid = false; continue; }
           value += q.value;
+          modeled ||= !!q.modeled;
         }
       }
       if (!Number.isFinite(value)) { report('arithmetic', path, '属性计算不是有限值。'); valid = false; }
       trace.value = valid ? value : null;
-      return valid ? { value, unit } : null;
+      return valid ? { value, unit, modeled } : null;
     });
   }
   function nodeValue(d: Definition, id: string, ctx: Context): Quantity | null {
@@ -383,6 +389,7 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
           }
           let value = node.initial ?? 0;
           let valid = true;
+          let modeled = false;
           for (const record of timeline) {
             if (!touch(path)) return null;
             if (record.kind !== 'damage' || record.timeMs < node.startMs || record.timeMs >= node.endMs || (positions.get(record.id) ?? -1) <= resetPosition) continue;
@@ -390,12 +397,19 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
             if ((node.actor && record.actor !== node.actor) || (node.definition && record.definition !== node.definition)) continue;
             trace.dependencies.push(`timeline.${record.id}`);
             if (node.mode === 'count') value++;
-            else { const q = damageValue(record); if (q === null) valid = false; else value += q; }
+            else {
+              const damage = damageValue(record);
+              if (damage === null) valid = false;
+              else {
+                value += damage.value;
+                modeled ||= !!damage.modeled;
+              }
+            }
           }
           if (node.cap !== undefined) value = Math.min(node.cap, value);
           if (!Number.isFinite(value)) { report('arithmetic', path, '历史累计不是有限值。'); return null; }
           trace.value = valid ? value : null;
-          return valid ? { value, unit: node.mode === 'count' ? 'scalar' : 'damage' } : null;
+          return valid ? { value, unit: node.mode === 'count' ? 'scalar' : 'damage', modeled } : null;
         }
         case 'condition': { const active = condition(node.key, path); return active === null ? null : nodeValue(d, active ? node.yes : node.no, ctx); }
         case 'unsupported': report('unsupported', path, `尚未支持：${node.capability}`); return null;
@@ -406,13 +420,17 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
             for (const issue of preparedRuntime && !preparedRuntime.ok ? preparedRuntime.issues : [{ code: 'unknown' as const, message: '角色配装尚未明确。' }]) report(issue.code, path, issue.message);
             return null;
           }
+          let modeledAttribute = false;
           const readProjectAttribute: Parameters<typeof evaluateRuntimeHit>[4] = (actorId, reference, eventId, phase) => {
             const key = reference.id.replace(/^attribute\./, '');
             if (key === reference.id || ![...statKeys, ...reactionBonusKeys, 'damageBonus', 'baseDamageBonus', 'defenseIgnore'].includes(key)) return undefined;
             const sourceRecord = records.get(eventId);
             if (!sourceRecord) return null;
-            const value = attribute(actorId, key, key === 'damageBonus' || key === 'defenseIgnore' ? 'scalar' : statUnit(key as StatKey | ReactionBonusKey | HitDamageKey), { ...ctx, actor: actorId, record: sourceRecord, phase, hitRecord: ctx.record })?.value;
-            return value == null ? null : { value: value + (key === 'damageBonus' ? options.extraBonus ?? 0 : 0), unit: key === 'damageBonus' || key === 'defenseIgnore' ? 'scalar' : statUnit(key as StatKey | ReactionBonusKey | HitDamageKey), kind: 'quantity' };
+            const unit = key === 'damageBonus' || key === 'defenseIgnore' ? 'scalar' : statUnit(key as StatKey | ReactionBonusKey | HitDamageKey);
+            const read = attribute(actorId, key, unit, { ...ctx, actor: actorId, record: sourceRecord, phase, hitRecord: ctx.record });
+            if (!read) return null;
+            modeledAttribute ||= !!read.modeled;
+            return { value: read.value + (key === 'damageBonus' ? options.extraBonus ?? 0 : 0), unit, kind: 'quantity' };
           };
           const real = evaluateRuntimeHit(runtime, ctx.actor, ctx.record, combatConditions(ctx.actor, ctx.record),
             instances.length || options.extraBonus ? readProjectAttribute : undefined);
@@ -434,13 +452,15 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
               if (view && !ctx.point.formula.effects.some(effect => effect.effect === view.effect && effect.action === view.action)) ctx.point.formula.effects.push({ definition: view.definition, effect: view.effect, action: view.action });
             }
           }
-          return real.value !== null ? { value: real.value, unit: 'damage' } : null;
+          const value = real.value ?? real.modeledValue;
+          return value === undefined ? null : { value, unit: 'damage', modeled: modeledAttribute || real.value === null };
         }
         case 'select': {
           const predicate = nodeValue(d, node.condition, ctx);
           if (!predicate) return null;
           if (predicate.unit !== 'scalar' || ![0, 1].includes(predicate.value)) { report('unit', path, '条件选择要求明确的真假值。'); return null; }
-          return nodeValue(d, predicate.value === 1 ? node.yes : node.no, ctx);
+          const branch = nodeValue(d, predicate.value === 1 ? node.yes : node.no, ctx);
+          return predicate.modeled && branch ? { ...branch, modeled: true } : branch;
         }
         case 'compare': case 'add': case 'subtract': case 'min': case 'max': case 'multiply': case 'divide': {
           const left = nodeValue(d, node.left, ctx); const right = nodeValue(d, node.right, ctx);
@@ -462,13 +482,17 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
             : node.op === 'min' ? Math.min(left.value, right.value) : node.op === 'max' ? Math.max(left.value, right.value)
             : node.op === 'multiply' ? left.value * right.value : left.value / right.value;
           if (!Number.isFinite(value)) { report('arithmetic', path, '运算结果不是有限值。'); return null; }
-          return { value, unit: node.op === 'compare' ? 'scalar' : unit };
+          return { value, unit: node.op === 'compare' ? 'scalar' : unit, modeled: left.modeled || right.modeled };
         }
       }
     });
   }
-  function damageValue(record: RecordEntry): number | null {
-    if (completed.has(record.id)) return points.get(record.id)?.value ?? null;
+  function damageValue(record: RecordEntry): Quantity | null {
+    if (completed.has(record.id)) {
+      const point = points.get(record.id)!;
+      const value = point.value ?? point.modeledValue;
+      return value === undefined ? null : { value, unit: 'damage', modeled: point.value === null };
+    }
     const path = `timeline.${record.id}`;
     return graph(`damage:${record.id}`, path, () => {
       const d = definitions.get(record.definition);
@@ -479,16 +503,23 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
       const ctx: Context = { actor: record.actor, record, phase: 'before', point };
       const base = nodeValue(d, d.damage, ctx);
       const game = gameDamagePoints.has(point.id);
-      const bonus = game ? { value: 0, unit: 'scalar' as const } : attribute(record.actor, 'damageBonus', 'scalar', ctx);
+      const bonus: Quantity | null = game ? { value: 0, unit: 'scalar' } : attribute(record.actor, 'damageBonus', 'scalar', ctx);
       if (base && base.unit !== 'attack' && base.unit !== 'damage') report('unit', path, '伤害根必须为攻击力或伤害单位。');
       else if (base && bonus) {
         const value = base.value * (1 + bonus.value);
-        if (Number.isFinite(value)) point.value = value;
+        if (Number.isFinite(value)) {
+          if (base.modeled || bonus.modeled) point.modeledValue = value;
+          else point.value = value;
+        }
         else report('arithmetic', path, '伤害不是有限值。');
       }
-      if (point.value === null && point.real?.status === 'complete') point.real = { ...point.real, status: 'partial', value: null, diagnostics: [...point.real.diagnostics, '属性依赖未能完整求值。'] };
+      if (point.value === null && point.real?.status === 'complete') {
+        point.real = { ...point.real, status: 'partial', value: null,
+          diagnostics: [...point.real.diagnostics, point.modeledValue === undefined ? '属性依赖未能完整求值。' : '依赖包含试算值。'] };
+      }
       completed.add(record.id);
-      return point.value;
+      const value = point.value ?? point.modeledValue;
+      return value === undefined ? null : { value, unit: 'damage', modeled: point.value === null };
     });
   }
   const attributes: GraphResult['attributes'] = {};
@@ -499,17 +530,27 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
   } else for (const record of timeline) if (record.kind === 'damage') damageValue(record);
   const orderedPoints = timeline.filter(r => r.kind === 'damage').map(record => points.get(record.id) ?? { id: record.id, value: null, formula: { definition: record.definition, root: definitions.get(record.definition)?.damage ?? null, effects: [] }, sources: [] });
   const invalid = diagnostics.some(d => !['unknown', 'unsupported', 'stale-revision', 'budget'].includes(d.code));
-  const sum = (selected: DamagePoint[]) => {
-    if (invalid || exhausted || selected.some(p => p.value === null)) return null;
-    const total = selected.reduce((value, p) => value + (p.value ?? 0), 0);
-    if (!Number.isFinite(total)) { report('arithmetic', 'objective', '统计结果不是有限值。'); return null; }
-    return total;
+  const sum = (selected: DamagePoint[]): { value: number | null; modeled?: number } => {
+    if (invalid || exhausted) return { value: null };
+    let total = 0, modeled = false;
+    for (const point of selected) {
+      const value = point.value ?? point.modeledValue;
+      if (value === undefined) return { value: null };
+      total += value;
+      modeled ||= point.value === null;
+    }
+    if (!Number.isFinite(total)) { report('arithmetic', 'objective', '统计结果不是有限值。'); return { value: null }; }
+    return modeled ? { value: null, modeled: total } : { value: total };
   };
-  const objectiveValue = sum(orderedPoints.filter(p => !project.objective.damageIds || project.objective.damageIds.includes(p.id)));
-  const totalValue = sum(orderedPoints);
+  const objective = sum(orderedPoints.filter(p => !project.objective.damageIds || project.objective.damageIds.includes(p.id)));
+  const total = sum(orderedPoints);
   return { status: invalid || diagnostics.some(d => d.code === 'arithmetic') ? 'invalid' : exhausted || diagnostics.some(d => d.code === 'stale-revision') || orderedPoints.some(p => p.value === null)
       || (options.attributeQuery && Object.values(attributes).some(value => value === null)) ? 'partial' : 'complete', points: orderedPoints,
-    objectiveValue, totalValue, diagnostics, plan: project, effectInstances: [...instances.map(i => i.view), ...contentViews], reads, stateReads: [...stateReads.values()],
+    objectiveValue: objective.value, totalValue: total.value,
+    ...(objective.modeled !== undefined ? { modeledObjectiveValue: objective.modeled } : {}),
+    ...(total.modeled !== undefined ? { modeledTotalValue: total.modeled } : {}),
+    diagnostics, plan: project, effectInstances: [...instances.map(i => i.view), ...contentViews], reads, stateReads: [...stateReads.values()],
     ...(runtime ? { feasibility: runtime.feasibility } : {}),
+    ...(actionStateRuns ? { actionStateRuns } : {}),
     ...(options.attributeQuery ? { attributes } : {}) };
 }

@@ -19,6 +19,7 @@ export interface AttributeRead {
 export interface DamagePoint {
   id: string;
   value: number | null;
+  modeledValue?: number;
   formula: { definition: string; root: string | null; effects: { definition: string; effect: string; action: string | null }[] };
   sources: { path: string; definition: string; version: string; source: Definition['source'] }[];
   real?: DamageResult;
@@ -37,12 +38,16 @@ export interface EvaluationResult {
   points: DamagePoint[];
   objectiveValue: number | null;
   totalValue: number | null;
+  modeledObjectiveValue?: number;
+  modeledTotalValue?: number;
   diagnostics: Diagnostic[];
   plan: Project | null;
   effectInstances?: EffectInstance[];
   reads?: AttributeRead[];
   stateReads?: CombatStateRead[];
   feasibility?: import('../calculation/result').CalculationFeasibility[];
+  actionStateRuns?: { actorId: string; status: import('../calculation/result').FormulaEvaluation['execution'];
+    diagnostics: import('../calculation/diagnostic').CalculationDiagnostic[]; requiredInputs: import('../calculation/result').RequiredInput[] }[];
 }
 
 /** Pure v1 evaluation: each candidate rebuilds its effects; no simulation or shared run state. */

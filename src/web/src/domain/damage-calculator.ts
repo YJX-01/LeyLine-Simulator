@@ -1,14 +1,12 @@
 import { APP_VERSION } from '@leyline/schema/version';
 import { unpackDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
-import { damageCalculatorSchema, ordinaryTrialId, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { damageCalculatorSchema, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
 import { loadAccountGameData } from './account-presentation';
 import { addActorFromBuild } from './real-project';
 import { createEmptyProject, nextRecordId } from './workbench-project';
 import { calculationArtifact } from './build-snapshot';
-import { collectCalculationRoots, prepareStructuredBuilds } from '@leyline/engine';
-import { describeCharacter, linkCharacterFile } from '@leyline/game-data/character-file';
-import { calculatorHitChoices } from './calculator-hits';
+import { prepareStructuredBuilds } from '@leyline/engine';
 
 /** Read wearing references even when Mona supplied no cultivation/weapon build. Never borrow a showcase. */
 export async function readCalculatorSource(account: LocalAccount, characterId: string, kind: 'local' | 'showcase') {
@@ -69,52 +67,27 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
 export function calculatorRequest(input: DamageCalculatorDocument, taskId: number): AxisRequest {
   const document = damageCalculatorSchema.parse(input);
   for (const project of [document.project, ...document.baseline ? [document.baseline] : []]) {
-    if (project.candidate.actors.some(actor => !actor.build)) throw new Error('计算副本中有尚未补全的队员配装。');
-    const prepared = prepareStructuredBuilds(project.candidate.actors.map(actor => ({ id: actor.id, build: actor.build! })));
+    const prepared = prepareStructuredBuilds(project.candidate.actors.map(({ id, build, element }) => ({ id, build, element })));
     if (!prepared.ok) throw new Error(prepared.diagnostics.map(diagnostic => diagnostic.message).join('；'));
   }
   return calculatorWorkerRequest(document, taskId);
 }
 
-/** Bind the explicitly selected ordinary formula only in the evaluation copy. Stored definitions retain their original coverage. */
-function withOrdinaryTrials(project: Project) {
-  const trials = project.timeline.filter(record => record.damage && record.damage.outputId === ordinaryTrialId(record.damage.hitId));
-  if (!trials.length) return project;
-  const actors = project.candidate.actors.map(actor => {
-    const records = trials.flatMap(record => record.actor === actor.id && record.damage ? [record.damage] : []);
-    if (!records.length || !actor.build) return actor;
-    const definition = actor.build.character;
-    const choices = calculatorHitChoices(definition);
-    const metadata = describeCharacter(definition);
-    for (const damage of records) {
-      const choice = choices.find(row => row.ordinaryTrial && row.outputId === damage.outputId && row.hitId === damage.hitId && row.skillId === damage.skillId);
-      if (!choice) throw new Error('此命中缺少可供普通直伤试算的倍率。');
-      const hit = metadata.talents.find(skill => skill.id === choice.skillId)!.hits.find(hit => hit.id === choice.hitId)!;
-      hit.outputs = [{ id: choice.outputId!, family: 'ordinary' }];
-      const profile = 'trial-' + hit.id;
-      metadata.support[profile] = { ...metadata.support[hit.support], resolution: 'unavailable',
-        reason: '按此命中的天赋倍率、元素和普通直伤公式试算，角色专属机制尚未完整核验。' };
-      hit.support = profile;
-    }
-    return { ...actor, build: { ...actor.build, character: linkCharacterFile(metadata, actor.build.dataVersion, collectCalculationRoots) } };
-  });
-  return { ...project, candidate: { ...project.candidate, actors } };
-}
-
 /** The Worker prepares and validates the team when evaluating. File imports are checked before installation. */
 export function calculatorWorkerRequest(document: DamageCalculatorDocument, taskId: number): AxisRequest {
-  if (!document.baseline) return { taskId, session: 1, revision: taskId, project: withOrdinaryTrials(document.project) };
+  if (!document.baseline) return { taskId, session: 1, revision: taskId, project: document.project };
   const baseline = document.baseline;
-  for (const key of ['timeline', 'conditions', 'enemy', 'combatStates', 'objective', 'effectRevisions', 'definitions'] as const) {
+  for (const key of ['timeline', 'conditions', 'enemy', 'combatStates', 'reactionRules', 'actionStates', 'objective', 'effectRevisions', 'definitions'] as const) {
     if (JSON.stringify(baseline[key]) !== JSON.stringify(document.project[key])) throw new Error('同轴比较须保留基准的记录、条件与定义，请先结束对照。');
   }
   if (baseline.candidate.actors.length !== document.project.candidate.actors.length) throw new Error('比较队员已变化。');
-  const replacements = withOrdinaryTrials(document.project).candidate.actors.map(actor => {
+  const replacements = document.project.candidate.actors.flatMap(actor => {
     const before = baseline.candidate.actors.find(entry => entry.id === actor.id);
+    if (before && !before.build && !actor.build && before.element === actor.element) return [];
     if (!before?.build || !actor.build || actor.build.character.id !== before.build.character.id) throw new Error('比较须使用同一角色的完整配装。');
-    return { actorId: actor.id, build: actor.build };
+    return [{ actorId: actor.id, build: actor.build }];
   });
-  return { taskId, session: 1, revision: taskId, project: withOrdinaryTrials(baseline), candidates: [{ id: 'calculator-candidate', name: '当前候选', replacements }] };
+  return { taskId, session: 1, revision: taskId, project: baseline, candidates: [{ id: 'calculator-candidate', name: '当前候选', replacements }] };
 }
 
 export function parseDamageCalculator(content: string): DamageCalculatorDocument {

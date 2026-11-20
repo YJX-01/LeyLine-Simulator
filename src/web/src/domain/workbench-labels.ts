@@ -1,4 +1,5 @@
-import type { Project, QuantityUnit } from '@leyline/schema';
+import type { CharacterDefinition, Project, QuantityUnit } from '@leyline/schema';
+import { canTryOrdinaryHit, ordinaryTrialId } from '@leyline/schema/hit-bindings';
 
 const units: Record<QuantityUnit, string> = { milliseconds: '毫秒', count: '数量', energy: '能量', stamina: '体力', scalar: '倍率', attack: '攻击力', hp: '生命值', defense: '防御力', elementalMastery: '元素精通', damage: '伤害' };
 const operations: Record<string, string> = { attribute: '时刻属性读取', capture: '属性捕获', history: '历史累计与计数', constant: '常量', input: '输入属性', add: '相加', multiply: '相乘', divide: '相除', condition: '条件选择', unsupported: '尚未支持', 'game-damage': '真实技能伤害' };
@@ -26,6 +27,11 @@ export function actorLabel(project: Project, id: string): string {
 export function recordLabel(project: Project, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
+  if (record.reactionEvent) return damageFamilyLabel(record.reactionEvent.family);
+  if (record.actionId) {
+    const label = project.definitions.find(definition => definition.id === record.definition)?.name;
+    if (label) return label;
+  }
   if (record.kind === 'capture') {
     const skill = project.candidate.actors.find(actor => actor.id === record.actor)?.build?.character.talents.find(skill => skill.id === record.skillId);
     return `${skill?.name ?? '技能'} · 属性捕获`;
@@ -58,3 +64,12 @@ export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(m
 export const realStatLabels: Record<string, string> = { hp: '生命值', hpPercent: '生命值加成', attack: '攻击力', attackPercent: '攻击力加成', defense: '防御力', defensePercent: '防御力加成', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
 export const realStatLabel = (key: string) => lookup(realStatLabels, key, '未识别属性');
 export const realElementLabel = (key: string) => lookup({ physical: '物理', anemo: '风', geo: '岩', electro: '雷', hydro: '水', pyro: '火', cryo: '冰', dendro: '草' }, key, '未知元素');
+export const damageFamilyLabel = (key: string) => lookup({ ordinary: '普通直伤', 'stellar-swirl': '星扩散', 'stellar-conduct': '星超导',
+  'lunar-charged': '月感电', 'lunar-bloom': '月绽放', 'lunar-crystallize': '月结晶' }, key, key);
+
+type Talent = CharacterDefinition['talents'][number];
+export function hitOutputOptions(skill: Talent, hit: Talent['hits'][number]) {
+  const options = hit.outputs.map(output => ({ id: output.id, label: damageFamilyLabel(output.family) }));
+  if (canTryOrdinaryHit(skill, hit)) options.push({ id: ordinaryTrialId(hit.id), label: '普通直伤试算' });
+  return options;
+}

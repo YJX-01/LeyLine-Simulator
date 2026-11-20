@@ -1,7 +1,6 @@
 import { buildSchema, projectSchema, type Build, type DamageRequest, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 import { nextRecordId } from './workbench-project';
-
 export { defaultEnemy } from './axis-input';
 
 export function addActorFromBuild(project: Project, input: Build, name?: string): string {
@@ -16,11 +15,11 @@ export function addActorFromBuild(project: Project, input: Build, name?: string)
     { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source: {...source,verified:source.verified && weaponVerified && build.sets.every(set=>set.effects.filter(effect=>effect.pieces<=build.artifacts.filter(item=>item.setId===set.id).length).every(effect=>effect.coverageRefs.every(reference => set.calculation.bundle.coverage.some(record => record.identity.id === reference.id && record.resolution === 'complete'))))},
       nodes: [{ id: 'real-damage', op: 'game-damage' }], damage: 'real-damage', effects: [] },
   );
-  project.candidate.actors.push({ id, name: name || build.character.identity.name, character: `${id}-character`, weapon: `${id}-weapon`, inputs: {}, build: build });
+  project.candidate.actors.push({ id, name: name || build.character.identity.name, character: `${id}-character`, weapon: `${id}-weapon`, element: build.character.identity.element, inputs: {}, build });
   return id;
 }
 
-export function addSkillAction(project: Project, actorId: string, skillId: string, timeMs: number, schema = projectSchema): string {
+export function addSkillAction(project: Project, actorId: string, skillId: string, timeMs: number): string {
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const build = actor?.build;
   const skill = build?.character.talents.find(entry => entry.id === skillId);
@@ -32,14 +31,14 @@ export function addSkillAction(project: Project, actorId: string, skillId: strin
   const record: Project['timeline'][number] = { id, actor: actorId, kind: 'action', definition: definitionId, skillId, timeMs,
     order: Math.max(-1, ...project.timeline.map(entry => entry.order)) + 1 };
   const definitions = project.definitions.some(entry => entry.id === definitionId) ? project.definitions : [...project.definitions, definition];
-  const parsed = schema.parse({ ...project, definitions, timeline: [...project.timeline, record] });
+  const parsed = projectSchema.parse({ ...project, definitions, timeline: [...project.timeline, record] });
   if (definitions !== project.definitions) project.definitions.push(parsed.definitions[parsed.definitions.length - 1]);
   project.timeline.push(parsed.timeline[parsed.timeline.length - 1]);
   return id;
 }
 
 /** An explicitly supplied read anchor, independent of casts, hits and effect triggers. */
-export function addAttributeCapture(project: Project, actorId: string, skillId: string, timeMs: number, schema = projectSchema): string {
+export function addAttributeCapture(project: Project, actorId: string, skillId: string, timeMs: number): string {
   const actor = project.candidate.actors.find(actor => actor.id === actorId);
   const skill = actor?.build?.character.talents.find(skill => skill.id === skillId);
   if (!actor?.build || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择来源技能，并填写合法的捕获时刻。');
@@ -47,26 +46,26 @@ export function addAttributeCapture(project: Project, actorId: string, skillId: 
   const definition = { id: definitionId, name: '独立属性捕获', version: actor.build.dataVersion,
     source: { kind: 'user' as const, reference: `${actor.build.character.id}@${actor.build.character.revision}`, verified: false }, nodes: [], effects: [] };
   const id = nextRecordId(project);
-  const next = schema.parse({ ...project, calculationProfile: 'dependency',
+  const next = projectSchema.parse({ ...project,
     definitions: project.definitions.some(entry => entry.id === definitionId) ? project.definitions : [...project.definitions, definition],
     timeline: [...project.timeline, { id, actor: actorId, kind: 'capture', skillId, definition: definitionId, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1 }],
   });
-  project.calculationProfile = next.calculationProfile;
   project.definitions = next.definitions;
   project.timeline = next.timeline;
   return id;
 }
 
-export function addSkillHit(project: Project, actorId: string, skillId: string, hitIndex: number, timeMs: number, choices: Pick<DamageRequest,'crit'|'reaction'|'conditions'|'stateOverrides'|'capture'|'inputs'|'effectApplications'> = {crit:null,reaction:null}): string {
+export function addSkillHit(project: Project, actorId: string, skillId: string, hitIndex: number, timeMs: number,
+  choices: Omit<DamageRequest, 'skillId' | 'hitId' | 'outputId'> & { outputId?: string | null } = { crit: null, reaction: null }): string {
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const skill = actor?.build?.character.talents.find(entry => entry.id === skillId);
   if (!actor || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择队员、技能和合法的整数毫秒时间。');
-  if (!Number.isInteger(hitIndex) || !skill.hits[hitIndex]?.outputs.length) throw new Error('该技能或命中类型尚未核验。');
   const selectedHit = skill.hits[hitIndex];
-  if (selectedHit.outputs.length !== 1) throw new Error('请选择明确的伤害输出。');
+  if (!Number.isInteger(hitIndex) || !selectedHit) throw new Error('请选择此技能已绑定的命中。');
+  const { outputId = selectedHit.outputs.length === 1 ? selectedHit.outputs[0].id : null, ...conditions } = choices;
   const id = nextRecordId(project);
   const record: Project['timeline'][number] = { id, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1,
-    actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitId: selectedHit.id, outputId: selectedHit.outputs[0].id, ...choices } };
+    actor: actor.id, kind: 'damage', definition: `${actor.id}-real-damage`, damage: { skillId, hitId: selectedHit.id, outputId, ...conditions } };
   const parsed = projectSchema.parse({ ...project, timeline: [...project.timeline, record] });
   if (record.damage?.effectApplications?.length && evaluateTimeline(parsed).status === 'invalid') throw new Error('效果适用事实引用或作用范围无效，当前项目保持不变。');
   project.timeline.push(parsed.timeline[parsed.timeline.length - 1]);

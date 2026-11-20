@@ -1,15 +1,18 @@
 import { buildSchema, combatConditionsSchema, damageRequestSchema, definitionKey, elements, statKeys, talentInputIssues, talentLevelBonus,
   type AttributePanel, type Build, type CalculationBinding, type CalculationFact, type CalculationIssue, type CombatConditions,
   type CalculationEvent, type CombatContext, type CombatFrame, type DamageRequest, type DamageResult, type Enemy, type CalculationFeasibility, type QuantityUnit,
-  type Project, type StatKey, type StructuredCombatSetup, type Value } from '@leyline/schema';
-import { createStructuredCombatContext, evaluateStructuredHit, prepareStructuredBuilds, structuredTeamFeasibility, type PreparedStructuredTeam } from './build-context';
+  type CalculationBundle, type EvaluationResult, type Project, type StatKey, type StructuredCombatSetup, type StructuredDamageEvaluation, type Value } from '@leyline/schema';
+import { createStructuredCombatContext, evaluateStructuredHit, evaluateStructuredReaction, prepareStructuredBuilds, structuredTeamFeasibility, type PreparedStructuredTeam } from './build-context';
 import { evaluateCombatBindings, type BoundAttributeReader } from './context';
 import { compiledData } from './compile';
 import { collectEffectInstances } from './effects';
 import { damageBreakdown, lastTrace } from './damage-view';
+import { compileCharacterActions } from './actions';
+import { evaluateStateMachine } from './state-machine';
+import { reactionOccurrence } from './project-reaction';
 
 type RecordEntry = Project['timeline'][number];
-type World = Pick<Project, 'candidate' | 'timeline' | 'combatStates' | 'enemy'>;
+type World = Pick<Project, 'candidate' | 'timeline' | 'combatStates' | 'enemy' | 'reactionRules' | 'actionStates'>;
 interface Runtime { team: PreparedStructuredTeam; context: CombatContext; setup: StructuredCombatSetup; builds: Map<string, Build>; projectApplications: Set<string>; feasibility: CalculationFeasibility[] }
 type PreparedRuntime = { ok: true; runtime: Runtime } | { ok: false; issues: CalculationIssue[] };
 const quantity = (unit: Extract<Value, { kind: 'quantity' }>['unit'], value: number): Value => ({ kind: 'quantity', unit, value });
@@ -23,19 +26,27 @@ export function projectCalculationEvent(record: RecordEntry, build?: Build): Cal
   const skillId = record.damage?.skillId ?? record.skillId;
   const talent = build?.character.talents.find(talent => talent.id === skillId);
   const hitId = record.damage?.hitId;
-  return { id: record.id, kind: record.kind === 'damage' ? 'hit' : record.kind, actorId: record.actor, targetIds: record.kind === 'damage' ? ['target'] : [],
-    timeMs: record.timeMs, order: record.order, skillId, hitId, category: hitId ? talent?.hits.find(hit => hit.id === hitId)?.category : talent?.category,
-    sourceEventIds: record.damage?.capture?.recordId ? [record.damage.capture.recordId] : [], facts: record.damage?.facts ?? {} };
+  const captureId = record.damage?.capture?.recordId;
+  const sourceEventIds = [...new Set([...(record.sourceEventIds ?? []), ...(captureId && captureId !== record.id ? [captureId] : [])])];
+  return { id: record.id, kind: record.reactionEvent ? 'reaction' : record.kind === 'damage' ? 'hit' : record.kind,
+    actorId: record.reactionEvent ? null : record.actor, targetIds: record.kind === 'damage' ? ['target'] : [],
+    timeMs: record.timeMs, order: record.order, actionId: record.actionId, skillId, hitId, category: hitId ? talent?.hits.find(hit => hit.id === hitId)?.category : talent?.category,
+    reactionId: record.reactionEvent?.family, sourceEventIds, facts: { ...record.facts, ...record.damage?.facts } };
 }
 
 /** Current project records are explicit query anchors; this function never schedules extra actions or hits. */
 export function prepareProjectRuntime(world: World): PreparedRuntime {
-  const actors = world.candidate.actors.filter(actor => actor.build).map(actor => ({ id: actor.id, build: actor.build! }));
-  if (!actors.length || actors.length !== world.candidate.actors.length) return { ok: false, issues: [issue('unknown', '队伍中存在尚未补全的角色配装。')] };
-  const prepared = prepareStructuredBuilds(actors);
+  const actors = world.candidate.actors.map(({ id, build, element }) => ({ id, build, element }));
+  const builds = new Map(actors.flatMap(actor => actor.build ? [[actor.id, actor.build] as const] : []));
+  const dependencies: CalculationBundle[] = world.reactionRules ? [world.reactionRules] : [];
+  for (const state of world.actionStates ?? []) {
+    const checked = compileCharacterActions(state.actions, builds.get(state.actorId)?.character);
+    if (!checked.ok) return { ok: false, issues: checked.diagnostics.map(diagnostic => issue('invalid-input', diagnostic.message)) };
+    dependencies.push(checked.bundle);
+  }
+  const prepared = prepareStructuredBuilds(actors, dependencies);
   if (!prepared.ok) return { ok: false, issues: prepared.diagnostics.map(diagnostic => issue('invalid-input', diagnostic.message)) };
   const enemy = world.enemy;
-  const builds = new Map(actors.map(actor => [actor.id, actor.build]));
   const setup: StructuredCombatSetup = {
     targets: [{ id: 'target', inputs: { level: fact(enemy ? quantity('count', enemy.level) : null), defenseReduction: fact(enemy ? quantity('scalar', enemy.defenseReduction) : null),
       ordinaryDamageReduction: fact(quantity('scalar', 0)), ...Object.fromEntries(elements.map(element => ['resistance.' + element, fact(enemy ? quantity('scalar', enemy.resistances[element]) : null)])) }, facts: {} }],
@@ -45,16 +56,29 @@ export function prepareProjectRuntime(world: World): PreparedRuntime {
   };
   try {
     const context = createStructuredCombatContext(prepared.team, setup);
-    for (const actor of context.actors) actor.inputs.defenseIgnore = fact(quantity('scalar', enemy?.defenseIgnore ?? 0));
+    for (const actor of context.actors) if (builds.has(actor.id)) actor.inputs.defenseIgnore = fact(quantity('scalar', enemy?.defenseIgnore ?? 0));
     return { ok: true, runtime: { team: prepared.team, context, setup, builds, projectApplications: new Set(), feasibility: [structuredTeamFeasibility(prepared.team)] } };
   } catch (error) { return { ok: false, issues: [issue('invalid-input', error instanceof Error ? error.message : '计算上下文无效。')] }; }
+}
+
+export function evaluateProjectStates(runtime: Runtime, actionStates: NonNullable<Project['actionStates']>): NonNullable<EvaluationResult['actionStateRuns']> {
+  const frames: NonNullable<CombatContext['stateFrames']> = [];
+  const runs = actionStates.map(({ actorId, actions, startMs, initial }, index) => {
+    const state = evaluateStateMachine(runtime.team.program, runtime.context, {
+      id: 'project-state-' + index, definition: actions.calculation.stateMachine, ownerId: actorId, targetId: 'target', startMs, initial,
+    });
+    frames.push(...state.stateFrames);
+    return { actorId, status: state.execution, diagnostics: state.diagnostics, requiredInputs: state.requiredInputs };
+  });
+  runtime.context = { ...runtime.context, stateFrames: frames };
+  return runs;
 }
 
 function frameFor(runtime: Runtime, actorId: string, record: RecordEntry, conditions: CombatConditions = {}, query = record.damage, phase: CombatFrame['phase'] = 'before'): CombatFrame {
   const build = runtime.builds.get(actorId), skill = build?.character.talents.find(talent => talent.id === query?.skillId), hit = skill?.hits.find(hit => hit.id === query?.hitId), output = hit?.outputs.find(output => output.id === query?.outputId);
   const overrides = new Map<string, Record<string, CalculationFact>>();
   for (const entry of record.damage?.stateOverrides ?? []) overrides.set(entry.actor, conditionsFacts(entry.values));
-  overrides.set(actorId, { ...overrides.get(actorId), ...conditionsFacts(conditions), ...actorId === record.actor ? record.damage?.facts : {} });
+  overrides.set(actorId, { ...overrides.get(actorId), ...conditionsFacts(conditions), ...actorId === record.actor ? { ...record.facts, ...record.damage?.facts } : {} });
   const captures = Object.fromEntries([...hit?.base.captures ?? [], ...output?.invocation.captures ?? []].flatMap(slot => record.damage?.capture?.recordId && record.damage.capture.phase
     ? [[slot.id, { eventId: record.damage.capture.recordId, phase: record.damage.capture.phase }]] : []));
   return { ownerId: actorId, recipientId: actorId, contributorId: null, targetId: 'target', eventId: record.id, sourceEventId: record.damage?.capture?.recordId ?? null, phase,
@@ -107,6 +131,12 @@ export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: Re
   const damage = record.damage, build = runtime.builds.get(actorId), panel = readRuntimePanel(runtime, actorId, record, conditions);
   const empty = (issues: CalculationIssue[]): DamageResult => ({ status: issues.some(issue => issue.code === 'invalid-input') ? 'invalid' : 'partial', value: null, panel,
     parts: { attack: panel.stats.attack, multiplier: null, bonus: null, crit: null, defense: null, resistance: null }, baseDamage: null, scaling: [], diagnostics: issues.map(issue => issue.message), issues });
+  if (record.reactionEvent) {
+    if (!compiledData(runtime.team.program)!.aggregates.has(definitionKey(ref(record.reactionEvent.family)))) return empty([issue('unknown', '尚未提供此反应的求值规则。')]);
+    const output = reactionOccurrence(record.id, record.reactionEvent, id => frameFor(runtime, id, record, id === actorId ? conditions : {}));
+    const result = evaluateStructuredReaction(runtime.team, runtime.context, output, attributeReader);
+    return { ...empty(resultIssues(result)), status: result.execution, ...resultValues(result), structured: result };
+  }
   if (!damage || !build) return empty([issue('unknown', '尚未选择角色和明确输出。')]);
   const frame = frameFor(runtime, actorId, record, conditions), { ownerId, recipientId, contributorId, hit: metadata, ...requestFrame } = frame;
   const skill = build.character.talents.find(skill => skill.id === damage.skillId), hit = skill?.hits.find(hit => hit.id === damage.hitId);
@@ -116,17 +146,28 @@ export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: Re
   const triggerPending = damage.reaction !== null && damage.reaction !== 'none' && damage.reaction.trigger === null;
   const result = evaluateStructuredHit(runtime.team, runtime.setup, { actorId, skillId: damage.skillId, hitId: damage.hitId, outputId: damage.outputId, frame: requestFrame,
     critMode: damage.crit, reactionMode: damage.reaction === null || triggerPending ? null : damage.reaction === 'none' ? 'none' : damage.reaction.type }, { context: runtime.context, attributeReader });
-  const value = result.totals.all;
-  const issues: CalculationIssue[] = result.diagnostics.filter(diagnostic => diagnostic.affectedOutputIds.length || ['budget', 'unreviewed-mechanism'].includes(diagnostic.code) || result.execution === 'invalid').map(diagnostic => issue(diagnostic.code === 'missing-fact' ? 'unknown' : diagnostic.code === 'unreviewed-mechanism' ? 'unsupported' : 'invalid-input', diagnostic.message));
+  const issues = resultIssues(result);
   if (triggerPending) issues.push(issue('unknown', '反应触发归属尚未确认。'));
   const parameter = skill?.parameters.find(parameter => parameter.id === hit?.parameter), level = skill ? build.talents[skill.category] + talentLevelBonus(build.character, skill.category, build.constellation) : 0;
   const breakdown = damageBreakdown(compiledData(runtime.team.program)!, damage, hit, result);
   const multiplier = parameter?.values[level - 1] ?? breakdown.scaling[0]?.multiplier ?? null;
   const attackRead = lastTrace(result.trace, node => node.kind === 'attribute' && node.nodeId === 'attribute.attack' && node.context?.actorId === actorId);
-  return { status: result.execution, value: value.state === 'known' && value.value.kind === 'quantity' ? value.value.value : null, panel,
+  return { status: result.execution, ...resultValues(result, triggerPending), panel,
     ...breakdown, parts: { attack: attackRead?.value?.kind === 'quantity' ? attackRead.value.value : panel.stats.attack, multiplier, ...breakdown.parts },
     diagnostics: issues.map(issue => issue.message), issues,
     structured: result };
+}
+
+function resultIssues(result: StructuredDamageEvaluation): CalculationIssue[] {
+  return result.diagnostics.filter(diagnostic => diagnostic.affectedOutputIds.length || ['budget', 'unreviewed-mechanism'].includes(diagnostic.code) || result.execution === 'invalid')
+    .map(diagnostic => issue(diagnostic.code === 'missing-fact' ? 'unknown' : diagnostic.code === 'unreviewed-mechanism' ? 'unsupported' : 'invalid-input', diagnostic.message));
+}
+
+function resultValues(result: StructuredDamageEvaluation, pending = false): Pick<DamageResult, 'value' | 'modeledValue'> {
+  const value = result.totals.all;
+  const modeled = result.outputs[0]?.modeledValue?.value;
+  return { value: value.state === 'known' && value.value.kind === 'quantity' ? value.value.value : null,
+    ...(!pending && modeled?.kind === 'quantity' && modeled.unit === 'damage' ? { modeledValue: modeled.value } : {}) };
 }
 
 export function evaluateBuildHit(input: unknown, damageInput: unknown, enemy?: Enemy): DamageResult {

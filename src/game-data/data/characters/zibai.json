@@ -3,7 +3,7 @@
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "zibai",
-  "revision": "3",
+  "revision": "4",
   "identity": {
     "name": "兹白",
     "title": "驹隙隐泉",
@@ -898,6 +898,25 @@
           ],
           "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "zibai.skill.param3",
+          "element": "geo",
+          "category": "normal",
+          "parameter": "param3",
+          "scaling": [
+            {
+              "stat": "defense",
+              "parameter": "param3"
+            }
+          ],
+          "outputs": [
+            {
+              "id": "zibai.skill.param3.lunar-crystallize",
+              "family": "lunar-crystallize"
+            }
+          ],
+          "support": "lunar-hit-unavailable"
         }
       ]
     },
@@ -1124,6 +1143,22 @@
       "mechanisms": [
         {
           "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "lunar-hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单段月伤倍率和乘区已接入，角色及装备的附加机制待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "direct-lunar-formula",
+          "resolution": "implemented"
+        },
+        {
+          "id": "lunar-kit",
           "resolution": "unavailable"
         }
       ]

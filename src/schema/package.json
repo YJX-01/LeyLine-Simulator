@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./version": "./src/version.mjs",
+    "./hit-bindings": "./src/calculation/hit-bindings.mjs",
     "./enka": "./src/exchange/enka.ts"
   },
   "dependencies": {

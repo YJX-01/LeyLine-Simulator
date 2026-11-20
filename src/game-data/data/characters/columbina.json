@@ -3,7 +3,7 @@
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "columbina",
-  "revision": "3",
+  "revision": "4",
   "identity": {
     "name": "哥伦比娅",
     "title": "空月归乡",
@@ -412,6 +412,25 @@
           ],
           "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "columbina.normal.param6",
+          "element": "dendro",
+          "category": "charged",
+          "parameter": "param6",
+          "scaling": [
+            {
+              "stat": "hp",
+              "parameter": "param6"
+            }
+          ],
+          "outputs": [
+            {
+              "id": "columbina.normal.param6.lunar-bloom",
+              "family": "lunar-bloom"
+            }
+          ],
+          "support": "lunar-hit-unavailable"
         }
       ]
     },
@@ -946,6 +965,22 @@
       "mechanisms": [
         {
           "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "lunar-hit-unavailable": {
+      "maxConstellation": 0,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单段月伤倍率和乘区已接入，角色及装备的附加机制待逐项核验。",
+      "mechanisms": [
+        {
+          "id": "direct-lunar-formula",
+          "resolution": "implemented"
+        },
+        {
+          "id": "lunar-kit",
           "resolution": "unavailable"
         }
       ]

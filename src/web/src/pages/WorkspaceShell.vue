@@ -22,7 +22,7 @@ const DamageCalculator = defineAsyncComponent(() => import('./DamageCalculator.v
 const calculator = ref<{ requestLeave: (action: () => void) => void }>();
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import { elements } from '@leyline/schema';
-import { actorLabel, definitionLabel, recordLabel, effectLabel, projectLabel, realElementLabel, diagnosticLabel, statusLabel, errorLabel } from '../domain/workbench-labels';
+import { actorLabel, definitionLabel, recordLabel, effectLabel, projectLabel, realElementLabel, diagnosticLabel, statusLabel, errorLabel, hitOutputOptions } from '../domain/workbench-labels';
 
 import { getActivePinia } from 'pinia';
 import type { useAxisWorkspaceStore } from '../stores/axis-workspace';
@@ -106,7 +106,7 @@ const icons: Record<string, string> = {
 };
 const sortedRecords = computed(() => [...project.value.timeline].sort((a, b) => a.timeMs - b.timeMs || a.order - b.order || a.id.localeCompare(b.id)));
 const damageRecords = computed(() => sortedRecords.value.filter(r => r.kind === 'damage'));
-const actions = computed(() => sortedRecords.value.filter(r => r.kind === 'action'));
+const actions = computed(() => sortedRecords.value.filter(r => r.kind === 'action' || r.kind === 'state-change'));
 const recordTimes = computed(() => new Map(project.value.timeline.map(record => [record.id, record.timeMs])));
 const axisName = computed({
   get: () => project.value.name ?? '',
@@ -114,10 +114,21 @@ const axisName = computed({
 });
 const axisMenu = ref<HTMLDetailsElement>();
 const selected = computed(() => project.value.timeline.find(r => r.id === selectedId.value));
+const selectedOutputs = computed(() => {
+  const record = selected.value;
+  const skill = project.value.candidate.actors.find(actor => actor.id === record?.actor)?.build?.character.talents.find(skill => skill.id === record?.damage?.skillId);
+  const hit = skill?.hits.find(hit => hit.id === record?.damage?.hitId);
+  return skill && hit ? hitOutputOptions(skill, hit) : [];
+});
 const selectedResult = computed(() => result.value.points.find(p => p.id === selectedId.value));
 const presentation = computed(() => getDamagePresentation(project.value, selectedId.value));
 const selectedTarget = computed(() => !project.value.objective.damageIds || project.value.objective.damageIds.includes(selectedId.value));
 const num = (value: number | null | undefined) => value === null || value === undefined || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
+const totalDamage = computed(() => result.value.totalValue ?? result.value.modeledTotalValue);
+function damageShare(value: number | null | undefined) {
+  return totalDamage.value ? Math.max(0, Math.min(100, (value ?? 0) / totalDamage.value * 100)) : 0;
+}
+const damageNumber = (value: number | null | undefined, modeled?: number) => value == null && modeled !== undefined ? '试算 ' + num(modeled) : num(value);
 const realPartsLabels: Record<string,string> = {attack:'攻击力',multiplier:'技能倍率',bonus:'增伤乘区',crit:'暴击乘区',defense:'防御乘区',resistance:'抗性乘区'};
 const number = (event: Event) => { const value = (event.target as HTMLInputElement).value; return value.trim() ? Number(value) : NaN; };
 async function openReference(target: ArtifactReferenceTarget, keepPage = false) {
@@ -287,8 +298,8 @@ async function importFile(event: Event) {
 
             <div class="axis-summary">
               <dl class="axis-totals">
-                <div><dt>全轴总伤害</dt><dd data-testid="workspace-total">{{ num(result.totalValue) }}</dd></div>
-                <div><dt>所选目标伤害</dt><dd>{{ num(result.objectiveValue) }}</dd></div>
+                <div><dt>全轴总伤害</dt><dd data-testid="workspace-total">{{ damageNumber(result.totalValue, result.modeledTotalValue) }}</dd></div>
+                <div><dt>所选目标伤害</dt><dd>{{ damageNumber(result.objectiveValue, result.modeledObjectiveValue) }}</dd></div>
               </dl>
               <button class="ui-action soft" data-size="md" @click="navigate('analysis')">进入伤害分析</button>
             </div>
@@ -303,7 +314,7 @@ async function importFile(event: Event) {
               </div>
             </details>
           </section>
-        <aside class="record-inspector library-section" aria-label="所选记录详情"><template v-if="selected"><div class="inspector-title"><span class="section-eyebrow">记录详情</span><span class="subtle-tag">{{ selected.kind === 'damage' ? '伤害点' : '动作' }}</span></div><h2>{{ recordLabel(project, selected.id) }}</h2><p class="monospace muted">{{ definitionLabel(project, selected.definition) }}</p><div v-if="selected.kind === 'damage'" class="inspector-damage">{{ num(selectedResult?.value) }}<small>计算伤害</small></div><div class="inspector-fields"><label>命中时间（毫秒）<input aria-label="命中时间（毫秒）" type="number" min="0" step="1" :value="selected.timeMs" @input="updateTime"></label><label>同刻顺序<input type="number" min="0" step="1" :value="selected.order" @input="selected.order = number($event)"></label><label>归属角色<select v-model="selected.actor" aria-label="归属角色"><option v-for="owner in project.candidate.actors" :key="owner.id" :value="owner.id">{{ actorLabel(project, owner.id) }}</option></select></label><label v-if="!selected.damage">记录定义<select v-model="selected.definition" aria-label="记录定义"><option v-for="definition in project.definitions.filter(d => selected?.kind === 'action' || d.damage)" :key="definition.id" :value="definition.id">{{ definitionLabel(project, definition.id) }}</option></select></label><label v-if="selected.kind === 'damage'" class="checkbox-line"><input aria-label="计入当前目标" type="checkbox" :checked="selectedTarget" @change="updateTarget">计入当前目标</label></div><div v-if="selected.kind === 'damage' && !selected.damage" class="inspector-section"><h3>基础计算关系</h3><div class="formula-box"><span>{{ presentation.definitionLabel }} / {{ presentation.rootLabel }}</span><strong>{{ presentation.expression }}</strong></div><p class="muted">实际结果同时读取当前候选条件与区间效果，不推断暴击或反应。</p></div><div v-if="selected.damage" class="inspector-section"><h3>命中条件</h3><label>暴击口径<select v-model="selected.damage.crit" aria-label="所选真实命中暴击"><option :value="null">待确认</option><option value="noncritical">明确不暴击</option><option value="critical">明确暴击</option><option value="expected">静态暴击期望</option></select></label><label>反应<select v-model="selected.damage.reaction" aria-label="所选真实命中反应"><option :value="null">待确认</option><option value="none">明确无反应</option></select></label></div><div v-if="selectedResult?.real" class="inspector-section"><h3>真实伤害乘区</h3><div v-for="(value,key) in selectedResult.real.parts" :key="key" class="field-line"><span>{{ realPartsLabels[key] }}</span><strong>{{ num(value) }}</strong></div><p v-for="message in selectedResult.real.diagnostics" :key="message" class="muted">{{ message }}</p></div><div class="inspector-section"><h3>候选效果与来源</h3><div v-for="source in selectedResult?.formula.effects" :key="`${source.definition}/${source.effect}/${source.action}`" class="source-pill"><strong>{{ definitionLabel(project, source.definition) }} / {{ effectLabel(project, source.definition, source.effect) }}</strong></div><p v-if="!selectedResult?.formula.effects.length" class="muted">此记录没有读取候选区间效果。</p><details><summary>技术详情：查看节点来源</summary><code v-for="source in selectedResult?.sources" :key="source.path" class="source-path">{{ source.path }}</code></details></div><button class="ui-action soft" data-accent="pyro" @click="removeRecord(selected.id)">删除所选记录</button></template><p v-else class="muted">选择一条记录查看明细。</p></aside>
+        <aside class="record-inspector library-section" aria-label="所选记录详情"><template v-if="selected"><div class="inspector-title"><span class="section-eyebrow">记录详情</span><span class="subtle-tag">{{ selected.kind === 'damage' ? '伤害点' : '动作' }}</span></div><h2>{{ recordLabel(project, selected.id) }}</h2><p class="monospace muted">{{ definitionLabel(project, selected.definition) }}</p><div v-if="selected.kind === 'damage'" class="inspector-damage">{{ damageNumber(selectedResult?.value, selectedResult?.modeledValue) }}<small>计算伤害</small></div><div class="inspector-fields"><label>命中时间（毫秒）<input aria-label="命中时间（毫秒）" type="number" min="0" step="1" :value="selected.timeMs" @input="updateTime"></label><label>同刻顺序<input type="number" min="0" step="1" :value="selected.order" @input="selected.order = number($event)"></label><label>归属角色<select v-model="selected.actor" aria-label="归属角色"><option v-for="owner in project.candidate.actors" :key="owner.id" :value="owner.id">{{ actorLabel(project, owner.id) }}</option></select></label><label v-if="!selected.damage">记录定义<select v-model="selected.definition" aria-label="记录定义"><option v-for="definition in project.definitions.filter(d => selected?.kind === 'action' || d.damage)" :key="definition.id" :value="definition.id">{{ definitionLabel(project, definition.id) }}</option></select></label><label v-if="selected.kind === 'damage'" class="checkbox-line"><input aria-label="计入当前目标" type="checkbox" :checked="selectedTarget" @change="updateTarget">计入当前目标</label></div><div v-if="selected.kind === 'damage' && !selected.damage && !selected.reactionEvent" class="inspector-section"><h3>基础计算关系</h3><div class="formula-box"><span>{{ presentation.definitionLabel }} / {{ presentation.rootLabel }}</span><strong>{{ presentation.expression }}</strong></div><p class="muted">实际结果同时读取当前候选条件与区间效果，不推断暴击或反应。</p></div><div v-if="selected.damage" class="inspector-section"><h3>命中条件</h3><label v-if="selectedOutputs.length > 1 || selected.damage.outputId === null || selected.damage.outputId.endsWith('.ordinary-trial')">伤害输出<select v-model="selected.damage.outputId" aria-label="所选命中输出"><option :value="null">待建模</option><option v-for="option in selectedOutputs" :key="option.id" :value="option.id">{{ option.label }}</option></select></label><label>暴击口径<select v-model="selected.damage.crit" aria-label="所选真实命中暴击"><option :value="null">待确认</option><option value="noncritical">明确不暴击</option><option value="critical">明确暴击</option><option value="expected">静态暴击期望</option></select></label><label>反应<select v-model="selected.damage.reaction" aria-label="所选真实命中反应"><option :value="null">待确认</option><option value="none">明确无反应</option></select></label></div><div v-if="selectedResult?.real" class="inspector-section"><h3>{{ selected.reactionEvent ? '反应贡献' : '真实伤害乘区' }}</h3><template v-if="selected.reactionEvent"><p v-for="contributor in selected.reactionEvent.contributors" :key="contributor.actorId">{{ actorLabel(project, contributor.actorId) }}</p></template><div v-else v-for="(value,key) in selectedResult.real.parts" :key="key" class="field-line"><span>{{ realPartsLabels[key] }}</span><strong>{{ num(value) }}</strong></div><p v-for="message in selectedResult.real.diagnostics" :key="message" class="muted">{{ message }}</p></div><div class="inspector-section"><h3>候选效果与来源</h3><div v-for="source in selectedResult?.formula.effects" :key="`${source.definition}/${source.effect}/${source.action}`" class="source-pill"><strong>{{ definitionLabel(project, source.definition) }} / {{ effectLabel(project, source.definition, source.effect) }}</strong></div><p v-if="!selectedResult?.formula.effects.length" class="muted">此记录没有读取候选区间效果。</p><details><summary>技术详情：查看节点来源</summary><code v-for="source in selectedResult?.sources" :key="source.path" class="source-path">{{ source.path }}</code></details></div><button class="ui-action soft" data-accent="pyro" @click="removeRecord(selected.id)">删除所选记录</button></template><p v-else class="muted">选择一条记录查看明细。</p></aside>
         </div>
 
         <template v-else>
@@ -316,8 +327,8 @@ async function importFile(event: Event) {
               </div>
             </div>
             <dl class="axis-totals">
-              <div><dt>全轴总伤害</dt><dd data-testid="workspace-total">{{ num(result.totalValue) }}</dd></div>
-              <div><dt>目标伤害</dt><dd>{{ num(result.objectiveValue) }}</dd></div>
+              <div><dt>全轴总伤害</dt><dd data-testid="workspace-total">{{ damageNumber(result.totalValue, result.modeledTotalValue) }}</dd></div>
+              <div><dt>目标伤害</dt><dd>{{ damageNumber(result.objectiveValue, result.modeledObjectiveValue) }}</dd></div>
               <div><dt>伤害点</dt><dd>{{ result.points.length }}</dd></div>
             </dl>
           </section>
@@ -339,9 +350,9 @@ async function importFile(event: Event) {
                     <small>{{ recordTimes.get(point.id) }} 毫秒</small>
                   </span>
                   <span class="analysis-track" aria-hidden="true">
-                    <i :style="{ width: `${result.totalValue && point.value ? Math.max(0, Math.min(100, point.value / result.totalValue * 100)) : 0}%` }"></i>
+                    <i :style="{ width: `${damageShare(point.value ?? point.modeledValue)}%` }"></i>
                   </span>
-                  <strong>{{ num(point.value) }}</strong>
+                  <strong>{{ damageNumber(point.value, point.modeledValue) }}</strong>
                   <span aria-hidden="true">↗</span>
                 </button>
               </li>

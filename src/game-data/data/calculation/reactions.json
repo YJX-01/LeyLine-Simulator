@@ -647,6 +647,28 @@
         "sources": [
           "kqm.transformative"
         ]
+      },
+      {
+        "schemaVersion": "0.1.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar-elevation-factor",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "input",
+          "inputUnit": "scalar",
+          "outputUnit": "scalar",
+          "rate": 1,
+          "offset": 1,
+          "threshold": 0,
+          "output": "value"
+        },
+        "sources": [
+          "kqm.web.stellar"
+        ]
       }
     ],
     "tables": [],
@@ -769,6 +791,102 @@
         "combine": "sum",
         "sources": [
           "kqm.web.stellar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.lunar.baseBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.lunar.damageBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.lunar.flatBaseBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "damage"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "damage",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.lunar.elevationFactor",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1
+          }
+        },
+        "combine": "product",
+        "sources": [
+          "kqm.web.lunar"
         ]
       }
     ],

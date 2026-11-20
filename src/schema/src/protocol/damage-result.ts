@@ -21,6 +21,7 @@ export interface DamageResult {
   structured?: import('../calculation/result').StructuredDamageEvaluation;
   status: CalculationStatus;
   value: number | null;
+  modeledValue?: number;
   panel: AttributePanel;
   parts: { attack: number | null; multiplier: number | null; bonus: number | null; crit: number | null; defense: number | null; resistance: number | null };
   baseDamage: number | null;

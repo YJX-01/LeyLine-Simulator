@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
 import { calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
-import { calculatorProjectSchema, ordinaryTrialId, projectSchema, type DamageCalculatorDocument } from '@leyline/schema';
+import { ordinaryTrialId, projectSchema, type DamageCalculatorDocument } from '@leyline/schema';
 import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
 import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
 import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
@@ -42,7 +42,7 @@ describe.skipIf(!existsSync(officialShowcase))('calculator reads original public
   });
 });
 
-it.skipIf(!existsSync(vesnaRecording))('ordinary trial for the recorded Varesa is confined to the calculator and requires a known crit choice', async () => {
+it.skipIf(!existsSync(vesnaRecording))('the recorded Varesa trial uses the same shared project formula and requires a known crit choice', async () => {
   const preview = await previewEnkaImport(JSON.parse(readFileSync(vesnaRecording, 'utf8')), '107590923', createAccount());
   const build = preview.rows.find(row => row.character.showcase?.build.character.id === 'varesa')!.character.showcase!.build;
   const project = createEmptyProject();
@@ -54,12 +54,12 @@ it.skipIf(!existsSync(vesnaRecording))('ordinary trial for the recorded Varesa i
   project.timeline.push({ id: recordId, actor: actorId, kind: 'damage', definition: actorId + '-real-damage', timeMs: 0, order: 0,
     damage: { skillId: skill.id, hitId: hit.id, outputId: ordinaryTrialId(hit.id), crit: 'critical', reaction: 'none' } });
   const document: DamageCalculatorDocument = { schemaVersion: project.schemaVersion, kind: 'damage-calculator', project, actorId, recordId };
-  expect(calculatorProjectSchema.safeParse(project).success).toBe(true);
-  expect(projectSchema.safeParse(project).success).toBe(false);
+  expect(projectSchema.safeParse(project).success).toBe(true);
   const saved = JSON.stringify(document);
   const evaluate = () => evaluateTimeline(calculatorWorkerRequest(document, 1).project).points.find(point => point.id === recordId)!;
   const point = evaluate();
   expect(point.value).toBeNull();
+  expect(point.modeledValue).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
   const modeled = point.real!.structured!.outputs[0].modeledValue?.value;
   expect(modeled?.kind === 'quantity' && modeled.value).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
   expect(JSON.stringify(document)).toBe(saved);

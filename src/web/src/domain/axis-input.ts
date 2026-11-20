@@ -13,5 +13,8 @@ export function setDamageSelected(project: Project, id: string, selected: boolea
 
 export function removeTimelineRecord(project: Project, id: string): void {
   project.timeline = project.timeline.filter(record => record.id !== id);
+  for (const record of project.timeline) {
+    if (record.sourceEventIds) record.sourceEventIds = record.sourceEventIds.filter(source => source !== id);
+  }
   if (project.objective.damageIds) project.objective.damageIds = project.objective.damageIds.filter(selected => selected !== id);
 }

@@ -3,8 +3,9 @@ import { DATA_VERSION } from './version.mjs';
 import loaders from 'virtual:leyline-catalog/loaders';
 import artifactMain from '../data/tables/artifact-main.json';
 import common from '../data/calculation/common.json';
+import { assembleCalculationLibrary } from './calculation-library.mjs';
 export { DATA_VERSION };
-import type { ArtifactItem, ArtifactMainTable, Build, CharacterActionsDefinition, CharacterDefinition, DefinitionRef, WeaponDefinition, ArtifactSetDefinition, StatKey, Element } from '@leyline/schema';
+import type { ArtifactItem, ArtifactMainTable, Build, CalculationBundle, CharacterActionsDefinition, CharacterDefinition, DefinitionRef, WeaponDefinition, ArtifactSetDefinition, StatKey, Element } from '@leyline/schema';
 export type { CharacterDefinition, WeaponDefinition, ArtifactSetDefinition, StatKey, Element, ContentSource, Support, Modifier } from '@leyline/schema';
 export interface GameCatalog {
   version: string;
@@ -27,6 +28,10 @@ export async function getBuildSources(): Promise<Pick<Build, 'sources' | 'artifa
 }
 export async function getArtifactMain(): Promise<ArtifactMainTable> {
   return clone(artifactMain as ArtifactMainTable);
+}
+export async function getReactionCalculationBundle(): Promise<CalculationBundle> {
+  const { default: reactions } = await import('../data/calculation/reactions.json');
+  return assembleCalculationLibrary(common, reactions, []);
 }
 /** Optional exact-revision companion. Absence never selects a newer character or guessed actions. */
 export async function getCharacterActions(character: DefinitionRef): Promise<CharacterActionsDefinition | null> {

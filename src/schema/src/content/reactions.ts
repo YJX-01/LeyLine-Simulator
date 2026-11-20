@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { contentSourceSchema, finiteSchema, idSchema } from '../common/values';
 
 export const hitReactionTypes = ['vaporize', 'melt', 'aggravate', 'spread'] as const;
+export const directLunarFamilies = ['lunar-charged', 'lunar-bloom', 'lunar-crystallize'] as const;
 export const hitReactionSchema = z.object({
   type: z.enum(hitReactionTypes),
   trigger: z.literal('record-owner').nullable(),

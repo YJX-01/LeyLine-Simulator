@@ -3,7 +3,7 @@ import { compileStructuredCharacter, evaluateBoundFormula } from '@leyline/engin
 
 export function selectCatalogHit(build: Pick<Build, 'character'>, skillId: string, index: number): Pick<DamageRequest, 'skillId' | 'hitId' | 'outputId'> {
   const hit = build.character.talents.find(skill => skill.id === skillId)?.hits[index];
-  return { skillId, hitId: hit?.id ?? 'missing-hit', outputId: hit?.outputs[0]?.id ?? 'unavailable-output' };
+  return { skillId, hitId: hit?.id ?? 'missing-hit', outputId: hit?.outputs[0]?.id ?? null };
 }
 
 /** Isolate a declared base binding using independent values from the catalog sources. */

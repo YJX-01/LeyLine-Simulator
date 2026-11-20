@@ -152,7 +152,7 @@ describe('explicit skill counts multiply additional base scaling through the com
 
   it('validates Ayato C2 five-stack range while retaining unsupported conditional HP and constellation damage', async () => {
     const build = await calculation('kamisatoayato', 'dullblade');
-    const request: DamageRequest = { skillId: 'kamisatoayato.skill', hitId: 'kamisatoayato.skill.param1', outputId: 'unavailable-output', crit: 'noncritical', reaction: 'none', inputs: { namisen: 5 } };
+    const request: DamageRequest = { skillId: 'kamisatoayato.skill', hitId: 'kamisatoayato.skill.param1', outputId: null, crit: 'noncritical', reaction: 'none', inputs: { namisen: 5 } };
     expect(evaluateDamage(build, request, enemy).status).toBe('invalid');
     build.constellation = 1;
     expect(evaluateDamage(build, request, enemy).status).toBe('invalid');

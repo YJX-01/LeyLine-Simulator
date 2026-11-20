@@ -3,6 +3,50 @@ import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import type { AxisResponse, Build, Project } from '@leyline/schema';
+import { vesnaRecording } from '../../helpers/recorded-vesna';
+
+test('timeline saves a pending hit and evaluates its explicitly selected trial output', async ({ page }) => {
+  test.skip(!existsSync(vesnaRecording), 'Requires the original authorized showcase.');
+  test.setTimeout(90000);
+  await page.goto('/');
+  const material = await page.evaluate(async raw => {
+    // @ts-expect-error Vite browser source URL.
+    const { previewEnkaImport } = await import('/src/domain/enka-import.ts');
+    // @ts-expect-error Vite browser source URL.
+    const { createAccount } = await import('/src/domain/account.ts');
+    // @ts-expect-error Vite browser source URL.
+    const { createEmptyProject } = await import('/src/domain/workbench-project.ts');
+    // @ts-expect-error Vite browser source URL.
+    const { addActorFromBuild, defaultEnemy } = await import('/src/domain/real-project.ts');
+    // @ts-expect-error Vite browser source URL.
+    const { packDocument } = await import('/src/domain/content-document.ts');
+    const preview = await previewEnkaImport(raw, String(raw.uid), createAccount());
+    const builds: Build[] = preview.rows.map((row: { character: { showcase: { build: Build } } }) => row.character.showcase.build);
+    const project = createEmptyProject();
+    project.enemy = defaultEnemy();
+    addActorFromBuild(project, builds.find(build => build.character.id === 'varesa'));
+    const burst = builds.find(build => build.character.id === 'varesa')!.character.talents.find(talent => talent.category === 'burst')!;
+    return { document: packDocument('axis', project), burst: burst.name, hitIndex: String(burst.hits.findIndex(hit => hit.parameter === 'param5')) };
+  }, JSON.parse(readFileSync(vesnaRecording, 'utf8')));
+  await page.getByTestId('workspace-nav-timeline').click();
+  await page.getByLabel('导入轴项目文件').setInputFiles({ name: 'showcase-calculation.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(material.document)) });
+  const editor = page.getByRole('region', { name: '剪辑式时间轴编辑' });
+  const inspector = page.getByRole('complementary', { name: '所选记录详情' });
+  await editor.getByRole('button', { name: '伤害层', exact: true }).click();
+  await editor.getByRole('button', { name: material.burst, exact: true }).click();
+  await editor.getByLabel('标注技能段数').selectOption(material.hitIndex);
+  await editor.getByRole('button', { name: '在光标处记录伤害点' }).click();
+  const output = inspector.getByLabel('所选命中输出');
+  await expect(output.locator('option:checked')).toHaveText('待建模');
+  await output.selectOption({ label: '普通直伤试算' });
+  await inspector.getByLabel('所选真实命中暴击').selectOption('critical');
+  await inspector.getByLabel('所选真实命中反应').selectOption('none');
+  await expect(inspector.locator('.inspector-damage')).toContainText(/试算 \d/);
+
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.1.0')!).document.project as Project);
+  expect(saved.timeline).toHaveLength(1);
+  expect(saved.timeline[0].damage).toMatchObject({ outputId: 'varesa.burst.param5.ordinary-trial', crit: 'critical', reaction: 'none' });
+});
 
 test('Cinnabar flat damage recalculates through actual Worker and file round-trip with an explicit application', async ({ page }) => {
   // Source-derived legal single-point calculation, not a player build or game observation.

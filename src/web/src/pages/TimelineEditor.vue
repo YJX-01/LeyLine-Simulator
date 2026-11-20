@@ -4,15 +4,16 @@ import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { addSkillAction, addSkillHit } from '../domain/real-project';
-import { recordLabel } from '../domain/workbench-labels';
+import { hitOutputOptions, recordLabel } from '../domain/workbench-labels';
 import type { Project } from '@leyline/schema';
-type Record = Project['timeline'][number];
+type TimelineRecord = Project['timeline'][number];
 const axis = useAxisWorkspaceStore();
 const cursor = ref(0);
 const scale = ref(60);
 const layer = ref<'action' | 'damage'>('action');
 const skillId = ref('');
 const hitIndex = ref(0);
+const outputId = ref('');
 const error = ref('');
 const playing = ref(false);
 let frame = 0;
@@ -31,18 +32,27 @@ function toggleClock() {
 }
 const skills = computed(() => axis.actor?.build?.character.talents ?? []);
 const skill = computed(() => skills.value.find(item => item.id === skillId.value) ?? skills.value[0]);
+const hit = computed(() => skill.value?.hits[hitIndex.value]);
+const outputOptions = computed(() => skill.value && hit.value ? hitOutputOptions(skill.value, hit.value) : []);
 const duration = computed(() => Math.min(3600000, Math.max(15000, cursor.value + 3000, ...axis.project.timeline.map(record => record.timeMs + 3000))));
 const width = computed(() => Math.max(600, duration.value / 1000 * scale.value));
-const records = (actor: string, kind: string) => axis.project.timeline.filter(record => record.actor === actor && record.kind === kind);
+const records = (actor: string, kind: string) => axis.project.timeline.filter(record => record.actor === actor
+  && (kind === 'damage' ? record.kind === 'damage' : record.kind === 'action' || record.kind === 'state-change'));
 function add(kind = layer.value, selectedSkill = skill.value) {
   const owner = axis.actor;
   if (!owner || !selectedSkill) { error.value = '请先准备队伍并选择技能。'; return; }
   const time = Math.round(cursor.value);
   if (!Number.isInteger(time) || time < 0 || time > 3600000) { error.value = '记录时间必须在 0 到 3600000 毫秒之间。'; return; }
-  if (kind === 'damage' && (!selectedSkill.hits[hitIndex.value]?.outputs.length)) { error.value = '该技能或段数尚未支持伤害计算；动作仍可记录。'; return; }
+  if (kind === 'damage' && !selectedSkill.hits[hitIndex.value]) { error.value = '请选择此技能已绑定的命中。'; return; }
   let id = '';
   try { axis.command(draft => {
-    if (kind === 'damage') { id = addSkillHit(draft, owner.id, selectedSkill.id, hitIndex.value, time); return; }
+    if (kind === 'damage') {
+      const hit = selectedSkill.hits[hitIndex.value];
+      const options = hitOutputOptions(selectedSkill, hit);
+      const chosen = options.some(option => option.id === outputId.value) ? outputId.value : hit.outputs.length === 1 ? hit.outputs[0].id : null;
+      id = addSkillHit(draft, owner.id, selectedSkill.id, hitIndex.value, time, { crit: null, reaction: null, outputId: chosen });
+      return;
+    }
     id = addSkillAction(draft, owner.id, selectedSkill.id, time);
   }); } catch (cause) { error.value = cause instanceof Error ? cause.message : '命中记录无效。'; return; }
   axis.selectedId = id;
@@ -53,7 +63,7 @@ function seek(event: MouseEvent) {
   const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
   cursor.value = Math.min(3600000, Math.max(0, Math.round((event.clientX - bounds.left) / scale.value * 1000)));
 }
-function drag(event: PointerEvent, record: Record) {
+function drag(event: PointerEvent, record: TimelineRecord) {
   if (event.button !== 0) return;
   pause();
   event.stopPropagation();
@@ -89,7 +99,7 @@ function key(event: KeyboardEvent) {
   if (/^[1-4]$/.test(event.key)) { const actor = axis.project.candidate.actors[index]; if (actor) axis.actorId = actor.id; event.preventDefault(); return; }
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { pause(); cursor.value = Math.max(0, Math.min(3600000, cursor.value + (event.key === 'ArrowLeft' ? -1 : 1) * (event.shiftKey ? 1000 : 10))); event.preventDefault(); return; }
   const category = event.key.toLowerCase() === 'e' ? 'skill' : event.key.toLowerCase() === 'q' ? 'burst' : undefined;
-  if (category) { const selected = skills.value.find(skill => skill.category === category); if (selected) { skillId.value = selected.id; hitIndex.value = 0; add(layer.value, selected); } event.preventDefault(); }
+  if (category) { const selected = skills.value.find(skill => skill.category === category); if (selected) { skillId.value = selected.id; hitIndex.value = 0; outputId.value = ''; add(layer.value, selected); } event.preventDefault(); }
   if (event.key === 'Enter') { add(); event.preventDefault(); }
 }
 onMounted(() => window.addEventListener('keydown', key));
@@ -120,13 +130,19 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
     </div>
     <div v-if="skills.length" class="skill-palette">
       <button v-for="item in skills" :key="item.id" class="desk-option" data-card-action="select" :aria-pressed="skill?.id === item.id"
-        @click="skillId = item.id; hitIndex = 0">
+        @click="skillId = item.id; hitIndex = 0; outputId = ''">
         <span>{{ item.name }}</span>
-        <small v-if="!item.hits.some(hit => hit.outputs.length)">仅可记动作</small>
+        <small v-if="!item.hits.length">仅可记动作</small>
       </button>
       <label v-if="layer === 'damage' && skill">命中段数
-        <select v-model.number="hitIndex" aria-label="标注技能段数">
+        <select v-model.number="hitIndex" aria-label="标注技能段数" @change="outputId = ''">
           <option v-for="(_, index) in skill.hits" :key="index" :value="index">第 {{ index + 1 }} 段</option>
+        </select>
+      </label>
+      <label v-if="layer === 'damage' && hit && hit.outputs.length !== 1 && outputOptions.length">伤害输出
+        <select v-model="outputId" aria-label="标注伤害输出">
+          <option value="">待建模</option>
+          <option v-for="option in outputOptions" :key="option.id" :value="option.id">{{ option.label }}</option>
         </select>
       </label>
       <button class="ui-action" :disabled="!skill" @click="add()">在光标处记录{{ layer === 'action' ? '动作' : '伤害点' }}</button>

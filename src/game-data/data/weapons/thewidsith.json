@@ -249,12 +249,12 @@
           "identity": {
             "namespace": "builtin",
             "id": "coverage.weapon.thewidsith",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
           },
           "entity": {
             "namespace": "builtin",
             "id": "thewidsith",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
           },
           "scope": {
             "kind": "equipment"
@@ -270,6 +270,20 @@
               "id": "explicit-output-scope",
               "resolution": "unavailable",
               "ruleIds": [],
+              "impact": {
+                "recipient": "owner",
+                "attributes": [
+                  "attribute.attackPercent",
+                  "attribute.anemoBonus",
+                  "attribute.geoBonus",
+                  "attribute.electroBonus",
+                  "attribute.hydroBonus",
+                  "attribute.pyroBonus",
+                  "attribute.cryoBonus",
+                  "attribute.dendroBonus",
+                  "attribute.elementalMastery"
+                ]
+              },
               "reason": "武器全部相关伤害机制尚未闭合。"
             }
           ]
@@ -281,7 +295,7 @@
   "schemaVersion": "0.1.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
+  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1",
   "sources": [
     "content.weapon.thewidsith",
     "content.weapon-curves"
@@ -290,7 +304,7 @@
     {
       "namespace": "builtin",
       "id": "coverage.weapon.thewidsith",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
     }
   ]
 }

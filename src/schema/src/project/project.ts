@@ -5,14 +5,22 @@ import { buildSchema } from '../account/build';
 import { damageRequestSchema } from './damage';
 import { enemySchema } from './enemy';
 import { talentInputIssues } from '../content/talent';
-import { ruleDefinitionSchema, requiresDependencyDefinition } from './expressions';
+import { elements } from '../content/stats';
+import { ruleDefinitionSchema } from './expressions';
 import { combatStateIntervalSchema, validateCombatStates } from './combat-state';
-export const ordinaryTrialId = (hitId: string) => hitId + '.ordinary-trial';
+import { calculationBundleSchema } from '../calculation/bundle';
+import { calculationFactSchema } from '../calculation/binding';
+import { stateMachineRequestSchema } from '../calculation/state-machine';
+import { characterActionsDefinitionSchema } from '../content/actions';
+import { definitionKey } from '../calculation/values';
+import { projectReactionSchema } from './reaction-event';
+import { canTryOrdinaryHit, ordinaryTrialId } from '../calculation/hit-bindings.mjs';
+export { ordinaryTrialId };
 const projectFields = z.object({
-  schemaVersion: z.literal(APP_VERSION), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
+  schemaVersion: z.literal(APP_VERSION), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct', 'dependency']).optional(), id: idSchema, name: idSchema.optional(), revision: idSchema,
   definitions: z.array(ruleDefinitionSchema).max(200),
   candidate: z.object({
-    id: idSchema, actors: z.array(z.object({ id: idSchema, name: idSchema.optional(), character: idSchema, weapon: idSchema, inputs: z.record(idSchema, quantitySchema), build: buildSchema.optional(),
+    id: idSchema, actors: z.array(z.object({ id: idSchema, name: idSchema.optional(), character: idSchema, weapon: idSchema, element: z.enum(elements).optional(), inputs: z.record(idSchema, quantitySchema), build: buildSchema.optional(),
       accountSnapshot: z.object({ accountId: idSchema, characterId: idSchema, weapon: z.string().max(160),
         artifacts: z.array(z.object({ id: idSchema, name: idSchema, slot: z.enum(['flower', 'plume', 'sands', 'goblet', 'circlet']), attack: z.number().finite().nonnegative() }).strict()).max(5),
       }).strict().optional(),
@@ -21,20 +29,21 @@ const projectFields = z.object({
   effectRevisions: z.array(z.object({ instanceId: z.string().min(1).max(2000), disabled: z.boolean(), value: quantitySchema.optional() }).strict()).max(10000).optional(),
   conditions: z.record(idSchema, z.boolean().nullable()),
   combatStates: z.array(combatStateIntervalSchema).max(10000).optional(),
+  reactionRules: calculationBundleSchema.optional(),
+  actionStates: z.array(stateMachineRequestSchema.pick({ startMs: true, initial: true }).extend({
+    actorId: idSchema, actions: characterActionsDefinitionSchema,
+  })).max(100).optional(),
   enemy: enemySchema.optional(),
   timeline: z.array(z.object({
     id: idSchema, timeMs: millisecondsSchema, order: z.number().int().nonnegative(), actor: idSchema,
-    kind: z.enum(['action', 'damage', 'capture']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
+    kind: z.enum(['action', 'damage', 'capture', 'state-change']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
+    reactionEvent: projectReactionSchema.optional(), actionId: idSchema.optional(),
+    facts: z.record(idSchema, calculationFactSchema).optional(), sourceEventIds: z.array(idSchema).max(1000).optional(),
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(idSchema).optional() }).strict(),
 }).strict();
-const checkedProject = (allowOrdinaryTrial: boolean) => projectFields.superRefine((project, context) => {
+export const projectSchema = projectFields.superRefine((project, context) => {
   validateCombatStates(project, context);
-  if (project.calculationProfile === 'direct') {
-    if (project.effectRevisions !== undefined || project.definitions.some(requiresDependencyDefinition)) {
-      context.addIssue({ code: 'custom', message: '属性读取、捕获、累计和效果修订需要明确采用依赖求值配置。', path: ['rulesVersion'] });
-    }
-  }
   project.definitions.forEach((definition, definitionIndex) => {
     definition.nodes.forEach((node, nodeIndex) => {
       if (node.op === 'history' && node.endMs <= node.startMs) context.addIssue({ code: 'custom', message: '累计窗口必须为非空左闭右开区间。', path: ['definitions', definitionIndex, 'nodes', nodeIndex] });
@@ -42,13 +51,37 @@ const checkedProject = (allowOrdinaryTrial: boolean) => projectFields.superRefin
   });
   const captureActors = new Map(project.candidate.actors.map(actor => [actor.id, actor]));
   const captureRecords = new Map(project.timeline.map(record => [record.id, record]));
+  const actionStates = new Map((project.actionStates ?? []).map(state => [state.actorId, state]));
+  if (actionStates.size !== (project.actionStates?.length ?? 0)) context.addIssue({ code: 'custom', path: ['actionStates'], message: '同一队员只能配置一个动作状态。' });
+  for (const [index, state] of (project.actionStates ?? []).entries()) {
+    const build = captureActors.get(state.actorId)?.build;
+    if (!build || definitionKey(build.character) !== definitionKey(state.actions.character)) {
+      context.addIssue({ code: 'custom', path: ['actionStates', index], message: '动作定义必须属于队员的当前角色快照。' });
+    }
+  }
   project.timeline.forEach((record, index) => {
+    const sources = record.sourceEventIds ?? [];
+    if (new Set(sources).size !== sources.length || sources.some(id => id === record.id || !captureRecords.has(id))) {
+      context.addIssue({ code: 'custom', path: ['timeline', index, 'sourceEventIds'], message: '来源事件须引用当前项目的不同记录。' });
+    }
+    if (record.reactionEvent && (record.kind !== 'damage' || record.damage || record.reactionEvent.contributors.some(({ actorId }) => !captureActors.has(actorId)))) {
+      context.addIssue({ code: 'custom', path: ['timeline', index, 'reactionEvent'], message: '反应伤害须明确引用项目队员，并单独记录。' });
+    }
+    if (record.actionId !== undefined) {
+      const action = actionStates.get(record.actor)?.actions.actions.find(action => action.id === record.actionId);
+      const matchesHit = record.damage && action?.hits.some(hit => hit.skillId === record.damage!.skillId && hit.hitId === record.damage!.hitId
+        && (record.damage!.outputId === null || hit.outputIds.includes(record.damage!.outputId)));
+      if (!action || !(record.kind === 'damage' ? matchesHit : record.kind !== 'capture' && (record.skillId ?? null) === action.skillId)) {
+        context.addIssue({ code: 'custom', path: ['timeline', index, 'actionId'], message: '动作必须引用该队员定义的技能、命中或独立事件。' });
+      }
+    }
     if (record.damage) {
       const actor = captureActors.get(record.actor), skill = actor?.build?.character.talents.find(skill => skill.id === record.damage!.skillId);
       const hit = skill?.hits.find(hit => hit.id === record.damage!.hitId);
-      const trial = allowOrdinaryTrial && hit && !skill?.noIndependentDamage && !hit.outputs.length && record.damage.outputId === ordinaryTrialId(hit.id);
-      if (record.kind !== 'damage' || !(trial || hit?.outputs.some(output => output.id === record.damage!.outputId))) {
-        context.addIssue({ code: 'custom', message: '伤害必须引用当前角色快照中的明确技能、命中和输出。', path: ['timeline', index, 'damage'] });
+      const output = record.damage.outputId;
+      const trial = skill && hit && output === ordinaryTrialId(hit.id) && canTryOrdinaryHit(skill, hit);
+      if (record.kind !== 'damage' || !hit || !(output === null || trial || hit.outputs.some(candidate => candidate.id === output))) {
+        context.addIssue({ code: 'custom', message: '伤害必须引用当前角色快照中的技能和命中，所选输出须存在。', path: ['timeline', index, 'damage'] });
       }
     }
     if (record.damage?.inputs) {
@@ -64,7 +97,6 @@ const checkedProject = (allowOrdinaryTrial: boolean) => projectFields.superRefin
       if (!record.skillId || !definition || definition.nodes.length || definition.effects.length || definition.damage !== undefined) {
         context.addIssue({ code: 'custom', message: '独立捕获点须指定所属技能及无公式、无效果的定义；它不表示施放或伤害。', path: ['timeline', index] });
       }
-      if (project.calculationProfile !== 'dependency') context.addIssue({ code: 'custom', message: '独立捕获点需要依赖求值配置。', path: ['calculationProfile'] });
     }
     const capture = record.damage?.capture;
     if (!capture) return;
@@ -97,8 +129,6 @@ const checkedProject = (allowOrdinaryTrial: boolean) => projectFields.superRefin
     });
   });
 });
-export const projectSchema = checkedProject(false);
-export const calculatorProjectSchema = checkedProject(true);
 export type Project = z.infer<typeof projectSchema>;
 export interface Diagnostic {
   code: 'invalid-input' | 'missing-reference' | 'duplicate-id' | 'cycle' | 'unit' | 'unknown' | 'unsupported' | 'arithmetic' | 'budget' | 'stale-revision';

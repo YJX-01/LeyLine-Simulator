@@ -8,7 +8,8 @@ test('entity-owned calculation definitions assemble once, directly from maintain
   const nahida = readAuditJson('src/game-data/data/characters/nahida.json');
   const owned = nahida.calculation.bundle.formulas.find(formula => formula.identity.id === 'nahida.skill.tri-karma.base');
   assert.deepEqual(library.formulas.find(formula => formula.identity.id === owned.identity.id), owned);
-  assert.equal(library.formulas.length, 98);
+  const reactions = readAuditJson('src/game-data/data/calculation/reactions.json').calculation;
+  for (const formula of reactions.formulas) assert.equal(library.formulas.filter(entry => entry.identity.id === formula.identity.id).length, 1);
   assert.equal(library.effects.length, 82);
   assert.equal(library.aggregates.length, 3);
   const changed = readCalculationLibrary(path => {

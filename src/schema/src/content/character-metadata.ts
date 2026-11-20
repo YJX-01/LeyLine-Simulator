@@ -7,8 +7,9 @@ import { constellationSchema, damageScalingStatSchema, passiveSchema, talentSche
 import { effectDefinitionSchema } from '../calculation/effect';
 import { formulaDefinitionSchema } from '../calculation/template';
 import { calculationQuantityTypeSchema, calculationValueTypeSchema, definitionRefSchema } from '../calculation/values';
-import { calculationCoverageRecordSchema } from '../calculation/coverage';
+import { calculationCoverageRecordSchema, coverageImpactSchema } from '../calculation/coverage';
 import { elements } from './stats';
+import { directLunarFamilies } from './reactions';
 
 const ids = z.array(idSchema).max(1000);
 type Expression = number | { stat: string; actor?: 'owner' | 'recipient' | 'contributor' } | { state: 'ascension' | 'constellation' | 'refinement' }
@@ -28,11 +29,11 @@ const scaling = z.object({ stat: damageScalingStatSchema, parameter: idSchema.op
 const hit = structuredHitSchema.pick({ id: true, element: true, category: true, parameter: true, snapshot: true }).extend({
   snapshot: structuredHitSchema.shape.snapshot.unwrap().omit({ source: true }).optional(),
   scaling: z.array(scaling).min(1).max(2), support: idSchema, coverageId: idSchema.optional(),
-  outputs: z.array(z.object({ id: idSchema, family: z.enum(['ordinary','stellar-swirl']), origin: z.enum(['talent','triggered']).optional(), condition: expression.optional() }).strict()).max(1000),
+  outputs: z.array(z.object({ id: idSchema, family: z.enum(['ordinary', 'stellar-swirl', ...directLunarFamilies]), origin: z.enum(['talent','triggered']).optional(), condition: expression.optional() }).strict()).max(1000),
 });
 const support = z.object(calculationCoverageRecordSchema.shape).pick({ resolution: true, evidence: true, reason: true }).extend({
   maxConstellation: z.number().int().min(0).max(6), mechanisms: z.array(z.object({ id: idSchema, resolution: z.enum(['implemented','irrelevant','unavailable']),
-    reason: z.string().min(1).optional(), rules: ids.optional() }).strict()).min(1),
+    reason: z.string().min(1).optional(), rules: ids.optional(), impact: coverageImpactSchema.optional() }).strict()).min(1),
 });
 const effect = z.object(effectDefinitionSchema.shape).pick({ trigger: true, lifetime: true, appliesTo: true, application: true, priority: true, activation: true }).partial().extend({
   id: idSchema, target: idSchema, excludeOwner: z.boolean().optional(), recipient: z.enum(['owner','team','target']).optional(), value: expression, condition: expression.optional(),

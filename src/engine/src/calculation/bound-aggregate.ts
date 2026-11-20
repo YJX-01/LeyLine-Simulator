@@ -2,13 +2,13 @@ import { boundAggregateRequestSchema, calculationJsonPointer, combatContextSchem
   type AggregateEvaluation, type AggregateRequest, type CalculationDiagnosticCode, type CombatFrame, type EvaluatedValue, type FormulaEvaluation, type RequiredInput, type Value } from '@leyline/schema';
 import { calculationBudgets, compiledData, type CompiledCalculation } from './compile';
 import { interpretAggregate, type AggregateEvaluationOptions } from './aggregate';
-import { interpretBoundFormula } from './context';
+import { interpretBoundFormula, type BoundAttributeReader } from './context';
 import { validateContextDefinitions } from './context-validation';
 import { CalculationSession } from './session';
 import { validateBoundFormula } from './binding-validation';
 
 /** Resolve every contributor against its own build, then rank separately inside each probability state. */
-export function evaluateBoundAggregate(program: CompiledCalculation, contextInput: unknown, input: unknown, options: AggregateEvaluationOptions = {}): AggregateEvaluation {
+export function evaluateBoundAggregate(program: CompiledCalculation, contextInput: unknown, input: unknown, options: AggregateEvaluationOptions & { attributeReader?: BoundAttributeReader } = {}): AggregateEvaluation {
   const fallback = { namespace: 'builtin', id: 'runtime.bound-aggregate', revision: '1' };
   const structure = [contextInput, input].flatMap(value => inspectCalculationStructure(value));
   const parsed = boundAggregateRequestSchema.safeParse(structure.length ? undefined : input);
@@ -70,7 +70,7 @@ export function evaluateBoundAggregate(program: CompiledCalculation, contextInpu
         const visits = session.limits.visits - session.visits, trace = session.limits.trace - session.trace.length - 1;
         if (visits < 1 || trace < 2) return finish(session.budget(undefined, 'probability', '概率读取达到共享预算。', trace < 2));
         const result = interpretBoundFormula(program, context, contributor.invocation, contributor.frame,
-          { readBindings: { probability: variable.probability.binding }, limits: { visits, depth: session.limits.depth, trace } }, { context, validation });
+          { readBindings: { probability: variable.probability.binding }, limits: { visits, depth: session.limits.depth, trace }, attributeReader: options.attributeReader }, { context, validation });
         const values = absorb(result, `p${index}:`), value = values.probability ?? values.invalid;
         if (!value || value.state !== 'known') return value ? finish(value) : invalid('invalid-range', '/probability', '概率读取无效。');
         if (value.value.kind !== 'quantity' || value.value.unit !== 'scalar') return invalid('unit-mismatch', `/probability/variables/${index}`, '概率必须为无量纲数量。');
@@ -95,7 +95,7 @@ export function evaluateBoundAggregate(program: CompiledCalculation, contextInpu
       const contributor = contributors.get(id)!, original = rank ? contributor.rankFrame! : contributor.frame;
       const frame: CombatFrame = { ...original, facts: { ...original.facts,
         ...Object.fromEntries(Object.entries(inputs).map(([key, value]) => [key, { value, provenance: 'derived' as const, sourceRefs: definition.sources }])) } };
-      return interpretBoundFormula(program, context, contributor.invocation, frame, { outputs, limits }, { context, validation });
+      return interpretBoundFormula(program, context, contributor.invocation, frame, { outputs, limits, attributeReader: options.attributeReader }, { context, validation });
     },
   });
   const { value } = absorb({ ...result, outputs: { value: result.value }, stages: [] }, 'aggregate:');

@@ -61,7 +61,8 @@ export function describeCharacter(character) {
   for (const record of bundle.coverage) {
     const { scope, resolution, evidence, reason } = record;
     const profile = { maxConstellation: scope.maxConstellation, resolution, evidence, reason,
-      mechanisms: record.mechanisms.map(m => ({ id: m.id, resolution: m.resolution, ...(m.ruleIds.length ? { rules: ids(m.ruleIds) } : {}), ...(m.reason === reason ? {} : { reason: m.reason }) })) };
+      mechanisms: record.mechanisms.map(m => ({ id: m.id, resolution: m.resolution, ...(m.ruleIds.length ? { rules: ids(m.ruleIds) } : {}),
+        ...(m.reason === reason ? {} : { reason: m.reason }), ...(m.impact ? { impact: m.impact } : {}) })) };
     const bytes = JSON.stringify(profile), base = scope.kind + '-' + resolution;
     if (!profileIds.has(bytes)) {
       let key = base, n = 1;

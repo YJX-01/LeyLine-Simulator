@@ -87,7 +87,7 @@ export function evaluateDamageQuery(program: CompiledCalculation, contextInput: 
     else {
       const result = computation.kind === 'formula' ? interpretBoundFormula(program, context, computation.invocation, computation.frame,
         { limits: { visits, trace, depth: session.limits.depth }, attributeReader: options.attributeReader }, { context, validation: contextValidation })
-        : computation.kind === 'bound-aggregate' ? evaluateBoundAggregate(program, context, computation.request, { limits: { visits, depth: session.limits.depth, trace } })
+        : computation.kind === 'bound-aggregate' ? evaluateBoundAggregate(program, context, computation.request, { limits: { visits, depth: session.limits.depth, trace }, attributeReader: options.attributeReader })
           : evaluateAggregate(program, computation.request, { limits: { visits, depth: session.limits.depth, trace } });
       const rebase = absorb(session, result, occurrence.outputId, occurrence.eventId);
       const rawValue = 'value' in result ? result.value : result.outputs[computation.kind === 'formula' ? computation.invocation.output : 'value'] ?? result.outputs.invalid;

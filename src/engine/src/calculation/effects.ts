@@ -31,8 +31,10 @@ export function hitMatches(selector: CalculationHitSelector, hit: CombatFrame['h
     && (!selector.reactionIds || hit.reactionId !== null && selector.reactionIds.includes(hit.reactionId));
 }
 export function effectUnlocked(activation: EffectDefinition['activation'], owner: Pick<CombatActor, 'ascension' | 'constellation' | 'refinement' | 'setCounts'>): boolean {
-  return owner.ascension >= (activation.ascension ?? 0) && owner.constellation >= (activation.constellation ?? 0)
-    && owner.refinement >= (activation.refinement ?? 1) && (!activation.set || (owner.setCounts[activation.set.id] ?? 0) >= activation.set.pieces);
+  return owner.ascension !== null && owner.ascension >= (activation.ascension ?? 0)
+    && owner.constellation !== null && owner.constellation >= (activation.constellation ?? 0)
+    && owner.refinement !== null && owner.refinement >= (activation.refinement ?? 1)
+    && (!activation.set || (owner.setCounts[activation.set.id] ?? 0) >= activation.set.pieces);
 }
 export function collectEffectInstances(data: CompiledData, context: CombatContext, targetId: string, visit: () => boolean): EffectInstance[] {
   const result: EffectInstance[] = [];

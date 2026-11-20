@@ -1,5 +1,5 @@
 import { APP_VERSION } from '@leyline/schema/version';
-import { definitionLibrarySchema, expressionReferences, requiresDependencyDefinition, type DefinitionLibraryFile, type Project } from '@leyline/schema';
+import { definitionLibrarySchema, expressionReferences, type DefinitionLibraryFile, type Project } from '@leyline/schema';
 
 type ContentDefinition = Project['definitions'][number];
 export type {DefinitionLibraryFile} from '@leyline/schema';
@@ -49,9 +49,6 @@ export function copyDefinitionToProject(project: Project, input: ContentDefiniti
       const dependency = available.find(entry => entry.id === effect.action) ?? project.definitions.find(entry => entry.id === effect.action);
       if (!dependency) throw new Error('区间效果的动作定义缺失，未复制到当前轴。');
       collect(dependency);
-    }
-    if (project.calculationProfile === 'direct' && requiresDependencyDefinition(definition)) {
-      throw new Error('复制此定义需要项目使用依赖求值配置。');
     }
     pending.push(JSON.parse(JSON.stringify(definition)) as ContentDefinition);
   };

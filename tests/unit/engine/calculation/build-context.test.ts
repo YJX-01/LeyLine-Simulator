@@ -185,7 +185,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     expect(result.trace.find(node => node.id === result.outputs[0].value.traceId)?.state).toBe('unknown');
     const character = teammate.character, unknown = character.talents.flatMap(talent => talent.hits.map(hit => ({ skillId: talent.id, hit }))).find(entry => !entry.hit.outputs.length)!;
     setup.events[0].actorId = 'teammate'; setup.events[0].skillId = unknown.skillId; setup.events[0].hitId = unknown.hit.id; setup.events[0].category = unknown.hit.category;
-    const unsupported = evaluateStructuredHit(prepared.team, setup, { ...request, actorId: 'teammate', skillId: unknown.skillId, hitId: unknown.hit.id });
+    const unsupported = evaluateStructuredHit(prepared.team, setup, { ...request, actorId: 'teammate', skillId: unknown.skillId, hitId: unknown.hit.id, outputId: null });
     expect(unsupported.execution).toBe('partial'); expect(unsupported.totals.all.state).toBe('unknown');
     expect(unsupported.trace.find(node => node.id === unsupported.totals.all.traceId)?.state).toBe('unknown');
   });

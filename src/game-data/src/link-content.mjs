@@ -1,4 +1,6 @@
-/** Link current authored content against an explicitly supplied library. No old-format conversion. */
+import { canTryOrdinaryHit, ordinaryHitInvocation } from '@leyline/schema/hit-bindings';
+
+/** Link current authored content against an explicitly supplied library. */
 export function createContentLinker({ schemas, collectCalculationRoots, library }) {
   const referenceKey = reference => schemas.definitionKey(reference);
   const bindingRoots = (binding, roots) => {
@@ -20,7 +22,12 @@ export function createContentLinker({ schemas, collectCalculationRoots, library 
         for (const hit of talent.hits) {
           hit.sources.forEach(source => sourceIds.add(source)); roots.push(...hit.coverageRefs);
           for (const output of hit.outputs) { roots.push(...output.coverageRefs); families.add(output.family); }
-          for (const invocation of [hit.base, ...hit.outputs.map(output => output.invocation)]) {
+          const invocations = [hit.base, ...hit.outputs.map(output => output.invocation)];
+          if (canTryOrdinaryHit(talent, hit)) {
+            families.add('ordinary');
+            invocations.push(ordinaryHitInvocation(hit));
+          }
+          for (const invocation of invocations) {
             roots.push(invocation.formula, ...invocation.captures.flatMap(capture => capture.attributes));
             Object.values(invocation.bindings).forEach(binding => bindingRoots(binding, roots));
             if (invocation.predicate) bindingRoots(invocation.predicate, roots);

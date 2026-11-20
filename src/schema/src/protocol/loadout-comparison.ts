@@ -18,7 +18,8 @@ export interface LoadoutComparison {
     name?: string;
     result: EvaluationResult;
     delta: number | null;
-    points: { id: string; before: number | null; after: number | null; delta: number | null }[];
+    modeledDelta?: number;
+    points: { id: string; before: number | null; after: number | null; delta: number | null; modeledDelta?: number }[];
     sources: { added: string[]; removed: string[]; builds: { actorId: string; fields: (keyof Build)[] }[] };
   }[];
 }

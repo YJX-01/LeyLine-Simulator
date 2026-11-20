@@ -43,6 +43,8 @@ export function evaluateStateMachine(program: CompiledCalculation, contextInput:
   if (!data.features.includes('event-state-v1')) return invalid('unsupported-feature', '/requiredFeatures', '运行闭包未声明事件状态能力。');
   const owner = context.actors.find(actor => actor.id === request.ownerId);
   if (!owner || !context.targets.some(target => target.id === request.targetId)) return invalid('stale-reference', '/ownerId', '状态机队员或目标引用已失效。');
+  const { ascension, constellation } = owner;
+  if (ascension === null || constellation === null) return invalid('missing-dependency', '/ownerId', '动作状态需要队员的突破和命座。');
   const validation = validateContextDefinitions(data, context);
   if (validation.diagnostics.length) return invalid(validation.diagnostics[0].code, validation.diagnostics[0].jsonPointer, validation.diagnostics[0].message);
   for (const key of ['visits', 'depth', 'trace'] as const) {
@@ -162,7 +164,7 @@ export function evaluateStateMachine(program: CompiledCalculation, contextInput:
       const transitions = machine.transitions.filter(transition => transition.phase === phase).sort((a, b) => a.priority - b.priority);
       for (const transition of transitions) {
         if (session.enter(origin, transition.id, 1)) break;
-        if (transition.activation.ascension !== undefined && owner.ascension < transition.activation.ascension || transition.activation.constellation !== undefined && owner.constellation < transition.activation.constellation) continue;
+        if (transition.activation.ascension !== undefined && ascension < transition.activation.ascension || transition.activation.constellation !== undefined && constellation < transition.activation.constellation) continue;
         const matches = eventMatches(transition.selector, event, owner.id, request.targetId);
         if (matches === false) continue;
         const predicate = legal ?? (matches === null ? session.missing(origin, transition.id + '.event', { kind: 'boolean' }, 'event', '/context/events')
