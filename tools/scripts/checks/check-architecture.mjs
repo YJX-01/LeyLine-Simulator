@@ -120,7 +120,7 @@ for (const path of files) {
       const argument = node.arguments[0];
       if (argument && ts.isStringLiteralLike(argument)) checkImport(path, argument.text, true);
       // Tooling resolves Vite from its owning workspace without hoisting it to the root.
-      else if (['tools/scripts/data/evaluate-project.mjs', 'tests/performance/timeline.mjs', 'tools/lib/load-content-schema.mjs'].includes(path) && argument?.getText(ast) === "pathToFileURL(require.resolve('vite')).href") {
+      else if (['tests/performance/timeline.mjs', 'tools/lib/load-content-schema.mjs'].includes(path) && argument?.getText(ast) === "pathToFileURL(require.resolve('vite')).href") {
         checkImport(path, 'vite', true);
       } else fail(path, 'computed module imports require an explicit architecture-check rule');
     }

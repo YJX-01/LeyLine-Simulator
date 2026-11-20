@@ -1,12 +1,10 @@
-import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
-import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schemas from '@leyline/schema';
-import { collectCalculationRoots, compileCharacterActions, createStructuredCombatContext, describeCalculationTemplate, evaluateBoundFormula, evaluateStateMachine,
+import { compileCharacterActions, createStructuredCombatContext, evaluateBoundFormula, evaluateStateMachine,
   prepareStructuredBuilds, type PreparedStructuredTeam } from '@leyline/engine';
-import { getArtifactMain, getCharacterActions } from '@leyline/game-data';
-import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
+import { getArtifactMain, getCharacter, getCharacterActions, getWeapon } from '@leyline/game-data';
 
 const read = (path: string) => readCalculationData(path);
 const quantity = (unit: schemas.CalculationUnit, value: number): schemas.Value => ({ kind: 'quantity', unit, value });
@@ -20,13 +18,10 @@ describe('Vesna source actions and fixed event-state execution', () => {
   const teams = new Map<string, PreparedStructuredTeam>();
   beforeAll(async () => {
     library = readCalculationLibrary();
-    const prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library,
-      manifest: catalogInventory(), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
-      retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
-    character = await prepare.character(read('src/game-data/data/characters/vesna.json'));
+    character = await getCharacter('vesna');
     actions = (await getCharacterActions({ namespace: character.namespace, id: character.id, revision: character.revision }))!;
     build = { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: character.dataVersion, character,
-      weapon: await prepare.weapon(read('src/game-data/data/weapons/favoniussword.json')), artifacts: [], sets: [], artifactMain: await getArtifactMain(),
+      weapon: await getWeapon('favoniussword'), artifacts: [], sets: [], artifactMain: await getArtifactMain(),
       level: 90, ascension: 6, constellation: 0, talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   });

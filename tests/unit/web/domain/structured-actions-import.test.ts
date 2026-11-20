@@ -1,22 +1,15 @@
-import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
-import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
-import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schemas from '@leyline/schema';
-import { collectCalculationRoots, compileCharacterActions, describeCalculationTemplate } from '@leyline/engine';
-import { getCharacterActions } from '@leyline/game-data';
-import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
+import { compileCharacterActions } from '@leyline/engine';
+import { getCharacter, getCharacterActions } from '@leyline/game-data';
 import { applyActionsImport, exportActionsSnapshot, prepareActionsImport, preparedActionsSnapshot } from '../../../../src/web/src/domain/structured-actions-import';
 
-const read = (path: string) => readCalculationData(path);
 const format = (value: unknown) => JSON.stringify(value, null, 2) + '\n';
 
 describe('current optional action companion transactions from actual Vesna metadata', () => {
   let character: schemas.StructuredCharacterDefinition, original: schemas.CharacterActionsDefinition;
   beforeAll(async () => {
-    const prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library: readCalculationLibrary(), manifest: catalogInventory(),
-      hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'), retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
-    character = await prepare.character(read('src/game-data/data/characters/vesna.json'));
+    character = await getCharacter('vesna');
     original = (await getCharacterActions({ namespace: character.namespace, id: character.id, revision: character.revision }))!;
   });
   function custom() { const file = structuredClone(original); file.identity.namespace = 'custom:vesna-actions-json-check'; return file; }

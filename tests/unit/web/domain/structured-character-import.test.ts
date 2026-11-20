@@ -1,25 +1,18 @@
-import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
-import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schemas from '@leyline/schema';
-import { collectCalculationRoots, describeCalculationTemplate, compileStructuredCharacter, evaluateStructuredHit, prepareStructuredBuilds } from '@leyline/engine';
-import { getArtifactMain } from '@leyline/game-data';
-import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
+import { compileStructuredCharacter, evaluateStructuredHit, prepareStructuredBuilds } from '@leyline/engine';
+import { getArtifactMain, getCharacter, getWeapon } from '@leyline/game-data';
 import { applyCharacterImport, exportCharacterSnapshot, prepareCharacterImport, prepareResolvedCharacterImport, preparedCharacterSnapshot } from '../../../../src/web/src/domain/structured-character-import';
 
-const root = new URL('../../../../', import.meta.url);
-const read = (path: string) => readCalculationData(new URL(path, root));
 const format = (value: unknown) => JSON.stringify(value, null, 2) + '\n';
 
 describe('current self-contained character import transactions', () => {
   let original: schemas.StructuredCharacterDefinition, weapon: schemas.StructuredWeaponDefinition, main: schemas.StructuredBuild['artifactMain'];
-  let prepare: ReturnType<typeof createContentLinker>;
   beforeAll(async () => {
-    prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library: readCalculationLibrary(), manifest: catalogInventory(),
-      hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'), retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
-    original = await prepare.character(read('src/game-data/data/characters/kaeya.json'));
-    weapon = await prepare.weapon(read('src/game-data/data/weapons/favoniussword.json')); main = await getArtifactMain();
+    original = await getCharacter('kaeya');
+    weapon = await getWeapon('favoniussword');
+    main = await getArtifactMain();
   });
   // Actual catalog metadata under an explicitly local namespace, never an invented game character.
   function custom(source = original): schemas.StructuredCharacterDefinition {
@@ -73,7 +66,7 @@ describe('current self-contained character import transactions', () => {
   });
 
   it.each(['missing', 'unit'] as const)('rejects a %s Yun Jin effect parameter before import can be applied', async change => {
-    const yunjin = await prepare.character(read('src/game-data/data/characters/yunjin.json'));
+    const yunjin = await getCharacter('yunjin');
     const current = [yunjin], before = format(current), file = custom(yunjin);
     const burst = file.talents.find(talent => talent.id === 'yunjin.burst')!;
     // Transparent error derivatives of Flying Cloud's real param2 binding; no player data is constructed.
@@ -95,7 +88,7 @@ describe('current self-contained character import transactions', () => {
     expect(invalid.ok).toBe(false);
     expect(invalid.diagnostics).toContainEqual(expect.objectContaining({ code: 'missing-dependency', jsonPointer: expect.stringMatching(/^\/calculation\/bundle\/attributes\/\d+\/base\/parameterId$/) }));
 
-    const yunjin = await prepare.character(read('src/game-data/data/characters/yunjin.json'));
+    const yunjin = await getCharacter('yunjin');
     const effect = yunjin.calculation.bundle.effects.find(effect => effect.identity.id === 'yunjin.flying-cloud-base.base')!;
     if (effect.value.kind !== 'formula') throw new Error('Expected adopted Flying Cloud formula.');
     effect.value.inputs.rate = { kind: 'talent-parameter', actor: { role: 'recipient' }, skillId: 'kaeya.skill', parameterId: 'param1', type: { kind: 'quantity', unit: 'scalar' } };

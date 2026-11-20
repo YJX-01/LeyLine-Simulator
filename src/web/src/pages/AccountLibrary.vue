@@ -216,7 +216,7 @@ function inventoryEquipment(entry: AccountCharacter) {
 }
 @media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:10px 7px 12px; }}
 
-.account-empty { padding:40px 20px; border:1px dashed var(--line); border-radius:12px; text-align:center; }.legacy-inventory { margin-top:24px; }.account-library { margin: 0 30px; color: var(--text, var(--ink)); }
+.account-library { margin: 0 30px; color: var(--text, var(--ink)); }
 .account-toolbar { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
 .account-toolbar label { min-width: 160px; }.account-toolbar span, p { font-size:var(--font-body); line-height: 1.8; }
 label { font-size:var(--font-body); display: grid; gap: 7px; } input, select { min-width: 0; width: 100%; box-sizing: border-box; }

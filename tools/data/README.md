@@ -12,7 +12,7 @@
 
 正式内容在[游戏内容包](../../src/game-data/README.md)，资源在[资源根](../../assets/README.md)。原始玩家资料由检查直接读取忽略目录.references，运行报告进入artifacts。
 
-讨论过程与已结束方案通过Git查询。整理前原文可用 `git show d497a7e:docs/<原路径>` 检索，重整前完整快照为37ab994。最终结论维护在[主题文档](../../docs/README.md)及对应模块说明中。
+主题规范和已采用决定见[文档导航](../../docs/README.md)及各模块 README。整理前的调查原文可用 `git show d497a7e:docs/<原路径>` 查阅。
 
 ## 参考项目与资料入口
 
@@ -158,9 +158,9 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ### 计算支持与内容绑定
 
-实体calculation字段与data/calculation两个公共库维护模板配置和数据，固定算法在engine的TS模板中维护；来源随拥有配置的bundle保存，装配器拒绝重复所有权；防御/抗性常数采用固定 KQM 的 [公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)，TS增幅/激化常数与现有reaction-facts数值直接比较；其他固定算法常数经describeCalculationTemplate直接核对，JSON不能覆盖通用算法。完整目录的审阅清单由 pnpm data:coverage 生成，未闭合条目保持 unavailable，不沿用旧支持声明作为新运行时验收。
+数值审计核对 TS 固定算法和 JSON 参数。防御与抗性常数采用 KQM 公式事实，增幅与激化采用 reaction-facts，模板常数通过 `describeCalculationTemplate` 核对。[KQM 公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)
 
-pnpm data:coverage --candidates对当前正式来源和采用记录作只读候选投影，并以共同编译器核对闭包；报告标明review-candidates。逐输出列出证书命座范围、来源和缺口，完整命座、角色与装备条目独立判断。pnpm data:coverage --require-complete只接受正式内容的完整闭合；候选的有界输出不提升为全目录通过，外部declared证据不视为本地采用。报告格式和入口见[内容包说明](../../src/game-data/README.md)。
+`pnpm data:coverage --json` 编译正式目录的依赖闭包，按输出列出证书命座范围、来源和缺口。完整命座、角色和装备分支分别判断，外部 `declared` 证据仍待本地采用，未闭合条目标记 `unavailable`。报告同时包含命中绑定和效果，`--require-complete` 用于全目录验收。[内容包说明](../../src/game-data/README.md)
 
 共同效果的[采用对应](sources/calculation-effects/retained-rules.json)关联现有内容规则、静态修饰与新的直接JSON定义。[固定来源字段](sources/calculation-effects/catalog-facts.json)保留原精炼字符串和套装效果文本；数值审计直接比较所有精炼档、静态数值、被动阈值/上限和持续时间。百分比按十进制指数解析为比例，避免转换时增加一次二进制除法舍入。绑定、属性、状态及捕获组件的独立计算检查见tests/unit/engine/calculation/context.test.ts；这些明确计算设定不声称为玩家配装或实录战斗。
 
@@ -168,9 +168,9 @@ tests/unit/engine/calculation/reaction-events.test.ts按真实技能参数独立
 
 tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行者及兼容武器的实际目录成长值，独立核算配装绑定的星扩散贡献、逐状态排序和换装重算；黎明神剑按精一14%暴击率及生命阈值验证条件读取。独立/联合模型、未知资格、捕获协议派生、事件合计与共享预算分别检查。捕获协议派生不宣称星扩散实际采用该捕获策略，这些组件检查不提升完整角色覆盖。
 
-[普通输出采用范围](sources/calculation-hits/ordinary-bindings.json)固定来源版本、明确命中身份及证书命座范围，不把旧supported标记转为新运行时证明。新v3配装入口逐项对照固定参数表独立核算；等级加级、条件暴击、增幅、HP转攻击、真实库存共享和未知队友机制分别检查。具体脚本为tests/unit/engine/calculation/build-context.test.ts。
+[普通输出采用范围](sources/calculation-hits/ordinary-bindings.json)记录固定来源、命中身份及证书命座范围。`tests/unit/engine/calculation/build-context.test.ts` 用固定参数表核算天赋等级加成、条件暴击、增幅、生命转攻击、真实库存共享和未知队友机制。
 
-正式v3目录包含154份角色与形态、256份武器和63份套装。当前编译闭合报告为4367项，116项完整、4251项尚缺支持，106个输出有明确采用范围，定义校验无失败。106个输出含71个普通输出及35个薇斯纳输出。`pnpm data:coverage`按当前目录重新统计，`--require-complete`用于全目录验收。tests/integration/structured-content.test.mjs逐份核对闭包和原始数值。
+`tests/integration/calculation-coverage.test.mjs` 检查目录加载后保留原始数值、命中和解锁分支，并核对覆盖证书缺失时的报告。
 
 [星伤命中采用范围](sources/calculation-hits/stellar-bindings.json)登记薇斯纳的状态、单段规则、来源和C0–C6边界。tests/unit/engine/calculation/stellar-character.test.ts从固定成长与原天赋参数独立推导856组可用条件，另检查未知或不满足条件、层数越界、无突破门槛的星耀祝礼、队友元素身份和离线闭包。角色JSON的talents.hits集中维护34个命中及35个输出。
 
@@ -184,13 +184,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 月/星公式按 [KQM原图与符号记录](sources/kqm-web/2026-11-15/reaction-formulas.json)维护直接/反应分支、固定加值插入点及独立乘区，精通比例以小数存储。原图采集在忽略的审阅目录；纯公式组件的独立核算与实体绑定、事件及多人聚合的覆盖分别报告。系统验收按公式完整性、全目录覆盖度与软件检查执行，开发者后续手动进行实际游戏测试。
 
-逐项定义以 src/game-data/data 为准，`node tools/scripts/data/audit-damage-paths.mjs` 输出当前绑定摘要。
-
 同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益。类别依据为[瓦雷莎天赋 combat3 原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/varesa.json)。独立计算器的普通直伤试算保留武器、套装和角色机制缺口。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
-
-#### 已审阅单次查询
-
-圣遗物当前实物范围、逐星级资料与接入缺口见[稀有度调查](#圣遗物稀有度调查)。
 
 #### 分项输入
 

@@ -1,12 +1,11 @@
-import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
-import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schemas from '@leyline/schema';
-import { collectCalculationClosure, collectCalculationRoots, compileStructuredCharacter, createStructuredCombatContext, describeCalculationTemplate,
+import { collectCalculationClosure, collectCalculationRoots, compileStructuredCharacter, createStructuredCombatContext,
   evaluateBoundFormula, evaluateStructuredHit, prepareStructuredBuilds, type PreparedStructuredTeam } from '@leyline/engine';
-import { getArtifactMain } from '@leyline/game-data';
-import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
+import { DATA_VERSION, getArtifactMain, getCharacter, getWeapon } from '@leyline/game-data';
+import { createContentLinker } from '../../../../src/game-data/src/link-content.mjs';
 
 const read = (path: string) => readCalculationData(path);
 const quantity = (unit: Extract<schemas.Value, { kind: 'quantity' }>['unit'], value: number): schemas.Value => ({ kind: 'quantity', unit, value });
@@ -23,17 +22,13 @@ const curves = read('tools/data/sources/catalog/genshin-db/character-curves.json
 describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
   const characters = new Map<string, schemas.StructuredCharacterDefinition>(), teams = new Map<number, PreparedStructuredTeam>();
   let main: schemas.ArtifactMainTable, weapon: schemas.StructuredWeaponDefinition;
-  let prepare: ReturnType<typeof createContentLinker>;
   beforeAll(async () => {
     main = await getArtifactMain();
-    prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library: readCalculationLibrary(),
-      manifest: catalogInventory(), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
-      retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
-    for (const id of ['vesna', 'kaeya', 'xingqiu']) characters.set(id, await prepare.character(read('src/game-data/data/characters/' + id + '.json')));
-    weapon = await prepare.weapon(read('src/game-data/data/weapons/favoniussword.json'));
+    for (const id of ['vesna', 'kaeya', 'xingqiu']) characters.set(id, await getCharacter(id));
+    weapon = await getWeapon('favoniussword');
   });
   function build(id: string, rank = 0): schemas.StructuredBuild {
-    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: catalogInventory().dataVersion,
+    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: DATA_VERSION,
       character: characters.get(id)!, weapon, sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: rank,
       talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
@@ -153,13 +148,14 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     expect(Object.hasOwn(exported.calculation, 'hitTemplates')).toBe(false); expect(JSON.stringify(character)).toBe(before);
   });
 
-  it('links a declared binding by full identity independent of member order and rejects a missing dependency', async () => {
+  it('links a declared binding by full identity independent of member order and rejects a missing dependency', () => {
+    const linker = createContentLinker({ schemas, collectCalculationRoots, library: readCalculationLibrary() });
     const authored = read('src/game-data/data/characters/vesna.json'), base = authored.talents[0].hits[0].base;
     const { revision, id, namespace } = base.formula;
     base.formula = { revision, id, namespace };
-    expect(compileStructuredCharacter(await prepare.character(authored)).ok).toBe(true);
+    expect(compileStructuredCharacter(linker.character(authored)).ok).toBe(true);
     base.formula.revision = 'missing';
-    await expect(prepare.character(authored)).rejects.toThrow();
+    expect(() => linker.character(authored)).toThrow();
   });
 
   it('can prove a disabled C6 output even when an earlier condition is unknown', () => {

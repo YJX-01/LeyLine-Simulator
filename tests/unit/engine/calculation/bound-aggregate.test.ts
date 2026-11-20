@@ -1,11 +1,9 @@
-import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
-import { readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schemas from '@leyline/schema';
-import { collectCalculationRoots, createStructuredCombatContext, describeCalculationTemplate, evaluateBoundAggregate, evaluateDamageQuery, prepareStructuredBuilds } from '@leyline/engine';
-import { getArtifactMain } from '@leyline/game-data';
-import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
+import { createStructuredCombatContext, evaluateBoundAggregate, evaluateDamageQuery, prepareStructuredBuilds } from '@leyline/engine';
+import { DATA_VERSION, getArtifactMain, getCharacter, getWeapon } from '@leyline/game-data';
 
 const read = (path: string) => readCalculationData(path);
 const ref = (id: string): schemas.DefinitionRef => ({ namespace: 'builtin', id, revision: '1' });
@@ -19,18 +17,14 @@ const numeric = (value: schemas.EvaluatedValue): number => { expect(value.state)
 // These checks cover contributor assembly, not full Vesna/Traveler kits or observed reaction sequences.
 describe('build-bound stellar contributions and per-state ranking', () => {
   let library: schemas.CalculationBundle, main: schemas.ArtifactMainTable;
-  let prepare: ReturnType<typeof createContentLinker>;
   const characters = new Map<string, schemas.StructuredCharacterDefinition>(), weapons = new Map<string, schemas.StructuredWeaponDefinition>();
   beforeAll(async () => {
     library = readCalculationLibrary(); main = await getArtifactMain();
-    prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, library,
-      manifest: catalogInventory(), hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'),
-      retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: read('tools/data/sources/character-text/base-and-manekin.json') });
-    for (const id of ['vesna', 'aether-cryo']) characters.set(id, await prepare.character(read('src/game-data/data/characters/' + id + '.json')));
-    for (const id of ['favoniussword', 'ironsting', 'harbingerofdawn']) weapons.set(id, await prepare.weapon(read('src/game-data/data/weapons/' + id + '.json')));
+    for (const id of ['vesna', 'aether-cryo']) characters.set(id, await getCharacter(id));
+    for (const id of ['favoniussword', 'ironsting', 'harbingerofdawn']) weapons.set(id, await getWeapon(id));
   });
   function build(id: string, weaponId: string): schemas.StructuredBuild {
-    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: 'genshin-db-8e5badd-content-v2', character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }

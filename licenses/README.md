@@ -11,6 +11,6 @@
 
 更新依赖或补丁后运行 `pnpm licenses:capture`；仅同步网页副本运行 `pnpm licenses:sync`；校验快照和分发副本运行 `pnpm licenses:check`。生成器读取已安装包及其原始许可文件。
 
-`src/web/public/licenses/` 是分发副本，会进入网页、子路径构建和桌面渲染器。Vite 构建另生成 `licenses/bundled-packages.json`，按实际进入产物的模块列包；它与完整开发依赖清单用途不同。Electron 自带的 `LICENSE` 和 `LICENSES.chromium.html` 由桌面打包器原样保留在应用根目录。
+`.cache/public/licenses/` 保存分发副本，供网页、子路径构建和桌面渲染器使用。Vite 另生成 `licenses/bundled-packages.json`，列出进入产物的包。桌面打包器将 Electron 自带的 `LICENSE` 和 `LICENSES.chromium.html` 原样保留在应用根目录。
 
 完整清单覆盖开发、测试和可选平台二进制；实际网页模块另见构建清单。

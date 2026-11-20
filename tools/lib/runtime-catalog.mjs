@@ -1,7 +1,7 @@
 import { catalogInventory, readCalculationData } from './catalog-data.mjs';
 import { readContentSource } from './content-source.mjs';
 import { readCalculationLibrary } from './calculation-library.mjs';
-import { createContentLinker } from './content-linking.mjs';
+import { createContentLinker } from '../../src/game-data/src/link-content.mjs';
 import { loadContentSchema } from './load-content-schema.mjs';
 
 const data = new URL('../../src/game-data/data/', import.meta.url);

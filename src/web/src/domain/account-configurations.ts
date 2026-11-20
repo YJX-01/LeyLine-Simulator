@@ -24,19 +24,6 @@ export function accountConfigurations(account:LocalAccount,saved:readonly SavedC
   });
 }
 
-export function artifactCombinations(configurations:readonly AccountConfiguration[]) {
-  const groups=new Map<string,{id:string;configurations:AccountConfiguration[]}>();
-  for(const configuration of configurations) {
-    const ids=accountSlots.map(slot=>configuration.character.equipment[slot] ?? '');
-    if(!ids.some(Boolean))continue;
-    const id=JSON.stringify(ids);
-    const group=groups.get(id) ?? {id,configurations:[]};
-    group.configurations.push(configuration);groups.set(id,group);
-  }
-  return [...groups.values()];
-}
-
-
 /** Validate snapshot identity against current physical inventory before adopting it. */
 export function preparePreferredConfiguration(account:LocalAccount,configuration:AccountConfiguration) {
   if(!configuration.presetId || configuration.source.id!==account.id)throw new Error('请选择当前账号的备选配置。');

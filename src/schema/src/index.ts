@@ -25,7 +25,6 @@ export * from './content/combat-rules';
 export * from './content/reactions';
 export * from './content/talent';
 export * from './content/character';
-export * from './content/damage-coverage';
 export * from './content/weapon';
 export * from './content/artifact-set';
 export * from './account/artifact';

@@ -1,20 +1,8 @@
 import { APP_VERSION } from '@leyline/schema/version';
 import { definitionLibrarySchema, expressionReferences, requiresDependencyDefinition, type DefinitionLibraryFile, type Project } from '@leyline/schema';
 
-export type ContentDefinition = Project['definitions'][number];
+type ContentDefinition = Project['definitions'][number];
 export type {DefinitionLibraryFile} from '@leyline/schema';
-export const cloneDefinition = (definition: ContentDefinition): ContentDefinition => JSON.parse(JSON.stringify(definition));
-export function createDefinition(name: string, kind: 'damage' | 'equipment' | 'character' = 'damage'): ContentDefinition {
-  const definition: ContentDefinition = { id: crypto.randomUUID(), name: name.trim() || '自定义内容', version: '1',
-    source: { kind: 'user', reference: 'local', verified: false }, nodes: [], effects: [] };
-  if (kind === 'damage') {
-    definition.nodes = [{ id: 'attack', op: 'input', key: 'attack', unit: 'attack' },
-      { id: 'multiplier', op: 'constant', quantity: { value: 2, unit: 'scalar' } },
-      { id: 'base', op: 'multiply', left: 'attack', right: 'multiplier' }];
-    definition.damage = 'base';
-  }
-  return definition;
-}
 export function parseDefinitionLibrary(input: unknown): DefinitionLibraryFile {
   const parsed=definitionLibrarySchema.safeParse(input);
   if(!parsed.success)throw new Error('内容定义库格式或版本不受支持，现有资料保持不变。');
@@ -24,7 +12,7 @@ export function parseDefinitionLibrary(input: unknown): DefinitionLibraryFile {
   for (const definition of definitions) validateDefinitionReferences(definition, definitions);
   return { schemaVersion: APP_VERSION, kind: 'definition-library', id: value.id, name: value.name, definitions };
 }
-export function validateDefinitionReferences(definition: ContentDefinition, definitions: ContentDefinition[]): void {
+function validateDefinitionReferences(definition: ContentDefinition, definitions: ContentDefinition[]): void {
   const nodes = new Map(definition.nodes.map(node => [node.id, node]));
   if (nodes.size !== definition.nodes.length || new Set(definition.effects.map(effect => effect.id)).size !== definition.effects.length) throw new Error('节点或效果标识重复。');
   const visited = new Set<string>();
@@ -63,9 +51,9 @@ export function copyDefinitionToProject(project: Project, input: ContentDefiniti
       collect(dependency);
     }
     if (project.calculationProfile === 'direct' && requiresDependencyDefinition(definition)) {
-      throw new Error('此定义需要 依赖求值配置。请先在队伍页明确采用 依赖求值配置，再复制定义；旧项目不会自动升级。');
+      throw new Error('复制此定义需要项目使用依赖求值配置。');
     }
-    pending.push(cloneDefinition(definition));
+    pending.push(JSON.parse(JSON.stringify(definition)) as ContentDefinition);
   };
   collect(input);
   project.definitions.push(...pending);

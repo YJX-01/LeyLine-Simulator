@@ -1,11 +1,9 @@
-import { catalogInventory, readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
-import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
+import { readCalculationData } from '../../../../tools/lib/catalog-data.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as schemas from '@leyline/schema';
-import { collectCalculationRoots, describeCalculationTemplate, createStructuredCombatContext, evaluateBoundFormula, evaluateStructuredHit, prepareStructuredBuilds, resolveBuild } from '@leyline/engine';
-import { getArtifactMain, getArtifactSet, loadCatalog } from '@leyline/game-data';
-import { createContentLinker } from '../../../../tools/lib/content-linking.mjs';
+import { createStructuredCombatContext, evaluateBoundFormula, evaluateStructuredHit, prepareStructuredBuilds, resolveBuild } from '@leyline/engine';
+import { DATA_VERSION, getArtifactMain, getArtifactSet, getCharacter, getWeapon, loadCatalog } from '@leyline/game-data';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { confirmMonaImport, previewMonaImport } from '../../../../src/web/src/domain/mona-import';
 
@@ -20,21 +18,19 @@ const numeric = (result: schemas.StructuredDamageEvaluation): number => {
 };
 
 describe('current snapshot assembly and parameter-bound catalog outputs', () => {
-  let prepare: ReturnType<typeof createContentLinker>, main: schemas.StructuredBuild['artifactMain'];
+  let main: schemas.StructuredBuild['artifactMain'];
   const characters = new Map<string, schemas.StructuredCharacterDefinition>(), weapons = new Map<string, schemas.StructuredWeaponDefinition>();
-  const manifest = catalogInventory(), text = read('tools/data/sources/character-text/base-and-manekin.json');
+  const text = read('tools/data/sources/character-text/base-and-manekin.json');
   const upstream = read('tools/data/sources/catalog/genshin-db/characters.json'), curves = read('tools/data/sources/catalog/genshin-db/character-curves.json');
   const talents = read('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json');
   const proud = new Map(read(text.proudSkillsFile).map((row: { proudSkillGroupId: number; level: number; paramList: number[] }) => [`${row.proudSkillGroupId}/${row.level}`, row]));
   beforeAll(async () => {
     main = await getArtifactMain();
-    prepare = createContentLinker({ schemas, collectCalculationRoots, describeCalculationTemplate, manifest, library: readCalculationLibrary(),
-      hitReviews: read('tools/data/sources/calculation-hits/ordinary-bindings.json'), retainedRules: read('tools/data/sources/calculation-effects/retained-rules.json'), textBindings: text });
-    for (const id of new Set(reviews.map(review => review.characterId))) characters.set(id, await prepare.character(read('src/game-data/data/characters/' + id + '.json')));
-    for (const id of ['favoniussword', 'harbingerofdawn', 'primordialjadecutter']) weapons.set(id, await prepare.weapon(read('src/game-data/data/weapons/' + id + '.json')));
+    for (const id of new Set(reviews.map(review => review.characterId))) characters.set(id, await getCharacter(id));
+    for (const id of ['favoniussword', 'harbingerofdawn', 'primordialjadecutter']) weapons.set(id, await getWeapon(id));
   });
   function build(id: string, weaponId = 'favoniussword'): schemas.StructuredBuild {
-    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: manifest.dataVersion, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: structuredClone(main), level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }
@@ -77,9 +73,9 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     confirmMonaImport(account, await previewMonaImport(readFileSync('.references/artifacts_mona.json', 'utf8'), account, catalog.sets, main));
     const original = account.artifacts.find(item => item.real?.slot === 'plume' && item.real.level === 20
       && item.real.substats.every(sub => sub.value <= (schemas.artifactSubstatLimits[4][sub.stat] ?? 0)))!.real!;
-    const set = await prepare.set(read('src/game-data/data/artifact-sets/' + original.setId + '.json'));
+    const set = await getArtifactSet(original.setId);
     const flower = account.artifacts.find(item => item.real?.slot === 'flower' && item.real.setId !== original.setId)!.real!;
-    const flowerSet = await prepare.set(read('src/game-data/data/artifact-sets/' + flower.setId + '.json'));
+    const flowerSet = await getArtifactSet(flower.setId);
     const levels = read('tools/data/sources/lunagc/b0501c5d89767ead5f647869a2412521447f7682/ReliquaryLevelExcelConfigData.json');
     for (const rarity of [4, 5] as const) {
       const piece = structuredClone(original);
@@ -104,7 +100,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
       if (rarity === 4) {
         const wrongSlot = structuredClone(input);
         wrongSlot.artifacts[0].setId = 'prayersforwisdom';
-        wrongSlot.sets[0] = await prepare.set(read('src/game-data/data/artifact-sets/prayersforwisdom.json'));
+        wrongSlot.sets[0] = await getArtifactSet('prayersforwisdom');
         const rejected = prepareStructuredBuilds([{ id: 'actor', build: wrongSlot }]);
         expect(rejected.ok).toBe(false);
         expect(rejected.diagnostics.some(diagnostic => diagnostic.message.includes('合法集合'))).toBe(true);
@@ -182,7 +178,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
   });
 
   it('keeps unreviewed team mechanisms unknown and preserves stable identities for unreviewed catalog hits', async () => {
-    const input = build('kaeya'), teammate = build('kaeya'); teammate.character = await prepare.character(read('src/game-data/data/characters/bennett.json'));
+    const input = build('kaeya'), teammate = build('kaeya'); teammate.character = await getCharacter('bennett');
     const prepared = prepareStructuredBuilds([{ id: 'actor', build: input }, { id: 'teammate', build: teammate }]); expect(prepared.ok).toBe(true); if (!prepared.ok) return;
     const { setup, request } = setting('kaeya', 'kaeya.skill', 'kaeya.skill.param1'), result = evaluateStructuredHit(prepared.team, setup, request);
     expect(result.execution).toBe('partial'); expect(result.outputs[0].value.state).toBe('unknown');
@@ -195,7 +191,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
   });
 
   it('evaluates the actual Ayato ATK/HP base component with typed Namisen counts and skips an inactive HP term', async () => {
-    const id = 'kamisatoayato'; characters.set(id, await prepare.character(read('src/game-data/data/characters/' + id + '.json')));
+    const id = 'kamisatoayato'; characters.set(id, await getCharacter(id));
     const input = build(id), prepared = prepareStructuredBuilds([{ id: 'actor', build: input }]); expect(prepared.ok).toBe(true); if (!prepared.ok) return;
     const { setup, request, hit } = setting(id, id + '.skill', id + '.skill.param1'), context = createStructuredCombatContext(prepared.team, setup);
     const source = upstream[id].stats, hp = source.base.hp * curves[90][source.curve.hp] + source.promotion[6].hp;
@@ -220,7 +216,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     confirmMonaImport(account, await previewMonaImport(original, account, catalog.sets, main));
     const piece = account.artifacts.find(item => item.real?.slot === 'flower')!, real = piece.real!, sourceRef = 'authorized-mona-source';
     const artifact: schemas.StructuredBuild['artifacts'][number] = { ...real, inventory: { accountId: account.id, itemId: piece.id }, sourceRefs: [sourceRef] };
-    const set = await prepare.set(read('src/game-data/data/artifact-sets/' + real.setId + '.json'));
+    const set = await getArtifactSet(real.setId);
     const left = build('kaeya'), right = build('jean');
     for (const input of [left, right]) { input.artifacts = [structuredClone(artifact)]; input.sets = [structuredClone(set)]; input.sources.push({ id: sourceRef, kind: 'recording', reference: 'authorized-local-mona-original' }); }
     const prepared = prepareStructuredBuilds([{ id: 'actor', build: left }, { id: 'teammate', build: right }]); expect(prepared.ok, JSON.stringify(prepared.diagnostics)).toBe(true); if (!prepared.ok) return;

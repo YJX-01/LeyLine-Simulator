@@ -22,7 +22,7 @@ dist/
 .DS_Store
 *.log
 
-# Archived Python development outputs
+# Python tool outputs
 __pycache__/
 *.py[cod]
 .venv/

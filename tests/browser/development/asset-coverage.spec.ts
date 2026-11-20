@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+import type { CharacterMetadata } from '@leyline/schema';
 import { verifyImages } from '../../helpers/image-integrity';
 
 const manifest=JSON.parse(readFileSync('assets/manifest.json','utf8')) as {assets:{file:string}[]};
@@ -41,27 +42,31 @@ test('attribute choices distinguish fixed and percentage icons and resolve both 
     await expect(icon.locator('> img')).toHaveAttribute('src',new RegExp(`/assets/game/stats/${stat}\\.svg\\?v=`));
     await expect.poll(()=>icon.locator('> img').evaluate(image=>(image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth===128)).toBe(true);
   }
-  await page.screenshot({path:'artifacts/yatta-percent-correction/attribute-choices.png'});
   await page.keyboard.press('Escape');
   await dialog.getByRole('button',{name:'取消',exact:true}).click();
 });
 
-test('catalog forms and supplemented characters resolve skill and actual constellation artwork',async({page})=>{
+test('catalog forms and supplemented characters display their skill and constellation artwork', async ({ page }) => {
   test.setTimeout(90000);
-  for(const [id,name] of [['aether-anemo','空（风）'],['lumine-cryo','荧（冰）'],['manekin-pyro','奇偶·男性（火）'],['manekina-hydro','奇偶·女性（水）'],['mitya','米提亚'],['valeriy','瓦列里']]) {
-    // Static catalog preview only; no player cultivation, equipment or damage observations are created.
-    const character=JSON.parse(readFileSync(`src/game-data/data/characters/${id}.json`,'utf8'));
-    await page.goto('/');
-    await page.getByRole('button',{name:'手动添加',exact:true}).click();
-    const dialog=page.getByRole('dialog',{name:'手动添加角色',exact:true});
-    await dialog.getByLabel('搜索游戏角色',{exact:true}).fill(name);
-    const choice=dialog.getByRole('button',{name:`选择${name}`,exact:true});
-    await expect.poll(()=>choice.locator('.game-icon.characters > img:not(.element-badge)').evaluate(image=>(image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth>0)).toBe(true);
+  await page.goto('/');
+  await page.getByRole('button', { name: '手动添加', exact: true }).click();
+  const catalog = page.getByRole('dialog', { name: '手动添加角色', exact: true });
+  for (const id of ['aether-anemo', 'lumine-cryo', 'manekin-pyro', 'manekina-hydro', 'mitya', 'valeriy']) {
+    const character: CharacterMetadata = JSON.parse(readFileSync(`src/game-data/data/characters/${id}.json`, 'utf8'));
+    const name = character.identity.name;
+    await catalog.getByLabel('搜索游戏角色', { exact: true }).fill(name);
+    const choice = catalog.getByRole('button', { name: `选择${name}`, exact: true });
+    const decoded = (images: Element[]) => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0);
+    const portrait = choice.locator('.game-icon.characters > img:not(.element-badge)');
+    await expect(portrait).toHaveCount(1);
+    await expect.poll(() => portrait.evaluateAll(decoded)).toBe(true);
     await choice.click();
-    const editor=page.getByRole('dialog',{name,exact:true});
-    const icons=editor.locator('.talent-field .game-icon.skills,.constellation-strip .game-icon.constellations:not(.placeholder)');
-    await expect(icons).toHaveCount(character.talents.length+character.constellations.length);
-    await expect.poll(()=>icons.evaluateAll(nodes=>nodes.every(node=>!node.classList.contains('placeholder') && Array.from(node.querySelectorAll('img')).every(image=>image.complete && image.naturalWidth>0)))).toBe(true);
-    if(!character.constellations.length)await expect(editor.locator('.constellation-strip .game-icon.constellations > img')).toHaveCount(0);
+    const editor = page.getByRole('dialog', { name, exact: true });
+    const talents = editor.locator('.talent-field .game-icon.skills > img');
+    const constellations = editor.locator('.constellation-strip .game-icon.constellations > img');
+    await expect(talents).toHaveCount(character.talents.length);
+    await expect(constellations).toHaveCount(character.constellations.length);
+    await expect.poll(() => talents.or(constellations).evaluateAll(decoded)).toBe(true);
+    await editor.getByRole('button', { name: '返回角色列表', exact: true }).click();
   }
 });

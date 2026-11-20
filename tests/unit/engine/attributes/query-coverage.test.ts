@@ -2,7 +2,7 @@ import { packDocument } from '../../../../src/web/src/domain/content-document';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
-import { findDamageCoverage, type Build, type DamageRequest } from '@leyline/schema';
+import type { Build, DamageRequest } from '@leyline/schema';
 import { compareTimelineLoadouts, evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
 import { createDamageCalculation, calculatorRequest, parseDamageCalculator, prepareCalculatorContentUpdate } from '../../../../src/web/src/domain/damage-calculator';
 import { evaluateLoadoutComparison } from '../../../../src/web/src/domain/loadout-comparison';
@@ -121,7 +121,6 @@ describe('source-backed query coverage preserves all other guards', () => {
   it('does not reuse the Kaeya E proof for C1 normal/charged or C4 E', async () => {
     const build = await buildFor('kaeya', 'dullblade', 1);
     const normal = build.character.talents.find(talent => talent.category === 'normal')!;
-    expect(findDamageCoverage(build.character, 1, { skillId: normal.id, hitId: normal.hits[0].id })).toBeUndefined();
     const output = evaluateDamage(build, { ...selectCatalogHit(build, normal.id, 0), crit: 'expected', reaction: 'none' }, defaultEnemy());
     expect(output.value).toBeNull(); // C1 target Cryo condition/effect has not been implemented.
     expect(output.issues.some(issue => issue.code === 'unsupported')).toBe(true);

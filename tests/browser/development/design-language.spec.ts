@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import type { LocalAccount } from '@leyline/schema';
 import { test, expect } from '@playwright/test';
 
 async function expectReadableText(page:import('@playwright/test').Page) {
@@ -26,7 +27,7 @@ const source='.references/enka/official-example.json';
 test.skip(!existsSync(source),'Requires the saved actual Enka showcase.');
 
 test('shared real-character editor protects team drafts and keeps account independent',async({page})=>{
-  test.setTimeout(90000); // Seven sections, keyboard and draft flows, desktop/mobile screenshots.
+  test.setTimeout(90000);
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(source,'utf8'))}));
   await page.goto('/');
   await expect(page.getByTestId('workspace-nav-characters')).toBeVisible();
@@ -43,14 +44,9 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();await page.keyboard.press('Escape');
   const account=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
   await expectReadableText(page);
-  // UI format harness derived from the recorded public snapshot; not a player export or physical inventory.
-  const project=await page.evaluate(async raw=>{
-    // These are Vite browser URLs inside page.evaluate, not Node module imports.
-    const [{previewEnkaImport},{createAccount},{createEmptyProject},{addActorFromBuild},{packDocument}]=await Promise.all([
-      // @ts-expect-error Resolved by Vite in the browser.
-      import('/src/domain/enka-import.ts'),
-      // @ts-expect-error Resolved by Vite in the browser.
-      import('/src/domain/account.ts'),
+  // Derive an axis format case from the imported public showcase.
+  const project=await page.evaluate(async accountText=>{
+    const [{createEmptyProject},{addActorFromBuild},{packDocument,unpackDocument}]=await Promise.all([
       // @ts-expect-error Resolved by Vite in the browser.
       import('/src/domain/workbench-project.ts'),
       // @ts-expect-error Resolved by Vite in the browser.
@@ -58,11 +54,10 @@ test('shared real-character editor protects team drafts and keeps account indepe
       // @ts-expect-error Resolved by Vite in the browser.
       import('/src/domain/content-document.ts'),
     ]);
-    const preview=await previewEnkaImport(raw,'618285856',createAccount());
-    const recorded=preview.rows.find((row:{character:{name:string}})=>row.character.name==='安柏').character.showcase.build;
+    const imported = unpackDocument('account', JSON.parse(accountText!)) as LocalAccount;
+    const recorded = imported.characters.find(character => character.name === '安柏')!.showcase!.build;
     const project=createEmptyProject();addActorFromBuild(project,recorded,'安柏');return packDocument('axis',project);
-  },JSON.parse(readFileSync(source,'utf8')));
-  writeFileSync('artifacts/recorded-showcase-ui-harness.json',JSON.stringify(project));
+  },account);
   await page.getByTestId('workspace-nav-timeline').click();
   await page.getByLabel('导入轴项目文件',{exact:true}).setInputFiles({name:'recorded-showcase-ui-harness.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(project))});
   await page.getByTestId('workspace-nav-analysis').click();
@@ -93,10 +88,8 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await dialog.getByRole('button',{name:'保存',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'保存',exact:true})).toBeDisabled();
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(account);
-  await page.screenshot({path:'artifacts/unified-team-editor.png',fullPage:true});
   await page.setViewportSize({width:390,height:844});
   expect(await dialog.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);
-  await page.screenshot({path:'artifacts/unified-team-editor-mobile.png',fullPage:true});
   await page.setViewportSize({width:1280,height:720});
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'查看与修改配装',exact:true}).click();
@@ -130,12 +123,8 @@ test('shared real-character editor protects team drafts and keeps account indepe
     }).map(node=>node.getAttribute('aria-label')??node.tagName));
     expect(clipped).toEqual([]);
     await expectReadableText(page);
-    await page.screenshot({path:`artifacts/unified-${target}.png`,fullPage:true});
     await page.setViewportSize({width:390,height:844});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
     await expectReadableText(page);
-    await page.screenshot({path:`artifacts/unified-${target}-mobile.png`,fullPage:true});
   }
-  await page.setViewportSize({width:390,height:844});
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
 });

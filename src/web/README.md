@@ -8,13 +8,11 @@ Vue页面在src/pages，共享控件在components；domain提供无响应式依�
 - [结构化角色导入事务](#结构化角色导入事务)
 - [圣遗物统计口径](#圣遗物统计口径)
 
-本页集中维护使用说明、已确认交互、外部导入协议和圣遗物统计口径。
-
-色值由src/styles/palette.ts维护，字体及基础规则由base.css集中定义，公共控件由design-language.css及组件承担。pnpm test:ui:contracts检查真实渲染样式与焦点，pnpm test:ui检查真实库存操作；需要桌面交付时串行执行相应检查。
+色值在 `src/styles/palette.ts`，字体及基础规则在 `base.css`，公共控件在 `design-language.css` 和共享组件。真实库存、样式和焦点检查见[测试入口](../../tests/README.md)。
 
 通用设计见[视觉规范](../../docs/interface.md#视觉与交互规范)，模块依赖见[架构职责](../../docs/architecture.md#模块职责)。
 
-账号、轴项目、独立计算器、角色定义与定义库都使用软件版本，当前 schemaVersion 为字符串 "0.1.0"。项目类文件用 document 保存用户选择，content 按完整身份保存角色与装备，共享的圣遗物主词条表按数据版本保存一次。浏览器按用途分别保存数据，存储键统一以当前软件版本结尾。
+文件容器、内容索引和浏览器存储命名见[文件与存储契约](../schema/README.md#文件与存储契约)。
 
 ## 结构化角色导入事务
 

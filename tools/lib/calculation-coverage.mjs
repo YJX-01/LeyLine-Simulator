@@ -4,10 +4,7 @@ import { combatRuleAudit, damagePathAudit } from './damage-path-audit.mjs';
 const definitionKey = reference => JSON.stringify([reference.namespace, reference.id, reference.revision]);
 const structured = entity => entity.schemaVersion === APP_VERSION && entity.calculation?.bundle !== undefined;
 
-/** Audit supplied snapshots only. Candidate preparation is an explicit caller action, never a fallback. */
 export function calculationCoverage(manifest, characters, weapons, sets, options = {}) {
-  const material = options.material ?? 'canonical';
-  if (!['canonical', 'review-candidates'].includes(material)) throw new Error('Unknown calculation coverage material: ' + material);
   for (const [group, entities] of [['characters', characters], ['weapons', weapons], ['sets', sets]]) {
     if (JSON.stringify(entities.map(entity => entity.id)) !== JSON.stringify(manifest[group])) throw new Error(group + ': coverage entities must match the complete ordered manifest.');
   }
@@ -27,7 +24,7 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
   };
   const proof = (entity, references, scope) => {
     const bundle = entity.calculation?.bundle, gaps = [], validation = validations.get(entity);
-    if (!validation?.ok) gaps.push(...validation?.diagnostics.map(item => item.message) ?? ['此实体尚未采用新运行时契约。']);
+    if (!validation?.ok) gaps.push(...validation?.diagnostics.map(item => item.message) ?? ['缺少当前定义的编译校验。']);
     if (!references.length) gaps.push('缺少此查询范围的覆盖记录。');
     const records = new Map((bundle?.coverage ?? []).map(record => [definitionKey(record.identity), record]));
     const sources = new Set((bundle?.sources ?? []).map(source => source.id));
@@ -53,11 +50,11 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
   const full = scope => scope.resolution === 'complete' && (scope.constellations === null || scope.constellations.max === 6);
   for (const character of characters) {
     const context = proof(character, character.calculation?.contextCoverageRefs ?? [], { kind: 'context' });
-    const root = add('character', character, '', {}, { revision: character.revision, support: character.capabilities?.calculation }, false, [context]);
+    const root = add('character', character, '', {}, { revision: character.revision }, false, [context]);
     const branches = [];
     for (const [talentIndex, talent] of character.talents.entries()) {
       const pointer = `/talents/${talentIndex}`;
-      const talentEntry = add('talent', character, pointer, { skillId: talent.id }, { support: talent.support, noIndependentDamage: talent.noIndependentDamage ?? false });
+      const talentEntry = add('talent', character, pointer, { skillId: talent.id }, { noIndependentDamage: talent.noIndependentDamage ?? false });
       const hits = [];
       for (const [hitIndex, hit] of talent.hits.entries()) {
         const scopes = (hit.outputs ?? []).map(output => ({ outputId: output.id, formula: output.invocation.formula,
@@ -77,31 +74,31 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
     for (const [index, passive] of character.passives.entries()) {
       const complete = branchCovered(passive.id); branches.push(complete);
       add('passive', character, `/passives/${index}`, { passiveId: passive.id, unlockAscension: passive.unlockAscension },
-        { support: passive.support, ruleIds: passive.ruleIds ?? (passive.combatRules ?? []).map(rule => rule.id) }, complete);
+        { ruleIds: passive.ruleIds }, complete);
     }
     for (const [index, constellation] of character.constellations.entries()) {
       const complete = branchCovered('constellation:' + constellation.rank); branches.push(complete);
       add('constellation', character, `/constellations/${index}`, { rank: constellation.rank },
-        { support: constellation.support, talentBonuses: constellation.talentBonuses, ruleIds: constellation.ruleIds ?? (constellation.combatRules ?? []).map(rule => rule.id) }, complete);
+        { talentBonuses: constellation.talentBonuses, ruleIds: constellation.ruleIds }, complete);
     }
     if (full(context) && branches.every(Boolean)) { root.resolution = 'complete'; root.reason = '角色全部输出、被动与命座范围有已采用覆盖。'; }
   }
   for (const weapon of weapons) {
     const scope = proof(weapon, weapon.coverageRefs ?? [], { kind: 'equipment' });
     add('weapon', weapon, '', { refinements: weapon.rarity < 3 ? [1] : [1, 2, 3, 4, 5] },
-      { support: weapon.support, modifierCount: weapon.modifiers?.length ?? 0, passive: weapon.passive ?? null, ruleIds: weapon.calculation?.ruleIds ?? (weapon.combatRules ?? []).map(rule => rule.id) }, full(scope), [scope]);
+      { ruleIds: weapon.calculation.ruleIds }, full(scope), [scope]);
   }
   for (const set of sets) {
-    const root = add('set', set, '', {}, { source: set.source }), complete = [];
+    const root = add('set', set, '', {}, { sources: set.sources }), complete = [];
     for (const [index, effect] of set.effects.entries()) {
       const scope = proof(set, effect.coverageRefs ?? [], { kind: 'equipment', pieces: effect.pieces }); complete.push(full(scope));
       add('set-effect', set, `/effects/${index}`, { pieces: effect.pieces },
-        { support: effect.support, modifierCount: effect.modifiers?.length ?? 0, ruleIds: effect.ruleIds ?? (effect.combatRules ?? []).map(rule => rule.id) }, full(scope), [scope]);
+        { ruleIds: effect.ruleIds }, full(scope), [scope]);
     }
     if (complete.length && complete.every(Boolean)) { root.resolution = 'complete'; root.reason = '套装全部件数分支有已采用覆盖。'; }
   }
-  return { schemaVersion: APP_VERSION, dataVersion: manifest.dataVersion, material,
-    meaning: 'Compiled coverage certificates describe their exact adopted scope. Candidate scopes are not canonical adoption, full-kit acceptance or game observations. C0 scopes never close C0-C6 entries.',
+  return { schemaVersion: APP_VERSION, dataVersion: manifest.dataVersion, material: 'canonical',
+    meaning: 'Compiled certificates describe their adopted constellation range, inputs and sources.',
     summary: { characters: characters.length, weapons: weapons.length, sets: sets.length, entries: entries.length,
       complete: entries.filter(entry => entry.resolution === 'complete').length, unavailable: entries.filter(entry => entry.resolution === 'unavailable').length,
       supportedOutputs: entries.filter(entry => entry.kind === 'hit').reduce((sum, entry) => sum + entry.scopes.filter(scope => scope.resolution === 'complete').length, 0),

@@ -1,4 +1,4 @@
-import { buildSchema, findDamageCoverage, projectSchema, type Build, type DamageRequest, type Project } from '@leyline/schema';
+import { buildSchema, projectSchema, type Build, type DamageRequest, type Project } from '@leyline/schema';
 import { evaluateTimeline } from '@leyline/engine';
 import { nextRecordId } from './workbench-project';
 

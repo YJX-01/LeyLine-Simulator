@@ -18,10 +18,6 @@ export function formatGameStat(stat: StatKey, value: number | null | undefined, 
   const percent=ratioStat(stat);
   return `${(value*(percent?100:1)).toLocaleString('zh-CN',{useGrouping,minimumFractionDigits:percent?1:0,maximumFractionDigits:percent?1:0})}${percent?'%':''}`;
 }
-export function formatAccountStat(stat: StatKey, value: number | undefined, maximumFractionDigits = 1): string {
-  if (value == null || !Number.isFinite(value)) return '—';
-  return `${(value * (ratioStat(stat) ? 100 : 1)).toLocaleString('zh-CN', { maximumFractionDigits })}${ratioStat(stat) ? '%' : ''}`;
-}
 /** Validate a complete detached edit before replacing anything in the inventory. */
 export function applyAccountArtifact(account: LocalAccount, item: AccountArtifact, existingId?: string): void {
   const next = JSON.parse(JSON.stringify(account)) as LocalAccount;

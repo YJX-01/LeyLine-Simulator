@@ -10,10 +10,6 @@ export function setCombatStateInterval(project: Project, interval: CombatStateIn
   project.combatStates = parsed.combatStates;
 }
 
-export function removeCombatStateInterval(project: Project, id: string): void {
-  if (project.combatStates) project.combatStates = project.combatStates.filter(interval => interval.id !== id);
-}
-
 export function setDamageStateOverride(project: Project, recordId: string, actor: string, values: CombatConditions | undefined): void {
   const record = project.timeline.find(entry => entry.id === recordId);
   if (record?.kind !== 'damage' || !record.damage) throw new Error('请选择已有的技能命中记录。');

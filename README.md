@@ -8,11 +8,10 @@ Node.js 22.12+、pnpm 11.3.0，CI使用Node.js 24。在仓库根执行：
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm data:build
 pnpm dev
 ```
 
-pnpm build构建网页，pnpm desktop:build构建桌面。操作与交付见[应用指南](src/web/README.md#地脉工作台使用说明)及[交付步骤](tools/README.md#构建托管与本地交付操作)。
+`pnpm build` 构建网页，`pnpm desktop:build` 构建桌面。运行和交付步骤见[应用指南](src/web/README.md#地脉工作台使用说明)及[交付步骤](tools/README.md#构建托管与本地交付操作)。
 
 ## 目录
 
@@ -27,8 +26,7 @@ pnpm build构建网页，pnpm desktop:build构建桌面。操作与交付见[应
 | tools | [维护脚本、来源、审计及补丁](tools/README.md) |
 | docs | [设计思路、规范与流程](docs/README.md) |
 | licenses | 许可原件、清单与声明 |
-| archive | 已退出的实现与历史资料，隔离于默认命令 |
 | .references | 忽略的参考检出与获授权原件 |
 | .cache、artifacts | 可重建缓存、运行记录与本地交付包 |
 
-[产品方向](docs/product-direction.md)维护目标，[支持判定](docs/calculation.md#计算支持判定)维护方法，[具体计算支持](tools/data/README.md#计算支持与内容绑定)维护实体与路径。
+[产品方向](docs/product-direction.md)记录目标，[计算支持](tools/data/README.md#计算支持与内容绑定)记录已验证的路径与来源。旧实现和阶段文档可从 Git 的 `48936d8:archive` 查阅。

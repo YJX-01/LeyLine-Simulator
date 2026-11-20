@@ -1,22 +1,20 @@
 # 测试入口
 
-unit按schema、game-data、engine、web镜像实现，integration提供跨模块、文件及原始资料检查；browser区分development/production，desktop和performance独立。helpers提供操作与核对能力，真实输入直接读取.references获授权原件。
+`unit` 按包组织，`integration` 核对跨模块、文件和内容，`browser` 分开发和生产，`desktop` 和 `performance` 单独运行。辅助代码集中在 `helpers`。
 
 | 命令 | 用途 |
 | --- | --- |
-| pnpm test | Vitest单元及TypeScript集成 |
-| pnpm test:content | Node内容和文件检查 |
-| pnpm test:ui | Chromium单worker真实库存流程 |
-| pnpm test:ui:contracts | Chromium单worker实际样式、焦点与窄屏 |
-| pnpm test:e2e | 开发浏览器矩阵 |
-| pnpm test:production | 根路径与子路径生产检查 |
-| pnpm test:desktop、test:ui:desktop | 独立profile桌面库存与原生文件 |
-| pnpm perf:engine | 真实录存Build求值与空轴聚合 |
+| `pnpm test` | Vitest 单元及 TypeScript 集成检查 |
+| `pnpm test:content` | Node 内容、目录及文件工具检查 |
+| `pnpm test:ui` | Chromium 真实库存流程 |
+| `pnpm test:ui:contracts` | Chromium 真实样式、焦点与窄屏 |
+| `pnpm test:e2e` | 完整 Chromium 开发回归 |
+| `pnpm test:production` | 根路径和子路径的 Chromium 生产检查 |
+| `pnpm test:desktop` | 独立用户目录下的桌面库存和原生文件往返 |
+| `pnpm perf:engine`、`pnpm perf:ui` | 可独立运行的[性能测量](performance/README.md) |
 
-原件为.references/artifacts_mona.json及已授权enka响应，具体登记见[验证资料](../tools/data/README.md#验证资料与独立计算记录)。原件缺失时对应检查明确跳过；历史构造场景、固定输入目录及专用辅助/归档副本已退出维护。
+浏览器与桌面串行、单工作线程执行。开发浏览器检查前先运行 `pnpm data:build`，生产检查前先构建根路径和子路径。安装 Chromium 使用 `pnpm exec playwright install chromium`，Linux 可加 `--with-deps`。按需复查 Safari 交互时，安装 WebKit 后用 `pnpm exec playwright test --config playwright.webkit.config.ts <相关用例文件>`。完整操作见[交付流程](../tools/README.md#构建与验证)。
 
-current-format使用实际录存的明确版本标签派生副本，检查版本拒绝、存储命名空间及当前恢复。保存、撤销、取消等行为使用当前空文档或原件派生副本。机制期望按来源独立推导，游戏观测单独记录。
+游戏资料验收直接读取获授权的 `.references/artifacts_mona.json` 与 [Enka 展柜原件](../tools/data/README.md#验证资料与独立计算记录)。记录依赖的检查在原件缺失时明确跳过。版本、错误和边界从原件派生，保存与取消等行为可用当前空文档。机制期望按来源独立推导，游戏观测单独登记。详见[测试规范](../docs/evidence-and-validation.md#测试与验证)。
 
-浏览器与桌面串行单worker，只管理本次创建的服务与实例。通用规则见[测试规范](../docs/evidence-and-validation.md#测试与验证)，性能预算见[测量入口](performance/README.md)。
-
-Playwright 通过 browser/playwright-runtime.json 加载测试辅助代码依赖的运行时模块。类型检查使用仓库根 tsconfig.json。
+Playwright 辅助代码的运行时映射在 `browser/playwright-runtime.json`，类型检查使用仓库根 `tsconfig.json`。
