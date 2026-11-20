@@ -36,9 +36,24 @@ try {
   await page.getByRole('button',{name:'打开 / 切换账号',exact:true}).click();
   await expect(page.getByLabel('账号管理',{exact:true})).toContainText('458 件圣遗物');
   if(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.1.0')).document))!==JSON.stringify(before))throw new Error('Native account round-trip changed inventory IDs or values.');
-  await app.evaluate(({dialog})=>{dialog.showSaveDialog=async()=>({canceled:true});});
-  await page.getByRole('button',{name:'保存账号资料',exact:true}).click();
-  await expect(page.getByLabel('账号管理',{exact:true}).getByRole('status')).toContainText('已取消');
+  const nameField = page.getByRole('textbox', {name:'账号名称', exact:true});
+  const draftName = before.name + '（编辑中）';
+  await nameField.fill(draftName);
+  await app.evaluate(({dialog})=>{
+    async function cancelSave() {
+      cancelSave.calls++;
+      return {canceled:true};
+    }
+    cancelSave.calls = 0;
+    dialog.showSaveDialog = cancelSave;
+  });
+  const save = page.getByRole('button',{name:'保存账号资料',exact:true});
+  await save.click();
+  await expect.poll(()=>app.evaluate(({dialog})=>dialog.showSaveDialog.calls)).toBe(1);
+  await expect(save).toBeEnabled();
+  await expect(nameField).toHaveValue(draftName);
+  await expect(page.locator('.account-save-state')).toHaveText('账号有未保存修改');
+  expect(await readFile(file,'utf8')).toBe(content);
 
   // The public showcase is a separate account, never combined with the private Mona inventory.
   await page.getByRole('button',{name:'新建账号',exact:true}).click();
