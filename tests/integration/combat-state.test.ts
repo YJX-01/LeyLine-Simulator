@@ -1,7 +1,7 @@
 import { officialShowcase } from '../helpers/recorded-reference';
 import { packDocument } from '../../src/web/src/domain/content-document';
 import { existsSync, readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { projectSchema, type Project } from '@leyline/schema';
 import { evaluateDamage, evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
@@ -15,8 +15,9 @@ import { recordedProject } from '../helpers/recorded-project';
 
 // Format/error derivatives of an actual showcase, not an observed team or combat axis.
 // Each hit is a single query context; its time and state are explicit test annotations.
-async function queryProject(timeMs = 1000): Promise<Project> {
-  const project = await recordedProject(officialShowcase);
+let recorded: Project;
+function queryProject(timeMs = 1000): Project {
+  const project = structuredClone(recorded);
   const actor = project.candidate.actors[0];
   project.timeline.push({ id: 'state-query', actor: actor.id, timeMs, order: 0, kind: 'damage',
     definition: `${actor.id}-real-damage`, damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: null, reaction: null } });
@@ -25,15 +26,17 @@ async function queryProject(timeMs = 1000): Promise<Project> {
 }
 
 describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives of the recorded public showcase', () => {
-  it.each([0, 999, 1000, 1999, 2000])('reads left-closed right-open intervals at %i ms', async timeMs => {
-    const project = projectSchema.parse(await queryProject(timeMs));
+  beforeAll(async () => { recorded = await recordedProject(officialShowcase); }, 30000);
+
+  it.each([0, 999, 1000, 1999, 2000])('reads left-closed right-open intervals at %i ms', timeMs => {
+    const project = projectSchema.parse(queryProject(timeMs));
     const state = createCombatStateReader(project)(project.candidate.actors[0].id, project.timeline[0]);
     expect(state.conditions).toEqual(timeMs >= 1000 && timeMs < 2000 ? { hpRatio: 1, shielded: false } : {});
     expect(state.reads.find(read => read.field === 'hpRatio')?.source).toBe(timeMs >= 1000 && timeMs < 2000 ? 'interval' : 'unknown');
   });
 
-  it.each([null, 0, 0.9])('preserves explicit HP override %s without falling back or mutating intervals', async hpRatio => {
-    const project = await queryProject();
+  it.each([null, 0, 0.9])('preserves explicit HP override %s without falling back or mutating intervals', hpRatio => {
+    const project = queryProject();
     const actor = project.candidate.actors[0].id;
     const intervalBefore = JSON.stringify(project.combatStates);
     setDamageStateOverride(project, 'state-query', actor, { hpRatio, onField: false });
@@ -46,7 +49,7 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
   });
 
   it('keeps owner overrides separate from another recorded character and from source-action reads', async () => {
-    const project = await queryProject();
+    const project = queryProject();
     const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const bennett = preview.rows.find(row => row.character.showcase!.build.character.id === 'bennett')!.character.showcase!.build;
     const other = addActorFromBuild(project, bennett);
@@ -66,8 +69,8 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
     expect(createCombatStateReader(project)(owner, sourceAction).conditions.hpRatio).toBe(1);
   });
 
-  it('rejects overlaps, empty intervals, duplicate identities and missing actor references atomically', async () => {
-    const project = await queryProject();
+  it('rejects overlaps, empty intervals, duplicate identities and missing actor references atomically', () => {
+    const project = queryProject();
     const before = JSON.stringify(project);
     const interval = project.combatStates![0];
     expect(() => setCombatStateInterval(project, { ...interval, id: 'overlap', startMs: 1999, endMs: 3000 })).toThrow();
@@ -81,7 +84,7 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
   });
 
   it('validates field and actor conflicts after merging hit overrides with intervals', async () => {
-    const project = await queryProject();
+    const project = queryProject();
     const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const other = addActorFromBuild(project, preview.rows.find(row => row.character.showcase!.build.character.id === 'bennett')!.character.showcase!.build);
     const owner = project.candidate.actors[0].id;
@@ -96,8 +99,8 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
     expect(projectSchema.safeParse(duplicate).success).toBe(false);
   });
 
-  it('round-trips annotations, returns state provenance and retains missing combat facts', async () => {
-    const project = await queryProject();
+  it('round-trips annotations, returns state provenance and retains missing combat facts', () => {
+    const project = queryProject();
     const roundTrip = importProject(JSON.stringify(packDocument('axis', project)));
     expect(roundTrip).toEqual(project);
     const result = evaluateTimeline(roundTrip);
@@ -111,7 +114,7 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
   });
 
   it('applies interval HP to an explicit theoretical weapon replacement without changing the recording', async () => {
-    const project = await queryProject();
+    const project = queryProject();
     const actor = project.candidate.actors[0];
     const original = JSON.stringify(actor.build);
     // This is a trial replacement, not evidence that this account owns or equipped Harbinger.
@@ -134,8 +137,8 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
     expect(JSON.stringify(reread.candidate.actors[0].build)).toBe(original);
   });
 
-  it('does not turn an action into hits or accept hit overrides attached to an action', async () => {
-    const project = await queryProject();
+  it('does not turn an action into hits or accept hit overrides attached to an action', () => {
+    const project = queryProject();
     project.timeline[0].kind = 'action';
     expect(projectSchema.safeParse(project).success).toBe(false);
     delete project.timeline[0].damage;

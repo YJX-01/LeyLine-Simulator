@@ -30,7 +30,7 @@ try {
   await app.evaluate(({dialog},file)=>{dialog.showSaveDialog=async()=>({canceled:false,filePath:file});dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});},file);
   await page.getByRole('button',{name:'导航 账号',exact:true}).click();
   await page.getByRole('button',{name:'保存账号资料',exact:true}).click();
-  await expect.poll(async()=>JSON.parse(await readFile(file,'utf8').catch(()=>'{}')).document?.artifacts?.length).toBe(458);
+  await expect.poll(async()=>JSON.parse(await readFile(file,'utf8').catch(()=>'{}')).document?.id).toBe(before.id);
   const content=await readFile(file,'utf8');
   if(!content.endsWith('\n') || JSON.stringify(JSON.parse(content).document)!==JSON.stringify(before))throw new Error('Native account export changed the actual snapshot or JSON formatting.');
   await page.getByRole('button',{name:'打开 / 切换账号',exact:true}).click();
