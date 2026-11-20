@@ -222,12 +222,28 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
     const reasons: string[] = [];
     for (const key of gaps) {
       const record = program.coverage.get(key)!;
+      const entity = definitionKey(record.entity), scope = record.scope;
+      const owners: string[] = [];
+      for (const actorBuild of data.builds.values()) {
+        const name = actorBuild.character.identity.name;
+        if (definitionKey(actorBuild.character) === entity) {
+          owners.push(record.resolution === 'complete' && scope.kind !== 'equipment' && actorBuild.constellation > scope.maxConstellation
+            ? `${name}的命座为${actorBuild.constellation}命，此项仅核验至${scope.maxConstellation}命`
+            : name);
+        } else if (definitionKey(actorBuild.weapon) === entity) owners.push(name + '的' + actorBuild.weapon.name);
+        else if (scope.kind === 'equipment') {
+          const set = actorBuild.sets.find(set => definitionKey(set) === entity);
+          if (set && actorBuild.artifacts.filter(item => item.setId === set.id).length >= (scope.pieces ?? 1)) {
+            owners.push(name + '的' + set.name + (scope.pieces ? scope.pieces + '件套' : ''));
+          }
+        }
+      }
       const targets = new Set(record.mechanisms.filter(mechanism => mechanism.resolution === 'unavailable').flatMap(mechanism => mechanism.ruleIds).flatMap(reference => {
         const effect = program.effects.get(definitionKey(reference));
         return effect?.target.kind === 'attribute' ? [effect.target.attribute.id] : [];
       }));
       reasons.push(`diagnostic-${result.diagnostics.length + 1}`);
-      result.diagnostics.push({ code: 'unreviewed-mechanism', severity: 'error', jsonPointer: '/coverage', affectedOutputIds: result.outputs.map(output => output.id), message: record.reason,
+      result.diagnostics.push({ code: 'unreviewed-mechanism', severity: 'error', jsonPointer: '/coverage', affectedOutputIds: result.outputs.map(output => output.id), message: [...owners, record.reason].join(' · '),
         ...(targets.size === 1 ? { nodeId: [...targets][0] } : {}) });
     }
     const invalid = result.execution === 'invalid';

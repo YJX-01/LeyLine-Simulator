@@ -1,6 +1,6 @@
 import { combatStateFields, type CombatConditions, type CombatStateField, type CombatStateInterval, type CombatStateRead, type Project } from '@leyline/schema';
 
-type RecordEntry = Project['timeline'][number];
+type RecordEntry = Pick<Project['timeline'][number], 'actor' | 'id' | 'timeMs' | 'kind' | 'damage'>;
 
 /** Build a per-run index. All intervals and overrides must already pass projectSchema. */
 export function createCombatStateReader(project: Project) {

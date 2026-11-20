@@ -4,7 +4,7 @@ export const vesnaRecording = '.references/enka/uid-107590923.json';
 const read = (name: string) => JSON.parse(readFileSync('tools/data/sources/' + name, 'utf8'));
 
 /** Independent arithmetic for the recorded gear, with explicit single-actor conditions. */
-export function recordedVesnaDamage(refinement: 1 | 2, talentMultiplier = 1): number {
+export function recordedVesnaDamage(refinement: 1 | 2, talentMultiplier = 1, loyalWind = true, mode: 'critical' | 'expected' = 'expected'): number {
   const raw = JSON.parse(readFileSync(vesnaRecording, 'utf8'));
   const character = read('catalog/genshin-db/characters.json').vesna.stats;
   const weapon = read('catalog/genshin-db/weapons.json').beyondthechrysalis.stats;
@@ -31,7 +31,8 @@ export function recordedVesnaDamage(refinement: 1 | 2, talentMultiplier = 1): nu
   const mastery = stats.FIGHT_PROP_ELEMENT_MASTERY ?? 0;
   const critRate = Math.min(1, 0.05 + 0.192 + (stats.FIGHT_PROP_CRITICAL ?? 0) + 0.16);
   const critDamage = 0.5 + weapon.base.specialized * weaponCurves[90][weapon.curve.specialized]
-    + (stats.FIGHT_PROP_CRITICAL_HURT ?? 0) + (refinement === 1 ? 0.56 : 0.72);
+    + (stats.FIGHT_PROP_CRITICAL_HURT ?? 0) + (loyalWind ? (refinement === 1 ? 0.56 : 0.72) : 0);
   const bonus = 1 + 6 * mastery / (mastery + 2000) + 0.2 + (refinement === 1 ? 0.36 : 0.45) + 0.4;
-  return attack * params[9] * talentMultiplier * 1.6 * (1 + Math.min(attack * 0.00007, 0.14)) * bonus * (1 + critRate * critDamage) * 0.9;
+  const crit = 1 + (mode === 'critical' ? 1 : critRate) * critDamage;
+  return attack * params[9] * talentMultiplier * 1.6 * (1 + Math.min(attack * 0.00007, 0.14)) * bonus * crit * 0.9;
 }

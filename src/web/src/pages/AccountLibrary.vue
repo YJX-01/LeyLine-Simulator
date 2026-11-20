@@ -47,6 +47,7 @@ import { effectiveRollBreakdown, effectiveStatGroups, characterLoadoutName, char
 import { useCharacterLoadoutsStore, type CharacterLoadout } from '../stores/character-loadouts';
 import { hasLocalConfiguration, hasCharacterInformation, planClearedConfiguration } from '../domain/account-configurations';
 import { characterListGroup } from '../domain/elemental-forms';
+import { teamArtifactEntries, teamMemberName, type TeamMember } from '../domain/team-members';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
 import { useArtifactCombinationsStore } from '../stores/artifact-combinations';
 import { applyCombination, combinationSignature, type ArtifactCombination } from '../domain/artifact-combinations';
@@ -58,7 +59,7 @@ const enkaImport=ref<InstanceType<typeof EnkaImport>>();
 const MonaImport = defineAsyncComponent(() => import('./MonaImport.vue'));
 const monaImport=ref<InstanceType<typeof MonaImport>>();
 
-const props = defineProps<{ page: 'characters' | 'artifacts'; pick?:boolean; selectedId?:string;configurationDetail?:boolean }>();
+const props = defineProps<{ page: 'characters' | 'artifacts'; pick?:boolean; selectedId?:string;configurationDetail?:boolean; pickMembers?:readonly TeamMember[]; pickShowcase?:boolean }>();
 const emit = defineEmits<{ settings:[]; select:[id:string];detailClosed:[] }>();
 const store = useAccountStore();
 useLibraryScroll(()=>props.page,!props.pick && !props.configurationDetail);
@@ -373,13 +374,16 @@ const metadata = (entry: typeof account.value.characters[number]) => entry.build
 const characterRelease = (entry: typeof account.value.characters[number]) => releaseMetadata('characters',entry.build?.character.id,entry.name);
 function roleRolls(entry:AccountCharacter) {
   const stats=loadouts.effectiveStats(account.value.id,entry.id,entry.name);
-  const items=inventoryEquipment(entry);
+  const items=props.pickMembers || props.pickShowcase ? teamArtifactEntries(entry.build).flatMap(slot => slot.item ?? []) : inventoryEquipment(entry);
   return effectiveRollBreakdown(items,buildRollBasis(Object.values(entry.equipment).some(Boolean)?entry.build:entry.showcase?.build ?? entry.build)).filter(group=>group.members.some(stat=>stats.includes(stat))).reduce((sum,row)=>sum+(row.value ?? 0),0);
 }
 const visibleCharacters = computed(() => {
-  const items = account.value.characters.filter(entry => {
+  const characters: AccountCharacter[] = props.pickMembers?.map(member => ({
+    id: member.id, name: teamMemberName(member), attack: 0, weapon: member.build?.weapon.name ?? '', equipment: {}, build: member.build,
+  })) ?? (props.pickShowcase ? account.value.characters.flatMap(entry => entry.showcase ? [{ ...entry, equipment: {}, build: entry.showcase.build }] : []) : account.value.characters);
+  const items = characters.filter(entry => {
     const meta=metadata(entry);
-    if(!hasCharacterInformation(entry) && !loadouts.loadouts.some(item=>item.accountId===account.value.id && item.characterId===entry.id && hasLocalConfiguration(item.snapshot.characters[0])))return false;
+    if(!props.pickMembers && !hasCharacterInformation(entry) && !loadouts.loadouts.some(item=>item.accountId===account.value.id && item.characterId===entry.id && hasLocalConfiguration(item.snapshot.characters[0])))return false;
     return (!favoriteFilter.value.length || favoriteFilter.value.includes(String(loadouts.favoriteLevel(account.value.id,entry.id)))) && entry.name.includes(query.value.trim()) && (!elementFilter.value.length || (meta && elementFilter.value.includes(meta.element)))
       && (!rarityFilter.value.length || rarityFilter.value.includes(String(characterRelease(entry)?.rarity)))
       && (!weaponFilter.value.length || (meta && weaponFilter.value.includes(meta.weaponType)));
@@ -387,8 +391,8 @@ const visibleCharacters = computed(() => {
   return items.sort((a,b) => characterListGroup(a.build?.character.id ?? catalog.value?.characters.find(item=>item.name===a.name)?.id)-characterListGroup(b.build?.character.id ?? catalog.value?.characters.find(item=>item.name===b.name)?.id) || (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.build?.level??-1)-(a.build?.level??-1) : sort.value==='constellation' ? (b.build?.constellation??-1)-(a.build?.constellation??-1) : sort.value==='rolls' ? roleRolls(b)-roleRolls(a) : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
 });
 const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({
-  ...entry, presetId:'', galleryKey:entry.id, gallerySnapshot:account.value, ready:configurationReady(account.value,entry),
-  artifacts: Object.keys(entry.equipment).length ? inventoryEquipment(entry) : accountSlots.flatMap(slot=>showcaseArtifact(entry,slot) ?? []),
+  ...entry, presetId:'', galleryKey:entry.id, gallerySnapshot:account.value, ready:props.pickMembers || props.pickShowcase ? entry.build?.artifacts.length === accountSlots.length : configurationReady(account.value,entry),
+  artifacts: props.pickMembers || props.pickShowcase ? teamArtifactEntries(entry.build).flatMap(slot => slot.item ?? []) : Object.keys(entry.equipment).length ? inventoryEquipment(entry) : accountSlots.flatMap(slot=>showcaseArtifact(entry,slot) ?? []),
 })));
 function openGallery(entry:{id:string;presetId:string}) { if(props.pick){emit('select',entry.id);return;}openCharacter(entry.id);if(entry.presetId)tryPreset(entry.presetId); }
 function handleEmptyAction() { if(account.value.characters.length){query.value='';resetFilters();}else{editingCharacter.value=false;modal.value='create';} }
@@ -441,7 +445,9 @@ function equip() {
         <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
           <span class="character-card-header">
             <span class="character-card-status">
-              <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'" :description="entry.ready ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全'" :accessible-name="`本地配置${entry.ready ? '就绪' : '缺失'}`" />
+              <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'"
+                :description="props.pickShowcase || props.pickMembers ? (entry.ready ? '配装快照的培养资料和五件圣遗物齐全' : '配装快照的培养资料或圣遗物尚未齐全') : (entry.ready ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全')"
+                :accessible-name="(props.pickShowcase ? '展柜配置' : props.pickMembers ? '队员配置' : '本地配置') + (entry.ready ? '就绪' : '缺失')" />
               <StatusBadge v-if="entry.showcase" label="展柜" tone="electro" state="complete" description="有独立展柜快照" accessible-name="有展柜信息" />
             </span>
             <strong>{{ entry.name }}</strong>
@@ -452,7 +458,8 @@ function equip() {
       </div>
       <ContextMenu v-if="characterMenu && !props.pick" :x="characterMenu.x" :y="characterMenu.y" label="角色操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'彻底删除',danger:true}]" @close="characterMenu=undefined" @select="characterMenuAction" />
       <ConfirmationDialog v-if="deletingCharacter" title="彻底删除角色？" confirm-label="彻底删除" @cancel="deleteCharacterId=''" @confirm="deleteCharacter"><p>清除「{{ deletingCharacter.name }}」的本地、展柜、全部配装和收藏。</p><p>圣遗物保留在库中。</p></ConfirmationDialog>
-      <LibraryEmptyState v-if="!visibleCharacters.length" :title="account.characters.length?'没有符合条件的角色':'角色库还是空的'" :description="account.characters.length?'清除搜索与筛选后重试。':'导入角色资料，或手动添加角色。'" :action="account.characters.length?'清除搜索与筛选':'手动添加角色'" @action="handleEmptyAction" />
+      <LibraryEmptyState v-if="!visibleCharacters.length && pickMembers" title="没有符合条件的队员" action="清除搜索与筛选" @action="query='';resetFilters()" />
+      <LibraryEmptyState v-else-if="!visibleCharacters.length" :title="account.characters.length?'没有符合条件的角色':'角色库还是空的'" :description="account.characters.length?'清除搜索与筛选后重试。':'导入角色资料，或手动添加角色。'" :action="account.characters.length?'清除搜索与筛选':'手动添加角色'" @action="handleEmptyAction" />
       <ManualCharacterImport v-if="modal==='create'" @saved="openCharacter" @close="modal=''" />
       </template>
       <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name"

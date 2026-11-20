@@ -6,6 +6,7 @@ import { projectSchema } from '../project/project';
 export const damageCalculatorSchema = z.object({
   schemaVersion: z.literal(APP_VERSION),
   kind: z.literal('damage-calculator'),
+  team: z.object({ id: idSchema, name: z.string().trim().min(1).max(160) }).strict().optional(),
   project: projectSchema,
   baseline: projectSchema.optional(),
   actorId: idSchema,

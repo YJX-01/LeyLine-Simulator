@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, nextTick, ref, shallowRef, watch } from 'vue';
+import { computed, defineAsyncComponent, nextTick, reactive, ref, shallowRef, watch } from 'vue';
 import FilterActions from '../components/FilterActions.vue';
 import FilterPanel from '../components/FilterPanel.vue';
-import GameIcon from '../components/GameIcon.vue';
+import TeamCard from '../components/TeamCard.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import LibraryListHeader from '../components/LibraryListHeader.vue';
 import LibraryPagination from '../components/LibraryPagination.vue';
@@ -17,12 +17,14 @@ import { teamSortDefaults, useLibraryViewStore } from '../stores/library-view';
 import { useSavedTeamsStore, type SavedTeam } from '../stores/saved-teams';
 
 const TeamEditorDialog = defineAsyncComponent(() => import('./TeamEditorDialog.vue'));
-const emit = defineEmits<{ inspect: [characterId: string, presetId: string] }>();
+const props = defineProps<{ pick?: boolean; selectedId?: string }>();
+const emit = defineEmits<{ inspect: [characterId: string, presetId: string]; select: [team: SavedTeam] }>();
 const library = ref<HTMLElement>();
 const saved = useSavedTeamsStore();
 const accounts = useAccountStore();
 const views = useLibraryViewStore();
-const browse = computed(() => views.forAccount(accounts.account.id));
+const pickerView = reactive({ teamQuery: '', teamMember: '', teamPage: 1, teamSort: teamSortDefaults.key as string, teamDirection: teamSortDefaults.direction as 'asc' | 'desc' });
+const browse = computed(() => props.pick ? pickerView : views.forAccount(accounts.account.id));
 const pageSize = 5;
 const filterOpen = ref(false);
 const sortOpen = ref(false);
@@ -91,7 +93,7 @@ function resetSort() {
 
 const activeTeam = shallowRef<SavedTeam | 'new'>();
 const editor = ref<InstanceType<typeof import('./TeamEditorDialog.vue')['default']>>();
-useLibraryScroll(() => 'teams');
+useLibraryScroll(() => 'teams', !props.pick);
 
 function requestLeave(action: () => void) {
   if (editor.value) editor.value.requestLeave(action);
@@ -107,11 +109,11 @@ function closeDeleted() {
 </script>
 
 <template>
-  <section ref="library" class="team-library panel library-page" aria-label="队伍">
-    <LibraryCornerOrnaments />
+  <section ref="library" class="team-library" :class="{ 'panel library-page': !pick }" aria-label="队伍">
+    <LibraryCornerOrnaments v-if="!pick" />
     <LibraryToolbar v-model="query" label="搜索队伍" placeholder="搜索队伍名或队员名…"
       :filter-count="filterCount" :sorted="sorted" @filter="filterOpen = true" @sort="sortOpen = true" @reset="resetFilters(); resetSort()">
-      <template #actions>
+      <template v-if="!pick" #actions>
         <button type="button" class="ui-action library-primary-action" @click="activeTeam = 'new'">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>新建队伍
         </button>
@@ -121,17 +123,9 @@ function closeDeleted() {
     <LibraryListHeader v-model:page="page" :pages="pages" :count="matches.length" :total="saved.teams.length" unit="支队伍" />
     <ul v-if="visible.length" class="team-list">
       <li v-for="team in visible" :key="team.id">
-        <button type="button" class="team-row" :data-team-id="team.id" :aria-label="`查看队伍 ${team.name}`"
-          :aria-description="team.project.candidate.actors.map(teamMemberName).join('、')" @click="activeTeam = team">
-          <strong>{{ team.name }}</strong>
-          <span class="team-row-members">
-            <GameIcon v-for="member in team.project.candidate.actors" :key="member.id" kind="characters"
-              :id="teamMemberPortrait(member)" :name="teamMemberName(member)" :title="teamMemberName(member)" :size="64"
-              style="width:var(--team-portrait-size);height:var(--team-portrait-size)"
-              :constellation="member.build?.constellation" :level="member.build?.level" />
-          </span>
-          <svg viewBox="0 0 24 24" class="team-row-arrow" aria-hidden="true"><path d="m10 6 6 6-6 6" /></svg>
-        </button>
+        <TeamCard :name="team.name" :members="team.project.candidate.actors" :selected="pick && team.id === selectedId"
+          :data-team-id="team.id" :aria-label="`${pick ? '选择' : '查看'}队伍 ${team.name}`"
+          @click="pick ? emit('select', team) : activeTeam = team" />
       </li>
     </ul>
     <p v-else class="team-empty">{{ saved.teams.length ? '没有匹配的队伍' : '还没有保存的队伍' }}</p>
@@ -159,22 +153,7 @@ function closeDeleted() {
 <style scoped>
 .team-library,.team-list { display:grid; gap:12px; min-width:0; }
 .team-list { list-style:none; padding:0; margin:0; }
-.team-library .team-row {
-  --team-portrait-size:64px;
-  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr); align-items:center; gap:12px;
-  box-sizing:border-box; width:100%; min-height:96px; padding:12px 16px; text-align:left;
-  border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; background:var(--surface);
-}
-.team-library .team-row:hover { border-color:var(--line); border-top-color:var(--element-anemo-primary); }
-.team-row > strong { min-width:0; font-size:var(--font-control); overflow-wrap:anywhere; }
-.team-row-members { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 12px; min-width:0; }
-.team-row-arrow { width:18px; height:18px; justify-self:end; color:var(--muted); }
 .team-empty { padding:24px 12px; text-align:center; color:var(--muted); }
 .team-library .team-pagination { margin-top:0; }
 .team-member-filter :deep(.picker-menu) { position:static; margin-top:5px; min-width:0; }
-@media(max-width:600px) {
-  .team-library .team-row { --team-portrait-size:56px; grid-template-columns:minmax(0,1fr) 20px; padding:12px; gap:8px; }
-  .team-row-members { grid-column:1/-1; grid-row:2; gap:6px; }
-  .team-row-arrow { grid-column:2; grid-row:1; }
-}
 </style>

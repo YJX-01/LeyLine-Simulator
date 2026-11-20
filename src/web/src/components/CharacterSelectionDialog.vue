@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import WorkbenchDialog from './WorkbenchDialog.vue';
 import AccountLibrary from '../pages/AccountLibrary.vue';
-withDefaults(defineProps<{selectedId?:string;title?:string;allowAll?:boolean}>(), { title: '选择角色' });
+import type { TeamMember } from '../domain/team-members';
+withDefaults(defineProps<{selectedId?:string;title?:string;allowAll?:boolean;members?:readonly TeamMember[];showcaseOnly?:boolean}>(), { title: '选择角色' });
 const emit=defineEmits<{select:[id:string];close:[]}>();
 </script>
 <template>
@@ -11,6 +12,6 @@ const emit=defineEmits<{select:[id:string];close:[]}>();
       <slot name="header-leading" />
     </template>
     <slot />
-    <AccountLibrary page="characters" pick :selected-id="selectedId" @select="emit('select',$event)" />
+    <slot name="browser"><AccountLibrary page="characters" pick :pick-members="members" :pick-showcase="showcaseOnly" :selected-id="selectedId" @select="emit('select',$event)" /></slot>
   </WorkbenchDialog>
 </template>

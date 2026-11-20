@@ -70,7 +70,7 @@ export async function prepareTeamMember(project: Project, account: LocalAccount,
   return { name: character.name, build: buildSchema.parse({ ...build, artifacts, sets }) };
 }
 
-export function teamArtifactEntries(build?: Build, account?: LocalAccount) {
+export function teamArtifactEntries(build?: Pick<Build, 'artifacts' | 'sets'>, account?: LocalAccount) {
   return accountSlots.map(slot => {
     const real = build?.artifacts.find(artifact => artifact.slot === slot);
     if (!real) return { slot };

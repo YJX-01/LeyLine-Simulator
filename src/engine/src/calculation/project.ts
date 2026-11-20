@@ -1,6 +1,6 @@
 import { buildSchema, combatConditionsSchema, damageRequestSchema, definitionKey, elements, statKeys, talentInputIssues, talentLevelBonus,
   type AttributePanel, type Build, type CalculationBinding, type CalculationFact, type CalculationIssue, type CombatConditions,
-  type CombatContext, type CombatFrame, type DamageRequest, type DamageResult, type Enemy, type CalculationFeasibility, type QuantityUnit,
+  type CalculationEvent, type CombatContext, type CombatFrame, type DamageRequest, type DamageResult, type Enemy, type CalculationFeasibility, type QuantityUnit,
   type Project, type StatKey, type StructuredCombatSetup, type Value } from '@leyline/schema';
 import { createStructuredCombatContext, evaluateStructuredHit, prepareStructuredBuilds, structuredTeamFeasibility, type PreparedStructuredTeam } from './build-context';
 import { evaluateCombatBindings, type BoundAttributeReader } from './context';
@@ -19,6 +19,15 @@ const conditionsFacts = (conditions: CombatConditions = {}): Record<string, Calc
   .filter(([, value]) => value !== undefined).map(([key, value]) => [key, fact(value === null ? null : typeof value === 'boolean' ? { kind: 'boolean', value } : quantity('scalar', value!))]));
 const issue = (code: CalculationIssue['code'], message: string): CalculationIssue => ({ code, message });
 
+export function projectCalculationEvent(record: RecordEntry, build?: Build): CalculationEvent {
+  const skillId = record.damage?.skillId ?? record.skillId;
+  const talent = build?.character.talents.find(talent => talent.id === skillId);
+  const hitId = record.damage?.hitId;
+  return { id: record.id, kind: record.kind === 'damage' ? 'hit' : record.kind, actorId: record.actor, targetIds: record.kind === 'damage' ? ['target'] : [],
+    timeMs: record.timeMs, order: record.order, skillId, hitId, category: hitId ? talent?.hits.find(hit => hit.id === hitId)?.category : talent?.category,
+    sourceEventIds: record.damage?.capture?.recordId ? [record.damage.capture.recordId] : [], facts: record.damage?.facts ?? {} };
+}
+
 /** Current project records are explicit query anchors; this function never schedules extra actions or hits. */
 export function prepareProjectRuntime(world: World): PreparedRuntime {
   const actors = world.candidate.actors.filter(actor => actor.build).map(actor => ({ id: actor.id, build: actor.build! }));
@@ -32,15 +41,7 @@ export function prepareProjectRuntime(world: World): PreparedRuntime {
       ordinaryDamageReduction: fact(quantity('scalar', 0)), ...Object.fromEntries(elements.map(element => ['resistance.' + element, fact(enemy ? quantity('scalar', enemy.resistances[element]) : null)])) }, facts: {} }],
     team: { inputs: {}, facts: {}, actorFacts: {} }, sources: [],
     factIntervals: (world.combatStates ?? []).map(interval => ({ id: interval.id, subject: { kind: 'actor', id: interval.actor }, startMs: interval.startMs, endMs: interval.endMs, facts: conditionsFacts(interval.values) })),
-    events: world.timeline.map(record => {
-      const skillId = record.damage?.skillId ?? record.skillId;
-      const talent = builds.get(record.actor)?.character.talents.find(talent => talent.id === skillId);
-      const hitId = record.damage?.hitId;
-      const category = hitId ? talent?.hits.find(hit => hit.id === hitId)?.category : talent?.category;
-      return { id: record.id, kind: record.kind === 'damage' ? 'hit' : record.kind, actorId: record.actor, targetIds: record.kind === 'damage' ? ['target'] : [],
-        timeMs: record.timeMs, order: record.order, skillId, hitId, category,
-        sourceEventIds: record.damage?.capture?.recordId ? [record.damage.capture.recordId] : [], facts: record.damage?.facts ?? {} };
-    }),
+    events: world.timeline.map(record => projectCalculationEvent(record, builds.get(record.actor))),
   };
   try {
     const context = createStructuredCombatContext(prepared.team, setup);

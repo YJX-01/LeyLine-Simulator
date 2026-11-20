@@ -1,10 +1,12 @@
 export { evaluateTimeline } from './timeline';
+export { createCombatStateReader } from './timeline/combat-state';
 export { compileCalculation, calculationBudgets } from './calculation/compile';
 export type { CompileResult, CompiledCalculation } from './calculation/compile';
 export { evaluateFormula } from './calculation/interpret';
 export type { FormulaEvaluationOptions } from './calculation/interpret';
 export { evaluateBoundFormula } from './calculation/context';
-export { calculationEffectInstanceId, effectUnlocked, hitMatches } from './calculation/effects';
+export { calculationEffectInstanceId, effectUnlocked, eventMatches, hitMatches } from './calculation/effects';
+export { projectCalculationEvent } from './calculation/project';
 export { evaluateDamageQuery, selectCalculationValue } from './calculation/queries';
 export { checkInventoryFeasibility } from './calculation/feasibility';
 export { prepareStructuredBuilds, createStructuredCombatContext, evaluateStructuredHit } from './calculation/build-context';
