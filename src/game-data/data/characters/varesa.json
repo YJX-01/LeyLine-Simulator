@@ -3,7 +3,7 @@
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "varesa",
-  "revision": "3",
+  "revision": "4",
   "identity": {
     "name": "瓦雷莎",
     "title": "悠暇豪劲",
@@ -946,7 +946,7 @@
         {
           "id": "varesa.burst.param5",
           "element": "electro",
-          "category": "burst",
+          "category": "plunge",
           "parameter": "param5",
           "scaling": [
             {

@@ -5,12 +5,13 @@ import { buildSchema, type Build, type Project, type StatKey } from '@leyline/sc
 import { resolveBuild } from '@leyline/engine';
 import { calculationArtifact } from '../domain/build-snapshot';
 import { useAccountStore } from '../stores/account';
-import { accountSlotLabels, type AccountArtifact, type AccountCharacter, type AccountSlot } from '../domain/account';
+import type { AccountArtifact, AccountCharacter, AccountSlot } from '../domain/account';
 import { formatGameStat } from '../domain/account-presentation';
 import { teamArtifactEntries } from '../domain/team-members';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
 import CharacterForm from './CharacterForm.vue';
-import ArtifactBrowser from './ArtifactBrowser.vue';
+import ArtifactDetail from './ArtifactDetail.vue';
+import ArtifactPickerDialog from '../components/ArtifactPickerDialog.vue';
 import ArtifactEquipmentGrid from '../components/ArtifactEquipmentGrid.vue';
 import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
 import DisclosureHeading from '../components/DisclosureHeading.vue';
@@ -31,6 +32,7 @@ const cultivationDirty=ref(false),revision=ref(0),busy=ref(false),error=ref(''),
 let baseline='';
 function restore() { const current=actor.value?.build;baseline=JSON.stringify(current);draft.value=current?JSON.parse(baseline):undefined;cultivationDirty.value=false;revision.value++;slot.value=undefined;error.value=''; }
 const slot=ref<AccountSlot>();
+const inspecting = ref<AccountArtifact>();
 restore();
 const dirty=computed(()=>cultivationDirty.value || JSON.stringify(draft.value)!==baseline);
 const {discardOpen,requestLeave,cancelDiscard,discardChanges,saveAndLeave}=useUnsavedChanges(dirty);
@@ -74,7 +76,12 @@ defineExpose({dirty,busy,save,restore,requestLeave});
     <template v-if="character && draft">
       <CharacterForm ref="form" :key="revision" candidate detached details :character="character" @dirty-change="cultivationDirty=$event" />
       <section class="editor-section"><DisclosureHeading title="角色面板" label="面板" controls="team-character-panel" :expanded="panelOpen" @toggle="panelOpen=!panelOpen" /><div v-if="panelOpen" id="team-character-panel"><p v-if="cultivationDirty" class="editor-context">保存后更新培养面板。</p><template v-else><p v-for="(issue,index) in panel?.issues" :key="index">{{ issue.message }}</p><dl v-if="panel"><template v-for="(value,stat) in panel.stats" :key="stat"><dt><StatLabel :stat="stat as StatKey" /></dt><dd>{{ formatGameStat(stat as StatKey,value) }}</dd></template></dl></template></div></section>
-      <section class="editor-section"><h3>圣遗物</h3><section v-if="slot"><div class="selection-toolbar"><h3>选择{{ accountSlotLabels[slot] }}</h3><button class="ui-action soft" data-accent="anemo" @click="slot=undefined">返回候选配装</button></div><ArtifactBrowser inline pick density="relaxed" :slot="slot" @select="equip" /></section><ArtifactEquipmentGrid v-else :entries="entries" :busy="busy" :wearers="[]" @change="slot=$event" @remove="equip(undefined,$event)" /></section>
+      <section class="editor-section"><h3>圣遗物</h3>
+        <ArtifactEquipmentGrid :entries="entries" :busy="busy" :wearers="[]" @change="slot=$event" @inspect="inspecting=entries.find(entry=>entry.slot===$event)?.item" />
+        <ArtifactPickerDialog v-if="slot" :slot="slot" :account="accounts.account" :current="entries.find(entry=>entry.slot===slot)?.item"
+          @select="equip" @remove="equip()" @close="slot=undefined" />
+        <ArtifactDetail v-if="inspecting" :item="inspecting" readonly @close="inspecting=undefined" />
+      </section>
     </template><p v-else>请先从队伍中选择已有角色。</p>
     <UnsavedChangesDialog v-if="discardOpen" :busy="busy" @save="saveAndLeave(save)" @continue="cancelDiscard" @discard="discardChanges" />
   </section>

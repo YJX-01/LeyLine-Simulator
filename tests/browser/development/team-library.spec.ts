@@ -4,6 +4,8 @@ import type { LocalAccount } from '@leyline/schema';
 import type { SavedTeam } from '../../../src/web/src/stores/saved-teams';
 import { readDocument } from '../../helpers/browser-document';
 
+test.use({ hasTouch: true });
+
 test('recorded team library keeps slot positions and links saved character configurations', async ({ page }, info) => {
   const source = '.references/enka/official-example.json';
   test.skip(!existsSync(source), 'Requires the original saved public showcase.');
@@ -42,13 +44,13 @@ test('recorded team library keeps slot positions and links saved character confi
   const nav = page.getByTestId('workspace-nav-team');
   await nav.click();
   const library = page.getByRole('region', { name: '队伍', exact: true });
-  const create = library.getByRole('button', { name: '新建队伍', exact: true });
+  const create = library.locator('.library-toolbar').getByRole('button', { name: '新建队伍', exact: true });
   await expect(library.getByText('还没有保存的队伍')).toBeVisible();
-  await create.click();
+  await library.locator('.library-empty').getByRole('button', { name: '新建队伍', exact: true }).click();
   const newDialog = page.getByRole('dialog', { name: '新建队伍', exact: true });
   const name = newDialog.getByLabel('队伍名称', { exact: true });
   const addMember = (slot: number) => newDialog.getByRole('button', { name: `选择队员${slot}`, exact: true });
-  const picker = page.getByRole('dialog', { name: '选择角色', exact: true });
+  const picker = page.getByRole('dialog', { name: '选择角色配置', exact: true });
   const save = newDialog.getByRole('button', { name: '保存', exact: true });
   await expect(page.locator('#workspace-main')).toHaveAttribute('aria-label', '队伍');
   await expect(newDialog.locator('.team-slot')).toHaveCount(4);
@@ -58,17 +60,20 @@ test('recorded team library keeps slot positions and links saved character confi
   await newDialog.getByText('队伍名称', { exact: true }).click();
   await expect(name).toBeFocused();
   await addMember(4).click();
-  await picker.getByRole('button', { name: '选择安柏', exact: true }).click();
+  const sources = picker.getByRole('group', { name: '角色资料来源' });
+  await expect(sources.getByRole('button', { name: '本地', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(picker.getByRole('button', { name: '选择行秋备选配置', exact: true })).toBeVisible();
+  await picker.getByRole('button', { name: '选择安柏首选配置', exact: true }).click();
   await expect(picker).toHaveCount(0);
-  await expect(newDialog.getByRole('button', { name: '更换队员4', exact: true })).toBeFocused();
+  await expect(newDialog.getByRole('button', { name: '选择安柏的角色配置', exact: true })).toBeFocused();
   await expect(newDialog.locator('.team-slot[data-slot="4"] .configuration-title')).toContainText('安柏');
   await addMember(1).click();
-  await picker.getByLabel('搜索账号角色', { exact: true }).pressSequentially('行秋');
-  await picker.getByRole('button', { name: '选择行秋', exact: true }).click();
+  await picker.getByLabel('搜索角色配置', { exact: true }).pressSequentially('行秋');
+  await picker.getByRole('button', { name: '选择行秋首选配置', exact: true }).click();
   await expect(picker).toHaveCount(0);
-  await expect(newDialog.getByRole('button', { name: '更换队员1', exact: true })).toBeFocused();
+  await expect(newDialog.getByRole('button', { name: '选择行秋的角色配置', exact: true })).toBeFocused();
   await addMember(2).click();
-  await picker.getByRole('button', { name: '选择行秋', exact: true }).click();
+  await picker.getByRole('button', { name: '选择行秋首选配置', exact: true }).click();
   await expect(picker.getByRole('alert')).toContainText('队伍已经有这位角色');
   await page.keyboard.press('Escape');
   await expect(picker).toHaveCount(0);
@@ -109,11 +114,63 @@ test('recorded team library keeps slot positions and links saved character confi
   ]);
   expect(original.slots?.[0]?.configuration).toEqual({ accountId: loaded.id, characterId: character.id, presetId: '' });
 
-  const pickerConfig = page.getByRole('dialog', { name: '选择角色配置', exact: true });
+  const pickerConfig = picker;
   const xingqiu = detail.getByRole('button', { name: '选择行秋的角色配置', exact: true });
   const amber = detail.getByRole('button', { name: '选择安柏的角色配置', exact: true });
-  await xingqiu.click();
+  const xingqiuDetails = detail.getByRole('button', { name: '查看行秋的配置详情', exact: true });
+  const swapMark = xingqiu.locator('.card-replace-mark');
+  await xingqiuDetails.hover({ position: { x: 12, y: 10 } });
+  await expect(swapMark).toBeHidden();
+  await expect(savedCards.first()).toHaveCSS('border-top-color', 'rgb(76, 169, 139)');
+  await expect(xingqiuDetails).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(xingqiuDetails).toHaveCSS('box-shadow', 'none');
+  await xingqiuDetails.focus();
+  await xingqiuDetails.press('Shift+Tab');
+  await expect(xingqiu).toBeFocused();
+  await expect(swapMark).toBeVisible();
+  await expect(savedCards.first()).toHaveCSS('border-top-color', 'rgb(79, 145, 197)');
+  const hitBox = (await xingqiu.boundingBox())!;
+  const statsBox = (await savedCards.first().locator('.effective-roll-summary').boundingBox())!;
+  expect(hitBox.x + hitBox.width).toBeLessThan(statsBox.x);
+  expect(hitBox.y).toBeCloseTo(statsBox.y, 0);
+  expect(hitBox.height).toBeCloseTo(statsBox.height, 0);
+  const arrow = (await swapMark.boundingBox())!;
+  expect(arrow.x + arrow.width / 2).toBeCloseTo(hitBox.x + hitBox.width / 2, 0);
+  expect(arrow.y + arrow.height / 2).toBeCloseTo(hitBox.y + hitBox.height / 2, 0);
+  expect(arrow.height / arrow.width).toBeCloseTo(16 / 20, 2);
+  await expect(swapMark).toHaveCSS('filter', 'none');
+  // Hit-test over a real level badge to verify the overlay also paints above the badge.
+  expect(await xingqiu.evaluate(button => {
+    const badge = button.querySelector('.level-badge')!.getBoundingClientRect();
+    const overlay = button.querySelector<HTMLElement>('.card-replace-layer')!;
+    overlay.style.pointerEvents = 'auto';
+    try { return overlay.contains(document.elementFromPoint(badge.x + badge.width / 2, badge.y + badge.height / 2)); }
+    finally { overlay.style.removeProperty('pointer-events'); }
+  })).toBe(true);
+  await savedCards.first().screenshot({ path: info.outputPath('team-slot-replacement.png') });
+  await xingqiu.click({ position: { x: 8, y: hitBox.height - 3 } });
+  const pickerHeader = pickerConfig.locator(':scope > header');
+  const switchRole = pickerHeader.getByRole('button', { name: '切换其他角色', exact: true });
+  await expect(switchRole).toBeVisible();
+  for (const width of [1280, 320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    const title = (await pickerHeader.getByRole('heading', { name: '选择角色配置' }).boundingBox())!;
+    const action = (await switchRole.boundingBox())!;
+    expect(Math.abs(action.y + action.height / 2 - title.y - title.height / 2)).toBeLessThan(1);
+    expect(action.x + action.width).toBeLessThanOrEqual(title.x);
+  }
+  await pickerHeader.screenshot({ path: info.outputPath('team-config-picker-header-mobile.png') });
+  await page.keyboard.press('Escape');
+  await close.focus();
+  await close.hover();
+  await expect(swapMark).toBeHidden();
+  await xingqiu.tap({ position: { x: 8, y: 4 } });
   await expect(pickerConfig.locator('.configuration-title > span:first-child')).toHaveText(['行秋', '行秋']);
+  await expect(pickerConfig.locator('.configuration-row.compact')).toHaveCount(2);
+  await switchRole.tap();
+  await expect(pickerConfig.getByRole('button', { name: '选择安柏首选配置', exact: true })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await xingqiu.tap();
   await expect(pickerConfig.getByRole('button', { name: /设为首选/ })).toHaveCount(0);
   const chosen = pickerConfig.locator(`[data-preset-id="${presetId}"]`);
   const chosenLabel = await chosen.locator('.configuration-title > span').last().innerText();
@@ -126,11 +183,14 @@ test('recorded team library keeps slot positions and links saved character confi
   const menu = page.getByRole('menu', { name: '队员操作', exact: true });
   await xingqiu.click({ button: 'right' });
   await expect(menu.getByRole('menuitem')).toHaveText(['查看详情', '替换']);
-  await menu.getByRole('menuitem', { name: '查看详情', exact: true }).click();
+  await page.keyboard.press('Escape');
+  const statLabel = savedCards.first().locator('.effective-roll-summary dt').first();
+  await statLabel.scrollIntoViewIfNeeded();
+  const statLabelBox = (await statLabel.boundingBox())!;
+  await page.touchscreen.tap(statLabelBox.x + statLabelBox.width / 2, statLabelBox.y + statLabelBox.height / 2);
   await expect(role.getByRole('button', { name: `精炼${refinement}阶`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#workspace-main')).toHaveAttribute('aria-label', '队伍');
-  await role.getByRole('button', { name: '管理生之花', exact: true }).press('Shift+F10');
-  await page.getByRole('menuitem', { name: '查看详情', exact: true }).click();
+  await role.getByRole('button', { name: '查看生之花详情', exact: true }).tap();
   const referenceItem = page.locator('.artifact-detail-dialog[open]');
   await referenceItem.getByRole('group', { name: '角色', exact: true }).getByRole('button').first().click();
   await expect(page.locator('#workspace-main')).toHaveAttribute('aria-label', '角色');
@@ -142,7 +202,8 @@ test('recorded team library keeps slot positions and links saved character confi
   await expect(role.getByRole('button', { name: `精炼${refinement}阶`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
   await expect(role).toHaveCount(0);
-  await expect(xingqiu).toBeFocused();
+  await expect(xingqiuDetails).toBeFocused();
+  await page.setViewportSize({ width: 1280, height: 760 });
   await xingqiu.press('Shift+F10');
   await menu.getByRole('menuitem', { name: '替换', exact: true }).click();
   await expect(pickerConfig.getByRole('button', { name: '选择安柏首选配置', exact: true })).toBeVisible();
@@ -236,6 +297,9 @@ test('recorded team library keeps slot positions and links saved character confi
   await bottom.getByRole('button', { name: '下一页', exact: true }).click();
   await expect(top.getByRole('spinbutton', { name: '顶部页码', exact: true })).toHaveValue('2');
   await expect(rows).toHaveCount(1);
+  await search.pressSequentially('没有这支队伍');
+  await library.locator('.library-empty').getByRole('button', { name: '清除搜索与筛选' }).click();
+  await expect(rows).toHaveCount(5);
   await search.pressSequentially('复核 5');
   await expect(rows).toHaveText(/录存配装复核 5/);
   await search.clear();

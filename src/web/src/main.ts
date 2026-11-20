@@ -6,6 +6,7 @@ import './styles/design-language.css';
 import './styles/picker.css';
 import './styles/import-flow.css';
 import './styles/artifact-cards.css';
+import './styles/action-cards.css';
 import { installPalette } from './styles/palette';
 installPalette();
 createApp(App).use(createPinia()).mount('#app');

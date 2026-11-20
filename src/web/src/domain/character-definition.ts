@@ -34,10 +34,10 @@ export function prepareCharacterDefinition(draft: CharacterDefinition, edits: Re
   if (!checked.ok) throw new Error(checked.diagnostics.map(diagnostic => diagnostic.message).join('；'));
   return checked.character;
 }
-export function applyCharacterDefinition(project: Project, actorId: string, file: CharacterDefinition): Project {
+export function applyCharacterDefinition(project: Project, actorId: string, file: CharacterDefinition, schema = projectSchema): Project {
   const checked = compileStructuredCharacter(file);
   if (!checked.ok) throw new Error(checked.diagnostics.map(diagnostic => diagnostic.message).join('；'));
-  const definition = checked.character, next = projectSchema.parse(project), actor = next.candidate.actors.find(actor => actor.id === actorId);
+  const definition = checked.character, next = schema.parse(project), actor = next.candidate.actors.find(actor => actor.id === actorId);
   if (!actor?.build) throw new Error('请先选择有完整配装的队员。');
   const character = actor.build.character;
   if (definition.dataVersion !== actor.build.dataVersion) throw new Error('角色数据版本与当前配装不同，请先核对版本。');
@@ -49,5 +49,5 @@ export function applyCharacterDefinition(project: Project, actorId: string, file
   if (!snapshot) throw new Error('当前队员的角色定义快照缺失。');
   snapshot.source = { kind: 'user', reference: definition.id + '@' + definition.revision, verified: false };
   snapshot.name = definition.identity.name + ' · 自定义角色快照';
-  return projectSchema.parse(next);
+  return schema.parse(next);
 }

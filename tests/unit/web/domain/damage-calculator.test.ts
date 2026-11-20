@@ -2,10 +2,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
-import { readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
+import { calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
+import { calculatorProjectSchema, ordinaryTrialId, projectSchema, type DamageCalculatorDocument } from '@leyline/schema';
+import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
 import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
 import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
-import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
+import { createEmptyProject, nextRecordId } from '../../../../src/web/src/domain/workbench-project';
 import { evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
 import { calculatorIntervals, setTrialCondition } from '../../../../src/web/src/domain/calculator-conditions';
@@ -41,6 +43,33 @@ describe.skipIf(!existsSync(recording))('calculator reads original public showca
 });
 
 const officialShowcase = '.references/enka/official-example.json';
+it.skipIf(!existsSync(vesnaRecording))('ordinary trial for the recorded Varesa is confined to the calculator and requires a known crit choice', async () => {
+  const preview = await previewEnkaImport(JSON.parse(readFileSync(vesnaRecording, 'utf8')), '107590923', createAccount());
+  const build = preview.rows.find(row => row.character.showcase?.build.character.id === 'varesa')!.character.showcase!.build;
+  const project = createEmptyProject();
+  project.enemy = defaultEnemy();
+  const actorId = addActorFromBuild(project, build);
+  const skill = build.character.talents.find(skill => skill.id === 'varesa.burst')!;
+  const hit = skill.hits.find(hit => hit.parameter === 'param5')!;
+  const recordId = nextRecordId(project);
+  project.timeline.push({ id: recordId, actor: actorId, kind: 'damage', definition: actorId + '-real-damage', timeMs: 0, order: 0,
+    damage: { skillId: skill.id, hitId: hit.id, outputId: ordinaryTrialId(hit.id), crit: 'critical', reaction: 'none' } });
+  const document: DamageCalculatorDocument = { schemaVersion: project.schemaVersion, kind: 'damage-calculator', project, actorId, recordId };
+  expect(calculatorProjectSchema.safeParse(project).success).toBe(true);
+  expect(projectSchema.safeParse(project).success).toBe(false);
+  const saved = JSON.stringify(document);
+  const evaluate = () => evaluateTimeline(calculatorWorkerRequest(document, 1).project).points.find(point => point.id === recordId)!;
+  const point = evaluate();
+  expect(point.value).toBeNull();
+  const modeled = point.real!.structured!.outputs[0].modeledValue?.value;
+  expect(modeled?.kind === 'quantity' && modeled.value).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
+  expect(JSON.stringify(document)).toBe(saved);
+  project.timeline[0].damage!.crit = null;
+  const unknown = evaluate();
+  expect(unknown.value).toBeNull();
+  expect(unknown.real!.structured!.outputs[0].modeledValue).toBeUndefined();
+}, 20000);
+
 it.skipIf(!existsSync(officialShowcase))('Harbinger trial uses the actual HP threshold, interval and hit override', async () => {
   const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
   const original = preview.rows.find(row => row.character.showcase?.build.character.id === 'xingqiu')!.character.showcase!.build;

@@ -27,9 +27,9 @@ const groups = computed(() => {
       <section v-for="([group, rows]) in groups" :key="group" :aria-label="group">
         <h3><GameIcon kind="skills" :id="rows[0].icon" :size="24" />{{ group }} <span>{{ rows[0].skillName }}</span></h3>
         <div class="hit-options">
-          <button v-for="row in rows" :key="row.outputId ?? row.hitId" type="button" :disabled="!row.outputId"
+          <button v-for="row in rows" :key="row.outputId ?? row.hitId" type="button" data-card-action="select" :disabled="!row.outputId"
             :data-output-id="row.outputId" :data-skill-id="row.skillId" :aria-pressed="!!row.outputId && selected === row.outputId" @click="emit('select',row)">
-            <strong>{{ row.alias }}</strong><span>{{ row.name }}</span><small>{{ row.outputId ? realElementLabel(row.element) : '尚未支持' }}</small>
+            <strong>{{ row.alias }}</strong><span>{{ row.name }}</span><small>{{ row.ordinaryTrial ? '普通直伤试算' : row.outputId ? realElementLabel(row.element) : '尚未支持' }}</small>
           </button>
         </div>
       </section>
@@ -42,9 +42,9 @@ const groups = computed(() => {
 h3 { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:0 0 8px; font-size:var(--font-control); }
 h3 span,small { font-size:var(--font-body); color:var(--muted); font-weight:400; }
 .hit-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr)); gap:8px; }
-.hit-options button { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; text-align:left; min-height:48px; padding:8px 12px; border:1px solid var(--line); border-radius:7px; background:var(--surface-raised); }
-.hit-options button[aria-pressed=true] { border-color:var(--element-anemo-primary); background:var(--element-anemo-light); }
-.hit-options strong { color:var(--element-anemo-deep); font-size:var(--font-control); }
+.hit-options button { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; text-align:left; min-height:48px; padding:8px 12px; background:var(--surface-raised); }
+.hit-options button[aria-pressed=true] { background:var(--element-hydro-light); }
+.hit-options strong { color:var(--element-hydro-deep); font-size:var(--font-control); }
 .hit-options span { overflow-wrap:anywhere; }
 .empty { color:var(--muted); }
 </style>

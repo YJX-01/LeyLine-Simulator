@@ -330,13 +330,13 @@ async function importFile(event: Event) {
               <span v-if="result.points.length" class="library-page-status">勾选计入目标</span>
             </div>
             <ul v-if="result.points.length" class="analysis-list">
-              <li v-for="point in result.points" :key="point.id" class="analysis-row">
+              <li v-for="point in result.points" :key="point.id" class="analysis-row" data-card-action="detail">
                 <label class="analysis-target">
                   <input type="checkbox" :aria-label="`目标 ${recordLabel(project, point.id)}`"
                     :checked="!project.objective.damageIds || project.objective.damageIds.includes(point.id)"
                     @change="updateDamageSelection(point.id, $event)">
                 </label>
-                <button class="analysis-point" :data-analysis-id="point.id"
+                <button class="analysis-point card-action-trigger" :data-analysis-id="point.id"
                   :aria-label="`分析定位 ${recordLabel(project, point.id)}`" @click="openPoint(point.id)">
                   <span class="analysis-point-name">{{ recordLabel(project, point.id) }}
                     <small>{{ recordTimes.get(point.id) }} 毫秒</small>

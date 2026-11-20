@@ -4,6 +4,7 @@ import FilterActions from '../components/FilterActions.vue';
 import FilterPanel from '../components/FilterPanel.vue';
 import TeamCard from '../components/TeamCard.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
+import LibraryEmptyState from '../components/LibraryEmptyState.vue';
 import LibraryListHeader from '../components/LibraryListHeader.vue';
 import LibraryPagination from '../components/LibraryPagination.vue';
 import LibraryToolbar from '../components/LibraryToolbar.vue';
@@ -123,12 +124,13 @@ function closeDeleted() {
     <LibraryListHeader v-model:page="page" :pages="pages" :count="matches.length" :total="saved.teams.length" unit="支队伍" />
     <ul v-if="visible.length" class="team-list">
       <li v-for="team in visible" :key="team.id">
-        <TeamCard :name="team.name" :members="team.project.candidate.actors" :selected="pick && team.id === selectedId"
+        <TeamCard :action="pick ? 'select' : 'detail'" :name="team.name" :members="team.project.candidate.actors" :selected="pick && team.id === selectedId"
           :data-team-id="team.id" :aria-label="`${pick ? '选择' : '查看'}队伍 ${team.name}`"
           @click="pick ? emit('select', team) : activeTeam = team" />
       </li>
     </ul>
-    <p v-else class="team-empty">{{ saved.teams.length ? '没有匹配的队伍' : '还没有保存的队伍' }}</p>
+    <LibraryEmptyState v-else title="还没有保存的队伍" filtered-title="没有匹配的队伍" :filtered="!!saved.teams.length"
+      :create-label="pick ? undefined : '新建队伍'" @create="activeTeam = 'new'" @clear="query = ''; resetFilters()" />
     <LibraryPagination v-model:page="page" class="team-pagination" :pages="pages" always position="底部" full />
 
     <WorkbenchDialog v-if="filterOpen" title="筛选队伍" size="filter" @close="filterOpen = false">
@@ -153,7 +155,6 @@ function closeDeleted() {
 <style scoped>
 .team-library,.team-list { display:grid; gap:12px; min-width:0; }
 .team-list { list-style:none; padding:0; margin:0; }
-.team-empty { padding:24px 12px; text-align:center; color:var(--muted); }
 .team-library .team-pagination { margin-top:0; }
 .team-member-filter :deep(.picker-menu) { position:static; margin-top:5px; min-width:0; }
 </style>

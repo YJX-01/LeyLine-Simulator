@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
+import ManualCharacterImport from './ManualCharacterImport.vue';
 import CharacterSelectionDialog from '../components/CharacterSelectionDialog.vue';
 import {computed,ref,watch} from 'vue';
 import {useLibraryScroll} from '../composables/use-library-scroll';
@@ -13,11 +14,11 @@ const props=defineProps<{mode:'characters'|'artifacts'}>();
 const emit=defineEmits<{edit:[characterId:string,presetId:string]}>();
 const account=useAccountStore(),views=useLibraryViewStore();
 const view=computed(()=>views.forAccount(account.account.id));
-const rolePickerOpen=ref(false);
-watch([()=>account.account.id,()=>props.mode],()=>{rolePickerOpen.value=false;});
+const rolePickerOpen=ref(false), creatingConfiguration=ref(false);
+watch([()=>account.account.id,()=>props.mode],()=>{rolePickerOpen.value=false;creatingConfiguration.value=false;});
 function selectRole(id:string){
   view.value.characterId=id;
-  view.value.configurationPage=1;
+  view.value.configurationOffset=0;
   rolePickerOpen.value=false;
 }
 useLibraryScroll(()=>props.mode==='characters'?'configurations':'combinations');
@@ -25,8 +26,9 @@ useLibraryScroll(()=>props.mode==='characters'?'configurations':'combinations');
 <template>
   <section class="account-configurations panel library-page" :aria-label="mode==='characters'?'角色配置':'圣遗物组合'">
     <LibraryCornerOrnaments />
-    <CharacterConfigurationList v-if="mode==='characters'" @pick-role="rolePickerOpen=true" @select="(characterId,presetId)=>emit('edit',characterId,presetId)" />
+    <CharacterConfigurationList v-if="mode==='characters'" @pick-role="rolePickerOpen=true" @create="creatingConfiguration=true" @select="(characterId,presetId)=>emit('edit',characterId,presetId)" />
     <ArtifactCombinationLibrary v-else ref="combinations" />
+    <ManualCharacterImport v-if="creatingConfiguration" reuse-local @saved="id=>emit('edit',id,'')" @close="creatingConfiguration=false" />
     <CharacterSelectionDialog v-if="rolePickerOpen" allow-all :selected-id="view.characterId" @close="rolePickerOpen=false" @select="selectRole" />
   </section>
 </template>

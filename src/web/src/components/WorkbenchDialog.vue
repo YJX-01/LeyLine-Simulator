@@ -27,6 +27,7 @@ function cancel(event:Event) {
   requestClose();
 }
 let previous: HTMLElement | null = null;
+let emptyLibrary: Element | null = null;
 let focusObserver:MutationObserver|undefined;
 function recoverFocus(){
   const current=dialog.value,active=document.activeElement;
@@ -35,7 +36,9 @@ function recoverFocus(){
   current.querySelector<HTMLElement>('[autofocus]')?.focus({preventScroll:true});
 }
 onMounted(() => {
-  previous = document.activeElement as HTMLElement;dialog.value?.showModal();
+  previous = document.activeElement as HTMLElement;
+  emptyLibrary = previous?.closest('.library-empty')?.closest('.library-page') ?? null;
+  dialog.value?.showModal();
   focusObserver=new MutationObserver(()=>queueMicrotask(recoverFocus));
   if(dialog.value){
     workbenchDialogClose.set(dialog.value,{isDirty:()=>!!props.dirty,close:requestClose});
@@ -45,7 +48,14 @@ onMounted(() => {
 onBeforeUnmount(() => {
   focusObserver?.disconnect();
   if (dialog.value) { workbenchDialogClose.delete(dialog.value); dialog.value.close(); }
-  queueMicrotask(() => previous?.isConnected && previous.focus({preventScroll:true}));
+  queueMicrotask(() => {
+    if (previous?.isConnected) previous.focus({ preventScroll:true });
+    else if (emptyLibrary?.isConnected) {
+      const toolbar = emptyLibrary.querySelector('.library-toolbar');
+      const target = toolbar?.querySelector<HTMLElement>('.library-primary-action') ?? toolbar?.querySelector<HTMLInputElement>('input');
+      target?.focus({ preventScroll:true });
+    }
+  });
 });
 </script>
 <template>

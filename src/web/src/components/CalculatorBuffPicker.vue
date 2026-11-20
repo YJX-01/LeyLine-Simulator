@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { CalculationFact, CombatConditions, DamageRequest, ValueType } from '@leyline/schema';
-import { buffConditionsMet, buffFactNames, type CalculatorBuff } from '../domain/calculator-buffs';
+import { buffConditionsMet, buffFactNames, resolveBuffSelection, type CalculatorBuff } from '../domain/calculator-buffs';
 import { hpMatches, setTrialCondition, setTrialFact, trialValue, withCurrentConditions, type CalculatorFactSetting } from '../domain/calculator-conditions';
 import GameIcon from './GameIcon.vue';
 import LibraryToolbar from './LibraryToolbar.vue';
@@ -57,25 +57,8 @@ function requirementLabel(setting: CalculatorFactSetting) {
   return value.kind === 'boolean' ? (value.value ? label : label + '关闭') : label + ' ' + (enumLabels[String(value.value)] ?? value.value);
 }
 function apply() {
-  const selected = new Map(changes.value);
-  const damage = draft.value;
-  const absent = (key: string) => !Object.hasOwn(current.value.conditions ?? {}, key) && !Object.hasOwn(damage.facts ?? {}, key);
-  for (const item of props.choices) {
-    if (checked(item) || item.triggerSkill || item.disabled) continue;
-    if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id) && !selected.has(item.id)) {
-      selected.set(item.id, false);
-    }
-    if (item.toggleFact && !Object.hasOwn(damage.facts ?? {}, item.toggleFact)) {
-      setTrialFact(damage, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, props.actorId);
-    }
-    if (item.stacks && !Object.hasOwn(damage.facts ?? {}, item.stacks.key)) {
-      setTrialFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: 0 } }, props.actorId);
-    }
-    // Unselected conditional effects can be excluded without inventing a combat state.
-    const missingCondition = item.hp && absent('hpRatio') || item.requirements.some(({ key }) => absent(key));
-    if (!item.explicit && missingCondition) selected.set(item.id, false);
-  }
-  emit('apply', selected, damage);
+  const selected = resolveBuffSelection(props.choices, draft.value, props.intervals, props.actorId, changes.value);
+  emit('apply', selected, draft.value);
 }
 </script>
 <template>
@@ -83,8 +66,8 @@ function apply() {
     <div class="buff-picker">
       <LibraryToolbar v-model="query" search-only label="搜索增益" placeholder="搜索增益或来源…" />
       <div v-if="visible.length" class="buff-options">
-        <div v-for="item in visible" :key="item.id" class="buff-entry" :class="{ chosen: checked(item) }">
-          <label>
+        <div v-for="item in visible" :key="item.id" class="buff-entry" data-card-action="select" :class="{ chosen: checked(item) }">
+          <label class="card-action-trigger">
             <GameIcon :kind="item.icon.kind" :id="item.icon.id" :monochrome="item.icon.kind === 'constellations'" :size="44" />
             <span><strong>{{ item.name }}</strong><small>{{ item.source }} / {{ item.description }}</small>
               <small v-if="item.requirements.length && !item.toggleFact">{{ item.requirements.map(requirementLabel).join('、') }}</small>
@@ -120,12 +103,12 @@ function apply() {
 <style scoped>
 .buff-picker { display:grid; gap:16px; }
 .buff-options,.buff-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); gap:8px; }
-.buff-entry { display:grid; align-content:start; border:1px solid var(--line); border-radius:7px; padding:10px 12px; }
-.buff-entry.chosen { background:var(--element-anemo-light); border-color:var(--element-anemo-primary); }
-.buff-entry label { display:grid; grid-template-columns:44px 1fr auto; align-items:center; gap:10px; cursor:pointer; }
+.buff-entry { display:grid; align-content:start; }
+.buff-entry.chosen { background:var(--element-hydro-light); }
+.buff-entry label { display:grid; grid-template-columns:44px 1fr auto; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; }
 .buff-entry strong,.buff-entry small { display:block; overflow-wrap:anywhere; }
 .buff-entry small { font-size:var(--font-body); color:var(--muted); line-height:1.5; font-weight:400; }
-.buff-entry input { width:18px; height:18px; min-height:0; accent-color:var(--element-anemo-deep); }
-.buff-entry button { justify-self:end; }.buff-fields label { min-width:0; }
+.buff-entry input { width:18px; height:18px; min-height:0; accent-color:var(--element-hydro-deep); }
+.buff-entry button { justify-self:end; margin:0 12px 10px; }.buff-fields label { min-width:0; }
 h3 { margin:0 0 8px; font-size:var(--font-control); }.buff-actions { display:flex; justify-content:flex-end; }
 </style>

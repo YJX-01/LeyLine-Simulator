@@ -1,16 +1,19 @@
-import { watch, type Ref } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 
-export function useInventoryPageSize(
+type CardDensity = 'relaxed' | 'compact';
+
+export function useGridPageSize(
   grid: Ref<HTMLElement | undefined>,
-  density: Ref<'relaxed' | 'compact'>,
-  size: Ref<number>,
+  density: Readonly<Ref<CardDensity>>,
+  rows: Readonly<Record<CardDensity, number>>,
+  size: Ref<number> = ref(rows[density.value]),
 ) {
   watch([grid, density], ([element, layout], _previous, onCleanup) => {
     if (!element) return;
-    const rows = layout === 'compact' ? 8 : 5;
     const measure = () => {
+      if (!element.clientWidth) return;
       const columns = getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length;
-      size.value = rows * columns;
+      size.value = rows[layout] * columns;
     };
     let frame = 0;
     let width: number | undefined;

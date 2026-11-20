@@ -3,7 +3,7 @@ import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, test, type Locator } from '@playwright/test';
 import type { AxisResponse, Build, DamageCalculatorDocument } from '@leyline/schema';
-import { vesnaRecording } from '../../helpers/recorded-vesna';
+import { recordedVaresaPlunge, recordedVesnaDamage, vesnaRecording } from '../../helpers/recorded-vesna';
 
 const buildEditor = (calculator: Locator) => calculator.getByRole('dialog', { name: / · 角色配置$/ });
 const editBuild = (calculator: Locator) => calculator.getByRole('button', { name: '编辑角色配置', exact: true }).click();
@@ -57,6 +57,9 @@ test('calculator shares the team and character pickers and retains a four-member
   await page.getByTestId('workspace-nav-team').click();
   const libraryCard = page.getByRole('region', { name: '队伍', exact: true }).locator('.team-row').first();
   await expect(libraryCard).toBeVisible();
+  await libraryCard.hover();
+  await expect(libraryCard).toHaveCSS('border-top-color', 'rgb(76, 169, 139)');
+  await expect(libraryCard.locator('.card-replace-mark')).toHaveCount(0);
   const desktopSizes = await sizes(libraryCard);
   expect(desktopSizes).toEqual(Array.from({ length: 4 }, () => [64, 64]));
   await page.setViewportSize({width:390,height:844});
@@ -74,10 +77,16 @@ test('calculator shares the team and character pickers and retains a four-member
   await button('选择队伍').click();
   const team = page.getByRole('dialog',{ name:'选择队伍' }).getByRole('button',{ name:'选择队伍 ' + teamName });
   await expect(team.locator('.team-row-members .game-icon')).toHaveCount(4);
+  await team.hover();
+  await expect(team).toHaveCSS('border-top-color', 'rgb(79, 145, 197)');
   expect(await sizes(team)).toEqual(desktopSizes);
   await page.setViewportSize({width:390,height:844});
   expect(await sizes(team)).toEqual(mobileSizes);
   await team.click();
+  await button('选择角色').hover();
+  await expect(button('选择队伍').locator('.card-replace-mark')).toBeHidden();
+  await button('选择队伍').hover();
+  await expect(button('选择队伍').locator('.team-row-members > .card-replace-layer .card-replace-mark')).toBeVisible();
   expect(await sizes(button('选择队伍'))).toEqual(mobileSizes);
   await page.setViewportSize({width:1280,height:960});
   expect(await sizes(button('选择队伍'))).toEqual(desktopSizes);
@@ -93,7 +102,13 @@ test('calculator shares the team and character pickers and retains a four-member
   await hits.getByLabel('搜索伤害').pressSequentially('小q');
   await expect(hits.locator('.hit-options button')).toHaveCount(1);
   await expect(hits.locator('.hit-options button')).toContainText('大火山崩落');
-  await page.keyboard.press('Escape');
+  await hits.getByRole('button', { name: /大火山崩落.*普通直伤试算/ }).click();
+  await button('保存伤害').click();
+  const trialValue = () => expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', '')));
+  const expectedValue = () => expect.poll(async () => Number((await calculator.getByTestId('calculator-expected').textContent())?.replaceAll(',', '')));
+  await trialValue().toBeCloseTo(recordedVaresaPlunge('critical'), 5);
+  await expectedValue().toBeCloseTo(recordedVaresaPlunge('expected'), 5);
+  await expect(calculator.getByText('已实现效果试算', { exact: false }).first()).toBeVisible();
   await button('选择角色').click();
   await roles.getByRole('button',{name:'选择薇斯纳'}).click();
   await button('选择伤害').click();
@@ -104,18 +119,22 @@ test('calculator shares the team and character pickers and retains a four-member
   await button('选择增益').click();
   for (const option of await page.getByRole('dialog', { name: '选择增益' }).getByRole('checkbox').all()) await option.check();
   await button('应用增益').click();
-  await button('计算伤害').click();
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('机制尚未支持');
+  const critical = recordedVesnaDamage(1, 1, true, 'critical', 3);
+  await trialValue().toBeCloseTo(critical, 5);
+  await expectedValue().toBeCloseTo(recordedVesnaDamage(1, 1, true, 'expected', 3), 5);
+  await calculator.getByText('计算条件与支持范围', { exact: true }).click();
   await expect(calculator.getByRole('list', { name: '未完成的计算条件' })).toContainText('瓦雷莎的流浪乐章');
+  await button('保存伤害').click();
+  await expect(button('保存伤害')).toBeDisabled();
   const download = page.waitForEvent('download');
-  await button('保存计算').click();
+  await button('导出计算文件').click();
   const content = readFileSync((await (await download).path())!, 'utf8');
   const file = await readDocument<DamageCalculatorDocument>(page,'damage-calculator',content);
   expect(file.team?.name).toBe(teamName);
   expect(file.project.candidate.actors.map(member => member.build!.character.id)).toEqual(members);
   expect(file.project.timeline.find(entry => entry.id === file.recordId)?.actor).toBe(file.actorId);
   await calculator.getByLabel('打开伤害计算文件').setInputFiles({name:'队伍计算.json',mimeType:'application/json',buffer:Buffer.from(content)});
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('机制尚未支持');
+  await trialValue().toBeCloseTo(critical, 5);
   await expect(button('选择队伍')).toContainText(teamName);
   await button('选择角色').click();
   await expect(roles.locator('.character-card')).toHaveCount(4);
@@ -123,8 +142,33 @@ test('calculator shares the team and character pickers and retains a four-member
   await page.setViewportSize({width:390,height:844});
   await expect(button('选择伤害')).toBeVisible();
   expect(await calculator.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  const multiplier = calculator.locator('.factor-card').filter({ hasText: '反应增伤区' }).locator('summary strong');
+  expect(await multiplier.evaluate(node => {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    return new Set(Array.from(range.getClientRects(), rect => rect.top)).size;
+  })).toBe(1);
   await page.screenshot({path:info.outputPath('team-calculator-mobile.png')});
   expect(await storage()).toEqual(before);
+  await page.reload();
+  await page.getByRole('button', { name: '打开功能导航' }).click();
+  await page.getByTestId('workspace-nav-calculator').click();
+  await button('伤害列表').click();
+  const list = page.getByRole('dialog', { name: '伤害列表' });
+  const plunge = list.getByRole('button', { name: /^瓦雷莎/ });
+  await expect(plunge).toContainText('试算 24,457.749657');
+  await list.getByRole('button', { name: /^薇斯纳/ }).click();
+  await trialValue().toBeCloseTo(critical, 5);
+  await expect(button('选择队伍')).toContainText(teamName);
+  await button('伤害列表').click();
+  await list.getByRole('button', { name: /^删除 薇斯纳/ }).click();
+  await page.getByRole('dialog', { name: '删除已保存的伤害？' }).getByRole('button', { name: '删除', exact: true }).click();
+  await plunge.click();
+  await expectedValue().toBeCloseTo(recordedVaresaPlunge('expected'), 5);
+  await button('伤害列表').click();
+  await list.getByRole('button', { name: /^删除 瓦雷莎/ }).click();
+  await page.getByRole('dialog', { name: '删除已保存的伤害？' }).getByRole('button', { name: '删除', exact: true }).click();
+  await expect(list).toContainText('还没有保存的伤害');
 });
 
 // Source-based legal single-point calculations, separate from player records/game observations.
@@ -153,7 +197,10 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('需补充条件');
+  const uncharged = (18.87648 * 8.349 + 67.54129 + 23.245 * 5.968 + 46.7) * 2.0672 * 1.24 * 0.45;
+  await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(uncharged, 5);
+  await calculator.getByRole('combobox', { name: '反击档位', exact: true }).selectOption('');
+  await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
   await expect(calculator.getByRole('list', { name: '未完成的计算条件' })).toContainText('反击档位');
   await calculator.getByRole('combobox', { name: '反击档位', exact: true }).selectOption('2');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
@@ -162,6 +209,9 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected, 5);
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-expected').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected * (1 + 0.05 * 0.5), 5);
   const base = calculator.locator('.factor-card').filter({ hasText: '数值 × 倍率区' });
+  await base.locator('summary').hover();
+  await expect(base).toHaveCSS('border-top-width', '3px');
+  await expect(base).toHaveCSS('border-top-color', 'rgb(76, 169, 139)');
   await base.locator('summary').click();
   await expect(base).toContainText('攻击力 × 倍率');
   const defense = calculator.locator('.factor-card').filter({ hasText: '防御区' });
@@ -169,6 +219,7 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await expect(defense).toContainText('目标等级');
   await calculator.getByRole('button', { name: '设为比较基准', exact: true }).click();
   await expect(calculator.getByRole('combobox', { name: '反击档位', exact: true })).toBeDisabled();
+  await expect(calculator.locator('.calculator-selections .card-replace-mark')).toHaveCount(0);
   await editBuild(calculator);
   await calculator.getByRole('button', { name: '更换武器', exact: true }).click();
   await weapons.getByLabel('搜索装备武器', { exact: true }).pressSequentially('佣兵重剑');
@@ -178,7 +229,7 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   const expectedAfter = (18.87648 * 8.349 + 67.54129 + 32.93 * 5.968 + 46.7) * 7.5072 * 1.24 * 0.45;
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-delta').textContent())?.replaceAll(',', ''))).toBeCloseTo(expectedAfter - expected, 5);
   const downloadPromise = page.waitForEvent('download');
-  await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
+  await calculator.getByRole('button', { name: '导出计算文件', exact: true }).click();
   const download = await downloadPromise;
   const content = readFileSync((await download.path())!, 'utf8');
   const savedDocument: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', content);
@@ -240,7 +291,7 @@ test('calculator creates a named independent Kaeya capture, saves it and recompu
   const changed = (18.6984 * 8.349 + 66.90411 + 32.93 * 5.968 + 46.7) * 1.3192 * 0.45;
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-delta').textContent())?.replaceAll(',', ''))).toBeCloseTo(changed - expected, 5);
   const downloadPromise = page.waitForEvent('download');
-  await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
+  await calculator.getByRole('button', { name: '导出计算文件', exact: true }).click();
   const savedFile = readFileSync((await (await downloadPromise).path())!, 'utf8');
   const saved = await readDocument<DamageCalculatorDocument>(page, 'damage-calculator', savedFile);
   expect(saved.project.timeline.filter(record => record.kind === 'action')).toHaveLength(0);
@@ -354,7 +405,8 @@ test('calculator reads the recorded public showcase explicitly without writing l
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('机制尚未支持');
+  await expect(calculator.locator('.damage-totals')).toContainText('已实现效果试算');
+  await calculator.getByText('计算条件与支持范围', { exact: true }).click();
   await expect(calculator.getByRole('list', { name: '未完成的计算条件' })).toContainText('命座');
   const after = await page.evaluate(async () => {
     // @ts-expect-error Vite browser source URL.
@@ -407,7 +459,7 @@ test('missing-build derivative of the original account stays selectable and carr
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
   await calculator.getByRole('button', { name: '计算伤害', exact: true }).click();
   const downloadPromise = page.waitForEvent('download');
-  await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
+  await calculator.getByRole('button', { name: '导出计算文件', exact: true }).click();
   const saved: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', readFileSync((await (await downloadPromise).path())!, 'utf8'));
   const copied = saved.project.candidate.actors[0].build!;
   expect(copied.artifacts.map(item => item.id)).toEqual(Object.values(before.equipment));
@@ -440,17 +492,19 @@ test('old saved content changes only after review and explicit adoption in the c
   await page.getByTestId('workspace-nav-calculator').click();
   const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '内容快照.json', mimeType: 'application/json', buffer: Buffer.from(content) });
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('机制尚未支持');
+  const expected = (18.6984 * 8.349 + 66.90411 + 23.245 * 5.968 + 46.7) * 3.824 * 0.45;
+  await expect(calculator.locator('.damage-totals')).toContainText('已实现效果试算');
+  await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected, 5);
   await calculator.getByText('角色定义', { exact: true }).click();
   await calculator.getByRole('button', { name: '检查当前内容', exact: true }).click();
   const review = page.getByRole('dialog', { name: '更新计算副本内容', exact: true });
   await expect(review).toContainText('角色定义（4 → 6）');
   await review.getByRole('button', { name: '关闭更新计算副本内容', exact: true }).click();
-  await expect(calculator.getByTestId('calculator-value')).toHaveText('机制尚未支持');
+  await expect(calculator.locator('.damage-totals')).toContainText('已实现效果试算');
   await calculator.getByRole('button', { name: '检查当前内容', exact: true }).click();
   await review.getByRole('button', { name: '采用当前内容并重算', exact: true }).click();
-  const expected = (18.6984 * 8.349 + 66.90411 + 23.245 * 5.968 + 46.7) * 3.824 * 0.45;
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expected, 5);
+  await expect(calculator.locator('.damage-totals')).toContainText('最终伤害值');
 });
 
 for (const entry of [
@@ -501,7 +555,7 @@ for (const entry of [
   await calculator.getByRole('button', { name: '重算候选', exact: true }).click();
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-delta').textContent())?.replaceAll(',', ''))).toBeCloseTo(entry.delta, 5);
   const downloadPromise = page.waitForEvent('download');
-  await calculator.getByRole('button', { name: '保存计算', exact: true }).click();
+  await calculator.getByRole('button', { name: '导出计算文件', exact: true }).click();
   const content = readFileSync((await (await downloadPromise).path())!, 'utf8');
   const saved = await readDocument<DamageCalculatorDocument>(page, 'damage-calculator', content);
   expect(saved.project.timeline).toHaveLength(1);

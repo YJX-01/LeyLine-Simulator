@@ -7,7 +7,8 @@ import { enemySchema } from './enemy';
 import { talentInputIssues } from '../content/talent';
 import { ruleDefinitionSchema, requiresDependencyDefinition } from './expressions';
 import { combatStateIntervalSchema, validateCombatStates } from './combat-state';
-export const projectSchema = z.object({
+export const ordinaryTrialId = (hitId: string) => hitId + '.ordinary-trial';
+const projectFields = z.object({
   schemaVersion: z.literal(APP_VERSION), rulesVersion: z.literal('timeline-v1'), calculationProfile: z.enum(['direct','dependency']), id: idSchema, name: idSchema.optional(), revision: idSchema,
   definitions: z.array(ruleDefinitionSchema).max(200),
   candidate: z.object({
@@ -26,7 +27,8 @@ export const projectSchema = z.object({
     kind: z.enum(['action', 'damage', 'capture']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
   }).strict()).max(10000),
   objective: z.object({ damageIds: z.array(idSchema).optional() }).strict(),
-}).strict().superRefine((project, context) => {
+}).strict();
+const checkedProject = (allowOrdinaryTrial: boolean) => projectFields.superRefine((project, context) => {
   validateCombatStates(project, context);
   if (project.calculationProfile === 'direct') {
     if (project.effectRevisions !== undefined || project.definitions.some(requiresDependencyDefinition)) {
@@ -44,7 +46,8 @@ export const projectSchema = z.object({
     if (record.damage) {
       const actor = captureActors.get(record.actor), skill = actor?.build?.character.talents.find(skill => skill.id === record.damage!.skillId);
       const hit = skill?.hits.find(hit => hit.id === record.damage!.hitId);
-      if (record.kind !== 'damage' || !hit?.outputs.some(output => output.id === record.damage!.outputId)) {
+      const trial = allowOrdinaryTrial && hit && !skill?.noIndependentDamage && !hit.outputs.length && record.damage.outputId === ordinaryTrialId(hit.id);
+      if (record.kind !== 'damage' || !(trial || hit?.outputs.some(output => output.id === record.damage!.outputId))) {
         context.addIssue({ code: 'custom', message: '伤害必须引用当前角色快照中的明确技能、命中和输出。', path: ['timeline', index, 'damage'] });
       }
     }
@@ -94,6 +97,8 @@ export const projectSchema = z.object({
     });
   });
 });
+export const projectSchema = checkedProject(false);
+export const calculatorProjectSchema = checkedProject(true);
 export type Project = z.infer<typeof projectSchema>;
 export interface Diagnostic {
   code: 'invalid-input' | 'missing-reference' | 'duplicate-id' | 'cycle' | 'unit' | 'unknown' | 'unsupported' | 'arithmetic' | 'budget' | 'stale-revision';

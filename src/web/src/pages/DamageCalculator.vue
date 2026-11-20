@@ -2,9 +2,9 @@
 import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
 import { loadCatalog, type GameCatalog } from '@leyline/game-data';
-import { damageCalculatorSchema, projectSchema, type ValueType, elements, talentLevelBonus, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
+import { calculatorProjectSchema, damageCalculatorSchema, projectSchema, type ValueType, elements, talentLevelBonus, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
 import type { AccountCharacter } from '../domain/account';
-import { calculatorRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
+import { calculatorRequest, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
 import { addActorFromBuild, addAttributeCapture, defaultEnemy } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { teamArtifactEntries } from '../domain/team-members';
@@ -31,10 +31,12 @@ import CalculatorDamagePicker from '../components/CalculatorDamagePicker.vue';
 import CalculatorBuffPicker from '../components/CalculatorBuffPicker.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
-import { applyCalculatorBuffs, buffFactNames, calculatorBuffChoices } from '../domain/calculator-buffs';
+import { applyCalculatorBuffs, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
 import { calculatorIntervals, ownerFactFields, selectionFacts, setTrialFact } from '../domain/calculator-conditions';
 import { damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
+import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
+const SavedDamageList = defineAsyncComponent(() => import('../components/SavedDamageList.vue'));
 const TeamLibrary = defineAsyncComponent(() => import('./TeamLibrary.vue'));
 const CharacterSelectionDialog = defineAsyncComponent(() => import('../components/CharacterSelectionDialog.vue'));
 const CalculatorBuildEditor = defineAsyncComponent(() => import('./CalculatorBuildEditor.vue'));
@@ -44,9 +46,11 @@ const document = shallowRef<DamageCalculatorDocument>();
 const working = ref(false), error = ref('');
 const file = ref<HTMLInputElement>(), source = ref('');
 const savedSignature = ref('');
+const listed = shallowRef<{ id: string; signature: string }>();
+const savingDamage = ref(false);
 const response = shallowRef<AxisResponse>();
 const expectedResult = shallowRef<AxisResponse['result']>();
-const picker = ref<'team' | 'character' | 'candidate' | 'damage' | 'buff'>();
+const picker = ref<'team' | 'character' | 'candidate' | 'damage' | 'buff' | 'list'>();
 const catalog = shallowRef<GameCatalog>();
 const characterSource = ref<'local' | 'showcase' | 'catalog'>('local');
 const sourceChoices = computed(() => [
@@ -114,7 +118,7 @@ async function importMetadata(event: Event) {
     const definition = parseCharacterDefinition(await file.text(), [selected]);
     if (before !== signature()) throw new Error('计算副本已变化，请重新导入。');
     const current = prepareDocument()!;
-    const next = { ...current, project: applyCharacterDefinition(current.project, actorId, definition) };
+    const next = { ...current, project: applyCharacterDefinition(current.project, actorId, definition, calculatorProjectSchema) };
     calculatorRequest(next, 0);
     document.value = next;
     if (document.value.recordId) await calculate();
@@ -123,6 +127,13 @@ async function importMetadata(event: Event) {
 const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
 const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
 const expectedPoint = computed(() => expectedResult.value?.points.find(point => point.id === document.value?.recordId));
+function modeledValue(record: typeof point.value) {
+  if (record?.value != null || record?.real?.status !== 'partial' || record.real.issues.some(issue => issue.code !== 'unsupported')) return;
+  const value = record.real.structured?.outputs.find(output => output.outputId === damage.value.outputId)?.modeledValue?.value;
+  if (value?.kind === 'quantity' && value.unit === 'damage') return value.value;
+}
+const trial = computed(() => modeledValue(point.value));
+const expectedTrial = computed(() => modeledValue(expectedPoint.value));
 const baselinePoint = computed(() => response.value?.comparison?.baseline.points.find(point => point.id === document.value?.recordId));
 const inputNames: Record<string, string> = { counterCharge: '反击档位', namisen: '浪闪层数', resolve: '施放时消耗的愿力', lightfallEnergy: '光降之剑能量层数' };
 const factLabels: Record<string, string> = { ...buffFactNames, ...inputNames, critMode: '暴击', reactionMode: '反应' };
@@ -134,11 +145,16 @@ function diagnosticText(message: string) {
 }
 const missingBuff = computed(() => [point.value, expectedPoint.value].some(point => point?.real?.structured?.requiredInputs.some(input =>
   input.requiredBy.length && (factFields.value.some(field => field.key === input.key) || ['onField', 'shielded', 'hpRatio'].includes(input.key)))));
-const diagnostics = computed(() => [...new Set([...(result.value?.diagnostics ?? []), ...(expectedResult.value?.diagnostics ?? [])]
-  .map(diagnostic => diagnosticText(diagnostic.message)))]);
+const diagnostics = computed(() => {
+  const recordPath = document.value?.recordId && 'timeline.' + document.value.recordId;
+  const all = [...(result.value?.diagnostics ?? []), ...(expectedResult.value?.diagnostics ?? [])];
+  return [...new Set(all.filter(({ path }) => !recordPath || !path.startsWith('timeline.') || path === recordPath || path.startsWith(recordPath + '.'))
+    .map(diagnostic => diagnosticText(diagnostic.message)))];
+});
 function unavailable(assessment: AxisResponse['result'] | undefined, record: typeof point.value) {
-  if (record?.real?.issues.some(issue => issue.code === 'unsupported')) return '机制尚未支持';
   if (record?.real?.status === 'invalid' || assessment?.status === 'invalid') return '输入需修正';
+  if (record?.real?.issues.some(issue => issue.code === 'unknown')) return '需补充条件';
+  if (record?.real?.issues.some(issue => issue.code === 'unsupported')) return '机制尚未支持';
   return '需补充条件';
 }
 const reactionType = computed({ get: () => damage.value.reaction === null ? '' : damage.value.reaction === 'none' ? 'none' : damage.value.reaction.type,
@@ -167,13 +183,18 @@ const signature = () => documentSignature.value + '\n' + JSON.stringify([damage.
 const dirty = computed(() => !!document.value && signature() !== savedSignature.value);
 const { discardOpen, requestLeave, cancelDiscard, discardChanges, saveAndLeave } = useUnsavedChanges(dirty);
 let activeWorker: Worker | undefined, taskId = 0, sourceRead = 0;
-function stop() { activeWorker?.terminate(); activeWorker = undefined; working.value = false; }
+let calculationFinished: Promise<void> | undefined, finishCalculation: (() => void) | undefined;
+function stop() {
+  activeWorker?.terminate(); activeWorker = undefined; working.value = false;
+  finishCalculation?.(); finishCalculation = undefined; calculationFinished = undefined;
+}
 function invalidate() { stop(); response.value = undefined; expectedResult.value = undefined; }
 watch(document, invalidate, { flush: 'sync' });
 watch([damage, enemy, hitTime], invalidate, { deep: true, flush: 'sync' });
 onBeforeUnmount(stop);
 function install(next: DamageCalculatorDocument, saved = false) {
   sourceRead++;
+  listed.value = undefined;
   invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = damageCalculatorSchema.parse(next);
   const record = next.project.timeline.find(record => record.id === next.recordId);
   damage.value = record?.damage ? JSON.parse(JSON.stringify(record.damage)) : emptyDamage();
@@ -184,12 +205,13 @@ function install(next: DamageCalculatorDocument, saved = false) {
 }
 function clearCalculation() {
   sourceRead++;
+  listed.value = undefined;
   invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = undefined;
   damage.value = emptyDamage(); enemy.value = defaultEnemy(); hitTime.value = 0; captureTime.value = '';
   editor.value = undefined; error.value = ''; source.value = '';
 }
 function newCalculation() { requestLeave(clearCalculation); }
-function copyAxis() { requestLeave(() => { try { install(copyProjectForCalculator(axis.project)); } catch (cause) { showError(cause); } }); }
+function copyAxis() { requestLeave(() => { try { const copy = copyProjectForCalculator(axis.project); install(copy); if (copy.recordId) void calculate(); } catch (cause) { showError(cause); } }); }
 function showError(cause: unknown) { error.value = cause instanceof Error ? cause.message : '计算未完成。'; }
 async function openCharacters() {
   characterSource.value = !account.account.characters.length ? 'catalog' : source.value.startsWith('showcase:') ? 'showcase' : 'local';
@@ -224,6 +246,7 @@ function chooseCharacter(id: string) {
       const project = current?.project ?? roster;
       const record = project.timeline.find(entry => entry.actor === id && entry.damage);
       install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', team: { id: team.id, name: team.name }, project, actorId: id, recordId: record?.id });
+      if (record) void calculate();
     } catch (cause) { showError(cause); }
     return;
   }
@@ -237,7 +260,10 @@ function chooseCharacter(id: string) {
 function selectDamage(choice: CalculatorHitChoice) {
   if (!choice.outputId) return;
   picker.value = undefined;
-  if (damage.value.outputId === choice.outputId && damage.value.hitId === choice.hitId && damage.value.skillId === choice.skillId) return;
+  if (damage.value.outputId === choice.outputId && damage.value.hitId === choice.hitId && damage.value.skillId === choice.skillId) {
+    if (!result.value && !working.value) void calculate();
+    return;
+  }
   const previousSkill = damage.value.skillId, previousReaction = reactionType.value;
   damage.value = { ...damage.value, skillId: choice.skillId, hitId: choice.hitId, outputId: choice.outputId };
   if (previousSkill !== choice.skillId) delete damage.value.inputs;
@@ -248,6 +274,14 @@ function selectDamage(choice: CalculatorHitChoice) {
     const applicable = new Set(buffs.value.filter(option => option.explicit && !option.triggerSkill).map(option => option.id));
     damage.value.effectApplications = damage.value.effectApplications.filter(entry => applicable.has(entry.instanceId));
   }
+  if (!previousSkill || previousSkill !== choice.skillId) {
+    for (const input of skill.value?.inputs ?? []) damage.value.inputs = { ...damage.value.inputs, [input.id]: input.min };
+  }
+  if (hitOwner.value) {
+    const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
+    const changes = resolveBuffSelection(buffs.value, draft, intervals.value, hitOwner.value.id, new Map());
+    applyBuffs(changes, draft);
+  } else void calculate();
 }
 function applyBuffs(changes: Map<string,boolean>, draft: DamageRequest) {
   if (!document.value || document.value.baseline) return;
@@ -256,6 +290,7 @@ function applyBuffs(changes: Map<string,boolean>, draft: DamageRequest) {
     if (next.project !== document.value.project) document.value = { ...document.value, project: next.project };
     damage.value = { ...draft, effectApplications: next.applications };
     picker.value = undefined;
+    if (selectedChoice.value) void calculate();
   } catch (cause) { picker.value = undefined; showError(cause); }
 }
 async function loadSource(kind: 'local' | 'showcase', id: string) {
@@ -289,21 +324,24 @@ function applyBuild(build: Build) {
   const { project } = current;
   const actors = project.candidate.actors.map(member => member.id === current.actorId ? { ...member, build } : member);
   document.value = { ...current, project: { ...project, candidate: { ...project.candidate, actors } } };
+  if (selectedChoice.value) void calculate();
 }
 function prepareDocument() {
-  if (!document.value) return undefined;
-  const next = damageCalculatorSchema.parse(document.value);
-  if (!next.baseline) {
-    next.project.enemy = enemy.value;
-    const record = next.project.timeline.find(record => record.id === next.recordId);
-    const timeMs = Math.round(hitTime.value * 1000);
-    if (!Number.isFinite(hitTime.value) || timeMs < 0 || timeMs > 3600000) throw new Error('请填写0至3600秒内的命中时刻。');
-    if (record && damage.value.skillId) { record.damage = JSON.parse(JSON.stringify(damage.value)); record.timeMs = timeMs; }
-    else if (!record && damage.value.skillId) {
-      if (!next.team && (next.project.timeline.some(record => record.kind === 'damage') || next.project.candidate.actors.length > 1)) throw new Error('请在复制的轴中选择已有命中。');
+  const current = document.value;
+  if (!current) return undefined;
+  if (current.baseline) return damageCalculatorSchema.parse(current);
+  const timeline = [...current.project.timeline];
+  const next = { ...current, project: { ...current.project, enemy: enemy.value, timeline } };
+  const timeMs = Math.round(hitTime.value * 1000);
+  if (!Number.isFinite(hitTime.value) || timeMs < 0 || timeMs > 3600000) throw new Error('请填写0至3600秒内的命中时刻。');
+  if (damage.value.skillId) {
+    const index = timeline.findIndex(record => record.id === next.recordId);
+    if (index >= 0) timeline[index] = { ...timeline[index], timeMs, damage: damage.value };
+    else {
+      if (!next.team && (timeline.some(record => record.kind === 'damage') || next.project.candidate.actors.length > 1)) throw new Error('请在复制的轴中选择已有命中。');
       next.recordId = nextRecordId(next.project);
-      next.project.timeline.push({ id: next.recordId, actor: next.actorId, kind: 'damage', definition: `${next.actorId}-real-damage`,
-        timeMs, order: Math.max(-1, ...next.project.timeline.map(record => record.order)) + 1, damage: JSON.parse(JSON.stringify(damage.value)) });
+      timeline.push({ id: next.recordId, actor: next.actorId, kind: 'damage', definition: `${next.actorId}-real-damage`,
+        timeMs, order: Math.max(-1, ...timeline.map(record => record.order)) + 1, damage: damage.value });
     }
   }
   return damageCalculatorSchema.parse(next);
@@ -315,7 +353,7 @@ async function createCapture() {
     if (String(captureTime.value).trim() === '') throw new Error('请填写已确认的属性捕获时刻。');
     const timeMs = Math.round(Number(captureTime.value) * 1000);
     const next = damageCalculatorSchema.parse(document.value);
-    const recordId = addAttributeCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs);
+    const recordId = addAttributeCapture(next.project, hitOwner.value.id, selectedHit.value.snapshot.sourceSkillId, timeMs, calculatorProjectSchema);
     document.value = next;
     damage.value.capture = { recordId, phase: null };
     captureTime.value = '';
@@ -327,11 +365,12 @@ async function calculate() {
     const next = prepareDocument();
     if (!next) return;
     if (!next.recordId) throw new Error('请选择伤害。');
-    document.value = next;
-    const request = calculatorRequest(next, ++taskId);
+    if (JSON.stringify(next) !== documentSignature.value) document.value = next;
+    const request = calculatorWorkerRequest(next, ++taskId);
     stop(); working.value = true;
     const worker = new Worker(new URL('../workers/axis.worker.ts', import.meta.url), { type: 'module' });
     activeWorker = worker;
+    calculationFinished = new Promise<void>(resolve => { finishCalculation = resolve; });
     const recordId = next.recordId;
     const expectedTask = ++taskId;
     worker.onmessage = (event: MessageEvent<AxisResponse>) => {
@@ -345,12 +384,16 @@ async function calculate() {
       response.value = event.data;
       if (event.data.error) { error.value = event.data.error; stop(); return; }
       if (damage.value.crit === 'expected') { expectedResult.value = result.value; stop(); return; }
-      const timeline = next.project.timeline.map(record => record.id === recordId && record.damage
-        ? { ...record, damage: { ...record.damage, crit: 'expected' as const } } : record);
-      worker.postMessage({ taskId: expectedTask, session: 1, revision: expectedTask, project: { ...next.project, timeline } });
+      try {
+        const evaluated = request.candidates ? calculatorWorkerRequest({ ...next, baseline: undefined }, expectedTask).project : request.project;
+        const timeline = evaluated.timeline.map(record => record.id === recordId && record.damage
+          ? { ...record, damage: { ...record.damage, crit: 'expected' as const } } : record);
+        worker.postMessage({ taskId: expectedTask, session: 1, revision: expectedTask, project: { ...evaluated, timeline } });
+      } catch (cause) { stop(); showError(cause); }
     };
-    worker.onerror = () => { if (activeWorker === worker) { stop(); error.value = '计算进程未完成，请重新计算。'; } };
+    worker.onmessageerror = worker.onerror = () => { if (activeWorker === worker) { stop(); error.value = '计算进程未完成，请重新计算。'; } };
     worker.postMessage(request);
+    await calculationFinished;
   } catch (cause) { stop(); showError(cause); }
 }
 async function reviewContent() {
@@ -373,21 +416,63 @@ async function applyContent() {
 }
 async function pinBaseline() {
   if (!document.value?.recordId || point.value?.value == null) return;
-  document.value = { ...document.value, baseline: projectSchema.parse(document.value.project) };
+  document.value = { ...document.value, baseline: calculatorProjectSchema.parse(document.value.project) };
   await calculate();
 }
 function endComparison() {
-  if (document.value) document.value = { ...document.value, baseline: undefined };
+  if (!document.value) return;
+  document.value = { ...document.value, baseline: undefined };
+  if (document.value.recordId) void calculate();
 }
 async function save() {
   error.value = '';
   try { const next = prepareDocument(); if (!next) return false; calculatorRequest(next, 0); if (JSON.stringify(document.value) !== JSON.stringify(next)) document.value = next; downloadJson(packDocument('damage-calculator', next), '伤害计算.json'); savedSignature.value = signature(); return true; }
   catch (cause) { showError(cause); return false; }
 }
+async function saveDamage() {
+  if (!document.value || !selectedChoice.value || savingDamage.value) return false;
+  savingDamage.value = true;
+  error.value = '';
+  try {
+    const next = prepareDocument()!;
+    if (JSON.stringify(next) !== documentSignature.value) document.value = next;
+    const before = signature();
+    if (before === listed.value?.signature) return true;
+    if (calculationFinished) await calculationFinished;
+    else if (!result.value) await calculate();
+    if (signature() !== before || !result.value) return false;
+    const value = point.value?.value ?? trial.value;
+    const id = await saveDamageSnapshot({
+      name: [roleName.value, selectedChoice.value.alias, selectedChoice.value.name].join(' / '),
+      team: next.team?.name, value, trial: trial.value != null,
+    }, next);
+    if (signature() !== before) return false;
+    listed.value = { id, signature: before };
+    savedSignature.value = before;
+    return true;
+  } catch (cause) {
+    error.value = cause instanceof DOMException && cause.name === 'QuotaExceededError' ? '本机存储空间不足，可导出计算文件。' : '伤害未能保存。' + (cause instanceof Error ? cause.message : '');
+    return false;
+  } finally { savingDamage.value = false; }
+}
+function reopenDamage(id: string) {
+  picker.value = undefined;
+  requestLeave(async () => {
+    const read = ++sourceRead, before = signature();
+    try {
+      const next = await loadSavedDamage(id);
+      if (read !== sourceRead || signature() !== before) return;
+      install(next, true);
+      if (next.recordId) void calculate();
+      savedSignature.value = signature();
+      listed.value = { id, signature: savedSignature.value };
+    } catch (cause) { if (read === sourceRead) showError(cause); }
+  });
+}
 async function openFile(event: Event) {
   const input = event.target as HTMLInputElement, selected = input.files?.[0]; input.value = '';
   if (!selected) return;
-  try { if (selected.size > 8 * 1024 * 1024) throw new Error('计算文件超过8 MiB。'); install(parseDamageCalculator(await selected.text()), true); await nextTick(); if (document.value?.recordId) await calculate(); savedSignature.value = signature(); }
+  try { if (selected.size > 8 * 1024 * 1024) throw new Error('计算文件超过8 MiB。'); install(parseDamageCalculator(await selected.text()), true); if (document.value?.recordId) void calculate(); savedSignature.value = signature(); }
   catch (cause) { showError(cause); }
 }
 function switchActor(id: string) {
@@ -396,12 +481,13 @@ function switchActor(id: string) {
 }
 async function selectRecord(id: string) {
   if (!document.value) return;
-  const next = damageCalculatorSchema.parse(document.value);
-  const previous = next.project.timeline.find(record => record.id === next.recordId);
-  if (!next.baseline && previous?.damage) previous.damage = JSON.parse(JSON.stringify(damage.value));
-  const record = next.project.timeline.find(record => record.id === id);
-  if (!record?.damage) return;
-  next.recordId = id; next.actorId = record.actor; install(next);
+  try {
+    const next = prepareDocument()!;
+    const record = next.project.timeline.find(record => record.id === id);
+    if (!record?.damage) return;
+    next.recordId = id; next.actorId = record.actor; install(next);
+    await calculate();
+  } catch (cause) { showError(cause); }
 }
 function setInput(id: string, event: Event) { const raw = (event.target as HTMLInputElement).value; damage.value.inputs = { ...damage.value.inputs, [id]: raw.trim() ? Number(raw) : null }; }
 function setCapture(event: Event) { damage.value.capture = { recordId: (event.target as HTMLSelectElement).value || null, phase: damage.value.capture?.phase ?? null }; }
@@ -415,27 +501,31 @@ defineExpose({ requestLeave: leaveCalculator });
 <template>
   <section class="damage-calculator panel library-page" aria-label="伤害计算">
     <LibraryCornerOrnaments />
+    <header class="library-page-toolbar damage-toolbar">
+      <button type="button" class="ui-action soft" data-accent="hydro" aria-haspopup="dialog" @click="picker = 'list'">伤害列表</button>
+      <button type="button" class="ui-action" data-accent="anemo" :disabled="!selectedChoice || savingDamage || listed?.signature === signature()" @click="saveDamage">保存伤害</button>
+    </header>
     <div class="calculator-selections" aria-label="计算选择">
-      <TeamCard v-if="selectedTeam && teamProject" class="calculator-team" :name="selectedTeam.name" :members="teamProject.candidate.actors"
+      <TeamCard v-if="selectedTeam && teamProject" class="calculator-team" action="replace" :name="selectedTeam.name" :members="teamProject.candidate.actors"
         aria-label="选择队伍" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'" />
-      <button v-else type="button" class="selection-tile primary-slot" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'">
+      <button v-else type="button" class="selection-tile primary-slot" data-card-action="select" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'">
         <span class="add-mark" aria-hidden="true">+</span><strong>选择队伍</strong>
       </button>
-      <button type="button" class="selection-tile primary-slot role-slot" aria-label="选择角色" aria-haspopup="dialog"
+      <button type="button" class="selection-tile primary-slot role-slot" :data-card-action="roleName ? 'replace' : 'select'" aria-label="选择角色" aria-haspopup="dialog"
         :class="{ filled: roleName }" :disabled="!!document?.baseline" @click="openCharacters">
         <template v-if="roleName">
-          <GameIcon kind="characters" :id="queryCharacter?.derivedFrom?.id ?? queryCharacter?.id" :name="roleName" :size="64"
+          <GameIcon kind="characters" :id="queryCharacter?.derivedFrom?.id ?? queryCharacter?.id" :name="roleName" :size="64" :replaceable="!document?.baseline"
             :level="hitOwner?.build?.level" :constellation="hitOwner?.build?.constellation" />
           <span><small>角色</small><strong>{{ roleName }}</strong></span>
         </template>
         <template v-else><span class="add-mark" aria-hidden="true">+</span><strong>选择角色</strong></template>
       </button>
-      <button type="button" class="selection-tile secondary-slot" aria-label="选择伤害" aria-haspopup="dialog" :data-output-id="damage.outputId"
+      <button type="button" class="selection-tile secondary-slot" :data-card-action="selectedChoice ? 'replace' : 'select'" aria-label="选择伤害" aria-haspopup="dialog" :data-output-id="damage.outputId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
-        <GameIcon v-if="selectedChoice" kind="skills" :id="selectedChoice.icon" :size="32" /><span v-else class="add-mark small" aria-hidden="true">+</span>
+        <GameIcon v-if="selectedChoice" kind="skills" :id="selectedChoice.icon" :size="32" :replaceable="!document?.baseline" /><span v-else class="add-mark small" aria-hidden="true">+</span>
         <span><small v-if="selectedChoice">伤害</small><strong>{{ selectedChoice ? selectedChoice.alias + '　' + selectedChoice.name : '选择伤害' }}</strong></span>
       </button>
-      <button type="button" class="selection-tile secondary-slot" aria-label="选择增益" aria-haspopup="dialog" :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'buff'">
+      <button type="button" class="selection-tile secondary-slot" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog" :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'buff'">
         <GameIcon v-if="includedBuffs.length" :kind="includedBuffs[0].icon.kind" :id="includedBuffs[0].icon.id" :monochrome="includedBuffs[0].icon.kind === 'constellations'" :size="32" />
         <span v-else class="add-mark small" aria-hidden="true">+</span>
         <span><small v-if="includedBuffs.length">增益</small><strong>{{ includedBuffs.length ? includedBuffs[0].name + (includedBuffs.length > 1 ? ' 等 ' + includedBuffs.length + ' 项' : '') : '选择增益' }}</strong></span>
@@ -449,12 +539,13 @@ defineExpose({ requestLeave: leaveCalculator });
         <button class="ui-action" data-accent="anemo" :disabled="working || !selectedChoice" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
       </div></header>
       <div class="damage-totals">
-        <div><span>最终伤害值 <small v-if="damage.crit">{{ critNames[damage.crit] }}</small></span>
-          <output v-if="result" data-testid="calculator-value">{{ point?.value == null ? unavailable(result, point) : number(point.value) }}</output><strong v-else>—</strong></div>
-        <div><span>期望伤害值</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint.value) }}</output><strong v-else>—</strong></div>
+        <div><span>{{ trial != null ? '已实现效果试算' : '最终伤害值' }} <small v-if="damage.crit">{{ critNames[damage.crit] }}</small></span>
+          <output v-if="result" data-testid="calculator-value">{{ point?.value == null && trial == null ? unavailable(result, point) : number(point?.value ?? trial) }}</output><strong v-else>—</strong></div>
+        <div><span>{{ expectedTrial != null ? '已实现效果期望' : '期望伤害值' }}</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null && expectedTrial == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint?.value ?? expectedTrial) }}</output><strong v-else>—</strong></div>
       </div>
       <template v-if="result">
-        <details v-if="diagnostics.length" class="result-support" open><summary>计算条件与支持范围</summary>
+        <details v-if="diagnostics.length" class="result-support"
+          :open="point?.value == null && trial == null || !!expectedResult && expectedPoint?.value == null && expectedTrial == null"><summary>计算条件与支持范围</summary>
           <ul aria-label="未完成的计算条件"><li v-for="message in diagnostics" :key="message">{{ message }}</li></ul>
           <button v-if="missingBuff && !document?.baseline" type="button" class="ui-action soft" data-size="md" @click="picker = 'buff'">补充增益条件</button>
         </details>
@@ -503,10 +594,11 @@ defineExpose({ requestLeave: leaveCalculator });
         <button class="ui-action soft" data-accent="anemo" @click="copyAxis">复制当前轴</button>
         <button class="ui-action soft" @click="newCalculation">新建计算</button>
         <button class="ui-action soft" @click="requestLeave(() => file?.click())">打开计算</button>
-        <button class="ui-action" :disabled="!character" @click="save">保存计算</button>
+        <button class="ui-action soft" :disabled="!character" @click="save">导出计算文件</button>
       </div>
     </footer>
     <input ref="file" hidden type="file" accept=".json,application/json" aria-label="打开伤害计算文件" @change="openFile">
+    <SavedDamageList v-if="picker === 'list'" @close="picker = undefined" @open="reopenDamage" @deleted="id => { if (listed?.id === id) listed = undefined; }" />
     <WorkbenchDialog v-if="picker === 'team'" title="选择队伍" center-title @close="picker = undefined">
       <template v-if="selectedTeam" #header-leading><button type="button" class="ui-action soft" data-size="md" @click="chooseTeam()">清除队伍</button></template>
       <TeamLibrary pick :selected-id="selectedTeam?.id" @select="chooseTeam" />
@@ -528,15 +620,16 @@ defineExpose({ requestLeave: leaveCalculator });
     <CalculatorBuildEditor v-if="editor" ref="editorDialog" :name="editor.name" :initial-character-id="editor.initialCharacterId" :character="editor.character"
       :equipment="editor.equipment" :effective-stats="effectiveStats(editor.name)" @close="editor = undefined" @apply="applyBuild" />
     <WorkbenchDialog v-if="contentReview" title="更新计算副本内容" @close="contentReview = undefined"><p>替换当前试配队员的内容定义，保留培养与装备选择。账号和原轴保留原记录，已有条件与效果引用继续校验。</p><ul v-if="contentReview.changes.length"><li v-for="change in contentReview.changes" :key="change">{{ change }}</li></ul><p v-else>当前定义已与内置内容一致。</p><button v-if="contentReview.changes.length" class="ui-action" data-accent="hydro" @click="applyContent">采用当前内容并重算</button></WorkbenchDialog>
-    <UnsavedChangesDialog v-if="discardOpen" @continue="cancelDiscard" @discard="discardChanges" @save="saveAndLeave(save)" />
+    <UnsavedChangesDialog v-if="discardOpen" @continue="cancelDiscard" @discard="discardChanges" @save="saveAndLeave(selectedChoice ? saveDamage : save)" />
   </section>
 </template>
 
 <style scoped>
 .damage-calculator,.calculator-result,.calculator-conditions,.calculator-build { display:grid; min-width:0; gap:12px; }
+.damage-toolbar { display:flex; align-items:center; justify-content:space-between; }
 .calculator-selections { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-.selection-tile { box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:12px; min-width:0; width:100%; padding:16px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); }
-.selection-tile:not(:disabled):hover { border-color:var(--element-anemo-primary); background:var(--element-anemo-light); }
+.selection-tile { box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:12px; min-width:0; width:100%; padding:16px; background:var(--surface); color:var(--ink); }
+
 .primary-slot,.calculator-team { min-height:140px; }
 .primary-slot:not(.filled) { flex-direction:column; border-style:dashed; }
 .selection-tile.filled:disabled,.secondary-slot:disabled:has(small),.calculator-team:disabled { opacity:1; }

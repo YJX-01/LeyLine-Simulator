@@ -131,7 +131,7 @@ defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis, selected
           <LevelPicker :level="level" :ascension="ascension" label="角色等级" :maximum="100" :disabled="showcase" @change="setCharacterLevel" />
         </fieldset>
         <fieldset class="cultivation-group weapon-cultivation" aria-label="武器培养" :disabled="showcase">
-          <span class="weapon-portrait"><button class="portrait-control" aria-label="更换武器" :title="weapons.find(item=>item.id===weaponId)?.name ?? '更换武器'" @click="weaponPicker?.show()"><GameIcon v-if="weaponId" kind="weapons" :id="weaponId" :size="88" :refinement="refinement" :level="weaponLevel" :rarity="weapons.find(item=>item.id===weaponId)?.rarity" /><WeaponPlaceholder v-else add /></button></span>
+          <span class="weapon-portrait"><button class="portrait-control replace-portrait" aria-label="更换武器" :title="weapons.find(item=>item.id===weaponId)?.name ?? '更换武器'" @click="weaponPicker?.show()"><GameIcon v-if="weaponId" kind="weapons" :id="weaponId" :size="88" :replaceable="!showcase" :refinement="refinement" :level="weaponLevel" :rarity="weapons.find(item=>item.id===weaponId)?.rarity" /><WeaponPlaceholder v-else add /></button></span>
           <LevelPicker :level="weaponLevel" :ascension="weaponAscension" label="武器等级" :disabled="showcase" :maximum="(weapons.find(item=>item.id===weaponId)?.rarity ?? 5) < 3 ? 70 : 90" @change="setWeaponLevel" />
 
         </fieldset>

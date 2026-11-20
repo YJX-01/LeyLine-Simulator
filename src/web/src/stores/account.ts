@@ -37,8 +37,8 @@ export const useAccountStore = defineStore('local-account', () => {
   const inventoryLevel = ref<string[]>([]);
   const inventorySort = ref('release');
   const inventorySortDirection=ref<'asc'|'desc'>('desc');
-  const inventoryDensity = ref<'relaxed' | 'compact'>('relaxed');
-  try { if (localStorage.getItem(storageKeyFor('inventory-density')) === 'compact') inventoryDensity.value = 'compact'; } catch { /* Keep the usable default when preferences cannot be read. */ }
+  const inventoryDensity = ref<'relaxed' | 'compact'>('compact');
+  try { if (localStorage.getItem(storageKeyFor('inventory-density')) === 'relaxed') inventoryDensity.value = 'relaxed'; } catch { /* Keep the usable default when preferences cannot be read. */ }
   watch(inventoryDensity, value => { try { localStorage.setItem(storageKeyFor('inventory-density'), value); } catch { /* Display preferences never block editing. */ } });
   watch(() => account.value.id, () => {
     characterFavoriteFilter.value=[]; selectedCharacterId.value=''; characterQuery.value=''; characterElement.value=[]; characterWeapon.value=[]; characterRarity.value=[]; characterSort.value='release';characterSortDirection.value='desc';

@@ -6,7 +6,7 @@ import { accountSlots, accountSlotLabels, artifactOwners, type AccountArtifact, 
 import { accountStatLabels } from '../domain/account-real';
 import { useAccountStore } from '../stores/account';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
-import { useInventoryPageSize } from '../composables/use-inventory-page-size';
+import { useGridPageSize } from '../composables/use-grid-page-size';
 import { loadAccountGameData } from '../domain/account-presentation';
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
 import ArtifactDetail from './ArtifactDetail.vue';
@@ -35,7 +35,7 @@ import {artifactReferences} from '../domain/artifact-references';
 import {useArtifactRemoval} from '../composables/use-artifact-removal';
 import {accountConfigurations} from '../domain/account-configurations';
 const props=defineProps<{slot?:AccountSlot;pick?:boolean;inline?:boolean;account?:LocalAccount;density?:'relaxed'|'compact';effectiveStats?:readonly StatKey[]}>();
-const emit=defineEmits<{select:[item:AccountArtifact]}>();
+const emit=defineEmits<{select:[item:AccountArtifact];create:[]}>();
 const store=useAccountStore(),context=storeToRefs(store),favorites=useArtifactFavoritesStore(),loadouts=useCharacterLoadoutsStore(),combinations=useArtifactCombinationsStore();
 const inventory=computed(()=>props.account ?? store.account);
 const inventoryItems=computed(()=>inventory.value.artifacts.filter(item=>item.inventoryId!==null));
@@ -54,14 +54,13 @@ const subMatch=props.pick?ref('all'):context.inventorySubMatch;
 const storedPage=props.pick?ref(1):context.inventoryPage;
 const selectedId=ref(''),filterOpen=ref(false),sortOpen=ref(false);
 const grid=ref<HTMLElement>();
-const pageSize = props.pick ? ref(30) : useInventoryPageSize(grid, density, context.inventoryPageSize);
+const pageSize = props.pick ? ref(30) : useGridPageSize(grid, density, { relaxed: 5, compact: 8 }, context.inventoryPageSize);
 const activeFilters=computed(()=>[statFilter,ownerFilter,setFilter,subFilter,levelFilter,favoriteFilter].reduce((count,filter)=>count+filter.value.length,0));
 function clearConditions(){slotFilter.value=[];statFilter.value=[];ownerFilter.value=[];favoriteFilter.value=[];setFilter.value=[];subFilter.value=[];levelFilter.value=[];subMatch.value='all';sort.value='release';sortDirection.value='desc';}
 function resetFilters() { query.value='';slotFilter.value=[];statFilter.value=[];ownerFilter.value=[];favoriteFilter.value=[];setFilter.value=[];subFilter.value=[];levelFilter.value=[]; }
 function setSortKey(key:string) { if(sort.value!==key){sort.value=key;sortDirection.value=key==='default'?'asc':'desc';} }
 const artifactDetail=ref<InstanceType<typeof ArtifactDetail>>();
 function requestLeave(action:()=>void) { if(artifactDetail.value)artifactDetail.value.requestLeave(action);else action(); }
-function scrollToTools() { document.querySelector<HTMLElement>('.library-actions button')?.focus();window.scrollTo({top:0}); }
 defineExpose({requestLeave});
 const catalogSets=shallowRef<{id:string;name:string;rarity:number}[]>([]);
 onMounted(async()=>{try {catalogSets.value=(await loadAccountGameData()).catalog.sets;}catch {store.error='套装目录加载失败，请重新打开库存。';}});
@@ -121,11 +120,13 @@ watch(()=>inventory.value.id,()=>{menu.value=undefined;deleting.value=undefined;
       </FilterPanel><template #footer><FilterActions flush @reset="resetFilters" @confirm="filterOpen=false" /></template></WorkbenchDialog>
       <WorkbenchDialog v-if="sortOpen" title="圣遗物排序" size="filter" @close="sortOpen=false"><SortPanel :model-value="sort" v-model:direction="sortDirection" :options="[{value:'release',label:'实装版本'},{value:'favorite',label:'收藏等级'},{value:'level',label:'等级'},{value:'default',label:'导入顺序'}]" @update:model-value="setSortKey" @reset="sort='release';sortDirection='desc'" @confirm="sortOpen=false" /></WorkbenchDialog>
       <LibraryListHeader v-model:page="page" :pages="pages" :count="filtered.length" :total="inventoryItems.length" unit="件圣遗物" class="inventory-results" />
-      <div ref="grid" class="inventory-cards" :class="density"><button v-for="item in visible" :key="item.id" class="inventory-card artifact-item-card" :data-artifact-id="item.id" :data-rarity="item.real?.rarity" :data-density="density" :aria-label="`${pick?'选择':'查看'} ${item.alias ?? item.name} ${item.id.slice(-6)}`" @contextmenu.prevent="openMenu($event,item)" @keydown="menuKey($event,item)" @click="props.pick?emit('select',item):selectedId=item.id"><ArtifactSummary :account="inventory" :item="item" :variant="density" :effective-stats="props.effectiveStats" /></button></div>
+      <div ref="grid" class="inventory-cards" :class="density"><button v-for="item in visible" :key="item.id" class="inventory-card artifact-item-card" :data-card-action="pick ? 'select' : 'detail'" :data-artifact-id="item.id" :data-rarity="item.real?.rarity" :data-density="density" :aria-label="`${pick?'选择':'查看'} ${item.alias ?? item.name} ${item.id.slice(-6)}`" @contextmenu.prevent="openMenu($event,item)" @keydown="menuKey($event,item)" @click="props.pick?emit('select',item):selectedId=item.id"><ArtifactSummary :account="inventory" :item="item" :variant="density" :effective-stats="props.effectiveStats" /></button></div>
       <p v-if="menuError" role="alert">{{ menuError }}</p>
       <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="圣遗物操作" :options="[{id:'details',label:'查看详情'},{id:favorites.level(inventory.id,menu.item.id)?'favorite-0':'favorite-1',label:favorites.level(inventory.id,menu.item.id)?'取消收藏':'收藏'},...(!pick?[{id:'delete',label:'删除',danger:true}]:[])]" @close="menu=undefined" @select="menuAction" />
       <ConfirmationDialog v-if="deleting" title="删除圣遗物？" confirm-label="删除" @cancel="cancelDelete" @confirm="remove"><p>删除「{{ deleting.alias ?? deleting.name }}」。</p><p v-if="deleteReferences.length">{{ deleteReferences.filter(item=>item.kind==='character').length }}个角色、{{ deleteReferences.filter(item=>item.kind==='configuration').length }}份配置、{{ deleteReferences.filter(item=>item.kind==='combination').length }}组组合引用此物品。佩戴、配置与组合保留内容并标为未入库。</p></ConfirmationDialog>
-      <LibraryEmptyState v-if="!filtered.length" :title="inventoryItems.length?'没有符合条件的圣遗物':'圣遗物库还是空的'" :description="inventoryItems.length?'清除搜索与筛选后重试。':'导入莫娜文件，确认预览后浏览真实词条。'" :action="inventoryItems.length?'清除搜索与筛选':'返回导入入口'" @action="inventoryItems.length?resetFilters():scrollToTools()" />
+      <LibraryEmptyState v-if="!filtered.length" :title="slot ? '这个部位还没有圣遗物' : '圣遗物库还是空的'"
+        filtered-title="没有符合条件的圣遗物" :filtered="inventoryItems.some(item => !slot || item.slot === slot)"
+        :create-label="pick ? undefined : '新建圣遗物'" @create="emit('create')" @clear="resetFilters" />
       <LibraryPagination v-model:page="page" :pages="pages" always position="底部" full />
     </template>
     <ArtifactDetail v-if="selected" ref="artifactDetail" :item="selected" :account="props.account" @close="selectedId=''" />

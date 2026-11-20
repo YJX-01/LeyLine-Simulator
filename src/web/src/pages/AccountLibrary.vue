@@ -303,8 +303,9 @@ function equipmentAction(action:string){const slot=equipmentMenu.value?.slot;equ
   if(action==='details')openInspectedArtifact(slot);
   else if(action==='replace')openEquipmentPicker(slot);
   else if(action==='remove' && character.value)delete character.value.equipment[slot];
-  else if(action==='import'){importPieceBaseline=JSON.stringify(account.value);importingSlot.value=slot;}
+  else if(action==='import')requestShowcasePiece(slot);
 }
+function requestShowcasePiece(slot:AccountSlot){importPieceBaseline=JSON.stringify(account.value);importingSlot.value=slot;}
 function importShowcasePiece(){try{
   if(!character.value || !importingSlot.value)return;
   if(JSON.stringify(account.value)!==importPieceBaseline)throw new Error('库存已变化，请重新确认。');
@@ -377,13 +378,17 @@ function roleRolls(entry:AccountCharacter) {
   const items=props.pickMembers || props.pickShowcase ? teamArtifactEntries(entry.build).flatMap(slot => slot.item ?? []) : inventoryEquipment(entry);
   return effectiveRollBreakdown(items,buildRollBasis(Object.values(entry.equipment).some(Boolean)?entry.build:entry.showcase?.build ?? entry.build)).filter(group=>group.members.some(stat=>stats.includes(stat))).reduce((sum,row)=>sum+(row.value ?? 0),0);
 }
-const visibleCharacters = computed(() => {
+const availableCharacters = computed(() => {
   const characters: AccountCharacter[] = props.pickMembers?.map(member => ({
     id: member.id, name: teamMemberName(member), attack: 0, weapon: member.build?.weapon.name ?? '', equipment: {}, build: member.build,
   })) ?? (props.pickShowcase ? account.value.characters.flatMap(entry => entry.showcase ? [{ ...entry, equipment: {}, build: entry.showcase.build }] : []) : account.value.characters);
-  const items = characters.filter(entry => {
+  if (props.pickMembers) return characters;
+  return characters.filter(entry => hasCharacterInformation(entry) || loadouts.loadouts.some(item =>
+    item.accountId === account.value.id && item.characterId === entry.id && hasLocalConfiguration(item.snapshot.characters[0])));
+});
+const visibleCharacters = computed(() => {
+  const items = availableCharacters.value.filter(entry => {
     const meta=metadata(entry);
-    if(!props.pickMembers && !hasCharacterInformation(entry) && !loadouts.loadouts.some(item=>item.accountId===account.value.id && item.characterId===entry.id && hasLocalConfiguration(item.snapshot.characters[0])))return false;
     return (!favoriteFilter.value.length || favoriteFilter.value.includes(String(loadouts.favoriteLevel(account.value.id,entry.id)))) && entry.name.includes(query.value.trim()) && (!elementFilter.value.length || (meta && elementFilter.value.includes(meta.element)))
       && (!rarityFilter.value.length || rarityFilter.value.includes(String(characterRelease(entry)?.rarity)))
       && (!weaponFilter.value.length || (meta && weaponFilter.value.includes(meta.weaponType)));
@@ -395,7 +400,6 @@ const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({
   artifacts: props.pickMembers || props.pickShowcase ? teamArtifactEntries(entry.build).flatMap(slot => slot.item ?? []) : Object.keys(entry.equipment).length ? inventoryEquipment(entry) : accountSlots.flatMap(slot=>showcaseArtifact(entry,slot) ?? []),
 })));
 function openGallery(entry:{id:string;presetId:string}) { if(props.pick){emit('select',entry.id);return;}openCharacter(entry.id);if(entry.presetId)tryPreset(entry.presetId); }
-function handleEmptyAction() { if(account.value.characters.length){query.value='';resetFilters();}else{editingCharacter.value=false;modal.value='create';} }
 function resetFilters() { elementFilter.value=[]; weaponFilter.value=[]; rarityFilter.value=[]; favoriteFilter.value=[]; }
 
 const equipmentView=ref<'local'|'showcase'>('local');
@@ -442,7 +446,7 @@ function equip() {
       <CharacterLibraryTools v-model:query="query" v-model:elements="elementFilter" v-model:weapons="weaponFilter" v-model:rarities="rarityFilter" v-model:favorites="favoriteFilter" v-model:sort="sort" v-model:direction="sortDirection" label="搜索账号角色" :sort-options="sortOptions"><template v-if="!props.pick" #actions><LibraryImportActions :mona="false" showcase @showcase="modal='network'" @create="editingCharacter=false;modal='create'" /></template></CharacterLibraryTools>
 
       <div class="character-cards">
-        <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
+        <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :data-card-action="pick ? 'select' : 'detail'" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && editingPresetId===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : entry.presetId ? `查看${entry.name}备选配装${configurationName(entry,entry.gallerySnapshot)}详情` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
           <span class="character-card-header">
             <span class="character-card-status">
               <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'"
@@ -459,7 +463,9 @@ function equip() {
       <ContextMenu v-if="characterMenu && !props.pick" :x="characterMenu.x" :y="characterMenu.y" label="角色操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'彻底删除',danger:true}]" @close="characterMenu=undefined" @select="characterMenuAction" />
       <ConfirmationDialog v-if="deletingCharacter" title="彻底删除角色？" confirm-label="彻底删除" @cancel="deleteCharacterId=''" @confirm="deleteCharacter"><p>清除「{{ deletingCharacter.name }}」的本地、展柜、全部配装和收藏。</p><p>圣遗物保留在库中。</p></ConfirmationDialog>
       <LibraryEmptyState v-if="!visibleCharacters.length && pickMembers" title="没有符合条件的队员" action="清除搜索与筛选" @action="query='';resetFilters()" />
-      <LibraryEmptyState v-else-if="!visibleCharacters.length" :title="account.characters.length?'没有符合条件的角色':'角色库还是空的'" :description="account.characters.length?'清除搜索与筛选后重试。':'导入角色资料，或手动添加角色。'" :action="account.characters.length?'清除搜索与筛选':'手动添加角色'" @action="handleEmptyAction" />
+      <LibraryEmptyState v-else-if="!visibleCharacters.length" title="角色库还是空的" filtered-title="没有符合条件的角色"
+        :filtered="!!availableCharacters.length" create-label="手动添加角色"
+        @create="editingCharacter=false;modal='create'" @clear="query='';resetFilters()" />
       <ManualCharacterImport v-if="modal==='create'" @saved="openCharacter" @close="modal=''" />
       </template>
       <WorkbenchDialog editor class="character-detail-dialog" v-if="detailOpen && character" :title="character.name"
@@ -477,14 +483,16 @@ function equip() {
         <CharacterForm v-if="equipmentView==='showcase'" details :character="character" showcase />
         <section class="detail-panel"><DisclosureHeading class="inline-section-heading" title="角色面板" label="面板" controls="character-stat-panel" :expanded="panelOpen" @toggle="panelOpen = !panelOpen" /><div id="character-stat-panel"><p v-if="panelOpen && cultivationDirty && equipmentView==='local'" class="detail-feedback">培养数值尚未保存，保存后更新面板。</p><CharacterStats v-else-if="panelOpen" :account="editingAccount" :character="character" :showcase="equipmentView === 'showcase'" /></div></section>
         <section class="detail-artifacts"><div class="inline-section-heading"><h3>圣遗物</h3><div class="combination-detail-actions"><button v-if="equipmentView==='local'" class="ui-action soft" data-size="md" data-accent="hydro" @click="combinationPickerOpen=true">应用组合</button><button class="ui-action soft" data-size="md" :data-accent="equipmentView==='showcase'?'electro':'anemo'" @click="saveCurrentCombination">保存组合</button></div></div>
-        <ArtifactEquipmentGrid :entries="equipmentEntries" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" popup context-menu @menu="equipmentContext" @inspect="openInspectedArtifact" :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.build?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
+        <ArtifactEquipmentGrid :entries="equipmentEntries" :account="editingAccount" :readonly="equipmentView==='showcase'" :effective-stats="effectiveStats" context-menu @menu="equipmentContext" @inspect="openInspectedArtifact" :wearers="equipmentView==='showcase' ? [{name:character.name,id:character.build?.character.id,label:'展柜快照'}] : undefined" @change="openEquipmentPicker" />
         </section>
         <section class="effective-stat-picker" role="group" aria-label="有效词条"><h3>有效词条</h3><EffectiveRollSummary :basis="effectiveBasis" :items="equippedItems" :selected-stats="effectiveStats" selectable @toggle="toggleEffectiveStat" /></section>
         <ComparisonPanel v-if="detailOpen" :key="`${character.id}-${editingPresetId}-${comparisonTargetRevision}`" kind="配置" :current="{title:(equipmentView==='showcase'?'展柜：':'当前配置：')+draftLabel,basis:effectiveBasis,items:equippedItems}" :options="comparisonOptions" :stats="effectiveStats" :reference-name="character.name" />
       </div>
       </WorkbenchDialog>
       <ContextMenu v-if="equipmentMenu" :x="equipmentMenu.x" :y="equipmentMenu.y" label="角色圣遗物操作" :options="[{id:'details',label:'查看详情'},...(equipmentView==='showcase'?[{id:'import',label:'入库',accent:'anemo' as const}]:[{id:'replace',label:'替换'},{id:'remove',label:'卸下',danger:true}])]" @close="equipmentMenu=undefined" @select="equipmentAction" />
-      <ArtifactDetail v-if="inspectingSlot && equipmentItem(inspectingSlot)" :item="equipmentItem(inspectingSlot)!" :readonly="equipmentView==='showcase' || equipmentItem(inspectingSlot)?.inventoryId===null" @close="closeInspectedArtifact" />
+      <ArtifactDetail v-if="inspectingSlot && equipmentItem(inspectingSlot)" :item="equipmentItem(inspectingSlot)!" :readonly="equipmentView==='showcase' || equipmentItem(inspectingSlot)?.inventoryId===null" @close="closeInspectedArtifact">
+        <template v-if="equipmentView==='showcase'" #actions><button class="ui-action soft" data-size="md" data-accent="anemo" @click="requestShowcasePiece(inspectingSlot)">入库</button></template>
+      </ArtifactDetail>
       <ConfirmationDialog v-if="importingSlot" title="入库圣遗物？" :danger="false" confirm-label="入库" @cancel="importingSlot=undefined" @confirm="importShowcasePiece"><p>相同内容合并，优先采用展柜强化次数；当前穿戴不变。</p></ConfirmationDialog>
       <ArtifactPickerDialog v-if="equipmentPickerOpen && character && equipmentView==='local'" :slot="equipmentSlot" :account="editingAccount" :current="equipmentItem(equipmentSlot)" :effective-stats="effectiveStats" @close="equipmentPickerOpen=false" @remove="unequipCurrentSlot" @select="artifactId=$event.id;equip();equipmentPickerOpen=false" />
       <WorkbenchDialog v-if="combinationPickerOpen && character" title="选择圣遗物组合" @close="combinationPickerOpen=false"><ArtifactCombinationLibrary pick :stats="effectiveStats" :reference-name="character.name" @select="useCombination" /></WorkbenchDialog>
@@ -499,7 +507,7 @@ function equip() {
     <template v-else>
 
       <WorkbenchDialog v-if="modal === 'repair' && repairPreview" title="核对已导入套装" @close="modal = ''"><p>根据莫娜 7.2.02 核实套装身份，仅补全未经手动修改的物品，不改变词条或穿戴关系。</p><p v-for="update in repairPreview.updates" :key="update.item.id">{{ update.item.mona?.sourceSetName }} → {{ update.item.name }}</p><p v-for="message in repairPreview.skipped" :key="message">{{ message }}</p><p v-if="!repairPreview.updates.length">没有可以直接补全的物品。</p><button :disabled="!repairPreview.updates.length" @click="repairSets">确认补全 {{ repairPreview.updates.length }} 件套装身份</button></WorkbenchDialog>
-      <ArtifactBrowser ref="inventoryBrowser"><template #actions><LibraryImportActions create-label="手动添加圣遗物" @mona="modal='import'" @create="modal='artifact'" /><button v-if="account.artifacts.some(item => item.mona?.setIdentityPending)" class="ui-muted-button" :disabled="checkingSets" @click="inspectSets">核对已导入套装</button></template></ArtifactBrowser>
+      <ArtifactBrowser ref="inventoryBrowser" @create="modal='artifact'"><template #actions><LibraryImportActions create-label="手动添加圣遗物" @mona="modal='import'" @create="modal='artifact'" /><button v-if="account.artifacts.some(item => item.mona?.setIdentityPending)" class="ui-muted-button" :disabled="checkingSets" @click="inspectSets">核对已导入套装</button></template></ArtifactBrowser>
 
       <WorkbenchDialog v-if="modal === 'artifact'" class="manual-artifact-dialog" title="手动添加圣遗物" @close="modal = ''"><ArtifactForm @close="modal = ''" /></WorkbenchDialog>
     </template>
@@ -526,12 +534,8 @@ function equip() {
   --character-card-media-columns:minmax(0,1fr) var(--character-card-character-size) minmax(0,1fr);
   container-type:inline-size; width:100%; max-width:360px; justify-self:center; display:flex; flex-direction:column;
   align-items:flex-start; gap:6px; min-width:0; padding:10px 7px 12px; color:var(--ink); text-align:left;
-  border:1px solid var(--line); border-radius:16px; background:var(--surface-raised);
-  box-shadow:0 2px 8px color-mix(in srgb,var(--neutral-ink) 1.96%,transparent); transition:border-color .15s,box-shadow .15s,transform .15s;
+  background:var(--surface);
 }
-.character-cards .character-card:hover { transform:translateY(-2px); border-color:var(--element-anemo-primary); box-shadow:0 8px 24px color-mix(in srgb,var(--neutral-ink) 6.27%,transparent); }
-
-@media(prefers-reduced-motion:reduce){.character-cards .character-card { transition:none; }.character-cards .character-card:hover { transform:none; }}
 @media(max-width:550px){.character-cards { grid-template-columns:minmax(0,1fr); }.character-cards .character-card { padding:10px 7px 12px; }}
 
 .account-empty { padding:40px 20px; border:1px dashed var(--line); border-radius:12px; text-align:center; }.legacy-inventory { margin-top:24px; }.account-library { margin: 0 30px; color: var(--text, var(--ink)); }
@@ -576,7 +580,7 @@ h2 { margin-top:7px; }.account-note { padding-bottom:16px; border-bottom:1px sol
 @media(max-width:400px) { .character-header-tools { gap:5px; } }
 .configuration-title { display:flex; align-items:center; min-width:0; max-width:100%; gap:6px; }
 .effective-stat-picker { margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }.effective-stat-picker h3 { margin-bottom:10px; font-size:var(--font-control); }.effective-stat-picker > div { display:flex; flex-wrap:wrap; gap:8px; }
-.configuration-title-button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:0; max-width:100%; height:var(--control-height-md); min-height:var(--control-height-md); padding:0 8px; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); font-size:var(--font-control); font-weight:700; }.configuration-title-button > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }.configuration-title-button svg { flex:none; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; }.account-library.pick-mode { margin:0; padding:0; border:0; box-shadow:none; background:transparent; }.account-library.pick-mode::after { display:none; }
+.configuration-title-button { --button-hover-border:var(--element-hydro-primary); display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:0; max-width:100%; height:var(--control-height-md); min-height:var(--control-height-md); padding:0 8px; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface-raised); color:var(--ink); font-size:var(--font-control); font-weight:700; }.configuration-title-button > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }.configuration-title-button svg { flex:none; width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.8; }.account-library.pick-mode { margin:0; padding:0; border:0; box-shadow:none; background:transparent; }.account-library.pick-mode::after { display:none; }
 
 .configuration-title { display:flex; align-items:center; justify-content:center; min-height:var(--control-height-md); margin:0; line-height:1.2; }
 .character-header-tools .equipment-view-tabs { display:flex; flex:none; gap:0; margin:0; padding:2px; height:32px; box-sizing:border-box; border:1px solid var(--line); border-radius:var(--control-radius); background:var(--neutral-canvas); }

@@ -254,6 +254,7 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
       return { state, traceId, reasons: [...new Set([...original.state !== 'known' ? original.reasons : [], ...reasons])] };
     };
     for (const output of result.outputs) if (output.value.state !== 'invalid') {
+      if (result.execution === 'complete' && output.value.state === 'known') output.modeledValue = output.value;
       output.value = gate(output.value, output.outputId);
       output.execution = invalid ? 'invalid' : 'partial'; output.diagnosticIds.push(...reasons);
     }

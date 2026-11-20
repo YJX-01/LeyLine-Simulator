@@ -82,8 +82,8 @@ function applyBuild(id: string, build: Build) {
     <p v-if="error || saved.error" role="alert">{{ error || saved.error }}</p>
     <div v-if="axis.project.candidate.actors.length" class="team-cards">
       <article v-for="actor in axis.project.candidate.actors" :key="actor.id"
-        class="library-section team-member" :class="{ active: axis.actorId === actor.id }">
-        <button class="actor-select" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
+        class="library-section team-member" data-card-action="select" :class="{ active: axis.actorId === actor.id }">
+        <button class="actor-select card-action-trigger" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
           <strong>{{ actor.name ?? actor.build?.character.identity.name }}</strong>
           <CharacterEquipmentIcons :build="actor.build" :name="actor.name" :size="72" />
           <small>{{ actor.build?.weapon.name ?? '配装资料待补全' }}</small>
@@ -124,7 +124,7 @@ function applyBuild(id: string, build: Build) {
     <WorkbenchDialog v-if="picking" title="从账号选择队员" @close="picking = false">
       <p v-if="error" role="alert">{{ error }}</p>
       <div v-if="characters.length" class="team-cards team-picker">
-        <button v-for="character in characters" :key="character.id" type="button" :disabled="adding" @click="add(character.id)">
+        <button v-for="character in characters" :key="character.id" type="button" data-card-action="select" :disabled="adding" @click="add(character.id)">
           <strong>{{ character.name }}</strong>
           <CharacterEquipmentIcons :build="character.build" :name="character.name" :size="72" />
           <small>{{ character.build?.weapon.name ?? '资料待补全' }}</small>
@@ -159,7 +159,7 @@ function applyBuild(id: string, build: Build) {
 .team-count { margin-inline-start:8px; color:var(--muted); font-size:var(--font-body); font-variant-numeric:tabular-nums; }
 .team-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,208px),1fr)); gap:12px; }
 .team-workspace .team-member { display:grid; align-content:start; gap:12px; border-top-width:3px; }
-.team-workspace .team-member.active { border-top-color:var(--element-anemo-primary); }
+.team-workspace .team-member.active { background:var(--element-hydro-light); }
 .actor-select,.team-picker > button {
   display:grid; justify-items:start; gap:6px; min-width:0; text-align:left; overflow-wrap:anywhere;
 }

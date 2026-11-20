@@ -53,7 +53,6 @@ watch([selectedSets,favoriteFilter,sort,direction],()=>{page.value=1;},{deep:tru
 watch(()=>account.account.id,()=>{editor.value=undefined;creating.value=false;deleteId.value='';menu.value=undefined;});
 onMounted(async()=>{try{const data=await loadAccountGameData();sets.value=data.catalog.sets;characters.value=data.catalog.characters;}catch{error.value='套装目录加载失败，请重新打开。';}});
 function clearFilters(){query.value='';selectedSets.value=[];favoriteFilter.value=[];}
-function emptyAction(){if(all.value.length)clearFilters();else creating.value=true;}
 function saved(id:string,duplicate:boolean){creating.value=false;editor.value=duplicate?store.combinations.find(item=>item.id===id):undefined;}
 function stale(combination:ArtifactCombination){try{validateCombinationItems(account.account,combination.items);return false;}catch{return true;}}
 function referenceId(combination:ArtifactCombination){return characters.value.find(character=>character.name===combination.referenceName)?.id;}
@@ -73,13 +72,14 @@ function closeEditor(deleted=false){creating.value=false;editor.value=undefined;
     <LibraryListHeader v-model:page="page" :pages="pages" :count="shown.length" :total="all.length" unit="组组合" />
     <p v-if="pick && referenceName" class="pick-reference">按{{ referenceName }}统计</p>
     <p v-if="error || store.error" role="alert">{{ error || store.error }}</p>
-    <div class="combination-list"><article v-for="combination in visible" :key="combination.id" class="combination-row" :data-combination-id="combination.id" @contextmenu.prevent="openMenu($event,combination)">
+    <div class="combination-list"><article v-for="combination in visible" :key="combination.id" class="combination-row" :data-card-action="pick ? 'select' : 'detail'" :data-combination-id="combination.id" @contextmenu.prevent="openMenu($event,combination)">
       <div class="combination-heading"><h3>{{ name(combination) }}</h3><span v-if="stale(combination)" class="stale">{{ combination.items.some(item=>item.inventoryId===null)?'含未入库':'库存已变化' }}</span><span v-if="combination.referenceName" class="combination-reference" role="img" :title="`参考角色：${combination.referenceName}`" :aria-label="`参考角色：${combination.referenceName}`"><GameIcon kind="characters" :id="referenceId(combination)" :name="combination.referenceName" :size="32" /></span><span v-if="combination.favorite" class="combination-favorite" :title="`${combination.favorite}级收藏`" :aria-label="`${combination.favorite}级收藏`"><FavoriteMark :level="combination.favorite" /></span></div>
       <EquipmentStrip :effective-stats="stats(combination)" :entries="accountSlots.map(slot=>({slot,item:combination.items.find(item=>item.slot===slot)}))" />
       <EffectiveRollSummary inline :basis="combination.basis" :items="combination.items" :selected-stats="stats(combination)" />
-      <button class="combination-open" :aria-label="pick?'应用组合':`查看组合：${name(combination)}`" :disabled="pick && stale(combination)" @click="open(combination)" @keydown="menuKey($event,combination)"></button>
+      <button class="combination-open card-detail-target" :aria-label="pick?'应用组合':`查看组合：${name(combination)}`" :disabled="pick && stale(combination)" @click="open(combination)" @keydown="menuKey($event,combination)"></button>
     </article></div>
-    <LibraryEmptyState v-if="!shown.length" :title="all.length?'没有匹配的组合':'还没有保存的组合'" :description="all.length?'清除筛选后重试。':'新建组合，或在角色详情中保存当前装备。'" :action="all.length?'清除筛选':'新建组合'" @action="emptyAction" />
+    <LibraryEmptyState v-if="!shown.length" title="还没有保存的组合" filtered-title="没有匹配的组合" :filtered="!!all.length"
+      create-label="新建组合" @create="creating=true;editor=undefined" @clear="clearFilters" />
     <LibraryPagination v-model:page="page" :pages="pages" always position="底部" full />
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="组合操作" :options="pick?[{id:'details',label:'查看详情'}]:[{id:'details',label:'查看详情'},{id:'favorite',label:menu.combination.favorite?'取消收藏':'收藏'},{id:'delete',label:'删除',danger:true}]" @close="menu=undefined" @select="menuAction" />
     <WorkbenchDialog v-if="filterOpen" title="筛选组合" size="filter" @close="filterOpen=false"><FilterPanel><section><h3>套装</h3><ArtifactSetFilter v-model="selectedSets" label="组合套装" :options="sets" /></section><section><h3>收藏</h3><FavoriteFilter v-model="favoriteFilter" label="组合收藏等级" /></section></FilterPanel><template #footer><FilterActions flush @reset="selectedSets=[];favoriteFilter=[]" @confirm="filterOpen=false" /></template></WorkbenchDialog>
@@ -89,7 +89,7 @@ function closeEditor(deleted=false){creating.value=false;editor.value=undefined;
   </section>
 </template>
 <style scoped>
-.combination-library { display:grid; gap:12px; min-width:0; }.combination-list { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }.combination-row { position:relative; display:grid; gap:12px; min-width:0; padding:16px; border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; background:var(--surface); }.combination-heading { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }.combination-heading h3 { flex:1; min-width:0; font-size:var(--font-control); margin:0; overflow-wrap:anywhere; }.combination-heading > span,.pick-reference { font-size:var(--font-body); }.stale { color:var(--element-pyro-deep); }.combination-reference { display:flex; align-items:center; margin-left:auto; }
-.combination-open { position:absolute; inset:0; z-index:1; width:100%; height:100%; min-height:0; border:0; border-radius:inherit; background:transparent; padding:0; cursor:pointer; }.combination-open:hover { background:transparent; box-shadow:none; }.combination-open:disabled { opacity:1; cursor:default; }.combination-open:focus-visible { outline:2px solid var(--element-hydro-deep); outline-offset:2px; }
+.combination-library { display:grid; gap:12px; min-width:0; }.combination-list { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }.combination-row { position:relative; display:grid; gap:12px; min-width:0; padding:16px; background:var(--surface); }.combination-heading { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }.combination-heading h3 { flex:1; min-width:0; font-size:var(--font-control); margin:0; overflow-wrap:anywhere; }.combination-heading > span,.pick-reference { font-size:var(--font-body); }.stale { color:var(--element-pyro-deep); }.combination-reference { display:flex; align-items:center; margin-left:auto; }
+.combination-open:disabled { opacity:1; }
 @media(max-width:600px) { .combination-row { padding:12px; } }
 </style>

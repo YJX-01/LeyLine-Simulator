@@ -99,7 +99,7 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
   <section class="editing-desk" aria-label="剪辑式时间轴编辑">
     <div v-if="axis.project.candidate.actors.length" class="desk-roster" role="group" aria-label="时间轴队员">
       <button v-for="(actor, index) in axis.project.candidate.actors" :key="actor.id"
-        class="desk-option" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
+        class="desk-option" data-card-action="select" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
         <GameIcon kind="characters" :id="actor.build?.character.id" :name="actor.name" :constellation="actor.build?.constellation"
           :level="actor.build?.level" :size="28" />
         <span><kbd>{{ index + 1 }}</kbd> {{ actor.name ?? actor.build?.character.identity.name }}</span>
@@ -119,7 +119,7 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
       </label>
     </div>
     <div v-if="skills.length" class="skill-palette">
-      <button v-for="item in skills" :key="item.id" class="desk-option" :aria-pressed="skill?.id === item.id"
+      <button v-for="item in skills" :key="item.id" class="desk-option" data-card-action="select" :aria-pressed="skill?.id === item.id"
         @click="skillId = item.id; hitIndex = 0">
         <span>{{ item.name }}</span>
         <small v-if="!item.hits.some(hit => hit.outputs.length)">仅可记动作</small>
@@ -151,7 +151,7 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
             </div>
             <div class="desk-lane" @click="seek">
               <span class="cursor-line" :style="{ left: `${cursor / 1000 * scale}px` }"></span>
-              <button v-for="record in records(actor.id, kind)" :key="record.id" class="desk-record"
+              <button v-for="record in records(actor.id, kind)" :key="record.id" class="desk-record" data-card-action="detail"
                 :class="{ selected: axis.selectedId === record.id, damage: kind === 'damage' }"
                 :style="{ left: `${record.timeMs / 1000 * scale}px` }"
                 :aria-label="`选择${kind === 'action' ? '动作' : '伤害点'} ${recordLabel(axis.project, record.id)}`" :data-record-id="record.id"
@@ -185,7 +185,7 @@ section.editing-desk { display:grid; gap:12px; padding:12px 16px; }
   display:flex; align-items:center; gap:8px; max-width:100%; min-height:var(--control-height-lg);
   padding:4px 8px; overflow-wrap:anywhere; text-align:left;
 }
-.desk-option[aria-pressed=true] { background:var(--element-anemo-light); color:var(--element-anemo-deep); border-color:var(--element-anemo-primary); font-weight:700; }
+.desk-option[aria-pressed=true] { background:var(--element-hydro-light); color:var(--element-hydro-deep); font-weight:700; }
 .skill-palette .desk-option { display:grid; gap:0; }
 .skill-palette small,.desk-option kbd { color:var(--muted); }
 .desk-scroll { overflow:auto; max-height:480px; border:1px solid var(--line); border-radius:var(--control-radius); }
@@ -208,10 +208,10 @@ section.editing-desk { display:grid; gap:12px; padding:12px 16px; }
 .desk-label > .game-icon { float:left; margin-right:6px; }
 .desk-record {
   position:absolute; top:12px; min-width:92px; max-width:150px; padding:4px 8px; color:var(--ink);
-  border:1px solid var(--line); border-radius:var(--control-radius); background:var(--surface);
+  background:var(--surface);
   text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; touch-action:none; cursor:grab;
 }
-.desk-record.damage { color:var(--element-anemo-deep); background:var(--element-anemo-light); border-color:var(--element-anemo-primary); }
+.desk-record.damage { color:var(--element-anemo-deep); background:var(--element-anemo-light); border-inline-color:var(--element-anemo-primary); border-bottom-color:var(--element-anemo-primary); }
 .desk-record.selected { border-color:var(--element-hydro-deep); box-shadow:inset 0 0 0 1px var(--element-hydro-deep); z-index:1; }
 .desk-record small { display:block; }
 .playhead,.cursor-line { position:absolute; top:0; bottom:0; border-left:1px solid var(--element-pyro-deep); pointer-events:none; }

@@ -23,19 +23,19 @@ test('empty and occupied pickers center titles; role exit continues, rejects fai
   const badges=role.locator('.constellation-number');await expect(badges).toHaveCount(7);expect(await badges.evaluateAll(nodes=>nodes.every(node=>getComputedStyle(node).backgroundColor==='rgba(0, 0, 0, 0)'))).toBe(true);
   const imported=await readDocument<LocalAccount>(page,'account',original!);
   const flowerId=imported.characters.find(entry=>entry.name==='安柏')!.equipment.flower;
-  await role.getByRole('button',{name:'管理生之花',exact:true}).press('Shift+F10');
+  await role.getByRole('button',{name:'查看生之花详情',exact:true}).press('Shift+F10');
   await page.getByRole('menuitem',{name:'卸下',exact:true}).click();
   await role.getByRole('button',{name:'装备生之花',exact:true}).click();const picker=page.getByRole('dialog',{name:'选择生之花',exact:true});await centered(picker);
   await picker.locator(`.inventory-card:not([data-artifact-id="${flowerId}"])`).first().click();
-  await role.getByRole('button',{name:'管理生之花',exact:true}).click();await centered(picker);await page.screenshot({path:'artifacts/unsaved-picker-centered.png',fullPage:true});const remove=await picker.getByRole('button',{name:'卸下',exact:true}).boundingBox();expect(remove!.width).toBe(64);expect(remove!.height).toBe(32);
+  await role.getByRole('button',{name:'替换生之花',exact:true}).click();await centered(picker);await page.screenshot({path:'artifacts/unsaved-picker-centered.png',fullPage:true});const remove=await picker.getByRole('button',{name:'卸下',exact:true}).boundingBox();expect(remove!.width).toBe(64);expect(remove!.height).toBe(32);
   await page.setViewportSize({width:390,height:844});await centered(picker);await page.screenshot({path:'artifacts/unsaved-picker-centered-mobile.png',fullPage:true});await page.keyboard.press('Escape');await page.setViewportSize({width:1440,height:1000});
-  await page.keyboard.press('Escape');await expect(warning(page).getByRole('button',{name:'保存',exact:true})).toBeVisible();await expect(warning(page).getByRole('button',{name:'放弃修改',exact:true})).toBeVisible();await page.screenshot({path:'artifacts/unsaved-three-actions.png',fullPage:true});await warning(page).getByRole('button',{name:'继续编辑',exact:true}).click();await expect(role.getByRole('button',{name:'管理生之花',exact:true})).toBeVisible();expect(await account(page)).toBe(original);
+  await page.keyboard.press('Escape');await expect(warning(page).getByRole('button',{name:'保存',exact:true})).toBeVisible();await expect(warning(page).getByRole('button',{name:'放弃修改',exact:true})).toBeVisible();await page.screenshot({path:'artifacts/unsaved-three-actions.png',fullPage:true});await warning(page).getByRole('button',{name:'继续编辑',exact:true}).click();await expect(role.getByRole('button',{name:'查看生之花详情',exact:true})).toBeVisible();expect(await account(page)).toBe(original);
   // A controlled storage failure on the real imported account must retain the same draft.
   await page.evaluate(()=>{const prototype=Storage.prototype as Storage & {originalSetItem?:Storage['setItem']};prototype.originalSetItem=prototype.setItem;prototype.setItem=function(key,value){if(key.startsWith('leyline-account'))throw new Error('test storage unavailable');prototype.originalSetItem!.call(this,key,value);};});
   await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(role).toBeVisible();await expect(role.locator('[role=alert]').first()).toBeVisible();expect(await account(page)).toBe(original);
   await page.evaluate(()=>{const prototype=Storage.prototype as Storage & {originalSetItem?:Storage['setItem']};prototype.setItem=prototype.originalSetItem!;delete prototype.originalSetItem;});
   await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'保存',exact:true}).click();await expect(role).toHaveCount(0);const saved=await account(page);expect(saved).not.toBe(original);
-  await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();await role.getByRole('button',{name:'管理生之花',exact:true}).click();await picker.getByRole('button',{name:'卸下',exact:true}).click();await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'放弃修改',exact:true}).click();await expect(role).toHaveCount(0);expect(await account(page)).toBe(saved);
+  await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();await role.getByRole('button',{name:'替换生之花',exact:true}).click();await picker.getByRole('button',{name:'卸下',exact:true}).click();await page.keyboard.press('Escape');await warning(page).getByRole('button',{name:'放弃修改',exact:true}).click();await expect(role).toHaveCount(0);expect(await account(page)).toBe(saved);
 });
 
 test('artifact exit validation keeps draft; Save persists then closes',async({page})=>{

@@ -79,7 +79,7 @@ defineExpose({prepare,reset});
       <label class="artifact-alias">别名<input class="ui-control" v-model="draft.alias" aria-label="圣遗物别名" placeholder="可选，不改变原名称…" maxlength="160" autocomplete="off"></label>
       <div v-if="!details" class="artifact-form-actions"><CancelButton @click="emit('close')" /><button class="ui-action" @click="check">预览词条</button></div>
     </template>
-    <template v-else-if="preview"><ArtifactSummary class="artifact-preview" :account="props.targetAccount" variant="relaxed" :item="draft" /><div class="artifact-form-actions"><CancelButton @click="emit('close')" /><button class="ui-action soft" @click="preview=false">返回修改</button><button class="ui-action" @click="apply">{{ item?'应用修改':'确认入库' }}</button></div></template>
+    <template v-else-if="preview"><ArtifactSummary class="artifact-preview" :account="props.targetAccount" :item="draft" /><div class="artifact-form-actions"><CancelButton @click="emit('close')" /><button class="ui-action soft" @click="preview=false">返回修改</button><button class="ui-action" @click="apply">{{ item?'应用修改':'确认入库' }}</button></div></template>
     <p v-if="error" role="alert">{{ error }}</p>
   </div>
 </template>

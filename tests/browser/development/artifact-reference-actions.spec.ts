@@ -5,8 +5,8 @@ import {auditDialog} from '../../helpers/ui-contract-audit';
 test.skip(!existsSync('.references/enka/official-example.json'),'Requires the recorded public showcase.');
 test('shared triangle favorites, one favorite action, unique copies, return links and deletion preserve detached equipment',async({page})=>{
   test.setTimeout(60000);page.setDefaultTimeout(8000);const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));await page.setViewportSize({width:1440,height:1000});const role=await prepareRecordedAmberConfiguration(page);
-  await role.getByRole('button',{name:'管理生之花',exact:true}).press('Shift+F10');await expect(page.getByRole('menuitem')).toHaveText(['查看详情','替换','卸下']);await page.getByRole('menuitem',{name:'查看详情',exact:true}).click();const detail=page.locator('.artifact-detail-dialog[open]');await expect(detail).toBeVisible();await page.keyboard.press('Escape');await expect(role).toBeVisible();
-  await role.getByRole('button',{name:'管理生之花',exact:true}).click({button:'right'});await page.getByRole('menuitem',{name:'卸下',exact:true}).click();await expect(role.getByRole('button',{name:'装备生之花',exact:true})).toBeVisible();await role.getByRole('button',{name:'还原',exact:true}).click();
+  await role.getByRole('button',{name:'查看生之花详情',exact:true}).press('Shift+F10');await expect(page.getByRole('menuitem')).toHaveText(['查看详情','替换','卸下']);await page.getByRole('menuitem',{name:'查看详情',exact:true}).click();const detail=page.locator('.artifact-detail-dialog[open]');await expect(detail).toBeVisible();await page.keyboard.press('Escape');await expect(role).toBeVisible();
+  await role.getByRole('button',{name:'查看生之花详情',exact:true}).click({button:'right'});await page.getByRole('menuitem',{name:'卸下',exact:true}).click();await expect(role.getByRole('button',{name:'装备生之花',exact:true})).toBeVisible();await role.getByRole('button',{name:'还原',exact:true}).click();
   await role.getByRole('button',{name:'5命',exact:true}).click();await role.getByRole('button',{name:'另存',exact:true}).click();await page.getByRole('button',{name:'确认另存',exact:true}).click();await expect(page.getByRole('dialog',{name:'另存角色配装方案',exact:true})).toHaveCount(0);await page.keyboard.press('Escape');await expect(role).toHaveCount(0);
   const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document),amber=before.characters.find((item:{name:string})=>item.name==='安柏'),id=amber.equipment.flower;
   await page.getByTestId('workspace-nav-artifacts').click();await page.getByRole('button',{name:'生之花',exact:true}).click();const card=page.locator(`.inventory-card[data-artifact-id="${id}"]`);await card.click({button:'right'});await expect(page.getByRole('menuitem')).toHaveText(['查看详情','收藏','删除']);await page.getByRole('menuitem',{name:'收藏',exact:true}).click();await expect(card.locator('.favorite-mark')).toHaveAttribute('data-level','1');await card.click();await detail.getByRole('button',{name:'设置圣遗物收藏',exact:true}).click();await expect(detail.locator('.favorite-mark')).toHaveAttribute('data-level','2');await expect(detail.locator('.artifact-favorite .corner-badge')).toHaveCount(0);await auditDialog(detail,'editor');
@@ -17,7 +17,7 @@ test('shared triangle favorites, one favorite action, unique copies, return link
 });
 test('showcase import defaults to merging, snapshot-only stays available, and context imports one slot',async({page})=>{
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync('.references/enka/official-example.json','utf8'))}));await page.goto('/');await page.getByRole('button',{name:'展柜导入',exact:true}).click();await page.getByLabel('游戏 UID',{exact:true}).fill('618285856');await page.getByRole('button',{name:'查询角色展柜',exact:true}).click();await expect(page.getByRole('button',{name:'同时导入本地库',exact:true})).toHaveAttribute('aria-pressed','true');await page.getByRole('button',{name:'仅保存展柜',exact:true}).click();await page.getByRole('button',{name:'确认导入 4 位角色',exact:true}).click();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts.length)).toBe(0);
-  await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});await role.getByRole('button',{name:'展柜',exact:true}).click();await role.getByRole('button',{name:'管理生之花',exact:true}).click({button:'right'});await expect(page.getByRole('menuitem')).toHaveText(['查看详情','入库']);await page.getByRole('menuitem',{name:'入库',exact:true}).click();await page.getByRole('dialog',{name:'入库圣遗物？',exact:true}).getByRole('button',{name:'入库',exact:true}).click();const account=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document);expect(account.artifacts).toHaveLength(1);expect(account.artifacts[0].slot).toBe('flower');expect(account.artifacts[0].rollSource).toBe('showcase');expect(account.characters.find((item:{name:string})=>item.name==='安柏').equipment).toEqual({});
+  await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();const role=page.getByRole('dialog',{name:'安柏',exact:true});await role.getByRole('button',{name:'展柜',exact:true}).click();await role.getByRole('button',{name:'查看生之花详情',exact:true}).click({button:'right'});await expect(page.getByRole('menuitem')).toHaveText(['查看详情','入库']);await page.getByRole('menuitem',{name:'入库',exact:true}).click();await page.getByRole('dialog',{name:'入库圣遗物？',exact:true}).getByRole('button',{name:'入库',exact:true}).click();const account=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document);expect(account.artifacts).toHaveLength(1);expect(account.artifacts[0].slot).toBe('flower');expect(account.artifacts[0].rollSource).toBe('showcase');expect(account.characters.find((item:{name:string})=>item.name==='安柏').equipment).toEqual({});
 });
 
 test('reference links keep the latest five origins and protect an evicted draft',async({page})=>{
@@ -49,9 +49,9 @@ test('reference links keep the latest five origins and protect an evicted draft'
     await expect(artifact).toHaveCount(0);
     await expect(main).toHaveAttribute('aria-label',destination);
     if(destination==='圣遗物组合'){
-      await editor.getByRole('button',{name:'管理生之花',exact:true}).click();
+      await editor.getByRole('button',{name:'查看生之花详情',exact:true}).click();
     }else{
-      await role.getByRole('button',{name:'管理生之花',exact:true}).press('Shift+F10');
+      await role.getByRole('button',{name:'查看生之花详情',exact:true}).press('Shift+F10');
       await page.getByRole('menuitem',{name:'查看详情',exact:true}).click();
     }
     await expect(artifact).toBeVisible();
@@ -70,7 +70,7 @@ test('reference links keep the latest five origins and protect an evicted draft'
   await sixth.click();
   await confirmation.getByRole('button',{name:'保存',exact:true}).click();
   await expect(main).toHaveAttribute('aria-label',destinations[5]);
-  await role.getByRole('button',{name:'管理生之花',exact:true}).press('Shift+F10');
+  await role.getByRole('button',{name:'查看生之花详情',exact:true}).press('Shift+F10');
   await page.getByRole('menuitem',{name:'查看详情',exact:true}).click();
   await follow(destinations[6]);
 

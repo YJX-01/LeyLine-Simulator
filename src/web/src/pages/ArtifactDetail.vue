@@ -64,7 +64,7 @@ defineExpose({requestLeave});
 </script>
 <template>
   <WorkbenchDialog editor class="artifact-detail-dialog" :title="display.name" :dirty="dirty" :before-close="requestLeave" @close="emit('close')">
-    <template #header-leading><div class="artifact-edit-actions"><EditorActions v-if="!readonly" :dirty="dirty" :busy="busy" allow-save-as :can-save-as="!!display.real" @save="save()" @save-as="save(true)" @restore="restore" /><button v-if="!readonly && !account && display.inventoryId!==null" class="ui-action soft" data-size="md" data-accent="pyro" @click="requestDelete">删除</button></div></template>
+    <template #header-leading><div class="artifact-edit-actions"><EditorActions v-if="!readonly" :dirty="dirty" :busy="busy" allow-save-as :can-save-as="!!display.real" @save="save()" @save-as="save(true)" @restore="restore" /><button v-if="!readonly && !account && display.inventoryId!==null" class="ui-action soft" data-size="md" data-accent="pyro" @click="requestDelete">删除</button><slot name="actions" /></div></template>
     <template #header-trailing><ArtifactFavorite v-if="!readonly" :account-id="inventory.id" :item-id="display.id" /></template>
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="artifact-detail-body"><ArtifactPortrait class="artifact-portrait" :item="display" main /><fieldset class="artifact-editor-fields" :disabled="readonly"><ArtifactForm ref="form" :key="revision" details inline :item="display" :target-account="props.account" @dirty-change="dirty=$event" /></fieldset></div>
@@ -74,7 +74,7 @@ defineExpose({requestLeave});
         <h4>{{ group.title }}</h4>
         <div>
           <button v-for="reference in references.filter(item=>item.kind===group.kind)" :key="reference.key"
-            :title="reference.name" class="ui-action soft" data-size="md" data-accent="hydro" :disabled="!navigate" @click="jump(reference.target)">
+            :title="reference.name" class="ui-action soft" data-size="md" data-accent="anemo" :disabled="!navigate" @click="jump(reference.target)">
             <span class="reference-name">{{ reference.name }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
           </button>
         </div>

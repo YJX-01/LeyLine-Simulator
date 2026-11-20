@@ -114,7 +114,7 @@ defineExpose({hasPreview,canConfirm,confirmLabel,confirmText,confirm,busy});
         <div v-if="visible.length" class="preview-items">
           <article v-for="item in visible" :key="item.id" class="preview-item artifact-item-card" data-passive :data-artifact-id="item.id" :data-rarity="item.real?.rarity" :aria-label="item.name">
             <h4 class="preview-item-name">{{ item.name }}</h4>
-            <ArtifactSummary :item="item" :account="store.account" variant="relaxed" :wearers="[]" />
+            <ArtifactSummary :item="item" :account="store.account" :wearers="[]" />
             <div class="preview-item-notes"><span>{{ item.mona?.equippedBy?`穿戴备注：${item.mona.equippedBy}`:'无穿戴备注' }}</span><span v-if="item.mona?.omit" class="preview-omitted">原文件标记忽略</span></div>
           </article>
         </div>

@@ -44,7 +44,7 @@ test('recorded items: explicit standalone save, duplicate reuse, draft applicati
   await page.keyboard.press('Escape');await page.setViewportSize({width:1280,height:900});await page.reload();await page.getByTestId('workspace-nav-combinations').click();expect(await combos(page)).toHaveLength(2);
   // Trial derived by unequipping one recorded item; it is not presented as a player export.
   await page.getByTestId('workspace-nav-characters').click();await page.getByRole('button',{name:'查看安柏详情',exact:true}).click();
-  await role.getByRole('button',{name:'管理生之花',exact:true}).click();await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:'卸下',exact:true}).click();
+  await role.getByRole('button',{name:'替换生之花',exact:true}).click();await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:'卸下',exact:true}).click();
   await role.getByRole('button',{name:'另存',exact:true}).click();await page.getByRole('button',{name:'确认另存',exact:true}).click();await page.keyboard.press('Escape');
   await page.getByTestId('workspace-nav-loadouts').click();
   await chooseConfigurationRole(page,'安柏');
@@ -85,7 +85,7 @@ test('actual Mona items: independent creation, restore, discard and deletion nev
   await page.screenshot({path:'artifacts/independent-combination-editor.png',fullPage:true});await editor.getByRole('button',{name:'保存',exact:true}).click();expect(await combos(page)).toHaveLength(1);
   expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(before);
   await page.getByRole('button',{name:/^查看组合：/}).click();const editing=page.getByRole('dialog',{name:'编辑组合',exact:true});
-  await editing.getByRole('button',{name:'管理生之花',exact:true}).click({button:'right'});await page.getByRole('menuitem',{name:'替换',exact:true}).click();await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:'卸下',exact:true}).click();await editing.getByRole('button',{name:'还原',exact:true}).click();await expect(editing.getByRole('button',{name:'管理生之花',exact:true})).toBeVisible();
+  await editing.getByRole('button',{name:'查看生之花详情',exact:true}).click({button:'right'});await page.getByRole('menuitem',{name:'替换',exact:true}).click();await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:'卸下',exact:true}).click();await editing.getByRole('button',{name:'还原',exact:true}).click();await expect(editing.getByRole('button',{name:'查看生之花详情',exact:true})).toBeVisible();
   await editing.getByRole('button',{name:'有效词条生命值',exact:true}).click();const saved=JSON.stringify(await combos(page));await page.keyboard.press('Escape');
   await page.getByRole('dialog',{name:'有未保存的修改',exact:true}).getByRole('button',{name:'放弃修改',exact:true}).click();expect(JSON.stringify(await combos(page))).toBe(saved);
   const openCombination=page.locator('.combination-open').first();await openCombination.focus();await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await openCombination.press('Shift+F10');await page.getByRole('menuitem',{name:'删除',exact:true}).click();await page.getByRole('dialog',{name:'删除组合？',exact:true}).getByRole('button',{name:'删除',exact:true}).click();expect(await combos(page)).toHaveLength(0);

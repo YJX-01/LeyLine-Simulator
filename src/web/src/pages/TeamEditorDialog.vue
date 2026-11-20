@@ -2,6 +2,7 @@
 import { computed, defineAsyncComponent, nextTick, ref, shallowRef, toRaw } from 'vue';
 import type { Project } from '@leyline/schema';
 import CharacterConfigurationCard from '../components/CharacterConfigurationCard.vue';
+import ChoiceGroup from '../components/ChoiceGroup.vue';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
 import ContextMenu from '../components/ContextMenu.vue';
 import EditorActions from '../components/EditorActions.vue';
@@ -22,7 +23,8 @@ import { useAccountStore } from '../stores/account';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
 import { teamNameLimit, useSavedTeamsStore, type SavedTeam } from '../stores/saved-teams';
 
-const CharacterSelectionDialog = defineAsyncComponent(() => import('../components/CharacterSelectionDialog.vue'));
+const CharacterCatalogBrowser = defineAsyncComponent(() => import('../components/CharacterCatalogBrowser.vue'));
+const ManualCharacterImport = defineAsyncComponent(() => import('./ManualCharacterImport.vue'));
 const CharacterConfigurationList = defineAsyncComponent(() => import('./CharacterConfigurationList.vue'));
 const props = defineProps<{ team?: SavedTeam }>();
 const emit = defineEmits<{ close: []; deleted: []; inspect: [characterId: string, presetId: string] }>();
@@ -71,7 +73,10 @@ const { discardOpen, requestLeave, cancelDiscard, discardChanges, saveAndLeave }
 defineExpose({ requestLeave });
 
 const form = ref<HTMLFormElement>();
-const picker = shallowRef<{ index: number; characterId?: string; characterName?: string }>();
+type MemberSource = 'local' | 'catalog';
+const picker = shallowRef<{ index: number; source: MemberSource; characterId?: string; characterName?: string }>();
+const catalogCharacter = shallowRef<{ id: string; name: string }>();
+const sourceChoices = [{ value: 'local', label: '本地' }, { value: 'catalog', label: '全部角色' }];
 const adding = ref(false);
 const pickError = ref('');
 const error = ref('');
@@ -94,11 +99,29 @@ function matchingCharacterId(slot: OccupiedSlot) {
 function openPicker(index: number, replaceCharacter = false) {
   pickError.value = '';
   const slot = slots.value[index];
-  picker.value = original.value && slot && !replaceCharacter
-    ? { index, characterId: matchingCharacterId(slot), characterName: slot.name }
-    : { index };
+  const account = accounts.account;
+  const local = account.characters.some(hasLocalConfiguration) || loadouts.loadouts.some(entry => entry.accountId === account.id);
+  picker.value = slot && !replaceCharacter
+    ? { index, source: 'local', characterId: matchingCharacterId(slot), characterName: slot.name }
+    : { index, source: local ? 'local' : 'catalog' };
+}
+function changeSource(source: unknown) {
+  if (!picker.value || (source !== 'local' && source !== 'catalog')) return;
+  pickError.value = '';
+  picker.value = { ...picker.value, source };
+}
+function configureCharacter(entry: { id: string; name: string }) {
+  const selection = picker.value;
+  if (!selection) return;
+  if (slots.value.some((slot, index) => index !== selection.index && slot?.member.build?.character.id === entry.id)) {
+    pickError.value = '队伍已经有这位角色。';
+    return;
+  }
+  pickError.value = '';
+  catalogCharacter.value = entry;
 }
 function closePicker() {
+  catalogCharacter.value = undefined;
   picker.value = undefined;
 }
 function focusSlot(index: number) {
@@ -127,8 +150,14 @@ async function selectMember(characterId: string, presetId = '') {
   pickError.value = '';
   try {
     if (presetId && !preset) throw new Error('配置已变化，请重新选择。');
+    const source = preset?.snapshot ?? account;
+    const character = source.characters.find(entry => entry.id === characterId);
+    if (character && !character.build) {
+      emit('inspect', characterId, presetId);
+      return;
+    }
     const project = projectWithoutSlot(current, selection.index);
-    const member = await prepareTeamMember(project, account, characterId, preset?.snapshot ?? account);
+    const member = await prepareTeamMember(project, account, characterId, source);
     if (picker.value !== selection) return;
     if (accounts.account !== account || draft.value !== current || (preset && !loadouts.loadouts.includes(preset))) throw new Error('资料已变化，请重新选择队员。');
     const actorId = addActorFromBuild(project, member.build, member.name);
@@ -154,7 +183,7 @@ function clearSlot(index: number) {
   focusSlot(index);
 }
 function openMenu(event: MouseEvent | KeyboardEvent, index: number) {
-  const trigger = (event.currentTarget as HTMLElement).closest('.team-slot')?.querySelector<HTMLButtonElement>('.configuration-open');
+  const trigger = (event.target as HTMLElement).closest('button') ?? (event.currentTarget as HTMLElement).querySelector<HTMLButtonElement>('.configuration-open');
   if (!trigger) return;
   event.preventDefault();
   trigger.focus({ preventScroll: true });
@@ -173,6 +202,9 @@ async function menuAction(action: string) {
     openPicker(index, true);
     return;
   }
+  inspectSlot(index);
+}
+function inspectSlot(index: number) {
   const slot = slots.value[index];
   if (!slot) return;
   const account = accounts.account;
@@ -244,29 +276,34 @@ function removeTeam() {
         <li v-for="(slot, index) in slots" :key="index" :data-slot="index + 1" class="team-slot">
           <CharacterConfigurationCard v-if="slot" class="team-configuration" compact :character-name="slot.name"
             :configuration-name="slot.label" :build="slot.member.build" :entries="slot.entries" :basis="slot.basis" :effective-stats="slot.stats"
-            :open-label="original ? `选择${slot.name}的角色配置` : `更换队员${index + 1}`"
-            @open="openPicker(index)" @contextmenu="openMenu($event, index)" @open-keydown="menuKey($event, index)" />
-          <button v-else type="button" class="team-add-slot" @click="openPicker(index)">
+            :open-label="`查看${slot.name}的配置详情`" :replace-label="`选择${slot.name}的角色配置`"
+            @open="inspectSlot(index)" @replace="openPicker(index)" @contextmenu="openMenu($event, index)" @open-keydown="menuKey($event, index)" />
+          <button v-else type="button" class="team-add-slot" data-card-action="select" @click="openPicker(index)">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>选择队员{{ index + 1 }}
           </button>
         </li>
       </ol>
     </form>
 
-    <CharacterSelectionDialog v-if="picker && !original" title="选择角色" :selected-id="pickedSlot?.configuration?.characterId"
-      @close="closePicker" @select="selectMember($event)">
-      <template v-if="pickedSlot" #header-leading>
+    <WorkbenchDialog v-if="picker" class="team-configuration-picker" :class="{ 'role-filtered': picker.source === 'local' && picker.characterName }"
+      title="选择角色配置" center-title @close="closePicker">
+      <template #header-leading>
+        <button v-if="picker.source === 'local' && picker.characterName" type="button" class="ui-action soft member-switch" data-size="md"
+          data-accent="hydro" @click="openPicker(picker.index, true)">切换其他角色</button>
+        <ChoiceGroup class="member-sources" joined small tone="hydro" label="角色资料来源" :model-value="picker.source" :options="sourceChoices" @update:model-value="changeSource" />
+      </template>
+      <template v-if="pickedSlot" #header-trailing>
         <button type="button" class="ui-action soft" data-size="md" data-accent="pyro" @click="clearSlot(picker.index)">移除队员</button>
       </template>
       <p v-if="pickError" class="team-pick-error" role="alert">{{ pickError }}</p>
-    </CharacterSelectionDialog>
-    <WorkbenchDialog v-if="picker && original" title="选择角色配置" center-title @close="closePicker">
-      <template v-if="pickedSlot" #header-leading>
-        <button type="button" class="ui-action soft" data-size="md" data-accent="pyro" @click="clearSlot(picker.index)">移除队员</button>
-      </template>
-      <p v-if="pickError" class="team-pick-error" role="alert">{{ pickError }}</p>
-      <p v-if="picker.characterName && !picker.characterId">当前账号没有{{ picker.characterName }}的配置。</p>
-      <CharacterConfigurationList v-else :character-id="picker.characterId" selectable selection-only @select="selectMember" />
+      <KeepAlive>
+        <CharacterCatalogBrowser v-if="picker.source === 'catalog'" @select="configureCharacter" />
+        <CharacterConfigurationList v-else-if="!picker.characterName || picker.characterId" :key="picker.characterId ?? 'all'"
+          :character-id="picker.characterId" selectable selection-only @select="selectMember" />
+      </KeepAlive>
+      <p v-if="picker.source === 'local' && picker.characterName && !picker.characterId">当前账号没有{{ picker.characterName }}的配置。</p>
+      <ManualCharacterImport v-if="catalogCharacter" :initial-character="catalogCharacter" reuse-local select-on-save
+        @saved="selectMember" @close="catalogCharacter=undefined" />
     </WorkbenchDialog>
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="队员操作"
       :options="[{ id: 'details', label: '查看详情' }, { id: 'replace', label: '替换' }]" @close="menu = undefined" @select="menuAction" />
@@ -288,17 +325,23 @@ function removeTeam() {
 .team-slot { display:grid; min-width:0; min-height:120px; }
 .team-configuration { align-content:start; }
 .team-configuration :deep(.configuration-top) { min-height:var(--control-height-md); }
-.team-configuration:hover { border-top-color:var(--element-anemo-primary); }
 .team-editor .team-add-slot {
   display:flex; align-items:center; justify-content:center; gap:8px; min-height:var(--control-height-lg);
-  padding:12px; border:1px dashed var(--line); border-radius:10px; color:var(--element-anemo-deep);
-  background:var(--element-anemo-light); font-size:var(--font-control); font-weight:700;
+  padding:12px; border-style:dashed; color:var(--element-hydro-deep);
+  background:var(--element-hydro-light); font-size:var(--font-control); font-weight:700;
 }
 .team-add-slot svg { width:16px; height:16px; }
 .team-pick-error { padding-bottom:8px; }
 @media(max-width:850px) {
   .team-editor > :deep(header) { grid-template-columns:72px minmax(0,1fr) 72px; }
   .team-editor > :deep(header .dialog-trailing) { display:flex; }
+  .team-configuration-picker.role-filtered > :deep(header) {
+    grid-template-columns:minmax(max-content,1fr) minmax(0,max-content) minmax(var(--control-height-md),1fr);
+  }
+  .team-configuration-picker > :deep(header .dialog-leading) { display:contents; }
+  .team-configuration-picker > :deep(header .dialog-extra) { grid-column:1/-1; grid-row:2; justify-self:end; }
+  .member-switch { grid-column:1; grid-row:1; justify-self:start; }
+  .member-sources { grid-column:1/-1; grid-row:2; justify-self:start; }
 }
 @media(max-width:520px) {
   .team-slots { grid-template-columns:minmax(0,1fr); grid-auto-rows:auto; gap:8px; }

@@ -1,10 +1,11 @@
-import type { CharacterDefinition } from '@leyline/schema';
+import { ordinaryTrialId, type CharacterDefinition } from '@leyline/schema';
 import { realElementLabel } from './workbench-labels';
 
 export interface CalculatorHitChoice {
   skillId: string;
   hitId: string;
   outputId?: string;
+  ordinaryTrial?: boolean;
   group: string;
   alias: string;
   name: string;
@@ -47,7 +48,11 @@ export function calculatorHitChoices(character: CharacterDefinition): Calculator
       const ordinal = category === 'normal' && name.match(/([一二三四五六七八九])段/)?.[1];
       const alias = variant ? (name.includes(variant) ? '小q' : '大Q') : aliasPrefix[category] + (ordinal ? ordinals.indexOf(ordinal) + 1 : stage);
       const base = { skillId: talent.id, hitId: hit.id, group: categoryNames[category], alias, skillName: talent.name, element: hit.element, icon };
-      if (!hit.outputs.length) choices.push({ ...base, name });
+      if (!hit.outputs.length) {
+        // Only a bound talent base can be tried. Special reaction rows need their own damage family.
+        const ordinary = !!parameter && !talent.noIndependentDamage && !/[月星][·・]?(感电|绽放|结晶|扩散|超导)/u.test(name);
+        choices.push({ ...base, name, ...(ordinary ? { outputId: ordinaryTrialId(hit.id), ordinaryTrial: true } : {}) });
+      }
       for (const output of hit.outputs) {
         const suffix = output.family === 'stellar-swirl' && !name.includes('星扩散') ? '（星扩散）' : '';
         choices.push({ ...base, name: name + suffix, outputId: output.id });

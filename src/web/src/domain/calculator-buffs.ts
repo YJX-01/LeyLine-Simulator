@@ -1,8 +1,8 @@
 import { calculationEffectInstanceId, effectUnlocked, eventMatches, hitMatches, projectCalculationEvent } from '@leyline/engine';
-import { definitionKey, projectSchema, type Build, type CalculationBinding, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
+import { calculatorProjectSchema, definitionKey, ordinaryTrialId, type Build, type CalculationBinding, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
 import { addSkillAction } from './real-project';
 import { realElementLabel, realStatLabels } from './workbench-labels';
-import { calculatorIntervals, hpChoice, hpMatches, ownerFactFields, selectionFacts, stackChoice, trialValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
+import { calculatorIntervals, hpChoice, hpMatches, ownerFactFields, selectionFacts, setTrialFact, stackChoice, trialValue, withCurrentConditions, type CalculatorFactField, type CalculatorFactSetting } from './calculator-conditions';
 
 export interface CalculatorBuff {
   id: string;
@@ -79,8 +79,9 @@ export function calculatorBuffChoices(project: Project, recipientId: string, dam
   const skill = builds.get(recipientId)?.character.talents.find(skill => skill.id === damage.skillId);
   const hit = skill?.hits.find(hit => hit.id === damage.hitId);
   const output = hit?.outputs.find(output => output.id === damage.outputId);
-  const frame: CombatFrame['hit'] = hit && output ? { skillId: damage.skillId, hitId: hit.id, category: hit.category, element: hit.element,
-    family: output.family, origin: output.origin, reactionId: damage.reaction && damage.reaction !== 'none' ? damage.reaction.type : null } : null;
+  const family = output?.family ?? (hit && damage.outputId === ordinaryTrialId(hit.id) ? 'ordinary' : undefined);
+  const frame: CombatFrame['hit'] = hit && family ? { skillId: damage.skillId, hitId: hit.id, category: hit.category, element: hit.element,
+    family, origin: output?.origin ?? 'talent', reactionId: damage.reaction && damage.reaction !== 'none' ? damage.reaction.type : null } : null;
   const order = project.timeline.find(record => record.id === recordId)?.order ?? Infinity;
   const disabled = new Set(project.effectRevisions?.filter(entry => entry.disabled).map(entry => entry.instanceId));
   const applications = new Map(damage.effectApplications?.map(entry => [entry.instanceId, entry.active]));
@@ -96,7 +97,7 @@ export function calculatorBuffChoices(project: Project, recipientId: string, dam
         if (!effectUnlocked(effect.activation, { ...build, setCounts }) || hitMatches(effect.appliesTo, frame) === false) continue;
         if (effect.recipient.role === 'owner' && ownerId !== recipientId || effect.recipient.role === 'team' && effect.recipient.excludeOwner && ownerId === recipientId) continue;
         const target = effect.target.kind === 'attribute' ? effect.target.attribute.id : '';
-        if (output && target.startsWith('attribute.reaction.stellar-') && !target.startsWith('attribute.reaction.' + output.family + '.')) continue;
+        if (family && target.startsWith('attribute.reaction.stellar-') && !target.startsWith('attribute.reaction.' + family + '.')) continue;
         const owns = (refs: typeof entity.calculation.ruleIds) => refs.some(ref => definitionKey(ref) === definitionKey(effect.identity));
         const passive = entity === character ? character.passives.find(item => owns(item.ruleIds) && build.ascension >= (item.unlockAscension ?? 0)) : undefined;
         const constellation = entity === character ? character.constellations.find(item => owns(item.ruleIds) && build.constellation >= item.rank) : undefined;
@@ -142,10 +143,26 @@ export function calculatorBuffChoices(project: Project, recipientId: string, dam
   return choices;
 }
 
+/** The fresh trial and the picker use the same unchecked options. Explicit unknowns remain unknown. */
+export function resolveBuffSelection(choices: readonly CalculatorBuff[], damage: DamageRequest, intervals: CombatConditions, actorId: string, changes: ReadonlyMap<string, boolean>) {
+  const selected = new Map(changes);
+  const current = withCurrentConditions(damage, intervals, actorId);
+  const absent = (key: string) => !Object.hasOwn(current.conditions ?? {}, key) && !Object.hasOwn(damage.facts ?? {}, key);
+  for (const item of choices) {
+    const enabled = selected.get(item.id) ?? (!item.disabled && (!item.explicit || item.checked));
+    if (item.triggerSkill || item.disabled || enabled && buffConditionsMet(item, current)) continue;
+    if (item.explicit && !damage.effectApplications?.some(entry => entry.instanceId === item.id) && !selected.has(item.id)) selected.set(item.id, false);
+    if (item.toggleFact && absent(item.toggleFact)) setTrialFact(damage, { key: item.toggleFact, value: { kind: 'boolean', value: false } }, actorId);
+    if (item.stacks && absent(item.stacks.key)) setTrialFact(damage, { key: item.stacks.key, value: { kind: 'quantity', unit: 'count', value: 0 } }, actorId);
+    if (!item.explicit && (item.hp && absent('hpRatio') || item.requirements.some(setting => absent(setting.key)))) selected.set(item.id, false);
+  }
+  return selected;
+}
+
 /** Apply explicit trial choices to the calculator copy. Timed effects retain a real source record and event order. */
 export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choices: CalculatorBuff[], changes: ReadonlyMap<string,boolean>, time: number, recordId?: string) {
   if (!changes.size) return { project: input, applications: damage.effectApplications };
-  const project = projectSchema.parse(input);
+  const project = calculatorProjectSchema.parse(input);
   let applications = [...damage.effectApplications ?? []];
   const addedActions = new Map<string, string>();
   for (const option of choices) {
@@ -156,7 +173,7 @@ export function applyCalculatorBuffs(input: Project, damage: DamageRequest, choi
       const key = JSON.stringify([option.ownerId,option.triggerSkill]);
       let event = addedActions.get(key);
       if (!event) {
-        event = addSkillAction(project, option.ownerId, option.triggerSkill, time);
+        event = addSkillAction(project, option.ownerId, option.triggerSkill, time, calculatorProjectSchema);
         addedActions.set(key, event);
         const action = project.timeline.find(record => record.id === event)!;
         const hit = project.timeline.find(record => record.id === recordId);

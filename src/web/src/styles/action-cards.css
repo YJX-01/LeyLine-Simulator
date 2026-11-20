@@ -1,0 +1,61 @@
+.workspace-design [data-card-action] {
+  --card-action-color: var(--element-anemo-primary);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--card-rest-edge, var(--line));
+  border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+.workspace-design [data-card-action='select'],
+.workspace-design [data-card-action='replace'] {
+  --card-action-color: var(--element-hydro-primary);
+}
+.workspace-design button[data-card-action]:enabled:is(:hover, :active, :focus-visible),
+.workspace-design [data-card-action]:has(> :is(.card-detail-target, .card-action-trigger):not(:disabled):is(:hover, :active, :focus-visible)),
+.workspace-design [data-card-action]:has(> .card-action-trigger :focus-visible) {
+  border-top-color: var(--card-action-color);
+}
+.workspace-design [data-card-action]:has(:is(.card-replace-target, .replace-portrait):enabled:is(:hover, :active, :focus-visible)) {
+  border-top-color: var(--element-hydro-primary);
+}
+.workspace-design button:is(.card-detail-target, .card-replace-target) {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+.workspace-design button.card-replace-target {
+  z-index: 2;
+  border-radius: var(--control-radius);
+}
+.workspace-design :is(button[data-card-action], .card-detail-target, .card-action-trigger, .card-replace-target, .replace-portrait):focus-visible {
+  outline: none;
+}
+.workspace-design button:enabled:is(:focus-visible, :active) .card-replace-layer {
+  visibility: visible;
+}
+@media (any-hover: hover) {
+  .workspace-design button:enabled:hover .card-replace-layer {
+    visibility: visible;
+  }
+}
+.workspace-design .replace-portrait {
+  position: relative;
+  isolation: isolate;
+}
+.workspace-design .replace-portrait > :not(.card-replace-layer),
+.workspace-design .artifact-visual > .artifact-art {
+  isolation: isolate;
+}
+@media (forced-colors: active) {
+  .workspace-design :is(button[data-card-action], .card-detail-target, .card-action-trigger, .card-replace-target, .replace-portrait):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

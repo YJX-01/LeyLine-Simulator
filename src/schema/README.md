@@ -28,6 +28,8 @@
 
 计算器的actorId须指向有Build的队员，recordId须指向项目中的伤害记录。保存设定与快照，重开重新求值。内容更新通过显式审阅采用，文件打开保持自身定义。
 
+独立计算文件可以用 `<hitId>.ordinary-trial` 记录用户对已有倍率命中的普通直伤试算选择。计算器校验队员、技能、命中、输入及捕获关系，求值时临时连接同一套普通直伤公式。原始定义和支持证据随文件保存。轴项目仍要求每条记录引用角色快照中声明的输出。
+
 kind=capture的独立记录关联同队员技能与合法时间，其定义无公式和效果，记录无damage。来源与命中的先后依order明确；before/after阶段按捕获契约执行。当前命中可以明确关联自身before阶段，自身after作为来源时拒绝；同刻缺order保持待确认，ID用于稳定排序而非补足依赖事实。
 
 combatStates包含id、actor、startMs、endMs、values；值支持hpRatio、onField、shielded及明确null。damage.conditions覆盖当前队员，stateOverrides按actor覆盖上下文中其他队员，重复字段覆盖拒绝。stateReads保留实际查询及intervalId、source和值。

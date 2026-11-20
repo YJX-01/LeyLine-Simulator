@@ -186,6 +186,8 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 逐项定义以 src/game-data/data 为准，`node tools/scripts/data/audit-damage-paths.mjs` 输出当前绑定摘要。
 
+同一展柜中瓦雷莎「大火山崩落」引用爆发的 param5，按下落攻击伤害匹配增益。类别依据为[瓦雷莎天赋 combat3 原文](sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/varesa.json)。独立计算器的普通直伤试算保留武器、套装和角色机制缺口。薇斯纳与瓦雷莎、菲林斯、雷电将军组成的四人试配另核对三位非冰风队员提供的75点精通，数值对照见 `tests/helpers/recorded-vesna.ts`。
+
 #### 已审阅单次查询
 
 圣遗物当前实物范围、逐星级资料与接入缺口见[稀有度调查](#圣遗物稀有度调查)。

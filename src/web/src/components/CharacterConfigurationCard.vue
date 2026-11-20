@@ -4,6 +4,7 @@ import type { Build, StatKey } from '@leyline/schema';
 import type { AccountArtifact, AccountSlot } from '../domain/account';
 import type { EffectiveRollBasis } from '../domain/effective-roll-basis';
 import ArtifactSetSummary from './ArtifactSetSummary.vue';
+import CardReplaceMark from './CardReplaceMark.vue';
 import ConfigurationTitle from './ConfigurationTitle.vue';
 import EffectiveRollSummary from './EffectiveRollSummary.vue';
 import EquipmentStrip from './EquipmentStrip.vue';
@@ -20,14 +21,16 @@ const props = withDefaults(defineProps<{
   preferred?: boolean;
   current?: boolean;
   openLabel?: string;
+  action?: 'detail' | 'select';
+  replaceLabel?: string;
   compact?: boolean;
-}>(), { effectiveStats: () => [], preferred: undefined });
-const emit = defineEmits<{ open: []; openKeydown: [event: KeyboardEvent] }>();
+}>(), { effectiveStats: () => [], preferred: undefined, compact: true, action: 'detail' });
+const emit = defineEmits<{ open: []; replace: []; openKeydown: [event: KeyboardEvent] }>();
 const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.item] : []));
 </script>
 
 <template>
-  <article class="configuration-row" :class="{ current, compact }">
+  <article class="configuration-row" :data-card-action="openLabel ? action : undefined" :class="{ current, compact }">
     <div class="configuration-top">
       <div class="configuration-heading">
         <ConfigurationTitle :character-name="characterName" :name="configurationName" :preferred="preferred" :current="current" />
@@ -43,14 +46,18 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
       <slot name="actions" />
     </div>
     <div class="configuration-body">
-      <div v-if="compact" class="configuration-portraits">
+      <component v-if="compact" :is="replaceLabel ? 'button' : 'div'" class="configuration-portraits"
+        :class="{ 'replace-portrait': replaceLabel }" :type="replaceLabel ? 'button' : undefined"
+        :aria-label="replaceLabel" :title="replaceLabel"
+        @click="replaceLabel && emit('replace')" @keydown="replaceLabel && emit('openKeydown', $event)">
         <GameIcon kind="characters" :id="build?.character.derivedFrom?.id ?? build?.character.id" :name="characterName" :size="48"
           :level="build?.level" :constellation="build?.constellation" />
         <GameIcon v-if="build" kind="weapons" :id="build.weapon.id" :name="build.weapon.name" :size="48"
           :level="build.weaponLevel" :refinement="build.refinement" />
         <WeaponPlaceholder v-else :size="48" />
         <ArtifactSetSummary :artifacts="items" :size="48" />
-      </div>
+        <CardReplaceMark v-if="replaceLabel" />
+      </component>
       <EquipmentStrip v-else :effective-stats="effectiveStats" :entries="entries">
         <template #leading>
           <GameIcon kind="characters" :id="build?.character.derivedFrom?.id ?? build?.character.id" :name="characterName" :size="64"
@@ -62,7 +69,7 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
       </EquipmentStrip>
       <EffectiveRollSummary inline :stacked="compact" :basis="basis" :items="items" :selected-stats="effectiveStats" />
     </div>
-    <button v-if="openLabel" type="button" class="configuration-open" :aria-label="openLabel" :disabled="current"
+    <button v-if="openLabel" type="button" class="configuration-open card-detail-target" :aria-label="openLabel" :disabled="current"
       @click="emit('open')" @keydown="emit('openKeydown', $event)"></button>
   </article>
 </template>
@@ -72,21 +79,18 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
   position:relative; display:grid; gap:12px; min-width:0; padding:16px;
   border:1px solid var(--line); border-top:3px solid var(--line); border-radius:10px; background:var(--surface);
 }
-.configuration-row.current { border-color:var(--element-anemo-primary); }
+.configuration-row.current { border-color:var(--element-hydro-primary); }
 .configuration-top { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
 .configuration-heading { display:flex; align-items:baseline; flex-wrap:wrap; flex:1; min-width:0; gap:8px 12px; }
 .configuration-cultivation { display:flex; flex-wrap:wrap; gap:4px 12px; color:var(--muted); font-size:var(--font-body); }
 .configuration-body { display:grid; gap:12px; min-width:0; }
 .configuration-row.compact { gap:8px; padding:10px; }
 .compact .configuration-body { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; align-self:start; }
-.configuration-portraits { display:flex; align-items:center; gap:6px; }
-.compact .effective-roll-summary { flex:1 1 232px; min-width:0; }
-.configuration-open {
-  position:absolute; inset:0; z-index:1; width:100%; height:100%; min-height:0;
-  border:0; border-radius:inherit; background:transparent; padding:0; cursor:pointer;
+.configuration-portraits { position:relative; display:flex; align-items:center; gap:6px; }
+.configuration-portraits.replace-portrait {
+  z-index:2; align-self:stretch; padding:0; border:0; background:transparent;
 }
-.configuration-open:hover { background:transparent; box-shadow:none; }
-.configuration-open:disabled { opacity:1; cursor:default; }
-.configuration-open:focus-visible { outline:2px solid var(--element-hydro-deep); outline-offset:2px; }
+.compact .effective-roll-summary { flex:1 1 232px; min-width:0; }
+.configuration-open:disabled { opacity:1; }
 @media(max-width:600px) { .configuration-top { align-items:start; }.configuration-heading { flex-basis:100%; }.configuration-row { padding:12px; } }
 </style>

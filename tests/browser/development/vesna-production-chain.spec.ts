@@ -92,9 +92,9 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await button('设为比较基准').click();
   await button('编辑角色配置').click();
   const editor = calculator.getByRole('dialog', { name:'薇斯纳 · 角色配置' });
-  await editor.getByRole('button', { name:'管理生之花' }).click();
+  await editor.getByRole('button', { name:'查看生之花详情' }).click();
   await page.keyboard.press('Escape');
-  await expect(editor.getByRole('button', { name:'管理生之花' })).toBeFocused();
+  await expect(editor.getByRole('button', { name:'查看生之花详情' })).toBeFocused();
   await page.screenshot({ path:info.outputPath('calculator-build-editor.png') });
   await page.setViewportSize({width:390,height:844});
   expect(await editor.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
@@ -102,7 +102,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   expect(await heading.evaluate(node => node.getBoundingClientRect().height)).toBeLessThanOrEqual(32);
   await page.screenshot({ path:info.outputPath('calculator-build-editor-mobile.png') });
   await page.setViewportSize({width:1536,height:1050});
-  await editor.getByRole('button', { name:'管理生之花' }).press('Shift+F10');
+  await editor.getByRole('button', { name:'查看生之花详情' }).press('Shift+F10');
   await page.getByRole('menuitem', { name:'卸下' }).click();
   await expect(editor.getByRole('button', { name:'装备生之花' })).toBeVisible();
   await button('精炼2阶').click();
@@ -110,14 +110,14 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await page.getByRole('dialog', { name:'有未保存的修改' }).getByRole('button', { name:'放弃修改' }).click();
   await expect(button('编辑角色配置')).toBeFocused();
   await button('编辑角色配置').click();
-  await expect(editor.getByRole('button', { name:'管理生之花' })).toBeVisible();
+  await expect(editor.getByRole('button', { name:'查看生之花详情' })).toBeVisible();
   await expect(button('精炼1阶')).toHaveAttribute('aria-pressed','true');
   await button('精炼2阶').click();
   await editor.getByRole('button', { name:'保存', exact:true }).click();
   await button('重算候选').click();
   await number('calculator-delta').toBeCloseTo(candidate - baseline, 5);
   const download = page.waitForEvent('download');
-  await button('保存计算').click();
+  await button('导出计算文件').click();
   const saved = await download;
   await saved.saveAs(info.outputPath('vesna-comparison.json'));
   const document: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', readFileSync(info.outputPath('vesna-comparison.json'), 'utf8'));

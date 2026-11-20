@@ -19,7 +19,7 @@ export function addActorFromBuild(project: Project, input: Build, name?: string)
   return id;
 }
 
-export function addSkillAction(project: Project, actorId: string, skillId: string, timeMs: number): string {
+export function addSkillAction(project: Project, actorId: string, skillId: string, timeMs: number, schema = projectSchema): string {
   const actor = project.candidate.actors.find(entry => entry.id === actorId);
   const build = actor?.build;
   const skill = build?.character.talents.find(entry => entry.id === skillId);
@@ -31,14 +31,14 @@ export function addSkillAction(project: Project, actorId: string, skillId: strin
   const record: Project['timeline'][number] = { id, actor: actorId, kind: 'action', definition: definitionId, skillId, timeMs,
     order: Math.max(-1, ...project.timeline.map(entry => entry.order)) + 1 };
   const definitions = project.definitions.some(entry => entry.id === definitionId) ? project.definitions : [...project.definitions, definition];
-  const parsed = projectSchema.parse({ ...project, definitions, timeline: [...project.timeline, record] });
+  const parsed = schema.parse({ ...project, definitions, timeline: [...project.timeline, record] });
   if (definitions !== project.definitions) project.definitions.push(parsed.definitions[parsed.definitions.length - 1]);
   project.timeline.push(parsed.timeline[parsed.timeline.length - 1]);
   return id;
 }
 
 /** An explicitly supplied read anchor, independent of casts, hits and effect triggers. */
-export function addAttributeCapture(project: Project, actorId: string, skillId: string, timeMs: number): string {
+export function addAttributeCapture(project: Project, actorId: string, skillId: string, timeMs: number, schema = projectSchema): string {
   const actor = project.candidate.actors.find(actor => actor.id === actorId);
   const skill = actor?.build?.character.talents.find(skill => skill.id === skillId);
   if (!actor?.build || !skill || !Number.isInteger(timeMs) || timeMs < 0 || timeMs > 3600000) throw new Error('请选择来源技能，并填写合法的捕获时刻。');
@@ -46,7 +46,7 @@ export function addAttributeCapture(project: Project, actorId: string, skillId: 
   const definition = { id: definitionId, name: '独立属性捕获', version: actor.build.dataVersion,
     source: { kind: 'user' as const, reference: `${actor.build.character.id}@${actor.build.character.revision}`, verified: false }, nodes: [], effects: [] };
   const id = nextRecordId(project);
-  const next = projectSchema.parse({ ...project, calculationProfile: 'dependency',
+  const next = schema.parse({ ...project, calculationProfile: 'dependency',
     definitions: project.definitions.some(entry => entry.id === definitionId) ? project.definitions : [...project.definitions, definition],
     timeline: [...project.timeline, { id, actor: actorId, kind: 'capture', skillId, definition: definitionId, timeMs, order: Math.max(-1, ...project.timeline.map(record => record.order)) + 1 }],
   });

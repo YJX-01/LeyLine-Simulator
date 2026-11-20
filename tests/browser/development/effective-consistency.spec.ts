@@ -21,7 +21,7 @@ test('recorded Flins shows 8.3 weighted attack, captures creation weapon and sha
   const source=JSON.parse(readFileSync(path,'utf8')).avatarInfoList.find((avatar:{avatarId:number})=>avatar.avatarId===10000120);const rank=(source.talentIdList ?? []).length;await role.getByRole('button',{name:`${rank===0?1:0}命`,exact:true}).click();await role.getByRole('button',{name:'另存',exact:true}).click();await page.getByRole('button',{name:'确认另存',exact:true}).click();await expect(page.getByRole('dialog',{name:'另存角色配装方案',exact:true})).toHaveCount(0);
   await role.getByRole('button',{name:'选择菲林斯配置',exact:true}).click();await page.getByRole('dialog',{name:'菲林斯的配置',exact:true}).getByRole('button',{name:'选择菲林斯首选配置',exact:true}).click();await role.getByRole('button',{name:'更换武器',exact:true}).click();await role.getByLabel('搜索装备武器',{exact:true}).fill('西风长枪');await role.getByRole('button',{name:'西风长枪',exact:true}).click();await role.getByRole('button',{name:'保存',exact:true}).click();await expect.poll(()=>page.evaluate(()=>{const file=JSON.parse(localStorage.getItem('leyline-account-0.1.0')!);return file.content.weapons[file.document.characters[0].build.weapon].name;})).toBe('西风长枪');await page.keyboard.press('Escape');await expect(role).toHaveCount(0);
   await page.getByTestId('workspace-nav-combinations').click();const combination=page.locator('.combination-row');await expect(combination.locator('[data-roll-stat=attack] dd')).toHaveText('8.3');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-artifact-combinations-0.1.0')!)[0].basis)).toEqual(stored[0].basis);await expect(combination.locator('.compact-entry:has([data-stat=attack])').first()).toHaveClass(/effective-substat/);await page.screenshot({path:'artifacts/effective-flins-combination-frozen.png',fullPage:true});
-  await page.getByTestId('workspace-nav-loadouts').click();await expect(page.locator('.configuration-row')).toHaveCount(2);await page.getByRole('button',{name:'排序',exact:true}).click();await expect(page.getByRole('dialog',{name:'配置排序',exact:true}).getByRole('button',{name:'有效词条数',exact:true})).toHaveAttribute('aria-pressed','true');await page.getByRole('button',{name:'完成',exact:true}).click();await expect(page.locator('.configuration-kind').first()).toHaveCSS('font-size','16px');await expect(page.locator('.configuration-row .compact-entry.effective-substat').first()).toBeVisible();
+  await page.getByTestId('workspace-nav-loadouts').click();await expect(page.locator('.configuration-row.compact')).toHaveCount(2);await page.getByRole('button',{name:'排序',exact:true}).click();await expect(page.getByRole('dialog',{name:'配置排序',exact:true}).getByRole('button',{name:'有效词条数',exact:true})).toHaveAttribute('aria-pressed','true');await page.getByRole('button',{name:'完成',exact:true}).click();await expect(page.locator('.configuration-kind').first()).toHaveCSS('font-size','16px');await expect(page.locator('.configuration-row .effective-roll-summary.stacked .effective').first()).toBeVisible();
   await page.getByRole('button',{name:'查看菲林斯首选配置',exact:true}).click();await expect(role.getByRole('region',{name:'配置对比',exact:true})).toBeVisible();await expect(role.getByRole('button',{name:'应用组合',exact:true})).toHaveAttribute('data-accent','hydro');await page.screenshot({path:'artifacts/effective-flins-unified-details.png',fullPage:true});await page.keyboard.press('Escape');expect(errors).toEqual([]);
 });
 
@@ -68,11 +68,14 @@ test('recorded configurations filter in the character dialog, fit two compact ca
   await expect(rows.first()).toContainText('菲林斯');
   await allRoles.focus();await allRoles.press('Space');
   await expect(allRoles).toHaveAttribute('aria-pressed','true');
-  await expect(rows).toHaveCount(5);
+  await expect(rows).toHaveCount(10);
   await chooseConfigurationRole(page,'菲林斯');
   await page.getByRole('button',{name:'清除筛选和排序条件',exact:true}).click();
   await expect(roles).toHaveText('选择角色');
 
+  await expect(layout.getByRole('button',{name:'紧凑',exact:true})).toHaveAttribute('aria-pressed','true');
+  await layout.getByRole('button',{name:'疏松',exact:true}).click();
+  await expect(rows).toHaveCount(5);
   const relaxed=await rows.first().boundingBox();
   const stats=rows.first().locator('.effective-roll-summary > div');
   const values=await stats.locator('dd').allTextContents();
@@ -88,9 +91,26 @@ test('recorded configurations filter in the character dialog, fit two compact ca
   const statLayout=await stats.evaluateAll(nodes=>nodes.map(node=>({top:node.getBoundingClientRect().top, fits:node.scrollWidth<=node.clientWidth})));
   expect(new Set(statLayout.map(box=>box.top)).size).toBeGreaterThan(1);
   expect(statLayout.every(box=>box.fits)).toBe(true);
+  const rowCount=()=>rows.evaluateAll(nodes=>new Set(nodes.map(node=>node.getBoundingClientRect().top)).size);
+  await expect(rows).toHaveCount(10);
+  expect(await rowCount()).toBe(5);
   await page.screenshot({path:'artifacts/effective-library-toolbars-aligned.png',fullPage:true});
 
+  const topPager=page.getByRole('navigation',{name:'顶部列表分页'});
+  await topPager.getByRole('button',{name:'下一页'}).click();
+  await expect(rows).toHaveCount(2);
+  const lastIds=()=>rows.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-configuration-id')));
+  const lastPage=await lastIds();
   await page.setViewportSize({width:390,height:844});
+  await expect(page.getByLabel('顶部页码',{exact:true})).toHaveValue('3');
+  expect(await lastIds()).toEqual(lastPage);
+  await page.setViewportSize({width:1440,height:1000});
+  await expect(page.getByLabel('顶部页码',{exact:true})).toHaveValue('2');
+  expect(await lastIds()).toEqual(lastPage);
+  await topPager.getByRole('button',{name:'上一页'}).click();
+  await page.setViewportSize({width:390,height:844});
+  await expect(rows).toHaveCount(5);
+  expect(await rowCount()).toBe(5);
   await expect(allRoles).toBeInViewport();
   expect((await layout.boundingBox())!.y).toBeCloseTo((await allRoles.boundingBox())!.y,1);
   const [mobileFirst,mobileSecond]=await Promise.all([rows.nth(0).boundingBox(),rows.nth(1).boundingBox()]);

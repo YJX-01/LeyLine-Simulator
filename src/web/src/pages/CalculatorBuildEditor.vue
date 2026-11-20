@@ -82,7 +82,7 @@ defineExpose({ requestLeave });
     <CharacterForm ref="form" candidate detached details resolve-identity :character="character" :initial-character-id="initialCharacterId" @dirty-change="cultivationDirty = $event" />
     <section class="editor-artifacts"><h3>圣遗物</h3>
       <ArtifactEquipmentGrid :entries="entries" :wearers="[]" :effective-stats="effectiveStats" :busy="busy"
-        popup inspect-primary context-menu @change="picking = $event" @inspect="inspecting = itemIn($event)" @menu="openMenu" />
+        context-menu @change="picking = $event" @inspect="inspecting = itemIn($event)" @menu="openMenu" />
     </section>
     <p v-if="error" role="alert">{{ error }}</p>
     <ContextMenu v-if="menu" :x="menu.x" :y="menu.y" label="圣遗物操作" :options="[{ id:'details', label:'查看详情' }, { id:'replace', label:'替换' }, { id:'remove', label:'卸下', danger:true }]"
