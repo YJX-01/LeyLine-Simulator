@@ -42,7 +42,7 @@ data/actions 目录枚举可选动作文件。convert-real-game-data逐份核对
 | desktop:build、desktop:preview:build | 临时工作区构建，共用artifacts/desktop/releases两版成功包 |
 | desktop:start | 启动最新本地产物 |
 | typecheck、test、test:content | TypeScript、Vitest单元与集成、Node内容文件检查 |
-| test:e2e、test:ui、test:ui:contracts | 全浏览器、真实库存、实际样式与焦点规格；单worker |
+| test:e2e、test:ui、test:ui:contracts | Chromium 全量开发检查、真实库存专项、样式与焦点专项，均为单工作线程 |
 | test:desktop、test:ui:desktop、test:content:desktop | 桌面库存与文件、同流程别名、元数据原生文件；独立临时profile |
 | test:production | 串行根路径与/leyline/生产输出检查，先构建二者 |
 | build:check、perf:engine | 体积预算、原始公开展柜Build求值；报告artifacts/performance |
@@ -50,7 +50,7 @@ data/actions 目录枚举可选动作文件。convert-real-game-data逐份核对
 | licenses:capture | 显式读取安装依赖并更新licenses声明，元数据核验可能联网 |
 | licenses:sync、licenses:check | 离线复制.cache/public/licenses、只读核对原件 |
 | preview | 当前网页与Enka本地服务，127.0.0.1，--port、--base、--dir |
-| release:prepare、release:verify --dir=... | 当前完整三浏览器证据下生成或核对本地交付候选 |
+| release:prepare、release:verify --dir=... | 依据 Chromium 开发和生产报告生成本地交付候选，按清单核对文件 |
 | outputs:prune --dry-run | 两版成功包保留预览；移除dry-run才处理更早成功包 |
 | clean:outputs --dry-run、clean:cache --dry-run | 解析路径、目录链接与tracked文件核对及清理预览；移除dry-run执行 |
 
@@ -72,12 +72,12 @@ data/actions 目录枚举可选动作文件。convert-real-game-data逐份核对
 
 1. `pnpm install --frozen-lockfile`、`pnpm data:build` 准备依赖与本地资源缓存，执行数据、架构、类型及相关行为检查。
 2. `pnpm build`、`pnpm build:check`、`pnpm perf:engine`检查网页、体积和真实输入性能。
-3. `pnpm exec playwright install chromium firefox webkit`准备浏览器，再执行`pnpm test:e2e`；Linux按需要使用`--with-deps`安装系统库。
+3. `pnpm exec playwright install chromium` 准备浏览器，再执行 `pnpm test:e2e`。Linux 可加 `--with-deps` 安装系统库。
 4. `pnpm build:subpath`、`pnpm test:production`验证根路径及/leyline/。报告位于artifacts/playwright，trace分别在test-results/development与production。
 5. 桌面先`pnpm exec install-electron`准备匹配运行时，再`pnpm desktop:build`、`pnpm test:desktop`。真实输入读取.references/artifacts_mona.json，独立profile与浏览器串行。
-6. `pnpm release:prepare`生成网页本地候选，核对当前源码指纹、完整用例清单及开发/生产三内核报告。证据须成功且无跳过、flaky或陈旧指纹；最后`pnpm release:verify --dir=<目录>`核对每项SHA-256、长度与文件清单。
+6. `pnpm release:prepare` 生成网页本地候选，核对当前源码指纹、完整用例清单及 Chromium 开发和生产报告。所有用例均须首次通过。`pnpm release:verify --dir=<目录>` 核对每项 SHA-256、长度与文件清单。
 
-日常按实际改动选择上述检查，最终交付遵循冻结源码与匹配证据。CI在Linux执行对应检查和浏览器矩阵，实际远端执行状态由工作流运行记录提供。
+日常按实际改动选择上述检查。CI 在 Linux 运行 Chromium。需要验证 Safari 交互时，先执行 `pnpm exec playwright install webkit`，再执行 `pnpm exec playwright test --config playwright.webkit.config.ts <相关用例文件>`。WebKit 的运行记录单独写入 `test-results/webkit`。
 
 默认网页输出为src/web/dist，子路径为src/web/dist-subpath。其他base使用`pnpm --filter @leyline/web build --base=/<路径>/`并按相同base验证。
 

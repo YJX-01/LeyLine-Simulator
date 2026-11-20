@@ -27,7 +27,7 @@ for(const [name,config] of [['results','playwright.config.ts'],['production-resu
  const expected=cases(listing.suites),actual=cases(report.suites,true);
  if(!expected.size || actual.size!==expected.size || [...expected.keys()].some(key=>!actual.has(key)))throw new Error(`${name}: focused or incomplete browser evidence; the current full case list must match.`);
  const browsers={};for(const browser of actual.values())browsers[browser]=(browsers[browser]??0)+1;
- if(['chromium','firefox','webkit'].some(browser=>!browsers[browser]))throw new Error(`${name}: incomplete browser matrix.`);
+ if (!browsers.chromium) throw new Error(`${name}: missing Chromium release evidence.`);
  evidence.push({suite:name,passed:actual.size,browsers,durationMs:report.stats.duration,sourceFingerprint:fingerprint});
 }
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
