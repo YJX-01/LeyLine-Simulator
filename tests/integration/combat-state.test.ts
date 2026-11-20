@@ -1,3 +1,4 @@
+import { officialShowcase } from '../helpers/recorded-reference';
 import { packDocument } from '../../src/web/src/domain/content-document';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -12,12 +13,10 @@ import { importProject, removeProjectActor } from '../../src/web/src/domain/work
 import { setCombatStateInterval, setDamageStateOverride } from '../../src/web/src/domain/combat-state';
 import { recordedProject } from '../helpers/recorded-project';
 
-const source = '.references/enka/official-example-2026-11-13.json';
-
 // Format/error derivatives of an actual showcase, not an observed team or combat axis.
 // Each hit is a single query context; its time and state are explicit test annotations.
 async function queryProject(timeMs = 1000): Promise<Project> {
-  const project = await recordedProject(source);
+  const project = await recordedProject(officialShowcase);
   const actor = project.candidate.actors[0];
   project.timeline.push({ id: 'state-query', actor: actor.id, timeMs, order: 0, kind: 'damage',
     definition: `${actor.id}-real-damage`, damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: null, reaction: null } });
@@ -25,7 +24,7 @@ async function queryProject(timeMs = 1000): Promise<Project> {
   return project;
 }
 
-describe.skipIf(!existsSync(source))('combat-state format derivatives of the recorded public showcase', () => {
+describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives of the recorded public showcase', () => {
   it.each([0, 999, 1000, 1999, 2000])('reads left-closed right-open intervals at %i ms', async timeMs => {
     const project = projectSchema.parse(await queryProject(timeMs));
     const state = createCombatStateReader(project)(project.candidate.actors[0].id, project.timeline[0]);
@@ -48,7 +47,7 @@ describe.skipIf(!existsSync(source))('combat-state format derivatives of the rec
 
   it('keeps owner overrides separate from another recorded character and from source-action reads', async () => {
     const project = await queryProject();
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(source, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const bennett = preview.rows.find(row => row.character.showcase!.build.character.id === 'bennett')!.character.showcase!.build;
     const other = addActorFromBuild(project, bennett);
     const owner = project.candidate.actors[0].id;
@@ -61,7 +60,7 @@ describe.skipIf(!existsSync(source))('combat-state format derivatives of the rec
     expect(createCombatStateReader(project)(other, project.timeline[0]).conditions.hpRatio).toBeNull();
     const standalone = evaluateDamage(project.candidate.actors[0].build, project.timeline[0].damage, undefined);
     expect(standalone.status).toBe('invalid');
-    expect(standalone.issues.some(issue => issue.code === 'invalid-input' && issue.message.includes('项目上下文'))).toBe(true);
+    expect(standalone.issues).toContainEqual({ code: 'invalid-input', message: '状态覆盖引用已失效。' });
     expect(evaluateTimeline(project).status).toBe('partial');
     const sourceAction: Project['timeline'][number] = { ...project.timeline[0], id: 'source-action-query', kind: 'action', damage: undefined };
     expect(createCombatStateReader(project)(owner, sourceAction).conditions.hpRatio).toBe(1);
@@ -83,7 +82,7 @@ describe.skipIf(!existsSync(source))('combat-state format derivatives of the rec
 
   it('validates field and actor conflicts after merging hit overrides with intervals', async () => {
     const project = await queryProject();
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(source, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const other = addActorFromBuild(project, preview.rows.find(row => row.character.showcase!.build.character.id === 'bennett')!.character.showcase!.build);
     const owner = project.candidate.actors[0].id;
     setCombatStateInterval(project, { id: 'on-field', actor: owner, startMs: 0, endMs: 2000, values: { onField: true } });
@@ -128,9 +127,10 @@ describe.skipIf(!existsSync(source))('combat-state format derivatives of the rec
     setDamageStateOverride(project, 'state-query', actor.id, { hpRatio: null });
     project.timeline[0].damage!.crit = 'expected';
     const unknown = evaluateTimeline(project);
-    expect(unknown.diagnostics.some(issue => issue.code === 'unknown' && issue.message.includes('生命比例'))).toBe(true);
+    expect(unknown.diagnostics).toContainEqual(expect.objectContaining({ code: 'unknown', message: expect.stringContaining('hpRatio') }));
+    expect(unknown.stateReads).toContainEqual(expect.objectContaining({ actor: actor.id, field: 'hpRatio', value: null, source: 'override' }));
     expect(unknown.points[0].value).toBeNull();
-    const reread = await recordedProject(source);
+    const reread = await recordedProject(officialShowcase);
     expect(JSON.stringify(reread.candidate.actors[0].build)).toBe(original);
   });
 

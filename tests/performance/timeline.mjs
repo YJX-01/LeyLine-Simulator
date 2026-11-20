@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import { sourceFingerprint } from '../../tools/lib/source-fingerprint.mjs';
+import { catalogPlugin } from '../../tools/scripts/build/catalog-plugin.mjs';
 const root = resolve(import.meta.dirname, '../..');
 const input='.references/enka/official-example.json';
 if (!existsSync(resolve(root,input))) {
@@ -15,7 +16,7 @@ if (!existsSync(resolve(root,input))) {
 }
 const require=createRequire(new URL('../../src/web/package.json',import.meta.url));
 const {createServer}=await import(pathToFileURL(require.resolve('vite')).href);
-const server=await createServer({root,configFile:false,logLevel:'silent',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,watch:null}});
+const server=await createServer({root,configFile:false,plugins:[catalogPlugin()],logLevel:'silent',optimizeDeps:{noDiscovery:true},server:{middlewareMode:true,watch:null}});
 try {
 // The input is an actual public showcase, without an observed combat timeline.
 const { previewEnkaImport } = await server.ssrLoadModule('/src/web/src/domain/enka-import.ts');

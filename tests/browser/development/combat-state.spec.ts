@@ -1,9 +1,8 @@
+import { officialShowcase } from '../../helpers/recorded-reference';
 import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import type { AxisResponse, Build, Project } from '@leyline/schema';
-
-const source = '.references/enka/official-example-2026-11-13.json';
 
 test('Cinnabar flat damage recalculates through actual Worker and file round-trip with an explicit application', async ({ page }) => {
   // Source-derived legal single-point calculation, not a player build or game observation.
@@ -139,10 +138,10 @@ test('source-backed Kaeya burst capture survives file parsing and the actual Wor
 });
 
 test('recorded showcase state annotations survive file parsing and the actual axis Worker', async ({ page }) => {
-  test.skip(!existsSync(source), 'Requires the newly recorded official public showcase; no substitute.');
-  const raw = JSON.parse(readFileSync(source, 'utf8'));
+  test.skip(!existsSync(officialShowcase), 'Requires the recorded official public showcase.');
+  const raw = JSON.parse(readFileSync(officialShowcase, 'utf8'));
   await page.goto('/');
-  const weapon = JSON.parse(readFileSync('src/game-data/data/weapons/primordialjadecutter.json', 'utf8'));
+  const { weapon } = await catalogSnapshotFields('xingqiu', 'primordialjadecutter');
   const result = await page.evaluate(async ({ response, weapon }) => {
     // @ts-expect-error Vite resolves browser-only source URLs.
     const { previewEnkaImport } = await import('/src/domain/enka-import.ts');
@@ -194,7 +193,7 @@ test('recorded showcase state annotations survive file parsing and the actual ax
 });
 
 test('recorded Xingqiu format project keeps actions and individually selected hits separate', async ({ page }) => {
-  test.skip(!existsSync(source), 'Requires the newly recorded official showcase; no substitute.');
+  test.skip(!existsSync(officialShowcase), 'Requires the recorded official public showcase.');
   await page.goto('/');
   const project = await page.evaluate(async response => {
     // @ts-expect-error Vite browser source URL.
@@ -212,7 +211,7 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
     // @ts-expect-error Vite browser source URL.
     const { packDocument } = await import('/src/domain/content-document.ts');
     return packDocument('axis', project);
-  }, JSON.parse(readFileSync(source, 'utf8')));
+  }, JSON.parse(readFileSync(officialShowcase, 'utf8')));
   // A format derivative. Added UI records are test edits, not an observed gameplay sequence.
   await page.getByTestId('workspace-nav-timeline').click();
   await page.getByLabel('导入轴项目文件', { exact: true }).setInputFiles({ name: 'recorded-showcase-format.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(project)) });

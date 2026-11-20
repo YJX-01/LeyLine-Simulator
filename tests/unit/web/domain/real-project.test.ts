@@ -1,3 +1,4 @@
+import { officialShowcase } from '../../../helpers/recorded-reference';
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { getCharacter, getWeapon, getArtifactMain, getBuildSources, DATA_VERSION } from '@leyline/game-data';
@@ -5,8 +6,6 @@ import { evaluateTimeline } from '@leyline/engine';
 import { projectSchema, type Build } from '@leyline/schema';
 import { addActorFromBuild, addSkillAction, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
 import { recordedProject } from '../../../helpers/recorded-project';
-
-const recordedSource = '.references/enka/official-example-2026-11-13.json';
 
 async function build(): Promise<Build> {
   return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter('jean'), weapon: await getWeapon('favoniussword'),
@@ -44,8 +43,8 @@ describe('real axis editing and inventory identity', () => {
     expect(() => addSkillAction(project, actor, 'jean.burst', -1)).toThrow();
     expect(JSON.stringify(project)).toBe(snapshot);
   });
-  it.skipIf(!existsSync(recordedSource))('reports duplicate inventory occupancy separately using the recorded showcase as a format derivative', async () => {
-    const source = (await recordedProject(recordedSource)).candidate.actors[0].build!;
+  it.skipIf(!existsSync(officialShowcase))('reports duplicate inventory occupancy separately using the recorded showcase as a format derivative', async () => {
+    const source = (await recordedProject(officialShowcase)).candidate.actors[0].build!;
     // Software namespace/error edits only; neither a second player account nor observed wearing.
     source.artifacts.forEach(item => { item.inventory = { accountId: 'namespace-a', itemId: item.id }; });
     const project = empty();

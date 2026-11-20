@@ -1,3 +1,4 @@
+import { officialShowcase } from '../../../helpers/recorded-reference';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
@@ -12,11 +13,10 @@ import { evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
 import { calculatorIntervals, setTrialCondition } from '../../../../src/web/src/domain/calculator-conditions';
 
-const recording = '.references/enka/official-example-2026-11-13.json';
-describe.skipIf(!existsSync(recording))('calculator reads original public showcase and local inventory independently', () => {
+describe.skipIf(!existsSync(officialShowcase))('calculator reads original public showcase and local inventory independently', () => {
   it('retains real wearing IDs when a format derivative lacks a local cultivation build', async () => {
     const account = createAccount();
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', account);
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', account);
     const row = preview.rows.find(row => row.character.showcase!.build.character.id === 'xingqiu')!;
     confirmEnkaImport(account, preview, [row.character.id], true);
     const character = account.characters[0];
@@ -42,7 +42,6 @@ describe.skipIf(!existsSync(recording))('calculator reads original public showca
   });
 });
 
-const officialShowcase = '.references/enka/official-example.json';
 it.skipIf(!existsSync(vesnaRecording))('ordinary trial for the recorded Varesa is confined to the calculator and requires a known crit choice', async () => {
   const preview = await previewEnkaImport(JSON.parse(readFileSync(vesnaRecording, 'utf8')), '107590923', createAccount());
   const build = preview.rows.find(row => row.character.showcase?.build.character.id === 'varesa')!.character.showcase!.build;

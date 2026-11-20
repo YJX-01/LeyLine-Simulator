@@ -1,3 +1,4 @@
+import { officialShowcase } from '../../../helpers/recorded-reference';
 import { readCalculationLibrary } from '../../../helpers/read-calculation-library';
 import { catalogBaseValue, evaluateCatalogBase } from '../../../helpers/catalog-calculation';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
@@ -145,10 +146,9 @@ describe('source-derived reaction formula components', () => {
   });
 });
 
-const recording = '.references/enka/official-example-2026-11-13.json';
-describe.skipIf(!existsSync(recording))('reaction calculations with actual recorded artifact values', () => {
+describe.skipIf(!existsSync(officialShowcase))('reaction calculations with actual recorded artifact values', () => {
   it('recalculates EM from a theoretical Kaeya loadout and preserves original player data', async () => {
-    const response = JSON.parse(readFileSync(recording, 'utf8'));
+    const response = JSON.parse(readFileSync(officialShowcase, 'utf8'));
     const preview = await previewEnkaImport(response, '618285856', createAccount());
     const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     const original = JSON.stringify(recorded);

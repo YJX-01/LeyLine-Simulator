@@ -1,3 +1,4 @@
+import { officialShowcase } from '../../helpers/recorded-reference';
 import { readDocument } from '../../helpers/browser-document';
 import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { existsSync, readFileSync } from 'node:fs';
@@ -375,8 +376,7 @@ test('actual comparison Worker recomputes Kaeya C3 after current document serial
 });
 
 test('calculator reads the recorded public showcase explicitly without writing local equipment or the original axis', async ({ page }) => {
-  const source = '.references/enka/official-example-2026-11-13.json';
-  test.skip(!existsSync(source), 'Requires the authorized original public showcase response; no substitute.');
+  test.skip(!existsSync(officialShowcase), 'Requires the authorized original public showcase response; no substitute.');
   page.setDefaultTimeout(8000);
   await page.goto('/');
   const before = await page.evaluate(async raw => {
@@ -395,7 +395,7 @@ test('calculator reads the recorded public showcase explicitly without writing l
     const store = useAccountStore();
     store.commitEdit(next);
     return { account: JSON.stringify(store.account), axis: JSON.stringify(useAxisWorkspaceStore().project), build: selected.character.showcase.build as Build };
-  }, JSON.parse(readFileSync(source, 'utf8')));
+  }, JSON.parse(readFileSync(officialShowcase, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
   const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByRole('button', { name: '选择角色', exact: true }).click();
@@ -422,8 +422,7 @@ test('calculator reads the recorded public showcase explicitly without writing l
 });
 
 test('missing-build derivative of the original account stays selectable and carries real wearing into the calculator copy', async ({ page }) => {
-  const source = '.references/enka/official-example-2026-11-13.json';
-  test.skip(!existsSync(source), 'Requires the original public showcase; no substitute.');
+  test.skip(!existsSync(officialShowcase), 'Requires the original public showcase; no substitute.');
   test.setTimeout(45000);
   await page.goto('/');
   const before = await page.evaluate(async raw => {
@@ -440,8 +439,8 @@ test('missing-build derivative of the original account stays selectable and carr
     // Missing-field format derivative, never a claim about the recorded player's missing cultivation.
     delete next.characters[0].build;
     useAccountStore().commitEdit(next);
-    return { account: JSON.stringify(useAccountStore().account), equipment: next.characters[0].equipment };
-  }, JSON.parse(readFileSync(source, 'utf8')));
+    return { account: localStorage.getItem('leyline-account-0.1.0'), equipment: next.characters[0].equipment };
+  }, JSON.parse(readFileSync(officialShowcase, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
   const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
   await calculator.getByRole('button', { name: '选择角色', exact: true }).click();

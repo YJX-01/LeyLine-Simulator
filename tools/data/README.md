@@ -223,7 +223,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 | .references/enka/official-example-2026-11-13.json | 同一官方UID另次响应；SHA-256为044745aeea79e7530b09d1999eaaa5671a2d8f4f84c2d7e2f0a8a12990b24fd7 |
 | .references/enka/uid-107590923.json | 用户授权的12角色展柜；映射适配和有效条数检查使用此原件 |
 
-官方接口为 https://enka.network/api/uid/618285856/。每次录存保留自身版本与字节；历史摘要与当前原件在使用时重新核对。公开示例和用户Mona库存各自保持账号来源。
+官方接口为 https://enka.network/api/uid/618285856/。当前 `official-example.json` 的 SHA-256 为 `e41b52d6abe70e2d571ac1da7505a09e209391c01dfbce7c8bdbe99fd971ea45`。伤害计算、战斗状态和快照回归使用其中的六命行秋与班尼特五件宗室。11 月 13 日的摘要仅标识当次响应。公开示例和用户 Mona 库存各自保持账号来源。
 
 Mona备注缺武器、命座、培养和战斗状态；用户确认的满级培养作为明确计算设定单独记录。公开展柜提供培养与装备，目标、战斗时间轴和伤害观测材料状态为待补。
 

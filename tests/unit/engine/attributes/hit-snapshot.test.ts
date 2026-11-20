@@ -1,3 +1,4 @@
+import { officialShowcase } from '../../../helpers/recorded-reference';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
@@ -140,14 +141,15 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
   });
 });
 
-const recording = '.references/enka/official-example-2026-11-13.json';
-describe.skipIf(!existsSync(recording))('capture calculations using actual recorded Noblesse artifact values', () => {
+describe.skipIf(!existsSync(officialShowcase))('capture calculations using actual recorded Noblesse artifact values', () => {
   it('does not activate the real Noblesse burst trigger merely by adding an independent read anchor', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     const build = await setting();
     // Explicit theoretical reuse of the original equipment, never claimed as Kaeya's player build.
-    build.artifacts = structuredClone(recorded.artifacts); build.sets = structuredClone(recorded.sets);
+    build.artifacts = structuredClone(recorded.artifacts);
+    build.sets = structuredClone(recorded.sets);
+    build.sources = recorded.sources;
     const project = createEmptyProject(); project.enemy = enemy;
     const actor = addActorFromBuild(project, build);
     const source = addAttributeCapture(project, actor, 'kaeya.burst', 200);
@@ -155,23 +157,24 @@ describe.skipIf(!existsSync(recording))('capture calculations using actual recor
     const result = evaluateTimeline(project);
     expect(result.status).toBe('complete');
     expect(result.points).toHaveLength(1);
-    expect(result.effectInstances?.some(instance => instance.content?.entity === 'noblesseoblige.4')).toBe(false);
+    expect(result.effectInstances?.some(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack')).toBe(false);
     // Action time is a separate independent condition, not synthesized from capture time.
     addSkillAction(project, actor, 'kaeya.burst', 0);
     const triggered = evaluateTimeline(project);
-    expect(triggered.effectInstances?.find(instance => instance.content?.entity === 'noblesseoblige.4')?.startMs).toBe(0);
+    expect(triggered.effectInstances?.find(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack')?.startMs).toBe(0);
     expect(triggered.points).toHaveLength(1);
     const white = 18.6984 * 8.349 + 66.90411 + 41.0671 * 7.275 + 155.6;
     expect(triggered.totalValue! - result.totalValue!).toBeCloseTo(white * 0.2 * 1.3192 * 1.2 * 0.45, 7);
   });
   it('captures before/after Noblesse at the source and recalculates a weapon candidate', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     const original = JSON.stringify(recorded);
     const build = await setting();
     // Explicit theoretical wearing of the original Bennett artifacts by Kaeya, not an account or combat observation.
     build.artifacts = structuredClone(recorded.artifacts);
     build.sets = structuredClone(recorded.sets);
+    build.sources = recorded.sources;
     const stats: Partial<Record<StatKey, number>> = {};
     for (const item of recorded.artifacts) {
       stats[item.mainStat] = (stats[item.mainStat] ?? 0) + recorded.artifactMain[item.rarity][item.mainStat]![item.level];
@@ -206,12 +209,13 @@ describe.skipIf(!existsSync(recording))('capture calculations using actual recor
   });
 
   it('retains a captured team buff after expiry within Kaeya burst duration', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     const jean = await setting('jean');
     // Explicit theoretical Jean wearing of the original artifacts; Kaeya has none, avoiding duplicate physical references.
     jean.artifacts = structuredClone(recorded.artifacts);
     jean.sets = structuredClone(recorded.sets);
+    jean.sources = recorded.sources;
     const project = createEmptyProject();
     project.enemy = enemy;
     const owner = addActorFromBuild(project, jean);
@@ -227,6 +231,6 @@ describe.skipIf(!existsSync(recording))('capture calculations using actual recor
     expect(result.points).toHaveLength(1);
     expect(result.totalValue).toBeCloseTo(attack * 1.3192 * 0.5 * 0.9, 8);
     expect(result.reads?.some(read => read.key === 'attack' && read.timeMs === 6000)).toBe(true);
-    expect(result.effectInstances?.find(instance => instance.content?.entity === 'noblesseoblige.4')?.endMs).toBe(12000);
+    expect(result.effectInstances?.find(instance => instance.effect === 'noblesseoblige.burst-team-attack.team-attack')?.endMs).toBe(12000);
   });
 });

@@ -1,3 +1,4 @@
+import { officialShowcase } from '../../../helpers/recorded-reference';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -103,10 +104,9 @@ describe('existing passive effects through the current panel', () => {
   });
 });
 
-const recording = '.references/enka/official-example-2026-11-13.json';
-describe.skipIf(!existsSync(recording))('Noblesse format queries derived from the recorded Bennett build', () => {
+describe.skipIf(!existsSync(officialShowcase))('Noblesse format queries derived from the recorded Bennett build', () => {
   it('independently calculates the 20% base-ATK increase with recorded artifacts in a theoretical Jean configuration', async () => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const recorded = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     const build = await setting('jean', 'primordialjadecutter');
     // Legal theoretical equipment using original observed artifact values; never claimed as player wearing.
@@ -131,7 +131,7 @@ describe.skipIf(!existsSync(recording))('Noblesse format queries derived from th
   });
 
   it.each([0, 11999, 12000])('applies only after an explicit burst action and before 12s at %i ms', async timeMs => {
-    const preview = await previewEnkaImport(JSON.parse(readFileSync(recording, 'utf8')), '618285856', createAccount());
+    const preview = await previewEnkaImport(JSON.parse(readFileSync(officialShowcase, 'utf8')), '618285856', createAccount());
     const build = preview.rows.find(row => row.character.showcase?.build.character.id === 'bennett')!.character.showcase!.build;
     expect(build.artifacts.filter(item => item.setId === 'noblesseoblige')).toHaveLength(5);
     // Derive a single legal Jean query with the original recorded artifacts.
