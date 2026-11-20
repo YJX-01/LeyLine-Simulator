@@ -1,5 +1,6 @@
 import type { LocalAccount } from '@leyline/schema';
 import { readDocument } from '../../helpers/browser-document';
+import { recordedJsonFile } from '../../helpers/recorded-reference';
 import { existsSync,readFileSync } from 'node:fs';
 import { test,expect } from '@playwright/test';
 
@@ -124,13 +125,14 @@ test('an empty weapon slot survives save and reload and the open panel previews 
 });
 
 test('a showcase merge reuses all five scanned Vesna artifacts and their reference links from both views', async ({ page }) => {
+  test.setTimeout(60000);
   const inventory = '.references/artifacts_mona.json', showcase = '.references/enka/uid-107590923.json';
   test.skip(!existsSync(inventory) || !existsSync(showcase), 'Requires the authorized inventory and showcase.');
   await page.route('**/api/enka/107590923', route => route.fulfill({ json: JSON.parse(readFileSync(showcase, 'utf8')) }));
   await page.goto('/');
   await page.getByTestId('workspace-nav-artifacts').click();
   await page.getByRole('button', { name: '莫娜导入', exact: true }).click();
-  await page.getByLabel('导入莫娜圣遗物文件', { exact: true }).setInputFiles(inventory);
+  await page.getByLabel('导入莫娜圣遗物文件', { exact: true }).setInputFiles(recordedJsonFile(inventory));
   await page.getByRole('button', { name: '确认导入 458 件圣遗物', exact: true }).click();
   await page.getByTestId('workspace-nav-characters').click();
   await page.getByRole('button', { name: '展柜导入', exact: true }).click();

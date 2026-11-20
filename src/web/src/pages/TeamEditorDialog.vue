@@ -137,7 +137,13 @@ function closeMemberBrowser() {
   if (!pickedSlot.value) closePicker();
 }
 function focusSlot(index: number) {
-  void nextTick(() => form.value?.querySelector<HTMLButtonElement>(`.team-slot[data-slot="${index + 1}"] button`)?.focus({ preventScroll: true }));
+  void nextTick(() => requestAnimationFrame(() => {
+    const target = form.value?.querySelector<HTMLButtonElement>(`.team-slot[data-slot="${index + 1}"] :is(.team-add-slot, .replace-portrait)`);
+    // Nested native dialogs finish restoring focus before the edited slot takes it back.
+    if (target && target.closest('dialog') === Array.from(document.querySelectorAll('dialog[open]')).at(-1)) {
+      target.focus({ preventScroll: true });
+    }
+  }));
 }
 function projectWithoutSlot(current: TeamDraft, index: number) {
   const project = structuredClone(current.project);

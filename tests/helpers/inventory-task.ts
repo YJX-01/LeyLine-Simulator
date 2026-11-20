@@ -148,7 +148,8 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
   const saved = info.outputPath('actual-account.json');
   await (await download).saveAs(saved);
-  const account = JSON.parse(await readFile(saved, 'utf8')).document;
+  const savedBytes = await readFile(saved);
+  const account = JSON.parse(savedBytes.toString('utf8')).document;
   expect(account.artifacts).toHaveLength(458);
   expect(account.artifacts.every((item: { mona?: {setIdentityPending?: boolean} }) => !item.mona?.setIdentityPending)).toBe(true);
   expect(account.characters).toHaveLength(0); // The inventory file cannot invent character builds.
@@ -157,8 +158,13 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button',{name:'排序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'导入顺序',exact:true}).click();await page.getByRole('dialog',{name:'圣遗物排序',exact:true}).getByRole('button',{name:'完成',exact:true}).click();
   await expect(page.locator('.artifact-browser .library-result-count')).toContainText('458 件圣遗物');
   await page.getByRole('button', { name: '导航 账号', exact: true }).click();
-  await page.getByLabel('导入账号资料文件', { exact: true }).setInputFiles(saved);
+  await page.getByRole('button', { name: '新建账号', exact: true }).click();
+  await expect(page.getByLabel('账号管理', { exact: true })).toContainText('0 件圣遗物');
+  await page.getByLabel('导入账号资料文件', { exact: true }).setInputFiles({
+    name: 'actual-account.json', mimeType: 'application/json', buffer: savedBytes,
+  });
   await expect(page.getByLabel('账号管理', { exact: true })).toContainText('458 件圣遗物');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document)).toEqual(account);
   await page.getByRole('button', { name: '新建账号', exact: true }).click();
   await expect(page.getByLabel('账号管理', { exact: true })).toContainText('0 件圣遗物');
   await page.getByRole('button', { name: '恢复替换前账号', exact: true }).click();
