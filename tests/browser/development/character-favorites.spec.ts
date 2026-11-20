@@ -23,7 +23,7 @@ test('real showcase: character favorites persist, filter and sort independently 
     return {horizontal:Math.abs((header.left+header.right)-(title.left+title.right))/2,vertical:Math.abs((header.top+header.bottom)-(title.top+title.bottom))/2};
   });
   expect(alignment.horizontal).toBeLessThan(.5);expect(alignment.vertical).toBeLessThanOrEqual(.5);
-  const picker=role.getByRole('button',{name:'选择甘雨配置',exact:true});await expect(picker).toContainText('|');
+  const picker=role.getByRole('button',{name:'选择甘雨配置',exact:true});await expect(picker).toHaveText('切换配置');
   for(const width of [900,760,390]) {
     await page.setViewportSize({width,height:900});
     await expect.poll(()=>role.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);

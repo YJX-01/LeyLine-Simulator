@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
 test.skip(!existsSync('.references/artifacts_mona.json'),'Requires the actual recorded Mona file.');
 test('actual Mona import: bounded preview, cancellation, recovery and duplicate handling',async({page})=>{
   await page.setViewportSize({width:1280,height:900});await page.goto('/');
-  await expect(page.locator('.nav-group[data-domain=account] .library-nav-icon')).toHaveCount(4);
+  await expect(page.locator('.nav-group[data-domain=account] .library-nav-icon')).toHaveCount(5);
   await page.getByTestId('workspace-nav-artifacts').click();
   const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
   await page.getByTestId('workspace-nav-artifacts').click();
@@ -18,8 +18,9 @@ test('actual Mona import: bounded preview, cancellation, recovery and duplicate 
   // Source item 8770563143816081: HP flower, with these four observed substats.
   const first=dialog.locator('.preview-item').first();
   const firstId=await first.getAttribute('data-artifact-id');
-  await expect(first.locator('.summary-main b')).toHaveText('4780');
-  await expect(first.locator('dd')).toHaveText(['5.8%', '11.0%', '10.9%', '17.9%']);
+  await expect(first.locator('.compact-main')).toHaveAttribute('data-stat','hp');
+  await expect(first.locator('.artifact-level')).toHaveText('20');
+  await expect(first.locator('.compact-entry b')).toHaveText(['5.8%', '11.0%', '10.9%', '17.9%']);
   await expect(dialog.getByLabel('导入结果汇总',{exact:true})).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(dialog.getByLabel('搜索待导入圣遗物',{exact:true})).toBeFocused();

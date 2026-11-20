@@ -26,6 +26,8 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await picker.getByRole('button',{name:'选择琴',exact:true}).click();
   await expect(page.locator('.configuration-row')).toHaveCount(1);
   await expect(page.locator('.configuration-title')).toContainText('|');
+  await expect(page.locator('.configuration-row.compact .card-sets')).toBeVisible();
+  await page.getByRole('group',{name:'卡片密度'}).getByRole('button',{name:'疏松',exact:true}).click();
   await expect(page.locator('.configuration-row .equipment-strip-items > .artifact-item-card')).toHaveCount(5);
   await page.getByTestId('workspace-nav-characters').click();
   await expect(page.getByLabel('搜索账号角色',{exact:true})).toHaveValue('甘雨');

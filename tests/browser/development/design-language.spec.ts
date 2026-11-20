@@ -78,7 +78,10 @@ test('shared real-character editor protects team drafts and keeps account indepe
   await expect(dialog.locator('.equipment-list > article')).toHaveCount(5);
   await expectReadableText(page);
   await expect(dialog.getByRole('button',{name:'保存',exact:true})).toHaveCSS('height','32px');
-  await expect(dialog.getByRole('button',{name:'更换生之花',exact:true})).toHaveCSS('height','24px');
+  const replace = dialog.getByRole('button', { name: '替换生之花', exact: true });
+  await expect(replace).toBeVisible();
+  const portrait = dialog.locator('.artifact-visual').filter({ has: page.getByRole('button', { name: '替换生之花', exact: true }) });
+  expect(await replace.boundingBox()).toEqual(await portrait.boundingBox());
   await dialog.getByRole('button',{name:'精炼3阶',exact:true}).click();
   await page.keyboard.press('Escape');
   const confirmation=page.getByRole('dialog',{name:'有未保存的修改',exact:true});
@@ -117,7 +120,7 @@ test('shared real-character editor protects team drafts and keeps account indepe
       await expect(picker.locator('.character-card')).toHaveCount(4);
       await picker.getByRole('button',{name:'选择安柏',exact:true}).click();
       await expect(page.locator('.configuration-row')).toHaveCount(1);
-      await expect(page.locator('.configuration-row .equipment-strip-items > .artifact-item-card')).toHaveCount(5);
+      await expect(page.locator('.configuration-row.compact .card-sets .card-set')).toHaveCount(2);
     }
     if(target==='settings')await page.getByText('界面配色 · 七元素三阶',{exact:true}).click();
     const clipped=await page.locator('input:not([type=checkbox]):not([type=file]),select').evaluateAll(nodes=>nodes.filter(node=>{

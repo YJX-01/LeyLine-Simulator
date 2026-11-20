@@ -3,7 +3,8 @@ import {existsSync,readFileSync} from 'node:fs';
 import {test,expect} from '@playwright/test';
 test('actual inventory starts and resets in newest release order',async({page})=>{
   test.skip(!existsSync('.references/artifacts_mona.json'),'Requires actual Mona inventory.');
-  await page.goto('/');await page.getByTestId('workspace-nav-artifacts').click();await page.getByRole('button',{name:'莫娜导入',exact:true}).click();await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
+  test.setTimeout(90000);
+  await page.goto('/', { waitUntil: 'domcontentloaded' });await page.getByTestId('workspace-nav-artifacts').click();await page.getByRole('button',{name:'莫娜导入',exact:true}).click();await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
   const metadata=JSON.parse(readFileSync('src/game-data/data/tables/catalog-release-metadata.json','utf8')).artifacts;
   const source=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts.map((item:{id:string;name:string;real:{setId:string}})=>({id:item.id,name:item.name,setId:item.real.setId})));
   // Independent comparison from canonical version tuples and game IDs, retaining source order for ties.

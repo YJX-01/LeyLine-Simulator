@@ -1,3 +1,4 @@
+import { chooseConfigurationRole } from './choose-configuration-role';
 import { restoreRecordedNoteSetup } from './recorded-note-setup';
 import { expect, type Page, type TestInfo } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
@@ -5,7 +6,7 @@ import { readFile } from 'node:fs/promises';
 export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   info.setTimeout(Math.max(info.timeout,90000));
   async function unloadFlower() {
-    await page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'管理生之花',exact:true}).click();
+    await page.getByRole('dialog',{name:'琴',exact:true}).getByRole('button',{name:'替换生之花',exact:true}).click();
     await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:'卸下',exact:true}).click();
   }
   const errors: string[] = [];
@@ -147,7 +148,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '保存账号资料', exact: true }).click();
   const saved = info.outputPath('actual-account.json');
   await (await download).saveAs(saved);
-  const account = JSON.parse(await readFile(saved, 'utf8'));
+  const account = JSON.parse(await readFile(saved, 'utf8')).document;
   expect(account.artifacts).toHaveLength(458);
   expect(account.artifacts.every((item: { mona?: {setIdentityPending?: boolean} }) => !item.mona?.setIdentityPending)).toBe(true);
   expect(account.characters).toHaveLength(0); // The inventory file cannot invent character builds.
@@ -175,9 +176,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   const beforeCollections=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
   await page.getByTestId('workspace-nav-loadouts').click();
   await expect(page.getByRole('heading',{name:'角色配置',exact:true,level:2})).toHaveCount(0);
-  await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
-  await page.getByRole('dialog',{name:'选择角色',exact:true}).getByLabel('搜索账号角色',{exact:true}).fill('琴');
-  await page.getByRole('button',{name:'选择琴',exact:true}).click();
+  await chooseConfigurationRole(page, '琴');
   await expect(page.locator('.configuration-row')).toHaveCount(1);
   await page.screenshot({path:'artifacts/account-character-loadouts.png',fullPage:true});
   await page.getByRole('button',{name:'查看琴首选配置',exact:true}).click();
@@ -205,7 +204,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.character-cards .card-weapon')).toBeVisible();
   await page.locator('.character-cards > button').click();
   await expect(page.locator('.equipment-list .artifact-summary[title*="翠绿之影"]').first()).toBeVisible();
-  await expect(page.locator('.equipment-list .artifact-summary.compact')).toHaveCount(0);
+  await expect(page.locator('.equipment-list .artifact-summary.compact')).toHaveCount(5);
   expect(await page.evaluate(()=>localStorage.getItem('leyline-inventory-density-0.1.0'))).toBe('compact');
   await expect.poll(() => page.locator('.character-cultivation .characters > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
   await expect.poll(() => page.locator('.equipment-list .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
@@ -218,23 +217,24 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(editingRole.locator('.effective-stat-picker [data-roll-stat]')).toHaveCount(7);
   await expect(editingRole.locator('.effective-stat-picker .choice-group')).toHaveCount(0);
   await expect(editingRole.getByRole('button',{name:'有效词条攻击力',exact:true})).toHaveCSS('font-weight','700');
-  // Recorded Jean notes: ATK 8.2%+5.3%, flat ATK60. No cultivation/weapon was recorded; use white ATK750.
-  const jeanAttackEntries=((.082+.053+60/750)/.04955).toFixed(1);
+  // The note supplies the artifacts; the open level-90, unarmed Jean draft supplies the white ATK.
+  const jeanWhiteAttack = 18.62 * 8.739 + 76.4582;
+  const jeanAttackEntries=((.082+.053+60/jeanWhiteAttack)/.04955).toFixed(1);
   await expect(editingRole.locator('.effective-stat-picker [data-roll-stat=attack] dd')).toHaveText(`${jeanAttackEntries} 条`);
   await expect(editingRole.locator('.effective-stat-picker [data-roll-stat=critRate] dd')).toHaveText('13.1 条');
   await expect(editingRole.locator('.equipment-actions')).toHaveCount(0);
-  const highlighted=await editingRole.locator('dt.effective-substat .stat-label').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-stat')));
-  const highlightStyle=await editingRole.locator('dt.effective-substat').first().evaluate(node=>({background:getComputedStyle(node).backgroundColor,color:getComputedStyle(node).color,expected:getComputedStyle(document.documentElement).getPropertyValue('--element-pyro-deep').trim()}));
+  const highlighted=await editingRole.locator('.compact-entry.effective-substat .stat-label').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-stat')));
+  const highlightStyle=await editingRole.locator('.compact-entry.effective-substat').first().evaluate(node=>({background:getComputedStyle(node).backgroundColor,color:getComputedStyle(node).color,expected:getComputedStyle(document.documentElement).getPropertyValue('--element-pyro-deep').trim()}));
   expect(highlightStyle.background).toBe('rgba(0, 0, 0, 0)');expect(highlightStyle.color).toBe('rgb(151, 71, 53)');
   expect(highlighted.length).toBeGreaterThan(0);expect(highlighted.every(stat=>['attack','attackPercent','energyRecharge'].includes(stat!))).toBe(true);
-  await expect(editingRole.getByRole('button',{name:'管理生之花',exact:true})).toBeVisible();
+  await expect(editingRole.getByRole('button',{name:'替换生之花',exact:true})).toBeVisible();
   await editingRole.locator('.effective-stat-picker').scrollIntoViewIfNeeded();
   await page.screenshot({path:'artifacts/role-equipment-and-roll-counts.png',fullPage:true});
   await page.screenshot({ path: info.outputPath('role-detail.png'), fullPage: true });
-  await page.getByRole('button', { name: '管理生之花', exact: true }).click();
+  await page.getByRole('button', { name: '替换生之花', exact: true }).click();
   await expect(page.getByRole('dialog').getByLabel('圣遗物库存浏览')).toContainText('86 件圣遗物');
   await expect(page.getByRole('dialog').getByRole('group',{name:'卡片密度'})).toHaveCount(0);
-  await expect(page.getByRole('dialog').locator('.inventory-card .artifact-summary.compact')).toHaveCount(0);
+  await expect(page.getByRole('dialog').locator('.inventory-card .artifact-summary.compact').first()).toBeVisible();
   const sourceOwner = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.characters.find((entry: {name: string; equipment: {flower?: string}}) => entry.name !== '琴' && entry.equipment.flower).id);
   const equipmentPickerWidth=await page.getByRole('dialog',{name:'选择生之花',exact:true}).evaluate(node=>node.getBoundingClientRect().width);
   await page.getByRole('dialog',{name:'选择生之花',exact:true}).getByRole('button',{name:/^筛选/}).click();
@@ -252,13 +252,13 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(originalRoleAccount);
   await expect(roleDetail.getByRole('button', { name:'保存', exact:true })).toBeEnabled();
   await roleDetail.getByRole('button', { name:'还原', exact:true }).click();
-  await expect(roleDetail.getByRole('button', { name:'管理生之花', exact:true })).toBeVisible();
+  await expect(roleDetail.getByRole('button', { name:'替换生之花', exact:true })).toBeVisible();
   await unloadFlower();
   await expect(roleDetail.getByRole('button',{name:'有效词条攻击力',exact:true})).toHaveAttribute('aria-pressed','true');
   await roleDetail.getByRole('button',{name:'有效词条暴击率',exact:true}).click();
   await roleDetail.getByRole('button',{name:'有效词条暴击伤害',exact:true}).click();
   await roleDetail.getByRole('button', { name:'另存', exact:true }).click();
-  await expect(page.getByLabel('配装方案名称', { exact:true })).toHaveValue(/^琴 · [\d.]+词条 · .+ · 未配武器$/);
+  await expect(page.getByLabel('配装方案名称', { exact:true })).toHaveValue(/^琴 \| [\d.]+词条\|[^|]+\|未配武器$/);
   await page.getByRole('button', { name:'确认另存', exact:true }).click();
   expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(originalRoleAccount);
   const presetId=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-character-loadouts-0.1.0')!).document[0].id);
@@ -284,9 +284,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await expect(page.locator('.character-cards > button')).toHaveCount(1);
   expect(adoptedRoleAccount.characters).toHaveLength(55);
   await page.getByTestId('workspace-nav-loadouts').click();
-  await page.getByRole('button',{name:'筛选配置角色',exact:true}).click();
-  await page.getByRole('dialog',{name:'选择角色',exact:true}).getByLabel('搜索账号角色',{exact:true}).fill('琴');
-  await page.getByRole('button',{name:'选择琴',exact:true}).click();
+  await chooseConfigurationRole(page, '琴');
   await expect(page.locator('.configuration-row')).toHaveCount(2);
   await page.getByRole('button',{name:'查看琴备选配置',exact:true}).click();
   await page.getByRole('button',{name:'选择琴配置',exact:true}).click();
@@ -364,7 +362,8 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   }
   await form.getByRole('button', { name: '预览词条', exact: true }).click();
   await expect(page.locator('.inventory-card')).toHaveCount(0);
-  await expect(form).toContainText('3967');
+  await expect(form.locator('.artifact-preview .artifact-level')).toHaveText(String(actual.real.level));
+  await expect(form.locator('.artifact-preview .compact-entry b')).toHaveText(['5.8%', '11.0%', '10.9%', '17.9%']);
   await form.getByRole('button', { name: '确认入库', exact: true }).click();
   await expect(page.locator('.inventory-card')).toHaveCount(1);
   await expect(page.locator('.inventory-card')).not.toContainText('3967');
