@@ -20,7 +20,7 @@ import ArtifactPortrait from '../components/ArtifactPortrait.vue';
 import ArtifactFavorite from '../components/ArtifactFavorite.vue';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
 import {useArtifactRemoval} from '../composables/use-artifact-removal';
-const props=defineProps<{item:AccountArtifact;account?:LocalAccount;readonly?:boolean}>();
+const props=defineProps<{item:AccountArtifact;account?:LocalAccount;readonly?:boolean;referenceItemId?:string}>();
 const emit=defineEmits<{close:[]}>();
 const store=useAccountStore(),loadouts=useCharacterLoadoutsStore(),combinations=useArtifactCombinationsStore();
 const navigate=inject(artifactReferenceNavigation,undefined),sets=ref<{id:string;name:string}[]>([]);
@@ -52,8 +52,10 @@ async function save(asCopy=false) {
   finally{busy.value=false;}
 }
 const references=computed(()=>{
-  const configurations=accountConfigurations(inventory.value,loadouts.loadouts);
-  return artifactReferences(inventory.value,configurations,combinations.combinations,display.value.id).map(reference=>{
+  const account = store.account;
+  if (account.id !== accountId) return [];
+  const configurations=accountConfigurations(account,loadouts.loadouts);
+  return artifactReferences(account,configurations,combinations.combinations,props.referenceItemId ?? display.value.id).map(reference=>{
     if(reference.target.kind==='combination'){const target=reference.target,item=combinations.combinations.find(item=>item.id===target.id);return {...reference,name:item?combinationName(item,sets.value):reference.name};}
     if(reference.target.kind==='configuration'){const target=reference.target,configuration=configurations.find(item=>item.character.id===target.characterId && item.presetId===target.presetId);if(configuration){const character=configuration.character,stats=loadouts.effectiveStats(inventory.value.id,character.id,character.name);return {...reference,name:`${character.name} | ${configuration.presetId?'备选':'首选'} | ${character.build?character.build.constellation+'命':'培养待补全'} | ${characterLoadoutLabel(character,configuration.source,stats,sets.value)}`};}}
     return reference;

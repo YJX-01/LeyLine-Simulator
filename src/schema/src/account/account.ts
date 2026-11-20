@@ -20,7 +20,7 @@ export const accountArtifactSchema = z.object({
 export const accountCharacterSchema = z.object({
   id: text, name: text, attack, weapon: z.string().max(160),
   equipment: z.partialRecord(z.enum(accountSlots), text), build: buildSchema.optional(),
-  showcase: z.object({ uid, avatarId: z.number().int(), fetchedAt: z.string().refine(value => Number.isFinite(Date.parse(value))), rawHash: z.string().regex(/^[a-f0-9]{64}$/), build: buildSchema }).strict().optional(),
+  showcase: z.object({ uid, avatarId: z.number().int(), fetchedAt: z.string().refine(value => Number.isFinite(Date.parse(value))), rawHash: z.string().regex(/^[a-f0-9]{64}$/), build: buildSchema.extend({ weapon: buildSchema.shape.weapon.unwrap() }) }).strict().optional(),
 }).strict();
 export const accountSchema = z.object({
   schemaVersion: z.literal(APP_VERSION), kind: z.literal('account'), id: text, name: text, uid: uid.optional(),

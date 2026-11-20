@@ -43,7 +43,7 @@ export function applyCharacterDefinition(project: Project, actorId: string, file
   if (definition.dataVersion !== actor.build.dataVersion) throw new Error('角色数据版本与当前配装不同，请先核对版本。');
   const original = character.derivedFrom?.id ?? character.id;
   if (definition.id !== character.id && definition.derivedFrom?.id !== original && definition.derivedFrom?.id !== character.id) throw new Error('请使用从当前队员角色复制的元数据。');
-  if (definition.identity.weaponType !== actor.build.weapon.weaponType) throw new Error('角色定义与武器类型不匹配。');
+  if (actor.build.weapon && definition.identity.weaponType !== actor.build.weapon.weaponType) throw new Error('角色定义与武器类型不匹配。');
   actor.build.character = definition; actor.name = definition.identity.name;
   const snapshot = next.definitions.find(item => item.id === actor.character);
   if (!snapshot) throw new Error('当前队员的角色定义快照缺失。');

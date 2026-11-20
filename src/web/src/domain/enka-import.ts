@@ -73,8 +73,8 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
         artifacts: artifacts.map(item => ({ ...item, inventory: null, sourceRefs: [recordingSource.id] })) },
         { sources: [...data.sources, recordingSource], artifactMainSourceRefs: data.artifactMainSourceRefs });
       const current=account.characters.find(item=>item.build?.character.id===entry.id||item.name===character.identity.name);
-      preview.rows.push({action:current?.build?'update':current?'complete':'add',before:current?JSON.stringify(current):undefined,character:{...current,id:current?.id??crypto.randomUUID(),name:current?.name??character.identity.name,attack:0,weapon:weapon.name,equipment:{...current?.equipment},
-        build:{...build,artifacts:[],sets:[]},showcase:{uid,avatarId:value.avatarId,fetchedAt:new Date().toISOString(),rawHash,build}}});
+      preview.rows.push({action:current?.build?.weapon?'update':current?'complete':'add',before:current?JSON.stringify(current):undefined,character:{...current,id:current?.id??crypto.randomUUID(),name:current?.name??character.identity.name,attack:0,weapon:weapon.name,equipment:{...current?.equipment},
+        build:{...build,artifacts:[],sets:[]},showcase:{uid,avatarId:value.avatarId,fetchedAt:new Date().toISOString(),rawHash,build:{...build,weapon}}}});
     } catch(cause) { preview.skipped.push(`${label}：${cause instanceof Error && cause.name === 'ZodError'?'培养或装备数值不在当前支持范围，请在预览中核对。':cause instanceof Error?cause.message:'资料解析失败。'}`); }
   }
   return preview;

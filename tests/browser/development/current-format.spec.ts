@@ -34,7 +34,8 @@ test('Manekin elemental cultivation uses the shared character form',async({page}
   const manual=page.getByRole('dialog',{name:'手动添加角色',exact:true});
   await manual.getByLabel('搜索游戏角色',{exact:true}).fill('奇偶·女性（水）');
   await manual.getByRole('button',{name:'选择奇偶·女性（水）',exact:true}).click();
-  await expect(manual.getByRole('button',{name:'1命',exact:true})).toBeEnabled();
-  await expect(manual.getByText('角色介绍与技能说明',{exact:true})).toHaveCount(0);
-  await expect(manual.locator('.talent-field')).toHaveCount(3);
+  const role=page.getByRole('dialog',{name:'奇偶·女性（水）',exact:true});
+  await expect(role.getByRole('button',{name:'1命',exact:true})).toBeEnabled();
+  await expect(role.getByText('角色介绍与技能说明',{exact:true})).toHaveCount(0);
+  await expect(role.locator('.talent-field')).toHaveCount(3);
 });

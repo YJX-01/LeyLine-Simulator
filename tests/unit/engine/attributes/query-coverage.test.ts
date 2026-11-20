@@ -157,7 +157,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(response.taskId).toBe(7);
     expect(response.comparison!.candidates[0].result.totalValue).toBeCloseTo(expectedAfter, 8);
     expect(JSON.stringify(document.baseline)).toBe(JSON.stringify(JSON.parse(original).project));
-    expect(build.weapon.id).toBe('wastergreatsword');
+    expect(build.weapon?.id).toBe('wastergreatsword');
     const invalid = { ...candidates[0], replacements: [{ actorId: 'kaeya', build: candidate }] };
     expect(() => compareTimelineLoadouts(document.project, [invalid])).toThrow('同一角色');
     document.project.timeline[0].damage!.inputs!.counterCharge = null;

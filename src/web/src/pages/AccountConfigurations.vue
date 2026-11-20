@@ -9,7 +9,13 @@ import {useLibraryViewStore} from '../stores/library-view';
 import CharacterConfigurationList from './CharacterConfigurationList.vue';
 import ArtifactCombinationLibrary from './ArtifactCombinationLibrary.vue';
 const combinations=ref<InstanceType<typeof ArtifactCombinationLibrary>>();
-defineExpose({requestLeave:(action:()=>void)=>combinations.value?combinations.value.requestLeave(action):action()});
+const manual = ref<InstanceType<typeof ManualCharacterImport>>();
+function requestLeave(action: () => void) {
+  const editor = manual.value ?? combinations.value;
+  if (editor) editor.requestLeave(action);
+  else action();
+}
+defineExpose({requestLeave});
 const props=defineProps<{mode:'characters'|'artifacts'}>();
 const emit=defineEmits<{edit:[characterId:string,presetId:string]}>();
 const account=useAccountStore(),views=useLibraryViewStore();
@@ -28,7 +34,7 @@ useLibraryScroll(()=>props.mode==='characters'?'configurations':'combinations');
     <LibraryCornerOrnaments />
     <CharacterConfigurationList v-if="mode==='characters'" @pick-role="rolePickerOpen=true" @create="creatingConfiguration=true" @select="(characterId,presetId)=>emit('edit',characterId,presetId)" />
     <ArtifactCombinationLibrary v-else ref="combinations" />
-    <ManualCharacterImport v-if="creatingConfiguration" reuse-local @saved="id=>emit('edit',id,'')" @close="creatingConfiguration=false" />
+    <ManualCharacterImport v-if="creatingConfiguration" ref="manual" @saved="id=>emit('edit',id,'')" @close="creatingConfiguration=false" />
     <CharacterSelectionDialog v-if="rolePickerOpen" allow-all :selected-id="view.characterId" @close="rolePickerOpen=false" @select="selectRole" />
   </section>
 </template>

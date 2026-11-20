@@ -103,9 +103,11 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await expect(levelMenu.getByRole('button',{name:'角色等级 1',exact:true})).toHaveCount(0);
   await bennett.getByRole('button',{name:'角色等级 95',exact:true}).click();await bennett.getByRole('button',{name:'保存',exact:true}).click();
   const { character } = (await account()).characters.find(entry => entry.name === '班尼特')!.build!;
-  const expectedHp = Math.round(character.attributes.base.hp * character.progression.curves.hp[95] + character.progression.promotion[6].hp).toLocaleString('zh-CN');
-  await bennett.getByRole('button',{name:'展开面板',exact:true}).click();await expect(bennett.locator('[data-stat-value="hp"]')).toHaveText(expectedHp);
+  const expectedHp = (level: number) => Math.round(character.attributes.base.hp * character.progression.curves.hp[level] + character.progression.promotion[6].hp).toLocaleString('zh-CN');
+  await bennett.getByRole('button',{name:'展开面板',exact:true}).click();await expect(bennett.locator('[data-stat-value="hp"]')).toHaveText(expectedHp(95));
   await bennett.getByLabel('角色等级',{exact:true}).click();await bennett.getByRole('button',{name:'提高自定义角色等级',exact:true}).click();await expect(bennett.getByLabel('自定义角色等级',{exact:true})).toHaveValue('100');
+  await expect(bennett.locator('[data-stat-value="hp"]')).toHaveText(expectedHp(100));
+  expect((await account()).characters.find(entry => entry.name === '班尼特')!.build!.level).toBe(95);
   await bennett.getByRole('button',{name:'保存',exact:true}).click();
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.characters.find((entry:{name:string})=>entry.name==='班尼特').build.level)).toBe(100);
   await page.setViewportSize({width:900,height:460});
@@ -122,19 +124,44 @@ test('actual showcase: element shortcuts, combined selections and separate sorti
   await page.screenshot({path:'artifacts/cultivation-refined-mobile.png',fullPage:true});
   await expect.poll(() => bennett.evaluate(node => node.scrollWidth<=node.clientWidth)).toBe(true);
   // Re-enter the recorded actual showcase cultivation through the manual-add flow.
-  const original = (await account()).characters.find(entry => entry.name === '班尼特')!.showcase!.build;
-  await page.evaluate(()=>{const file=JSON.parse(localStorage.getItem('leyline-account-0.1.0')!);const account=file.document;account.characters=account.characters.filter((entry:{name:string})=>entry.name!=='班尼特');localStorage.setItem('leyline-account-0.1.0',JSON.stringify(file));});
-  await page.setViewportSize({width:1440,height:1080});await page.reload();
+  await page.keyboard.press('Escape');
+  await page.setViewportSize({width:1440,height:1080});
+  await page.getByRole('button', { name: '展柜导入', exact: true }).click();
+  await page.getByLabel('游戏 UID', { exact: true }).fill('618285856');
+  await page.getByRole('button', { name: '查询角色展柜', exact: true }).click();
+  await page.getByRole('button', { name: '全选', exact: true }).click();
+  await page.getByRole('button', { name: '确认导入 4 位角色', exact: true }).click();
+  const recorded = (await account()).characters.find(entry => entry.name === '班尼特')!;
+  const original = recorded.showcase!.build;
+  await page.getByRole('button', { name: '查看班尼特详情', exact: true }).click({button:'right'});
+  await page.getByRole('menuitem', { name: '彻底删除', exact: true }).click();
+  await page.getByRole('dialog', { name: '彻底删除角色？' }).getByRole('button', { name: '彻底删除', exact: true }).click();
   await page.getByRole('button',{name:'手动添加',exact:true}).click();
   const adding=page.getByRole('dialog',{name:'手动添加角色',exact:true});
   await adding.getByLabel('搜索游戏角色',{exact:true}).fill('班尼特');await adding.getByRole('button',{name:'选择班尼特',exact:true}).click();
-  for(const key of ['normal','skill','burst'] as const)await adding.locator(`[data-talent="${key}"] input`).fill(String(original.talents[key]));
-  await adding.getByRole('button',{name:'更换武器',exact:true}).click();await adding.getByLabel('搜索装备武器',{exact:true}).fill(original.weapon.name);await adding.locator('.catalog-browser-options').getByRole('button',{name:original.weapon.name,exact:true}).click();
-  await adding.getByRole('button',{name:`${original.constellation}命`,exact:true}).click();
-  await adding.getByRole('button',{name:'保存角色资料',exact:true}).click();
+  for(const key of ['normal','skill','burst'] as const)await bennett.locator(`[data-talent="${key}"] input`).fill(String(original.talents[key]));
+  await bennett.getByRole('button',{name:'更换武器',exact:true}).click();await bennett.getByLabel('搜索装备武器',{exact:true}).fill(original.weapon.name);await bennett.locator('.catalog-browser-options').getByRole('button',{name:original.weapon.name,exact:true}).click();
+  await bennett.getByRole('button',{name:`${original.constellation}命`,exact:true}).click();
+  for (const [slot, label] of [['flower','生之花'],['plume','死之羽'],['sands','时之沙'],['goblet','空之杯'],['circlet','理之冠']] as const) {
+    await bennett.getByRole('button', { name: `装备${label}`, exact: true }).click();
+    await page.getByRole('dialog', { name: `选择${label}`, exact: true }).locator(`[data-artifact-id="${recorded.equipment[slot]}"]`).click();
+  }
+  await bennett.getByRole('button', { name: '查看生之花详情', exact: true }).click();
+  const flower = page.locator('.artifact-detail-dialog[open]');
+  const alias = flower.getByLabel('圣遗物别名', { exact: true });
+  await alias.fill('');
+  await alias.pressSequentially('班尼特生之花');
+  await flower.getByRole('button', { name: '保存', exact: true }).click();
+  await flower.getByRole('button', { name: /^关闭/ }).click();
+  await expect(bennett.getByRole('button', { name: '替换生之花', exact: true })).toBeVisible();
+  expect((await account()).characters.some(entry => entry.name === '班尼特')).toBe(false);
+  expect((await account()).artifacts.find(item => item.id === recorded.equipment.flower)?.alias).not.toBe('班尼特生之花');
+  await bennett.getByRole('button',{name:'保存',exact:true}).click();
+  expect((await account()).characters.find(entry => entry.name === '班尼特')!.equipment).toEqual(recorded.equipment);
+  expect((await account()).artifacts.find(item => item.id === recorded.equipment.flower)?.alias).toBe('班尼特生之花');
   await expect(page.getByRole('dialog',{name:'班尼特',exact:true})).toBeVisible();
   const manual = (await account()).characters.find(entry => entry.name === '班尼特')!.build!;
-  expect({id:manual.character.id,level:manual.level,ascension:manual.ascension,constellation:manual.constellation,talents:manual.talents,weapon:manual.weapon.id,weaponLevel:manual.weaponLevel,refinement:manual.refinement}).toEqual({id:original.character.id,level:original.level,ascension:original.ascension,constellation:original.constellation,talents:original.talents,weapon:original.weapon.id,weaponLevel:original.weaponLevel,refinement:original.refinement});
+  expect({id:manual.character.id,level:manual.level,ascension:manual.ascension,constellation:manual.constellation,talents:manual.talents,weapon:manual.weapon?.id,weaponLevel:manual.weaponLevel,refinement:manual.refinement}).toEqual({id:original.character.id,level:original.level,ascension:original.ascension,constellation:original.constellation,talents:original.talents,weapon:original.weapon.id,weaponLevel:original.weaponLevel,refinement:original.refinement});
   await page.screenshot({path:'artifacts/cultivation-manual-add.png',fullPage:true});
 
 

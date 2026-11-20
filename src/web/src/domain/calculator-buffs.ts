@@ -40,7 +40,7 @@ export const buffFactNames: Record<string, string> = {
   'beyondthechrysalis.loyalWind': '蝶变 / 忠忱之风（10秒内）', 'beyondthechrysalis.betrayalWind': '蝶变 / 叛弃之风（10秒内）',
   'scarletproof.stellarWindow': '血红之证四件效果（10秒内）',
 };
-type Entity = Build['character'] | Build['weapon'] | Build['sets'][number];
+type Entity = Build['character'] | NonNullable<Build['weapon']> | Build['sets'][number];
 export function buffConditionsMet(item: Pick<CalculatorBuff, 'requirements' | 'stacks' | 'hp'>, damage: DamageRequest) {
   return item.requirements.every(({ key, value }) => trialValue(damage, key) === value.value)
     && (!item.hp || hpMatches(item.hp, trialValue(damage, 'hpRatio')))
@@ -93,6 +93,7 @@ export function calculatorBuffChoices(project: Project, recipientId: string, dam
     const setCounts: Record<string, number> = {};
     for (const item of build.artifacts) setCounts[item.setId] = (setCounts[item.setId] ?? 0) + 1;
     for (const entity of [character, weapon, ...build.sets]) {
+      if (!entity) continue;
       for (const effect of entity.calculation.bundle.effects) {
         if (!effectUnlocked(effect.activation, { ...build, setCounts }) || hitMatches(effect.appliesTo, frame) === false) continue;
         if (effect.recipient.role === 'owner' && ownerId !== recipientId || effect.recipient.role === 'team' && effect.recipient.excludeOwner && ownerId === recipientId) continue;

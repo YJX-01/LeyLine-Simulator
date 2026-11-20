@@ -40,7 +40,7 @@ export async function prepareCalculatorContentUpdate(input: DamageCalculatorDocu
   const before = actor.build!;
   if (before.character.origin !== 'builtin') throw new Error('自定义角色须保留其定义，不能替换为内置内容。');
   const [character, weapon, sets, data] = await Promise.all([
-    getCharacter(before.character.id), getWeapon(before.weapon.id), Promise.all(before.sets.map(set => getArtifactSet(set.id))), loadAccountGameData(),
+    getCharacter(before.character.id), before.weapon ? getWeapon(before.weapon.id) : null, Promise.all(before.sets.map(set => getArtifactSet(set.id))), loadAccountGameData(),
   ]);
   const after: Build = { ...before, character, weapon, sets, artifactMain: data.main, sources: [...before.sources, ...data.sources.filter(source => !before.sources.some(existing => existing.id === source.id))], artifactMainSourceRefs: data.artifactMainSourceRefs, dataVersion: data.catalog.version };
   const labels = { character: `角色定义（${before.character.revision} → ${character.revision}）`, weapon: '武器定义', sets: '套装定义', artifactMain: '圣遗物主词条表', dataVersion: '内容版本' };
@@ -50,7 +50,8 @@ export async function prepareCalculatorContentUpdate(input: DamageCalculatorDocu
   const definitionIds = new Set([actor.character, actor.weapon, ...document.project.timeline.filter(record => record.actor === actor.id).map(record => record.definition)]);
   for (const definition of document.project.definitions) if (definitionIds.has(definition.id) && !definition.effects.length && (!definition.nodes.length || definition.nodes.every(node => node.op === 'game-damage'))) {
     definition.version = after.dataVersion;
-    definition.source = { kind: 'user', reference: definition.id === actor.weapon ? `${weapon.id}@${after.dataVersion}` : `${character.id}@${character.revision}`, verified: false };
+    const reference = definition.id === actor.weapon ? (weapon ? `${weapon.id}@${after.dataVersion}` : after.dataVersion) : `${character.id}@${character.revision}`;
+    definition.source = { kind: 'user', reference, verified: false };
   }
   return { document: damageCalculatorSchema.parse(document), changes };
 }

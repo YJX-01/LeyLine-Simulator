@@ -141,7 +141,7 @@ export function runtimeEffectViews(runtime: Runtime, visit: () => boolean) {
   const data = compiledData(runtime.team.program)!;
   const entity = (actorId: string, reference: { namespace: string; id: string; revision: string }): string => {
     const build = runtime.builds.get(actorId)!;
-    return [build.weapon, ...build.sets, build.character].find(entity => entity.calculation.bundle.effects.some(effect => definitionKey(effect.identity) === definitionKey(reference)))?.id ?? build.character.id;
+    return [build.weapon, ...build.sets, build.character].find(entity => entity?.calculation.bundle.effects.some(effect => definitionKey(effect.identity) === definitionKey(reference)))?.id ?? build.character.id;
   };
   const unit = (target: import('@leyline/schema').EffectDefinition['target']): QuantityUnit => {
     const type = target.kind === 'attribute' ? data.attributes.get(definitionKey(target.attribute))!.type

@@ -11,7 +11,39 @@ import {useCharacterLoadoutsStore} from '../../../../src/web/src/stores/characte
 import {useArtifactCombinationsStore} from '../../../../src/web/src/stores/artifact-combinations';
 import {useArtifactRemoval} from '../../../../src/web/src/composables/use-artifact-removal';
 import {useInventoryHistoryMerge} from '../../../../src/web/src/composables/use-inventory-history-merge';
+import {loadAccountGameData} from '../../../../src/web/src/domain/account-presentation';
+import {previewMonaImport,confirmMonaImport} from '../../../../src/web/src/domain/mona-import';
 const path='.references/enka/official-example.json';
+const inventoryPath = '.references/artifacts_mona.json';
+const playerShowcase = '.references/enka/uid-107590923.json';
+it.skipIf(!hasRecordedReference(inventoryPath) || !hasRecordedReference(playerShowcase))('matches recorded Mona and Enka pieces across display rounding, retaining physical IDs and scan values', async () => {
+  const account = createAccount(), data = await loadAccountGameData();
+  const inventory = await previewMonaImport(readRecordedReference(inventoryPath), account, data.catalog.sets, data.main);
+  confirmMonaImport(account, inventory);
+  const before = account.artifacts.length;
+  const preview = await previewEnkaImport(JSON.parse(readRecordedReference(playerShowcase)), '107590923', account);
+  const roles = preview.rows.map(row => row.character);
+  const plan = planShowcaseInventory(account, roles);
+  // Of the 60 observed pieces, the ATK sands on avatar 10000116 has no ordered match in the scan.
+  expect([plan.matched, plan.added]).toEqual([59, 1]);
+  const role = roles.find(role => role.showcase!.avatarId === 10000143)!;
+  const expected = ['7356583031583997','7583025891101129','1049847574026174','1435275503059808','4716894979347650']
+    .map(id => account.artifacts.find(piece => piece.real?.source?.key === 'id:' + id)!);
+  expect(plan.items[role.id].map(piece => piece.id)).toEqual(expected.map(piece => piece.id));
+  const stats = (piece: typeof expected[number]) => piece.real!.substats.map(sub => [sub.stat, sub.value]);
+  expect(stats(plan.items[role.id][0])).toEqual(stats(expected[0]));
+  expect(plan.items[role.id][0].rollSource).toBe('showcase');
+  const mastery = plan.items[roles.find(role => role.showcase!.avatarId === 10000107)!.id].find(piece => piece.slot === 'sands')!;
+  expect(mastery.mona?.mainValue).toBe(187);
+  expect(data.main[5].elementalMastery[20]).toBe(186.5);
+  confirmEnkaImport(account, preview, roles.map(role => role.id), true);
+  expect(account.artifacts).toHaveLength(before + 1);
+  expect(account.characters.find(entry => entry.id === role.id)!.equipment.flower).toBe(expected[0].id);
+  expect(planShowcaseInventory(account, account.characters).added).toBe(0);
+  const repeated = await previewMonaImport(readRecordedReference(inventoryPath), account, data.catalog.sets, data.main);
+  expect(repeated.duplicates).toBe(before);
+  expect(repeated.conflicts).toEqual([]);
+});
 describe.skipIf(!hasRecordedReference(path))('observed artifact identity and persisted history',()=>{
   async function recorded(){const account=createAccount(),preview=await previewEnkaImport(JSON.parse(readRecordedReference(path)),'618285856',account);confirmEnkaImport(account,preview,preview.rows.map(row=>row.character.id),true);return account;}
   it('shows showcase items as unstored after inventory deletion without changing their snapshot',async()=>{

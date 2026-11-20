@@ -317,7 +317,7 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('button', { name: '手动添加', exact: true }).click();
 
   await expect(page.getByLabel('角色等级', { exact: true })).toHaveCount(0);
-  await expect(page.getByRole('button', { name: '保存角色资料', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('dialog', { name: '手动添加角色' }).getByRole('button', { name: '保存', exact: true })).toHaveCount(0);
   await page.getByLabel('搜索游戏角色', { exact: true }).fill('琴');
   await expect.poll(() => page.locator('.catalog-browser-options .game-icon > img').first().evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
   await page.screenshot({ path: info.outputPath('character-picker.png') });

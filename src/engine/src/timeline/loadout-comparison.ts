@@ -24,8 +24,8 @@ export function compareTimelineLoadouts(input: Project, candidates: LoadoutCandi
         if (definition) {
           const entity = replacement.build[slot];
           definition.version = replacement.build.dataVersion;
-          definition.source = { kind: 'user', reference: `${entity.id}@${replacement.build.dataVersion}`, verified: false };
-          definition.name = `${slot === 'character' ? replacement.build.character.identity.name : replacement.build.weapon.name} · 候选快照`;
+          definition.source = { kind: 'user', reference: entity ? `${entity.id}@${replacement.build.dataVersion}` : replacement.build.dataVersion, verified: false };
+          definition.name = `${slot === 'character' ? replacement.build.character.identity.name : replacement.build.weapon?.name ?? '未配武器'} · 候选快照`;
         }
       }
       const damageDefinitions = new Set(next.timeline.filter(record => record.actor === actor.id && record.kind === 'damage').map(record => record.definition));

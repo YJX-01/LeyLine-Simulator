@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 import { getCharacter, getWeapon } from '@leyline/game-data';
 import { resolveBuild } from '@leyline/engine';
-import { buildSchema, type CharacterDefinition } from '@leyline/schema';
-import { parseAccount, type AccountCharacter } from '../domain/account';
-import { createBuildSnapshot } from '../domain/build-snapshot';
+import type { Build, CharacterDefinition } from '@leyline/schema';
+import type { AccountCharacter } from '../domain/account';
+import { assembleBuildSnapshot } from '../domain/build-snapshot';
 import { loadAccountGameData } from '../domain/account-presentation';
 import { useAccountStore } from '../stores/account';
 import CatalogPicker from '../components/CatalogPicker.vue';
@@ -16,24 +16,39 @@ import ChoiceGroup from '../components/ChoiceGroup.vue';
 import CornerBadge from '../components/CornerBadge.vue';
 import { talentDisplayRows } from '../domain/character-info';
 import {buildRollBasis} from '../domain/effective-roll-basis';
-import { elementalForm } from '../domain/elemental-forms';
 const props = defineProps<{ character?: AccountCharacter; initialCharacterId?: string; inline?: boolean; details?: boolean; showcase?: boolean; detached?: boolean; candidate?: boolean; resolveIdentity?: boolean }>();
-const emit = defineEmits<{ close: []; saved: [id: string]; dirtyChange: [dirty: boolean] }>();
+const emit = defineEmits<{ dirtyChange: [dirty: boolean] }>();
 const store = useAccountStore();
 const originalAccount = store.account;
+const error = ref('');
 let disposed = false;
 onUnmounted(() => { disposed = true; });
-const data = ref<Awaited<ReturnType<typeof loadAccountGameData>>>();
+const data = shallowRef<Awaited<ReturnType<typeof loadAccountGameData>>>();
 const sourceBuild = computed(() => props.showcase ? props.character?.showcase?.build : props.character?.build);
-const selectedDefinition=ref<CharacterDefinition | undefined>(sourceBuild.value?.character);
+const selectedDefinition=shallowRef<CharacterDefinition | undefined>(sourceBuild.value?.character);
 const talentIcons=computed(()=>selectedDefinition.value?talentDisplayRows(selectedDefinition.value):[]);
 const characterId = ref(sourceBuild.value?.character.id ?? props.initialCharacterId ?? '');
-let definitionRequest=0;
-watch(characterId,async id=>{const token=++definitionRequest;if(!id){selectedDefinition.value=undefined;return;}try { const next=sourceBuild.value?.character.id===id?sourceBuild.value.character:await getCharacter(id);if(!disposed && token===definitionRequest)selectedDefinition.value=next;}catch{if(token===definitionRequest)selectedDefinition.value=undefined;}},{immediate:true});
-const weaponId = ref(sourceBuild.value?.weapon.id ?? '');
+const weaponId = ref(sourceBuild.value?.weapon?.id ?? '');
+const selectedWeapon = shallowRef<Build['weapon']>(sourceBuild.value?.weapon ?? null);
+let contentReady: Promise<void>;
+watch([characterId, weaponId], ([id, selectedWeaponId], _, onCleanup) => {
+  let current = true;
+  onCleanup(() => { current = false; });
+  const snapshot = sourceBuild.value;
+  const character = selectedDefinition.value?.id === id ? selectedDefinition.value : snapshot?.character.id === id ? snapshot.character : undefined;
+  const weapon = selectedWeapon.value?.id === selectedWeaponId ? selectedWeapon.value : snapshot?.weapon?.id === selectedWeaponId ? snapshot.weapon : null;
+  selectedDefinition.value = character;
+  selectedWeapon.value = weapon;
+  contentReady = Promise.all([
+    character ?? (id ? getCharacter(id) : undefined),
+    weapon ?? (selectedWeaponId ? getWeapon(selectedWeaponId) : null),
+  ]).then(([definition, equipment]) => {
+    if (current) { selectedDefinition.value = definition; selectedWeapon.value = equipment; }
+  }).catch(() => { if (current) error.value = '角色或武器资料加载失败。'; });
+}, { immediate: true, flush: 'sync' });
 const ascension = ref(sourceBuild.value?.ascension ?? 6);
-const weaponLevel = ref(sourceBuild.value?.weaponLevel ?? 90);
-const weaponAscension = ref(sourceBuild.value?.weaponAscension ?? 6);
+const weaponLevel = ref(sourceBuild.value?.weapon ? sourceBuild.value.weaponLevel : 90);
+const weaponAscension = ref(sourceBuild.value?.weapon ? sourceBuild.value.weaponAscension : 6);
 const level = ref(sourceBuild.value?.level ?? 90);
 const constellation = ref(sourceBuild.value?.constellation ?? 0);
 const refinement = ref(sourceBuild.value?.refinement ?? 1);
@@ -46,76 +61,64 @@ watch(ascension, () => { for(const key of ['normal','skill','burst'] as const) t
 function setCharacterLevel(nextLevel:number, nextAscension:number) { level.value=nextLevel; ascension.value=nextAscension; }
 function setWeaponLevel(nextLevel:number, nextAscension:number) { weaponLevel.value=nextLevel; weaponAscension.value=nextAscension; }
 const weaponPicker=ref<InstanceType<typeof CatalogPicker>>();
-const signature=()=>JSON.stringify([characterId.value,weaponId.value,level.value,ascension.value,constellation.value,weaponLevel.value,weaponAscension.value,refinement.value,talents.value]);
+const signature = () => JSON.stringify([characterId.value, level.value, ascension.value, constellation.value, talents.value,
+  weaponId.value ? [weaponId.value, weaponLevel.value, weaponAscension.value, refinement.value] : null]);
 const initialValues=ref(signature());
 const dirty=computed(()=>initialValues.value!==signature());
 watch(dirty, value => emit('dirtyChange', value), { immediate:true });
-function reset() { const b=sourceBuild.value;level.value=b?.level??90;ascension.value=b?.ascension??6;constellation.value=b?.constellation??0;weaponId.value=b?.weapon.id??'';weaponLevel.value=b?.weaponLevel??90;weaponAscension.value=b?.weaponAscension??6;refinement.value=b?.refinement??1;talents.value={...(b?.talents??{normal:10,skill:10,burst:10})};initialValues.value=signature(); }
-const error = ref(''); const busy = ref(false);
+function reset() { const b=sourceBuild.value;level.value=b?.level??90;ascension.value=b?.ascension??6;constellation.value=b?.constellation??0;weaponId.value=b?.weapon?.id??'';weaponLevel.value=b?.weapon?b.weaponLevel:90;weaponAscension.value=b?.weapon?b.weaponAscension:6;refinement.value=b?.refinement??1;talents.value={...(b?.talents??{normal:10,skill:10,burst:10})};initialValues.value=signature(); }
 const capturedCharacter = computed(() => sourceBuild.value?.character.id === characterId.value ? sourceBuild.value.character : undefined);
 const catalogCharacter = computed(() => data.value?.catalog.characters.find(item => item.id === characterId.value));
 // Source IDs are used only for presentation; calculation continues to read the carried snapshot.
 const referenceCharacter = computed(() => catalogCharacter.value ?? data.value?.catalog.characters.find(item => capturedCharacter.value?.derivedFrom?.id===item.id));
 const character = computed(() => capturedCharacter.value ? {id:capturedCharacter.value.id,...capturedCharacter.value.identity} : catalogCharacter.value);
 const weapons = computed(() => data.value?.catalog.weapons.filter(item => item.weaponType === character.value?.weaponType) ?? []);
-onMounted(async () => { try { data.value = await loadAccountGameData(); if (!characterId.value && props.character) characterId.value = data.value.catalog.characters.find(item => item.name === props.character?.name)?.id ?? ''; initialValues.value=signature(); } catch { error.value = '游戏目录加载失败。'; } });
+onMounted(async () => {
+  try {
+    data.value = await loadAccountGameData();
+    if (!characterId.value && props.character) {
+      characterId.value = data.value.catalog.characters.find(item => item.name === props.character?.name)?.id ?? '';
+      initialValues.value = signature();
+    }
+  } catch { error.value = '游戏目录加载失败。'; }
+});
+const draftBuild = computed<Build | undefined>(() => {
+  const snapshot = sourceBuild.value, catalog = data.value;
+  const definition = selectedDefinition.value, weapon = selectedWeapon.value;
+  if (!definition || (weaponId.value && !weapon) || (!snapshot && !catalog)) return;
+  return assembleBuildSnapshot({
+    dataVersion: snapshot?.dataVersion ?? catalog!.catalog.version,
+    artifactMain: snapshot?.artifactMain ?? catalog!.main,
+    character: definition, weapon, level: level.value, ascension: ascension.value, constellation: constellation.value,
+    talents: { ...talents.value }, weaponLevel: weapon ? weaponLevel.value : 1, weaponAscension: weapon ? weaponAscension.value : 0, refinement: weapon ? refinement.value : 1,
+    artifacts: props.candidate ? snapshot?.artifacts ?? [] : [], sets: props.candidate ? snapshot?.sets ?? [] : [],
+  }, snapshot ?? catalog!);
+});
+const canSave = computed(() => !!draftBuild.value);
 async function prepare(): Promise<AccountCharacter | undefined> {
   if (props.showcase) return;
-  busy.value = true; error.value = '';
+  error.value = '';
   try {
-    if (!data.value || !character.value || !weapons.value.some(item => item.id === weaponId.value)) throw new Error('请选择角色与适配武器。');
-    const snapshot = sourceBuild.value;
-    const [realCharacter, weapon] = await Promise.all([
-      snapshot?.character.id === characterId.value ? buildSchema.shape.character.parse(snapshot.character) : getCharacter(characterId.value),
-      snapshot?.weapon.id === weaponId.value ? buildSchema.shape.weapon.parse(snapshot.weapon) : getWeapon(weaponId.value),
-    ]);
+    await contentReady;
     if (disposed) return;
     if (store.account !== originalAccount) throw new Error('账号已切换，请重新打开。');
-    const lockedId=props.character?.build?.character.id??data.value.catalog.characters.find(item=>item.name===props.character?.name)?.id;
-    if(props.character && realCharacter.id!==lockedId && !(props.detached && props.resolveIdentity && !lockedId && !props.character.build))throw new Error('已有角色的身份不可更换。');
+    const build = draftBuild.value;
+    if (!build) throw new Error('请选择角色并等候目录加载。');
+    const { character: definition, weapon } = build;
+    const lockedId = props.character?.build?.character.id ?? data.value?.catalog.characters.find(item => item.name === props.character?.name)?.id;
+    if (props.character && definition.id !== lockedId && !(props.detached && props.resolveIdentity && !lockedId && !props.character.build)) throw new Error('已有角色的身份不可更换。');
     const id = props.character?.id ?? crypto.randomUUID();
-    if (!props.candidate && store.account.characters.some(item => item.id !== id && (item.build?.character.id === characterId.value || item.name === realCharacter.identity.name))) throw new Error('账号已有该角色，请在原角色资料上补全或编辑。');
-    if (weaponAscension.value >= weapon.promotion.length) throw new Error(`所选武器最高突破为 ${weapon.promotion.length - 1}，请调整武器突破与等级。`);
-    const promotion = weaponAscension.value;
-    const build = createBuildSnapshot({ dataVersion: snapshot?.dataVersion ?? data.value.catalog.version, character: realCharacter, weapon, artifactMain: snapshot?.artifactMain ?? data.value.main, sets: props.candidate ? props.character?.build?.sets ?? [] : [], level: level.value, ascension: ascension.value, constellation: constellation.value, talents: talents.value, weaponLevel: weaponLevel.value, weaponAscension: promotion, refinement: refinement.value, artifacts: props.candidate ? props.character?.build?.artifacts ?? [] : [] }, snapshot ?? data.value);
+    if (!props.candidate && store.account.characters.some(item => item.id !== id && (item.build?.character.id === definition.id || item.name === definition.identity.name))) throw new Error('账号已有该角色，请在原角色资料上补全或编辑。');
+    if (weapon && build.weaponAscension >= weapon.promotion.length) throw new Error(`所选武器最高突破为 ${weapon.promotion.length - 1}，请调整武器突破与等级。`);
     const invalid = resolveBuild(build).issues.filter(issue => issue.code === 'invalid-input');
     if (invalid.length) throw new Error(invalid.map(issue => issue.message).join('；'));
-    const entry: AccountCharacter = { id, name: realCharacter.identity.name, attack: 0, weapon: weapon.name, equipment: { ...props.character?.equipment }, build: build, ...(props.character?.showcase?.build.character.id === realCharacter.id ? { showcase: props.character.showcase } : {}) };
-    return entry;
-  } catch (cause) { error.value = cause instanceof Error ? cause.message : '角色资料保存失败。'; return undefined; } finally { busy.value = false; }
+    return { id, name: definition.identity.name, attack: 0, weapon: weapon?.name ?? '', equipment: { ...props.character?.equipment }, build,
+      ...(props.character?.showcase?.build.character.id === definition.id ? { showcase: props.character.showcase } : {}) };
+  } catch (cause) { error.value = cause instanceof Error ? cause.message : '角色资料保存失败。'; return undefined; }
 }
-async function apply(notify = true) {
-  const entry = await prepare();
-  if (!entry) return false;
-  try {
-    const next = JSON.parse(JSON.stringify(store.account));
-    const index = next.characters.findIndex((item: AccountCharacter) => item.id === entry.id);
-    if (index >= 0) next.characters[index] = entry; else next.characters.push(entry);
-    store.commitEdit(parseAccount(next));
-    initialValues.value=signature(); if(notify){emit('saved', entry.id); if(!props.details)emit('close');}return true;
-  } catch (cause) { error.value=cause instanceof Error?cause.message:'角色资料保存失败。'; return false; }
-}
-
-const rollBasis=ref(buildRollBasis(sourceBuild.value));
-let basisRequest=0;
-async function getRollBasis(){
-  const request=++basisRequest;
-  const values={characterId:characterId.value,weaponId:weaponId.value,level:level.value,ascension:ascension.value,weaponLevel:weaponLevel.value,weaponAscension:weaponAscension.value};
-  let result=buildRollBasis();
-  try{
-    if(values.characterId && values.weaponId){
-      const snapshot=sourceBuild.value;
-      const [char,weapon]=await Promise.all([snapshot?.character.id===values.characterId?snapshot.character:getCharacter(values.characterId),snapshot?.weapon.id===values.weaponId?snapshot.weapon:getWeapon(values.weaponId)]);
-      result=buildRollBasis({character:char,weapon,...values});
-    }
-  }catch{ /* Missing reference data uses the documented default basis. */ }
-  if(!disposed && request===basisRequest)rollBasis.value=result;
-  return result;
-}
-watch([characterId,weaponId,level,ascension,weaponLevel,weaponAscension],()=>{void getRollBasis();},{immediate:!sourceBuild.value});
-const canSave=computed(()=>!!character.value && weapons.value.some(item=>item.id===weaponId.value));
-defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis, selectedDefinition });
-
+const rollBasis = computed(() => buildRollBasis(draftBuild.value));
+async function getRollBasis() { await contentReady; return rollBasis.value; }
+defineExpose({ prepare, reset, canSave, draftBuild, rollBasis, getRollBasis });
 </script>
 <template>
   <div class="character-form" :class="{inline,details:true}">
@@ -132,16 +135,15 @@ defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis, selected
         </fieldset>
         <fieldset class="cultivation-group weapon-cultivation" aria-label="武器培养" :disabled="showcase">
           <span class="weapon-portrait"><button class="portrait-control replace-portrait" aria-label="更换武器" :title="weapons.find(item=>item.id===weaponId)?.name ?? '更换武器'" @click="weaponPicker?.show()"><GameIcon v-if="weaponId" kind="weapons" :id="weaponId" :size="88" :replaceable="!showcase" :refinement="refinement" :level="weaponLevel" :rarity="weapons.find(item=>item.id===weaponId)?.rarity" /><WeaponPlaceholder v-else add /></button></span>
-          <LevelPicker :level="weaponLevel" :ascension="weaponAscension" label="武器等级" :disabled="showcase" :maximum="(weapons.find(item=>item.id===weaponId)?.rarity ?? 5) < 3 ? 70 : 90" @change="setWeaponLevel" />
+          <LevelPicker :level="weaponLevel" :ascension="weaponAscension" label="武器等级" :disabled="showcase || !weaponId" :maximum="(weapons.find(item=>item.id===weaponId)?.rarity ?? 5) < 3 ? 70 : 90" @change="setWeaponLevel" />
 
         </fieldset>
           <fieldset class="constellation-row" :disabled="showcase"><strong>命座</strong><div class="constellation-strip" role="group" aria-label="命座" :style="elementStyle">
             <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><CornerBadge small transparent class="constellation-number">{{ rank-1 }}</CornerBadge></button>
           </div></fieldset>
-          <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase" @update:model-value="refinement=Number($event)" /></fieldset>
+          <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase || !weaponId"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase || !weaponId" @update:model-value="refinement=Number($event)" /></fieldset>
       </div>
       <CatalogPicker v-if="!showcase" ref="weaponPicker" hide-trigger label="装备武器" image-kind="weapons" v-model="weaponId" :options="weapons" :disabled="!characterId" />
-      <div v-if="(dirty || !props.character) && !showcase && !detached" class="detail-save"><button class="ui-action" data-accent="anemo" :disabled="busy || !characterId || !weaponId" @click="apply()">{{ props.character ? '保存修改' : '保存角色资料' }}</button><button class="ui-action soft" data-accent="pyro" v-if="props.character" :disabled="busy" @click="reset">还原修改</button></div>
     </template>
     <p v-if="error" role="alert">{{ error }}</p>
   </div>
@@ -170,7 +172,7 @@ defineExpose({ prepare, reset, apply, canSave, rollBasis, getRollBasis, selected
 
 .constellation-strip .constellation-number { position:absolute; right:-1px; bottom:-2px; }
 
-.constellation-strip button:disabled { opacity:1; }.detail-save { display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }.detail-save button { font-size:var(--font-control); }
+.constellation-strip button:disabled { opacity:1; }
 @media(max-width:700px) { .cultivation-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }.talent-group { grid-column:1/-1; width:min(240px,100%); justify-self:start; }.talent-group { padding-top:0; }.refinement-field { grid-column:2; grid-row:3; }.constellation-row { grid-column:1/-1; grid-row:4; } }
 
 

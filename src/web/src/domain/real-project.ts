@@ -7,12 +7,13 @@ export { defaultEnemy } from './axis-input';
 export function addActorFromBuild(project: Project, input: Build, name?: string): string {
   const build = buildSchema.parse(input);
   const id = crypto.randomUUID();
+  const weaponVerified = build.weapon?.calculation.bundle.coverage.some(record => record.resolution === 'complete') ?? true;
   const source = { kind: build.character.origin === 'builtin' ? 'preset' as const : 'user' as const, reference: build.dataVersion,
     verified: build.character.origin === 'builtin' && build.character.calculation.bundle.coverage.some(record => record.scope.kind === 'context' && record.scope.maxConstellation >= build.constellation && record.resolution === 'complete') };
   project.definitions.push(
     { id: `${id}-character`, name: `${build.character.identity.name} · 角色快照`, version: build.dataVersion, source, nodes: [], effects: [] },
-    { id: `${id}-weapon`, name: `${build.weapon.name} · 武器快照`, version: build.dataVersion, source: {kind:'preset',reference:build.dataVersion,verified:build.weapon.calculation.bundle.coverage.some(record => record.resolution === 'complete')}, nodes: [], effects: [] },
-    { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source: {...source,verified:source.verified && build.weapon.calculation.bundle.coverage.some(record => record.resolution === 'complete') && build.sets.every(set=>set.effects.filter(effect=>effect.pieces<=build.artifacts.filter(item=>item.setId===set.id).length).every(effect=>effect.coverageRefs.every(reference => set.calculation.bundle.coverage.some(record => record.identity.id === reference.id && record.resolution === 'complete'))))},
+    { id: `${id}-weapon`, name: build.weapon ? `${build.weapon.name} · 武器快照` : '未配武器', version: build.dataVersion, source: {kind:'preset',reference:build.dataVersion,verified:weaponVerified}, nodes: [], effects: [] },
+    { id: `${id}-real-damage`, name: `${build.character.identity.name} · 真实技能伤害`, version: build.dataVersion, source: {...source,verified:source.verified && weaponVerified && build.sets.every(set=>set.effects.filter(effect=>effect.pieces<=build.artifacts.filter(item=>item.setId===set.id).length).every(effect=>effect.coverageRefs.every(reference => set.calculation.bundle.coverage.some(record => record.identity.id === reference.id && record.resolution === 'complete'))))},
       nodes: [{ id: 'real-damage', op: 'game-damage' }], damage: 'real-damage', effects: [] },
   );
   project.candidate.actors.push({ id, name: name || build.character.identity.name, character: `${id}-character`, weapon: `${id}-weapon`, inputs: {}, build: build });

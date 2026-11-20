@@ -9,13 +9,14 @@ export function defaultRollBasis():EffectiveRollBasis {return {...defaults.defau
 /** White stats only: no artifact mains, bonuses, passives, teammates, or temporary buffs. */
 export function buildRollBasis(build?:Pick<Build,'character'|'weapon'|'level'|'ascension'|'weaponLevel'|'weaponAscension'>):EffectiveRollBasis {
   if(!build)return defaultRollBasis();
-  const {character,weapon}=build,promotion=character.progression.promotion[build.ascension],weaponPromotion=weapon.promotion[build.weaponAscension];
-  if(!promotion || weaponPromotion===undefined)return defaultRollBasis();
+  const {character,weapon}=build,promotion=character.progression.promotion[build.ascension];
+  if(!promotion)return defaultRollBasis();
   const hp=character.attributes.base.hp*character.progression.curves.hp[build.level]+promotion.hp;
-  const attack=character.attributes.base.attack*character.progression.curves.attack[build.level]+promotion.attack+weapon.baseAttack*weapon.attackCurve[build.weaponLevel]+weaponPromotion;
+  const weaponAttack=weapon ? weapon.baseAttack*weapon.attackCurve[build.weaponLevel]+weapon.promotion[build.weaponAscension] : 0;
+  const attack=character.attributes.base.attack*character.progression.curves.attack[build.level]+promotion.attack+weaponAttack;
   const defense=character.attributes.base.defense*character.progression.curves.defense[build.level]+promotion.defense;
   if(![hp,attack,defense].every(value=>Number.isFinite(value) && value>0))return defaultRollBasis();
-  return {hp,attack,defense,source:'build',characterId:character.id,weaponId:weapon.id,weaponName:weapon.name,level:build.level,weaponLevel:build.weaponLevel};
+  return {hp,attack,defense,source:'build',characterId:character.id,level:build.level,...weapon?{weaponId:weapon.id,weaponName:weapon.name,weaponLevel:build.weaponLevel}:{}};
 }
 export function readRollBasis(value:unknown):EffectiveRollBasis {
   if(value===undefined)return defaultRollBasis();

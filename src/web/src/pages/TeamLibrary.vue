@@ -2,6 +2,7 @@
 import { computed, defineAsyncComponent, nextTick, reactive, ref, shallowRef, watch } from 'vue';
 import FilterActions from '../components/FilterActions.vue';
 import FilterPanel from '../components/FilterPanel.vue';
+import FavoriteFilter from '../components/FavoriteFilter.vue';
 import TeamCard from '../components/TeamCard.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
@@ -24,7 +25,7 @@ const library = ref<HTMLElement>();
 const saved = useSavedTeamsStore();
 const accounts = useAccountStore();
 const views = useLibraryViewStore();
-const pickerView = reactive({ teamQuery: '', teamMember: '', teamPage: 1, teamSort: teamSortDefaults.key as string, teamDirection: teamSortDefaults.direction as 'asc' | 'desc' });
+const pickerView = reactive({ teamQuery: '', teamMember: '', teamFavorites: [] as string[], teamPage: 1, teamSort: teamSortDefaults.key as string, teamDirection: teamSortDefaults.direction as 'asc' | 'desc' });
 const browse = computed(() => props.pick ? pickerView : views.forAccount(accounts.account.id));
 const pageSize = 5;
 const filterOpen = ref(false);
@@ -32,8 +33,9 @@ const sortOpen = ref(false);
 const sortOptions = [
   { value: teamSortDefaults.key, label: '保存顺序' },
   { value: 'name', label: '队伍名称' },
+  { value: 'favorite', label: '收藏等级' },
 ];
-const filterCount = computed(() => Number(!!browse.value.teamMember));
+const filterCount = computed(() => Number(!!browse.value.teamMember) + browse.value.teamFavorites.length);
 const sorted = computed(() => browse.value.teamSort !== teamSortDefaults.key || browse.value.teamDirection !== teamSortDefaults.direction);
 const memberOptions = computed(() => {
   const options = new Map(saved.teams.flatMap(team => team.project.candidate.actors.map(member => {
@@ -46,7 +48,7 @@ const memberOptions = computed(() => {
 });
 const directionLabels = computed(() => browse.value.teamSort === 'saved'
   ? { asc: '从早到晚', desc: '从晚到早' }
-  : { asc: '名称正序', desc: '名称倒序' });
+  : browse.value.teamSort === 'name' ? { asc: '名称正序', desc: '名称倒序' } : undefined);
 const query = computed({
   get: () => browse.value.teamQuery,
   set: value => {
@@ -56,15 +58,17 @@ const query = computed({
 });
 const matches = computed(() => {
   const term = query.value.trim().toLowerCase();
-  const { teamMember, teamSort, teamDirection } = browse.value;
+  const { teamMember, teamFavorites, teamSort, teamDirection } = browse.value;
   const filtered = saved.teams.filter(team => {
     const members = team.project.candidate.actors;
     if (teamMember && !members.some(member => teamMemberName(member) === teamMember)) return false;
+    if (teamFavorites.length && !teamFavorites.includes(String(team.favorite ?? 0))) return false;
     return team.name.toLowerCase().includes(term)
       || members.some(member => teamMemberName(member).toLowerCase().includes(term));
   });
   if (teamSort === 'saved') return teamDirection === 'asc' ? filtered : filtered.reverse();
   const sign = teamDirection === 'asc' ? 1 : -1;
+  if (teamSort === 'favorite') return filtered.sort((a, b) => sign * ((a.favorite ?? 0) - (b.favorite ?? 0)));
   return filtered.sort((a, b) => sign * a.name.localeCompare(b.name, 'zh-CN', { numeric: true }));
 });
 const pages = computed(() => Math.max(1, Math.ceil(matches.value.length / pageSize)));
@@ -73,18 +77,19 @@ const page = computed({
   set: value => { browse.value.teamPage = Math.max(1, Math.min(value, pages.value)); },
 });
 const visible = computed(() => matches.value.slice((page.value - 1) * pageSize, page.value * pageSize));
-watch(() => [browse.value.teamMember, browse.value.teamSort, browse.value.teamDirection], () => {
+watch(() => [browse.value.teamMember, browse.value.teamFavorites, browse.value.teamSort, browse.value.teamDirection], () => {
   browse.value.teamPage = 1;
 });
 
 function resetFilters() {
   browse.value.teamMember = '';
+  browse.value.teamFavorites = [];
 }
 
 function changeSort(key: string) {
   if (browse.value.teamSort === key) return;
   browse.value.teamSort = key;
-  browse.value.teamDirection = teamSortDefaults.direction;
+  browse.value.teamDirection = key === 'favorite' ? 'desc' : teamSortDefaults.direction;
 }
 
 function resetSort() {
@@ -124,7 +129,7 @@ function closeDeleted() {
     <LibraryListHeader v-model:page="page" :pages="pages" :count="matches.length" :total="saved.teams.length" unit="支队伍" />
     <ul v-if="visible.length" class="team-list">
       <li v-for="team in visible" :key="team.id">
-        <TeamCard :action="pick ? 'select' : 'detail'" :name="team.name" :members="team.project.candidate.actors" :selected="pick && team.id === selectedId"
+        <TeamCard :action="pick ? 'select' : 'detail'" :name="team.name" :members="team.project.candidate.actors" :favorite="team.favorite" :selected="pick && team.id === selectedId"
           :data-team-id="team.id" :aria-label="`${pick ? '选择' : '查看'}队伍 ${team.name}`"
           @click="pick ? emit('select', team) : activeTeam = team" />
       </li>
@@ -138,8 +143,9 @@ function closeDeleted() {
         <section>
           <h3>包含角色</h3>
           <SingleSelectPicker v-model="browse.teamMember" class="team-member-filter" label="包含角色" empty-label="全部角色"
-            image-kind="characters" :options="memberOptions" allow-empty @clear="resetFilters" />
+            image-kind="characters" :options="memberOptions" allow-empty @clear="browse.teamMember = ''" />
         </section>
+        <section><h3>收藏</h3><FavoriteFilter v-model="browse.teamFavorites" label="队伍收藏等级" /></section>
       </FilterPanel>
       <template #footer><FilterActions flush @reset="resetFilters" @confirm="filterOpen = false" /></template>
     </WorkbenchDialog>

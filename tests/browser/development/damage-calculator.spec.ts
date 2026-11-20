@@ -233,8 +233,8 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   const download = await downloadPromise;
   const content = readFileSync((await download.path())!, 'utf8');
   const savedDocument: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', content);
-  expect(savedDocument.project.candidate.actors[0].build!.weapon.id).toBe('oldmercspal');
-  expect(savedDocument.baseline!.candidate.actors[0].build!.weapon.id).toBe('wastergreatsword');
+  expect(savedDocument.project.candidate.actors[0].build!.weapon?.id).toBe('oldmercspal');
+  expect(savedDocument.baseline!.candidate.actors[0].build!.weapon?.id).toBe('wastergreatsword');
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles({ name: '伤害计算.json', mimeType: 'application/json', buffer: Buffer.from(content) });
   await expect.poll(async () => Number((await calculator.getByTestId('calculator-value').textContent())?.replaceAll(',', ''))).toBeCloseTo(expectedAfter, 5);
   await expect(calculator.getByText('已保存', { exact: true })).toBeVisible();
@@ -464,7 +464,7 @@ test('missing-build derivative of the original account stays selectable and carr
   const copied = saved.project.candidate.actors[0].build!;
   expect(copied.artifacts.map(item => item.id)).toEqual(Object.values(before.equipment));
   expect(copied.artifacts).toHaveLength(5);
-  expect(copied.weapon.id).toBe('dullblade');
+  expect(copied.weapon?.id).toBe('dullblade');
   expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(before.account);
 });
 

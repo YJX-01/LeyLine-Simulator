@@ -86,7 +86,7 @@ function applyBuild(id: string, build: Build) {
         <button class="actor-select card-action-trigger" :aria-pressed="axis.actorId === actor.id" @click="axis.actorId = actor.id">
           <strong>{{ actor.name ?? actor.build?.character.identity.name }}</strong>
           <CharacterEquipmentIcons :build="actor.build" :name="actor.name" :size="72" />
-          <small>{{ actor.build?.weapon.name ?? '配装资料待补全' }}</small>
+          <small>{{ actor.build?.weapon?.name ?? (actor.build ? '未配武器' : '配装资料待补全') }}</small>
           <small>{{ actor.build?.artifacts.length ?? 0 }} 件试配圣遗物</small>
         </button>
         <div class="library-page-actions">
@@ -127,7 +127,7 @@ function applyBuild(id: string, build: Build) {
         <button v-for="character in characters" :key="character.id" type="button" data-card-action="select" :disabled="adding" @click="add(character.id)">
           <strong>{{ character.name }}</strong>
           <CharacterEquipmentIcons :build="character.build" :name="character.name" :size="72" />
-          <small>{{ character.build?.weapon.name ?? '资料待补全' }}</small>
+          <small>{{ character.build?.weapon?.name ?? (character.build ? '未配武器' : '资料待补全') }}</small>
         </button>
       </div>
       <LibraryEmptyState v-else title="账号还没有角色资料" action="前往角色库" @action="picking = false; emit('account')" />

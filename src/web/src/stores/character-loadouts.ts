@@ -3,27 +3,53 @@ import { packDocument, unpackDocument } from '../domain/content-document';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { StatKey } from '@leyline/schema';
-import { effectiveStatOptions, defaultEffectiveStats, effectiveStatGroups } from '../domain/character-loadout-name';
+import { configurationSignature, effectiveStatOptions, defaultEffectiveStats, effectiveStatGroups } from '../domain/character-loadout-name';
 import { parseAccount, type AccountCharacter, type LocalAccount } from '../domain/account';
 
 export interface CharacterLoadout { id: string; name: string; accountId: string; characterId: string; snapshot: LocalAccount }
 const key = storageKeyFor('character-loadouts');
+const favoriteKey = storageKeyFor('character-favorites');
+const configurationKey = (accountId: string, characterId: string, presetId: string) => JSON.stringify([accountId, characterId, presetId]);
+
+function writePreferences(storageKey: string, next: Record<string, number | StatKey[]>, commit?: () => void) {
+  const previous = localStorage.getItem(storageKey);
+  localStorage.setItem(storageKey, JSON.stringify(next));
+  try { commit?.(); }
+  catch (cause) {
+    if (previous === null) localStorage.removeItem(storageKey);
+    else localStorage.setItem(storageKey, previous);
+    throw cause;
+  }
+}
 export const useCharacterLoadoutsStore = defineStore('character-loadouts', () => {
   const loadouts = ref<CharacterLoadout[]>([]);
   const error = ref('');
   const favorites=ref<Record<string,number>>({});
   try {
-    const raw=JSON.parse(localStorage.getItem(storageKeyFor('character-favorites')) ?? '{}');
+    const raw=JSON.parse(localStorage.getItem(favoriteKey) ?? '{}');
     if(raw && typeof raw==='object' && !Array.isArray(raw))for(const [id,level] of Object.entries(raw)) {
-      if(typeof level==='number' && Number.isInteger(level) && level>=1 && level<=3)favorites.value[id]=level;
+      if(typeof level==='number' && Number.isInteger(level) && level>=0 && level<=3)favorites.value[id]=level;
     }
   }catch { /* Invalid preferences never replace account data. */ }
-  function favoriteLevel(accountId:string,characterId:string) { return favorites.value[`${accountId}/${characterId}`] ?? 0; }
-  function setFavorite(accountId:string,characterId:string,level:number) {
+  function favoriteLevel(accountId: string, characterId: string, presetId?: string) {
+    const characterLevel = favorites.value[`${accountId}/${characterId}`] ?? 0;
+    if (presetId === undefined) return characterLevel;
+    return favorites.value[configurationKey(accountId, characterId, presetId)] ?? (presetId ? 0 : characterLevel);
+  }
+  function writeFavorites(next: Record<string, number>, commit?: () => void) {
+    writePreferences(favoriteKey, next, commit);
+    favorites.value = next;
+  }
+  function setFavorite(accountId:string,characterId:string,level:number,presetId?:string) {
     if(!Number.isInteger(level) || level<0 || level>3)throw new Error('收藏等级无效。');
     const next={...favorites.value};
-    if(level)next[`${accountId}/${characterId}`]=level;else delete next[`${accountId}/${characterId}`];
-    localStorage.setItem(storageKeyFor('character-favorites'),JSON.stringify(next));favorites.value=next;
+    const preferred = configurationKey(accountId, characterId, '');
+    // Earlier detail views shared the role mark. Keep its last value on the preferred configuration.
+    if (presetId === undefined) next[preferred] ??= favoriteLevel(accountId, characterId);
+    const id = presetId === undefined ? `${accountId}/${characterId}` : configurationKey(accountId, characterId, presetId);
+    if (level || presetId === '') next[id] = level;
+    else delete next[id];
+    writeFavorites(next);
   }
 
   const effective = ref<Record<string,StatKey[]>>({});
@@ -37,9 +63,10 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     const selected=effective.value[`${accountId}/${characterId}`];
     return selected ? effectiveStatGroups.filter(group=>group.members.some(stat=>selected.includes(stat))).flatMap(group=>group.members) : defaultEffectiveStats(name);
   }
-  function setEffectiveStats(accountId:string,characterId:string,stats:StatKey[]) {
+  function setEffectiveStats(accountId:string,characterId:string,stats:StatKey[],commit?:()=>void) {
     const next={...effective.value,[`${accountId}/${characterId}`]:[...new Set(stats.filter(stat=>effectiveStatOptions.includes(stat)))]};
-    localStorage.setItem(storageKeyFor('effective-stats'),JSON.stringify(next)); effective.value=next;
+    writePreferences(storageKeyFor('effective-stats'), next, commit);
+    effective.value=next;
   }
   function persist(next:CharacterLoadout[]) {
     const content=JSON.stringify(packDocument('character-loadouts', next));
@@ -51,24 +78,27 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
     const before=loadouts.value;persist(next);
     try{commit();}catch(cause){persist(before);throw cause;}
   }
-  function removeMany(ids:readonly string[],commit:()=>void) {
-    if(error.value)throw new Error(error.value);
-    const next=loadouts.value.filter(item=>!ids.includes(item.id));
-    if(next.length===loadouts.value.length){commit();return;}
-    const previous=JSON.stringify(packDocument('character-loadouts', loadouts.value));
-    localStorage.setItem(key,JSON.stringify(packDocument('character-loadouts', next)));
-    try { commit(); }
-    catch(cause) {
-      try{localStorage.setItem(key,previous);}catch{error.value='配置保存回退失败，请保留账号备份并检查本地存储。';}
-      throw cause;
+  function removeConfigurations(accountId: string, characterId: string, presetId: string,
+    plan: { removedIds: readonly string[]; promotedId: string; removedCharacter: boolean }, commit: () => void) {
+    if (plan.removedCharacter) return removeCharacter(accountId, characterId, commit);
+    if (error.value) throw new Error(error.value);
+    const next = loadouts.value.filter(item => !plan.removedIds.includes(item.id));
+    const marks = { ...favorites.value };
+    for (const id of plan.removedIds) delete marks[configurationKey(accountId, characterId, id)];
+    if (!presetId) {
+      const preferred = configurationKey(accountId, characterId, '');
+      marks[preferred] = plan.promotedId ? favoriteLevel(accountId, characterId, plan.promotedId) : 0;
     }
-    loadouts.value=next;
+    writeFavorites(marks, () => next.length === loadouts.value.length ? commit() : replaceAll(next, commit));
   }
   function removeCharacter(accountId:string,characterId:string,commit:()=>void) {
     if(error.value)throw new Error(error.value);
     const preferenceId=`${accountId}/${characterId}`;
     const next=loadouts.value.filter(item=>item.accountId!==accountId || item.characterId!==characterId);
     const nextFavorites={...favorites.value},nextEffective={...effective.value};
+    for (const id of ['', ...loadouts.value.filter(item=>item.accountId===accountId && item.characterId===characterId).map(item=>item.id)]) {
+      delete nextFavorites[configurationKey(accountId, characterId, id)];
+    }
     delete nextFavorites[preferenceId];delete nextEffective[preferenceId];
     const writes:[[string,unknown],[string,unknown],[string,unknown]]=[[key,packDocument('character-loadouts', next)],[storageKeyFor('character-favorites'),nextFavorites],[storageKeyFor('effective-stats'),nextEffective]];
     const previous=writes.map(([storageKey])=>[storageKey,localStorage.getItem(storageKey)] as const);
@@ -107,16 +137,28 @@ export const useCharacterLoadoutsStore = defineStore('character-loadouts', () =>
       loadouts.value = next;
     }
   } catch { error.value = '角色配装方案无法读取，原始资料未覆盖。'; }
-  function save(name: string, account: LocalAccount, character: AccountCharacter) {
+  function newLoadout(name: string, account: LocalAccount, character: AccountCharacter) {
     if (error.value) throw new Error(error.value);
     if (!name.trim() || name.length > 160) throw new Error('请输入不超过 160 字的方案名称。');
     if (loadouts.value.length >= 50) throw new Error('角色配装方案已达 50 份上限。');
     const selected = new Set(Object.values(character.equipment));
     const snapshot = parseAccount({ ...account, characters:[character], artifacts:account.artifacts.filter(item => selected.has(item.id)) });
-    const entry = { id:crypto.randomUUID(), name:name.trim(), accountId:account.id, characterId:character.id, snapshot };
-    const next = [...loadouts.value, entry];
-    persist(next);
+    return { id:crypto.randomUUID(), name:name.trim(), accountId:account.id, characterId:character.id, snapshot };
+  }
+  function save(name: string, account: LocalAccount, character: AccountCharacter) {
+    const entry = newLoadout(name, account, character);
+    persist([...loadouts.value, entry]);
     return entry.id;
   }
-  return { loadouts, error, favoriteLevel, setFavorite, save, update, removeMany, removeCharacter, replaceAll, effectiveStats, setEffectiveStats };
+  function adoptPreferred(account: LocalAccount, current: AccountCharacter, name: string, selectedId: string, commit: () => void) {
+    if (error.value) throw new Error(error.value);
+    const previous = loadouts.value.find(item => item.accountId === account.id && item.characterId === current.id
+      && configurationSignature(item.snapshot.characters[0]) === configurationSignature(current));
+    const alternate = previous ?? newLoadout(name, account, current);
+    const marks = { ...favorites.value };
+    marks[configurationKey(account.id, current.id, alternate.id)] = favoriteLevel(account.id, current.id, '');
+    marks[configurationKey(account.id, current.id, '')] = favoriteLevel(account.id, current.id, selectedId);
+    writeFavorites(marks, () => previous ? commit() : replaceAll([...loadouts.value, alternate], commit));
+  }
+  return { loadouts, error, favoriteLevel, setFavorite, save, update, adoptPreferred, removeConfigurations, removeCharacter, replaceAll, effectiveStats, setEffectiveStats };
 });

@@ -58,9 +58,10 @@ test('catalog forms and supplemented characters resolve skill and actual constel
     const choice=dialog.getByRole('button',{name:`选择${name}`,exact:true});
     await expect.poll(()=>choice.locator('.game-icon.characters > img:not(.element-badge)').evaluate(image=>(image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth>0)).toBe(true);
     await choice.click();
-    const icons=dialog.locator('.talent-field .game-icon.skills,.constellation-strip .game-icon.constellations:not(.placeholder)');
+    const editor=page.getByRole('dialog',{name,exact:true});
+    const icons=editor.locator('.talent-field .game-icon.skills,.constellation-strip .game-icon.constellations:not(.placeholder)');
     await expect(icons).toHaveCount(character.talents.length+character.constellations.length);
     await expect.poll(()=>icons.evaluateAll(nodes=>nodes.every(node=>!node.classList.contains('placeholder') && Array.from(node.querySelectorAll('img')).every(image=>image.complete && image.naturalWidth>0)))).toBe(true);
-    if(!character.constellations.length)await expect(dialog.locator('.constellation-strip .game-icon.constellations > img')).toHaveCount(0);
+    if(!character.constellations.length)await expect(editor.locator('.constellation-strip .game-icon.constellations > img')).toHaveCount(0);
   }
 });

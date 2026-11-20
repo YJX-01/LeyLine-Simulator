@@ -44,7 +44,7 @@ export async function prepareTeamMember(project: Project, account: LocalAccount,
   if (source.id !== account.id) throw new Error('请选择当前账号的角色配置。');
   const character = source.characters.find(entry => entry.id === characterId);
   const build = character?.build;
-  if (!character || !build) throw new Error('请先在角色库补全该角色的培养与武器。');
+  if (!character || !build) throw new Error('请先在角色库补全该角色的培养。');
   if (source === account && character.showcase && !Object.values(character.equipment).length && character.showcase.build.artifacts.length) {
     throw new Error('此角色只有展柜配装。请先在角色库匹配本地圣遗物。');
   }

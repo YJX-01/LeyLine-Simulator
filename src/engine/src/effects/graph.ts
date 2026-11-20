@@ -70,6 +70,7 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
   const instances: Instance[] = [];
   for (const actor of actors.values()) {
     const sources = (['character', 'weapon'] as const).flatMap(slot => {
+      if (slot === 'weapon' && actor.build?.weapon === null) return [];
       const definition = definitions.get(actor[slot]);
       if (!definition) { missing(actor[slot], `candidate.actors.${actor.id}.${slot}`); return []; }
       return [{ slot: slot as string, definition, content: undefined as EffectInstance['content'] }];
@@ -92,7 +93,7 @@ export function evaluateDependencyGraph(project: Project, options: GraphOptions 
         for (const { record: trigger, unconfirmed } of triggers) {
           if (!touch('effects')) break;
           const identity: (string | null)[] = [actor.id, slot, d.id, d.version, effect.id, trigger?.id ?? null];
-          if (actor.build && (slot === 'character' || slot === 'weapon')) identity.push(actor.build[slot].id, actor.build.dataVersion);
+          if (actor.build && (slot === 'character' || slot === 'weapon')) identity.push(actor.build[slot]?.id ?? null, actor.build.dataVersion);
           const id = JSON.stringify(identity);
           const recipient = effect.recipient ?? 'self';
           if (recipient !== 'self' && recipient !== 'team' && !actors.has(recipient)) missing(recipient, `effects.${id}.recipient`);

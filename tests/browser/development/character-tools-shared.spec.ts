@@ -8,7 +8,7 @@ test('owned and catalog character pickers share controls while keeping data and 
   await page.getByTestId('workspace-nav-team').click();
   await page.locator('.team-library .library-toolbar').getByRole('button', { name: '新建队伍', exact: true }).click();
   await page.getByRole('button', { name: '选择队员1', exact: true }).click();
-  const picker = page.getByRole('dialog', { name: '选择角色配置', exact: true });
+  const picker = page.getByRole('dialog', { name: '选择队员', exact: true });
   await expect(picker.locator('.configuration-row')).toHaveCount(4);
   await picker.getByRole('group', { name: '角色资料来源' }).getByRole('button', { name: '全部角色', exact: true }).click();
   const metrics = await picker.locator('.library-toolbar').evaluate(node => ({

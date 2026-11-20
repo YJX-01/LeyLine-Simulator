@@ -36,8 +36,8 @@ const inspecting = ref<AccountArtifact>();
 restore();
 const dirty=computed(()=>cultivationDirty.value || JSON.stringify(draft.value)!==baseline);
 const {discardOpen,requestLeave,cancelDiscard,discardChanges,saveAndLeave}=useUnsavedChanges(dirty);
-const character=computed<AccountCharacter|undefined>(()=>draft.value?{id:actorId,name:draft.value.character.identity.name,attack:0,weapon:draft.value.weapon.name,equipment:{},build:draft.value}:undefined);
-const panel=computed(()=>draft.value?resolveBuild(draft.value):undefined);
+const character=computed<AccountCharacter|undefined>(()=>draft.value?{id:actorId,name:draft.value.character.identity.name,attack:0,weapon:draft.value.weapon?.name ?? '',equipment:{},build:draft.value}:undefined);
+const panel=computed(()=>form.value?.draftBuild ? resolveBuild(form.value.draftBuild) : undefined);
 const entries = computed(() => teamArtifactEntries(draft.value, accounts.account));
 async function equip(item?:AccountArtifact,part=slot.value) {
   const original=draft.value,owner=accounts.account;if(!original||!part||busy.value)return;error.value='';busy.value=true;
@@ -75,7 +75,7 @@ defineExpose({dirty,busy,save,restore,requestLeave});
     <p v-if="axisContext" class="editor-context">保存到当前轴配装，账号穿戴保持独立。</p><p v-if="error" role="alert">{{ error }}</p>
     <template v-if="character && draft">
       <CharacterForm ref="form" :key="revision" candidate detached details :character="character" @dirty-change="cultivationDirty=$event" />
-      <section class="editor-section"><DisclosureHeading title="角色面板" label="面板" controls="team-character-panel" :expanded="panelOpen" @toggle="panelOpen=!panelOpen" /><div v-if="panelOpen" id="team-character-panel"><p v-if="cultivationDirty" class="editor-context">保存后更新培养面板。</p><template v-else><p v-for="(issue,index) in panel?.issues" :key="index">{{ issue.message }}</p><dl v-if="panel"><template v-for="(value,stat) in panel.stats" :key="stat"><dt><StatLabel :stat="stat as StatKey" /></dt><dd>{{ formatGameStat(stat as StatKey,value) }}</dd></template></dl></template></div></section>
+      <section class="editor-section"><DisclosureHeading title="角色面板" label="面板" controls="team-character-panel" :expanded="panelOpen" @toggle="panelOpen=!panelOpen" /><div v-if="panelOpen" id="team-character-panel"><p v-for="(issue,index) in panel?.issues" :key="index">{{ issue.message }}</p><dl v-if="panel"><template v-for="(value,stat) in panel.stats" :key="stat"><dt><StatLabel :stat="stat as StatKey" /></dt><dd>{{ formatGameStat(stat as StatKey,value) }}</dd></template></dl></div></section>
       <section class="editor-section"><h3>圣遗物</h3>
         <ArtifactEquipmentGrid :entries="entries" :busy="busy" :wearers="[]" @change="slot=$event" @inspect="inspecting=entries.find(entry=>entry.slot===$event)?.item" />
         <ArtifactPickerDialog v-if="slot" :slot="slot" :account="accounts.account" :current="entries.find(entry=>entry.slot===slot)?.item"

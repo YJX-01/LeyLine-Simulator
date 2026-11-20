@@ -12,6 +12,10 @@ export function physicalArtifact(item: Build['artifacts'][number]): ArtifactItem
 }
 
 type NewBuild = Omit<Build, 'schemaVersion' | 'kind' | 'sources' | 'artifactMainSourceRefs' | 'artifacts'> & { artifacts: readonly (ArtifactItem | Build['artifacts'][number])[] };
-export function createBuildSnapshot(input: NewBuild, { sources, artifactMainSourceRefs }: Pick<Build, 'sources' | 'artifactMainSourceRefs'>): Build {
-  return buildSchema.parse({ ...input, sources, artifactMainSourceRefs, schemaVersion: APP_VERSION, kind: 'calculation-build', artifacts: input.artifacts.map(item => calculationArtifact(item)) });
+export function createBuildSnapshot(input: NewBuild, references: Pick<Build, 'sources' | 'artifactMainSourceRefs'>): Build {
+  return buildSchema.parse(assembleBuildSnapshot(input, references));
+}
+
+export function assembleBuildSnapshot(input: NewBuild, { sources, artifactMainSourceRefs }: Pick<Build, 'sources' | 'artifactMainSourceRefs'>): Build {
+  return { ...input, sources, artifactMainSourceRefs, schemaVersion: APP_VERSION, kind: 'calculation-build', artifacts: input.artifacts.map(item => calculationArtifact(item)) };
 }

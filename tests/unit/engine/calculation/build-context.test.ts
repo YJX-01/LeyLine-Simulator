@@ -159,7 +159,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     const base = attack('kaeya', 'harbingerofdawn') * rate('kaeya', 'kaeya.skill', 'kaeya.skill.param1') * 0.45;
     expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(base, 8);
     request.critMode = 'critical';
-    const critDamage = upstream.kaeya.stats.base.critdmg + input.weapon.baseStat * input.weapon.statCurve[90];
+    const critDamage = upstream.kaeya.stats.base.critdmg + input.weapon!.baseStat * input.weapon!.statCurve[90];
     expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(base * (1 + critDamage), 8);
     request.critMode = 'expected';
     expect(evaluateStructuredHit(prepared.team, setup, request).execution).toBe('partial');

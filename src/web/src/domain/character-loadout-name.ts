@@ -42,7 +42,7 @@ export function characterLoadoutName(character: AccountCharacter, account: Local
 }
 export function characterLoadoutLabel(character: AccountCharacter, account: LocalAccount, stats: readonly StatKey[], sets: readonly {id:string;name:string}[]) {
   const ids=new Set(Object.values(character.equipment));
-  return equipmentConfigurationLabel(account.artifacts.filter(item=>ids.has(item.id)),stats,sets,buildRollBasis(character.build),character.build?.weapon.name ?? '未配武器');
+  return equipmentConfigurationLabel(account.artifacts.filter(item=>ids.has(item.id)),stats,sets,buildRollBasis(character.build),character.build?.weapon?.name ?? '未配武器');
 }
 export function equipmentConfigurationLabel(pieces:readonly AccountArtifact[],stats:readonly StatKey[],sets:readonly {id:string;name:string}[],basis:EffectiveRollBasis,weaponName:string,rollTotal?:number) {
   const total=rollTotal ?? effectiveRollBreakdown(pieces,basis).filter(group=>group.members.some(stat=>stats.includes(stat))).reduce((sum,row)=>sum+(row.value ?? 0),0);

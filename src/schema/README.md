@@ -72,7 +72,7 @@ content/structured-content.ts 定义引擎读取的角色、武器和套装快�
 
 calculation.bundle保存自身依赖，ruleIds关联精确效果身份。被动、命座、套装件数与效果解锁条件一致；覆盖记录须属于相同实体和对应命中/件数范围。技能输入携带明确数量类型、范围、整数要求和命座上限。
 
-account/structured-build.ts接收 calculation-build，携带角色与装备定义、培养、主词条表、来源和实物引用。artifact.inventory为明确的accountId与itemId组合，或null。当前账号、轴项目及计算器均使用该配装契约。
+account/structured-build.ts接收 calculation-build，携带角色与装备定义、培养、主词条表、来源和实物引用。本地配装的 weapon 为完整武器定义或明确的 null。空槽保留角色培养，武器等级、突破和精炼不提供数值或效果。展柜快照携带来源中已核验的武器定义。artifact.inventory为明确的accountId与itemId组合，或null。当前账号、轴项目及计算器均使用该配装契约。
 
 ## 动作与事件状态契约
 

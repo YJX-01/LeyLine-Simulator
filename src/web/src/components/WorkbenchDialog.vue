@@ -27,7 +27,8 @@ function cancel(event:Event) {
   requestClose();
 }
 let previous: HTMLElement | null = null;
-let emptyLibrary: Element | null = null;
+let sourceLibrary: Element | null = null;
+let fromEmptyList = false;
 let focusObserver:MutationObserver|undefined;
 function recoverFocus(){
   const current=dialog.value,active=document.activeElement;
@@ -37,7 +38,10 @@ function recoverFocus(){
 }
 onMounted(() => {
   previous = document.activeElement as HTMLElement;
-  emptyLibrary = previous?.closest('.library-empty')?.closest('.library-page') ?? null;
+  fromEmptyList = !!previous?.closest('.library-empty');
+  if (fromEmptyList || (previous?.closest('[data-card-action]') && !previous.closest('dialog'))) {
+    sourceLibrary = previous?.closest('.library-page') ?? null;
+  }
   dialog.value?.showModal();
   focusObserver=new MutationObserver(()=>queueMicrotask(recoverFocus));
   if(dialog.value){
@@ -50,9 +54,10 @@ onBeforeUnmount(() => {
   if (dialog.value) { workbenchDialogClose.delete(dialog.value); dialog.value.close(); }
   queueMicrotask(() => {
     if (previous?.isConnected) previous.focus({ preventScroll:true });
-    else if (emptyLibrary?.isConnected) {
-      const toolbar = emptyLibrary.querySelector('.library-toolbar');
-      const target = toolbar?.querySelector<HTMLElement>('.library-primary-action') ?? toolbar?.querySelector<HTMLInputElement>('input');
+    else if (sourceLibrary?.isConnected) {
+      const toolbar = sourceLibrary.querySelector('.library-toolbar');
+      const create = fromEmptyList ? toolbar?.querySelector<HTMLElement>('.library-primary-action') : undefined;
+      const target = create ?? toolbar?.querySelector<HTMLInputElement>('input');
       target?.focus({ preventScroll:true });
     }
   });

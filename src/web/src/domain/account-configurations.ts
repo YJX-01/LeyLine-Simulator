@@ -6,7 +6,7 @@ export interface AccountConfiguration { id:string; character:AccountCharacter; s
 interface SavedConfiguration { id:string; accountId:string; characterId:string; snapshot:LocalAccount }
 
 export function localConfigurationComplete(account:LocalAccount,character:AccountCharacter):boolean {
-  return !!character.build && accountSlots.every(slot=>{
+  return !!character.build?.weapon && accountSlots.every(slot=>{
     const item=account.artifacts.find(item=>item.id===character.equipment[slot]);
     return item?.slot===slot && !!item.real && !item.mona?.setIdentityPending;
   });

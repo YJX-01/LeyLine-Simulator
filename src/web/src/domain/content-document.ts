@@ -28,7 +28,7 @@ export function packDocument(kind: DocumentKind, value: unknown) {
   const document = walk(value, raw => {
     const { character, weapon, sets, artifactMain, ...rest } = raw as unknown as schemas.Build;
     return { ...rest, character: store('characters', entryKey(character), describeCharacter(character)),
-      weapon: store('weapons', entryKey(weapon), weapon), sets: sets.map(set => store('sets', entryKey(set), set)),
+      weapon: weapon === null ? null : store('weapons', entryKey(weapon), weapon), sets: sets.map(set => store('sets', entryKey(set), set)),
       artifactMain: store('mainStats', rest.dataVersion, artifactMain) };
   });
   return { schemaVersion: schemas.APP_VERSION, kind, document,
@@ -61,6 +61,6 @@ export function unpackDocument(kind: DocumentKind, value: unknown): unknown {
       return item;
     };
     if (build.artifactMain !== build.dataVersion) throw new Error('圣遗物主词条表版本与配装不一致。');
-    return { ...build, character, weapon: equipment('weapons', build.weapon), sets: build.sets.map(key => equipment('sets', key)), artifactMain: get('mainStats', build.artifactMain) };
+    return { ...build, character, weapon: build.weapon === null ? null : equipment('weapons', build.weapon), sets: build.sets.map(key => equipment('sets', key)), artifactMain: get('mainStats', build.artifactMain) };
   });
 }

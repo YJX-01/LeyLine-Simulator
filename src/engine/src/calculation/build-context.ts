@@ -47,7 +47,7 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
     }
     appendBundle(dependencies.data);
   }
-  const append = (entity: StructuredBuild['character'] | StructuredBuild['weapon'] | StructuredBuild['sets'][number]) => {
+  const append = (entity: StructuredBuild['character'] | NonNullable<StructuredBuild['weapon']> | StructuredBuild['sets'][number]) => {
     const key = definitionKey(reference(entity)), content = canonical(entity);
     if (identities.has(key)) { if (identities.get(key) !== content) report('conflicting-definition', '/build', '相同实体身份的快照内容冲突。'); return; }
     identities.set(key, content);
@@ -55,24 +55,25 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
   };
   for (const [index, entry] of parsed.data.entries()) {
     const { build, id } = entry, character = build.character, weapon = build.weapon, pointer = `/${index}/build`;
-    data.builds.set(id, build); append(character); append(weapon); build.sets.forEach(append); merged.sources.push(...build.sources);
+    data.builds.set(id, build); append(character); if (weapon) append(weapon); build.sets.forEach(append); merged.sources.push(...build.sources);
     const validLevel = (level: number, ascension: number) => level >= minLevels[ascension] && level <= maxLevels[ascension];
     if (!(validLevel(build.level, build.ascension) || build.ascension === 6 && [95, 100].includes(build.level))) report('invalid-range', pointer + '/level', '角色等级与突破阶段不匹配。');
-    if (!validLevel(build.weaponLevel, build.weaponAscension) || build.weaponAscension >= weapon.promotion.length) report('invalid-range', pointer + '/weaponLevel', '武器等级与突破阶段不匹配。');
+    if (weapon && (!validLevel(build.weaponLevel, build.weaponAscension) || build.weaponAscension >= weapon.promotion.length)) report('invalid-range', pointer + '/weaponLevel', '武器等级与突破阶段不匹配。');
     if (Object.values(build.talents).some(level => level > maxTalents[build.ascension])) report('invalid-range', pointer + '/talents', '基础天赋等级超出突破阶段上限；命座加级由装配器另加一次。');
-    if (character.identity.weaponType !== weapon.weaponType || weapon.rarity < 3 && build.refinement !== 1) report('invalid-range', pointer + '/weapon', '武器类型或精炼不合法。');
+    if (weapon && (character.identity.weaponType !== weapon.weaponType || weapon.rarity < 3 && build.refinement !== 1)) report('invalid-range', pointer + '/weapon', '武器类型或精炼不合法。');
     const inputs: CombatActor['inputs'] = {}, raw = Object.fromEntries(statKeys.map(key => [key, 0])) as Record<typeof statKeys[number], number>;
     const rawSources = new Map<string, Set<string>>();
     const add = (key: typeof statKeys[number], value: number, sources: string[]) => { raw[key] += value; const refs = rawSources.get(key) ?? new Set(); sources.forEach(source => refs.add(source)); rawSources.set(key, refs); };
     const promotion = character.progression.promotion[build.ascension];
     for (const stat of ['hp', 'attack', 'defense'] as const) {
       const white = character.attributes.base[stat] * character.progression.curves[stat][build.level] + promotion[stat]
-        + (stat === 'attack' ? weapon.baseAttack * weapon.attackCurve[build.weaponLevel] + (weapon.promotion[build.weaponAscension] ?? NaN) : 0);
+        + (stat === 'attack' && weapon ? weapon.baseAttack * weapon.attackCurve[build.weaponLevel] + (weapon.promotion[build.weaponAscension] ?? NaN) : 0);
       if (!Number.isFinite(white) || white < 0 || stat === 'hp' && white === 0) report('invalid-range', pointer + '/progression', '成长或突破快照缺失或非法。');
-      inputs['white' + stat[0].toUpperCase() + stat.slice(1)] = derived(quantity(stat, white), [...character.sources, ...stat === 'attack' ? weapon.sources : []]);
+      inputs['white' + stat[0].toUpperCase() + stat.slice(1)] = derived(quantity(stat, white), [...character.sources, ...stat === 'attack' && weapon ? weapon.sources : []]);
     }
     add('critRate', character.attributes.base.critRate, character.sources); add('critDamage', character.attributes.base.critDamage, character.sources); add('energyRecharge', 1, character.sources);
-    add(character.attributes.specialized, promotion.specialized, character.sources); add(weapon.stat, weapon.baseStat * weapon.statCurve[build.weaponLevel], weapon.sources);
+    add(character.attributes.specialized, promotion.specialized, character.sources);
+    if (weapon) add(weapon.stat, weapon.baseStat * weapon.statCurve[build.weaponLevel], weapon.sources);
     const ids = new Set<string>(), slots = new Set<string>(), setCounts: Record<string, number> = Object.create(null) as Record<string, number>;
     const allocation: InventoryAllocation = { actorId: id, artifacts: [] };
     for (const artifact of build.artifacts) {
@@ -104,7 +105,7 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
     inputs.level = derived(quantity('count', build.level), character.sources);
     for (const key of ['defenseIgnore', 'amplifyingReactionBonus', 'additiveReactionBonus']) inputs[key] = derived(quantity('scalar', 0), []);
     const effects = [...character.calculation.ruleIds, ...character.passives.filter(passive => build.ascension >= (passive.unlockAscension ?? 0)).flatMap(passive => passive.ruleIds),
-      ...character.constellations.filter(constellation => build.constellation >= constellation.rank).flatMap(constellation => constellation.ruleIds), ...weapon.calculation.ruleIds,
+      ...character.constellations.filter(constellation => build.constellation >= constellation.rank).flatMap(constellation => constellation.ruleIds), ...weapon?.calculation.ruleIds ?? [],
       ...build.sets.flatMap(set => [...set.calculation.ruleIds, ...set.effects.filter(effect => (setCounts[set.id] ?? 0) >= effect.pieces).flatMap(effect => effect.ruleIds)])];
     const talents: CombatActor['talents'] = character.talents.map(talent => ({ id: talent.id, level: build.talents[talent.category] + talentLevelBonus(character, talent.category, build.constellation), sourceRefs: talent.sources,
       parameters: talent.parameters.map(parameter => {
@@ -134,7 +135,7 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
   const programData = compiledData(compiled.program)!;
   for (const build of data.builds.values()) {
     validateCharacterBindings(programData, build.character, report);
-    const allRefs = [...build.character.calculation.contextCoverageRefs, ...build.weapon.coverageRefs, ...build.sets.flatMap(set => set.effects.flatMap(effect => effect.coverageRefs))];
+    const allRefs = [...build.character.calculation.contextCoverageRefs, ...build.weapon?.coverageRefs ?? [], ...build.sets.flatMap(set => set.effects.flatMap(effect => effect.coverageRefs))];
     if (allRefs.some(reference => !programData.coverage.has(definitionKey(reference)))) report('missing-dependency', '/coverage', '配装快照缺少覆盖记录的精确版本。');
   }
   const sources = new Set(programData.sources.map(source => source.id));
@@ -201,7 +202,7 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
     // The selected hit certifies its owner's exact scope. For other actors,
     // only their separate context certificates cover possible team effects.
     if (actorId !== query.actorId) refs.push(...actorBuild.character.calculation.contextCoverageRefs);
-    refs.push(...actorBuild.weapon.coverageRefs);
+    if (actorBuild.weapon) refs.push(...actorBuild.weapon.coverageRefs);
     const actor = data.actors.find(actor => actor.id === actorId)!;
     for (const set of actorBuild.sets) for (const effect of set.effects) if ((actor.setCounts[set.id] ?? 0) >= effect.pieces) refs.push(...effect.coverageRefs);
   }
@@ -230,7 +231,7 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
           owners.push(record.resolution === 'complete' && scope.kind !== 'equipment' && actorBuild.constellation > scope.maxConstellation
             ? `${name}的命座为${actorBuild.constellation}命，此项仅核验至${scope.maxConstellation}命`
             : name);
-        } else if (definitionKey(actorBuild.weapon) === entity) owners.push(name + '的' + actorBuild.weapon.name);
+        } else if (actorBuild.weapon && definitionKey(actorBuild.weapon) === entity) owners.push(name + '的' + actorBuild.weapon.name);
         else if (scope.kind === 'equipment') {
           const set = actorBuild.sets.find(set => definitionKey(set) === entity);
           if (set && actorBuild.artifacts.filter(item => item.setId === set.id).length >= (scope.pieces ?? 1)) {

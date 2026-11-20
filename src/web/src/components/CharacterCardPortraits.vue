@@ -27,7 +27,7 @@ const rows = computed(() => {
     <GameIcon kind="characters" :id="build?.character.id" :name="name" :size="104" :constellation="build?.constellation" :level="build?.level"
       style="width:var(--character-card-character-size);height:var(--character-card-character-size)" />
     <span class="card-weapon">
-      <GameIcon v-if="build" kind="weapons" :id="build.weapon.id" :size="88" :refinement="build.refinement" :level="build.weaponLevel" :rarity="build.weapon.rarity"
+      <GameIcon v-if="build?.weapon" kind="weapons" :id="build.weapon.id" :size="88" :refinement="build.refinement" :level="build.weaponLevel" :rarity="build.weapon.rarity"
         style="width:100%;height:100%" />
       <WeaponPlaceholder v-else style="--weapon-placeholder-size:var(--character-card-equipment-size)" />
     </span>

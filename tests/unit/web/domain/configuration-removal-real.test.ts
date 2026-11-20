@@ -21,11 +21,16 @@ describe.skipIf(!hasRecordedReference(path))('configuration removal from recorde
       const id=store.save('安柏缺花试配',trial,alternative);
       const preset=planConfigurationRemoval(account,store.loadouts,target.id,id);expect(preset.accountChanged).toBe(false);expect(preset.next).toBe(account);expect(preset.removedIds).toEqual([id]);
       const preferred=planConfigurationRemoval(account,store.loadouts,target.id);expect(preferred.promotedId).toBe(id);expect(preferred.removedIds).toEqual([id]);expect(preferred.next.characters.find(character=>character.id===target.id)!.equipment).toEqual(alternative.equipment);expect(Object.values(target.equipment)).toHaveLength(5);
+      store.setFavorite(account.id,target.id,1,'');
+      store.setFavorite(account.id,target.id,3,id);
       const before=new Map(memory),saved=JSON.stringify(store.loadouts);
-      expect(()=>store.removeMany(preferred.removedIds,()=>{throw new Error('account write failed');})).toThrow('account write failed');expect(memory).toEqual(before);expect(JSON.stringify(store.loadouts)).toBe(saved);
+      expect(()=>store.removeConfigurations(account.id,target.id,'',preferred,()=>{throw new Error('account write failed');})).toThrow('account write failed');expect(memory).toEqual(before);expect(JSON.stringify(store.loadouts)).toBe(saved);
       expect(JSON.stringify(preferred.next.artifacts)).toBe(inventory);expect(JSON.stringify(preferred.next.characters.find(character=>character.id===target.id)!.showcase)).toBe(showcase);
       const last=planConfigurationRemoval(account,[],target.id);const retained=last.next.characters.find(character=>character.id===target.id)!;expect(hasLocalConfiguration(retained)).toBe(false);expect(retained.showcase).toEqual(target.showcase);expect(JSON.stringify(last.next.artifacts)).toBe(inventory);expect(last.removedCharacter).toBe(false);
       expect(()=>planConfigurationRemoval(account,store.loadouts,target.id,'missing')).toThrow('配置已不存在');
+      store.removeConfigurations(account.id,target.id,'',preferred,()=>{});
+      expect(store.favoriteLevel(account.id,target.id,'')).toBe(3);
+      expect(store.favoriteLevel(account.id,target.id,id)).toBe(0);
     }finally{vi.unstubAllGlobals();}
   });
 });

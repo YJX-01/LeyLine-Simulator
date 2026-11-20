@@ -9,6 +9,7 @@ import ConfigurationTitle from './ConfigurationTitle.vue';
 import EffectiveRollSummary from './EffectiveRollSummary.vue';
 import EquipmentStrip from './EquipmentStrip.vue';
 import GameIcon from './GameIcon.vue';
+import FavoriteMark from './FavoriteMark.vue';
 import WeaponPlaceholder from './WeaponPlaceholder.vue';
 
 const props = withDefaults(defineProps<{
@@ -19,6 +20,7 @@ const props = withDefaults(defineProps<{
   basis: EffectiveRollBasis;
   effectiveStats?: readonly StatKey[];
   preferred?: boolean;
+  favorite?: number;
   current?: boolean;
   openLabel?: string;
   action?: 'detail' | 'select';
@@ -38,12 +40,13 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
           <span v-if="build" class="configuration-cultivation">
             <span>{{ build.level }}级</span><span>{{ build.constellation }}命</span>
             <span>天赋 {{ build.talents.normal }}/{{ build.talents.skill }}/{{ build.talents.burst }}</span>
-            <span>武器 {{ build.weaponLevel }}级</span><span>精炼{{ build.refinement }}</span>
+            <template v-if="build.weapon"><span>武器 {{ build.weaponLevel }}级</span><span>精炼{{ build.refinement }}</span></template><span v-else>未配武器</span>
           </span>
           <span v-else class="configuration-cultivation">培养资料缺失，未配置武器</span>
         </template>
       </div>
       <slot name="actions" />
+      <span v-if="favorite" class="configuration-favorite" role="img" :aria-label="`${favorite}级收藏`" :title="`${favorite}级收藏`"><FavoriteMark :level="favorite" /></span>
     </div>
     <div class="configuration-body">
       <component v-if="compact" :is="replaceLabel ? 'button' : 'div'" class="configuration-portraits"
@@ -52,7 +55,7 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
         @click="replaceLabel && emit('replace')" @keydown="replaceLabel && emit('openKeydown', $event)">
         <GameIcon kind="characters" :id="build?.character.derivedFrom?.id ?? build?.character.id" :name="characterName" :size="48"
           :level="build?.level" :constellation="build?.constellation" />
-        <GameIcon v-if="build" kind="weapons" :id="build.weapon.id" :name="build.weapon.name" :size="48"
+        <GameIcon v-if="build?.weapon" kind="weapons" :id="build.weapon.id" :name="build.weapon.name" :size="48"
           :level="build.weaponLevel" :refinement="build.refinement" />
         <WeaponPlaceholder v-else :size="48" />
         <ArtifactSetSummary :artifacts="items" :size="48" />
@@ -62,7 +65,7 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
         <template #leading>
           <GameIcon kind="characters" :id="build?.character.derivedFrom?.id ?? build?.character.id" :name="characterName" :size="64"
             :level="build?.level" :constellation="build?.constellation" />
-          <GameIcon v-if="build" kind="weapons" :id="build.weapon.id" :name="build.weapon.name" :size="64"
+          <GameIcon v-if="build?.weapon" kind="weapons" :id="build.weapon.id" :name="build.weapon.name" :size="64"
             :level="build.weaponLevel" :refinement="build.refinement" />
           <WeaponPlaceholder v-else :size="64" />
         </template>
@@ -82,6 +85,7 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
 .configuration-row.current { border-color:var(--element-hydro-primary); }
 .configuration-top { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
 .configuration-heading { display:flex; align-items:baseline; flex-wrap:wrap; flex:1; min-width:0; gap:8px 12px; }
+.configuration-favorite { flex:none; align-self:flex-start; margin-inline-start:auto; }
 .configuration-cultivation { display:flex; flex-wrap:wrap; gap:4px 12px; color:var(--muted); font-size:var(--font-body); }
 .configuration-body { display:grid; gap:12px; min-width:0; }
 .configuration-row.compact { gap:8px; padding:10px; }
@@ -92,5 +96,5 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
 }
 .compact .effective-roll-summary { flex:1 1 232px; min-width:0; }
 .configuration-open:disabled { opacity:1; }
-@media(max-width:600px) { .configuration-top { align-items:start; }.configuration-heading { flex-basis:100%; }.configuration-row { padding:12px; } }
+@media(max-width:600px) { .configuration-top { align-items:start; }.configuration-row { padding:12px; } }
 </style>

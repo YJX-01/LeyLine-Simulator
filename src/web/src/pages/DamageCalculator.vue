@@ -76,7 +76,7 @@ const hitOwner = computed(() => {
   return record ? document.value?.project.candidate.actors.find(actor => actor.id === record.actor) : actor.value;
 });
 const character = computed<AccountCharacter | undefined>(() => actor.value?.build ? {
-  id: actor.value.id, name: actor.value.build.character.identity.name, attack: 0, weapon: actor.value.build.weapon.name, equipment: {}, build: actor.value.build,
+  id: actor.value.id, name: actor.value.build.character.identity.name, attack: 0, weapon: actor.value.build.weapon?.name ?? '', equipment: {}, build: actor.value.build,
 } : undefined);
 const queryCharacter = computed(() => hitOwner.value?.build?.character);
 const skill = computed(() => queryCharacter.value?.talents.find(skill => skill.id === damage.value.skillId));
@@ -176,7 +176,7 @@ function effectiveStats(name: string) {
 }
 const configurationName = computed(() => {
   const build = actor.value?.build;
-  return build && equipmentConfigurationLabel(entries.value.flatMap(entry => entry.item ?? []), effectiveStats(build.character.identity.name), build.sets, basis.value, build.weapon.name);
+  return build && equipmentConfigurationLabel(entries.value.flatMap(entry => entry.item ?? []), effectiveStats(build.character.identity.name), build.sets, basis.value, build.weapon?.name ?? '未配武器');
 });
 const documentSignature = computed(() => JSON.stringify(document.value ?? null));
 const signature = () => documentSignature.value + '\n' + JSON.stringify([damage.value, enemy.value, hitTime.value]);
@@ -640,7 +640,7 @@ defineExpose({ requestLeave: leaveCalculator });
 .secondary-slot { justify-content:flex-start; min-height:68px; padding:10px 16px; text-align:left; }.role-slot.filled { text-align:left; }
 button.calculator-team { grid-template-columns:minmax(0,1fr) auto; gap:4px; }
 .calculator-team :deep(.team-row-members) { grid-row:2; grid-column:1/-1; }
-.calculator-team :deep(.team-row-arrow) { grid-row:1; grid-column:2; }
+.calculator-team :deep(.team-row-trailing) { grid-row:1; grid-column:2; }
 .result-heading { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
 .result-heading { justify-content:space-between; }.damage-calculator h3 { margin:0; font-size:var(--font-control); }
 .damage-totals { display:grid; grid-template-columns:1fr 1fr; padding:16px; border:1px solid var(--line); border-radius:7px; background:var(--surface); }
