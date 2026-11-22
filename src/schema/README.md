@@ -12,7 +12,7 @@
 
 当前运行校验定义在src/exchange、src/account及src/project，应用操作遵循[文件与状态规范](../../docs/files-and-state.md)。
 
-根 package.json 的 version 同时用于软件版本、第一方文件的 schemaVersion、计算库的 runtimeVersion 和内置目录的 dataVersion。当前值为字符串 `"0.1.0"`。文件以 kind 区分。实体 revision 标识具体内容，rulesVersion、algorithmRevision 和模板 revision 标识具体求值协议。外部来源的版本沿用其原始记录。
+根 package.json 的 version 同时用于软件版本、第一方文件的 schemaVersion、计算库的 runtimeVersion 和内置目录的 dataVersion。当前值为字符串 `"0.2.0"`。文件以 kind 区分。实体 revision 标识具体内容，rulesVersion、algorithmRevision 和模板 revision 标识具体求值协议。外部来源的版本沿用其原始记录。
 
 | 文档 | 当前契约 |
 | --- | --- |
@@ -22,25 +22,25 @@
 | 轴项目规则 | rulesVersion=timeline-v1，统一依赖求值 |
 | 独立计算器 | kind=damage-calculator，document 内含 project、可选 baseline、actorId 和可选 recordId，最大 8 MiB |
 
-浏览器按用途分别存储账号、项目恢复、角色配置、队伍、定义库、收藏与偏好。键名由 storageKeyFor 生成，例如 `leyline-account-0.1.0`。
+浏览器按用途分别存储账号、项目恢复、角色配置、队伍、定义库、收藏与偏好。键名由 storageKeyFor 生成，例如 `leyline-account-0.2.0`。
 
 读取按当前严格schema校验，旧版本标签或退休字段返回拒绝，当前编辑保留。磁盘文件及旧存储字节由用户维护，显式替换前完成备份。角色培养中的退休hpRatio字段按严格契约拒绝，生命条件由项目上下文提供。
 
 计算器的actorId须指向有Build的队员，recordId须指向项目中的伤害记录。保存设定与快照，重开重新求值。内容更新通过显式审阅采用，文件打开保持自身定义。
 
-轴项目和独立计算文件共用命中契约。明确已有命中后，outputId 可引用正式输出、用 null 保留待建模记录，或对适用的绑定写入 `<hitId>.ordinary-trial`。求值从快照绑定普通直伤公式。现有 0.1.0 文件可携带原 calculationProfile 字段。
+轴项目和计算器用同一 HitRef 保存内容分组、命名空间、实体 ID、本地修订和命中 ID。打开文件时从内容表取回角色、装备、套装及成长曲线，按原修订求值。
 
 kind=capture的独立记录关联同队员技能与合法时间，其定义无公式和效果，记录无damage。来源与命中的先后依order明确；before/after阶段按捕获契约执行。当前命中可以明确关联自身before阶段，自身after作为来源时拒绝；同刻缺order保持待确认，ID用于稳定排序而非补足依赖事实。
 
-combatStates包含id、actor、startMs、endMs、values；值支持hpRatio、onField、shielded及明确null。damage.conditions覆盖当前队员，stateOverrides按actor覆盖上下文中其他队员，重复字段覆盖拒绝。stateReads保留实际查询及intervalId、source和值。
+combatStates 保存按队员和时间段设置的生命比例、站场和护盾状态。damage.facts 按队员、目标、队伍或事件保存带类型的覆盖值，显式 null 表示未知，省略时继承。stateReads 记录实际取值和区间。
 
 多人反应记录使用 reactionEvent，包含伤害族、元素、贡献者和暴击口径。联合概率表可显式指定各状态的暴击结果。reactionRules 保存采用的公式闭包。actionStates 保存当前角色修订的动作定义、状态起点和初始值，timeline 的 actionId 及 facts 明确执行事件。
 
-damage.reaction 为 none、null 或严格的 type/trigger 对象。反应规则表使用当前 schemaVersion，algorithmRevision=1 选择引擎固定算法。damage.capture 关联 recordId 与 phase，damage.inputs 提供本技能输入，damage.effectApplications 关联 instanceId 与 active。
+damage.reaction 为 none、null 或严格的 type/trigger 对象。反应规则表使用当前 schemaVersion，algorithmRevision=1 选择引擎固定算法。damage.capture 关联 recordId 与 phase，damage.facts 按主体提供技能计数与战斗条件，damage.effectApplications 关联 instanceId 与 active。
 
-正式查询使用skillId、hitId、outputId定位结果。计算支持按实体修订、命座和相关依赖闭包核验。复制为自定义并修改倍率后按新内容计算，证明状态按自定义来源核验。
+正式查询使用 HitRef，按内容分组、命名空间、实体、本地修订和命中 ID 定位。计算支持按实体修订、命座和相关依赖闭包核验。复制为自定义并修改倍率后按新内容计算，证明状态按自定义来源核验。
 
-武器passive.kind=none须有逐件来源，同时要求修饰和combatRules为空；字段缺失保留缺件状态。培养、反应规则及来源适用事实分别按各自契约校验。
+武器被动按精炼档读取数值，增益和追击写入该武器的 buffs 和 hits。培养、反应规则及来源适用事实分别按各自契约校验。
 
 人类可读JSON统一由formatJson输出两空格缩进和末尾换行；存储和生成块按各自格式使用紧凑JSON。
 

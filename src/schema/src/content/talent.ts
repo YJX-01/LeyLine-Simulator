@@ -1,61 +1,59 @@
 import { z } from 'zod';
-import { idSchema, finiteSchema, supportSchema, contentSourceSchema } from '../common/values';
-import { elements, statSchema } from './stats';
-import { attackTypeSchema } from './effects';
-import { combatRulesSchema } from './combat-rules';
-import { definitionRefSchema } from '../calculation/values';
+import { combatExpressionSchema } from './combat-expression';
+import { idSchema, finiteSchema } from '../common/values';
+import { elements } from './stats';
+import { calculationQuantityTypeSchema } from '../calculation/values';
+import type { CharacterMetadata } from './character-metadata';
 export const damageScalingStatSchema = z.enum(['attack', 'hp', 'defense', 'elementalMastery']);
 export type DamageScalingStat = z.infer<typeof damageScalingStatSchema>;
-export const damageHitSchema = z.object({
-  parameter: idSchema,
-  scalingStat: damageScalingStatSchema.optional(),
-  additionalScaling: z.array(z.object({ stat: damageScalingStatSchema, parameter: idSchema, count: idSchema.optional() }).strict()).max(8).optional(),
-  element: z.enum(elements).optional(),
-  category: attackTypeSchema.optional(),
-  snapshot: z.object({
-    sourceSkillId: idSchema,
-    attributes: z.array(statSchema).min(1).max(30).refine(attributes => new Set(attributes).size === attributes.length, '捕获属性不得重复。'),
-    source: contentSourceSchema.optional(),
-  }).strict().optional(),
-}).strict();
-export const parameterSchema = z.object({ id: idSchema, unit: z.enum(['ratio','scalar','seconds','energy','stamina','unknown']), values: z.array(finiteSchema).min(1).max(30) }).strict();
+export const parameterSchema = z.object({ id: idSchema, unit: z.enum(['ratio','scalar','seconds','energy','stamina','staminaPerSecond','pointsPerSecond','hp','attack','defense','elementalMastery','count','unknown']), values: z.array(finiteSchema).min(1).max(30) }).strict();
 export const talentInputSchema = z.object({
-  id: idSchema, min: finiteSchema.nonnegative(), max: finiteSchema.nonnegative(), integer: z.boolean(), source: contentSourceSchema.optional(),
-  constellationLimits: z.array(z.object({ rank: z.number().int().min(1).max(6), max: finiteSchema.nonnegative(), source: contentSourceSchema.optional() }).strict()).max(6).optional(),
+  id: idSchema, type: calculationQuantityTypeSchema, min: finiteSchema.nonnegative(), max: finiteSchema.nonnegative(), integer: z.boolean(),
+  constellationLimits: z.array(z.object({ rank: z.number().int().min(1).max(6), max: finiteSchema.nonnegative() }).strict()).max(6).optional(),
 }).strict().refine(input => input.max >= input.min && (!input.integer || (Number.isInteger(input.min) && Number.isInteger(input.max)))
   && (input.constellationLimits ?? []).every(limit => limit.max >= input.min && (!input.integer || Number.isInteger(limit.max)))
   && new Set(input.constellationLimits?.map(limit => limit.rank)).size === (input.constellationLimits ?? []).length, '技能输入范围无效。');
-export const talentSchema = z.object({ id: idSchema, name: idSchema, description: z.string().max(40000), flavorText: z.string().max(10000).optional(),
+const frames = z.number().int().nonnegative().max(36000);
+export const linkedSummonSchema = z.object({
+  durationParameter: idSchema, capacity: z.number().int().min(1).max(8), rankHits: z.array(idSchema).min(1).max(10),
+  extraRankAt: z.number().int().min(1).max(6), fps: z.number().int().min(1).max(240), spawn: frames, firstShot: frames,
+  interval: frames.min(1), impactDelay: frames, release: z.object({ skill: idSchema, hit: idSchema, additionalHit: idSchema,
+    impact: frames, firstAdditional: frames, spacing: frames }).strict(),
+}).strict();
+export const talentFieldsSchema = z.object({ id: idSchema, name: idSchema, description: z.string().max(40000), flavorText: z.string().max(10000).optional(),
   category: z.enum(['normal','skill','burst']), element: z.enum(elements),
+  energyCapacity: z.union([z.literal(0), z.object({ parameter: idSchema }).strict()]).optional(),
+  cooldownParameter: idSchema.optional(),
+  skillCharges: z.number().int().min(1).max(10).optional(),
+  castWindow: z.object({ fact:idSchema, durationParameter:idSchema, cancelOnLeave:z.boolean(), cancelOnDefeat:z.literal(true).optional(), exit:z.object({hit:idSchema,ready:idSchema}).strict().optional(),
+    followUp:z.object({triggers:z.array(idSchema).min(1).max(30),hit:idSchema,ready:idSchema,recordedHits:z.number().int().min(1).max(30)}).strict().optional(),
+    hitCounter:z.object({input:idSchema,hits:z.array(idSchema).min(1),intervalMs:z.number().int().nonnegative(),ascension:z.object({rank:z.number().int().min(1).max(6),initial:z.number().int().nonnegative(),fillHit:idSchema}).strict()}).strict().optional(),
+    contact:z.object({hit:idSchema,ready:idSchema,intervalMs:z.number().int().positive()}).strict().optional() }).strict().optional(),
   parameters: z.array(parameterSchema).max(100), details: z.array(z.object({ label: z.string().max(500), template: z.string().max(2000) }).strict()).max(100),
-  inputs: z.array(talentInputSchema).max(20).optional(),
-  hits: z.array(damageHitSchema).max(30), noIndependentDamage: z.literal(true).optional(), support: supportSchema,
-}).strict().superRefine((talent, context) => {
-  const ids = new Set(talent.parameters.map(parameter => parameter.id));
-  if (ids.size !== talent.parameters.length) context.addIssue({ code:'custom', message:'技能参数标识重复。', path:['parameters'] });
-  const inputIds = new Set((talent.inputs ?? []).map(input => input.id));
-  if (inputIds.size !== (talent.inputs ?? []).length) context.addIssue({ code: 'custom', message: '技能输入标识重复。', path: ['inputs'] });
-  if (talent.support.supported && !talent.hits.length && !talent.noIndependentDamage) context.addIssue({ code:'custom', message:'已支持技能须声明命中或明确无独立伤害。', path:['hits'] });
-  if (talent.noIndependentDamage && talent.hits.length) context.addIssue({ code:'custom', message:'无独立伤害的技能不能声明伤害命中。', path:['hits'] });
-  for (const [index, hit] of talent.hits.entries()) {
-    const references = [hit.parameter, ...(hit.additionalScaling ?? []).map(term => term.parameter)];
-    if (references.some(reference => !ids.has(reference))) context.addIssue({ code:'custom',message:'命中引用了不存在的参数。',path:['hits',index] });
-    if (hit.additionalScaling?.some(term => term.count && !inputIds.has(term.count))) context.addIssue({ code: 'custom', message: '命中引用了未声明的技能输入。', path: ['hits', index] });
-  }
-});
-export const passiveSchema = z.object({ id: idSchema, name: idSchema, description: z.string().max(40000), unlockAscension:z.number().int().min(0).max(6).nullable(), support:supportSchema, combatRules: combatRulesSchema.optional(), ruleIds: z.array(definitionRefSchema).max(1000).optional() }).strict();
+  heals: z.array(z.object({ id: idSchema, detail: z.number().int().nonnegative(), stat: damageScalingStatSchema,
+    rate: idSchema, flat: idSchema.optional(), recipient: z.enum(['self', 'other', 'party', 'on-field']),
+    condition: combatExpressionSchema.optional(), count: z.object({ fact: idSchema, cap: z.number().int().positive().optional() }).strict().optional(),
+    trigger: z.literal('cast').optional() }).strict()
+    .refine(heal => !heal.trigger || heal.recipient === 'self' || heal.recipient === 'party', '施放时的自动治疗须有确定的受益人。')).min(1).max(32).optional(),
+  inputs: z.array(talentInputSchema).max(20).optional(), summon: linkedSummonSchema.optional(),
+  noIndependentDamage: z.literal(true).optional(),
+}).strict();
+export const passiveSchema = z.object({ id: idSchema, name: idSchema, description: z.string().max(40000), unlockAscension:z.number().int().min(0).max(6).nullable(), moonsignLevel:z.literal(1).optional() }).strict();
 export const constellationSchema = z.object({ rank:z.number().int().min(1).max(6), name:idSchema, description:z.string().max(40000),
-  talentBonuses:z.array(z.object({category:z.enum(['normal','skill','burst']),levels:z.literal(3)}).strict()).max(3), support:supportSchema, combatRules: combatRulesSchema.optional(), ruleIds: z.array(definitionRefSchema).max(1000).optional() }).strict();
-export type Talent = z.infer<typeof talentSchema>;
+  extraSkillCharge:z.literal(1).optional(),
+  talentBonuses:z.array(z.object({category:z.enum(['normal','skill','burst']),levels:z.literal(3)}).strict()).max(3) }).strict();
+export type Talent = CharacterMetadata['talents'][number];
+
+export function talentInputMaximum(input: NonNullable<Talent['inputs']>[number], constellation: number): number {
+  return (input.constellationLimits ?? []).reduce((current, limit) => limit.rank <= constellation && limit.rank > current.rank ? limit : current, {rank:0,max:input.max}).max;
+}
 
 /** Missing values stay unknown; supplied values must belong to this talent's source-declared range. */
 export function talentInputIssues(talent: Pick<Talent, 'inputs'>, values: Record<string, number | null> = {}, constellation = 0): string[] {
   return Object.entries(values).flatMap(([id, value]) => {
     const input = talent.inputs?.find(input => input.id === id);
     if (!input) return [`技能未声明此命中输入：${id}`];
-    const limit = input.constellationLimits?.filter(limit => limit.rank <= constellation).reduce<{ rank: number; max: number }>(
-      (current, limit) => limit.rank > current.rank ? limit : current, { rank: 0, max: input.max });
-    return value !== null && (!Number.isFinite(value) || value < input.min || value > (limit?.max ?? input.max) || (input.integer && !Number.isInteger(value)))
+    return value !== null && (!Number.isFinite(value) || value < input.min || value > talentInputMaximum(input,constellation) || (input.integer && !Number.isInteger(value)))
       ? [`命中输入超出技能声明范围或整数要求：${id}`] : [];
   });
 }

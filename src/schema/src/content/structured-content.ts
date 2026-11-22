@@ -1,36 +1,39 @@
+import { artifactSetMetadataSchema, weaponMetadataSchema } from './equipment-metadata';
 import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema } from '../common/values';
 import { characterFieldsSchema, weaponFieldsSchema, artifactSetFieldsSchema } from './entity-fields';
-import { parameterSchema, talentSchema, talentInputSchema, passiveSchema, constellationSchema } from './talent';
+import { talentFieldsSchema, passiveSchema, constellationSchema } from './talent';
 import { elements, statSchema } from './stats';
 import { boundFormulaSchema, type CalculationBinding } from '../calculation/binding';
 import { calculationBundleSchema, type CalculationBundle } from '../calculation/bundle';
-import { calculationQuantityTypeSchema, definitionKey, definitionRefSchema } from '../calculation/values';
-import { structuredHitSchema } from './calculation';
+import { definitionKey, definitionRefSchema } from '../calculation/values';
+import { characterMetadataSchema } from './character-metadata';
+import { structuredHitSchema, equipmentHitSchema } from './calculation';
 export { structuredHitSchema } from './calculation';
 
 const refs = z.array(definitionRefSchema).max(1000);
 const sources = z.array(idSchema).min(1).max(1000);
 const profile = z.object({ bundle: calculationBundleSchema, ruleIds: refs }).strict();
-export const structuredTalentSchema = z.object(talentSchema.shape).omit({ hits: true, support: true, parameters: true }).extend({
-  parameters: z.array(parameterSchema).max(100), hits: z.array(structuredHitSchema).max(1000), sources,
-  inputs: z.array(talentInputSchema.safeExtend({ type: calculationQuantityTypeSchema })).max(20).optional(),
+const resonanceParticles = z.object({ id: idSchema, element: z.enum(elements), count: z.number().int().positive(),
+  cooldownMs: z.number().int().nonnegative(), reactions: z.array(idSchema).min(1), swirlElements: z.array(z.enum(elements)) }).strict();
+export const structuredTalentSchema = talentFieldsSchema.extend({
+  hits: z.array(structuredHitSchema).max(1000), sources, ruleIds: refs,
 }).strict();
-const structuredPassiveSchema = passiveSchema.omit({ support: true, combatRules: true }).extend({ ruleIds: refs }).strict();
-const structuredConstellationSchema = constellationSchema.omit({ support: true, combatRules: true }).extend({ ruleIds: refs }).strict();
+const structuredPassiveSchema = passiveSchema.extend({ ruleIds: refs }).strict();
+const structuredConstellationSchema = constellationSchema.extend({ ruleIds: refs }).strict();
 
 function validateProfile(bundle: CalculationBundle, ruleIds: z.infer<typeof refs>, validation: z.RefinementCtx): void {
   const effects = new Set(bundle.effects.map(effect => definitionKey(effect.identity)));
   if (ruleIds.some(reference => !effects.has(definitionKey(reference)))) validation.addIssue({ code: 'custom', path: ['calculation', 'ruleIds'], message: '内容快照缺少规则的精确版本。' });
 }
 export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend({
-  schemaVersion: z.literal(APP_VERSION), namespace: definitionRefSchema.shape.namespace, attributes: characterFieldsSchema.shape.attributes.extend({ outputs: z.record(statSchema, definitionRefSchema) }),
+  metadata: characterMetadataSchema, schemaVersion: z.literal(APP_VERSION), namespace: definitionRefSchema.shape.namespace, attributes: characterFieldsSchema.shape.attributes.extend({ outputs: z.record(statSchema, definitionRefSchema) }),
   talents: z.array(structuredTalentSchema).max(30), passives: z.array(structuredPassiveSchema).max(30),
-  constellations: z.array(structuredConstellationSchema).max(6), sources, calculation: profile.extend({ contextCoverageRefs: refs.min(1) }).strict(),
+  constellations: z.array(structuredConstellationSchema).max(6), sources, calculation: profile.extend({ contextCoverageRefs: refs.min(1), gleam:z.object({name:idSchema,ruleIds:refs}).strict().optional(), resonances: z.array(z.object({ element: z.union([z.enum(elements), z.literal('distinct')]), name: idSchema, ruleIds: refs, particles: resonanceParticles.optional() }).strict()).max(8).optional() }).strict(),
 }).strict().superRefine((character, validation) => {
   const bundle = character.calculation.bundle;
-  const allRules = [...character.calculation.ruleIds, ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds)];
+  const allRules = [...character.calculation.ruleIds, ...character.talents.flatMap(talent => talent.ruleIds), ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds)];
   validateProfile(bundle, allRules, validation);
   const entity = { namespace: character.namespace, id: character.id, revision: character.revision };
   if ((character.origin === 'builtin') !== (character.namespace === 'builtin')) validation.addIssue({ code: 'custom', path: ['namespace'], message: '内容来源与命名空间不匹配。' });
@@ -63,7 +66,6 @@ export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend(
       if (binding.kind === 'formula') Object.values(binding.inputs).forEach(visit);
     }
     for (const hit of talent.hits) {
-      if (hit.parameter && !talent.parameters.some(parameter => parameter.id === hit.parameter)) validation.addIssue({ code: 'custom', path: ['talents', index, 'hits'], message: '命中展示参数不存在。' });
       const capture = hit.snapshot;
       if (capture && (!talentIds.has(capture.sourceSkillId) || new Set(capture.attributes).size !== capture.attributes.length
         || !hit.base.captures.some(slot => slot.sourceSkillId === capture.sourceSkillId && capture.attributes.every(stat => slot.attributes.some(reference => reference.id === `attribute.${stat}`))))) {
@@ -76,13 +78,12 @@ export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend(
         if (binding.kind === 'formula') Object.values(binding.inputs).forEach(validateBaseInput);
       }
       Object.values(hit.base.bindings).forEach(validateBaseInput);
-      const references = [...hit.coverageRefs, ...hit.outputs.flatMap(output => output.coverageRefs)];
+      const references = hit.coverageRefs;
       for (const reference of references) {
         const record = coverage.get(definitionKey(reference));
         if (!record || definitionKey(record.entity) !== definitionKey(entity) || record.scope.kind !== 'hit' || record.scope.skillId !== talent.id || record.scope.hitId !== hit.id) validation.addIssue({ code: 'custom', path: ['talents', index, 'hits'], message: '命中覆盖记录的实体或查询范围不匹配。' });
       }
-      if (new Set(hit.outputs.map(output => output.id)).size !== hit.outputs.length) validation.addIssue({ code: 'custom', path: ['talents', index, 'hits'], message: '命中输出身份重复。' });
-      for (const invocation of [hit.base, ...hit.outputs.map(output => output.invocation)]) {
+      for (const invocation of [hit.base, ...Object.values(hit.damage)]) {
         Object.values(invocation.bindings).forEach(visit);
         if (invocation.predicate) visit(invocation.predicate);
         if (invocation.captures.some(slot => !talentIds.has(slot.sourceSkillId))) validation.addIssue({ code: 'custom', path: ['talents', index], message: '捕获槽引用了不存在的来源技能。' });
@@ -92,7 +93,7 @@ export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend(
 });
 
 export const structuredWeaponDefinitionSchema = weaponFieldsSchema.extend({
-  schemaVersion: z.literal(APP_VERSION), kind: z.literal('weapon-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, calculation: profile, coverageRefs: refs.min(1),
+  metadata: weaponMetadataSchema, schemaVersion: z.literal(APP_VERSION), kind: z.literal('weapon-definition'), hits: z.array(equipmentHitSchema).optional(), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, calculation: profile, coverageRefs: refs.min(1),
 }).strict().superRefine((weapon, validation) => {
   validateProfile(weapon.calculation.bundle, weapon.calculation.ruleIds, validation);
   for (const reference of weapon.coverageRefs) {
@@ -101,8 +102,8 @@ export const structuredWeaponDefinitionSchema = weaponFieldsSchema.extend({
   }
 });
 export const structuredArtifactSetDefinitionSchema = artifactSetFieldsSchema.extend({
-  schemaVersion: z.literal(APP_VERSION), kind: z.literal('artifact-set-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, rarity: z.number().int().min(1).max(5),
-  effects: z.array(z.object({ pieces: z.number().int().min(1).max(5), ruleIds: refs, coverageRefs: refs.min(1) }).strict()).max(5), calculation: profile,
+  metadata: artifactSetMetadataSchema, schemaVersion: z.literal(APP_VERSION), kind: z.literal('artifact-set-definition'), namespace: definitionRefSchema.shape.namespace, revision: idSchema, sources, rarity: z.number().int().min(1).max(5),
+  effects: z.array(z.object({ pieces: z.number().int().min(1).max(5), hits: z.array(equipmentHitSchema).optional(), ruleIds: refs, coverageRefs: refs.min(1) }).strict()).max(5), calculation: profile,
 }).strict().superRefine((set, validation) => {
   validateProfile(set.calculation.bundle, [...set.calculation.ruleIds, ...set.effects.flatMap(effect => effect.ruleIds)], validation);
   if (new Set(set.effects.map(effect => effect.pieces)).size !== set.effects.length) validation.addIssue({ code: 'custom', path: ['effects'], message: '套装件数重复。' });

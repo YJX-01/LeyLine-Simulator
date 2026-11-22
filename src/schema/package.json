@@ -1,11 +1,12 @@
 {
   "name": "@leyline/schema",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./version": "./src/version.mjs",
+    "./buffs": "./src/calculation/buffs.mjs",
     "./hit-bindings": "./src/calculation/hit-bindings.mjs",
     "./enka": "./src/exchange/enka.ts"
   },

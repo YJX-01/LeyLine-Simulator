@@ -62,7 +62,6 @@ export interface StructuredDamageOutput {
   evidence: 'declared' | 'adopted' | 'independently-checked' | 'observed';
   value: EvaluatedValue;
   /** Formula result before an outstanding content-coverage check. Excluded from certified totals. */
-  modeledValue?: Extract<EvaluatedValue, { state: 'known' }>;
   stages: FormulaEvaluation['stages'];
   diagnosticIds: string[];
   aggregation?: { states: AggregateEvaluation['states'] };

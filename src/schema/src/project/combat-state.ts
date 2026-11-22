@@ -1,3 +1,4 @@
+import { actorConditions, type HitFacts } from './hit-facts';
 import { z } from 'zod';
 import { idSchema, millisecondsSchema } from '../common/values';
 import { combatConditionsSchema, type CombatConditions } from './combat-conditions';
@@ -28,10 +29,37 @@ export type CombatStateOverride = z.infer<typeof combatStateOverrideSchema>;
 interface StateProject {
   candidate: { actors: { id: string }[] };
   combatStates?: CombatStateInterval[];
-  timeline: { actor: string; timeMs: number; kind: string; damage?: {
-    conditions?: CombatConditions;
-    stateOverrides?: CombatStateOverride[];
+  timeline: { actor: string; timeMs: number; kind: string; order?: number; id?: string; fieldSwitch?: object; damage?: {
+    facts?: HitFacts;
   } }[];
+}
+
+/** Read switches in event order and bounded observations on their half-open intervals. */
+export function createFieldPresenceReader(project: Pick<StateProject,'combatStates'|'timeline'>) {
+  const marked = (project.combatStates ?? []).filter(s => s.values.onField !== undefined).sort((a,b) => a.startMs-b.startMs);
+  const on = marked.filter(s => s.values.onField === true);
+  const byActor = new Map<string, CombatStateInterval[]>();
+  for (const s of marked) {
+    const list = byActor.get(s.actor) ?? [];
+    list.push(s);
+    byActor.set(s.actor,list);
+  }
+  const switches = project.timeline.filter(r => r.fieldSwitch).sort((a,b) => a.timeMs-b.timeMs || (a.order ?? 0)-(b.order ?? 0));
+  function last<T>(values: readonly T[], eligible: (value: T) => boolean) {
+    let left=0, right=values.length;
+    while (left<right) { const mid=(left+right)>>>1; if (eligible(values[mid])) left=mid+1; else right=mid; }
+    return values[left-1] as T | undefined;
+  }
+  function bound(list: CombatStateInterval[], time: number) {
+    const current = last(list,s => s.startMs<=time);
+    return current && time<current.endMs ? current : undefined;
+  }
+  return (actor: string, time: number, order = Infinity, after = false) => {
+    const marked = bound(byActor.get(actor) ?? [],time) ?? bound(on,time);
+    const swap = last(switches,r => r.timeMs < time || r.timeMs === time && ((r.order ?? 0) < order || after && r.order === order));
+    if (swap && (!marked || swap.timeMs >= marked.startMs)) return { value: swap.actor===actor, source:'switch' as const, id:swap.id! };
+    if (marked) return { value: marked.actor===actor ? marked.values.onField ?? null : false, source:'interval' as const, id:marked.id };
+  };
 }
 
 /** Validate annotations without deriving HP changes, shield survival or combat events. */
@@ -74,36 +102,20 @@ export function validateCombatStates(project: StateProject, context: z.Refinemen
     }
     if (entry.interval.endMs > previous.interval.endMs) previous = entry;
   }
-  const intervalValue = (actor: string, timeMs: number): boolean | null | undefined => {
-    const entries = fields.get(JSON.stringify([actor, 'onField'])) ?? [];
-    let left = 0;
-    let right = entries.length;
-    while (left < right) {
-      const middle = (left + right) >>> 1;
-      if (entries[middle].interval.startMs <= timeMs) left = middle + 1;
-      else right = middle;
-    }
-    const interval = entries[left - 1]?.interval;
-    return interval && timeMs < interval.endMs ? interval.values.onField : undefined;
-  };
+  const presence = createFieldPresenceReader(project);
   project.timeline.forEach((record, index) => {
-    const overrides = record.damage?.stateOverrides ?? [];
-    if (record.kind !== 'damage' && record.damage) issue(['timeline', index, 'damage'], '非伤害记录不能携带命中条件或命中覆盖。');
     const values = new Map<string, CombatConditions>();
-    if (record.damage?.conditions) values.set(record.actor, record.damage.conditions);
-    overrides.forEach((override, overrideIndex) => {
-      const path = ['timeline', index, 'damage', 'stateOverrides', overrideIndex];
-      if (!actors.has(override.actor)) issue([...path, 'actor'], '命中覆盖引用的队员不存在。');
-      const existing = values.get(override.actor) ?? {};
-      for (const field of combatStateFields) {
-        if (existing[field] !== undefined && override.values[field] !== undefined) issue([...path, 'values', field], '同一命中不能重复覆盖同一队员的同一状态字段。');
+    for (const [rowIndex, row] of (record.damage?.facts ?? []).entries()) {
+      if (row.subject.kind === 'actor') {
+        if (!actors.has(row.subject.id)) issue(['timeline', index, 'damage', 'facts', rowIndex], '命中覆盖引用的队员不存在。');
+        values.set(row.subject.id, actorConditions(record.damage?.facts, row.subject.id));
       }
-      values.set(override.actor, { ...existing, ...override.values });
-    });
+      if (row.subject.kind === 'target' && row.subject.id !== 'target') issue(['timeline', index, 'damage', 'facts', rowIndex], '命中目标不存在。');
+    }
     if (invalid || record.kind !== 'damage') return;
     const active = [...actors].filter(actor => {
       const override = values.get(actor)?.onField;
-      return (override !== undefined ? override : intervalValue(actor, record.timeMs)) === true;
+      return (override !== undefined ? override : presence(actor, record.timeMs, record.order)?.value) === true;
     });
     if (active.length > 1) issue(['timeline', index, 'damage'], '命中覆盖与区间合并后不能有多位队员站场。');
   });

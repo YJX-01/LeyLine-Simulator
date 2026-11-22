@@ -1,17 +1,51 @@
 const ref = id => ({ namespace: 'builtin', id, revision: '1' });
 const current = { kind: 'current', phase: 'same' };
 const reactions = { physical: [], anemo: [], geo: [], cryo: ['melt'], pyro: ['melt', 'vaporize'], hydro: ['vaporize'], electro: ['aggravate'], dendro: ['spread'] };
-export const ordinaryTrialId = hitId => hitId + '.ordinary-trial';
-
-export function canTryOrdinaryHit(talent, hit) {
-  if (talent.noIndependentDamage || hit.outputs.length) return false;
-  const parametersOf = bindings => Object.values(bindings).flatMap(binding => binding.kind === 'talent-parameter'
-    ? [binding.parameterId] : binding.kind === 'formula' ? parametersOf(binding.inputs) : []);
-  const parameters = new Set([hit.parameter, ...parametersOf(hit.base.bindings)].filter(Boolean));
-  return !talent.details.some(detail => /[月星][·・]?(感电|绽放|结晶|扩散|超导)/u.test(detail.label)
-    && [...detail.template.matchAll(/\{([^}:]+)(?::[^}]*)?\}/g)].some(match => parameters.has(match[1])));
+export function ordinaryReactions(element) { return reactions[element] ?? []; }
+export const absorbedElements = ['pyro', 'hydro', 'electro', 'cryo'];
+export function partyPriorityElement(elements) {
+  const present = [...elements], first = absorbedElements.find(element => present.includes(element));
+  return first === 'pyro' || present.every(Boolean) ? first ?? 'anemo' : null;
 }
-
+export function resolveHitElement(hit, value, team = [], infused) {
+  if (hit.infusion && infused === true) return { element: hit.infusion.element };
+  if (hit.elementBy === 'strikingHand' || hit.elementBy === 'partyPriorityElement') {
+    if (hit.elementBy === 'strikingHand' && value?.value === 'left') return { element: hit.element };
+    const right = partyPriorityElement(team);
+    if (hit.elementBy === 'strikingHand' && value?.value !== 'right' && right !== hit.element) {
+      return { element: hit.element, missing: 'strikingHand' };
+    }
+    return right === null ? { element: hit.element, missing: 'partyPriorityElement' } : { element: right };
+  }
+  return { element: hit.elementBy === 'absorbedElement' && value?.kind === 'enum' && absorbedElements.includes(value.value) ? value.value : hit.element };
+}
+export function effectiveHitElement(hit, value, team = [], infused) {
+  return resolveHitElement(hit, value, team, infused).element;
+}
+export function authoredHitEntries(metadata, skillId) {
+  const i = metadata.talents.findIndex(talent => talent.id === skillId);
+  if (i < 0) return [];
+  const rows = metadata.talents[i].hits.map((hit, j) => ({ hit, field: '/talents/' + i + '/hits/' + j }));
+  for (const [group, state] of [['passives', 'ascension'], ['constellations', 'constellation']]) {
+    for (const [index, owner] of metadata[group].entries()) for (const [j, hit] of (owner.hits ?? []).entries()) {
+      if (hit.skill !== skillId) continue;
+      const rank = state === 'ascension' ? owner.unlockAscension ?? 0 : owner.rank;
+      rows.push({ hit, field: '/' + group + '/' + index + '/hits/' + j, unlock: { state, rank } });
+    }
+  }
+  return rows;
+}
+export function authoredHit(metadata, skillId, hitId) {
+  return metadata && skillId && hitId ? authoredHitEntries(metadata, skillId).find(row => row.hit.id === hitId)?.hit : undefined;
+}
+export function hitInvocations(hit) {
+  const all = [hit.base, ...Object.values(hit.damage)];
+  if (hit.infusion && hit.damage.ordinary) all.push(ordinaryHitInvocation({ ...hit,element:hit.infusion.element },hit.damage.ordinary.predicate));
+  if ((hit.elementBy || hit.coordinated) && hit.damage.ordinary) for (const element of hit.coordinated ? Object.keys(reactions) : absorbedElements) {
+    all.push(ordinaryHitInvocation({ ...hit, element }, hit.damage.ordinary.predicate));
+  }
+  return all;
+}
 /** Bind declared hit data to fixed formula inputs. */
 export function combatDamageBindings(element, captures = []) {
   const attr = stat => {

@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 import { resolve } from 'node:path';
 export default defineConfig({ plugins: [catalogPlugin()], resolve:{alias:{
  '@leyline/schema/version':resolve('src/schema/src/version.mjs'),
+ '@leyline/schema/buffs':resolve('src/schema/src/calculation/buffs.mjs'),
  '@leyline/schema/hit-bindings':resolve('src/schema/src/calculation/hit-bindings.mjs'),
  '@leyline/schema/enka':resolve('src/schema/src/exchange/enka.ts'), '@leyline/schema':resolve('src/schema/src/index.ts'),
  '@leyline/game-data/character-file':resolve('src/game-data/src/character-file.mjs'), '@leyline/game-data':resolve('src/game-data/src/index.ts'),'@leyline/engine':resolve('src/engine/src/index.ts'),

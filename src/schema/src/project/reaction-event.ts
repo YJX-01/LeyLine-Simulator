@@ -5,8 +5,16 @@ import { calculationFactSchema } from '../calculation/binding';
 import { damageRequestSchema } from './damage';
 
 export const aggregateReactionFamilies = ['lunar-charged', 'lunar-crystallize', 'stellar-swirl'] as const;
+export const transformativeFamilies = ['burning','superconduct','swirl','electro-charged','shatter','overloaded','bloom','burgeon','hyperbloom'] as const;
+export type TransformativeFamily = typeof transformativeFamilies[number];
+export const transformativeElements: Record<TransformativeFamily, readonly typeof elements[number][]> = {
+  burning: ['pyro'], superconduct: ['cryo'], swirl: ['pyro','hydro','electro','cryo'], 'electro-charged': ['electro'],
+  shatter: ['physical'], overloaded: ['pyro'], bloom: ['dendro'], burgeon: ['dendro'], hyperbloom: ['dendro'],
+};
+export const isTransformative = (family: string): family is TransformativeFamily => Object.hasOwn(transformativeElements,family);
 export const projectReactionSchema = z.object({
-  family: z.enum(aggregateReactionFamilies),
+  family: z.enum([...aggregateReactionFamilies,...transformativeFamilies]),
+  triggerActorId: idSchema.nullable().optional(),
   element: z.enum(elements),
   coefficient: finiteSchema.nonnegative().nullable().optional(),
   contributors: z.array(z.object({
@@ -18,6 +26,10 @@ export const projectReactionSchema = z.object({
   jointCrit: z.array(z.object({ id: idSchema, probability: finiteSchema.min(0).max(1), critical: z.record(idSchema, z.boolean()) }).strict()).min(1).max(256).optional(),
 }).strict().superRefine((reaction, context) => {
   const contributors = reaction.contributors.map(contributor => contributor.actorId);
+  if (isTransformative(reaction.family) && (contributors.length !== 1 || reaction.triggerActorId !== contributors[0] || reaction.contributors[0].qualified !== true
+    || reaction.contributors[0].crit !== 'noncritical' || reaction.jointCrit || !transformativeElements[reaction.family].includes(reaction.element))) {
+    context.addIssue({ code: 'custom', message: '普通剧变反应的每次伤害须记录触发队员、对应元素与非暴击口径。' });
+  }
   if (new Set(contributors).size !== contributors.length) context.addIssue({ code: 'custom', path: ['contributors'], message: '参与队员不得重复。' });
   if (reaction.family !== 'stellar-swirl' && reaction.coefficient !== undefined) context.addIssue({ code: 'custom', path: ['coefficient'], message: '此反应使用固定系数。' });
   if (reaction.family === 'lunar-charged' && reaction.element !== 'electro' || reaction.family === 'lunar-crystallize' && reaction.element !== 'geo') {

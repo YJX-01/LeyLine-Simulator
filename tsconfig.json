@@ -13,6 +13,7 @@
         "./src/schema/src/index.ts"
       ],
       "@leyline/schema/version": ["./src/schema/src/version.d.mts"],
+      "@leyline/schema/buffs": ["./src/schema/src/calculation/buffs.d.mts"],
       "@leyline/schema/hit-bindings": ["./src/schema/src/calculation/hit-bindings.d.mts"],
       "@leyline/schema/enka": [
         "./src/schema/src/exchange/enka.ts"

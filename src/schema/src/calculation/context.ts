@@ -24,7 +24,7 @@ export const calculationFactFrameSchema = z.object({ id: idSchema, subject: fact
   phase: z.enum(['before', 'after']), facts: stateFacts.refine(values => Object.keys(values).length > 0, '事件状态不得为空。') }).strict();
 export const combatActorSchema = z.object({
   id: idSchema, inputs: facts, facts: stateFacts, actorFacts,
-  identity: z.object({ element: z.enum(elements), sourceRefs: z.array(idSchema).max(1000) }).strict().optional(),
+  identity: z.object({ element: z.enum(elements), region:z.string().max(160).optional(), weaponType: idSchema.optional(), sourceRefs: z.array(idSchema).max(1000) }).strict().optional(),
   ascension: z.number().int().min(0).max(6).nullable(), constellation: z.number().int().min(0).max(6).nullable(), refinement: z.number().int().min(1).max(5).nullable(),
   setCounts: z.record(idSchema, z.number().int().min(0).max(5)), effects: z.array(definitionRefSchema).max(10000),
   talents: z.array(z.object({ id: idSchema, level: z.number().int().min(1).max(30), sourceRefs: z.array(idSchema).max(1000).default([]),
@@ -47,6 +47,11 @@ export const combatContextSchema = z.object({
     if (size !== context[key].length) validation.addIssue({ code: 'custom', path: [key], message: '上下文身份重复。' });
   }
   for (const [index, event] of context.events.entries()) {
+    for (const { subject } of event.subjectFacts ?? []) {
+      if (subject.kind === 'actor' && !actorIds.has(subject.id) || subject.kind === 'target' && !targetIds.has(subject.id)) {
+        validation.addIssue({ code: 'custom', path: ['events', index, 'subjectFacts'], message: '状态覆盖引用已失效。' });
+      }
+    }
     if (event.actorId !== null && !actorIds.has(event.actorId) || event.targetIds?.some(id => !targetIds.has(id)) || event.sourceEventIds.some(id => !eventIds.has(id))) validation.addIssue({ code: 'custom', path: ['events', index], message: '事件引用了不存在的队员、目标或来源事件。' });
   }
   for (const [index, actor] of context.actors.entries()) {

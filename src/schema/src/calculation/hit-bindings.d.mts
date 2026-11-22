@@ -1,10 +1,21 @@
+import type { CharacterMetadata } from '../content/character-metadata';
 import type { BoundFormula, CalculationBinding } from './binding';
-import type { StructuredCharacterDefinition } from '../content/calculation';
+import type { StructuredCharacterDefinition } from '../content/structured-content';
+import type { Value } from './values';
 
 type Talent = StructuredCharacterDefinition['talents'][number];
 type Hit = Talent['hits'][number];
-export function ordinaryTrialId(hitId: string): string;
-export function canTryOrdinaryHit(talent: { noIndependentDamage?: true; details: { label: string; template: string }[] }, hit: { base: BoundFormula; outputs: readonly unknown[]; parameter?: string }): boolean;
+type AuthoredHit = CharacterMetadata['talents'][number]['hits'][number];
+export function authoredHitEntries(metadata: CharacterMetadata, skillId: string): {
+  hit: AuthoredHit; field: string; unlock?: { state: 'constellation' | 'ascension'; rank: number };
+}[];
+export function authoredHit(metadata?: CharacterMetadata, skillId?: string, hitId?: string): AuthoredHit | undefined;
+export const absorbedElements: ('pyro' | 'hydro' | 'electro' | 'cryo')[];
+export function ordinaryReactions(element?: string): readonly ('melt' | 'vaporize' | 'aggravate' | 'spread')[];
+export function partyPriorityElement(elements: Iterable<string | undefined | null>): Hit['element'] | null;
+export function resolveHitElement(hit: Pick<Hit, 'element' | 'elementBy' | 'infusion'>, value?: Value | null, team?: Iterable<string | undefined | null>, infused?: boolean | null): { element: Hit['element']; missing?: 'strikingHand' | 'partyPriorityElement' };
+export function effectiveHitElement(hit: Pick<Hit, 'element' | 'elementBy' | 'infusion'>, value?: Value | null, team?: Iterable<string | undefined | null>, infused?:boolean|null): Hit['element'];
+export function hitInvocations(hit: Pick<Hit, 'base' | 'element' | 'elementBy' | 'coordinated' | 'infusion' | 'damage'>): BoundFormula[];
 export function ordinaryHitInvocation(hit: Pick<Hit, 'element' | 'base'>, predicate?: CalculationBinding): BoundFormula;
 export function combatDamageBindings(element: Hit['element'], captures?: BoundFormula['captures']): {
   attr: (stat: string) => CalculationBinding;

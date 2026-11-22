@@ -14,13 +14,19 @@ export const calculationReadTimeSchema = z.discriminatedUnion('kind', [
 ]);
 export type CalculationActorSelector = z.infer<typeof actorSelectorSchema>;
 export type CalculationReadTime = z.infer<typeof calculationReadTimeSchema>;
+export const teamCountSchema = z.object({
+  elements: z.array(z.enum(elements)).min(1).max(8).refine(values => new Set(values).size === values.length, '元素条件重复。'),
+  match: z.enum(['include','exclude']), excludeOwner: z.boolean(), cap: z.number().int().min(1).max(4).optional(),
+}).strict();
 export type CalculationBinding =
   | { kind: 'attribute'; actor: CalculationActorSelector; key: DefinitionRef; at: CalculationReadTime; excludeCurrentEffect?: true }
   | { kind: 'talent-parameter'; actor: CalculationActorSelector; skillId: string; parameterId: string; type: ValueType }
   | { kind: 'actor-state'; actor: CalculationActorSelector; property: 'ascension' | 'constellation' | 'refinement' }
-  | { kind: 'team-count'; elements: typeof elements[number][]; match: 'include' | 'exclude'; excludeOwner: boolean }
+  | { kind: 'team-attribute'; key: DefinitionRef; aggregate: 'max' | 'sum' }
+  | ({ kind: 'team-count' } & z.infer<typeof teamCountSchema>)
+  | { kind: 'team-region'; region:string }
   | { kind: 'refinement-parameter'; values: number[]; type: Extract<ValueType, { kind: 'quantity' }> }
-  | { kind: 'fact'; key: string; type: ValueType; scope: 'query' | 'owner' | 'recipient' | 'contributor' | 'target' | 'team' | 'source-event' }
+  | { kind: 'fact'; key: string; type: ValueType; at?: 'source-event' | 'last-observation'; scope: 'query' | 'owner' | 'recipient' | 'event-actor' | 'contributor' | 'target' | 'team' | 'source-event' }
   | { kind: 'enemy'; key: DefinitionRef; at: Exclude<CalculationReadTime, { kind: 'capture' }> }
   | { kind: 'formula'; formula: DefinitionRef; inputs: Record<string, CalculationBinding>; output: string }
   | { kind: 'constant'; value: Value };
@@ -29,11 +35,12 @@ export const calculationBindingSchema: z.ZodType<CalculationBinding> = z.lazy(()
   z.object({ kind: z.literal('attribute'), actor: actorSelectorSchema, key: definitionRefSchema, at: calculationReadTimeSchema, excludeCurrentEffect: z.literal(true).optional() }).strict(),
   z.object({ kind: z.literal('talent-parameter'), actor: actorSelectorSchema, skillId: idSchema, parameterId: idSchema, type: calculationValueTypeSchema }).strict(),
   z.object({ kind: z.literal('actor-state'), actor: actorSelectorSchema, property: z.enum(['ascension', 'constellation', 'refinement']) }).strict(),
-  z.object({ kind: z.literal('team-count'), elements: z.array(z.enum(elements)).min(1).max(8).refine(values => new Set(values).size === values.length, '元素条件重复。'),
-    match: z.enum(['include', 'exclude']), excludeOwner: z.boolean() }).strict(),
+  z.object({ kind: z.literal('team-attribute'), key: definitionRefSchema, aggregate: z.enum(['max', 'sum']) }).strict(),
+  z.object({ kind: z.literal('team-region'), region:idSchema }).strict(),
+  teamCountSchema.extend({kind:z.literal('team-count')}),
   z.object({ kind: z.literal('refinement-parameter'), values: z.array(finiteSchema).length(5), type: calculationQuantityTypeSchema }).strict(),
-  z.object({ kind: z.literal('fact'), key: idSchema, type: calculationValueTypeSchema,
-    scope: z.enum(['query', 'owner', 'recipient', 'contributor', 'target', 'team', 'source-event']) }).strict(),
+  z.object({ kind: z.literal('fact'), key: idSchema, type: calculationValueTypeSchema, at: z.enum(['source-event','last-observation']).optional(),
+    scope: z.enum(['query', 'owner', 'recipient', 'event-actor', 'contributor', 'target', 'team', 'source-event']) }).strict(),
   z.object({ kind: z.literal('enemy'), key: definitionRefSchema, at: z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('current'), phase: z.enum(['same', 'before', 'after']) }).strict(),
     z.object({ kind: z.literal('source-event'), phase: z.enum(['before', 'after']) }).strict(),

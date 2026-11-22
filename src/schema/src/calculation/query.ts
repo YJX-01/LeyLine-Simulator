@@ -39,7 +39,7 @@ export const damageOccurrenceSchema = z.object({
 export const damageQuerySchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('hit'), output: damageOccurrenceSchema, inventoryAllocations: inventoryAllocationsSchema.optional() }).strict()
     .refine(query => query.output.computation.kind === 'formula' && query.output.computation.frame.hit !== null
-      && query.output.computation.frame.hit.origin !== 'reaction' && query.output.computation.frame.hit.skillId !== null && query.output.computation.frame.hit.hitId !== null,
+      && query.output.computation.frame.hit.origin !== 'reaction' && query.output.computation.frame.hit.hitId !== null,
     '技能命中请求必须引用技能公式输出。'),
   z.object({ kind: z.literal('event'), eventId: idSchema, outputs: z.array(damageOccurrenceSchema).max(10000), inventoryAllocations: inventoryAllocationsSchema.optional() }).strict()
     .superRefine((query, validation) => {

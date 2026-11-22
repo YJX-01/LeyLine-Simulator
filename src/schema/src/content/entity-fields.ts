@@ -15,6 +15,7 @@ export const characterFieldsSchema = z.object({
     promotion: z.array(z.object({ maxLevel: finiteSchema, hp: finiteSchema, attack: finiteSchema, defense: finiteSchema, specialized: finiteSchema }).strict()).min(7).max(8) }).strict(),
 }).strict();
 export const weaponFieldsSchema = z.object({
+  maxRefinement: z.number().int().min(1).max(5).optional(),
   id: idSchema, name: idSchema, weaponType: idSchema, rarity: z.number().int().min(1).max(5), baseAttack: finiteSchema, baseStat: finiteSchema, stat: statSchema,
   attackCurve: curve, statCurve: curve, promotion: z.array(finiteSchema).min(5).max(8),
 }).strict();
