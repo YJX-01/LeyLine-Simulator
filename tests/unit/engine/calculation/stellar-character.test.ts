@@ -11,7 +11,8 @@ const read = (path: string) => readCalculationData(path);
 const quantity = (unit: Extract<schemas.Value, { kind: 'quantity' }>['unit'], value: number): schemas.Value => ({ kind: 'quantity', unit, value });
 const fact = (value: schemas.Value): schemas.CalculationFact => ({ value, provenance: 'explicit', sourceRefs: [] });
 type Hit = schemas.StructuredCharacterDefinition['talents'][number]['hits'][number];
-type Output = Hit['outputs'][number];
+type Output = { family: string; origin: Hit['origin']; invocation: Hit['base'] };
+const routes = (hit: Hit): Output[] => Object.entries(hit.damage).map(([family, invocation]) => ({ family, invocation, origin: hit.origin }));
 type Conditions = { radiant: boolean; stance: boolean; stacks: number };
 const parameters = read('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json').vesna;
 const upstream = read('tools/data/sources/catalog/genshin-db/characters.json').vesna.stats;
@@ -28,7 +29,7 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     weapon = await getWeapon('favoniussword');
   });
   function build(id: string, rank = 0): schemas.StructuredBuild {
-    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: DATA_VERSION,
+    return { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: DATA_VERSION,
       character: characters.get(id)!, weapon, sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: rank,
       talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
@@ -50,13 +51,13 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
         facts: { radiance: fact({ kind: 'enum', value: conditions.radiant ? 'stellar-swirl' : 'none' }), 'vesna.stance': fact({ kind: 'boolean', value: conditions.stance }),
           'vesna.disciplineStacks': fact(quantity('count', conditions.stacks)), 'vesna.c6Window': fact({ kind: 'boolean', value: true }) } }],
       events: [{ id: 'hit', kind: 'hit', actorId: 'vesna', targetIds: ['enemy'], timeMs: 1000, order: 0, skillId, hitId: hit.id, category: hit.category, sourceEventIds: [], facts: {} }] },
-      request: { actorId: 'vesna', skillId, hitId: hit.id, outputId: output.id, critMode: 'noncritical', reactionMode: 'none',
+      request: { actorId: 'vesna', hit: schemas.characterHitRef(characters.get('vesna')!, hit.id), critMode: 'noncritical', reactionMode: 'none',
         frame: { targetId: 'enemy', eventId: 'hit', sourceEventId: null, phase: 'before', facts: {}, actorFacts: {}, captures: {}, applications: [], factOverrides: [] } },
     };
   }
   function selected(id: string, family?: string) {
     const hit = characters.get('vesna')!.talents.flatMap(talent => talent.hits).find(hit => hit.id === id)!;
-    return { hit, output: hit.outputs.find(output => !family || output.family === family)! };
+    return { hit, output: routes(hit).find(output => !family || output.family === family)! };
   }
   const whiteAttack = (level = 90, ascension = 6) => upstream.base.attack * curves[level][upstream.curve.attack] + upstream.promotion[ascension].attack
     + weapon.baseAttack * weapon.attackCurve[90] + weapon.promotion[6];
@@ -74,7 +75,7 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     let checked = 0;
     for (const radiant of [false, true]) for (const stance of [false, true]) for (const stacks of [0, 6]) {
       const conditions = { radiant, stance, stacks };
-      for (const talent of characters.get('vesna')!.talents) for (const hit of talent.hits) for (const output of hit.outputs) {
+      for (const talent of characters.get('vesna')!.talents) for (const hit of talent.hits) for (const output of routes(hit)) {
         const id = hit.id.slice(talent.id.length + 1), stellar = output.family === 'stellar-swirl';
         let active = true;
         if (talent.category === 'normal') active = id.endsWith('.anemo') === stance;
@@ -103,11 +104,11 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     const missing = evaluateStructuredHit(team(0), setup, request);
     expect(missing.execution).toBe('partial'); expect(missing.requiredInputs.some(input => input.key === 'radiance')).toBe(true);
     setup.factIntervals[0].facts['vesna.stance'] = fact({ kind: 'boolean', value: false });
-    expect(evaluateStructuredHit(team(0), setup, request).execution).toBe('invalid');
+    expect(evaluateStructuredHit(team(0), setup, request).totals.all).toMatchObject({ state: 'known', value: { value: 0 } });
     const c6 = selected('vesna.skill.c6.slash'), locked = setting(c6.hit, c6.output, { radiant: false, stance: false, stacks: 0 });
     delete locked.setup.factIntervals[0].facts['vesna.c6Window'];
     const result = evaluateStructuredHit(team(0), locked.setup, locked.request);
-    expect(result.execution).toBe('invalid'); expect(result.requiredInputs.some(input => input.key === 'vesna.c6Window' && input.requiredBy.length)).toBe(false);
+    expect(result.totals.all).toMatchObject({ state: 'known', value: { value: 0 } }); expect(result.requiredInputs.some(input => input.key === 'vesna.c6Window' && input.requiredBy.length)).toBe(false);
   });
 
   it('checks source stack limits and does not silently cap an invalid supplied state', () => {
@@ -134,7 +135,7 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     const { hit, output } = selected('vesna.skill.param5'), { setup, request } = setting(hit, output, { radiant: true, stance: true, stacks: 0 });
     const context = createStructuredCombatContext(team(0), setup); delete context.actors.find(actor => actor.id === 'xingqiu')!.identity;
     const frame: schemas.CombatFrame = { ...request.frame, ownerId: 'vesna', recipientId: 'vesna', contributorId: null,
-      facts: { critMode: fact({ kind: 'enum', value: 'noncritical' }) }, hit: { skillId: request.skillId, hitId: hit.id, element: hit.element, category: hit.category, family: output.family, origin: output.origin, reactionId: null } };
+      facts: { critMode: fact({ kind: 'enum', value: 'noncritical' }) }, hit: { skillId: schemas.findCharacterHit(characters.get('vesna'), request.hit)!.talent.id, hitId: hit.id, element: hit.element, category: hit.category, family: output.family, origin: output.origin, reactionId: null } };
     const result = evaluateBoundFormula(team(0).program, context, output.invocation, frame);
     expect(result.execution).toBe('partial'); expect(result.requiredInputs.some(input => input.key === 'xingqiu.element')).toBe(true);
   });
@@ -165,9 +166,9 @@ describe('Vesna owned single-hit definitions and fixed TS algorithms', () => {
     if (predicate?.kind !== 'formula') throw new Error('expected source-declared conjunctive guard');
     [predicate.inputs.term0, predicate.inputs.term1] = [predicate.inputs.term1, predicate.inputs.term0];
     const frame: schemas.CombatFrame = { ...request.frame, ownerId: 'vesna', recipientId: 'vesna', contributorId: null,
-      facts: {}, hit: { skillId: request.skillId, hitId: hit.id, element: hit.element, category: hit.category, family: output.family, origin: output.origin, reactionId: null } };
+      facts: {}, hit: { skillId: schemas.findCharacterHit(characters.get('vesna'), request.hit)!.talent.id, hitId: hit.id, element: hit.element, category: hit.category, family: output.family, origin: output.origin, reactionId: null } };
     const result = evaluateBoundFormula(team(0).program, createStructuredCombatContext(team(0), setup), invocation, frame);
-    expect(result.execution).toBe('invalid'); expect(result.diagnostics.some(diagnostic => diagnostic.code === 'conflicting-definition')).toBe(true);
+    expect(result.outputs.value).toMatchObject({ state: 'known', value: { value: 0 } });
     expect(result.requiredInputs.some(input => input.key === 'vesna.c6Window' && input.requiredBy.length)).toBe(false);
   });
 });

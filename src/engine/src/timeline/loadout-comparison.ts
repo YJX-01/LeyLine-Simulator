@@ -7,11 +7,7 @@ export function compareTimelineLoadouts(input: Project, candidates: LoadoutCandi
   const entries = loadoutCandidatesSchema.parse(candidates);
   const baseline = evaluateTimeline(project);
   const originalSources = new Set((baseline.effectInstances ?? []).map(instance => instance.id));
-  const difference = (before: number | null, after: number | null, modeledBefore?: number, modeledAfter?: number) => {
-    if (before !== null && after !== null) return { delta: after - before };
-    const left = before ?? modeledBefore, right = after ?? modeledAfter;
-    return { delta: null, ...(left !== undefined && right !== undefined ? { modeledDelta: right - left } : {}) };
-  };
+  const difference = (before: number | null, after: number | null) => ({ delta: before === null || after === null ? null : after - before });
   return { baseline, candidates: entries.map(candidate => {
     const next = projectSchema.parse(project);
     const builds: LoadoutComparison['candidates'][number]['sources']['builds'] = [];
@@ -43,10 +39,10 @@ export function compareTimelineLoadouts(input: Project, candidates: LoadoutCandi
     const sources = new Set((result.effectInstances ?? []).map(instance => instance.id));
     const points = new Map(result.points.map(point => [point.id, point]));
     return { id: candidate.id, ...(candidate.name ? { name: candidate.name } : {}), result,
-      ...difference(baseline.objectiveValue, result.objectiveValue, baseline.modeledObjectiveValue, result.modeledObjectiveValue),
+      ...difference(baseline.objectiveValue, result.objectiveValue),
       points: baseline.points.map(before => {
         const after = points.get(before.id);
-        return { id: before.id, before: before.value, after: after?.value ?? null, ...difference(before.value, after?.value ?? null, before.modeledValue, after?.modeledValue) };
+        return { id: before.id, before: before.value, after: after?.value ?? null, ...difference(before.value, after?.value ?? null) };
       }),
       sources: { added: [...sources].filter(id => !originalSources.has(id)), removed: [...originalSources].filter(id => !sources.has(id)), builds } };
   }) };

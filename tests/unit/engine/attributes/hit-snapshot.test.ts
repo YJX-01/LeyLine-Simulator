@@ -1,3 +1,4 @@
+import { hpFacts } from '../../../helpers/catalog-calculation';
 import { officialShowcase } from '../../../helpers/recorded-reference';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -11,7 +12,7 @@ import { createAccount } from '../../../../src/web/src/domain/account';
 
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id = 'kaeya', weapon = 'favoniussword'): Promise<Build> {
-  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     artifactMain: await getArtifactMain(), artifacts: [], sets: [], level: 90, ascension: 6,
     constellation: 0, talents: { normal: 1, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
@@ -40,12 +41,12 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
     for (const derivative of ['no-skill', 'damage', 'formula', 'future'] as const) {
       const next: Project = JSON.parse(original);
       if (derivative === 'no-skill') delete next.timeline[0].skillId;
-      if (derivative === 'damage') next.timeline[0].damage = { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none' };
+      if (derivative === 'damage') next.timeline[0].damage = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'kaeya', revision: '6' }, hitId: 'kaeya.burst.param1' }, crit: 'noncritical', reaction: 'none' };
       if (derivative === 'formula') next.definitions.find(definition => definition.id === next.timeline[0].definition)!.nodes = [{ id: 'real-damage', op: 'game-damage' }];
       if (derivative === 'future') {
         next.timeline[0].timeMs = 1001;
         next.timeline.push({ id: 'query', actor, kind: 'damage', definition: `${actor}-real-damage`, timeMs: 1000, order: 1,
-          damage: { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'before' } } });
+          damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'kaeya', revision: '6' }, hitId: 'kaeya.burst.param1' }, crit: 'noncritical', reaction: 'none', capture: { recordId: source, phase: 'before' } } });
       }
       expect(projectSchema.safeParse(next).success).toBe(false);
     }
@@ -80,7 +81,7 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
 
   it('calculates Jean initial burst directly without imposing the persistent field capture', async () => {
     const build = await setting('jean');
-    const result = evaluateDamage(build, { skillId: 'jean.burst', hitId: 'jean.burst.param1', outputId: 'jean.burst.param1.damage', crit: 'noncritical', reaction: 'none' }, enemy);
+    const result = evaluateDamage(build, { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.burst.param1' }, crit: 'noncritical', reaction: 'none' }, enemy);
     const attack = 18.62 * 8.739 + 76.4582 + 41.0671 * 7.275 + 155.6;
     expect(result.status).toBe('complete');
     expect(result.value).toBeCloseTo(attack * 7.2216 * 0.5 * 0.9, 8);
@@ -111,7 +112,7 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
       if (variant === 'future') snapshot.timeMs = 1001;
       if (variant === 'same-order') { snapshot.timeMs = record.timeMs; snapshot.order = record.order; }
       if (variant === 'self-after') record.damage!.capture = { recordId: record.id, phase: 'after' };
-      if (variant === 'not-snapshotted') record.damage!.skillId = 'kaeya.normal';
+      if (variant === 'not-snapshotted') record.damage!.hit.hitId = 'kaeya.normal.param1';
       expect(projectSchema.safeParse(project).success).toBe(false);
       expect(evaluateTimeline(project).status).toBe('invalid');
       // Invalid new references never mutate the existing project on a domain command.
@@ -126,7 +127,7 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
     const { project, actor, source, record } = query(await setting('kaeya', 'harbingerofdawn'));
     project.combatStates = [{ id: 'source-hp', actor, startMs: 0, endMs: 100, values: { hpRatio: 1 } }];
     record.damage!.crit = 'expected';
-    record.damage!.conditions = { hpRatio: null };
+    record.damage!.facts = hpFacts(record.actor, null);
     const attack = 18.6984 * 8.349 + 66.90411 + 38.7413 * 7.346 + 116.7;
     const result = evaluateTimeline(project);
     expect(result.status).toBe('complete');
@@ -134,7 +135,7 @@ describe('hit attribute captures reuse the existing event dependency graph', () 
     expect(result.totalValue).toBeCloseTo(attack * 1.3192 * (1 + 0.19 * (0.5 + 0.102 * 4.594)) * 0.5 * 0.9, 7);
     expect(result.reads?.some(read => read.key === 'critRate' && read.recordId === source && read.value === 0.19)).toBe(true);
     project.combatStates = [];
-    record.damage!.conditions = { hpRatio: 1 }; // Current hit is known; source remains unknown.
+    record.damage!.facts = hpFacts(record.actor, 1); // Current hit is known; source remains unknown.
     expect(evaluateTimeline(project).status).toBe('partial');
     record.damage!.crit = 'noncritical';
     expect(evaluateTimeline(project).status).toBe('complete'); // Unused source crit does not require HP.

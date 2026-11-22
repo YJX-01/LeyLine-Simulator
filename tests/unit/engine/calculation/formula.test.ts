@@ -9,7 +9,7 @@ const formula: FormulaDefinition = readCalculationData(new URL('src/game-data/da
 const character = readCalculationData(new URL('src/game-data/data/characters/nahida.json', root));
 const recording = new URL('.references/enka/uid-107590923.json', root);
 function library(definition = structuredClone(formula)): CalculationBundle {
-  return { schemaVersion: '0.1.0', runtimeVersion: '0.1.0', requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
+  return { schemaVersion: '0.2.0', runtimeVersion: '0.2.0', requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
     sources: [{ id: 'character.builtin.nahida', kind: 'definition' }],
     formulas: [definition], tables: [], attributes: [], effects: [], stateMachines: [], aggregates: [], coverage: [] };
 }

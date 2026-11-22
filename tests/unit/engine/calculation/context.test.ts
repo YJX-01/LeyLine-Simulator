@@ -238,8 +238,8 @@ describe('bound catalog components and adopted effect conditions', () => {
     const compiled = compileCalculation(derivative); expect(compiled.ok).toBe(true); if (!compiled.ok) return;
     expect(evaluateBoundFormula(compiled.program, context, invocation, frame).diagnostics.some(diagnostic => diagnostic.code === 'conflicting-definition')).toBe(true);
     delete invocation.bindings.preReactionFlat;
-    expect(evaluateBoundFormula(compiled.program, context, invocation, frame).execution).toBe('partial');
-    frame.applications = [{ instanceId: calculationEffectInstanceId(actor.id, actor.effects[0], null), active: true }];
+    expect(evaluateBoundFormula(compiled.program, context, invocation, frame).execution).toBe('complete');
+    frame.applications = [{ instanceId: calculationEffectInstanceId(actor.id, actor.effects[0], 'query'), active: true }];
     const defense = input(actor, 'whiteDefense') * (1 + input(actor, 'defensePercent'));
     expect(numeric(evaluateBoundFormula(compiled.program, context, invocation, frame))).toBeCloseTo(defense * (rate(actor, 'albedo.skill', 'param2') + 0.4), 8);
     frame.hit!.category = 'burst';

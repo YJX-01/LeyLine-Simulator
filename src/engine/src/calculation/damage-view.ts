@@ -2,7 +2,7 @@ import { definitionKey, type CalculationBinding, type CalculationTraceNode, type
   type DefinitionRef, type EvaluatedValue, type StructuredDamageEvaluation, type StructuredCharacterDefinition } from '@leyline/schema';
 import type { CompiledData } from './compile';
 
-type Hit = StructuredCharacterDefinition['talents'][number]['hits'][number];
+type Hit = Pick<StructuredCharacterDefinition['talents'][number]['hits'][number], 'base' | 'element' | 'snapshot'>;
 
 function numeric(value: EvaluatedValue | CalculationTraceNode | undefined): number | null {
   return value?.state === 'known' && value.value?.kind === 'quantity' ? value.value.value : null;

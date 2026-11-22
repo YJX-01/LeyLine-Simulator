@@ -14,6 +14,20 @@ export function validateContextDefinitions(data: CompiledData, context: CombatCo
     ...context.targets.flatMap(target => [...Object.values(target.inputs), ...Object.values(target.facts)]), ...Object.values(context.team.inputs), ...Object.values(context.team.facts),
     ...context.events.flatMap(event => Object.values(event.facts)), ...context.factIntervals.flatMap(interval => Object.values(interval.facts)),
     ...(context.stateFrames ?? []).flatMap(entry => Object.values(entry.facts))];
+  const actorIds = new Set(context.actors.map(actor => actor.id));
+  const targetIds = new Set(context.targets.map(target => target.id));
+  for (const [i,event] of context.events.entries()) {
+    for (const { subject, values } of event.subjectFacts ?? []) {
+      if (subject.kind === 'actor' && !actorIds.has(subject.id) || subject.kind === 'target' && !targetIds.has(subject.id)) {
+        report('stale-reference', '/context/events/' + i + '/subjectFacts', '事实的主体不在当前队伍或目标中。');
+      }
+      facts.push(...Object.values(values));
+    }
+    for (const state of Object.values(event.derivedStates ?? {})) for (const [actor, values] of Object.entries(state)) {
+      if (!actorIds.has(actor)) report('stale-reference', '/context/events/' + i, '推导状态引用了无效的队员。');
+      facts.push(...Object.values(values));
+    }
+  }
   if (!factsHaveSources(facts, sources)) report('missing-dependency', '/context', '事实缺少来源记录。');
   for (const [index, actor] of context.actors.entries()) {
     if (actor.identity?.sourceRefs.some(source => !sources.has(source))) report('missing-dependency', `/context/actors/${index}/identity`, '队员元素身份缺少来源记录。');

@@ -20,7 +20,7 @@ function queryProject(timeMs = 1000): Project {
   const project = structuredClone(recorded);
   const actor = project.candidate.actors[0];
   project.timeline.push({ id: 'state-query', actor: actor.id, timeMs, order: 0, kind: 'damage',
-    definition: `${actor.id}-real-damage`, damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: null, reaction: null } });
+    definition: `${actor.id}-real-damage`, damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.skill.param1' }, crit: null, reaction: null } });
   project.combatStates = [{ id: 'hp-annotation', actor: actor.id, startMs: 1000, endMs: 2000, values: { hpRatio: 1, shielded: false } }];
   return project;
 }
@@ -95,7 +95,7 @@ describe.skipIf(!existsSync(officialShowcase))('combat-state format derivatives 
     setDamageStateOverride(project, 'state-query', other, { onField: true });
     expect(projectSchema.safeParse(project).success).toBe(true);
     const duplicate = structuredClone(project);
-    duplicate.timeline[0].damage!.stateOverrides!.push({ actor: owner, values: { onField: null } });
+    duplicate.timeline[0].damage!.facts!.push({ subject: { kind: 'actor', id: owner }, values: { onField: { value: null, provenance: 'explicit', sourceRefs: [] } } });
     expect(projectSchema.safeParse(duplicate).success).toBe(false);
   });
 

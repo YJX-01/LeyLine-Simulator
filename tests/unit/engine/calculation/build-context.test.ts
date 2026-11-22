@@ -30,7 +30,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     for (const id of ['favoniussword', 'harbingerofdawn', 'primordialjadecutter']) weapons.set(id, await getWeapon(id));
   });
   function build(id: string, weaponId = 'favoniussword'): schemas.StructuredBuild {
-    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: structuredClone(main), level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }
@@ -50,7 +50,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
   }
   function setting(characterId: string, skillId: string, hitId: string) {
     const character = characters.get(characterId)!, hit = character.talents.find(talent => talent.id === skillId)!.hits.find(hit => hit.id === hitId)!;
-    const request: schemas.StructuredHitRequest = { actorId: 'actor', skillId, hitId, outputId: hit.outputs[0]?.id ?? 'damage', critMode: 'noncritical', reactionMode: 'none',
+    const request: schemas.StructuredHitRequest = { actorId: 'actor', hit: schemas.characterHitRef(character, hitId), critMode: 'noncritical', reactionMode: 'none',
       frame: { targetId: 'enemy', eventId: 'hit', sourceEventId: null, phase: 'before', facts: {}, actorFacts: {}, captures: {}, applications: [], factOverrides: [] } };
     const setup: schemas.StructuredCombatSetup = { targets: [{ id: 'enemy', inputs: { level: fact(quantity('count', 90)), defenseReduction: fact(quantity('scalar', 0)), ordinaryDamageReduction: fact(quantity('scalar', 0)),
       ...Object.fromEntries(schemas.elements.map(element => ['resistance.' + element, fact(quantity('scalar', 0.1))])) }, facts: {} }],
@@ -93,7 +93,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
       const expectedAttack = attack('kaeya') * (1 + subs.filter(sub => sub.stat === 'attackPercent').reduce((sum, sub) => sum + sub.value, 0))
         + expectedMain + subs.filter(sub => sub.stat === 'attack').reduce((sum, sub) => sum + sub.value, 0);
       const { setup, request } = setting('kaeya', 'kaeya.skill', 'kaeya.skill.param1');
-      expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(expectedAttack * rate('kaeya', request.skillId, request.hitId) * 0.45, 8);
+      expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(expectedAttack * rate('kaeya', schemas.findCharacterHit(characters.get(request.hit.definition.id), request.hit)!.talent.id, request.hit.hitId) * 0.45, 8);
       expect(resolveBuild(input).stats.attack).toBeCloseTo(expectedAttack, 8);
       const oldShape = { ...input, artifactMain: input.artifactMain[5] };
       expect(prepareStructuredBuilds([{ id: 'actor', build: oldShape }]).ok).toBe(false);
@@ -117,15 +117,15 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     expect(context.actors[0].talents.find(talent => talent.id === 'kaeya.skill')!.level).toBe(10);
     const frame = { ...request.frame, ownerId: 'actor', recipientId: 'actor', contributorId: null, hit: { skillId: 'kaeya.skill', hitId: hit.id, element: hit.element, category: hit.category, family: 'ordinary', origin: 'talent' as const, reactionId: null },
       facts: { critMode: fact({ kind: 'enum', value: 'noncritical' }), reactionMode: fact({ kind: 'enum', value: 'none' }) } };
-    const component = evaluateBoundFormula(prepared.team.program, context, hit.outputs[0].invocation, frame), value = component.outputs.value;
+    const component = evaluateBoundFormula(prepared.team.program, context, hit.damage.ordinary, frame), value = component.outputs.value;
     expect(component.execution).toBe('complete');
     if (value.state === 'known') expect(value.value.value).toBeCloseTo(attack('kaeya') * rate('kaeya', 'kaeya.skill', hit.id, 10) * 0.45, 8);
-    expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(attack('kaeya') * rate('kaeya', request.skillId, hit.id, 10) * 0.45, 8);
+    expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(attack('kaeya') * rate('kaeya', schemas.findCharacterHit(characters.get(request.hit.definition.id), request.hit)!.talent.id, hit.id, 10) * 0.45, 8);
     input.constellation = 4;
     const uncovered = prepareStructuredBuilds([{ id: 'actor', build: input }]);
     if (!uncovered.ok) throw new Error('C4 build failed structural preparation');
     const partial = evaluateStructuredHit(uncovered.team, setup, request);
-    expect(partial.trace.find(node => node.id === partial.totals.all.traceId)?.state).toBe('unknown');
+    expect(partial.trace.find(node => node.id === partial.totals.all.traceId)?.state).toBe('known');
   });
 
   it('uses the actual Jade Cutter refinements through the effect graph without double-applying HP', () => {
@@ -169,24 +169,26 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     for (const [id, reaction, multiplier] of [['kaeya', 'melt', 1.5], ['xingqiu', 'vaporize', 2]] as const) {
       const input = build(id), prepared = prepareStructuredBuilds([{ id: 'actor', build: input }]); expect(prepared.ok).toBe(true); if (!prepared.ok) continue;
       const { setup, request } = setting(id, id + '.skill', id + '.skill.param1'); request.reactionMode = reaction;
-      expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(attack(id) * rate(id, request.skillId, request.hitId) * (id === 'xingqiu' ? 1.2 : 1) * 0.45 * multiplier, 8);
+      expect(numeric(evaluateStructuredHit(prepared.team, setup, request))).toBeCloseTo(attack(id) * rate(id, schemas.findCharacterHit(characters.get(request.hit.definition.id), request.hit)!.talent.id, request.hit.hitId) * (id === 'xingqiu' ? 1.2 : 1) * 0.45 * multiplier, 8);
       setup.events[0].skillId = id + '.normal';
       expect(evaluateStructuredHit(prepared.team, setup, request).execution).toBe('invalid');
-      setup.events[0].skillId = request.skillId; request.frame.facts.reactionMode = fact({ kind: 'enum', value: 'none' });
+      setup.events[0].skillId = schemas.findCharacterHit(characters.get(request.hit.definition.id), request.hit)!.talent.id; request.frame.facts.reactionMode = fact({ kind: 'enum', value: 'none' });
       expect(evaluateStructuredHit(prepared.team, setup, request).execution).toBe('invalid');
     }
   });
 
   it('keeps unreviewed team mechanisms unknown and preserves stable identities for unreviewed catalog hits', async () => {
-    const input = build('kaeya'), teammate = build('kaeya'); teammate.character = await getCharacter('bennett');
+    const input = build('kaeya'), teammate = build('kaeya'); teammate.character = await getCharacter('aether-cryo');
     const prepared = prepareStructuredBuilds([{ id: 'actor', build: input }, { id: 'teammate', build: teammate }]); expect(prepared.ok).toBe(true); if (!prepared.ok) return;
     const { setup, request } = setting('kaeya', 'kaeya.skill', 'kaeya.skill.param1'), result = evaluateStructuredHit(prepared.team, setup, request);
-    expect(result.execution).toBe('partial'); expect(result.outputs[0].value.state).toBe('unknown');
-    expect(result.trace.find(node => node.id === result.outputs[0].value.traceId)?.state).toBe('unknown');
-    const character = teammate.character, unknown = character.talents.flatMap(talent => talent.hits.map(hit => ({ skillId: talent.id, hit }))).find(entry => !entry.hit.outputs.length)!;
-    setup.events[0].actorId = 'teammate'; setup.events[0].skillId = unknown.skillId; setup.events[0].hitId = unknown.hit.id; setup.events[0].category = unknown.hit.category;
-    const unsupported = evaluateStructuredHit(prepared.team, setup, { ...request, actorId: 'teammate', skillId: unknown.skillId, hitId: unknown.hit.id, outputId: null });
+    expect(result.execution).toBe('partial'); expect(result.outputs[0].value.state).toBe('known');
+    expect(result.trace.find(node => node.id === result.outputs[0].value.traceId)?.state).toBe('known');
+    const character = teammate.character, hit = schemas.characterHitRef(character, 'aether-cryo.burst.param1');
+    const selected = schemas.findCharacterHit(character, hit)!;
+    setup.events[0].actorId = 'teammate'; setup.events[0].skillId = selected.talent.id; setup.events[0].hitId = selected.hit.id; setup.events[0].category = selected.hit.category;
+    const unsupported = evaluateStructuredHit(prepared.team, setup, { ...request, actorId: 'teammate', hit });
     expect(unsupported.execution).toBe('partial'); expect(unsupported.totals.all.state).toBe('unknown');
+    expect(unsupported.requiredInputs.map(input => input.key)).toContain('radiance');
     expect(unsupported.trace.find(node => node.id === unsupported.totals.all.traceId)?.state).toBe('unknown');
   });
 
@@ -196,7 +198,7 @@ describe('current snapshot assembly and parameter-bound catalog outputs', () => 
     const { setup, request, hit } = setting(id, id + '.skill', id + '.skill.param1'), context = createStructuredCombatContext(prepared.team, setup);
     const source = upstream[id].stats, hp = source.base.hp * curves[90][source.curve.hp] + source.promotion[6].hp;
     const frame: schemas.CombatFrame = { ...request.frame, ownerId: 'actor', recipientId: 'actor', contributorId: null,
-      hit: { skillId: request.skillId, hitId: hit.id, element: hit.element, category: hit.category, family: 'ordinary', origin: 'talent', reactionId: null } };
+      hit: { skillId: schemas.findCharacterHit(characters.get(request.hit.definition.id), request.hit)!.talent.id, hitId: hit.id, element: hit.element, category: hit.category, family: 'ordinary', origin: 'talent', reactionId: null } };
     for (const count of [0, 4]) {
       frame.facts.namisen = fact(quantity('count', count));
       const result = evaluateBoundFormula(prepared.team.program, context, hit.base, frame), value = result.outputs.base;

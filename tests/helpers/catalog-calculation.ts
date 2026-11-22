@@ -1,9 +1,10 @@
+import { characterHitRef } from '@leyline/schema';
 import type { Build, CharacterDefinition, CombatActor, CombatContext, DamageRequest, DamageScalingStat, FormulaEvaluation, Value } from '@leyline/schema';
 import { compileStructuredCharacter, evaluateBoundFormula } from '@leyline/engine';
 
-export function selectCatalogHit(build: Pick<Build, 'character'>, skillId: string, index: number): Pick<DamageRequest, 'skillId' | 'hitId' | 'outputId'> {
+export function selectCatalogHit(build: Pick<Build, 'character'>, skillId: string, index: number): Pick<DamageRequest, 'hit'> {
   const hit = build.character.talents.find(skill => skill.id === skillId)?.hits[index];
-  return { skillId, hitId: hit?.id ?? 'missing-hit', outputId: hit?.outputs[0]?.id ?? null };
+  return { hit: characterHitRef(build.character, hit?.id ?? 'missing-hit') };
 }
 
 /** Isolate a declared base binding using independent values from the catalog sources. */
@@ -39,4 +40,12 @@ export function evaluateCatalogBase(character: CharacterDefinition, talentId: st
 export function catalogBaseValue(result: FormulaEvaluation): number | null {
   const value = Object.values(result.outputs)[0];
   return value?.state === 'known' && value.value.kind === 'quantity' ? value.value.value : null;
+}
+
+export function eventCounts(values: Record<string, number | null>): NonNullable<DamageRequest['facts']> {
+  return [{ subject: { kind: 'event' }, values: Object.fromEntries(Object.entries(values).map(([id, value]) => [id,
+    { value: value === null ? null : { kind: 'quantity', unit: id === 'resolve' ? 'scalar' : 'count', value }, provenance: 'explicit', sourceRefs: [] }])) }];
+}
+export function hpFacts(actor: string, ratio: number | null): NonNullable<DamageRequest['facts']> {
+  return [{ subject: { kind: 'actor', id: actor }, values: { hpRatio: { value: ratio === null ? null : { kind: 'quantity', unit: 'scalar', value: ratio }, provenance: 'explicit', sourceRefs: [] } } }];
 }

@@ -1,7 +1,8 @@
+import { hitInvocations } from '@leyline/schema/hit-bindings';
 import { APP_VERSION } from '@leyline/schema/version';
 import { calculationClosureRequestSchema, calculationJsonPointer, definitionKey, inspectCalculationStructure, structuredCharacterDefinitionSchema,
   type CalculationBinding, type CalculationBundle, type CalculationDiagnostic, type DefinitionRef } from '@leyline/schema';
-import { compileCalculation, compiledData } from './compile';
+import { compileCalculation, compiledData, type CompiledCalculation } from './compile';
 import { compileStructuredCharacter } from './character';
 
 export type CalculationClosureResult = { ok: true; bundle: CalculationBundle; diagnostics: CalculationDiagnostic[] } | { ok: false; diagnostics: CalculationDiagnostic[] };
@@ -12,9 +13,13 @@ export function collectCalculationRoots(library: unknown, input: unknown): Calcu
   if (diagnostics.length) return { ok: false, diagnostics };
   const request = calculationClosureRequestSchema.safeParse(input);
   if (!request.success) return { ok: false, diagnostics: request.error.issues.map(issue => ({ code: 'invalid-range', severity: 'error', jsonPointer: calculationJsonPointer(issue.path), message: issue.message, affectedOutputIds: [] })) };
-  const compiled = compileCalculation(library);
-  if (!compiled.ok) return compiled;
-  const data = compiledData(compiled.program)!, pending = [...request.data.roots], selected = new Set<string>(), sources = new Set(request.data.sourceIds), families = new Set(request.data.families);
+  let data = compiledData(library as CompiledCalculation);
+  if (!data) {
+    const compiled = compileCalculation(library);
+    if (!compiled.ok) return compiled;
+    data = compiledData(compiled.program)!;
+  }
+  const pending = [...request.data.roots], selected = new Set<string>(), sources = new Set(request.data.sourceIds), families = new Set(request.data.families);
   const report = (pointer: string, message: string) => diagnostics.push({ code: 'missing-dependency', severity: 'error', jsonPointer: pointer, message, affectedOutputIds: [] });
   for (const source of sources) if (!data.sources.some(record => record.id === source)) report('/sourceIds', '缺少明确来源：' + source);
   for (const family of families) if (!data.damageFamilies.includes(family)) report('/families', '缺少明确伤害族：' + family);
@@ -22,7 +27,7 @@ export function collectCalculationRoots(library: unknown, input: unknown): Calcu
     const queue = [root];
     for (let index = 0; index < queue.length; index++) {
       const binding = queue[index];
-      if (binding.kind === 'attribute' || binding.kind === 'enemy') pending.push(binding.key);
+      if (binding.kind === 'attribute' || binding.kind === 'enemy' || binding.kind === 'team-attribute') pending.push(binding.key);
       if (binding.kind === 'formula') { pending.push(binding.formula); queue.push(...Object.values(binding.inputs)); }
     }
   };
@@ -83,21 +88,23 @@ export function collectCalculationClosure(characterInput: unknown, registry?: un
   const parsed = structuredCharacterDefinitionSchema.safeParse(characterInput);
   if (!parsed.success) return { ok: false, diagnostics: parsed.error.issues.map(issue => ({ code: 'invalid-range', severity: 'error', jsonPointer: calculationJsonPointer(issue.path), message: issue.message, affectedOutputIds: [] })) };
   const character = parsed.data, roots: DefinitionRef[] = [...Object.values(character.attributes.outputs), ...character.calculation.ruleIds, ...character.calculation.contextCoverageRefs,
-    ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds)];
+    ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds),
+    ...(character.calculation.resonances ?? []).flatMap(entry => entry.ruleIds), ...character.calculation.gleam?.ruleIds ?? []];
   const sourceIds = new Set(character.sources), families = new Set<string>();
   const bindingRoots = (binding: CalculationBinding): void => {
-    if (binding.kind === 'attribute' || binding.kind === 'enemy') roots.push(binding.key);
+    if (binding.kind === 'attribute' || binding.kind === 'enemy' || binding.kind === 'team-attribute') roots.push(binding.key);
     if (binding.kind === 'formula') { roots.push(binding.formula); Object.values(binding.inputs).forEach(bindingRoots); }
   };
   for (const talent of character.talents) {
+    roots.push(...talent.ruleIds);
     talent.sources.forEach(source => sourceIds.add(source));
     for (const hit of talent.hits) {
       hit.sources.forEach(source => sourceIds.add(source)); roots.push(...hit.coverageRefs);
-      for (const invocation of [hit.base, ...hit.outputs.map(output => output.invocation)]) {
+      for (const invocation of hitInvocations(hit)) {
         roots.push(invocation.formula, ...invocation.captures.flatMap(slot => slot.attributes)); Object.values(invocation.bindings).forEach(bindingRoots);
         if (invocation.predicate) bindingRoots(invocation.predicate);
       }
-      for (const output of hit.outputs) { families.add(output.family); roots.push(...output.coverageRefs); }
+      Object.keys(hit.damage).forEach(family => families.add(family));
     }
   }
   const result = collectCalculationRoots(registry ?? character.calculation.bundle, { roots, sourceIds: [...sourceIds], families: [...families] });

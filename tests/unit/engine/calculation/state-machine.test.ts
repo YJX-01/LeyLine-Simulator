@@ -20,7 +20,7 @@ describe('Vesna source actions and fixed event-state execution', () => {
     library = readCalculationLibrary();
     character = await getCharacter('vesna');
     actions = (await getCharacterActions({ namespace: character.namespace, id: character.id, revision: character.revision }))!;
-    build = { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: character.dataVersion, character,
+    build = { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: character.dataVersion, character,
       weapon: await getWeapon('favoniussword'), artifacts: [], sets: [], artifactMain: await getArtifactMain(),
       level: 90, ascension: 6, constellation: 0, talents: { normal: 10, skill: 10, burst: 10 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
@@ -207,11 +207,11 @@ describe('Vesna source actions and fixed event-state execution', () => {
     const hit = character.talents.find(talent => talent.id === 'vesna.skill')!.hits.find(hit => hit.id === 'vesna.skill.param1')!;
     const frame: schemas.CombatFrame = { ownerId: 'vesna', recipientId: 'vesna', contributorId: null, targetId: 'enemy', eventId: event.id, sourceEventId: null,
       phase: 'before', facts: { critMode: fact({ kind: 'enum', value: 'noncritical' }), reactionMode: fact({ kind: 'enum', value: 'none' }) }, actorFacts: {}, captures: {}, applications: [], factOverrides: [],
-      hit: { skillId: 'vesna.skill', hitId: hit.id, element: hit.element, category: hit.category, family: hit.outputs[0].family, origin: hit.outputs[0].origin, reactionId: null } };
-    const before = evaluateBoundFormula(prepared.program, context, hit.outputs[0].invocation, frame);
-    const after = evaluateBoundFormula(prepared.program, context, hit.outputs[0].invocation, { ...frame, phase: 'after' });
+      hit: { skillId: 'vesna.skill', hitId: hit.id, element: hit.element, category: hit.category, family: Object.keys(hit.damage)[0], origin: hit.origin, reactionId: null } };
+    const before = evaluateBoundFormula(prepared.program, context, Object.values(hit.damage)[0], frame);
+    const after = evaluateBoundFormula(prepared.program, context, Object.values(hit.damage)[0], { ...frame, phase: 'after' });
     expect(before.execution, JSON.stringify(before.diagnostics)).toBe('complete'); expect(after.execution, JSON.stringify(after.diagnostics)).toBe('complete');
-    const a = before.outputs[hit.outputs[0].invocation.output], b = after.outputs[hit.outputs[0].invocation.output];
+    const a = before.outputs[Object.values(hit.damage)[0].output], b = after.outputs[Object.values(hit.damage)[0].output];
     expect(a.state).toBe('known'); expect(b.state).toBe('known');
     if (a.state === 'known' && b.state === 'known' && a.value.kind === 'quantity' && b.value.kind === 'quantity') expect(b.value.value / a.value.value).toBeCloseTo(1.4, 12);
     const conflict = evaluateStateMachine(prepared.program, context, request());

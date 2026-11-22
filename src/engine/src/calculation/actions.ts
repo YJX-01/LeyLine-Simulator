@@ -1,7 +1,7 @@
 import { calculationBundleSchema, calculationJsonPointer, characterActionsDefinitionSchema, definitionKey, inspectCalculationStructure,
   type CalculationBundle, type CalculationDiagnostic, type CharacterActionsDefinition, type StructuredCharacterDefinition } from '@leyline/schema';
 import { compileStructuredCharacter } from './character';
-import { compiledData, type CompiledCalculation } from './compile';
+import { compiledData, deduplicateCalculationBundle, type CompiledCalculation } from './compile';
 import { collectCalculationRoots } from './closure';
 
 export type CompiledCharacterActions = { ok: true; actions: CharacterActionsDefinition; character: StructuredCharacterDefinition;
@@ -28,12 +28,13 @@ export function compileCharacterActions(input: unknown, characterInput: unknown,
     for (const key of ['sources', 'formulas', 'tables', 'attributes', 'effects', 'aggregates', 'coverage', 'stateMachines'] as const) (bundle[key] as unknown[]).push(...additions[key]);
   }
   const sourceIds = [...new Set([...actions.sources, ...actions.actions.flatMap(action => action.sources), ...actions.gaps.flatMap(gap => gap.sources)])];
-  const closure = collectCalculationRoots(bundle, { roots: [actions.calculation.stateMachine], sourceIds, families: [] });
+  const closure = collectCalculationRoots(deduplicateCalculationBundle(bundle), { roots: [actions.calculation.stateMachine], sourceIds, families: [] });
   if (!closure.ok) return { ok: false, diagnostics: [...diagnostics, ...closure.diagnostics] };
   bundle = structuredClone(character.calculation.bundle);
   bundle.requiredFeatures = [...new Set([...bundle.requiredFeatures, ...closure.bundle.requiredFeatures])];
   bundle.damageFamilies = [...new Set([...bundle.damageFamilies ?? [], ...closure.bundle.damageFamilies ?? []])];
   for (const key of ['sources', 'formulas', 'tables', 'attributes', 'effects', 'aggregates', 'coverage', 'stateMachines'] as const) (bundle[key] as unknown[]).push(...closure.bundle[key]);
+  bundle = deduplicateCalculationBundle(bundle);
   const compiled = compileStructuredCharacter({ ...character, calculation: { ...character.calculation, bundle } });
   if (!compiled.ok) return { ok: false, diagnostics: [...diagnostics, ...compiled.diagnostics] };
   const data = compiledData(compiled.program)!, machine = data.stateMachines.get(definitionKey(actions.calculation.stateMachine));
@@ -44,8 +45,8 @@ export function compileCharacterActions(input: unknown, characterInput: unknown,
   for (const [index, action] of actions.actions.entries()) {
     if (action.skillId !== null && !character.talents.some(talent => talent.id === action.skillId)) report('stale-reference', `/actions/${index}/skillId`, '动作引用的技能不存在。');
     for (const [hitIndex, reference] of action.hits.entries()) {
-      const hit = character.talents.find(talent => talent.id === reference.skillId)?.hits.find(hit => hit.id === reference.hitId);
-      if (!hit || reference.outputIds.some(id => !hit.outputs.some(output => output.id === id))) report('stale-reference', `/actions/${index}/hits/${hitIndex}`, '动作引用的命中或输出已失效。');
+      const exists = character.talents.some(talent => talent.hits.some(hit => hit.id === reference.hitId));
+      if (!exists) report('stale-reference', `/actions/${index}/hits/${hitIndex}`, '动作引用的命中已失效。');
     }
   }
   if (machine) for (const selector of [...machine.requirements.map(rule => rule.selector), ...machine.transitions.map(rule => rule.selector)]) {

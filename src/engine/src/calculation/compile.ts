@@ -40,6 +40,23 @@ function canonical(value: unknown): string {
   if (value && typeof value === 'object') return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical((value as Record<string, unknown>)[key])).join(',') + '}';
   return JSON.stringify(value);
 }
+
+/** Coalesce shared snapshots before applying the document budget. Conflicts stay visible to the compiler. */
+export function deduplicateCalculationBundle(bundle: CalculationBundle): CalculationBundle {
+  const result = {...bundle};
+  for (const field of ['sources','formulas','tables','attributes','effects','aggregates','coverage','stateMachines'] as const) {
+    const seen = new Map<string, unknown>();
+    const definitions = bundle[field].filter(definition => {
+      const key = 'identity' in definition ? definitionKey(definition.identity) : definition.id;
+      const previous = seen.get(key);
+      if (previous) return previous !== definition && canonical(previous) !== canonical(definition);
+      seen.set(key, definition);
+      return true;
+    });
+    Object.assign(result, { [field]: definitions });
+  }
+  return result;
+}
 function freeze(value: unknown): void {
   if (!value || typeof value !== 'object' || Object.isFrozen(value)) return;
   Object.freeze(value);

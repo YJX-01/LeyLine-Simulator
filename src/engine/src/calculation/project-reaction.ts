@@ -1,4 +1,5 @@
 import { combatDamageBindings } from '@leyline/schema/hit-bindings';
+import { isTransformative } from '@leyline/schema';
 import type { BoundAggregateRequest, CalculationFact, CombatFrame, DamageOccurrence, ProjectReaction, Value } from '@leyline/schema';
 
 const ref = (id: string) => ({ namespace: 'builtin' as const, id, revision: '1' });
@@ -9,6 +10,16 @@ const noncritical = { kind: 'enum' as const, value: 'noncritical' };
 export function reactionOccurrence(eventId: string, reaction: ProjectReaction, frameFor: (actorId: string) => CombatFrame): DamageOccurrence {
   const { family, element } = reaction;
   const { attr, call, critFactor, resistanceFactor } = combatDamageBindings(element);
+  if (isTransformative(family)) {
+    const owner = reaction.contributors[0], frame = frameFor(owner.actorId);
+    const hit = { skillId: null, hitId: null, category: null, family: 'transformative', element, origin: 'reaction' as const, reactionId: family };
+    return { eventId, outputId: family, actorId: owner.actorId, contributorIds: [owner.actorId], family: 'transformative',
+      computation: { kind: 'formula', invocation: { formula: ref('transformative'), output: 'value', captures: [], bindings: {
+        levelMultiplier: call('reaction-level-multiplier', { level: attr('level') }), em: attr('elementalMastery'), resistanceFactor,
+        reactionBonus: attr('reaction.transformative.damageBonus'), reactionCoefficient: attr('reaction.' + family + '.coefficient'),
+      } }, frame: { ...frame, hit, contributorId: owner.actorId, factOverrides: [...frame.factOverrides.filter(r => r.subject.kind !== 'actor' || r.subject.id !== owner.actorId),
+        { subject: { kind: 'actor', id: owner.actorId }, facts: { ...frame.factOverrides.find(r => r.subject.kind === 'actor' && r.subject.id === owner.actorId)?.facts, ...owner.facts } }] } } };
+  }
   const stellar = family === 'stellar-swirl';
   const special = (key: string) => attr('reaction.' + (stellar ? 'stellar-swirl.' : 'lunar.') + key);
   const expected = reaction.contributors.filter(contributor => contributor.crit === 'expected');

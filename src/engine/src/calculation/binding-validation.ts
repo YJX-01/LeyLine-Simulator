@@ -27,7 +27,7 @@ export function validateBinding(data: CompiledData, binding: CalculationBinding,
   let type: ValueType | undefined;
   if (binding.kind === 'constant') type = binding.value.kind === 'quantity' ? { kind: 'quantity', unit: binding.value.unit }
     : binding.value.kind === 'enum' ? { kind: 'enum', values: [binding.value.value] } : { kind: 'boolean' };
-  else if (binding.kind === 'attribute' || binding.kind === 'enemy') {
+  else if (binding.kind === 'attribute' || binding.kind === 'enemy' || binding.kind === 'team-attribute') {
     const attribute = data.attributes.get(definitionKey(binding.key));
     if (!attribute) report('missing-dependency', pointer + '/key', '绑定缺少属性的精确版本。');
     else {
@@ -35,7 +35,7 @@ export function validateBinding(data: CompiledData, binding: CalculationBinding,
       if ((binding.kind === 'enemy') !== (attribute.scope === 'target')) report('unit-mismatch', pointer, '属性读取方式与作用域不匹配。');
     }
   } else if (binding.kind === 'formula') type = validateFormulaBindings(data, binding.formula, binding.inputs, binding.output, pointer, report, false, depth + 1);
-  else if (binding.kind === 'actor-state' || binding.kind === 'team-count') type = { kind: 'quantity', unit: 'count' };
+  else if (binding.kind === 'actor-state' || binding.kind === 'team-count' || binding.kind === 'team-region') type = { kind: 'quantity', unit: 'count' };
   else {
     type = binding.type;
     if (binding.kind === 'refinement-parameter' && binding.values.some(value => {

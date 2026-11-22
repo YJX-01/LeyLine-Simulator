@@ -1,3 +1,4 @@
+import { eventCounts } from '../../../helpers/catalog-calculation';
 import { packDocument } from '../../../../src/web/src/domain/content-document';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { describe, expect, it } from 'vitest';
@@ -11,15 +12,15 @@ import { addAttributeCapture, defaultEnemy } from '../../../../src/web/src/domai
 
 // Independent legal calculation settings from pinned genshin-db and KQM. No player build/observed axis.
 async function buildFor(id: string, weapon: string, constellation = 0): Promise<Build> {
-  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
+  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon), artifactMain: await getArtifactMain(),
     level: 90, ascension: 6, constellation, talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1, artifacts: [], sets: [] };
 }
-const request = (build: Build): DamageRequest => ({ ...selectCatalogHit(build, `${build.character.id}.skill`, 0), crit: 'noncritical', reaction: 'none', ...(build.character.id === 'beidou' ? { inputs: { counterCharge: 2 } } : {}) });
+const request = (build: Build): DamageRequest => ({ ...selectCatalogHit(build, `${build.character.id}.skill`, 0), crit: 'noncritical', reaction: 'none', ...(build.character.id === 'beidou' ? { facts: eventCounts({ counterCharge: 2 }) } : {}) });
 
 describe('source-backed query coverage preserves all other guards', () => {
   it.each([0, 1])('calculates Kaeya C%i icicle from an independent anchor through file and candidate recomputation', async constellation => {
     const build = await buildFor('kaeya', 'dullblade', constellation);
-    const document = createDamageCalculation(build, { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none' }, defaultEnemy());
+    const document = createDamageCalculation(build, { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'kaeya', revision: '6' }, hitId: 'kaeya.burst.param1' }, crit: 'noncritical', reaction: 'none' }, defaultEnemy());
     const hit = document.project.timeline[0];
     hit.timeMs = 1000;
     const source = addAttributeCapture(document.project, document.actorId, 'kaeya.burst', 0);
@@ -47,7 +48,8 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(evaluateTimeline(reopened.project).totalValue).toBeNull();
     record.damage!.capture!.phase = 'before';
     reopened.project.candidate.actors[0].build!.constellation = 2;
-    expect(evaluateTimeline(reopened.project).totalValue).toBeNull();
+    expect(evaluateTimeline(reopened.project).totalValue).toBeCloseTo(expected, 8);
+    expect(evaluateTimeline(reopened.project).status).toBe('partial');
   });
 
   it('prepares a reviewed content replacement without mutating the saved snapshot, baseline or custom definition', async () => {
@@ -60,7 +62,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     }
     const document = createDamageCalculation(build, request(build), defaultEnemy());
     const original = JSON.stringify(document);
-    expect(evaluateTimeline(document.project).totalValue).toBeNull();
+    expect(evaluateTimeline(document.project).status).toBe('partial');
     const update = await prepareCalculatorContentUpdate(document);
     expect(update.changes).toContain('角色定义（4 → 6）');
     const owner = update.document.project.candidate.actors[0];
@@ -70,7 +72,9 @@ describe('source-backed query coverage preserves all other guards', () => {
     document.baseline = structuredClone(document.project);
     await expect(prepareCalculatorContentUpdate(document)).rejects.toThrow('结束对照');
     delete document.baseline;
-    document.project.candidate.actors[0].build!.character = copyCharacterDefinition(build.character, build.dataVersion);
+    const custom = copyCharacterDefinition(build.character, build.dataVersion);
+    document.project.candidate.actors[0].build!.character = custom;
+    document.project.timeline[0].damage!.hit.definition = { group: 'characters', namespace: custom.namespace, id: custom.id, revision: custom.revision };
     await expect(prepareCalculatorContentUpdate(document)).rejects.toThrow('自定义角色');
   });
   it.each([0, 1, 2, 3])('calculates Kaeya C%i E including only unlocked talent bonuses', async constellation => {
@@ -95,23 +99,27 @@ describe('source-backed query coverage preserves all other guards', () => {
     stale.character.revision = '4';
     const proof = incomplete.character.calculation.bundle.coverage.find(record => record.scope.kind === 'hit' && record.scope.skillId === 'beidou.skill')!;
     proof.resolution = 'unavailable';
-    for (const derivative of [missing, stale, incomplete, { ...build, constellation: 1 }]) {
-      expect(evaluateDamage(derivative, request(build), defaultEnemy()).value).toBeNull();
+    for (const derivative of [missing, stale]) expect(evaluateDamage(derivative, request(build), defaultEnemy()).value).toBeNull();
+    for (const derivative of [incomplete, { ...build, constellation: 1 }]) {
+      const result = evaluateDamage(derivative, request(build), defaultEnemy());
+      expect(result.status).toBe('partial');
+      expect(result.value).toBeGreaterThan(0);
     }
     const copied = copyCharacterDefinition(build.character, build.dataVersion);
     expect(copied.calculation.bundle.coverage.every(record => record.evidence === 'declared')).toBe(true);
-    expect(evaluateDamage({ ...build, character: copied }, request(build), defaultEnemy()).value).toBeGreaterThan(0);
+    expect(evaluateDamage({ ...build, character: copied }, request(build), defaultEnemy()).value).toBeNull();
+    expect(evaluateDamage({ ...build, character: copied }, { ...request(build), hit: { definition: { group: 'characters', id: copied.id, namespace: copied.namespace, revision: copied.revision }, hitId: request(build).hit.hitId } }, defaultEnemy()).value).toBeGreaterThan(0);
     expect(JSON.stringify(build)).toBe(original);
   });
 
   it('retains missing counter, relevant unaudited weapon, unknown crit and invalid structural derivatives', async () => {
     const build = await buildFor('beidou', 'wastergreatsword');
-    const missing = evaluateDamage(build, { ...request(build), inputs: undefined }, defaultEnemy());
+    const missing = evaluateDamage(build, { ...request(build), facts: undefined }, defaultEnemy());
     expect(missing.value).toBeNull();
     expect(missing.issues.some(issue => issue.code === 'unknown' && issue.message.includes('counterCharge'))).toBe(true);
     const weapon = await getWeapon('wolfsgravestone'); // Real ATK/passive dependencies are still unreviewed.
     const unsupported = evaluateDamage({ ...build, weapon }, request(build), defaultEnemy());
-    expect(unsupported.value).toBeNull();
+    expect(unsupported.value).toBeGreaterThan(0);
     expect(unsupported.issues.some(issue => issue.code === 'unsupported')).toBe(true);
     expect(evaluateDamage(build, { ...request(build), crit: null }, defaultEnemy()).value).toBeNull();
     expect(evaluateDamage({ ...build, weapon: await getWeapon('dullblade') }, request(build), defaultEnemy()).status).toBe('invalid');
@@ -122,9 +130,9 @@ describe('source-backed query coverage preserves all other guards', () => {
     const build = await buildFor('kaeya', 'dullblade', 1);
     const normal = build.character.talents.find(talent => talent.category === 'normal')!;
     const output = evaluateDamage(build, { ...selectCatalogHit(build, normal.id, 0), crit: 'expected', reaction: 'none' }, defaultEnemy());
-    expect(output.value).toBeNull(); // C1 target Cryo condition/effect has not been implemented.
+    expect(output.status).toBe('partial'); // C1 target Cryo condition/effect has not been implemented.
     expect(output.issues.some(issue => issue.code === 'unsupported')).toBe(true);
-    expect(evaluateDamage({ ...build, constellation: 4 }, request(build), defaultEnemy()).value).toBeNull();
+    expect(evaluateDamage({ ...build, constellation: 4 }, request(build), defaultEnemy()).status).toBe('partial');
   });
 
   it('recomputes isolated candidates through the exported service, domain request and file reopening', async () => {
@@ -145,8 +153,8 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(comparison.candidates[0].delta).toBeCloseTo(expectedAfter - expectedBefore, 8);
     expect(comparison.candidates[0].sources.builds).toEqual([{ actorId: document.actorId, fields: ['weapon'] }]);
     expect(comparison.candidates[1].result.status).toBe('partial');
-    expect(comparison.candidates[1].result.totalValue).toBeNull();
-    expect(comparison.candidates[1].delta).toBeNull();
+    expect(comparison.candidates[1].result.totalValue).toBeGreaterThan(0);
+    expect(comparison.candidates[1].delta).toBeCloseTo(comparison.candidates[1].result.totalValue! - expectedBefore, 8);
     expect(comparison.candidates[2].result.totalValue).toBeCloseTo(expectedBefore, 8);
     expect(comparison.candidates[2].delta).toBe(0);
     document.baseline = JSON.parse(JSON.stringify(document.project));
@@ -159,7 +167,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(build.weapon?.id).toBe('wastergreatsword');
     const invalid = { ...candidates[0], replacements: [{ actorId: 'kaeya', build: candidate }] };
     expect(() => compareTimelineLoadouts(document.project, [invalid])).toThrow('同一角色');
-    document.project.timeline[0].damage!.inputs!.counterCharge = null;
+    document.project.timeline[0].damage!.facts = eventCounts({ counterCharge: null });
     expect(() => calculatorRequest(document, 8)).toThrow('同轴比较');
     expect(() => parseDamageCalculator(JSON.stringify({ ...reopened, schemaVersion: 0 }))).toThrow();
   });

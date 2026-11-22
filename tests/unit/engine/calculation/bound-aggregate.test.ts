@@ -24,7 +24,7 @@ describe('build-bound stellar contributions and per-state ranking', () => {
     for (const id of ['favoniussword', 'ironsting', 'harbingerofdawn']) weapons.set(id, await getWeapon(id));
   });
   function build(id: string, weaponId: string): schemas.StructuredBuild {
-    return { schemaVersion: '0.1.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
+    return { schemaVersion: '0.2.0', kind: 'calculation-build', dataVersion: DATA_VERSION, character: structuredClone(characters.get(id)!), weapon: structuredClone(weapons.get(weaponId)!),
       sets: [], artifacts: [], artifactMain: main, level: 90, ascension: 6, constellation: 0, talents: { normal: 1, skill: 1, burst: 1 }, weaponLevel: 90, weaponAscension: 6, refinement: 1,
       sources: [{ id: 'artifact-main-source', kind: 'repo', repository: 'Rafs-kk/LunaGC-6.6-res', commit: 'b0501c5d89767ead5f647869a2412521447f7682', path: 'ExcelBinOutput/ReliquaryLevelExcelConfigData.json' }], artifactMainSourceRefs: ['artifact-main-source'] };
   }

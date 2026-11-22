@@ -7,7 +7,7 @@ import type { CalculationBundle, FormulaDefinition } from '@leyline/schema';
 
 const original: FormulaDefinition = readCalculationData(new URL('../../../../src/game-data/data/characters/nahida.json', import.meta.url)).calculation.bundle.formulas.find((item: FormulaDefinition) => item.identity.id === 'nahida.skill.tri-karma.base');
 function library(): CalculationBundle {
-  return { schemaVersion: '0.1.0', runtimeVersion: '0.1.0', requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
+  return { schemaVersion: '0.2.0', runtimeVersion: '0.2.0', requiredFeatures: ['fixed-templates-v1', 'formula-call-v1'],
     sources: [{ id: 'character.builtin.nahida', kind: 'definition' }],
     formulas: [structuredClone(original)], tables: [], attributes: [], effects: [], stateMachines: [], aggregates: [], coverage: [] };
 }
@@ -20,7 +20,7 @@ describe('fixed TS template compilation from real catalog configurations', () =>
     if (recipe.template.id === 'scaled-damage') recipe.template.terms.splice(0);
     expect(compileCalculation(bundle).ok).toBe(false);
     if (result.ok) {
-      expect(result.program.runtimeVersion).toBe('0.1.0');
+      expect(result.program.runtimeVersion).toBe('0.2.0');
       expect(evaluateFormula(result.program, original.identity, {}, { outputs: ['base'] }).execution).toBe('partial');
     }
     expect(describeCalculationTemplate(original).outputs.base).toEqual({ kind: 'quantity', unit: 'damage' });

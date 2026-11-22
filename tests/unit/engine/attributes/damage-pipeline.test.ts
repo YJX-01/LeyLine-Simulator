@@ -1,4 +1,4 @@
-import { selectCatalogHit } from '../../../helpers/catalog-calculation';
+import { hpFacts, selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
 import { characterDefinitionSchema, elements, type Build, type Enemy } from '@leyline/schema';
@@ -12,7 +12,7 @@ import { talentBonus } from '../../../../src/web/src/domain/character-info';
 // Hilichurl resistances: pinned KQM resources/compendiums/enemy-resistances.md.
 const hilichurl: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id: string, weapon = 'harbingerofdawn'): Promise<Build> {
-  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     sets: [], artifacts: [], artifactMain: await getArtifactMain(), level: 90, ascension: 6, constellation: 0,
     talents: { normal: 1, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
@@ -72,7 +72,7 @@ describe('shared damage formula with source-derived calculation settings', () =>
 
   it('only consumes HP-gated Harbinger crit rate when the chosen crit mode needs it', async () => {
     const build = await setting('jean');
-    const request = { skillId: 'jean.skill', hitId: 'jean.skill.param1', outputId: 'jean.skill.param1.damage', crit: 'noncritical' as const, reaction: 'none' as const };
+    const request = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.skill.param1' }, crit: 'noncritical' as const, reaction: 'none' as const };
     const expectedBase = (18.62 * 8.739 + 76.4582 + 38.7413 * 7.346 + 116.7) * 4.964;
     const noncritical = evaluateDamage(build, request, hilichurl);
     expect(noncritical.panel.status).toBe('partial');
@@ -88,7 +88,7 @@ describe('shared damage formula with source-derived calculation settings', () =>
 
   it('recomputes all relevant attributes after a weapon change', async () => {
     const alternate = await setting('jean', 'favoniussword');
-    const request = { ...selectCatalogHit(alternate, 'jean.skill', 0), crit: 'expected' as const, reaction: 'none' as const, conditions: { hpRatio: 1 } };
+    const request = { ...selectCatalogHit(alternate, 'jean.skill', 0), crit: 'expected' as const, reaction: 'none' as const, facts: hpFacts('owner', 1) };
     const result = evaluateDamage(alternate, request, hilichurl);
     const attack = 18.62 * 8.739 + 76.4582 + 41.0671 * 7.275 + 155.6;
     expect(result.value).toBeCloseTo(attack * 4.964 * 1.025 * 0.5 * 0.9, 8);
@@ -97,7 +97,7 @@ describe('shared damage formula with source-derived calculation settings', () =>
 
   it('reuses category modifiers without treating unrelated elemental bonuses as unsupported', async () => {
     const build = await setting('jean', 'festeringdesire');
-    const result = evaluateDamage(build, { skillId: 'jean.skill', hitId: 'jean.skill.param1', outputId: 'jean.skill.param1.damage', crit: 'expected', reaction: 'none' }, hilichurl);
+    const result = evaluateDamage(build, { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.skill.param1' }, crit: 'expected', reaction: 'none' }, hilichurl);
     const attack = 18.62 * 8.739 + 76.4582 + 42.401 * 8.349 + 155.6;
     expect(result.status).toBe('complete');
     expect(result.value).toBeCloseTo(attack * 4.964 * 1.16 * (1 + 0.11 * 0.5) * 0.5 * 0.9, 8);
@@ -105,11 +105,11 @@ describe('shared damage formula with source-derived calculation settings', () =>
 
   it('keeps structural errors global and unsupported constellations explicit', async () => {
     const build = await setting('jean');
-    const request = { skillId: 'jean.skill', hitId: 'jean.skill.param1', outputId: 'jean.skill.param1.damage', crit: 'noncritical' as const, reaction: 'none' as const };
+    const request = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.skill.param1' }, crit: 'noncritical' as const, reaction: 'none' as const };
     expect(evaluateDamage({ ...build, level: 19, ascension: 1 }, request, hilichurl).status).toBe('invalid');
     const c5 = evaluateDamage({ ...build, constellation: 5 }, request, hilichurl);
     expect(c5.status).toBe('partial');
-    expect(c5.value).toBeNull();
+    expect(c5.value).toBeCloseTo(c5.baseDamage! * 0.45, 8);
     expect(talentBonus(build.character, 'skill', 5)).toBe(3);
     expect(c5.parts.multiplier).toBe(build.character.talents.find(talent => talent.category === 'skill')!.parameters[0].values[11]);
   });
@@ -131,7 +131,7 @@ describe('source-bound base-damage components, with character rules still pendin
     const punch = evaluateCatalogBase(dehya, 'dehya.burst', 0, 9,
       stat => stat === 'attack' ? dehyaAttack : stat === 'hp' ? hp : null);
     expect(catalogBaseValue(punch)).toBeCloseTo(1.6779 * dehyaAttack + 0.028764 * hp, 8);
-    expect([chiori, dehya].every(character => character.talents.every(talent => talent.hits.every(hit => hit.outputs.length === 0)))).toBe(true);
+    expect([chiori, dehya].every(character => character.talents.every(talent => new Set(talent.hits.map(hit => hit.id)).size === talent.hits.length))).toBe(true);
   });
 
   it.each([['cyno', 0, 'normal', 1.438227], ['raidenshogun', 1, 'burst', 0.752402]] as const)
@@ -143,7 +143,7 @@ describe('source-bound base-damage components, with character rules still pendin
       const attack = white + 23.245 * 5.968 + 46.7;
       expect(catalogBaseValue(evaluateCatalogBase(character, talent.id, hitIndex, 9, () => attack, id === 'raidenshogun' ? { resolve: 0 } : {}))).toBeCloseTo(attack * coefficient, 8);
       expect(talent.hits[hitIndex].category).toBe(category);
-      expect(talent.hits.every(hit => !hit.outputs.length)).toBe(true);
+      expect(talent.hits.every(hit => Object.keys(hit.damage).length <= 1)).toBe(true);
     });
 
   it('uses Gorou DEF burst scaling and preserves Xinyan physical burst damage', async () => {
@@ -172,7 +172,7 @@ describe('source-bound base-damage components, with character rules still pendin
       // A request/schema boundary using legal catalog equipment; no fabricated character or numerical truth.
       const result = evaluateDamage(build, { ...selectCatalogHit(build, talent.id, 0), crit: 'noncritical', reaction: 'none' }, hilichurl);
       expect(result.status).toBe('invalid');
-      expect(result.issues.some(issue => issue.message.includes('没有独立伤害'))).toBe(true);
+      expect(result.issues.some(issue => issue.code === 'invalid-input')).toBe(true);
       const impossible = structuredClone(character);
       impossible.talents.find(skill => skill.id === talent.id)!.hits.push(...character.talents.find(skill => skill.hits.length)!.hits.slice(0, 1));
       expect(characterDefinitionSchema.safeParse(impossible).success).toBe(false);
@@ -185,7 +185,7 @@ describe('source-bound base-damage components, with character rules still pendin
     const base = evaluateCatalogBase(character, talent.id, 5, 9, stat => stat === 'defense' ? defense : null);
     expect(catalogBaseValue(base)).toBeCloseTo(defense * 1.174572, 8);
     expect(talent.hits[5].element).toBe('physical');
-    expect(talent.hits.every(hit => !hit.outputs.length)).toBe(true);
+    expect(talent.hits.every(hit => Object.keys(hit.damage).length <= 1)).toBe(true);
   });
 
   it('adds Sethos Shadowpiercing Shot attack and EM terms once without treating them as separate hits', async () => {
@@ -208,7 +208,7 @@ describe('source-bound base-damage components, with character rules still pendin
     expect(catalogBaseValue(evaluateCatalogBase(character, talent.id, 9, 9, () => attack))).toBeCloseTo(attack * 3.6992, 8);
     expect(talent.hits[6].element).toBe('physical');
     expect(talent.hits.slice(7, 10).every(hit => hit.element === 'cryo' && hit.category === 'charged')).toBe(true);
-    expect(talent.hits.every(hit => !hit.outputs.length)).toBe(true);
+    expect(talent.hits.every(hit => Object.keys(hit.damage).length <= 1)).toBe(true);
   });
 
   it.each([
@@ -221,11 +221,11 @@ describe('source-bound base-damage components, with character rules still pendin
     // The basic bow/catalyst have only four ascensions; use their legal level 70 cap.
     if (weapon !== 'harbingerofdawn') { build.weaponLevel = 70; build.weaponAscension = 4; }
     const skill = build.character.talents.find(skill => skill.category === 'skill')!;
-    const expectedStats = resolveBuild(build).stats;
+    const expectedStats = resolveBuild(build, { onField: false }).stats;
     const result = evaluateCatalogBase(build.character, skill.id, hitIndex, 9, stat => expectedStats[stat]);
     expect(result.execution).toBe('complete');
     for (const stat of stats) expect(result.trace.some(node => node.kind === 'attribute' && node.nodeId === `attribute.${stat}`)).toBe(true);
-    expect(evaluateDamage(build, { ...selectCatalogHit(build, skill.id, hitIndex), crit: 'noncritical', reaction: 'none' }, hilichurl).value).toBeNull();
+    expect(evaluateDamage(build, { ...selectCatalogHit(build, skill.id, hitIndex), crit: 'noncritical', reaction: 'none', facts: [{ subject: { kind: 'actor', id: 'owner' }, values: { onField: { value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] } } }] }, hilichurl).status).toBe('partial');
 
   });
 
@@ -240,7 +240,7 @@ describe('source-bound base-damage components, with character rules still pendin
     expect(base.execution).toBe('complete');
     expect(catalogBaseValue(base)).toBeCloseTo(attribute * multiplier, 9);
     expect(base.trace.some(node => node.kind === 'attribute' && node.nodeId === `attribute.${stat}`)).toBe(true);
-    expect(talent.hits.every(hit => !hit.outputs.length)).toBe(true); // Scaling proof does not prove all passive/condition rules.
+    expect(talent.hits.every(hit => Object.keys(hit.damage).length <= 1)).toBe(true); // Scaling proof does not prove all passive/condition rules.
   });
 
   it('adds Nahida ATK and EM terms and propagates an unknown term instead of zero', async () => {

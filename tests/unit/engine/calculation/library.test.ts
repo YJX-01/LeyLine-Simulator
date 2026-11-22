@@ -64,7 +64,7 @@ describe('authored ordinary formula library', () => {
     const reactions = readCalculationData(new URL('src/game-data/data/calculation/reactions.json', root)).rules;
     const additive = bundle.formulas.find(formula => formula.identity.id === 'additive')!;
     const table = bundle.tables.find(table => table.identity.id === 'reaction-level')!;
-    const lookup: FormulaDefinition = { schemaVersion: '0.1.0', identity: { namespace: 'custom:reaction-table-test', id: 'adopted-level-lookup', revision: '1' },
+    const lookup: FormulaDefinition = { schemaVersion: '0.2.0', identity: { namespace: 'custom:reaction-table-test', id: 'adopted-level-lookup', revision: '1' },
       template: { id: 'level-multiplier', revision: '1', table: table.identity }, sources: ['kqm.additive'] };
     bundle.formulas.push(lookup);
     const program = prepared(bundle);

@@ -1,9 +1,9 @@
-import { boundFormulaSchema, calculationBindingSchema, calculationJsonPointer, combatContextSchema, combatFrameSchema, definitionKey, inspectCalculationStructure, valueMatchesType, valueTypeAssignable,
+import { subjectFacts, boundFormulaSchema, calculationBindingSchema, calculationJsonPointer, combatContextSchema, combatFrameSchema, definitionKey, inspectCalculationStructure, valueMatchesType, valueTypeAssignable,
   type AttributeDefinition, type BoundFormula, type CalculationActorSelector, type CalculationBinding, type CalculationDiagnostic, type CalculationFact,
   type CalculationReadTime, type CombatContext, type CombatFrame, type DefinitionRef, type EvaluatedValue, type FormulaEvaluation, type Value, type ValueType } from '@leyline/schema';
 import { compiledData, type CompiledCalculation, type CompiledData } from './compile';
 import { validateBinding, validateBoundFormula } from './binding-validation';
-import { collectEffectInstances, eventOrder, hitMatches, instanceActive, type EffectInstance } from './effects';
+import { collectEffectInstances, eventOrder, hasRecipientCharges, teamHealthCounter, hitMatches, instanceActive, stackExpiryUncertain, type EffectInstance } from './effects';
 import { interpretFormula, type FormulaEvaluationOptions } from './interpret';
 import { CalculationSession, type TraceOrigin } from './session';
 import { factsHaveSources, validateContextDefinitions } from './context-validation';
@@ -63,8 +63,12 @@ class BoundEvaluator {
   scopedFact(subject: CombatContext['factIntervals'][number]['subject'], key: string, frame: ReadFrame): CalculationFact | undefined {
     const identity = JSON.stringify([subject, key]);
     if (frame.eventId === this.initialFrame.eventId && this.overrides.has(identity)) return this.overrides.get(identity);
+    const recordFact = subjectFacts(this.events.get(frame.eventId)?.subjectFacts, subject)?.[key];
+    if (recordFact) return recordFact;
     const eventFrame = this.stateFrames.get(JSON.stringify([subject, key, frame.eventId, frame.phase]));
     if (eventFrame) return eventFrame;
+    const resource = subject.kind === 'actor' ? this.events.get(frame.eventId)?.derivedStates?.[frame.phase][subject.id]?.[key] : undefined;
+    if (resource) return resource;
     const timeMs = this.events.get(frame.eventId)!.timeMs;
     const entries = this.intervals.get(identity) ?? [];
     let left = 0, right = entries.length;
@@ -110,15 +114,39 @@ class BoundEvaluator {
       return value === null ? this.missing(origin, binding.property, { kind: 'quantity', unit: 'count' }, 'actor-build')
         : this.session.known(origin, binding.property, { kind: 'quantity', unit: 'count', value });
     }
-    if (binding.kind === 'team-count') {
+    if (binding.kind === 'team-attribute') {
+      const type = this.data.attributes.get(definitionKey(binding.key))!.type;
+      if (type.kind !== 'quantity') return this.session.invalid(origin, binding.key.id, '/bindings', '队伍聚合只读取数值属性。', 'unit-mismatch');
+      const excluded = frame.instance ? new Set([...frame.excluded, frame.instance.id]) : frame.excluded;
+      const dependencies: string[] = [];
+      let total = binding.aggregate === 'max' ? -Infinity : 0;
+      for (const actor of this.context.actors) {
+        const value = this.attribute(binding.key, actor.id, { ...frame, ownerId: actor.id, recipientId: actor.id, excluded }, depth + 1);
+        if (value.state !== 'known') return value;
+        if (value.value.kind !== 'quantity') return this.session.invalid(origin, binding.key.id, '/bindings', '队伍属性单位无效。', 'unit-mismatch');
+        dependencies.push(value.traceId);
+        total = binding.aggregate === 'max' ? Math.max(total, value.value.value) : total + value.value.value;
+      }
+      return this.session.known(origin, binding.key.id, { kind: 'quantity', unit: type.unit, value: total }, dependencies, type);
+    }
+    if (binding.kind === 'team-count' || binding.kind === 'team-region') {
       let count = 0;
+      let unknownElement: string | undefined;
       const sources = new Set<string>();
       for (const actor of this.context.actors) {
+        if (binding.kind==='team-region') {
+          if (actor.identity?.region === undefined) return this.missing(origin,actor.id+'.region',{kind:'enum',values:[binding.region,'other']},'team-composition');
+          actor.identity.sourceRefs.forEach(source=>sources.add(source));
+          if (actor.identity.region===binding.region) count++;
+          continue;
+        }
         if (binding.excludeOwner && actor.id === frame.ownerId) continue;
-        if (!actor.identity) return this.missing(origin, actor.id + '.element', { kind: 'enum', values: ['physical', 'anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro'] }, 'team-composition');
+        if (!actor.identity) { unknownElement ??= actor.id; continue; }
         actor.identity.sourceRefs.forEach(source => sources.add(source));
         if (binding.elements.includes(actor.identity.element) === (binding.match === 'include')) count++;
+        if (count === binding.cap) { unknownElement = undefined; break; }
       }
+      if (unknownElement) return this.missing(origin, unknownElement + '.element', { kind: 'enum', values: ['physical', 'anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro'] }, 'team-composition');
       const value = this.session.known(origin, 'team-count', { kind: 'quantity', unit: 'count', value: count });
       const trace = this.session.trace.at(-1); if (trace?.id === value.traceId) trace.sourceRefs = [...new Set([...trace.sourceRefs, ...sources])];
       return value;
@@ -143,6 +171,11 @@ class BoundEvaluator {
       return this.readFact(origin, binding.parameterId, binding.type, actorId, { value, provenance: 'derived', sourceRefs: talent!.sourceRefs });
     }
     if (binding.kind === 'fact') {
+      if (binding.at === 'source-event') {
+        const source = this.sourceTime(frame, origin, 'before');
+        if ('state' in source) return source;
+        frame = { ...source, facts: {}, actorFacts: {} };
+      }
       if (binding.scope === 'source-event') {
         const source = this.sourceTime(frame, origin, frame.phase);
         if ('state' in source) return source;
@@ -150,10 +183,27 @@ class BoundEvaluator {
       }
       const event = this.events.get(frame.eventId)!;
       const scope = binding.scope === 'owner' ? frame.ownerId : binding.scope === 'recipient' ? frame.recipientId
-        : binding.scope === 'contributor' ? frame.contributorId : binding.scope;
-      const fact = binding.scope === 'query' ? own(frame.facts, binding.key) ?? own(event.facts, binding.key)
+        : binding.scope === 'contributor' ? frame.contributorId : binding.scope === 'event-actor' ? event.actorId : binding.scope;
+      let fact = binding.scope === 'query' ? own(frame.facts, binding.key) ?? own(event.facts, binding.key)
         : binding.scope === 'target' ? this.scopedFact({ kind: 'target', id: frame.targetId }, binding.key, frame)
           : binding.scope === 'team' ? this.scopedFact({ kind: 'team' }, binding.key, frame) : scope ? this.scopedFact({ kind: 'actor', id: scope }, binding.key, frame) : undefined;
+      if (binding.at === 'last-observation' && scope && scope !== 'query' && scope !== 'target' && scope !== 'team') {
+        const subject = {kind:'actor',id:scope} as const;
+        const current = frame.eventId === this.initialFrame.eventId ? this.overrides.get(JSON.stringify([subject,binding.key])) : undefined;
+        let latest: typeof event | undefined;
+        let last: CalculationFact | undefined;
+        for (const recorded of this.events.values()) {
+          if (recorded.timeMs > event.timeMs || recorded.timeMs === event.timeMs && recorded.order > event.order) continue;
+          const observed = subjectFacts(recorded.subjectFacts,subject)?.[binding.key];
+          if (observed && (!latest || (eventOrder(latest,recorded) ?? 0) < 0)) { latest = recorded; last = observed; }
+        }
+        fact = current ?? last ?? fact;
+      }
+      const counter = frame.instance?.definition.counter;
+      if (binding.scope === 'owner' && frame.instance && counter && (counter.fact === binding.key || counter.overflowFact === binding.key)) {
+        const points = this.scopedFact({ kind: 'actor', id: frame.ownerId }, counter.fact, frame);
+        fact = teamHealthCounter(frame.instance, this.events.values(), event, frame.phase, binding.key, points, fact) ?? undefined;
+      }
       return this.readFact(origin, binding.key, binding.type, scope ?? 'contributor', fact);
     }
     const actorId = binding.kind === 'enemy' ? frame.targetId : this.actor(binding.actor, frame, origin);
@@ -161,7 +211,7 @@ class BoundEvaluator {
     const at = this.time(binding.at, frame, origin, binding.key, actorId);
     if ('state' in at) return at;
     const excluded = binding.kind === 'attribute' && binding.excludeCurrentEffect && frame.instance
-      ? new Set([...frame.excluded, frame.instance.id]) : frame.excluded;
+        ? new Set([...frame.excluded, ...this.instances.filter(i => i.owner.id === frame.instance!.owner.id && i.definition === frame.instance!.definition).map(i => i.id)]) : frame.excluded;
     const value = this.attribute(binding.key, actorId, { ...at, excluded }, depth + 1);
     return binding.at.kind === 'capture' ? this.session.emit(origin, binding.at.slot, [value.traceId], value.state === 'known' ? value.value : null,
       value.state, value.state === 'known' ? [] : value.reasons, 'capture', { eventId: at.eventId, phase: at.phase, actorId, captureSlot: binding.at.slot }) : value;
@@ -226,18 +276,28 @@ class BoundEvaluator {
       const recipientMatches: boolean | null = recipient.role === 'owner' ? instance.owner.id === frame.recipientId
         : recipient.role === 'target' ? true : recipient.role === 'team' ? !recipient.excludeOwner || instance.owner.id !== frame.recipientId
           : recipientActor == null ? null : recipientActor === frame.recipientId;
-      const hit = hitMatches(effect.appliesTo, frame.hit), active = instanceActive(instance, this.events.get(frame.eventId)!, frame.phase);
+      const hit = hitMatches(effect.appliesTo, frame.hit);
+      const observed = effect.windowFact && this.scopedFact({ kind: 'actor', id: instance.owner.id }, effect.windowFact, frame);
+      if (effect.windowFact && (instance.source ? observed !== undefined : !observed)) continue;
+      const event = this.events.get(frame.eventId)!;
+      const uncertainExpiry = stackExpiryUncertain(instance, event.timeMs);
       const application = frame.applications.find(candidate => candidate.instanceId === instance.id);
+      const active = observed ? observed.value?.kind === 'boolean' ? observed.value.value : null
+        : uncertainExpiry && typeof application?.active === 'boolean' ? application.active : instanceActive(instance, event, frame.phase);
       if (recipientMatches === false || hit === false || active === false || application?.active === false) continue;
+      const charges = hasRecipientCharges(instance, this.events.values(), this.events.get(frame.eventId)!, frame.recipientId);
+      if (charges === false) continue;
       const effectFrame: ReadFrame = { ...frame, ownerId: instance.owner.id, sourceEventId: instance.source?.id ?? null, instance,
         actorFacts: { ...frame.actorFacts, ...instance.owner.actorFacts } };
       const effectOrigin = originOf(effect, '/effects' + calculationJsonPointer([definitionKey(effect.identity)]));
-      const predicate = effect.predicate ? this.binding(effect.predicate, effectFrame, effectOrigin, depth + 1) : undefined;
+      const confirmedSource = instance.source?.confirmedBuff && effect.predicate?.kind === 'fact'
+        && effect.predicate.at === 'source-event' && effect.predicate.type.kind === 'boolean';
+      const predicate = effect.predicate && !confirmedSource ? this.binding(effect.predicate, effectFrame, effectOrigin, depth + 1) : undefined;
       if (predicate?.state === 'known' && predicate.value.kind === 'boolean' && !predicate.value.value) continue;
       let value: EvaluatedValue;
       if (predicate && predicate.state !== 'known') value = predicate;
-      else if (recipientMatches === null || hit === null || active === null || effect.application === 'explicit' && application?.active !== true) {
-        value = this.missing(effectOrigin, instance.id, boolean, 'effect-applicability');
+      else if (charges === null || recipientMatches === null || hit === null || active === null || application?.active === null || effect.application === 'explicit' && application?.active !== true) {
+        value = this.missing(effectOrigin, uncertainExpiry ? (effect.buff ?? effect.identity).id + '.stackRefresh' : instance.id, boolean, 'effect-applicability');
       } else if (revision?.value) {
         const type = effect.target.kind === 'attribute' ? this.data.attributes.get(definitionKey(effect.target.attribute))!.type
           : this.data.formulas.get(definitionKey(effect.target.formula))!.definition.modifierPorts![effect.target.port].type;
@@ -253,7 +313,6 @@ class BoundEvaluator {
   }
   stack(group: Contribution[], origin: TraceOrigin): Contribution[] {
     const { stacking } = group[0].instance.definition;
-    if (group.some(contribution => contribution.value.state !== 'known')) return group;
     if (group.length > stacking.maxStacks) {
       const compare = (a: Contribution, b: Contribution): number | null => {
         if (stacking.retain === 'highest-priority') return a.instance.definition.priority === b.instance.definition.priority ? null : b.instance.definition.priority - a.instance.definition.priority;
@@ -265,6 +324,7 @@ class BoundEvaluator {
         value: this.missing(origin, stacking.group, boolean, 'stacking-order') }];
       group = [...group].sort((a, b) => compare(a, b)!).slice(0, stacking.maxStacks);
     }
+    if (group.some(contribution => contribution.value.state !== 'known')) return group;
     if (stacking.policy === 'max') {
       const values = group.map(item => item.value).filter((value): value is Extract<EvaluatedValue, { state: 'known' }> => value.state === 'known');
       const largest = Math.max(...values.map(value => value.value.kind === 'quantity' ? value.value.value : NaN));
@@ -300,7 +360,7 @@ function validateRuntimeFrame(evaluator: BoundEvaluator, frame: CombatFrame): st
     const instance = evaluator.instances.find(instance => instance.id === application.instanceId);
     if (!instance) return '效果适用事实引用已失效。';
     const effect = instance.definition, recipient = effect.recipient;
-    if (effect.application !== 'explicit' || hitMatches(effect.appliesTo, frame.hit) === false
+    if (effect.application === 'always' && !stackExpiryUncertain(instance, evaluator.events.get(frame.eventId)!.timeMs) || hitMatches(effect.appliesTo, frame.hit) === false
       || recipient.role === 'owner' && instance.owner.id !== frame.recipientId
       || recipient.role === 'team' && recipient.excludeOwner && instance.owner.id === frame.recipientId
       || recipient.role === 'fact-actor' && firstOwn(instance.owner.actorFacts, frame.actorFacts, recipient.input) != null
@@ -407,7 +467,13 @@ export function interpretBoundFormula(program: CompiledCalculation, contextInput
     const active = evaluator.binding(invocation.predicate, initialReadFrame, origin, 0);
     if (active.state !== 'known') return session.finish({ [invocation.output]: active });
     if (active.value.kind !== 'boolean') return invalid('输出条件必须为布尔值。');
-    if (!active.value.value) return session.finish({ [invocation.output]: session.invalid(origin, 'predicate', '/invocation/predicate', '当前条件下不能执行此输出。', 'conflicting-definition', [active.traceId]) });
+    if (!active.value.value) {
+      const type = data.formulas.get(definitionKey(invocation.formula))!.definition.outputs[invocation.output].type;
+      const excluded = type.kind === 'quantity' && type.unit === 'damage'
+        ? session.known(origin, 'predicate', { kind: 'quantity', unit: 'damage', value: 0 }, [active.traceId])
+        : session.invalid(origin, 'predicate', '/invocation/predicate', '当前条件下不能执行此输出。', 'conflicting-definition', [active.traceId]);
+      return session.finish({ [invocation.output]: excluded });
+    }
   }
   if (options.readBindings) {
     const origin = originOf(data.formulas.get(definitionKey(invocation.formula))!.definition);

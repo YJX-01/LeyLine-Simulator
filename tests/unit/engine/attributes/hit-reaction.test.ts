@@ -14,7 +14,7 @@ import { previewEnkaImport } from '../../../../src/web/src/domain/enka-import';
 
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id: string): Promise<Build> {
-  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon('favoniussword'),
+  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon('favoniussword'),
     artifactMain: await getArtifactMain(), artifacts: [], sets: [], level: 90, ascension: 6, constellation: 0, talents: { normal: 9, skill: 9, burst: 9 },
     weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
@@ -39,7 +39,7 @@ describe('annotated amplifying reactions reuse the damage pipeline', () => {
     const project = createEmptyProject();
     project.enemy = enemy;
     const actor = addActorFromBuild(project, build);
-    addSkillHit(project, actor, hit.skillId, 0, 0, hit);
+    addSkillHit(project, actor, id + '.skill', 0, 0, hit);
     const original = JSON.stringify(project);
     const timeline = evaluateTimeline(project);
     expect(timeline.status).toBe('complete');

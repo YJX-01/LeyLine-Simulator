@@ -47,7 +47,7 @@ export function validateCharacterBindings(data: CompiledData, character: Structu
       }
     }
     if (binding.kind === 'formula') for (const [key, input] of Object.entries(binding.inputs)) bindingParameters(input, pointer + '/inputs' + calculationJsonPointer([key]), actors, depth + 1);
-    if (binding.kind === 'attribute' || binding.kind === 'enemy') {
+    if (binding.kind === 'attribute' || binding.kind === 'enemy' || binding.kind === 'team-attribute') {
       const definition = data.attributes.get(definitionKey(binding.key));
       const actorIsSelf = binding.kind === 'attribute' && binding.actor.role !== 'fact-actor' && actors[binding.actor.role];
       const baseActors = definition?.scope === 'target' || definition?.scope === 'team' ? actors : { ...actors, owner: actorIsSelf, recipient: actorIsSelf };
@@ -60,7 +60,7 @@ export function validateCharacterBindings(data: CompiledData, character: Structu
     else if (definition.scope !== 'actor' || definition.type.kind !== 'quantity' || definition.type.unit !== unit) report('unit-mismatch', '/attributes/outputs', '角色面板输出的类型、单位或作用域不匹配。');
     attributeBindings(reference, self, '/attributes/outputs' + calculationJsonPointer([key]));
   }
-  const ruleIds = [...character.calculation.ruleIds, ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds)];
+  const ruleIds = [...character.calculation.ruleIds, ...character.talents.flatMap(talent => talent.ruleIds), ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds)];
   for (const reference of ruleIds) {
     const effect = data.effects.get(definitionKey(reference));
     if (!effect) continue;
@@ -86,12 +86,12 @@ export function validateCharacterBindings(data: CompiledData, character: Structu
   for (const [talentIndex, talent] of character.talents.entries()) for (const [hitIndex, hit] of talent.hits.entries()) {
     const pointer = `/talents/${talentIndex}/hits/${hitIndex}`;
     validateInvocation(hit.base, pointer + '/base');
-    for (const [index, output] of hit.outputs.entries()) {
-      const outputPointer = `${pointer}/outputs/${index}`;
-      validateInvocation(output.invocation, outputPointer + '/invocation');
-      if (!data.damageFamilies.includes(output.family)) report('missing-dependency', outputPointer + '/family', '命中输出引用了未声明的伤害族。');
-      const formula = data.formulas.get(definitionKey(output.invocation.formula));
-      const type = formula?.definition.outputs[output.invocation.output]?.type;
+    for (const [family, invocation] of Object.entries(hit.damage)) {
+      const outputPointer = `${pointer}/damage/${family}`;
+      validateInvocation(invocation, outputPointer + '/invocation');
+      if (!data.damageFamilies.includes(family)) report('missing-dependency', outputPointer + '/family', '命中输出引用了未声明的伤害族。');
+      const formula = data.formulas.get(definitionKey(invocation.formula));
+      const type = formula?.definition.outputs[invocation.output]?.type;
       if (type && (type.kind !== 'quantity' || type.unit !== 'damage')) report('unit-mismatch', outputPointer + '/invocation/output', '伤害输出必须是damage数量。');
     }
   }

@@ -1,3 +1,4 @@
+import { eventCounts } from '../../../helpers/catalog-calculation';
 import { selectCatalogHit } from '../../../helpers/catalog-calculation';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
@@ -11,7 +12,7 @@ import { createEmptyProject } from '../../../../src/web/src/domain/workbench-pro
 // These are legal independent single-point calculation settings, not player builds or observed timelines.
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function calculation(id: string, weapon: string): Promise<Build> {
-  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     artifactMain: await getArtifactMain(), sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0,
     talents: { normal: 1, skill: 9, burst: 9 }, weaponLevel: 70, weaponAscension: 4, refinement: 1 };
 }
@@ -19,7 +20,7 @@ async function calculation(id: string, weapon: string): Promise<Build> {
 describe('explicit skill counts multiply additional base scaling through the common attribute reader', () => {
   it.each([0, 1, 2])('adds Beidou counter charge %i before the damage bonus multiplier', async counterCharge => {
     const build = await calculation('beidou', 'wastergreatsword');
-    const request: DamageRequest = { skillId: 'beidou.skill', hitId: 'beidou.skill.param3', outputId: 'beidou.skill.param3.damage', crit: 'noncritical', reaction: 'none', inputs: { counterCharge } };
+    const request: DamageRequest = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'beidou', revision: '5' }, hitId: 'beidou.skill.param3' }, crit: 'noncritical', reaction: 'none', facts: eventCounts({ counterCharge }) };
     const attack = 18.87648 * 8.349 + 67.54129 + 23.245 * 5.968 + 46.7;
     const expectedBase = attack * (2.0672 + 2.72 * counterCharge);
     // R1 now proves this exact C0 path from the formal snapshot, without an external reader.
@@ -70,7 +71,7 @@ describe('explicit skill counts multiply additional base scaling through the com
       const result = evaluateCatalogBase(build.character, 'raidenshogun.burst', hitIndex, 9, stat => stat === 'attack' ? attack : null, { resolve });
       expect(catalogBaseValue(result)).toBeCloseTo(attack * (coefficient + added * resolve), 8);
       expect(result.trace.some(node => node.nodeId === 'resolve' && node.value?.value === 15.2)).toBe(true);
-      expect(build.character.talents.find(talent => talent.id === 'raidenshogun.burst')!.hits[hitIndex].outputs).toEqual([]);
+      expect(Object.keys(build.character.talents.find(talent => talent.id === 'raidenshogun.burst')!.hits[hitIndex].damage)).toEqual(['ordinary']);
     });
 
   it('adds Eula energy to the physical explosion and leaves the initial Cryo slash independent', async () => {
@@ -107,7 +108,7 @@ describe('explicit skill counts multiply additional base scaling through the com
   it.each([{ counterCharge: -1 }, { counterCharge: 3 }, { counterCharge: 0.5 }, { resolve: 1 }] as Record<string, number | null>[])
     ('rejects the invalid Beidou count derivative %j through direct and project schemas', async inputs => {
       const build = await calculation('beidou', 'wastergreatsword');
-      const request: DamageRequest = { skillId: 'beidou.skill', hitId: 'beidou.skill.param3', outputId: 'beidou.skill.param3.damage', crit: 'noncritical', reaction: 'none', inputs };
+      const request: DamageRequest = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'beidou', revision: '5' }, hitId: 'beidou.skill.param3' }, crit: 'noncritical', reaction: 'none', facts: eventCounts(inputs) };
       expect(evaluateDamage(build, request, enemy).status).toBe('invalid');
       const project = createEmptyProject();
       const actor = addActorFromBuild(project, build);
@@ -134,7 +135,7 @@ describe('explicit skill counts multiply additional base scaling through the com
     const actor = addActorFromBuild(project, build);
     project.candidate.actors[0].inputs.counterCharge = { value: 2, unit: 'scalar' };
     project.timeline.push({ id: 'unknown-counter-query', actor, timeMs: 0, order: 0, kind: 'damage', definition: `${actor}-real-damage`,
-      damage: { skillId: 'beidou.skill', hitId: 'beidou.skill.param3', outputId: 'beidou.skill.param3.damage', crit: 'noncritical', reaction: 'none' } });
+      damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'beidou', revision: '5' }, hitId: 'beidou.skill.param3' }, crit: 'noncritical', reaction: 'none' } });
     const result = evaluateTimeline(project);
     expect(result.points[0].real?.scaling[1].count).toEqual({ input: 'counterCharge', value: null });
     expect(result.diagnostics.some(issue => issue.code === 'unknown' && issue.message.includes('counterCharge'))).toBe(true);
@@ -146,22 +147,27 @@ describe('explicit skill counts multiply additional base scaling through the com
     const actor = addActorFromBuild(project, build);
     const before = JSON.stringify(project);
     expect(() => addSkillHit(project, actor, 'kaeya.skill', 0, 0,
-      { crit: 'noncritical', reaction: 'none', inputs: { counterCharge: 2 } })).toThrow();
+      { crit: 'noncritical', reaction: 'none', facts: eventCounts({ counterCharge: 2 }) })).toThrow();
     expect(JSON.stringify(project)).toBe(before);
   });
 
-  it('validates Ayato C2 five-stack range while retaining unsupported conditional HP and constellation damage', async () => {
+  it('uses Ayato’s C2 maximum HP at three stacks and applies C1 only against targets at or below half health', async () => {
     const build = await calculation('kamisatoayato', 'dullblade');
-    const request: DamageRequest = { skillId: 'kamisatoayato.skill', hitId: 'kamisatoayato.skill.param1', outputId: null, crit: 'noncritical', reaction: 'none', inputs: { namisen: 5 } };
+    const request: DamageRequest = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'kamisatoayato', revision: '5' }, hitId: 'kamisatoayato.skill.param1' }, crit: 'noncritical', reaction: 'none', facts: eventCounts({ namisen: 5 }) };
     expect(evaluateDamage(build, request, enemy).status).toBe('invalid');
     build.constellation = 1;
     expect(evaluateDamage(build, request, enemy).status).toBe('invalid');
     build.constellation = 2;
-    const accepted = evaluateDamage(build, request, enemy);
-    expect(accepted.status).toBe('partial');
-    expect(accepted.issues.some(issue => issue.code === 'invalid-input')).toBe(false);
-    expect(accepted.value).toBeNull();
-    request.inputs!.namisen = 6;
+    expect(evaluateDamage(build, request, enemy).value).toBeNull();
+    const attack = 23.275 * 8.739 + 95.57275 + 23.245 * 5.968 + 46.7;
+    const hp = 1067.7184 * 8.739 + 4384.629;
+    for (const stacks of [2,3,5]) for (const health of [.5,.5001]) {
+      request.facts=[...eventCounts({namisen:stacks}),{subject:{kind:'target',id:'target'},values:{targetHpRatio:{value:{kind:'quantity',unit:'scalar',value:health},provenance:'explicit',sourceRefs:[]}}}];
+      const accepted=evaluateDamage(build,request,enemy);
+      expect(accepted.issues.some(issue=>issue.code==='invalid-input')).toBe(false);
+      expect(accepted.value).toBeCloseTo((attack*.9717+hp*(stacks>=3?1.5:1)*.010308*stacks)*.45*(health<=.5?1.4:1),7);
+    }
+    request.facts = eventCounts({ namisen: 6 });
     expect(evaluateDamage(build, request, enemy).status).toBe('invalid');
   });
 });

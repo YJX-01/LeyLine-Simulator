@@ -9,15 +9,16 @@ import { createEmptyProject } from '../../../../src/web/src/domain/workbench-pro
 // No player equipment, recorded sequence or game-observed damage is claimed.
 const enemy: Enemy = { level: 90, resistances: Object.fromEntries(elements.map(element => [element, 0.1])) as Enemy['resistances'], defenseReduction: 0, defenseIgnore: 0 };
 async function setting(id = 'jean', weapon = 'cinnabarspindle'): Promise<Build> {
-  return { schemaVersion: '0.1.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
+  return { schemaVersion: '0.2.0', kind: 'calculation-build', ...await getBuildSources(), dataVersion: DATA_VERSION, character: await getCharacter(id), weapon: await getWeapon(weapon),
     artifactMain: await getArtifactMain(), sets: [], artifacts: [], level: 90, ascension: 6, constellation: 0,
     talents: { normal: 9, skill: 9, burst: 9 }, weaponLevel: 90, weaponAscension: 6, refinement: 1 };
 }
-function query(build: Build, request: DamageRequest = { skillId: 'jean.skill', hitId: 'jean.skill.param1', outputId: 'jean.skill.param1.damage', crit: 'noncritical', reaction: 'none' }) {
+function query(build: Build, request: DamageRequest = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.skill.param1' }, crit: 'noncritical', reaction: 'none' }) {
   const project = createEmptyProject();
   project.enemy = enemy;
   const actor = addActorFromBuild(project, build);
-  const hit = addSkillHit(project, actor, request.skillId, build.character.talents.find(skill => skill.id === request.skillId)!.hits.findIndex(hit => hit.id === request.hitId), 0, request);
+  const talent = build.character.talents.find(skill => skill.hits.some(hit => hit.id === request.hit.hitId))!;
+  const hit = addSkillHit(project, actor, talent.id, talent.hits.findIndex(hit => hit.id === request.hit.hitId), 0, request);
   const result = evaluateTimeline(project);
   const instance = result.effectInstances!.find(instance => instance.content?.entity === 'cinnabarspindle');
   return { project, actor, hit, instance };
@@ -26,12 +27,11 @@ const jeanAttack = 18.62 * 8.739 + 76.4582 + 41.0671 * 7.275 + 155.6;
 const jeanDefense = (59.83 * 8.739 + 245.7) * (1 + 0.150133 * 4.594);
 
 describe('hit-local flat bonuses share source dependency evaluation and recipient damage multipliers', () => {
-  it.each([1, 2, 3, 4, 5])('calculates Cinnabar R%i with an explicit application and independent DEF contribution', async refinement => {
+  it.each([1, 2, 3, 4, 5])('calculates Cinnabar R%i on the qualifying hit using its independent DEF contribution', async refinement => {
     const build = await setting();
     build.refinement = refinement;
-    const { project, hit, instance } = query(build);
-    expect(instance?.requiresApplication).toBe(true);
-    setDamageEffectApplication(project, hit, instance!.id, true);
+    const { project, instance } = query(build);
+    expect(instance?.requiresApplication).toBeUndefined();
     const before = JSON.stringify(project);
     const result = evaluateTimeline(projectSchema.parse(JSON.parse(before)));
     const added = jeanDefense * [0.4, 0.5, 0.6, 0.7, 0.8][refinement - 1];
@@ -53,16 +53,22 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
     const { project, hit, instance } = query(build);
     if (mode !== 'missing') setDamageEffectApplication(project, hit, instance!.id, mode === 'inactive' ? false : null);
     const result = evaluateTimeline(project);
-    expect(result.status).toBe(mode === 'inactive' ? 'complete' : 'partial');
-    expect(result.points[0].real?.baseDamageBonus).toBe(mode === 'inactive' ? 0 : null);
-    expect(result.totalValue).toBe(mode === 'inactive' ? jeanAttack * 4.964 * 0.5 * 0.9 : null);
+    expect(result.status).toBe(mode === 'unknown' ? 'partial' : 'complete');
+    if (mode === 'unknown') {
+      expect(result.points[0].real?.baseDamageBonus).toBeNull();
+      expect(result.totalValue).toBeNull();
+    } else {
+      const added = mode === 'inactive' ? 0 : jeanDefense * .4;
+      expect(result.points[0].real?.baseDamageBonus).toBeCloseTo(added, 8);
+      expect(result.totalValue).toBeCloseTo((jeanAttack * 4.964 + added) * .45, 8);
+    }
     if (mode === 'inactive') expect(result.reads?.some(read => read.key === 'defense')).toBe(false);
-    expect(evaluateDamage(build, project.timeline[0].damage, enemy).status).toBe(mode === 'missing' ? 'partial' : 'invalid');
+    expect(evaluateDamage(build, project.timeline[0].damage, enemy).status).toBe(mode === 'missing' ? 'complete' : 'invalid');
   });
 
   it('applies recipient Hydro bonus, expected crit and vaporize after adding the Cinnabar base', async () => {
     const build = await setting('xingqiu');
-    const { project, hit, instance } = query(build, { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: 'expected', reaction: { type: 'vaporize', trigger: 'record-owner' } });
+    const { project, hit, instance } = query(build, { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.skill.param1' }, crit: 'expected', reaction: { type: 'vaporize', trigger: 'record-owner' } });
     setDamageEffectApplication(project, hit, instance!.id, true);
     const attack = (16.9176 * 8.349 + 60.53229 + 41.0671 * 7.275 + 155.6) * 1.24;
     const defense = (63.51975 * 8.349 + 227.2725) * (1 + 0.150133 * 4.594);
@@ -73,9 +79,12 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
   });
 
   it('ignores the skill-only source for normal attacks and rejects a mismatched application', async () => {
-    const { project, hit, instance } = query(await setting(), { skillId: 'jean.normal', hitId: 'jean.normal.param1', outputId: 'jean.normal.param1.damage', crit: 'noncritical', reaction: 'none' });
+    const { project, actor, hit } = query(await setting(), { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.normal.param1' }, crit: 'noncritical', reaction: 'none' });
     expect(evaluateTimeline(project).status).toBe('complete');
     expect(evaluateTimeline(project).totalValue).toBeCloseTo(jeanAttack * 0.88796 * 0.5 * 0.9, 8);
+    project.timeline[0].timeMs=20;
+    addSkillHit(project,actor,'jean.skill',0,0,{crit:'noncritical',reaction:'none'});
+    const instance=evaluateTimeline(project).effectInstances!.find(item=>item.content?.entity==='cinnabarspindle');
     const before = JSON.stringify(project);
     expect(() => setDamageEffectApplication(project, hit, instance!.id, true)).toThrow();
     expect(JSON.stringify(project)).toBe(before);
@@ -117,11 +126,11 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
     expect(evaluateTimeline(project).diagnostics.some(diagnostic => diagnostic.code === 'unit')).toBe(true);
   });
 
-  it('keeps explicit application and fixed-value revisions separate', async () => {
+  it('allows a recorded exception to a timed application independently of fixed-value revisions', async () => {
     const { project, hit, instance } = query(await setting());
     project.calculationProfile = 'dependency';
     project.effectRevisions = [{ instanceId: instance!.id, disabled: false, value: { value: jeanDefense * 0.4, unit: 'damage' } }];
-    expect(evaluateTimeline(project).status).toBe('partial'); // A fixed value is not evidence that the effect applied.
+    expect(evaluateTimeline(project).status).toBe('complete');
     setDamageEffectApplication(project, hit, instance!.id, false);
     expect(evaluateTimeline(project).totalValue).toBeCloseTo(jeanAttack * 4.964 * 0.45, 8);
     setDamageEffectApplication(project, hit, instance!.id, true);
@@ -136,7 +145,7 @@ describe('hit-local flat bonuses share source dependency evaluation and recipien
     const build = await setting('kaeya', 'favoniussword');
     const attack = 18.6984 * 8.349 + 66.90411 + 41.0671 * 7.275 + 155.6;
     const shenheAttack = (23.6474 * 8.739 + 97.10191 + 23.245 * 5.968 + 46.7) * 1.288;
-    const { project, actor, hit } = query(build, { skillId: 'kaeya.burst', hitId: 'kaeya.burst.param1', outputId: 'kaeya.burst.param1.damage', crit: 'noncritical', reaction: 'none' });
+    const { project, actor, hit } = query(build, { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'kaeya', revision: '6' }, hitId: 'kaeya.burst.param1' }, crit: 'noncritical', reaction: 'none' });
     const source = addAttributeCapture(project, actor, 'kaeya.burst', 0);
     const record = project.timeline.find(record => record.id === hit)!;
     record.timeMs = 1000;

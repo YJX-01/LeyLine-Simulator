@@ -61,7 +61,7 @@ function boundedStatBonus(recipe: FormulaDefinition, selected: Extract<FormulaDe
 
 function attributeConversion(recipe: FormulaDefinition, selected: Extract<FormulaDefinition['template'], { id: 'attribute-conversion' }>): FormulaGraph {
   const b = new TemplateBuilder(recipe), input = b.input(selected.attribute, q(selected.stat), { min: 0 });
-  const rateUnit = selected.target === 'damage' ? 'scalar' : 'attack';
+  const rateUnit = selected.target === 'attack' ? 'attack' : 'scalar';
   const rate = b.input(selected.rate, q(rateUnit), { min: 0 });
   const normalized = selected.target === 'damage' ? input : b.divide('$normalized', input, b.quantity('$oneUnit', selected.stat, 1));
   const convert = (id: string, coefficient: string) => selected.target === 'damage' ? b.scale(id, normalized, coefficient) : b.multiply(id, normalized, coefficient);
@@ -128,6 +128,16 @@ export function instantiateCalculationTemplate(recipe: FormulaDefinition): Formu
     case 'standard-reaction': return { amplifying, additive, transformative }[selected.family](recipe);
     case 'ordinary-reaction': return ordinaryReaction(recipe, selected.element, selected.amplifying, selected.additive);
     case 'reaction-hit': return reactionHit(recipe, selected.family, selected.origin, selected.mastery, selected.baseMultiplier);
+    case 'count-coefficient': {
+      const b = new TemplateBuilder(recipe), count = b.input('count', q('count'), { min: 0, max: selected.max });
+      b.output('value', b.lookup('$coefficient', selected.table, count), q('scalar')); return b.finish();
+    }
+    case 'radiance-ratio': {
+      const b = new TemplateBuilder(recipe), mode = b.input('mode', { kind: 'enum', values: ['none', 'stellar-conduct', 'stellar-swirl'] });
+      const matches = (value: string) => b.compare('$is-' + value, 'eq', mode, b.constant('$' + value, { kind: 'enum', value }));
+      const radiant = b.select('$radiant', matches('stellar-conduct'), b.input('conduct', q('scalar')), b.input('swirl', q('scalar')));
+      b.output('value', b.select('$ratio', matches('none'), b.input('ordinary', q('scalar')), radiant), q('scalar')); return b.finish();
+    }
     case 'level-multiplier': {
       const b = new TemplateBuilder(recipe), level = b.input('level', q('count'), { min: 1, max: 100 });
       b.output('value', b.lookup('$value', selected.table, level), q('damage')); return b.finish();
@@ -139,6 +149,28 @@ export function instantiateCalculationTemplate(recipe: FormulaDefinition): Formu
     case 'linear-bonus': return linearBonus(recipe, selected);
     case 'bounded-stat-bonus': return boundedStatBonus(recipe, selected);
     case 'attribute-conversion': return attributeConversion(recipe, selected);
+    case 'stat-product': {
+      const b = new TemplateBuilder(recipe);
+      b.output('value', b.multiply('$product', b.input('basis', q(selected.unit)), b.input('rate', q('scalar'))), q(selected.unit));
+      return b.finish();
+    }
+    case 'energy-full': {
+      const b = new TemplateBuilder(recipe), capacity = b.input('capacity',q('energy'),{min:0});
+      const positive = b.compare('$has-capacity','gt',capacity,b.quantity('$zero','energy',0));
+      const equal = b.compare('$equal','eq',b.input('energy',q('energy'),{min:0}),capacity);
+      b.output('active',b.select('$full',positive,equal,b.constant('$absent',{kind:'boolean',value:false})),{kind:'boolean'});
+      return b.finish();
+    }
+    case 'capped-conversion': {
+      const b = new TemplateBuilder(recipe), basis = b.input('basis', q(selected.from), { min: 0 });
+      const excess = selected.threshold === undefined ? basis : b.max('$excess',
+        b.subtract('$difference', basis, b.quantity('$threshold', selected.from, selected.threshold)), b.quantity('$zero', selected.from, 0));
+      const units = b.divide('$units', excess, b.quantity('$divisor', selected.from, selected.per));
+      const rate = b.input('rate', q('scalar'), { min: 0 }), cap = b.input('cap', q(selected.to), { min: 0 });
+      const scaled = b.multiply('$scaled', units, rate);
+      const value = selected.to === 'scalar' ? scaled : b.multiply('$amount', scaled, b.quantity('$one', selected.to, 1));
+      b.output('value', b.min('$capped', value, cap), q(selected.to)); return b.finish();
+    }
     case 'constant-bonus': {
       const b = new TemplateBuilder(recipe), value = b.constant('$value', selected.value);
       const type: ValueType = selected.value.kind === 'quantity' ? q(selected.value.unit)

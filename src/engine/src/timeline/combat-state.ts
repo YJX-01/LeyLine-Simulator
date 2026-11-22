@@ -1,9 +1,10 @@
-import { combatStateFields, type CombatConditions, type CombatStateField, type CombatStateInterval, type CombatStateRead, type Project } from '@leyline/schema';
+import { actorConditions, combatStateFields, createFieldPresenceReader, type CombatConditions, type CombatStateField, type CombatStateInterval, type CombatStateRead, type Project } from '@leyline/schema';
 
-type RecordEntry = Pick<Project['timeline'][number], 'actor' | 'id' | 'timeMs' | 'kind' | 'damage'>;
+type RecordEntry = Pick<Project['timeline'][number], 'actor' | 'id' | 'timeMs' | 'kind' | 'damage'> & { order?: number };
 
 /** Build a per-run index. All intervals and overrides must already pass projectSchema. */
 export function createCombatStateReader(project: Project) {
+  const presence = createFieldPresenceReader(project);
   const fields = new Map<string, CombatStateInterval[]>();
   for (const interval of project.combatStates ?? []) {
     for (const field of combatStateFields) {
@@ -33,9 +34,15 @@ export function createCombatStateReader(project: Project) {
       }
       const candidate = entries[left - 1];
       const interval = candidate && record.timeMs < candidate.endMs ? candidate : undefined;
-      const own = record.kind === 'damage' && actor === record.actor ? record.damage?.conditions?.[field] : undefined;
-      const scoped = record.kind === 'damage' ? record.damage?.stateOverrides?.find(override => override.actor === actor && override.values[field] !== undefined)?.values[field] : undefined;
-      const override = scoped !== undefined ? scoped : own;
+      const override = record.kind === 'damage' ? actorConditions(record.damage?.facts, actor)[field] : undefined;
+      if (field === 'onField') {
+        const state = presence(actor,record.timeMs,record.order);
+        const value = override !== undefined ? override as boolean | null : state?.value;
+        if (value !== undefined) conditions.onField = value;
+        reads.push({actor,field,timeMs:record.timeMs,recordId:record.id,value:value ?? null,source:override!==undefined?'override':state?.source ?? 'unknown',
+          intervalId:state?.source==='interval'?state.id:null,...state?.source==='switch'?{sourceEventId:state.id}:{}});
+        return;
+      }
       const value = override !== undefined ? override : interval?.values[field];
       if (value !== undefined) conditions[field] = value;
       reads.push({ actor, field, timeMs: record.timeMs, recordId: record.id, value: value ?? null,
