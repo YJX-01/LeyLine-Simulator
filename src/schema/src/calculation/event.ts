@@ -53,3 +53,8 @@ export const calculationEventSelectorSchema = z.object({
 }).strict();
 export type CalculationEvent = z.infer<typeof calculationEventSchema>;
 export type CalculationEventSelector = z.infer<typeof calculationEventSelectorSchema>;
+
+export const buffEventSelectorSchema = z.union([calculationEventSelectorSchema, z.array(calculationEventSelectorSchema).min(2).max(32)]);
+export function buffEventSelectors(selector: z.infer<typeof buffEventSelectorSchema>): CalculationEventSelector[] {
+  return Array.isArray(selector) ? selector : [selector];
+}

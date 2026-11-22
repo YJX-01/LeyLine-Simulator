@@ -461,6 +461,18 @@
     "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
     "divisor": 100
   },
+  "mailedflower.whispers-of-wind-and-flower": {
+    "entity": "mailedflower",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "mailedflower.whispers-of-wind-and-flower.1": {
+    "entity": "mailedflower",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
   "mappamare.reaction-elements": {
     "entity": "mappamare",
     "stat": "damageBonus",

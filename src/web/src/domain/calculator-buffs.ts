@@ -1,5 +1,5 @@
 import { authoredHit, effectiveHitElement } from '@leyline/schema/hit-bindings';
-import { findBuildHit, subjectFacts } from '@leyline/schema';
+import { buffEventSelectors, findBuildHit, subjectFacts } from '@leyline/schema';
 import { buffEndMs, calculationEffectInstanceId, grantedBuildEffects, grantedGleamEffects, grantedResonances, hitMatches, instanceActive, projectBuffContext, stackExpiryUncertain } from '@leyline/engine';
 import { projectSchema, definitionKey, type Build, type CalculationBinding, type CombatConditions, type CombatFrame, type DamageRequest, type DefinitionRef, type EffectDefinition, type Project } from '@leyline/schema';
 import { addConfirmedBuff, addSkillAction } from './real-project';
@@ -161,9 +161,10 @@ export function calculatorBuffChoices(project: Project, sourceId: string, damage
         .filter(instance => (trigger.kind === 'permanent' || instance.source) && (instanceActive(instance, position, 'before') === true
           || stackExpiryUncertain(instance,timeMs)));
       const nextLayer = timing && sources.length < timing.maxLayers ? { ...timing, maxLayers: timing.maxLayers - sources.length } : undefined;
-      if ((!sources.length || nextLayer) && trigger.kind === 'event' && trigger.selector.kinds.includes('action')) {
-        const skill = character.talents.find(talent => (!trigger.selector.skillIds || trigger.selector.skillIds.includes(talent.id))
-          && (!trigger.selector.categories || trigger.selector.categories.includes(talent.category)));
+      const castSelectors = trigger.kind === 'event' ? buffEventSelectors(trigger.selector).filter(branch => branch.kinds.includes('action')) : [];
+      if ((!sources.length || nextLayer) && castSelectors.length) {
+        const skill = character.talents.find(talent => castSelectors.some(branch => (!branch.skillIds || branch.skillIds.includes(talent.id))
+          && (!branch.categories || branch.categories.includes(talent.category))));
         if (skill) choices.push({ ...common, id: calculationEffectInstanceId(ownerId,effect.buff ?? effect.identity,null), checked: false, disabled:false, triggerSkill: skill.id, timing: nextLayer,
           description: description + '，施放' + skill.name + '后' + (effect.lifetime.kind === 'interval' ? '持续' + effect.lifetime.durationMs / 1000 + '秒' : '生效') });
       } else if (nextLayer && trigger.kind === 'event' && effect.lifetime.kind === 'interval') {

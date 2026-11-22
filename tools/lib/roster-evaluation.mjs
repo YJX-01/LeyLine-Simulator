@@ -480,7 +480,8 @@ function evaluateEquipmentCase(engine, build, owner, row, expectedWhite, holderC
       }
       return engine.evaluateCombatBindings(prepared.team.program, world, { value: input }, current);
     };
-    const trigger = effect.trigger.kind === 'event' ? effect.trigger.selector : undefined;
+    const selection = effect.trigger.kind === 'event' ? effect.trigger.selector : undefined;
+    const trigger = Array.isArray(selection) ? selection[0] : selection;
     let activeContext = context, sourceId = null;
     if (trigger) {
       const skill = build.character.talents.find(t => trigger.categories?.includes(t.category) || trigger.skillIds?.includes(t.id));

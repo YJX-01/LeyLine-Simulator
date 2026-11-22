@@ -7,7 +7,7 @@ import GameIcon from '../components/GameIcon.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
-import { equipmentHits, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
+import { buffEventSelectors, equipmentHits, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
 import { getReactionCalculationBundle } from '@leyline/game-data';
 import { grantedDamageChanges } from '@leyline/engine';
 import { ordinaryReactions } from '@leyline/schema/hit-bindings';
@@ -70,7 +70,8 @@ async function addReaction() {
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '无法记录反应伤害。'; }
 }
 const damageChanges = computed(() => axis.actor?.build ? grantedDamageChanges(axis.actor.build) : []);
-const hasDefeatTrigger = computed(() => axis.actor?.build?.weapon?.metadata.buffs?.some(b => typeof b.trigger === 'object' && 'selector' in b.trigger && b.trigger.selector.observation?.key === 'enemyDefeated'));
+const hasDefeatTrigger = computed(() => axis.actor?.build?.weapon?.metadata.buffs?.some(b => typeof b.trigger === 'object' && 'selector' in b.trigger
+  && buffEventSelectors(b.trigger.selector).some(branch => branch.observation?.key === 'enemyDefeated')));
 const hitTargets = ref<number | ''>(''), criticalTargets = ref<number | ''>(''), triggerRoll = ref<number | ''>('');
 function setSeed(event: Event) {
   const raw = (event.target as HTMLInputElement).value;

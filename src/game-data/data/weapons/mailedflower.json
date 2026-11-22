@@ -224,19 +224,95 @@
   "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "1",
+  "revision": "2",
   "support": {
-    "resolution": "unavailable",
+    "resolution": "complete",
     "evidence": "adopted",
-    "reason": "武器全部相关伤害机制尚未闭合。",
+    "reason": "持有者在场时，元素战技命中敌人或触发元素反应后提升攻击力和元素精通，持续八秒。再次满足条件刷新持续时间。",
     "mechanisms": [
       {
-        "id": "explicit-output-scope",
-        "resolution": "unavailable",
-        "ruleIds": [],
-        "reason": "武器全部相关伤害机制尚未闭合。"
+        "id": "mailedflower.whispers-of-wind-and-flower",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "mailedflower.whispers-of-wind-and-flower",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "mailedflower.whispers-of-wind-and-flower.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "持有者在场时，元素战技命中敌人或触发元素反应后提升攻击力和元素精通，持续八秒。再次满足条件刷新持续时间。"
       }
     ]
   },
-  "maxRefinement": 5
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "mailedflower.whispers-of-wind-and-flower",
+      "trigger": {
+        "kind": "event",
+        "selector": [
+          {
+            "kinds": [
+              "hit"
+            ],
+            "actor": "owner",
+            "target": "enemy",
+            "categories": [
+              "skill"
+            ],
+            "allowZeroDamage": true
+          },
+          {
+            "kinds": [
+              "reaction"
+            ],
+            "actor": "owner",
+            "target": "any"
+          }
+        ]
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 8000,
+        "phase": "after"
+      },
+      "condition": {
+        "fact": "onField",
+        "at": "source-event"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        },
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "refinement": [
+              48,
+              60,
+              72,
+              84,
+              96
+            ],
+            "unit": "elementalMastery"
+          }
+        }
+      ]
+    }
+  ]
 }

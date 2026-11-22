@@ -52,7 +52,15 @@ export function buffTriggerMatches(definition: EffectDefinition, event: Calculat
     if (event.kind !== 'state-change' || event.occurred === false || event.actorId !== ownerId || definitionKey(event.confirmedBuff) !== definitionKey(definition.buff ?? definition.identity)) return false;
     return event.occurred === null ? null : true;
   }
-  return eventMatches(definition.trigger.selector, event, ownerId, targetId);
+  const { selector } = definition.trigger;
+  if (!Array.isArray(selector)) return eventMatches(selector, event, ownerId, targetId);
+  let unknown = false;
+  for (const branch of selector) {
+    const match = eventMatches(branch, event, ownerId, targetId);
+    if (match === true) return true;
+    if (match === null) unknown = true;
+  }
+  return unknown ? null : false;
 }
 export function effectUnlocked(activation: EffectDefinition['activation'], owner: Pick<CombatActor, 'ascension' | 'constellation' | 'refinement' | 'setCounts'> & { identity?: Pick<NonNullable<CombatActor['identity']>,'element'|'weaponType'> }): boolean {
   return owner.ascension !== null && owner.ascension >= (activation.ascension ?? 0)

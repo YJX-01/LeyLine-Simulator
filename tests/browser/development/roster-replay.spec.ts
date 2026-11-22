@@ -11,13 +11,15 @@ import { auditHealingWindows, type HealingWindowCase } from '../../../tools/lib/
 
 type ReopenedCase = RosterReplayQuery & { anemoResistance?: number; missingInput?: string; hpChanges?: number[]; additionalMembers?: Build[];
   reactionRecords?: { kind: 'freeze' | 'shatter'; timeMs: number; byTeammate?: boolean }[];
+  priorHits?: { category: 'skill' | 'normal'; timeMs: number; byTeammate?: boolean }[];
+  fieldChanges?: { timeMs: number; byTeammate?: boolean }[];
   reactionRules?: Project['reactionRules']; timeMs?: number };
 async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
   const results = await page.evaluate(async cases => {
     // @ts-expect-error Vite browser source URL.
     const { createDamageCalculation, parseDamageCalculator, calculatorWorkerRequest } = await import('/src/domain/damage-calculator.ts');
     // @ts-expect-error Vite browser source URL.
-    const { defaultEnemy, addActorFromBuild, addAttributeCapture, addCombatObservation, addReactionObservation, addSkillAction, addTransformativeReaction } = await import('/src/domain/real-project.ts');
+    const { defaultEnemy, addActorFromBuild, addAttributeCapture, addCombatObservation, addFieldChange, addReactionObservation, addSkillAction, addSkillHit, addTransformativeReaction } = await import('/src/domain/real-project.ts');
     // @ts-expect-error Vite browser source URL.
     const { packDocument } = await import('/src/domain/content-document.ts');
     // @ts-expect-error Vite browser source URL.
@@ -28,13 +30,22 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
     });
     const values = [];
     try {
-      for (const { build, damage, teammate, additionalMembers, capture, cast, anemoResistance, hpChanges, reactionRecords, reactionRules, timeMs } of cases) {
+      for (const { build, damage, teammate, additionalMembers, capture, cast, anemoResistance, hpChanges, reactionRecords, reactionRules, timeMs, priorHits, fieldChanges } of cases) {
         const enemy = defaultEnemy(); enemy.level = build.level;
         if (anemoResistance !== undefined) enemy.resistances.anemo = anemoResistance;
         const file = createDamageCalculation(build, damage, enemy);
         const peer = teammate && addActorFromBuild(file.project, teammate);
         for (const member of additionalMembers ?? []) addActorFromBuild(file.project, member);
         if (timeMs !== undefined) file.project.timeline[0].timeMs = timeMs;
+        for (const change of fieldChanges ?? []) {
+          addFieldChange(file.project, change.byTeammate ? peer : file.actorId, change.timeMs, {mode:{crit:'noncritical',reaction:'none'}});
+        }
+        for (const previous of priorHits ?? []) {
+          const actor = previous.byTeammate ? peer : file.actorId;
+          const member = previous.byTeammate ? teammate! : build;
+          const skill = member.character.talents.find(t => t.category === previous.category)!;
+          addSkillHit(file.project, actor, skill.id, 0, previous.timeMs, {crit:'noncritical',reaction:'none'});
+        }
         if (cast) {
           file.project.timeline[0].timeMs = cast.delayMs;
           addSkillAction(file.project, file.actorId, cast.skillId, 0);
@@ -47,7 +58,7 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
           if (reaction.kind === 'shatter') addTransformativeReaction(file.project, actor, 'shatter', 'physical', reaction.timeMs, reactionRules);
           else addReactionObservation(file.project, actor, reaction.timeMs, reaction.kind);
         }
-        if (reactionRecords) file.project.objective.damageIds = [file.recordId];
+        if (reactionRecords || priorHits) file.project.objective.damageIds = [file.recordId];
         if (capture) {
           file.project.timeline[0].timeMs = 1;
           const recordId = addAttributeCapture(file.project, file.actorId, capture.skillId, 0);
@@ -59,7 +70,7 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
         const project = importProject(JSON.stringify(packDocument('axis', reopened.project)));
         const axis = (await evaluate({ ...request, project, taskId: 2 })).result;
         values.push([calculator, axis].map(r => ({
-          value: reactionRecords ? r.objectiveValue : r.totalValue, matches: r.points.filter(p => p.id === file.recordId).length,
+          value: reactionRecords || priorHits ? r.objectiveValue : r.totalValue, matches: r.points.filter(p => p.id === file.recordId).length,
           missing: r.points.find(p => p.id === file.recordId)?.real?.structured?.requiredInputs.map(input => input.key) ?? [],
           issues: r.totalValue === null ? r.diagnostics.map(d => d.message).slice(0, 3) : []
         })));
@@ -138,6 +149,34 @@ test('party talent levels use the saved lineup in both files and the actual Work
   }
   await page.goto('/');
   expect(await compareReopenedQueries(page, cases)).toEqual([]);
+});
+test('Mailed Flower replays either trigger, field changes and shared expiry in both Worker requests', async ({page}) => {
+  const base = {sets:[], artifacts:[], level:1, ascension:0, constellation:0, weaponLevel:1, weaponAscension:0, refinement:1, talents:{normal:1,skill:1,burst:1}};
+  const weapon = await catalogSnapshotFields('chongyun','mailedflower');
+  const teammate: Build = {...await catalogSnapshotFields('kaeya','dullblade'),...base};
+  const cases: ReopenedCase[] = [];
+  const skill = {category:'skill' as const,timeMs:1}, reaction = {kind:'freeze' as const,timeMs:1}, enter = {timeMs:0};
+  const scenarios: [string,boolean,Partial<ReopenedCase>][] = [
+    ['触发当击',false,{}],
+    ['战技命中后',true,{timeMs:2,priorHits:[skill]}],
+    ['反应后',true,{timeMs:8000,reactionRecords:[reaction]}],
+    ['八秒边界',false,{timeMs:8001,reactionRecords:[reaction]}],
+    ['队友触发',false,{timeMs:2,reactionRecords:[{...reaction,byTeammate:true}]}],
+    ['换人后保留',true,{timeMs:10,priorHits:[skill],fieldChanges:[enter,{timeMs:5,byTeammate:true}]}],
+    ['后台命中不能刷新',false,{timeMs:8001,priorHits:[skill,{...skill,timeMs:7000}],fieldChanges:[enter,{timeMs:5,byTeammate:true}]}],
+    ['另一种触发刷新',true,{timeMs:8001,priorHits:[skill],reactionRecords:[{...reaction,timeMs:7000}]}],
+  ];
+  for (const rank of [1,5]) {
+    const build: Build = {...weapon,...base,refinement:rank}, attack = build.character.attributes.base.attack + build.weapon!.baseAttack;
+    for (const [label,active,settings] of scenarios) {
+      const triggering = label === '触发当击', skillId = triggering ? 'skill' : 'normal';
+      cases.push({label:label+'/'+rank,build,teammate,fieldChanges:[enter],timeMs:1,...settings,
+        damage:{hit:{definition:{group:'characters',namespace:'builtin',id:'chongyun',revision:build.character.revision},hitId:'chongyun.'+skillId+'.param1'},crit:'noncritical',reaction:'none',facts:[]},
+        expected:attack*(active?rank===1?1.12:1.24:1)*(triggering?1.7204:.70004)*.5*.9});
+    }
+  }
+  await page.goto('/');
+  expect(await compareReopenedQueries(page,cases)).toEqual([]);
 });
 test('Varka keeps the recorded striking hand and reports an undetermined charged hit in both save formats', async ({ page }) => {
   const starter = { sets: [], artifacts: [], level: 1, ascension: 0, constellation: 0, weaponLevel: 1, weaponAscension: 0,

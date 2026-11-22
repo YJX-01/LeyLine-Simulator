@@ -18,8 +18,9 @@ export function auditEquipmentContexts(entities,engine) {
     const prepared=engine.prepareStructuredBuilds(members);
     if (!prepared.ok) throw new Error(b.character.id+' / '+b.weapon.id+' '+JSON.stringify(prepared.diagnostics));
     const talent=b.character.talents[0], h=talent.hits[0];
-    return (key,{category='normal',time=1,events=[],facts={},targetFacts,recipient='actor',family='ordinary',reactionId=null,flatHp,recharge}={}) => {
+    return (key,{category='normal',time=1,events=[],facts={},targetFacts,recipient='actor',family='ordinary',reactionId=null,flatHp,recharge,queryEvent,phase='before'}={}) => {
       const {setup,request}=auditHit(b.character,talent,h);
+      if (queryEvent) Object.assign(setup.events[0],queryEvent,{id:request.frame.eventId});
       setup.events[0].timeMs=time;
       setup.events.unshift(...events);
       Object.assign(request.frame.factOverrides[0].facts,facts);
@@ -28,7 +29,7 @@ export function auditEquipmentContexts(entities,engine) {
       if (flatHp!==undefined) context.actors[0].inputs.flatHp=quantity('hp',flatHp);
       if (recharge!==undefined) context.actors[0].inputs.energyRecharge=quantity('scalar',recharge);
       const input={kind:'attribute',key:{id:'attribute.'+key,namespace:'builtin',revision:'1'},actor:{role:'owner'},at:{kind:'current',phase:'same'}};
-      const result=engine.evaluateCombatBindings(prepared.team.program,context,{value:input},{...request.frame,ownerId:recipient,recipientId:recipient,contributorId:null,
+      const result=engine.evaluateCombatBindings(prepared.team.program,context,{value:input},{...request.frame,phase,ownerId:recipient,recipientId:recipient,contributorId:null,
         hit:{skillId:talent.id,hitId:h.id,category,element:'physical',origin:'talent',family,reactionId}});
       return result.outputs.value?.value?.value ?? null;
     };
@@ -291,6 +292,43 @@ export function auditEquipmentContexts(entities,engine) {
     }
   }
   for (let rank=1;rank<=5;rank++) {
+    const flower = 'mailedflower', readFlower = probe(build('noelle',flower,rank),[build('jean')]);
+    // The two Mailed Flower observations in kqm-tcl/docs/evidence/equipment/weapons.md cover off-field refresh and the triggering hit.
+    const description = source[flower].metadata['r'+rank].description;
+    const [,duration,attack,mastery] = description.match(/后的(\d+)秒内，攻击力提升([\d.]+)%，元素精通提升(\d+)点/);
+    const end = Number(duration) * 1000;
+    const skill = event('hit','skill',0);
+    const reaction = {...event('reaction','normal',0),reactionId:'freeze'};
+    const both = {...skill,reactionId:'crystallize'};
+    const offField = event('hit','skill',end-1,'actor',{},false);
+    const unknown = {...skill,subjectFacts:[{subject:{kind:'actor',id:'actor'},values:{onField:{value:null,provenance:'explicit',sourceRefs:[]}}}]};
+    const checks = [
+      ['skill',[skill],1,true], ['reaction',[reaction],end-1,true], ['both',[both],1,true],
+      ['reaction on a normal hit',[{...event('hit','normal',0),reactionId:'freeze'}],1,true],
+      ['shield contact',[{...skill,facts:{targetsDamaged:quantity('count',0)}}],1,true],
+      ['cast',[event('action','skill',0)],1,false], ['ordinary hit',[event('hit','normal',0)],1,false],
+      ['no enemy',[{...skill,targetIds:[]}],1,false], ['other actor',[event('hit','skill',0,'peer0')],1,false],
+      ['other reactor',[{...reaction,actorId:'peer0'}],1,false], ['off-field',[offField],end,false],
+      ['expired',[skill],end,false], ['off-field keeps previous',[skill,offField],end-1,true],
+      ['off-field cannot extend',[skill,offField],end,false], ['holder position missing',[unknown],1,null],
+      ['refresh by reaction',[skill,{...reaction,id:'again',timeMs:end-1}],2*end-2,true],
+      ['refresh expires',[skill,{...reaction,id:'again',timeMs:end-1}],2*end-1,false],
+      ['refresh by skill',[reaction,{...skill,id:'again',timeMs:end-1}],end,true],
+      ['effect persists off-field',[skill],1,true],
+    ];
+    for (const [stat,delta] of [['attackPercent',Number(attack)/100],['elementalMastery',Number(mastery)]]) {
+      for (const [scenario,events,time,active] of checks) for (const recipient of ['actor','peer0']) {
+        const opts = {recipient,time,...scenario==='effect persists off-field'?{facts:{onField:flag(false)}}:{}};
+        const base = readFlower(stat,opts);
+        const expected = recipient==='actor' && active===null ? null : base + (recipient==='actor' && active ? delta : 0);
+        record(flower,rank,'/buffs/0',{scenario,stat,recipient},readFlower(stat,{...opts,events}),expected);
+      }
+      for (const queryEvent of [skill,reaction,both]) for (const phase of ['before','after']) {
+        const base = readFlower(stat);
+        record(flower,rank,'/buffs/0',{stat,phase,kind:queryEvent.kind,reaction:queryEvent.reactionId},
+          readFlower(stat,{queryEvent,phase}),base+(phase==='after'?delta:0));
+      }
+    }
     for (const [id,holder,stat,eligible,element] of [
       ['darkironsword','kaeya','attackPercent',['overloaded','superconduct','stellar-conduct','electro-charged','quicken','aggravate','hyperbloom','lunar-charged'],'electro'],
       ['emeraldorb','lisa','attackPercent',['vaporize','electro-charged','freeze','bloom','lunar-charged','lunar-bloom'],'hydro'],

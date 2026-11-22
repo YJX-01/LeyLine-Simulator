@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { finiteSchema, idSchema } from '../common/values';
 import { elements } from '../content/stats';
 import { calculationBindingSchema } from './binding';
-import { calculationEventSelectorSchema } from './event';
+import { buffEventSelectorSchema } from './event';
 import { calculationValueTypeSchema, definitionRefSchema, valueMatchesType } from './values';
 
 export const teamHealthCounterSchema = z.object({
@@ -41,7 +41,7 @@ export const effectDefinitionSchema = z.object({
     z.object({ role: z.literal('owner') }).strict(), z.object({ role: z.literal('team'), excludeOwner: z.boolean() }).strict(),
     z.object({ role: z.literal('fact-actor'), input: idSchema }).strict(), z.object({ role: z.literal('target') }).strict(),
   ]),
-  trigger: z.discriminatedUnion('kind', [z.object({ kind: z.literal('permanent') }).strict(), z.object({ kind: z.literal('event'), selector: calculationEventSelectorSchema,
+  trigger: z.discriminatedUnion('kind', [z.object({ kind: z.literal('permanent') }).strict(), z.object({ kind: z.literal('event'), selector: buffEventSelectorSchema,
     cooldownMs: z.number().int().positive().max(3600000).optional(), duringTeamInterval: idSchema.optional() }).strict()]),
   lifetime: z.discriminatedUnion('kind', [z.object({ kind: z.literal('permanent') }).strict(),
     z.object({ kind: z.literal('interval'), durationMs: z.number().int().positive().max(3600000), phase: z.enum(['before', 'after']) }).strict()]),
