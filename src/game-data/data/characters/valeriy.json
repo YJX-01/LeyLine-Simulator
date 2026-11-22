@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "valeriy",
@@ -247,7 +247,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -310,7 +310,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             15,
             15,
@@ -331,7 +331,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -417,101 +417,119 @@
       "hits": [
         {
           "id": "valeriy.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "valeriy.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "valeriy.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "valeriy.normal.param4",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "valeriy.low",
+              "inputs": {
+                "count": {
+                  "fact": "valeriy.impactPotential"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "valeriy.normal.param11",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "valeriy.normal.param12",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "valeriy.normal.param13",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param13",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param13"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "valeriy.normal.param5",
+          "name": "臼炮直射·抵近轰击伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "support": "hit-unavailable",
+          "category": "charged",
+          "element": "electro",
+          "when": [
+            {
+              "call": "valeriy.ready",
+              "inputs": {
+                "count": {
+                  "fact": "valeriy.impactPotential"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ]
     },
@@ -584,7 +602,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1309.6384,
             1440.6204,
@@ -605,7 +623,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -626,7 +644,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -649,19 +667,17 @@
       "hits": [
         {
           "id": "valeriy.skill.param1",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param5"
     },
     {
       "id": "valeriy.burst",
@@ -736,7 +752,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -757,7 +773,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -778,7 +794,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -801,33 +817,31 @@
       "hits": [
         {
           "id": "valeriy.burst.param1",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "valeriy.burst.param2",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "雷霰重弹伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -930,5 +944,38 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "valeriy.impactPotential": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "valeriy.ready",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 40
+      }
+    },
+    {
+      "id": "valeriy.low",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "count",
+        "unit": "count",
+        "relation": "lt",
+        "threshold": 40
+      }
+    }
+  ]
 }

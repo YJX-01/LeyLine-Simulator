@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "candace",
@@ -252,7 +252,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -338,128 +338,105 @@
       "hits": [
         {
           "id": "candace.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -517,7 +494,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1155.5629,
             1271.1353,
@@ -580,7 +557,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -601,7 +578,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -624,30 +601,24 @@
       "hits": [
         {
           "id": "candace.skill.param3",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "基础伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.skill.param4",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "蓄力完成伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -713,7 +684,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -776,7 +747,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             3,
             3,
@@ -797,7 +768,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -818,7 +789,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -841,33 +812,31 @@
       "hits": [
         {
           "id": "candace.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "candace.burst.param4",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param4",
-          "scaling": [
+          "name": "水波冲击伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -887,7 +856,25 @@
       "id": "candace.passive3",
       "name": "向拂晓的初光",
       "description": "队伍中自己的角色攀爬消耗的体力降低20%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "candace.stamina-climb",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.stamina-climb",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.climb",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [

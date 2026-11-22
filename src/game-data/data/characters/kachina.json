@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "kachina",
@@ -252,7 +252,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -338,128 +338,105 @@
       "hits": [
         {
           "id": "kachina.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "二段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -534,7 +511,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             60,
             60,
@@ -555,7 +532,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -578,33 +555,28 @@
       "hits": [
         {
           "id": "kachina.skill.param1",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "冲天转转搭乘伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kachina.skill.param2",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "冲天转转独立伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param4"
     },
     {
       "id": "kachina.burst",
@@ -655,7 +627,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -676,7 +648,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -697,7 +669,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -720,19 +692,20 @@
       "hits": [
         {
           "id": "kachina.burst.param1",
-          "element": "geo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -746,7 +719,33 @@
       "id": "kachina.passive2",
       "name": "坚岩之重",
       "description": "冲天转转造成的伤害提升，提升值相当于卡齐娜的防御力的20%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kachina.talent-flat-bonus",
+          "appliesTo": {
+            "hitIds": [
+              "kachina.skill.param1",
+              "kachina.skill.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "kachina.talent-flat",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": 0.2
+                },
+                "output": "bonus"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kachina.passive3",
@@ -835,5 +834,19 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "kachina.talent-flat",
+      "template": {
+        "id": "attribute-conversion",
+        "stat": "defense",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "bonus",
+        "revision": "1"
+      }
+    }
+  ]
 }

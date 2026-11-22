@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "manekin",
@@ -15,7 +15,8 @@
     "notes": [
       "当前是未元素化的基础形态，仅配置普通攻击。元素战技与元素爆发请查看对应元素形态。",
       "奇偶没有命座；固有天赋与对应元素形态按实际配置收录。"
-    ]
+    ],
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -551,129 +552,107 @@
       "hits": [
         {
           "id": "manekin.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param5",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekin.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         }
       ]
     }
@@ -689,7 +668,19 @@
       "id": "manekin.passive2",
       "name": "交战持备",
       "description": "奇偶处于队伍后台时，若元素能量低于30%，每秒为自己恢复2点元素能量。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "manekin.reserve-energy",
+          "periodicEnergy": {
+            "belowRatio": 0.3,
+            "amount": 2,
+            "intervalMs": 1000,
+            "offField": true
+          },
+          "modifiers": []
+        }
+      ]
     },
     {
       "id": "manekin.passive3",
@@ -700,30 +691,41 @@
   ],
   "constellations": [],
   "support": {
-    "hit-unavailable": {
+    "hit-complete": {
       "maxConstellation": 0,
-      "resolution": "unavailable",
+      "resolution": "complete",
       "evidence": "adopted",
-      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "reason": "按无元素形态的普通攻击、重击和下落攻击倍率逐段计算。",
       "mechanisms": [
         {
-          "id": "explicit-output-scope",
-          "resolution": "unavailable"
+          "id": "talent-hits",
+          "resolution": "implemented"
         }
       ]
     },
-    "context-unavailable": {
+    "context-complete": {
       "maxConstellation": 0,
-      "resolution": "unavailable",
+      "resolution": "complete",
       "evidence": "adopted",
-      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "reason": "无元素形态只有剑术，没有可施放的元素战技和元素爆发。",
       "mechanisms": [
         {
-          "id": "explicit-output-scope",
-          "resolution": "unavailable"
+          "id": "manekin.passive1",
+          "resolution": "irrelevant",
+          "reason": "该形态无法创建禁限区域。"
+        },
+        {
+          "id": "manekin.passive2",
+          "resolution": "irrelevant",
+          "reason": "该形态没有元素爆发，元素能量上限为零。"
+        },
+        {
+          "id": "manekin.passive3",
+          "resolution": "irrelevant",
+          "reason": "只切换已有装扮搭配。"
         }
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-complete"
 }

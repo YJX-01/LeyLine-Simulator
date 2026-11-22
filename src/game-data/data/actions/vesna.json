@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-actions",
   "identity": {
     "namespace": "builtin",
@@ -25,11 +25,7 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param1",
-          "outputIds": [
-            "vesna.skill.param1.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -48,11 +44,7 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param2",
-          "outputIds": [
-            "vesna.skill.param2.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -71,31 +63,19 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param3",
-          "outputIds": [
-            "vesna.skill.param3.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param4",
-          "outputIds": [
-            "vesna.skill.param4.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param5",
-          "outputIds": [
-            "vesna.skill.param5.stellar-swirl"
-          ],
           "offsetsMs": [
             null
           ]
@@ -114,11 +94,7 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param6",
-          "outputIds": [
-            "vesna.skill.param6.ordinary"
-          ],
           "offsetsMs": [
             null,
             null,
@@ -127,11 +103,7 @@
           ]
         },
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param7",
-          "outputIds": [
-            "vesna.skill.param7.stellar-swirl"
-          ],
           "offsetsMs": [
             null,
             null,
@@ -140,21 +112,13 @@
           ]
         },
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param8",
-          "outputIds": [
-            "vesna.skill.param8.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param9",
-          "outputIds": [
-            "vesna.skill.param9.stellar-swirl"
-          ],
           "offsetsMs": [
             null
           ]
@@ -173,21 +137,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.burst",
           "hitId": "vesna.burst.param1",
-          "outputIds": [
-            "vesna.burst.param1.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.burst",
           "hitId": "vesna.burst.param2",
-          "outputIds": [
-            "vesna.burst.param2.stellar-swirl"
-          ],
           "offsetsMs": [
             null
           ]
@@ -208,22 +164,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.c6.slash",
-          "outputIds": [
-            "vesna.skill.c6.slash.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.c6.spirit",
-          "outputIds": [
-            "vesna.skill.c6.spirit.ordinary",
-            "vesna.skill.c6.spirit.stellar-swirl"
-          ],
           "offsetsMs": [
             null
           ]
@@ -242,21 +189,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param1",
-          "outputIds": [
-            "vesna.normal.param1.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param1.anemo",
-          "outputIds": [
-            "vesna.normal.param1.anemo.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -275,21 +214,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param2",
-          "outputIds": [
-            "vesna.normal.param2.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param2.anemo",
-          "outputIds": [
-            "vesna.normal.param2.anemo.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -308,22 +239,14 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param3",
-          "outputIds": [
-            "vesna.normal.param3.ordinary"
-          ],
           "offsetsMs": [
             null,
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param3.anemo",
-          "outputIds": [
-            "vesna.normal.param3.anemo.ordinary"
-          ],
           "offsetsMs": [
             null,
             null
@@ -343,21 +266,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param4",
-          "outputIds": [
-            "vesna.normal.param4.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param4.anemo",
-          "outputIds": [
-            "vesna.normal.param4.anemo.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -376,21 +291,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param5",
-          "outputIds": [
-            "vesna.normal.param5.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param5.anemo",
-          "outputIds": [
-            "vesna.normal.param5.anemo.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -409,21 +316,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param6",
-          "outputIds": [
-            "vesna.normal.param6.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param6.anemo",
-          "outputIds": [
-            "vesna.normal.param6.anemo.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -442,21 +341,13 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param7",
-          "outputIds": [
-            "vesna.normal.param7.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
         },
         {
-          "skillId": "vesna.normal",
           "hitId": "vesna.normal.param7.anemo",
-          "outputIds": [
-            "vesna.normal.param7.anemo.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -475,11 +366,7 @@
       "cancelAfterMs": null,
       "hits": [
         {
-          "skillId": "vesna.skill",
           "hitId": "vesna.skill.param10",
-          "outputIds": [
-            "vesna.skill.param10.ordinary"
-          ],
           "offsetsMs": [
             null
           ]
@@ -505,8 +392,8 @@
   ],
   "calculation": {
     "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
+      "runtimeVersion": "0.2.0",
       "requiredFeatures": [
         "fixed-templates-v1",
         "combat-binding-v1",
@@ -529,7 +416,7 @@
       "tables": [],
       "formulas": [
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.1.yes",
@@ -548,7 +435,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.1.not",
@@ -567,7 +454,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.1.yes",
@@ -586,7 +473,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.1.not",
@@ -605,7 +492,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.2.yes",
@@ -624,7 +511,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.2.not",
@@ -643,7 +530,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.2.yes",
@@ -662,7 +549,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.2.not",
@@ -681,7 +568,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.3.yes",
@@ -700,7 +587,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.all.3.not",
@@ -719,7 +606,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.3.yes",
@@ -738,7 +625,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.any.3.not",
@@ -757,7 +644,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.c0",
@@ -777,7 +664,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.c1",
@@ -797,7 +684,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.c6",
@@ -817,7 +704,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.first-highest",
@@ -837,7 +724,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.positive-cost",
@@ -857,7 +744,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.stage.1",
@@ -877,7 +764,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.stage.2",
@@ -897,7 +784,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.stage.3",
@@ -917,7 +804,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.third-highest",
@@ -937,7 +824,7 @@
           ]
         },
         {
-          "schemaVersion": "0.1.0",
+          "schemaVersion": "0.2.0",
           "identity": {
             "namespace": "builtin",
             "id": "vesna.actions.fourth-highest",

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "flins",
@@ -256,7 +256,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -342,128 +342,105 @@
       "hits": [
         {
           "id": "flins.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -666,7 +643,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -687,7 +664,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -708,7 +685,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             16,
             16,
@@ -731,100 +708,85 @@
       "hits": [
         {
           "id": "flins.skill.param1",
-          "element": "electro",
+          "name": "一段伤害",
           "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.skill.param2",
-          "element": "electro",
+          "name": "二段伤害",
           "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.skill.param3",
-          "element": "electro",
+          "name": "三段伤害",
           "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.skill.param4",
-          "element": "electro",
+          "name": "四段伤害",
           "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.skill.param5",
-          "element": "electro",
+          "name": "五段伤害",
           "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.skill.param6",
-          "element": "electro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.skill.param7",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param7",
-          "scaling": [
+          "name": "北国枪阵伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -935,7 +897,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -956,7 +918,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -1019,7 +981,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             30,
             30,
@@ -1042,57 +1004,76 @@
       "hits": [
         {
           "id": "flins.burst.param1",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能初始伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "flins.burst.param2",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "中间段月感电伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [
-            {
-              "id": "flins.burst.param2.lunar-charged",
-              "family": "lunar-charged"
-            }
-          ],
+          "family": "lunar-charged",
           "support": "lunar-hit-unavailable"
         },
         {
           "id": "flins.burst.param3",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param3",
-          "scaling": [
+          "name": "最终段月感电伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [
+          "family": "lunar-charged",
+          "support": "lunar-hit-unavailable"
+        },
+        {
+          "id": "flins.burst.symphony",
+          "name": "雷霆交响伤害",
+          "base": [
             {
-              "id": "flins.burst.param3.lunar-charged",
-              "family": "lunar-charged"
+              "stat": "attack",
+              "parameter": "param6"
             }
+          ],
+          "family": "lunar-charged",
+          "when": [
+            "flins.symphonyWindow"
+          ],
+          "support": "lunar-hit-unavailable"
+        },
+        {
+          "id": "flins.burst.symphony-extra",
+          "name": "雷霆交响额外伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "family": "lunar-charged",
+          "when": [
+            "flins.symphonyWindow",
+            "fullMoonsign",
+            "nearThundercloud"
           ],
           "support": "lunar-hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param5"
     }
   ],
   "passives": [
@@ -1112,7 +1093,32 @@
       "id": "flins.passive3",
       "name": "月兆祝赐·旧世潜藏",
       "description": "队伍中的角色触发感电反应时，将转为触发月感电反应，且基于菲林斯的攻击力，提升月感电反应的基础伤害：每100点攻击力都将提升0.7%基础伤害，至多通过这种方式提升14%伤害。\n\n此外，菲林斯在队伍中时，队伍的月兆将会上升一级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "flins.reaction-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.baseBonus",
+              "value": {
+                "call": "blessing.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "moonsignLevel": 1
     },
     {
       "id": "flins.passive4",
@@ -1211,5 +1217,19 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "flins.symphonyWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "nearThundercloud": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

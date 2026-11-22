@@ -11,7 +11,7 @@ if(process.argv.includes('--capture')) {
   const enka=JSON.parse(read('.references/enka/affixes.json'));
   const props={};for(const [name,stat] of Object.entries(names))props[stat]=`FIGHT_PROP_${name}`;
   for(const [id,row] of Object.entries(affixes))if(enka[id]?.propType!==props[row.stat])throw Error(`Enka affix identity mismatch: ${id}`);
-  writeFileSync(canonical,JSON.stringify({source:{repository:'Rafs-kk/LunaGC-6.6-res',commit,path:'ExcelBinOutput/ReliquaryAffixExcelConfigData.json'},affixes},null,2)+'\n');
+  writeFileSync(canonical,JSON.stringify({affixes},null,2)+'\n');
 }
 const data=JSON.parse(readFileSync(canonical));
-console.log(JSON.stringify({affixes:Object.keys(data.affixes).length,commit:data.source.commit}));
+console.log(JSON.stringify({affixes:Object.keys(data.affixes).length}));

@@ -90,84 +90,7 @@
       "modifierIndex": 0,
       "effect": {
         "namespace": "builtin",
-        "id": "festeringdesire.static-physicalBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 1,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-anemoBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 2,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-geoBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 3,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-electroBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 4,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-hydroBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 5,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-pyroBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 6,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-cryoBonus",
-        "revision": "1"
-      },
-      "source": "genshin-db.festeringdesire.static",
-      "status": "retained-static"
-    },
-    {
-      "entity": "festeringdesire",
-      "modifierIndex": 7,
-      "effect": {
-        "namespace": "builtin",
-        "id": "festeringdesire.static-dendroBonus",
+        "id": "festeringdesire.skill",
         "revision": "1"
       },
       "source": "genshin-db.festeringdesire.static",
@@ -178,7 +101,7 @@
       "modifierIndex": 8,
       "effect": {
         "namespace": "builtin",
-        "id": "festeringdesire.static-critRate",
+        "id": "festeringdesire.skill.1",
         "revision": "1"
       },
       "source": "genshin-db.festeringdesire.static",

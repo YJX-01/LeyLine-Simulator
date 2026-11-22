@@ -221,187 +221,69 @@
     97.3,
     116.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.harbingerofdawn.static",
-          "kind": "definition"
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "buffs": [
+    {
+      "id": "harbingerofdawn.static-critRate",
+      "condition": {
+        "call": "harbingerofdawn.hp-condition",
+        "inputs": {
+          "hpRatio": {
+            "fact": "hpRatio"
+          }
         },
+        "output": "active"
+      },
+      "modifiers": [
         {
-          "id": "content.weapon.harbingerofdawn",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [
-        {
-          "schemaVersion": "0.1.0",
-          "identity": {
-            "namespace": "builtin",
-            "id": "harbingerofdawn.hp-condition",
-            "revision": "1"
-          },
-          "template": {
-            "id": "threshold-condition",
-            "revision": "1",
-            "input": "hpRatio",
-            "relation": "gt",
-            "threshold": 0.9
-          },
-          "sources": [
-            "genshin-db.harbingerofdawn.static"
-          ]
-        }
-      ],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "harbingerofdawn.static-critRate",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.harbingerofdawn.static"
-          ],
-          "activation": {},
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "predicate": {
-            "kind": "formula",
-            "formula": {
-              "namespace": "builtin",
-              "id": "harbingerofdawn.hp-condition",
-              "revision": "1"
-            },
-            "inputs": {
-              "hpRatio": {
-                "kind": "fact",
-                "key": "hpRatio",
-                "type": {
-                  "kind": "quantity",
-                  "unit": "scalar"
-                },
-                "scope": "owner"
-              }
-            },
-            "output": "active"
-          },
+          "target": "attribute.critRate",
           "value": {
-            "kind": "refinement-parameter",
-            "values": [
+            "refinement": [
               0.14,
               0.175,
               0.21,
               0.245,
               0.28
             ],
-            "type": {
-              "kind": "quantity",
-              "unit": "scalar"
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.critRate",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "harbingerofdawn.static-critRate",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
+            "unit": "scalar"
           }
         }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.harbingerofdawn",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "harbingerofdawn",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。",
-          "sources": [
-            "content.weapon.harbingerofdawn",
-            "genshin-db.harbingerofdawn.static"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "harbingerofdawn.static-critRate",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。"
-            }
-          ]
-        }
       ]
-    },
-    "ruleIds": [
+    }
+  ],
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。",
+    "mechanisms": [
       {
-        "namespace": "builtin",
-        "id": "harbingerofdawn.static-critRate",
-        "revision": "1"
+        "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "harbingerofdawn.static-critRate",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用规则按精炼、作用域及明确适用事实求单次输出；触发次数和可执行性另查。"
       }
     ]
   },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.harbingerofdawn",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "formulas": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.harbingerofdawn",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "harbingerofdawn.hp-condition",
+      "template": {
+        "id": "threshold-condition",
+        "revision": "1",
+        "input": "hpRatio",
+        "relation": "gt",
+        "threshold": 0.9
+      }
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

@@ -3,9 +3,13 @@ import argparse
 import copy
 import json
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / 'tools/lib'))
+from content_source import read_content as read, write_content
 COMMIT = '8e5badd60b5d894284ccc927a56c9683529d2592'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--source', type=Path, default=ROOT / 'tools/data/sources/genshin-db' / COMMIT)
@@ -14,14 +18,12 @@ args = parser.parse_args()
 output = args.out.resolve()
 if not output.is_relative_to((ROOT / 'artifacts/content-candidates').resolve()) or output == (ROOT / 'artifacts/content-candidates').resolve():
     parser.error('--out must be a new directory beneath artifacts/content-candidates')
-output.mkdir(parents=True, exist_ok=False)
-
-def read(path):
-    return json.loads(path.read_text(encoding='utf-8'))
+if output.exists():
+    parser.error('candidate directory already exists')
+candidates = {}
 
 def write(path, value):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+    candidates[path] = value
 
 stats = read(args.source / 'stats/talents.json')
 supplement = read(ROOT / 'tools/data/sources/character-text/base-and-manekin.json')
@@ -150,8 +152,6 @@ for identifier, path in sorted(paths.items()):
     for field in ['title', 'description', 'rarity', 'region']:
         if field in identity and (field != 'region' or identity[field]):
             candidate['identity'][field] = identity[field]
-        elif field == 'region':
-            candidate['identity'].pop('region', None)
     for index, talent in enumerate(candidate['talents'], 1):
         source = text.get(f'combat{index}', {})
         talent['name'] = source.get('name', talent['name'])
@@ -180,5 +180,17 @@ for identifier, path in sorted(paths.items()):
     if candidate != original:
         changes.append(identifier)
     write(output / 'characters' / path.name, candidate)
-write(output / 'review.json', {'source': str(args.source), 'changed': changes, 'policy': 'Candidates only. Review text, numbers, rules, revision and dataVersion before explicitly adopting. Existing rule and constellation bonus bindings are preserved; changed verified parameters revoke support pending review.'})
+validation = """
+import {readFileSync} from 'node:fs';
+import {loadContentSchema} from './tools/lib/load-content-schema.mjs';
+const {characterMetadataSchema}=await loadContentSchema('/src/schema/src/index.ts');
+for (const candidate of JSON.parse(readFileSync(0,'utf8'))) characterMetadataSchema.parse(candidate);
+"""
+subprocess.run(['node', '--input-type=module', '-e', validation], cwd=ROOT, check=True,
+               input=json.dumps(list(candidates.values()), ensure_ascii=False, allow_nan=False).encode('utf-8'))
+write(output / 'review.json', {'changed': changes, 'policy': 'Review text, numeric parameters, bindings and revisions before adoption.'})
+output.mkdir(parents=True, exist_ok=False)
+for path, value in candidates.items():
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_content(path, value)
 print(json.dumps({'candidateDirectory': str(output), 'changedCharacters': len(changes)}))

@@ -221,76 +221,79 @@
     97.3,
     116.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.skyridersword",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.skyridersword",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "skyridersword",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.skyridersword"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.skyridersword",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "施放元素爆发后，提高12%攻击力和移动速度，持续15秒。",
+    "mechanisms": [
+      {
+        "id": "skyridersword.swiftness",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "skyridersword.swiftness",
+            "revision": "1"
+          }
+        ],
+        "reason": "施放元素爆发后，提高12%攻击力和移动速度，持续15秒。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.skyridersword",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "skyridersword.swiftness",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 15000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ]
+          }
+        },
+        {
+          "target": "attribute.movementSpeed",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ]
+          }
+        }
+      ]
     }
   ]
 }

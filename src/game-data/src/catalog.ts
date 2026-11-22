@@ -39,3 +39,8 @@ export async function getCharacterActions(character: DefinitionRef): Promise<Cha
   const definition = (await loaders.actions[character.id]()).default as CharacterActionsDefinition;
   return definition.character.namespace === character.namespace && definition.character.revision === character.revision ? clone(definition) : null;
 }
+
+export async function loadBattleScenes() {
+  const [{ default: definitions }, { sceneDefinitionSchema }] = await Promise.all([import('../data/calculation/battle-scenes.json'), import('@leyline/schema')]);
+  return definitions.map(definition => sceneDefinitionSchema.parse(definition));
+}

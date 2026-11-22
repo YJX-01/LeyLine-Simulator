@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "aether-anemo",
@@ -11,7 +11,8 @@
     "element": "anemo",
     "weaponType": "WEAPON_SWORD_ONE_HAND",
     "rarity": 5,
-    "gameId": 10000005
+    "gameId": 10000005,
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -276,7 +277,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -362,142 +363,117 @@
       "hits": [
         {
           "id": "aether-anemo.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param7",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -622,7 +598,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -643,7 +619,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             8,
             8,
@@ -666,58 +642,46 @@
       "hits": [
         {
           "id": "aether-anemo.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "初始切割伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.skill.param2",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "最大切割伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.skill.param3",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "初始爆风伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aether-anemo.skill.param4",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "最大爆风伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -796,7 +760,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -817,7 +781,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -838,7 +802,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -861,19 +825,32 @@
       "hits": [
         {
           "id": "aether-anemo.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "龙卷风伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "aether-anemo.burst.param2",
+          "name": "附加元素伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -901,7 +878,18 @@
       "rank": 2,
       "name": "革新的旋风",
       "description": "元素充能效率提升16%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-anemo.c2-recharge",
+          "modifiers": [
+            {
+              "target": "attribute.energyRecharge",
+              "value": 0.16
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,

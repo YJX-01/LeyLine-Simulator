@@ -221,76 +221,59 @@
     97.3,
     116.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.blacktassel",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.blacktassel",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "blacktassel",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.blacktassel"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.blacktassel",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
-    {
-      "namespace": "builtin",
-      "id": "coverage.weapon.blacktassel",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。",
+    "mechanisms": [
+      {
+        "id": "blacktassel.targetBonus",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "blacktassel.targetBonus",
+            "revision": "1"
+          }
+        ],
+        "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。"
+      }
+    ]
+  },
+  "facts": {
+    "enemy.slime": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      }
     }
-  ]
+  },
+  "buffs": [
+    {
+      "id": "blacktassel.targetBonus",
+      "condition": {
+        "fact": "enemy.slime"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    }
+  ],
+  "maxRefinement": 5
 }

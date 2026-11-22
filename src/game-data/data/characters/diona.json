@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "diona",
@@ -342,142 +342,118 @@
       "hits": [
         {
           "id": "diona.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param7",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param8",
+          "name": "满蓄力瞄准射击",
           "element": "cryo",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -556,7 +532,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             692.8066,
             762.09686,
@@ -577,7 +553,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -598,7 +574,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -619,7 +595,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             1.8,
             1.9,
@@ -642,16 +618,13 @@
       "hits": [
         {
           "id": "diona.skill.param1",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "猫爪伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -755,7 +728,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             513.19006,
             564.5162,
@@ -776,7 +749,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -797,7 +770,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -818,7 +791,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -841,31 +814,39 @@
       "hits": [
         {
           "id": "diona.burst.param1",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "diona.burst.param2",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "领域持续伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "diona.burst.heal.param3",
+          "detail": 2,
+          "stat": "hp",
+          "rate": "param3",
+          "flat": "param4",
+          "recipient": "on-field"
         }
       ]
     }

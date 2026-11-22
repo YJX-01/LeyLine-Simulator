@@ -1,3 +1,4 @@
+import { expression } from '@leyline/schema/buffs';
 import { hitBindings, ordinaryHitInvocation } from '@leyline/schema/hit-bindings';
 
 /** Assemble the common damage inputs once per requested hit. */
@@ -7,8 +8,8 @@ const current = { kind: 'current', phase: 'same' };
 const scalar = { kind: 'quantity', unit: 'scalar' };
 const formula = (id, inputs, output = 'value') => ({ kind: 'formula', formula: ref(id), inputs, output });
 
-export function assembleHit(hit, skillId) {
-  const { scaling, outputs, ...fields } = hit;
+export function assembleHit(hit, skillId, branches, facts = {}) {
+  const { base: scaling, ...fields } = hit;
   const captured = hit.snapshot?.attributes ?? [];
   const attribute = stat => ({ kind: 'attribute', actor: owner, key: ref('attribute.' + stat),
     at: captured.includes(stat) ? { kind: 'capture', slot: 'panel' } : current });
@@ -16,32 +17,46 @@ export function assembleHit(hit, skillId) {
     attributes: captured.map(stat => ref('attribute.' + stat)), allowedPhases: ['before', 'after'] }] : [];
   const invocation = (binding, predicate) => ({ formula: binding.formula, bindings: binding.inputs,
     output: binding.output, captures, ...(predicate ? { predicate } : {}) });
-  if (!Array.isArray(scaling) || scaling.length < 1 || scaling.length > 2) throw new Error(hit.id + ': unsupported scaling terms');
-  const terms = scaling.map(term => {
+  if (Array.isArray(scaling) && (scaling.length < 1 || scaling.length > 128)) throw new Error(hit.id + ': unsupported scaling terms');
+  const terms = (Array.isArray(scaling) ? scaling : []).map(term => {
     if ((term.parameter !== undefined) === (term.ratio !== undefined)) throw new Error(hit.id + ': specify one multiplier');
-    const ratio = term.parameter !== undefined ? { kind: 'talent-parameter', actor: owner, skillId, parameterId: term.parameter, type: scalar }
+    const ratio = term.parameter !== undefined ? { kind: 'talent-parameter', actor: hit.coordinated ? { role: 'contributor' } : owner, skillId: term.skill ?? skillId, parameterId: term.parameter, type: scalar }
       : { kind: 'constant', value: { ...scalar, value: term.ratio } };
     const inputs = { attribute: attribute(term.stat), ratio };
     if (term.count) inputs.count = { kind: 'fact', scope: 'query', key: term.count, type: { kind: 'quantity', unit: term.countUnit ?? 'count' } };
     return formula(term.formula ?? term.stat + (term.count ? '-counted' : '') + '-damage-base', inputs, 'base');
   });
-  const base = invocation(terms.length === 1 ? terms[0] : formula('damage-sum-2', { term0: terms[0], term1: terms[1] }, 'base'));
+  // Each library sum has at most nine input ports. Group longer ordered bases without dropping terms.
+  function sum(values) {
+    if (values.length === 1) return values[0];
+    if (values.length <= 9) return formula('damage-sum-' + values.length,
+      Object.fromEntries(values.map((value, index) => ['term' + index, value])), 'base');
+    const groups = [];
+    for (let i = 0; i < values.length; i += 9) groups.push(sum(values.slice(i, i + 9)));
+    return sum(groups);
+  }
+  const base = invocation(Array.isArray(scaling) ? sum(terms) : expression({ call: scaling.template, inputs: scaling.inputs, output: scaling.output }, facts));
   function assembleOutput(output) {
-    const { condition, ...identity } = output;
+    const { condition } = output;
     const hitData = { ...hit, base };
-    if (output.family === 'ordinary') return { ...identity, origin: output.origin ?? 'talent', invocation: ordinaryHitInvocation(hitData, condition), coverageRefs: hit.coverageRefs };
+    if (output.family === 'ordinary') return ordinaryHitInvocation(hitData, condition);
     const { attr, critFactor, resistanceFactor, skillBase } = hitBindings(hitData);
-    const special = stat => attr('reaction.' + (output.family === 'stellar-swirl' ? 'stellar-swirl' : 'lunar') + '.' + stat);
+    if (output.family === 'resistance-only') return invocation(formula('product.damage', { basis: skillBase, rate: resistanceFactor }), condition);
+    const stellar = output.family === 'stellar-swirl' || output.family === 'stellar-conduct';
+    const special = stat => attr('reaction.' + (stellar ? output.family : 'lunar') + '.' + stat);
     const inputs = { scaledBase: skillBase, em: attribute('elementalMastery'), reactionBaseBonus: special('baseBonus'),
       reactionBonus: special('damageBonus'), flatBaseBonus: special('flatBaseBonus'), critFactor, resistanceFactor };
     let result;
-    if (output.family === 'stellar-swirl') {
-      result = formula('vesna.stellar-direct', { ...inputs, baseMultiplier: special('baseMultiplier'),
-        elevationFactor: formula('vesna.elevation-factor', { input: special('elevation') }) });
+    if (stellar) {
+      result = formula(output.family + '-direct', { ...inputs,
+        scaledBase: formula('product.damage', { basis: skillBase, rate: special('baseMultiplier') }),
+        ...(output.family === 'stellar-conduct' ? { reactionCoefficient: formula('stellar.attach-coefficient', {
+          count: { kind: 'fact', key: 'stellarAttachments', scope: 'query', type: { kind: 'quantity', unit: 'count' } } }) } : {}),
+        elevationFactor: formula('stellar-elevation-factor', { input: special('elevation') }) });
     } else {
       result = formula(output.family + '-direct', { ...inputs, elevationFactor: special('elevationFactor') });
     }
-    return { ...identity, origin: output.origin ?? 'talent', invocation: invocation(result, condition), coverageRefs: hit.coverageRefs };
+    return invocation(result, condition);
   }
-  return { ...fields, base, outputs: outputs.map(assembleOutput) };
+  return { ...fields, base, origin: hit.origin ?? 'talent', damage: Object.fromEntries(branches.map(branch => [branch.family, assembleOutput(branch)])) };
 }

@@ -221,76 +221,51 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.sacrificialgreatsword",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.sacrificialgreatsword",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "sacrificialgreatsword",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.sacrificialgreatsword"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.sacrificialgreatsword",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "按精炼、造成伤害的目标数和持有者站场状态判定触发。重置当前正在恢复的一次战技冷却。",
+    "mechanisms": [
+      {
+        "id": "sacrificialgreatsword.composed",
+        "resolution": "implemented",
+        "ruleIds": [],
+        "reason": "按精炼、造成伤害的目标数和持有者站场状态判定触发。重置当前正在恢复的一次战技冷却。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.sacrificialgreatsword",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "sacrificialgreatsword.composed",
+      "modifiers": [],
+      "onDamage": {
+        "critical": false,
+        "categories": [
+          "skill"
+        ],
+        "chance": [
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8
+        ],
+        "cooldownMs": [
+          30000,
+          26000,
+          22000,
+          19000,
+          16000
+        ],
+        "change": {
+          "kind": "reset-skill"
+        }
+      }
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "yumemizukimizuki",
@@ -206,7 +206,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -292,100 +292,83 @@
       "hits": [
         {
           "id": "yumemizukimizuki.normal.param1",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.normal.param2",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.normal.param3",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.normal.param4",
-          "element": "anemo",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.normal.param6",
-          "element": "anemo",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.normal.param7",
-          "element": "anemo",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.normal.param8",
-          "element": "anemo",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -468,7 +451,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -510,7 +493,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -554,33 +537,28 @@
       "hits": [
         {
           "id": "yumemizukimizuki.skill.param4",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "持续攻击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "yumemizukimizuki.burst",
@@ -681,7 +659,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -702,7 +680,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -723,7 +701,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -744,7 +722,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             314.57,
             346.03137,
@@ -767,33 +745,31 @@
       "hits": [
         {
           "id": "yumemizukimizuki.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yumemizukimizuki.burst.param2",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "梦念冲击波伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [

@@ -221,76 +221,120 @@
     155.6,
     186.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.azurelight",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.azurelight",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "azurelight",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.azurelight"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.azurelight",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "施放元素战技后的12秒内，攻击力提升24%。持续期间，装备者的元素能量为0时，攻击力还会提升24%，且暴击伤害提升40%。",
+    "mechanisms": [
+      {
+        "id": "azurelight.after-skill",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "azurelight.after-skill",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "azurelight.after-skill.1",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "azurelight.after-skill.2",
+            "revision": "1"
+          }
+        ],
+        "reason": "施放元素战技后的12秒内，攻击力提升24%。持续期间，装备者的元素能量为0时，攻击力还会提升24%，且暴击伤害提升40%。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.azurelight",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "azurelight.after-skill",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "skill"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 12000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.24,
+              0.3,
+              0.36,
+              0.42,
+              0.48
+            ]
+          }
+        },
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.24,
+              0.3,
+              0.36,
+              0.42,
+              0.48
+            ]
+          },
+          "condition": {
+            "call": "energy.zero",
+            "inputs": {
+              "amount": {
+                "fact": "currentEnergy"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "target": "attribute.critDamage",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.4,
+              0.5,
+              0.6,
+              0.7,
+              0.8
+            ]
+          },
+          "condition": {
+            "call": "energy.zero",
+            "inputs": {
+              "amount": {
+                "fact": "currentEnergy"
+              }
+            },
+            "output": "active"
+          }
+        }
+      ]
     }
   ]
 }

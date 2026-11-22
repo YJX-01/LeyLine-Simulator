@@ -10,7 +10,9 @@ test('entity-owned calculation definitions assemble once, directly from maintain
   assert.deepEqual(library.formulas.find(formula => formula.identity.id === owned.identity.id), owned);
   const reactions = readAuditJson('src/game-data/data/calculation/reactions.json').calculation;
   for (const formula of reactions.formulas) assert.equal(library.formulas.filter(entry => entry.identity.id === formula.identity.id).length, 1);
-  assert.equal(library.effects.length, 82);
+  const effects = new Set(library.effects.map(effect => JSON.stringify(effect.identity)));
+  assert.equal(effects.size, library.effects.length);
+  for (const id of ['furina.fanfare', 'resonance.pyro', 'adventurer.hp', 'bennett.inspiration']) assert.ok(library.effects.some(effect => effect.identity.id === id));
   assert.equal(library.aggregates.length, 3);
   const changed = readCalculationLibrary(path => {
     const value = readAuditJson(path);

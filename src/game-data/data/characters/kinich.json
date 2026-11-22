@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "kinich",
@@ -210,7 +210,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -317,101 +317,98 @@
       "hits": [
         {
           "id": "kinich.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.normal.param4",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.normal.param6",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.normal.param7",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.normal.param8",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "kinich.normal.param9",
+          "name": "空中普通攻击伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "kinich.airborneAttack"
+          ]
         }
       ]
     },
@@ -485,7 +482,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -506,7 +503,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             20,
             20,
@@ -529,33 +526,28 @@
       "hits": [
         {
           "id": "kinich.skill.param1",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "环绕射击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.skill.param2",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "迴猎贯鳞炮伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "kinich.burst",
@@ -631,7 +623,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -652,7 +644,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -673,7 +665,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -696,33 +688,31 @@
       "hits": [
         {
           "id": "kinich.burst.param1",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kinich.burst.param2",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "龙息伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -825,5 +815,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kinich.airborneAttack": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

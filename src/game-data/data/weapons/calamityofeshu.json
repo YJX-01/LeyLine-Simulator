@@ -221,76 +221,96 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.calamityofeshu",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "按精炼读取技能说明中的倍率，按命中类别、触发来源和持续时间授予。",
+    "mechanisms": [
+      {
+        "id": "calamityofeshu.shield-damage",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.calamityofeshu",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "calamityofeshu.shield-damage",
+            "revision": "1"
+          }
+        ],
+        "reason": "按精炼读取技能说明中的倍率，按命中类别、触发来源和持续时间授予。"
+      },
+      {
+        "id": "calamityofeshu.shield-crit",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "calamityofeshu",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.calamityofeshu"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+            "id": "calamityofeshu.shield-crit",
+            "revision": "1"
+          }
+        ],
+        "reason": "按精炼读取技能说明中的倍率，按命中类别、触发来源和持续时间授予。"
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "id": "calamityofeshu.shield-damage",
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "condition": {
+        "fact": "shielded"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.calamityofeshu",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.calamityofeshu",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "calamityofeshu.shield-crit",
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "condition": {
+        "fact": "shielded"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "refinement": [
+              0.08,
+              0.1,
+              0.12,
+              0.14,
+              0.16
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

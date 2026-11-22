@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "hutao",
@@ -302,7 +302,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -388,156 +388,127 @@
       "hits": [
         {
           "id": "hutao.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "五段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param7",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param7",
-          "scaling": [
+          "name": "六段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param8",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param10",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param11",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "hutao.normal.param12",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -641,7 +612,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             8,
             8,
@@ -662,7 +633,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -683,7 +654,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             16,
             16,
@@ -727,19 +698,17 @@
       "hits": [
         {
           "id": "hutao.skill.param3",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "血梅香伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param6"
     },
     {
       "id": "hutao.burst",
@@ -861,7 +830,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -882,7 +851,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -926,31 +895,111 @@
       "hits": [
         {
           "id": "hutao.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "hp.above50",
+              "inputs": {
+                "ratio": {
+                  "fact": "hpRatio"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "snapshot": {
+            "sourceSkillId": "hutao.burst",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "pyroBonus"
+            ]
+          }
         },
         {
           "id": "hutao.burst.param2",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "低血量时技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "hp.at-most50",
+              "inputs": {
+                "ratio": {
+                  "fact": "hpRatio"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "snapshot": {
+            "sourceSkillId": "hutao.burst",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "pyroBonus"
+            ]
+          }
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "hutao.burst.heal.param3",
+          "detail": 2,
+          "stat": "hp",
+          "rate": "param3",
+          "recipient": "self",
+          "condition": {
+            "call": "hp.above50",
+            "inputs": {
+              "ratio": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "count": {
+            "fact": "targetsHit",
+            "cap": 5
+          }
+        },
+        {
+          "id": "hutao.burst.heal.param4",
+          "detail": 3,
+          "stat": "hp",
+          "rate": "param4",
+          "recipient": "self",
+          "condition": {
+            "call": "hp.at-most50",
+            "inputs": {
+              "ratio": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "count": {
+            "fact": "targetsHit",
+            "cap": 5
+          }
         }
       ]
     }
@@ -967,8 +1016,23 @@
       "name": "血之灶火",
       "description": "胡桃的生命值低于或等于50%时，获得33%火元素伤害加成。",
       "unlockAscension": 4,
-      "effects": [
-        "hutao.ascension-four.pyro-bonus"
+      "buffs": [
+        {
+          "id": "hutao.ascension-four.pyro-bonus",
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "hutao.ascension-four",
+                "inputs": {
+                  "hp-ratio": {
+                    "fact": "hpRatio"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -995,7 +1059,12 @@
       "rank": 3,
       "name": "逗留采血色",
       "description": "蝶引来生的技能等级提升3级。\n至多提升至15级。",
-      "talentBonuses": []
+      "talentBonuses": [
+        {
+          "category": "skill",
+          "levels": 3
+        }
+      ]
     },
     {
       "rank": 4,
@@ -1007,7 +1076,12 @@
       "rank": 5,
       "name": "无可奈何燃花作香",
       "description": "安神秘法的技能等级提升3级。\n至多提升至15级。",
-      "talentBonuses": []
+      "talentBonuses": [
+        {
+          "category": "burst",
+          "levels": 3
+        }
+      ]
     },
     {
       "rank": 6,
@@ -1031,32 +1105,6 @@
       }
     }
   ],
-  "effects": [
-    {
-      "id": "hutao.ascension-four.pyro-bonus",
-      "target": "attribute.pyroBonus",
-      "value": {
-        "call": "hutao.ascension-four",
-        "inputs": {
-          "hp-ratio": {
-            "fact": "hpRatio"
-          }
-        }
-      },
-      "activation": {
-        "ascension": 4
-      }
-    }
-  ],
-  "facts": {
-    "hpRatio": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "scalar"
-      }
-    }
-  },
   "support": {
     "hit-unavailable": {
       "maxConstellation": 0,

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lumine-pyro",
@@ -11,7 +11,8 @@
     "element": "pyro",
     "weaponType": "WEAPON_SWORD_ONE_HAND",
     "rarity": 5,
-    "gameId": 10000007
+    "gameId": 10000007,
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -276,7 +277,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -362,142 +363,117 @@
       "hits": [
         {
           "id": "lumine-pyro.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param7",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -597,7 +573,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             80,
             80,
@@ -618,7 +594,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -641,47 +617,39 @@
       "hits": [
         {
           "id": "lumine-pyro.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "焰烈之槛伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.skill.param2",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "长按伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-pyro.skill.param3",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "灼火之槛伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param5"
     },
     {
       "id": "lumine-pyro.burst",
@@ -728,7 +696,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -749,7 +717,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -772,19 +740,20 @@
       "hits": [
         {
           "id": "lumine-pyro.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param3"
+      },
+      "cooldownParameter": "param2"
     }
   ],
   "passives": [
@@ -829,7 +798,37 @@
       "rank": 4,
       "name": "燎灼的烈火",
       "description": "施放元素爆发灼火燎原后，旅行者获得20%火元素伤害加成，持续9秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lumine-pyro.c4-cast",
+          "recipient": "owner",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "lumine-pyro.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 9000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,

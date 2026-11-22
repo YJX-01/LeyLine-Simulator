@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "yunjin",
@@ -298,7 +298,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -384,156 +384,127 @@
       "hits": [
         {
           "id": "yunjin.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "四段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param7",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param7",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param8",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param10",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param11",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.normal.param12",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -591,7 +562,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1155.4323,
             1270.9916,
@@ -675,7 +646,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -698,47 +669,39 @@
       "hits": [
         {
           "id": "yunjin.skill.param3",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "点按伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.skill.param4",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "一段蓄力伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yunjin.skill.param5",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param5",
-          "scaling": [
+          "name": "二段蓄力伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param6"
     },
     {
       "id": "yunjin.burst",
@@ -818,7 +781,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -839,7 +802,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -860,7 +823,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -881,7 +844,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             30,
             30,
@@ -904,19 +867,79 @@
       "hits": [
         {
           "id": "yunjin.burst.param1",
-          "element": "geo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "yunjin.flying-cloud-base.base",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "stacking": {
+            "group": "flying-cloud",
+            "scope": "recipient",
+            "policy": "replace"
+          },
+          "application": "explicit",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "yunjin.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "yunjin.flying-cloud-base",
+                "inputs": {
+                  "def": {
+                    "stat": "defense"
+                  },
+                  "rate": {
+                    "skill": "yunjin.burst",
+                    "parameter": "param2"
+                  }
+                },
+                "output": "bonus"
+              }
+            }
+          ],
+          "charges": {
+            "parameter": "param6",
+            "categories": [
+              "normal"
+            ]
+          }
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -950,7 +973,42 @@
       "rank": 2,
       "name": "诸般切末",
       "description": "施放破嶂见旌仪后，附近队伍中所有角色普通攻击造成的伤害提升15%，持续12秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yunjin.c2-cast",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "yunjin.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1000,58 +1058,6 @@
         "output": "bonus"
       }
     }
-  ],
-  "effects": [
-    {
-      "id": "yunjin.flying-cloud-base.base",
-      "target": "attribute.baseDamageBonus",
-      "value": {
-        "call": "yunjin.flying-cloud-base",
-        "inputs": {
-          "def": {
-            "stat": "defense"
-          },
-          "rate": {
-            "skill": "yunjin.burst",
-            "parameter": "param2"
-          }
-        },
-        "output": "bonus"
-      },
-      "recipient": "team",
-      "appliesTo": {
-        "categories": [
-          "normal"
-        ]
-      },
-      "stacking": {
-        "group": "flying-cloud",
-        "scope": "recipient",
-        "policy": "replace"
-      },
-      "application": "explicit",
-      "trigger": {
-        "kind": "event",
-        "selector": {
-          "kinds": [
-            "action"
-          ],
-          "actor": "owner",
-          "target": "any",
-          "skillIds": [
-            "yunjin.burst"
-          ]
-        }
-      },
-      "lifetime": {
-        "kind": "interval",
-        "durationMs": 12000,
-        "phase": "after"
-      }
-    }
-  ],
-  "innateEffects": [
-    "yunjin.flying-cloud-base.base"
   ],
   "support": {
     "hit-unavailable": {

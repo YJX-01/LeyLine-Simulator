@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "yanfei",
@@ -403,7 +403,7 @@
         },
         {
           "id": "param14",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -508,7 +508,7 @@
         },
         {
           "id": "param19",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -552,156 +552,131 @@
       "hits": [
         {
           "id": "yanfei.normal.param1",
-          "element": "pyro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param2",
-          "element": "pyro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param3",
-          "element": "pyro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param4",
-          "element": "pyro",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param5",
-          "element": "pyro",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param6",
-          "element": "pyro",
+          "name": "重击伤害（第3击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param7",
-          "element": "pyro",
+          "name": "重击伤害（第4击）",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param8",
-          "element": "pyro",
+          "name": "重击伤害（第5击）",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param16",
-          "element": "pyro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param16",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param16"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param17",
-          "element": "pyro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param17",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param17"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yanfei.normal.param18",
-          "element": "pyro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param18",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param18"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -747,7 +722,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -770,19 +745,17 @@
       "hits": [
         {
           "id": "yanfei.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param2"
     },
     {
       "id": "yanfei.burst",
@@ -862,7 +835,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -883,7 +856,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             1,
             1,
@@ -904,7 +877,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -925,7 +898,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -948,17 +921,46 @@
       "hits": [
         {
           "id": "yanfei.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "castWindow": {
+        "fact": "yanfei.brilliance",
+        "durationParameter": "param3",
+        "cancelOnLeave": true,
+        "cancelOnDefeat": true
+      },
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "yanfei.brilliance-bonus",
+          "condition": {
+            "fact": "yanfei.brilliance"
+          },
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "parameter": "param2",
+                "skill": "yanfei.burst"
+              }
+            }
+          ]
         }
       ]
     }
@@ -994,7 +996,32 @@
       "rank": 2,
       "name": "最终解释权",
       "description": "烟绯的重击对于生命值低于50%的敌人，暴击率提高20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yanfei.right-of-final-interpretation",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "condition": {
+            "call": "hp.below50",
+            "inputs": {
+              "ratio": {
+                "fact": "targetHpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1057,5 +1084,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "yanfei.brilliance": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

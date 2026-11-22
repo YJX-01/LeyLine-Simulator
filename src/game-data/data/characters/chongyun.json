@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "chongyun",
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -367,128 +367,106 @@
       "hits": [
         {
           "id": "chongyun.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param5",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param6",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chongyun.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -542,7 +520,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             2,
             2.1,
@@ -563,7 +541,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -584,7 +562,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -607,19 +585,17 @@
       "hits": [
         {
           "id": "chongyun.skill.param1",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "chongyun.burst",
@@ -666,7 +642,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -687,7 +663,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             40,
             40,
@@ -710,19 +686,20 @@
       "hits": [
         {
           "id": "chongyun.burst.param1",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param3"
+      },
+      "cooldownParameter": "param2"
     }
   ],
   "passives": [

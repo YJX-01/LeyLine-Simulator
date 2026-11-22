@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "tartaglia",
@@ -419,7 +419,7 @@
         },
         {
           "id": "param14",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -442,157 +442,160 @@
       "hits": [
         {
           "id": "tartaglia.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "六段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param7",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param8",
+          "name": "满蓄力瞄准射击",
           "element": "hydro",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param11",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param12",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.normal.param13",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param13",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param13"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "tartaglia.normal.param9",
+          "name": "断流·闪（单段）",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "hydro",
+          "when": [
+            "tartaglia.riptideFlash"
+          ]
+        },
+        {
+          "id": "tartaglia.normal.param10",
+          "name": "断流·破",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param10"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "hydro",
+          "when": [
+            "tartaglia.riptideBurst"
+          ]
         }
       ]
     },
@@ -891,7 +894,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -912,7 +915,7 @@
         },
         {
           "id": "param13",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             30,
             30,
@@ -933,7 +936,7 @@
         },
         {
           "id": "param14",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -954,7 +957,7 @@
         },
         {
           "id": "param15",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             36,
             36,
@@ -975,7 +978,7 @@
         },
         {
           "id": "param16",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             45,
             45,
@@ -998,156 +1001,132 @@
       "hits": [
         {
           "id": "tartaglia.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "状态激发伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param2",
-          "element": "hydro",
+          "name": "一段伤害",
           "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param3",
-          "element": "hydro",
+          "name": "二段伤害",
           "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param4",
-          "element": "hydro",
+          "name": "三段伤害",
           "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param5",
-          "element": "hydro",
+          "name": "四段伤害",
           "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param6",
-          "element": "hydro",
+          "name": "五段伤害",
           "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param7",
-          "element": "hydro",
+          "name": "六段伤害（第1击）",
           "category": "normal",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param8",
-          "element": "hydro",
+          "name": "六段伤害（第2击）",
           "category": "normal",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param9",
-          "element": "hydro",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param10",
-          "element": "hydro",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.skill.param11",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param11",
-          "scaling": [
+          "name": "断流·斩 伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -1251,7 +1230,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             20,
             20,
@@ -1272,7 +1251,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -1293,7 +1272,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -1316,47 +1295,42 @@
       "hits": [
         {
           "id": "tartaglia.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害·近战",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.burst.param3",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param3",
-          "scaling": [
+          "name": "技能伤害·远程",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tartaglia.burst.param2",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "断流·爆 伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "cooldownParameter": "param5"
     }
   ],
   "passives": [
@@ -1453,5 +1427,19 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "tartaglia.riptideFlash": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "tartaglia.riptideBurst": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

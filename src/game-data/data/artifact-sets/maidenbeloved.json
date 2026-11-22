@@ -12,192 +12,99 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.maidenbeloved.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.maidenbeloved",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "maidenbeloved.static-healingBonus",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.maidenbeloved.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "maidenbeloved",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.15
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.healingBonus",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "maidenbeloved.static-healingBonus",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.maidenbeloved.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "maidenbeloved",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.maidenbeloved"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "maidenbeloved.static-healingBonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.maidenbeloved.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "maidenbeloved",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.maidenbeloved"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.maidenbeloved"
-  ],
+  "revision": "1",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "maidenbeloved.static-healingBonus",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": 0.15
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.maidenbeloved.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "maidenbeloved.static-healingBonus",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "施放元素战技或元素爆发后的10秒内，队伍中所有角色受治疗效果加成提高20%。",
+        "mechanisms": [
+          {
+            "id": "maidenbeloved.after-cast",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "maidenbeloved.after-cast",
+                "revision": "1"
+              }
+            ],
+            "reason": "施放元素战技或元素爆发后的10秒内，队伍中所有角色受治疗效果加成提高20%。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.maidenbeloved.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "maidenbeloved.after-cast",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "categories": [
+                "skill",
+                "burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "recipient",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingHealingBonus",
+              "value": 0.2
+            }
+          ]
         }
       ]
     }

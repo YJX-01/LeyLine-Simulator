@@ -1,9 +1,4 @@
 {
-  "source": {
-    "repository": "Rafs-kk/LunaGC-6.6-res",
-    "commit": "b0501c5d89767ead5f647869a2412521447f7682",
-    "path": "ExcelBinOutput/ReliquaryAffixExcelConfigData.json"
-  },
   "affixes": {
     "401021": {
       "stat": "hp",

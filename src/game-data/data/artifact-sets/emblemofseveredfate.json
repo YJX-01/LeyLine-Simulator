@@ -12,194 +12,106 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.emblemofseveredfate.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.emblemofseveredfate",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "emblemofseveredfate.static-energyRecharge",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.emblemofseveredfate.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "emblemofseveredfate",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.2
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.energyRecharge",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "emblemofseveredfate.static-energyRecharge",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.emblemofseveredfate.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "emblemofseveredfate",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.emblemofseveredfate"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "emblemofseveredfate.static-energyRecharge",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.emblemofseveredfate.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "emblemofseveredfate",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.emblemofseveredfate"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.emblemofseveredfate"
-  ],
+  "revision": "1",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "emblemofseveredfate.static-energyRecharge",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.energyRecharge",
+              "value": 0.2
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.emblemofseveredfate.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "emblemofseveredfate.static-energyRecharge",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。",
+        "mechanisms": [
+          {
+            "id": "emblemofseveredfate.4",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "emblemofseveredfate.4",
+                "revision": "1"
+              }
+            ],
+            "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.emblemofseveredfate.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "emblemofseveredfate.4",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "emblemofseveredfate.conversion",
+                "inputs": {
+                  "basis": {
+                    "stat": "energyRecharge"
+                  }
+                }
+              }
+            }
+          ],
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          }
         }
       ]
+    }
+  ],
+  "formulas": [
+    {
+      "id": "emblemofseveredfate.conversion",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.25,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.75
+      }
     }
   ]
 }

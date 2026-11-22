@@ -221,76 +221,122 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.fruitfulhook",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "unavailable",
+    "evidence": "adopted",
+    "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。",
+    "mechanisms": [
+      {
+        "id": "fruitfulhook.plunge.critRate",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.fruitfulhook",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "fruitfulhook.plunge.critRate",
+            "revision": "1"
+          }
+        ],
+        "reason": "下落攻击的暴击率提升16%；下落攻击命中敌人后，普通攻击、重击、下落攻击造成的伤害提升16%，持续10秒。"
+      },
+      {
+        "id": "fruitfulhook.after-trigger",
+        "resolution": "unavailable",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "fruitfulhook",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.fruitfulhook"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+            "id": "fruitfulhook.after-trigger",
+            "revision": "1"
+          }
+        ],
+        "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。"
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "id": "fruitfulhook.plunge.critRate",
+      "appliesTo": {
+        "categories": [
+          "plunge"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.fruitfulhook",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.fruitfulhook",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "fruitfulhook.after-trigger",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "plunge"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 10000,
+        "phase": "after"
+      },
+      "condition": {
+        "call": "condition.any",
+        "inputs": {
+          "term0": {
+            "fact": "onField",
+            "at": "source-event"
+          },
+          "term1": {
+            "fact": "weaponTriggeredOffField",
+            "at": "source-event"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

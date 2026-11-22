@@ -12,192 +12,109 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.tenacityofthemillelith.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.tenacityofthemillelith",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "tenacityofthemillelith.static-hpPercent",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.tenacityofthemillelith.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "tenacityofthemillelith",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.2
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.hpPercent",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "tenacityofthemillelith.static-hpPercent",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tenacityofthemillelith.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tenacityofthemillelith",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.tenacityofthemillelith"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "tenacityofthemillelith.static-hpPercent",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tenacityofthemillelith.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tenacityofthemillelith",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.tenacityofthemillelith"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.tenacityofthemillelith"
-  ],
+  "revision": "1",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "tenacityofthemillelith.static-hpPercent",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.2
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.tenacityofthemillelith.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "tenacityofthemillelith.static-hpPercent",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "元素战技命中敌人后，使队伍中附近的所有角色攻击力提升20%，护盾强效提升30%，持续3秒。该效果每0.5秒至多触发一次。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。",
+        "mechanisms": [
+          {
+            "id": "tenacityofthemillelith.skill",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "tenacityofthemillelith.skill",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tenacityofthemillelith.skill.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "元素战技命中敌人后，使队伍中附近的所有角色攻击力提升20%，护盾强效提升30%，持续3秒。该效果每0.5秒至多触发一次。装备此圣遗物套装的角色处于队伍后台时，依然能触发该效果。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.tenacityofthemillelith.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "tenacityofthemillelith.skill",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "categories": [
+                "skill"
+              ],
+              "allowZeroDamage": true
+            },
+            "cooldownMs": 500
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 3000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.shieldStrength",
+              "value": 0.3
+            }
+          ]
         }
       ]
     }

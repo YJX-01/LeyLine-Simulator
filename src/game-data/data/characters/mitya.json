@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "mitya",
@@ -214,7 +214,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -342,101 +342,115 @@
       "hits": [
         {
           "id": "mitya.normal.param1",
-          "element": "electro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.normal.param2",
-          "element": "electro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.normal.param3",
-          "element": "electro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.normal.param4",
-          "element": "electro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.normal.param6",
-          "element": "electro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.normal.param7",
-          "element": "electro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.normal.param8",
-          "element": "electro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "mitya.normal.param9",
+          "name": "递变聚爆（首击）",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "mitya.overloadedWithBeacon"
+          ],
+          "category": "charged"
+        },
+        {
+          "id": "mitya.normal.param10",
+          "name": "递变聚爆（每枚信标）",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "parameter": "param10"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "mitya.overloadedWithBeacon"
+          ],
+          "category": "charged",
+          "family": "stellar-conduct"
         }
       ]
     },
@@ -584,7 +598,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             25,
             25,
@@ -605,7 +619,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -628,47 +642,92 @@
       "hits": [
         {
           "id": "mitya.skill.param1",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "短按技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.skill.param2",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "长按技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mitya.skill.param3",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "稳态炉心伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mitya.stable"
+          ]
+        },
+        {
+          "id": "mitya.skill.param4",
+          "name": "稳态炉心消耗递变信标",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "parameter": "param4"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct",
+          "when": [
+            "mitya.stable",
+            "mitya.excessBeacon"
+          ]
+        },
+        {
+          "id": "mitya.skill.param5",
+          "name": "稳态炉心引爆",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "parameter": "param5",
+              "count": "mitya.beacons"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct",
+          "when": [
+            "mitya.stable"
+          ]
         }
-      ]
+      ],
+      "inputs": [
+        {
+          "id": "mitya.beacons",
+          "min": 0,
+          "max": 4,
+          "integer": true,
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "constellationLimits": [
+            {
+              "rank": 1,
+              "max": 5
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param7"
     },
     {
       "id": "mitya.burst",
@@ -739,7 +798,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             3,
             3,
@@ -760,7 +819,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -781,7 +840,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -804,10 +863,8 @@
       "hits": [
         {
           "id": "mitya.burst.param1",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
@@ -817,10 +874,13 @@
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -840,7 +900,31 @@
       "id": "mitya.passive3",
       "name": "星耀祝礼·极密协议",
       "description": "队伍中的角色触发超导反应时，将转为触发星超导反应。触发星超导反应时，将不会创造星辉棱晶，而是改为在触发星超导反应后的3秒内，每1.5秒在附近创造一枚可以被米提亚携带的**递变信标**，并将其附近更大的区域变换为极星辉域，再次触发星超导反应时，将刷新上述效果的持续时间。\n此外，基于米提亚的元素精通，提升队伍中附近的所有角色造成的星超导反应的基础伤害：每点元素精通都将提升0.028%星超导反应的基础伤害，至多通过这种方式提升14%基础伤害。处于极星辉域中时，米提亚还会进入辉映·星超导状态。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "mitya.stellar-base",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.baseBonus",
+              "value": {
+                "call": "blessing.stellarMastery",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mitya.passive4",
@@ -923,5 +1007,32 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "mitya.stable": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "mitya.overloadedWithBeacon": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "mitya.excessBeacon": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "mitya.beacons": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    }
+  }
 }

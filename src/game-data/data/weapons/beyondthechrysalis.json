@@ -221,231 +221,91 @@
     155.6,
     186.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "buffs": [
+    {
+      "id": "beyondthechrysalis.loyalWind",
+      "condition": {
+        "fact": "beyondthechrysalis.loyalWind"
+      },
+      "modifiers": [
         {
-          "id": "genshin-db.beyondthechrysalis.damage",
-          "kind": "definition"
-        },
-        {
-          "id": "content.weapon.beyondthechrysalis",
-          "kind": "definition"
-        },
-        {
-          "id": "content.weapon.beyondthechrysalis.explicit-scope",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "beyondthechrysalis.loyalWind",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.beyondthechrysalis.damage"
-          ],
-          "activation": {},
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "predicate": {
-            "kind": "fact",
-            "key": "beyondthechrysalis.loyalWind",
-            "type": {
-              "kind": "boolean"
-            },
-            "scope": "owner"
-          },
+          "target": "attribute.critDamage",
           "value": {
-            "kind": "refinement-parameter",
-            "values": [
+            "refinement": [
               0.56,
               0.72,
               0.88,
               1.04,
               1.2
             ],
-            "type": {
-              "kind": "quantity",
-              "unit": "scalar"
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.critDamage",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "beyondthechrysalis.loyalWind",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
+            "unit": "scalar"
           }
-        },
+        }
+      ]
+    },
+    {
+      "id": "beyondthechrysalis.betrayalWind",
+      "condition": {
+        "fact": "beyondthechrysalis.betrayalWind"
+      },
+      "modifiers": [
         {
-          "identity": {
-            "namespace": "builtin",
-            "id": "beyondthechrysalis.betrayalWind",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.beyondthechrysalis.damage"
-          ],
-          "activation": {},
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "predicate": {
-            "kind": "fact",
-            "key": "beyondthechrysalis.betrayalWind",
-            "type": {
-              "kind": "boolean"
-            },
-            "scope": "owner"
-          },
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
           "value": {
-            "kind": "refinement-parameter",
-            "values": [
+            "refinement": [
               0.36,
               0.45,
               0.54,
               0.63,
               0.72
             ],
-            "type": {
-              "kind": "quantity",
-              "unit": "scalar"
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.reaction.stellar-swirl.damageBonus",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "beyondthechrysalis.betrayalWind",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
+            "unit": "scalar"
           }
         }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.beyondthechrysalis",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "beyondthechrysalis",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。",
-          "sources": [
-            "content.weapon.beyondthechrysalis",
-            "genshin-db.beyondthechrysalis.damage",
-            "content.weapon.beyondthechrysalis.explicit-scope"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "beyondthechrysalis.loyalWind",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "beyondthechrysalis.betrayalWind",
-                  "revision": "1"
-                }
-              ],
-              "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。"
-            }
-          ]
-        }
       ]
-    },
-    "ruleIds": [
+    }
+  ],
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。",
+    "mechanisms": [
       {
-        "namespace": "builtin",
-        "id": "beyondthechrysalis.loyalWind",
-        "revision": "1"
-      },
-      {
-        "namespace": "builtin",
-        "id": "beyondthechrysalis.betrayalWind",
-        "revision": "1"
+        "id": "explicit-output-scope",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "beyondthechrysalis.loyalWind",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "beyondthechrysalis.betrayalWind",
+            "revision": "1"
+          }
+        ],
+        "reason": "明确单次伤害范围：忠忱/叛弃之风在读取阶段的有效性分别明确提供，两者可重叠；10秒时效、退场清除与顺序须由记录或显式事实证明。能量恢复和完整轮转可执行性不在伤害证书内。"
       }
     ]
   },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.beyondthechrysalis",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
-    {
-      "namespace": "builtin",
-      "id": "coverage.weapon.beyondthechrysalis",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+  "facts": {
+    "beyondthechrysalis.loyalWind": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "beyondthechrysalis.betrayalWind": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
     }
-  ]
+  },
+  "maxRefinement": 5
 }

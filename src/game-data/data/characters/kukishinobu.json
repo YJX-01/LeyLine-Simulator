@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "kukishinobu",
@@ -252,7 +252,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -338,128 +338,106 @@
       "hits": [
         {
           "id": "kukishinobu.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param5",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -542,7 +520,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             288.8908,
             317.7839,
@@ -605,7 +583,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -626,7 +604,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -649,31 +627,36 @@
       "hits": [
         {
           "id": "kukishinobu.skill.param1",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kukishinobu.skill.param4",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "越祓草轮伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param7",
+      "heals": [
+        {
+          "id": "kukishinobu.skill.heal.param2",
+          "detail": 1,
+          "stat": "hp",
+          "rate": "param2",
+          "flat": "param3",
+          "recipient": "on-field"
         }
       ]
     },
@@ -772,7 +755,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             2,
             2,
@@ -793,7 +776,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             3.5,
             3.5,
@@ -814,7 +797,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -835,7 +818,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -858,19 +841,20 @@
       "hits": [
         {
           "id": "kukishinobu.burst.param1",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "单次伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -878,7 +862,27 @@
       "id": "kukishinobu.passive1",
       "name": "破笼之志",
       "description": "久岐忍的生命值不高于50%时，治疗加成提升15%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "kukishinobu.breaking-free",
+          "condition": {
+            "call": "hp.at-most50",
+            "inputs": {
+              "ratio": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kukishinobu.passive2",

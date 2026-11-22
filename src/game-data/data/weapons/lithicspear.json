@@ -221,76 +221,102 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.lithicspear",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.lithicspear",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "lithicspear",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.lithicspear"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.lithicspear",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "队伍中每有一位璃月角色，装备此武器的角色便获得7%攻击力提升与3%暴击率提升。至多获得4层提升效果。",
+    "mechanisms": [
+      {
+        "id": "lithicspear.liyue",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "lithicspear.liyue",
+            "revision": "1"
+          },
+          {
+            "namespace": "builtin",
+            "id": "lithicspear.liyue.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "队伍中每有一位璃月角色，装备此武器的角色便获得7%攻击力提升与3%暴击率提升。至多获得4层提升效果。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.lithicspear",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "lithicspear.liyue",
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "call": "capped.party-bonus",
+            "inputs": {
+              "basis": {
+                "teamRegion": "璃月"
+              },
+              "rate": {
+                "unit": "scalar",
+                "refinement": [
+                  0.07,
+                  0.08,
+                  0.09,
+                  0.1,
+                  0.11
+                ]
+              },
+              "cap": {
+                "unit": "scalar",
+                "refinement": [
+                  0.28,
+                  0.32,
+                  0.36,
+                  0.4,
+                  0.44
+                ]
+              }
+            }
+          }
+        },
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "call": "capped.party-bonus",
+            "inputs": {
+              "basis": {
+                "teamRegion": "璃月"
+              },
+              "rate": {
+                "unit": "scalar",
+                "refinement": [
+                  0.03,
+                  0.04,
+                  0.05,
+                  0.06,
+                  0.07
+                ]
+              },
+              "cap": {
+                "unit": "scalar",
+                "refinement": [
+                  0.12,
+                  0.16,
+                  0.2,
+                  0.24,
+                  0.28
+                ]
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

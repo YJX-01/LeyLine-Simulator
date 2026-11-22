@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "gaming",
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -367,128 +367,106 @@
       "hits": [
         {
           "id": "gaming.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param5",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param6",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "gaming.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -559,7 +537,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -582,19 +560,18 @@
       "hits": [
         {
           "id": "gaming.skill.param1",
-          "element": "pyro",
+          "name": "下落攻击·踏云献瑞伤害",
           "category": "plunge",
-          "parameter": "param1",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "gaming.burst",
@@ -670,7 +647,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -691,7 +668,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -712,7 +689,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -735,17 +712,28 @@
       "hits": [
         {
           "id": "gaming.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "猊兽·文仔砸击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4",
+      "heals": [
+        {
+          "id": "gaming.burst.heal.param2",
+          "detail": 1,
+          "stat": "hp",
+          "rate": "param2",
+          "recipient": "self",
+          "trigger": "cast"
         }
       ]
     }
@@ -761,7 +749,50 @@
       "id": "gaming.passive2",
       "name": "祥烟瑞气",
       "description": "嘉明的生命值低于50%时，获得20%受治疗加成。嘉明的生命值高于或等于50%时，下落攻击·踏云献瑞造成的伤害提升20%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "gaming.a4-healing",
+          "condition": {
+            "call": "hp.below50",
+            "inputs": {
+              "ratio": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingHealingBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "gaming.a4-plunge",
+          "condition": {
+            "call": "hp.at-least50",
+            "inputs": {
+              "ratio": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "gaming.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "gaming.passive3",

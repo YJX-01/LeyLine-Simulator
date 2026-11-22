@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "dehya",
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -367,128 +367,106 @@
       "hits": [
         {
           "id": "dehya.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param5",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param6",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -659,7 +637,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -680,7 +658,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -703,38 +681,30 @@
       "hits": [
         {
           "id": "dehya.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "净焰昂藏伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.skill.param2",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "剑域炽焰伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.skill.param3",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "领域伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
@@ -744,10 +714,10 @@
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param8"
     },
     {
       "id": "dehya.burst",
@@ -865,7 +835,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             4,
             4,
@@ -886,7 +856,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -907,7 +877,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -930,10 +900,8 @@
       "hits": [
         {
           "id": "dehya.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "炽鬃拳伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
@@ -943,15 +911,12 @@
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "dehya.burst.param3",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param3",
-          "scaling": [
+          "name": "焚落踢伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
@@ -961,10 +926,13 @@
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -992,7 +960,57 @@
       "rank": 1,
       "name": "皎洁之火铓辉灿漫",
       "description": "迪希雅的生命值上限提升20%；此外，基于生命值上限，迪希雅的以下攻击造成的伤害提高：\n·熔铁流狱伤害提高值：生命值上限的3.6%；\n·炎啸狮子咬伤害提高值：生命值上限的6%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "dehya.the-flame-incandescent",
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.baseDamageBonus",
+              "appliesTo": {
+                "hitIds": [
+                  "dehya.skill.param1",
+                  "dehya.skill.param2",
+                  "dehya.skill.param3"
+                ]
+              },
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.036
+                },
+                "output": "base"
+              }
+            },
+            {
+              "target": "attribute.baseDamageBonus",
+              "appliesTo": {
+                "hitIds": [
+                  "dehya.burst.param1",
+                  "dehya.burst.param3"
+                ]
+              },
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.06
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,

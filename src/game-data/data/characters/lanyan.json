@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lanyan",
@@ -273,7 +273,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -359,142 +359,116 @@
       "hits": [
         {
           "id": "lanyan.normal.param1",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param2",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param3",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "二段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param4",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param5",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param6",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param7",
-          "element": "anemo",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param9",
-          "element": "anemo",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param10",
-          "element": "anemo",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lanyan.normal.param11",
-          "element": "anemo",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -569,7 +543,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1155.5629,
             1271.1353,
@@ -590,7 +564,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12.5,
             12.5,
@@ -611,7 +585,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             16,
             16,
@@ -634,19 +608,18 @@
       "hits": [
         {
           "id": "lanyan.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "翦月环伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param5",
+      "skillCharges": 1
     },
     {
       "id": "lanyan.burst",
@@ -693,7 +666,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -714,7 +687,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -737,19 +710,20 @@
       "hits": [
         {
           "id": "lanyan.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param3"
+      },
+      "cooldownParameter": "param2"
     }
   ],
   "passives": [
@@ -800,7 +774,40 @@
       "rank": 4,
       "name": "「揽龙鹰兮结血珠」",
       "description": "施放元素爆发鹍弦踏月出之后的12秒内，队伍中附近所有角色的元素精通提升60点。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lanyan.c4-cast",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "lanyan.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 60,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -817,7 +824,8 @@
       "rank": 6,
       "name": "「愿随风兮鸣银鸾」",
       "description": "凤缕随翦舞的可使用次数增加1次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "extraSkillCharge": 1
     }
   ],
   "support": {

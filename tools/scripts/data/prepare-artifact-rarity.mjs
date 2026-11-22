@@ -1,6 +1,6 @@
-import { existsSync, lstatSync, mkdirSync, realpathSync, writeFileSync } from 'node:fs';
-import { isAbsolute, join, relative, resolve, sep } from 'node:path';
-import { readContentSource } from '../../lib/content-source.mjs';
+import { existsSync, lstatSync, mkdirSync, realpathSync } from 'node:fs';
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { readContentSource, writeContentSource } from '../../lib/content-source.mjs';
 
 // Explicit, offline source investigation. Never invoked by ordinary generation.
 const root = realpathSync(resolve(import.meta.dirname, '../../..'));
@@ -65,9 +65,6 @@ const sets = Object.entries(canonicalSets).map(([id, set]) => {
 const report = {
   formatVersion: 1,
   status: 'investigation-only',
-  source: { repository: 'Rafs-kk/LunaGC-6.6-res', commit, reference,
-    files: ['ReliquaryExcelConfigData.json', 'ReliquaryMainPropExcelConfigData.json', 'ReliquarySetExcelConfigData.json'],
-    adoptedParameterDirectory: sourceRoot },
   summary: { sourceItems: items.length, sourceMainPoolRows: mainPools.length, sourceSets: sourceSets.length,
     canonicalSets: sets.length, missingSourceSets: sets.filter(set => !set.sourceSetPresent).map(set => set.id) },
   unresolved: [
@@ -79,6 +76,7 @@ const report = {
   ],
   rarities, sets,
 };
-mkdirSync(output, { recursive: true });
-writeFileSync(join(output, 'analysis.json'), `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' });
+mkdirSync(dirname(output), { recursive: true });
+mkdirSync(output);
+writeContentSource(join(output, 'analysis.json'), report);
 console.log(JSON.stringify({ ...report.summary, candidateMaxLevels: rarities.map(entry => entry.candidateMaxEnhancementLevel), output: relative(root, output) }));

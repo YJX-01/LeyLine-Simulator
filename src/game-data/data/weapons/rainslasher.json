@@ -221,76 +221,60 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.rainslasher",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.rainslasher",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "rainslasher",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.rainslasher"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.rainslasher",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。",
+    "mechanisms": [
+      {
+        "id": "rainslasher.targetBonus",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "rainslasher.targetBonus",
+            "revision": "1"
+          }
+        ],
+        "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。"
+      }
+    ]
+  },
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.rainslasher",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "rainslasher.targetBonus",
+      "condition": {
+        "call": "condition.any",
+        "inputs": {
+          "term0": {
+            "fact": "aura.hydro"
+          },
+          "term1": {
+            "fact": "aura.electro"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.2,
+              0.24,
+              0.28,
+              0.32,
+              0.36
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

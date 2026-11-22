@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "venti",
@@ -392,156 +392,405 @@
       "hits": [
         {
           "id": "venti.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "venti.no-windsunder",
+              "inputs": {
+                "term0": {
+                  "fact": "venti.stormeye"
+                },
+                "term1": {
+                  "fact": "venti.hexerei"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "venti.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "venti.no-windsunder",
+              "inputs": {
+                "term0": {
+                  "fact": "venti.stormeye"
+                },
+                "term1": {
+                  "fact": "venti.hexerei"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "venti.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "venti.no-windsunder",
+              "inputs": {
+                "term0": {
+                  "fact": "venti.stormeye"
+                },
+                "term1": {
+                  "fact": "venti.hexerei"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "venti.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "venti.no-windsunder",
+              "inputs": {
+                "term0": {
+                  "fact": "venti.stormeye"
+                },
+                "term1": {
+                  "fact": "venti.hexerei"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "venti.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "venti.no-windsunder",
+              "inputs": {
+                "term0": {
+                  "fact": "venti.stormeye"
+                },
+                "term1": {
+                  "fact": "venti.hexerei"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "venti.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "六段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "venti.no-windsunder",
+              "inputs": {
+                "term0": {
+                  "fact": "venti.stormeye"
+                },
+                "term1": {
+                  "fact": "venti.hexerei"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "venti.normal.param7",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "venti.normal.param8",
+          "name": "满蓄力瞄准射击",
           "element": "anemo",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "venti.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "venti.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "venti.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.normal.param1.windsunder",
+          "name": "飓风箭·一段伤害",
+          "element": "anemo",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param1",
+                    "skill": "venti.normal"
+                  },
+                  "rate": {
+                    "parameter": "param12",
+                    "skill": "venti.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.stormeye",
+            "venti.hexerei"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.normal.param2.windsunder",
+          "name": "飓风箭·二段伤害",
+          "element": "anemo",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param2",
+                    "skill": "venti.normal"
+                  },
+                  "rate": {
+                    "parameter": "param12",
+                    "skill": "venti.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.stormeye",
+            "venti.hexerei"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.normal.param3.windsunder",
+          "name": "飓风箭·三段伤害",
+          "element": "anemo",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param3",
+                    "skill": "venti.normal"
+                  },
+                  "rate": {
+                    "parameter": "param12",
+                    "skill": "venti.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.stormeye",
+            "venti.hexerei"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.normal.param4.windsunder",
+          "name": "飓风箭·四段伤害",
+          "element": "anemo",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param4",
+                    "skill": "venti.normal"
+                  },
+                  "rate": {
+                    "parameter": "param12",
+                    "skill": "venti.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.stormeye",
+            "venti.hexerei"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.normal.param5.windsunder",
+          "name": "飓风箭·五段伤害",
+          "element": "anemo",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param5",
+                    "skill": "venti.normal"
+                  },
+                  "rate": {
+                    "parameter": "param12",
+                    "skill": "venti.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.stormeye",
+            "venti.hexerei"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.normal.param6.windsunder",
+          "name": "飓风箭·六段伤害",
+          "element": "anemo",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param6",
+                    "skill": "venti.normal"
+                  },
+                  "rate": {
+                    "parameter": "param12",
+                    "skill": "venti.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.stormeye",
+            "venti.hexerei"
+          ],
           "support": "hit-unavailable"
         }
       ]
@@ -595,7 +844,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -637,7 +886,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -660,30 +909,24 @@
       "hits": [
         {
           "id": "venti.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "点按伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "venti.skill.param3",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "长按伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -762,7 +1005,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             8,
             8,
@@ -783,7 +1026,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -804,7 +1047,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -827,19 +1070,32 @@
       "hits": [
         {
           "id": "venti.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "持续伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.burst.param2",
+          "name": "附加元素伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -859,7 +1115,25 @@
       "id": "venti.passive3",
       "name": "恒风随行",
       "description": "队伍中自己的角色滑翔消耗的体力降低20%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "venti.stamina-glide",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.stamina-glide",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.glide",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -936,5 +1210,31 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "venti.stormeye": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "venti.hexerei": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "venti.no-windsunder",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 2,
+        "negate": true
+      }
+    }
+  ]
 }

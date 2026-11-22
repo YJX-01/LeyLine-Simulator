@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "0.1.0",
-  "runtimeVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
+  "runtimeVersion": "0.2.0",
   "requiredFeatures": [
     "fixed-templates-v1",
     "formula-call-v1",
@@ -39,9 +39,7 @@
     },
     {
       "id": "leyline.binding-read",
-      "kind": "author",
-      "name": "LeyLine Simulator",
-      "reference": "Fixed typed parameter read; no game-specific numeric constants."
+      "kind": "definition"
     },
     {
       "id": "content.character-curves",
@@ -58,7 +56,7 @@
   ],
   "formulas": [
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-counted-damage-base",
@@ -82,7 +80,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-damage-base",
@@ -105,7 +103,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "attack-panel-base",
@@ -121,7 +119,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "crit-selected",
@@ -141,7 +139,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "crit",
@@ -156,7 +154,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-2",
@@ -172,7 +170,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-3",
@@ -188,7 +186,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-4",
@@ -204,7 +202,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-5",
@@ -220,7 +218,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-6",
@@ -236,7 +234,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-7",
@@ -252,7 +250,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-8",
@@ -268,7 +266,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "damage-sum-9",
@@ -284,7 +282,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-counted-damage-base",
@@ -308,7 +306,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-damage-base",
@@ -331,7 +329,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense-panel-base",
@@ -347,7 +345,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "defense",
@@ -362,7 +360,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "elementalMastery-counted-damage-base",
@@ -386,7 +384,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "elementalMastery-damage-base",
@@ -409,7 +407,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-counted-damage-base",
@@ -433,7 +431,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-damage-base",
@@ -456,7 +454,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "hp-panel-base",
@@ -472,7 +470,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "ordinary-bonus",
@@ -487,7 +485,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "ordinary-hit",
@@ -503,7 +501,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "resistance",
@@ -518,7 +516,7 @@
       ]
     },
     {
-      "schemaVersion": "0.1.0",
+      "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
         "id": "binding.milliseconds",
@@ -526,6 +524,634 @@
       },
       "template": {
         "id": "read-milliseconds",
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "condition.all",
+        "revision": "1"
+      },
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 2,
+        "negate": false
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "condition.any",
+        "revision": "1"
+      },
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "any",
+        "terms": 2,
+        "negate": false
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "product.attack",
+        "revision": "1"
+      },
+      "template": {
+        "id": "stat-product",
+        "unit": "attack",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "product.scalar",
+        "revision": "1"
+      },
+      "template": {
+        "id": "stat-product",
+        "unit": "scalar",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "hp.above50",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "gt",
+        "threshold": 0.5,
+        "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "hp.above70",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "gt",
+        "threshold": 0.7,
+        "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "constellation.one",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "rank",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 6,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "product.damage",
+        "revision": "1"
+      },
+      "template": {
+        "id": "stat-product",
+        "revision": "1",
+        "unit": "damage"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "element.unconverted",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "electro",
+          "cryo"
+        ],
+        "equals": "none",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "condition.not",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "condition-group",
+        "terms": 1,
+        "operator": "all",
+        "negate": true,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.defense"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "rank.at-least-1",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 6
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "rank.at-least-2",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 6
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "rank.at-least-3",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 3,
+        "maxInput": 6
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "rank.at-least-4",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 4,
+        "maxInput": 6
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "rank.at-least-5",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 5,
+        "maxInput": 6
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "rank.at-least-6",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 6,
+        "maxInput": 6
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.attack",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "attack",
+        "to": "attack",
+        "per": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.energy-bonus",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "energy",
+        "to": "scalar",
+        "per": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.hp-thousand",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "hp",
+        "to": "scalar",
+        "per": 1000,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "nearby.one",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "nearby.two",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "energy.zero",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "quantity-condition",
+        "input": "amount",
+        "unit": "energy",
+        "relation": "eq",
+        "threshold": 0,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "id": "hp.below50",
+        "namespace": "builtin",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "lt",
+        "threshold": 0.5,
+        "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "id": "hp.below70",
+        "namespace": "builtin",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "lt",
+        "threshold": 0.7,
+        "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "id": "hp.at-least50",
+        "namespace": "builtin",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "gte",
+        "threshold": 0.5,
+        "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "energy.full",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "energy-full",
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.party-bonus",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "count",
+        "to": "scalar",
+        "per": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.attack-hundred",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "attack",
+        "to": "scalar",
+        "per": 100,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.defense-hundred",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "defense",
+        "to": "scalar",
+        "per": 100,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "capped.elementalMastery-hundred",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "template": {
+        "id": "capped-conversion",
+        "from": "elementalMastery",
+        "to": "scalar",
+        "per": 100,
+        "revision": "1"
+      }
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "hp.at-most50",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "lte",
+        "threshold": 0.5,
+        "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "scene.autumn-platform.pyro",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "pyro",
+          "cryo"
+        ],
+        "equals": "pyro",
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "scene.autumn-platform.cryo",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "pyro",
+          "cryo"
+        ],
+        "equals": "cryo",
         "revision": "1"
       },
       "sources": [
@@ -1561,6 +2187,598 @@
       "combine": "sum",
       "sources": [
         "kqm.additive"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.incomingHealingBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.shieldStrength",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.energyCapacity",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "energy"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "input",
+        "key": "energyCapacity"
+      },
+      "combine": "sum",
+      "sources": [
+        "content.character-curves"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.movementSpeed",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.normalAttackSpeed",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.skillCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.staminaCostReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.physical",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.anemo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.geo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.electro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.hydro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.pyro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.cryo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.resistance.dendro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.auraDurationReduction.pyro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "bounds": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.auraDurationReduction.hydro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "bounds": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.auraDurationReduction.cryo",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "bounds": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.auraDurationReduction.electro",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ],
+      "bounds": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.staminaCostReduction.sprint",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "attribute",
+        "key": {
+          "namespace": "builtin",
+          "id": "attribute.staminaCostReduction",
+          "revision": "1"
+        },
+        "actor": {
+          "role": "owner"
+        },
+        "at": {
+          "kind": "current",
+          "phase": "same"
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.staminaCostReduction.glide",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "attribute",
+        "key": {
+          "namespace": "builtin",
+          "id": "attribute.staminaCostReduction",
+          "revision": "1"
+        },
+        "actor": {
+          "role": "owner"
+        },
+        "at": {
+          "kind": "current",
+          "phase": "same"
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.staminaCostReduction.swim",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "attribute",
+        "key": {
+          "namespace": "builtin",
+          "id": "attribute.staminaCostReduction",
+          "revision": "1"
+        },
+        "actor": {
+          "role": "owner"
+        },
+        "at": {
+          "kind": "current",
+          "phase": "same"
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.staminaCostReduction.climb",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "attribute",
+        "key": {
+          "namespace": "builtin",
+          "id": "attribute.staminaCostReduction",
+          "revision": "1"
+        },
+        "actor": {
+          "role": "owner"
+        },
+        "at": {
+          "kind": "current",
+          "phase": "same"
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
       ]
     }
   ],

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "chevreuse",
@@ -252,7 +252,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -338,128 +338,105 @@
       "hits": [
         {
           "id": "chevreuse.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -571,7 +548,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -613,7 +590,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             256.79184,
             282.47458,
@@ -655,7 +632,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -676,7 +653,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -699,59 +676,58 @@
       "hits": [
         {
           "id": "chevreuse.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "点按伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.skill.param2",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "长按伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.skill.param3",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "「超量装药弹头」伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.skill.param7",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param7",
-          "scaling": [
+          "name": "流涌之刃伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param9",
+      "heals": [
+        {
+          "id": "chevreuse.skill.heal.param5",
+          "detail": 3,
+          "stat": "hp",
+          "rate": "param5",
+          "flat": "param6",
+          "recipient": "on-field"
         }
       ]
     },
@@ -825,7 +801,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -846,7 +822,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -869,33 +845,31 @@
       "hits": [
         {
           "id": "chevreuse.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "爆轰榴弹伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "chevreuse.burst.param2",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二重毁伤弹伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -915,7 +889,25 @@
       "id": "chevreuse.passive3",
       "name": "迅捷行军策略",
       "description": "队伍中自己的角色冲刺消耗的体力降低20%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "chevreuse.stamina-sprint",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.stamina-sprint",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.sprint",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [

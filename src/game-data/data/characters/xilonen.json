@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "xilonen",
@@ -243,7 +243,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -413,115 +413,207 @@
       "hits": [
         {
           "id": "xilonen.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "二段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param5",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param7",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "defense",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param8",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "defense",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.normal.param9",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "defense",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "xilonen.normal.roller10",
+          "name": "刃轮巡猎一段伤害",
+          "element": "geo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param10"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
+        },
+        {
+          "id": "xilonen.normal.roller11",
+          "name": "刃轮巡猎二段伤害",
+          "element": "geo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param11"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
+        },
+        {
+          "id": "xilonen.normal.roller12",
+          "name": "刃轮巡猎三段伤害",
+          "element": "geo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param12"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
+        },
+        {
+          "id": "xilonen.normal.roller13",
+          "name": "刃轮巡猎四段伤害",
+          "element": "geo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param13"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
+        },
+        {
+          "id": "xilonen.normal.roller7",
+          "name": "刃轮巡猎下坠期间伤害",
+          "element": "geo",
+          "category": "plunge",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param7"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
+        },
+        {
+          "id": "xilonen.normal.roller8",
+          "name": "刃轮巡猎低空坠地冲击伤害",
+          "element": "geo",
+          "category": "plunge",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param8"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
+        },
+        {
+          "id": "xilonen.normal.roller9",
+          "name": "刃轮巡猎高空坠地冲击伤害",
+          "element": "geo",
+          "category": "plunge",
+          "base": [
+            {
+              "stat": "defense",
+              "parameter": "param9"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "xilonen.nightsoul"
+          ]
         }
       ]
     },
@@ -603,7 +695,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -624,7 +716,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -645,7 +737,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             90,
             90,
@@ -666,7 +758,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             7,
             7,
@@ -689,19 +781,17 @@
       "hits": [
         {
           "id": "xilonen.skill.param1",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "突进伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param6"
     },
     {
       "id": "xilonen.burst",
@@ -781,7 +871,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             500.73764,
             550.81836,
@@ -802,7 +892,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -844,7 +934,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -865,7 +955,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -888,31 +978,39 @@
       "hits": [
         {
           "id": "xilonen.burst.param1",
-          "element": "geo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "xilonen.burst.param5",
-          "element": "geo",
-          "category": "burst",
-          "parameter": "param5",
-          "scaling": [
+          "name": "追加节拍伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6",
+      "heals": [
+        {
+          "id": "xilonen.burst.heal.param2",
+          "detail": 1,
+          "stat": "defense",
+          "rate": "param2",
+          "flat": "param3",
+          "recipient": "on-field"
         }
       ]
     }
@@ -1017,5 +1115,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "xilonen.nightsoul": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

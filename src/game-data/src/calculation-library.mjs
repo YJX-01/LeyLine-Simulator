@@ -1,10 +1,16 @@
+import resonanceData from '../data/calculation/resonances.json' with { type: 'json' };
+import { grantBuffs } from '@leyline/schema/buffs';
 import { APP_VERSION } from '@leyline/schema/version';
 const collections = ['sources', 'tables', 'formulas', 'attributes', 'effects', 'stateMachines', 'aggregates', 'coverage'];
 const key = reference => JSON.stringify([reference.namespace, reference.id, reference.revision]);
 
 /** Assemble the explicit authored owners. Duplicate ownership is an error even for equal bytes. */
 export function assembleCalculationLibrary(common, reactions, entities) {
-  const bundles = [common, reactions.calculation, ...entities.flatMap(entity => entity.calculation ? [entity.calculation.bundle] : [])];
+  const publicSource = { id: 'public.resonances', kind: 'definition' };
+  const effects = [];
+  for (const entry of resonanceData.resonances) grantBuffs(entry, effects, [publicSource.id], resonanceData.facts);
+  grantBuffs(resonanceData.gleam,effects,[publicSource.id],resonanceData.facts);
+  const bundles = [{ ...common, effects: [...common.effects, ...effects], sources: [...common.sources, publicSource] }, reactions.calculation, ...entities.flatMap(entity => entity.calculation ? [entity.calculation.bundle] : [])];
   const result = { schemaVersion: APP_VERSION, runtimeVersion: APP_VERSION, requiredFeatures: [], damageFamilies: [] };
   for (const field of ['requiredFeatures', 'damageFamilies']) result[field] = [...new Set(bundles.flatMap(bundle => bundle[field] ?? []))];
   for (const field of collections) {

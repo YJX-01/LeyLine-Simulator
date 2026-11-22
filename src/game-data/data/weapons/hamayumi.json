@@ -221,76 +221,158 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.hamayumi",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "普通攻击造成的伤害提升16%，重击造成的伤害提升12%。当装备该武器的角色元素能量等于100%时，这个效果提升100%。",
+    "mechanisms": [
+      {
+        "id": "hamayumi.normal.damageBonus",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.hamayumi",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "hamayumi.normal.damageBonus",
+            "revision": "1"
+          }
+        ],
+        "reason": "普通攻击造成的伤害提升16%，重击造成的伤害提升12%。当装备该武器的角色元素能量等于100%时，这个效果提升100%。"
+      },
+      {
+        "id": "hamayumi.charged.damageBonus",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "hamayumi",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+            "id": "hamayumi.charged.damageBonus",
+            "revision": "1"
+          }
+        ],
+        "reason": "普通攻击造成的伤害提升16%，重击造成的伤害提升12%。当装备该武器的角色元素能量等于100%时，这个效果提升100%。"
+      },
+      {
+        "id": "hamayumi.full-energy",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "hamayumi.full-energy",
+            "revision": "1"
           },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.hamayumi"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+          {
+            "namespace": "builtin",
+            "id": "hamayumi.full-energy.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "普通攻击造成的伤害提升16%，重击造成的伤害提升12%。当装备该武器的角色元素能量等于100%时，这个效果提升100%。"
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "id": "hamayumi.normal.damageBonus",
+      "appliesTo": {
+        "categories": [
+          "normal"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.hamayumi",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.hamayumi",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "hamayumi.charged.damageBonus",
+      "appliesTo": {
+        "categories": [
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hamayumi.full-energy",
+      "condition": {
+        "call": "energy.full",
+        "output": "active",
+        "inputs": {
+          "energy": {
+            "fact": "currentEnergy"
+          },
+          "capacity": {
+            "stat": "energyCapacity"
+          }
+        }
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          }
+        },
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          },
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

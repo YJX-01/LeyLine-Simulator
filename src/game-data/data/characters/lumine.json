@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lumine",
@@ -14,7 +14,8 @@
     "gameId": 10000007,
     "notes": [
       "当前是未元素化的基础形态，仅配置普通攻击。元素战技与元素爆发请查看对应元素形态。"
-    ]
+    ],
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -554,190 +555,115 @@
       "hits": [
         {
           "id": "lumine.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param1.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param2.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param3.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param4.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param5.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param6.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param7",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param7.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param9.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param10.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "lumine.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "lumine.normal.param11.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"

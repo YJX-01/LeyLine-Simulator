@@ -12,338 +12,113 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.scarletproof.static",
-          "kind": "definition"
-        },
-        {
-          "id": "genshin-db.scarletproof.stellar",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.scarletproof",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "scarletproof.static-attackPercent",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.scarletproof.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "scarletproof",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.18
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.attackPercent",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "scarletproof.static-attackPercent",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "scarletproof.stellar.critRate",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.scarletproof.stellar"
-          ],
-          "activation": {
-            "set": {
-              "id": "scarletproof",
-              "pieces": 4
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "predicate": {
-            "kind": "fact",
-            "key": "scarletproof.stellarWindow",
-            "type": {
-              "kind": "boolean"
-            },
-            "scope": "owner"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.16
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.critRate",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "scarletproof.stellar.critRate",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "scarletproof.stellar.reaction.stellar-swirl.damageBonus",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.scarletproof.stellar"
-          ],
-          "activation": {
-            "set": {
-              "id": "scarletproof",
-              "pieces": 4
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "predicate": {
-            "kind": "fact",
-            "key": "scarletproof.stellarWindow",
-            "type": {
-              "kind": "boolean"
-            },
-            "scope": "owner"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.4
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.reaction.stellar-swirl.damageBonus",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "scarletproof.stellar.reaction.stellar-swirl.damageBonus",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.scarletproof.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "scarletproof",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.scarletproof"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "scarletproof.static-attackPercent",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.scarletproof.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "scarletproof",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.scarletproof"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "scarletproof.stellar.critRate",
-                  "revision": "1"
-                },
-                {
-                  "namespace": "builtin",
-                  "id": "scarletproof.stellar.reaction.stellar-swirl.damageBonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.scarletproof"
-  ],
+  "revision": "1",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "scarletproof.static-attackPercent",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.18
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.scarletproof.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "scarletproof.static-attackPercent",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "scarletproof.stellar.critRate",
-          "revision": "1"
-        },
-        {
-          "namespace": "builtin",
-          "id": "scarletproof.stellar.reaction.stellar-swirl.damageBonus",
-          "revision": "1"
+          "id": "scarletproof.stellar",
+          "windowFact": "scarletproof.stellarWindow",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "reactionIds": [
+                "stellar-swirl"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.16
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": 0.4
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.scarletproof.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "scarletproof.stellar",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scarletproof.stellar.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     }
-  ]
+  ],
+  "facts": {
+    "scarletproof.stellarWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

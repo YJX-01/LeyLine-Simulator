@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "sigewinne",
@@ -317,128 +317,109 @@
       "hits": [
         {
           "id": "sigewinne.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param7",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param8",
+          "name": "满蓄力瞄准射击",
           "element": "hydro",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param9",
+          "name": "小小关心气泡伤害",
           "element": "hydro",
           "category": "charged",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param4",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param5",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.normal.param6",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -521,7 +502,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             269.6314,
             296.5983,
@@ -605,7 +586,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -626,7 +607,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -691,31 +672,43 @@
       "hits": [
         {
           "id": "sigewinne.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "激愈水球伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sigewinne.skill.param7",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param7",
-          "scaling": [
+          "name": "流涌之刃伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param9",
+      "heals": [
+        {
+          "id": "sigewinne.skill.heal.param2",
+          "detail": 1,
+          "stat": "hp",
+          "rate": "param2",
+          "flat": "param3",
+          "recipient": "other"
+        },
+        {
+          "id": "sigewinne.skill.heal.param4",
+          "detail": 2,
+          "stat": "hp",
+          "rate": "param4",
+          "recipient": "self"
         }
       ]
     },
@@ -768,7 +761,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -789,7 +782,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -810,7 +803,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             2.5,
             2.5,
@@ -833,19 +826,20 @@
       "hits": [
         {
           "id": "sigewinne.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param3"
+      },
+      "cooldownParameter": "param2"
     }
   ],
   "passives": [

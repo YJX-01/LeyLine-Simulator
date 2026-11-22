@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "linnea",
@@ -292,114 +292,96 @@
       "hits": [
         {
           "id": "linnea.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param4",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param5",
+          "name": "满蓄力瞄准射击",
           "element": "geo",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param6",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param7",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.normal.param8",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -499,7 +481,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             25,
             25,
@@ -520,7 +502,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -543,47 +525,47 @@
       "hits": [
         {
           "id": "linnea.skill.param1",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "露米捶捶乱打伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "linnea.skill.param2",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "露米加力重锤伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "family": "lunar-crystallize",
+          "support": "hit-unavailable",
+          "when": [
+            "linnea.nearMoondrift"
+          ]
         },
         {
           "id": "linnea.skill.param3",
-          "element": "geo",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "露米百万吨重锤伤害",
+          "base": [
             {
               "stat": "defense",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "family": "lunar-crystallize",
+          "support": "hit-unavailable",
+          "when": [
+            "linnea.ultimateForm"
+          ]
         }
-      ]
+      ],
+      "cooldownParameter": "param5"
     },
     {
       "id": "linnea.burst",
@@ -618,7 +600,7 @@
       "parameters": [
         {
           "id": "param1",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             770.3755,
             847.42377,
@@ -660,7 +642,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             154.0751,
             169.48476,
@@ -702,7 +684,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -723,7 +705,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -744,7 +726,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -764,7 +746,29 @@
           ]
         }
       ],
-      "hits": []
+      "hits": [],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6",
+      "heals": [
+        {
+          "id": "linnea.burst.heal.param2",
+          "detail": 0,
+          "stat": "defense",
+          "rate": "param2",
+          "flat": "param1",
+          "recipient": "party"
+        },
+        {
+          "id": "linnea.burst.heal.param4",
+          "detail": 1,
+          "stat": "defense",
+          "rate": "param4",
+          "flat": "param3",
+          "recipient": "on-field"
+        }
+      ]
     }
   ],
   "passives": [
@@ -784,7 +788,32 @@
       "id": "linnea.passive3",
       "name": "月兆祝赐·栖地考察",
       "description": "队伍中的角色触发水元素结晶反应时，将转为触发月结晶反应，且基于莉奈娅的防御力，提升队伍中角色造成的月结晶反应的基础伤害：每100点防御力都将提升0.7%月结晶反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，莉奈娅在队伍中时，队伍的月兆将会上升一级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "linnea.reaction-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.baseBonus",
+              "value": {
+                "call": "blessing.defense",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "moonsignLevel": 1
     },
     {
       "id": "linnea.passive4",
@@ -867,5 +896,19 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "linnea.nearMoondrift": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "linnea.ultimateForm": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

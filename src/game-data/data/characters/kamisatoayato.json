@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "kamisatoayato",
@@ -256,7 +256,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -342,128 +342,105 @@
       "hits": [
         {
           "id": "kamisatoayato.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "kamisatoayato.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -593,7 +570,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -656,7 +633,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -677,7 +654,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -700,10 +677,9 @@
       "hits": [
         {
           "id": "kamisatoayato.skill.param1",
-          "element": "hydro",
+          "name": "一段瞬水剑伤害",
           "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
@@ -714,15 +690,16 @@
               "count": "namisen"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "kamisatoayato.stance"
+          ]
         },
         {
           "id": "kamisatoayato.skill.param2",
-          "element": "hydro",
+          "name": "二段瞬水剑伤害",
           "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
@@ -733,15 +710,16 @@
               "count": "namisen"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "kamisatoayato.stance"
+          ]
         },
         {
           "id": "kamisatoayato.skill.param3",
-          "element": "hydro",
+          "name": "三段瞬水剑伤害",
           "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
@@ -752,24 +730,54 @@
               "count": "namisen"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "kamisatoayato.stance"
+          ]
         },
         {
           "id": "kamisatoayato.skill.param6",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param6",
-          "scaling": [
+          "name": "水影伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param8",
+      "castWindow": {
+        "fact": "kamisatoayato.stance",
+        "durationParameter": "param4",
+        "cancelOnLeave": true,
+        "cancelOnDefeat": true,
+        "hitCounter": {
+          "input": "namisen",
+          "hits": [
+            "kamisatoayato.skill.param1",
+            "kamisatoayato.skill.param2",
+            "kamisatoayato.skill.param3"
+          ],
+          "intervalMs": 100,
+          "ascension": {
+            "rank": 1,
+            "initial": 2,
+            "fillHit": "kamisatoayato.skill.param6"
+          }
+        },
+        "followUp": {
+          "triggers": [
+            "kamisatoayato.skill.param1",
+            "kamisatoayato.skill.param2",
+            "kamisatoayato.skill.param3"
+          ],
+          "hit": "kamisatoayato.c6.shunsuiken",
+          "ready": "kamisatoayato.extraSlash",
+          "recordedHits": 2
+        }
+      }
     },
     {
       "id": "kamisatoayato.burst",
@@ -845,7 +853,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -866,7 +874,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -887,7 +895,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -910,19 +918,52 @@
       "hits": [
         {
           "id": "kamisatoayato.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "水花剑伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "kamisatoayato.suiyuu",
+          "recipient": "team",
+          "trigger": "cast",
+          "duration": {
+            "parameter": "param3"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "fact": "kamisatoayato.inGarden",
+            "of": "recipient"
+          },
+          "stacking": {
+            "scope": "recipient",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "kamisatoayato.burst",
+                "parameter": "param2"
+              }
+            }
+          ]
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -936,7 +977,19 @@
       "id": "kamisatoayato.passive2",
       "name": "神里流·破月渐盈",
       "description": "神里绫人处于队伍后台时，若元素能量低于40点，每1秒为自己恢复2点元素能量。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kamisatoayato.off-field-energy",
+          "periodicEnergy": {
+            "belowEnergy": 40,
+            "amount": 2,
+            "intervalMs": 1000,
+            "offField": true
+          },
+          "modifiers": []
+        }
+      ]
     },
     {
       "id": "kamisatoayato.passive3",
@@ -950,13 +1003,61 @@
       "rank": 1,
       "name": "镜华风姿",
       "description": "对于生命值低于或等于50%的敌人，瞬水剑造成的伤害提升40%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kamisatoayato.constellation-one",
+          "condition": {
+            "call": "hp.at-most50",
+            "inputs": {
+              "ratio": {
+                "fact": "targetHpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "kamisatoayato.skill.param1",
+              "kamisatoayato.skill.param2",
+              "kamisatoayato.skill.param3",
+              "kamisatoayato.c6.shunsuiken"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "世有源泉",
       "description": "浪闪叠加上限提升至5层；神里绫人处于至少3层浪闪状态下时，将提升50%生命值上限。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kamisatoayato.namisen-hp",
+          "condition": {
+            "call": "rank.at-least-3",
+            "inputs": {
+              "rank": {
+                "fact": "namisen"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -973,7 +1074,37 @@
       "rank": 4,
       "name": "不厌细流",
       "description": "施放神里流·水囿后，队伍中附近的角色普通攻击的攻击速度提升15%，持续15秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kamisatoayato.c4-cast",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "kamisatoayato.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -990,7 +1121,26 @@
       "rank": 6,
       "name": "滥觞无底",
       "description": "施放神里流·镜花之后，神里绫人的下一次瞬水剑攻击命中敌人时，将进行2次额外的瞬水剑攻击，各自能造成神里绫人攻击力450%的伤害。\n此两次瞬水剑攻击不会受到浪闪的增益。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kamisatoayato.c6.shunsuiken",
+          "name": "滥觞无底·追加瞬水剑（单击）",
+          "skill": "kamisatoayato.skill",
+          "category": "normal",
+          "element": "hydro",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 4.5
+            }
+          ],
+          "when": [
+            "kamisatoayato.extraSlash"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "formulas": [
@@ -1042,5 +1192,32 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kamisatoayato.inGarden": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "namisen": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    },
+    "kamisatoayato.stance": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "kamisatoayato.extraSlash": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "durin",
@@ -252,7 +252,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -338,128 +338,105 @@
       "hits": [
         {
           "id": "durin.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -575,7 +552,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             6,
             9,
@@ -596,7 +573,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -619,61 +596,50 @@
       "hits": [
         {
           "id": "durin.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "转变·白化之是伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.skill.param2",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "转变·黑度之否伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.skill.param3",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "转变·黑度之否伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.skill.param4",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "转变·黑度之否伤害（第3击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param6"
     },
     {
       "id": "durin.burst",
@@ -886,7 +852,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -907,7 +873,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -928,7 +894,7 @@
         },
         {
           "id": "param11",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -949,7 +915,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -972,117 +938,97 @@
       "hits": [
         {
           "id": "durin.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "白化法·如光流变伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param2",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "白化法·如光流变伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param3",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param3",
-          "scaling": [
+          "name": "白化法·如光流变伤害（第3击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param4",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param4",
-          "scaling": [
+          "name": "黑度法·如星阴燃伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param5",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param5",
-          "scaling": [
+          "name": "黑度法·如星阴燃伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param6",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param6",
-          "scaling": [
+          "name": "黑度法·如星阴燃伤害（第3击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param7",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param7",
-          "scaling": [
+          "name": "白焰之龙伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "durin.burst.param8",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param8",
-          "scaling": [
+          "name": "黑蚀之龙伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param12"
+      },
+      "cooldownParameter": "param11"
     }
   ],
   "passives": [

@@ -221,76 +221,175 @@
     155.6,
     186.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.sunnymorningsleepin",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.sunnymorningsleepin",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "sunnymorningsleepin",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.sunnymorningsleepin"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.sunnymorningsleepin",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "触发扩散、星扩散反应后的6秒内，元素精通提升120点；元素战技命中敌人后的9秒内，元素精通提升96点；元素爆发命中敌人后的30秒内，元素精通提升32点。",
+    "mechanisms": [
+      {
+        "id": "sunnymorningsleepin.swirl",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "sunnymorningsleepin.swirl",
+            "revision": "1"
+          }
+        ],
+        "reason": "触发扩散、星扩散反应后的6秒内，元素精通提升120点；元素战技命中敌人后的9秒内，元素精通提升96点；元素爆发命中敌人后的30秒内，元素精通提升32点。"
+      },
+      {
+        "id": "sunnymorningsleepin.skill",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "sunnymorningsleepin.skill",
+            "revision": "1"
+          }
+        ],
+        "reason": "触发扩散、星扩散反应后的6秒内，元素精通提升120点；元素战技命中敌人后的9秒内，元素精通提升96点；元素爆发命中敌人后的30秒内，元素精通提升32点。"
+      },
+      {
+        "id": "sunnymorningsleepin.burst",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "sunnymorningsleepin.burst",
+            "revision": "1"
+          }
+        ],
+        "reason": "触发扩散、星扩散反应后的6秒内，元素精通提升120点；元素战技命中敌人后的9秒内，元素精通提升96点；元素爆发命中敌人后的30秒内，元素精通提升32点。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.sunnymorningsleepin",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "sunnymorningsleepin.swirl",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "reaction"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "reactionIds": [
+            "swirl",
+            "stellar-swirl"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 6000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "unit": "elementalMastery",
+            "refinement": [
+              120,
+              150,
+              180,
+              210,
+              240
+            ]
+          }
+        }
+      ],
+      "condition": {
+        "fact": "onField",
+        "at": "source-event"
+      }
+    },
+    {
+      "id": "sunnymorningsleepin.skill",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "skill"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 9000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "unit": "elementalMastery",
+            "refinement": [
+              96,
+              120,
+              144,
+              168,
+              192
+            ]
+          }
+        }
+      ],
+      "condition": {
+        "fact": "onField",
+        "at": "source-event"
+      }
+    },
+    {
+      "id": "sunnymorningsleepin.burst",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "hit"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "categories": [
+            "burst"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 30000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.elementalMastery",
+          "value": {
+            "unit": "elementalMastery",
+            "refinement": [
+              32,
+              40,
+              48,
+              56,
+              64
+            ]
+          }
+        }
+      ],
+      "condition": {
+        "fact": "onField",
+        "at": "source-event"
+      }
     }
   ]
 }

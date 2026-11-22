@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "vesna",
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -367,28 +367,22 @@
       "hits": [
         {
           "id": "vesna.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param1.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -396,28 +390,22 @@
         },
         {
           "id": "vesna.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param2.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -425,28 +413,22 @@
         },
         {
           "id": "vesna.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param3.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -454,28 +436,22 @@
         },
         {
           "id": "vesna.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param4.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -483,28 +459,22 @@
         },
         {
           "id": "vesna.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param5.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -512,28 +482,22 @@
         },
         {
           "id": "vesna.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "六段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param6.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -541,28 +505,23 @@
         },
         {
           "id": "vesna.normal.param7",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param7.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -570,28 +529,23 @@
         },
         {
           "id": "vesna.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param9.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -599,28 +553,23 @@
         },
         {
           "id": "vesna.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param10.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -628,28 +577,23 @@
         },
         {
           "id": "vesna.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param11.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -657,22 +601,17 @@
         },
         {
           "id": "vesna.normal.param1.anemo",
+          "name": "一段伤害",
           "element": "anemo",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param1.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -680,22 +619,17 @@
         },
         {
           "id": "vesna.normal.param2.anemo",
+          "name": "二段伤害",
           "element": "anemo",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param2.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -703,22 +637,17 @@
         },
         {
           "id": "vesna.normal.param3.anemo",
+          "name": "三段伤害",
           "element": "anemo",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param3.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -726,22 +655,17 @@
         },
         {
           "id": "vesna.normal.param4.anemo",
+          "name": "四段伤害",
           "element": "anemo",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param4.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -749,22 +673,17 @@
         },
         {
           "id": "vesna.normal.param5.anemo",
+          "name": "五段伤害",
           "element": "anemo",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param5.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -772,22 +691,17 @@
         },
         {
           "id": "vesna.normal.param6.anemo",
+          "name": "六段伤害",
           "element": "anemo",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param6.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -795,22 +709,18 @@
         },
         {
           "id": "vesna.normal.param7.anemo",
+          "name": "重击伤害",
           "element": "anemo",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param7.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -818,22 +728,18 @@
         },
         {
           "id": "vesna.normal.param9.anemo",
+          "name": "下坠期间伤害",
           "element": "anemo",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param9.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -841,22 +747,18 @@
         },
         {
           "id": "vesna.normal.param10.anemo",
+          "name": "低空坠地冲击伤害",
           "element": "anemo",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param10.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -864,22 +766,18 @@
         },
         {
           "id": "vesna.normal.param11.anemo",
+          "name": "高空坠地冲击伤害",
           "element": "anemo",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.normal.param11.anemo.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -1221,19 +1119,11 @@
       "hits": [
         {
           "id": "vesna.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "vesna.skill.param1.ordinary",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete",
@@ -1241,22 +1131,16 @@
         },
         {
           "id": "vesna.skill.param2",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "翔风剑一阶伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.skill.param2.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -1264,22 +1148,16 @@
         },
         {
           "id": "vesna.skill.param3",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "翔风剑二阶伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.skill.param3.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -1287,43 +1165,37 @@
         },
         {
           "id": "vesna.skill.param4",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "翔风剑二阶灵剑伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.skill.param4.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  },
-                  "term1": {
-                    "call": "vesna.condition.not",
-                    "inputs": {
-                      "term0": {
-                        "call": "vesna.radiance",
-                        "inputs": {
-                          "mode": {
-                            "fact": "radiance"
-                          }
-                        },
-                        "output": "active"
-                      }
-                    },
-                    "output": "active"
-                  }
+              "call": "vesna.condition.all2",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
                 },
-                "output": "active"
-              }
+                "term1": {
+                  "call": "vesna.condition.not",
+                  "inputs": {
+                    "term0": {
+                      "call": "vesna.radiance",
+                      "inputs": {
+                        "mode": {
+                          "fact": "radiance"
+                        }
+                      },
+                      "output": "active"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -1331,43 +1203,37 @@
         },
         {
           "id": "vesna.skill.param6",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param6",
-          "scaling": [
+          "name": "翔风剑三阶灵剑伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.skill.param6.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  },
-                  "term1": {
-                    "call": "vesna.condition.not",
-                    "inputs": {
-                      "term0": {
-                        "call": "vesna.radiance",
-                        "inputs": {
-                          "mode": {
-                            "fact": "radiance"
-                          }
-                        },
-                        "output": "active"
-                      }
-                    },
-                    "output": "active"
-                  }
+              "call": "vesna.condition.all2",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
                 },
-                "output": "active"
-              }
+                "term1": {
+                  "call": "vesna.condition.not",
+                  "inputs": {
+                    "term0": {
+                      "call": "vesna.radiance",
+                      "inputs": {
+                        "mode": {
+                          "fact": "radiance"
+                        }
+                      },
+                      "output": "active"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -1375,43 +1241,37 @@
         },
         {
           "id": "vesna.skill.param8",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param8",
-          "scaling": [
+          "name": "翔风剑三阶灵剑最终段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.skill.param8.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  },
-                  "term1": {
-                    "call": "vesna.condition.not",
-                    "inputs": {
-                      "term0": {
-                        "call": "vesna.radiance",
-                        "inputs": {
-                          "mode": {
-                            "fact": "radiance"
-                          }
-                        },
-                        "output": "active"
-                      }
-                    },
-                    "output": "active"
-                  }
+              "call": "vesna.condition.all2",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
                 },
-                "output": "active"
-              }
+                "term1": {
+                  "call": "vesna.condition.not",
+                  "inputs": {
+                    "term0": {
+                      "call": "vesna.radiance",
+                      "inputs": {
+                        "mode": {
+                          "fact": "radiance"
+                        }
+                      },
+                      "output": "active"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -1419,22 +1279,16 @@
         },
         {
           "id": "vesna.skill.param10",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param10",
-          "scaling": [
+          "name": "风翎伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.skill.param10.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "fact": "vesna.stance"
-              }
+              "fact": "vesna.stance"
             }
           ],
           "support": "hit-complete",
@@ -1442,36 +1296,32 @@
         },
         {
           "id": "vesna.skill.param5",
-          "element": "anemo",
-          "category": "skill",
-          "scaling": [
+          "name": "翔风剑二阶灵剑星扩散伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [
+          "family": "stellar-swirl",
+          "when": [
             {
-              "id": "vesna.skill.param5.stellar-swirl",
-              "family": "stellar-swirl",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  },
-                  "term1": {
-                    "call": "vesna.radiance",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      }
-                    },
-                    "output": "active"
-                  }
+              "call": "vesna.condition.all2",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
                 },
-                "output": "active"
-              }
+                "term1": {
+                  "call": "vesna.radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -1479,36 +1329,32 @@
         },
         {
           "id": "vesna.skill.param7",
-          "element": "anemo",
-          "category": "skill",
-          "scaling": [
+          "name": "翔风剑三阶灵剑星扩散伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [
+          "family": "stellar-swirl",
+          "when": [
             {
-              "id": "vesna.skill.param7.stellar-swirl",
-              "family": "stellar-swirl",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  },
-                  "term1": {
-                    "call": "vesna.radiance",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      }
-                    },
-                    "output": "active"
-                  }
+              "call": "vesna.condition.all2",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
                 },
-                "output": "active"
-              }
+                "term1": {
+                  "call": "vesna.radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -1516,174 +1362,39 @@
         },
         {
           "id": "vesna.skill.param9",
-          "element": "anemo",
-          "category": "skill",
-          "scaling": [
+          "name": "翔风剑三阶灵剑最终段星扩散伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [
+          "family": "stellar-swirl",
+          "when": [
             {
-              "id": "vesna.skill.param9.stellar-swirl",
-              "family": "stellar-swirl",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "fact": "vesna.stance"
-                  },
-                  "term1": {
-                    "call": "vesna.radiance",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      }
-                    },
-                    "output": "active"
-                  }
+              "call": "vesna.condition.all2",
+              "inputs": {
+                "term0": {
+                  "fact": "vesna.stance"
                 },
-                "output": "active"
-              }
+                "term1": {
+                  "call": "vesna.radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
           "coverageId": "coverage.vesna.vesna.skill.param9"
-        },
-        {
-          "id": "vesna.skill.c6.slash",
-          "element": "anemo",
-          "category": "skill",
-          "scaling": [
-            {
-              "stat": "attack",
-              "ratio": 1.5
-            }
-          ],
-          "outputs": [
-            {
-              "id": "vesna.skill.c6.slash.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "call": "vesna.c6-unlocked",
-                    "inputs": {
-                      "rank": {
-                        "state": "constellation"
-                      }
-                    },
-                    "output": "active"
-                  },
-                  "term1": {
-                    "fact": "vesna.c6Window"
-                  }
-                },
-                "output": "active"
-              }
-            }
-          ],
-          "support": "hit-complete",
-          "coverageId": "coverage.vesna.vesna.skill.c6.slash"
-        },
-        {
-          "id": "vesna.skill.c6.spirit",
-          "element": "anemo",
-          "category": "skill",
-          "scaling": [
-            {
-              "stat": "attack",
-              "ratio": 2
-            }
-          ],
-          "outputs": [
-            {
-              "id": "vesna.skill.c6.spirit.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "call": "vesna.condition.all2",
-                    "inputs": {
-                      "term0": {
-                        "call": "vesna.c6-unlocked",
-                        "inputs": {
-                          "rank": {
-                            "state": "constellation"
-                          }
-                        },
-                        "output": "active"
-                      },
-                      "term1": {
-                        "fact": "vesna.c6Window"
-                      }
-                    },
-                    "output": "active"
-                  },
-                  "term1": {
-                    "call": "vesna.condition.not",
-                    "inputs": {
-                      "term0": {
-                        "call": "vesna.radiance",
-                        "inputs": {
-                          "mode": {
-                            "fact": "radiance"
-                          }
-                        },
-                        "output": "active"
-                      }
-                    },
-                    "output": "active"
-                  }
-                },
-                "output": "active"
-              }
-            },
-            {
-              "id": "vesna.skill.c6.spirit.stellar-swirl",
-              "family": "stellar-swirl",
-              "condition": {
-                "call": "vesna.condition.all2",
-                "inputs": {
-                  "term0": {
-                    "call": "vesna.condition.all2",
-                    "inputs": {
-                      "term0": {
-                        "call": "vesna.c6-unlocked",
-                        "inputs": {
-                          "rank": {
-                            "state": "constellation"
-                          }
-                        },
-                        "output": "active"
-                      },
-                      "term1": {
-                        "fact": "vesna.c6Window"
-                      }
-                    },
-                    "output": "active"
-                  },
-                  "term1": {
-                    "call": "vesna.radiance",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      }
-                    },
-                    "output": "active"
-                  }
-                },
-                "output": "active"
-              }
-            }
-          ],
-          "support": "hit-complete",
-          "coverageId": "coverage.vesna.vesna.skill.c6.spirit"
         }
-      ]
+      ],
+      "cooldownParameter": "param14"
     },
     {
       "id": "vesna.burst",
@@ -1798,34 +1509,28 @@
       "hits": [
         {
           "id": "vesna.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "灵剑伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [
+          "when": [
             {
-              "id": "vesna.burst.param1.ordinary",
-              "family": "ordinary",
-              "condition": {
-                "call": "vesna.condition.not",
-                "inputs": {
-                  "term0": {
-                    "call": "vesna.radiance",
-                    "inputs": {
-                      "mode": {
-                        "fact": "radiance"
-                      }
-                    },
-                    "output": "active"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "vesna.radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
@@ -1833,33 +1538,33 @@
         },
         {
           "id": "vesna.burst.param2",
-          "element": "anemo",
-          "category": "burst",
-          "scaling": [
+          "name": "灵剑星扩散伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [
+          "family": "stellar-swirl",
+          "when": [
             {
-              "id": "vesna.burst.param2.stellar-swirl",
-              "family": "stellar-swirl",
-              "condition": {
-                "call": "vesna.radiance",
-                "inputs": {
-                  "mode": {
-                    "fact": "radiance"
-                  }
-                },
-                "output": "active"
-              }
+              "call": "vesna.radiance",
+              "inputs": {
+                "mode": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
             }
           ],
           "support": "hit-complete",
           "coverageId": "coverage.vesna.vesna.burst.param2"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -1868,9 +1573,79 @@
       "name": "仪典·春之行列",
       "description": "薇斯纳施放特殊元素战技**翔风剑**或元素爆发**致礼·献予女皇陛下**后，还会获得一层「整肃」，持续20秒，至多叠加6层，每层独立计算持续时间。\n拥有整肃时，薇斯纳召唤的**灵剑**将会造成原本100%+整肃层数*10%的伤害；施放元素战技操典·制胜有道或退场时，清除薇斯纳拥有的整肃。",
       "unlockAscension": 1,
-      "effects": [
-        "vesna.discipline.ordinary.effect",
-        "vesna.discipline.stellar-swirl.effect"
+      "buffs": [
+        {
+          "id": "vesna.discipline.ordinary.effect",
+          "appliesTo": {
+            "hitIds": [
+              "vesna.skill.param4",
+              "vesna.skill.param5",
+              "vesna.skill.param6",
+              "vesna.skill.param7",
+              "vesna.skill.param8",
+              "vesna.skill.param9",
+              "vesna.burst.param1",
+              "vesna.burst.param2",
+              "vesna.skill.c6.spirit"
+            ],
+            "families": [
+              "ordinary"
+            ]
+          },
+          "stacking": {
+            "group": "vesna.discipline.ordinary",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "call": "vesna.discipline",
+                "inputs": {
+                  "input": {
+                    "fact": "vesna.disciplineStacks"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "vesna.discipline.stellar-swirl.effect",
+          "appliesTo": {
+            "hitIds": [
+              "vesna.skill.param4",
+              "vesna.skill.param5",
+              "vesna.skill.param6",
+              "vesna.skill.param7",
+              "vesna.skill.param8",
+              "vesna.skill.param9",
+              "vesna.burst.param1",
+              "vesna.burst.param2",
+              "vesna.skill.c6.spirit"
+            ],
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "stacking": {
+            "group": "vesna.discipline.stellar-swirl",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.baseMultiplier",
+              "value": {
+                "call": "vesna.discipline",
+                "inputs": {
+                  "input": {
+                    "fact": "vesna.disciplineStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1878,9 +1653,79 @@
       "name": "理典·冬之凯风",
       "description": "辉映·星扩散：依据队伍中角色的元素类型，薇斯纳将获得对应效果。当前队伍中：\n·每有一位元素类型为冰元素或风元素的角色：薇斯纳的攻击力提升6%；\n·每有一位不为上述元素类型的角色：薇斯纳的元素精通提升25点。",
       "unlockAscension": 4,
-      "effects": [
-        "vesna.cryo-anemo-attack.effect",
-        "vesna.other-element-mastery.effect"
+      "buffs": [
+        {
+          "id": "vesna.cryo-anemo-attack.effect",
+          "condition": {
+            "call": "vesna.radiance",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "group": "vesna.cryo-anemo-attack",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "vesna.cryo-anemo-attack",
+                "inputs": {
+                  "input": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo",
+                        "anemo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "vesna.other-element-mastery.effect",
+          "condition": {
+            "call": "vesna.radiance",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "group": "vesna.other-element-mastery",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "vesna.other-element-mastery",
+                "inputs": {
+                  "input": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo",
+                        "anemo"
+                      ],
+                      "match": "exclude",
+                      "excludeOwner": false
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1888,8 +1733,33 @@
       "name": "星耀祝礼·散华序饰",
       "description": "队伍中的角色触发冰元素扩散反应时，将转为触发星扩散反应，且基于薇斯纳的攻击力，提升队伍中角色造成的星扩散反应的基础伤害：每100点攻击力都将提升0.7%星扩散反应的基础伤害，至多通过这种方式提升14%伤害。\n队伍中的角色在附近触发星扩散反应后的8秒内，薇斯纳将会进入辉映·星扩散状态。",
       "unlockAscension": null,
-      "effects": [
-        "vesna.linchpin-base.effect"
+      "buffs": [
+        {
+          "id": "vesna.linchpin-base.effect",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "stacking": {
+            "group": "vesna.linchpin-base",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.baseBonus",
+              "value": {
+                "call": "blessing.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1905,8 +1775,28 @@
       "name": "送冬的华宴",
       "description": "**巡风列装**模式下，薇斯纳至多可以施放四次最高境界的**翔风剑**，而非三次，且每次进入巡风列装模式后，首次施放最高境界的翔风剑不消耗**「剑气」**。\n此外，薇斯纳在巡风列装模式下造成的星扩散反应伤害提升20%。",
       "talentBonuses": [],
-      "effects": [
-        "vesna.c1-bonus.effect"
+      "buffs": [
+        {
+          "id": "vesna.c1-bonus.effect",
+          "condition": {
+            "fact": "vesna.stance"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "stacking": {
+            "group": "vesna.c1-bonus",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": 0.2
+            }
+          ]
+        }
       ]
     },
     {
@@ -1914,8 +1804,32 @@
       "name": "迎春的轮舞",
       "description": "突破天赋**「仪典·春之行列」**获得强化：薇斯纳进入**巡风列装**模式时，会获得最大层数的整肃；拥有最大层数的整肃时，薇斯纳的攻击力提升40%。\n上述效果需要解锁突破天赋「仪典·春之行列」。",
       "talentBonuses": [],
-      "effects": [
-        "vesna.c2-attack.effect"
+      "buffs": [
+        {
+          "id": "vesna.c2-attack.effect",
+          "condition": {
+            "call": "vesna.max-discipline",
+            "inputs": {
+              "stacks": {
+                "fact": "vesna.disciplineStacks"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "group": "vesna.c2-attack",
+            "retain": "highest-priority"
+          },
+          "activation": {
+            "ascension": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.4
+            }
+          ]
+        }
       ]
     },
     {
@@ -1934,9 +1848,87 @@
       "name": "先代的荣膺",
       "description": "突破天赋**「理典·冬之凯风」**获得强化：攻击力提升与元素精通提升的效果改为原本的三倍。",
       "talentBonuses": [],
-      "effects": [
-        "vesna.cryo-anemo-attack-c4.effect",
-        "vesna.other-element-mastery-c4.effect"
+      "buffs": [
+        {
+          "id": "vesna.cryo-anemo-attack-c4.effect",
+          "condition": {
+            "call": "vesna.radiance",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "priority": 1,
+          "stacking": {
+            "group": "vesna.cryo-anemo-attack",
+            "retain": "highest-priority"
+          },
+          "activation": {
+            "ascension": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "vesna.cryo-anemo-attack-c4",
+                "inputs": {
+                  "input": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo",
+                        "anemo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "vesna.other-element-mastery-c4.effect",
+          "condition": {
+            "call": "vesna.radiance",
+            "inputs": {
+              "mode": {
+                "fact": "radiance"
+              }
+            },
+            "output": "active"
+          },
+          "priority": 1,
+          "stacking": {
+            "group": "vesna.other-element-mastery",
+            "retain": "highest-priority"
+          },
+          "activation": {
+            "ascension": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "vesna.other-element-mastery-c4",
+                "inputs": {
+                  "input": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo",
+                        "anemo"
+                      ],
+                      "match": "exclude",
+                      "excludeOwner": false
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1955,8 +1947,67 @@
       "name": "不移的赤忱",
       "description": "施放最高境界**翔风剑**后的5秒内，薇斯纳可以点按普通攻击或元素战技，施放风仙一族秘传的翔风剑·变移：造成薇斯纳150%攻击力的风元素伤害，并召唤出**灵剑**，额外造成薇斯纳200%攻击力的风元素伤害。若薇斯纳处于**巡风列装**模式，还会额外唤出风翎协同攻击敌人。\n此外，薇斯纳造成的星扩散反应伤害**擢升**20%。",
       "talentBonuses": [],
-      "effects": [
-        "vesna.c6-elevation.effect"
+      "buffs": [
+        {
+          "id": "vesna.c6-elevation.effect",
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "stacking": {
+            "group": "vesna.c6-elevation",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.elevation",
+              "value": 0.2
+            }
+          ]
+        }
+      ],
+      "hits": [
+        {
+          "id": "vesna.skill.c6.slash",
+          "name": "六命翔风剑斩击",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.5
+            }
+          ],
+          "when": [
+            "vesna.c6Window"
+          ],
+          "support": "hit-complete",
+          "coverageId": "coverage.vesna.vesna.skill.c6.slash",
+          "skill": "vesna.skill"
+        },
+        {
+          "id": "vesna.skill.c6.spirit",
+          "name": "六命翔风剑灵剑",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "ordinary",
+              "stellar-conduct": "ordinary",
+              "stellar-swirl": "stellar-swirl"
+            }
+          },
+          "when": [
+            "vesna.c6Window"
+          ],
+          "support": "hit-complete",
+          "coverageId": "coverage.vesna.vesna.skill.c6.spirit",
+          "skill": "vesna.skill"
+        }
       ]
     }
   ],
@@ -1993,18 +2044,6 @@
           "stellar-swirl"
         ],
         "equals": "stellar-swirl"
-      }
-    },
-    {
-      "id": "vesna.c6-unlocked",
-      "template": {
-        "id": "quantity-condition",
-        "revision": "1",
-        "input": "rank",
-        "unit": "count",
-        "relation": "gte",
-        "threshold": 6,
-        "maxInput": 6
       }
     },
     {
@@ -2095,50 +2134,6 @@
       }
     },
     {
-      "id": "vesna.linchpin-base",
-      "template": {
-        "id": "linear-bonus",
-        "revision": "1",
-        "input": "input",
-        "inputUnit": "attack",
-        "outputUnit": "scalar",
-        "rate": 0.00007,
-        "offset": 0,
-        "threshold": 0,
-        "output": "value",
-        "cap": 0.14
-      }
-    },
-    {
-      "id": "vesna.elevation-factor",
-      "template": {
-        "id": "linear-bonus",
-        "revision": "1",
-        "input": "input",
-        "inputUnit": "scalar",
-        "outputUnit": "scalar",
-        "rate": 1,
-        "offset": 1,
-        "threshold": 0,
-        "output": "value"
-      }
-    },
-    {
-      "id": "vesna.stellar-direct",
-      "template": {
-        "id": "reaction-hit",
-        "revision": "1",
-        "family": "stellar-swirl",
-        "origin": "direct",
-        "mastery": {
-          "namespace": "builtin",
-          "id": "stellar-em-bonus",
-          "revision": "1"
-        },
-        "baseMultiplier": true
-      }
-    },
-    {
       "id": "vesna.condition.all3",
       "template": {
         "revision": "1",
@@ -2159,319 +2154,11 @@
       }
     }
   ],
-  "effects": [
-    {
-      "id": "vesna.discipline.ordinary.effect",
-      "target": "attribute.baseMultiplier",
-      "value": {
-        "call": "vesna.discipline",
-        "inputs": {
-          "input": {
-            "fact": "vesna.disciplineStacks"
-          }
-        }
-      },
-      "activation": {
-        "ascension": 1
-      },
-      "appliesTo": {
-        "hitIds": [
-          "vesna.skill.param4",
-          "vesna.skill.param5",
-          "vesna.skill.param6",
-          "vesna.skill.param7",
-          "vesna.skill.param8",
-          "vesna.skill.param9",
-          "vesna.burst.param1",
-          "vesna.burst.param2",
-          "vesna.skill.c6.spirit"
-        ],
-        "families": [
-          "ordinary"
-        ]
-      },
-      "stacking": {
-        "group": "vesna.discipline.ordinary",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.discipline.stellar-swirl.effect",
-      "target": "attribute.reaction.stellar-swirl.baseMultiplier",
-      "value": {
-        "call": "vesna.discipline",
-        "inputs": {
-          "input": {
-            "fact": "vesna.disciplineStacks"
-          }
-        }
-      },
-      "activation": {
-        "ascension": 1
-      },
-      "appliesTo": {
-        "hitIds": [
-          "vesna.skill.param4",
-          "vesna.skill.param5",
-          "vesna.skill.param6",
-          "vesna.skill.param7",
-          "vesna.skill.param8",
-          "vesna.skill.param9",
-          "vesna.burst.param1",
-          "vesna.burst.param2",
-          "vesna.skill.c6.spirit"
-        ],
-        "families": [
-          "stellar-swirl"
-        ]
-      },
-      "stacking": {
-        "group": "vesna.discipline.stellar-swirl",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.cryo-anemo-attack.effect",
-      "target": "attribute.attackPercent",
-      "value": {
-        "call": "vesna.cryo-anemo-attack",
-        "inputs": {
-          "input": {
-            "teamCount": {
-              "elements": [
-                "cryo",
-                "anemo"
-              ],
-              "match": "include",
-              "excludeOwner": false
-            }
-          }
-        }
-      },
-      "condition": {
-        "call": "vesna.radiance",
-        "inputs": {
-          "mode": {
-            "fact": "radiance"
-          }
-        },
-        "output": "active"
-      },
-      "activation": {
-        "ascension": 4
-      },
-      "stacking": {
-        "group": "vesna.cryo-anemo-attack",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.other-element-mastery.effect",
-      "target": "attribute.elementalMastery",
-      "value": {
-        "call": "vesna.other-element-mastery",
-        "inputs": {
-          "input": {
-            "teamCount": {
-              "elements": [
-                "cryo",
-                "anemo"
-              ],
-              "match": "exclude",
-              "excludeOwner": false
-            }
-          }
-        }
-      },
-      "condition": {
-        "call": "vesna.radiance",
-        "inputs": {
-          "mode": {
-            "fact": "radiance"
-          }
-        },
-        "output": "active"
-      },
-      "activation": {
-        "ascension": 4
-      },
-      "stacking": {
-        "group": "vesna.other-element-mastery",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.cryo-anemo-attack-c4.effect",
-      "target": "attribute.attackPercent",
-      "value": {
-        "call": "vesna.cryo-anemo-attack-c4",
-        "inputs": {
-          "input": {
-            "teamCount": {
-              "elements": [
-                "cryo",
-                "anemo"
-              ],
-              "match": "include",
-              "excludeOwner": false
-            }
-          }
-        }
-      },
-      "condition": {
-        "call": "vesna.radiance",
-        "inputs": {
-          "mode": {
-            "fact": "radiance"
-          }
-        },
-        "output": "active"
-      },
-      "activation": {
-        "ascension": 4,
-        "constellation": 4
-      },
-      "priority": 1,
-      "stacking": {
-        "group": "vesna.cryo-anemo-attack",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.other-element-mastery-c4.effect",
-      "target": "attribute.elementalMastery",
-      "value": {
-        "call": "vesna.other-element-mastery-c4",
-        "inputs": {
-          "input": {
-            "teamCount": {
-              "elements": [
-                "cryo",
-                "anemo"
-              ],
-              "match": "exclude",
-              "excludeOwner": false
-            }
-          }
-        }
-      },
-      "condition": {
-        "call": "vesna.radiance",
-        "inputs": {
-          "mode": {
-            "fact": "radiance"
-          }
-        },
-        "output": "active"
-      },
-      "activation": {
-        "ascension": 4,
-        "constellation": 4
-      },
-      "priority": 1,
-      "stacking": {
-        "group": "vesna.other-element-mastery",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.linchpin-base.effect",
-      "target": "attribute.reaction.stellar-swirl.baseBonus",
-      "value": {
-        "call": "vesna.linchpin-base",
-        "inputs": {
-          "input": {
-            "stat": "attack"
-          }
-        }
-      },
-      "recipient": "team",
-      "appliesTo": {
-        "families": [
-          "stellar-swirl"
-        ]
-      },
-      "stacking": {
-        "group": "vesna.linchpin-base",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.c1-bonus.effect",
-      "target": "attribute.reaction.stellar-swirl.damageBonus",
-      "value": 0.2,
-      "condition": {
-        "fact": "vesna.stance"
-      },
-      "activation": {
-        "constellation": 1
-      },
-      "appliesTo": {
-        "families": [
-          "stellar-swirl"
-        ]
-      },
-      "stacking": {
-        "group": "vesna.c1-bonus",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.c2-attack.effect",
-      "target": "attribute.attackPercent",
-      "value": 0.4,
-      "condition": {
-        "call": "vesna.max-discipline",
-        "inputs": {
-          "stacks": {
-            "fact": "vesna.disciplineStacks"
-          }
-        },
-        "output": "active"
-      },
-      "activation": {
-        "ascension": 1,
-        "constellation": 2
-      },
-      "stacking": {
-        "group": "vesna.c2-attack",
-        "retain": "highest-priority"
-      }
-    },
-    {
-      "id": "vesna.c6-elevation.effect",
-      "target": "attribute.reaction.stellar-swirl.elevation",
-      "value": 0.2,
-      "activation": {
-        "constellation": 6
-      },
-      "appliesTo": {
-        "families": [
-          "stellar-swirl"
-        ]
-      },
-      "stacking": {
-        "group": "vesna.c6-elevation",
-        "retain": "highest-priority"
-      }
-    }
-  ],
   "facts": {
     "vesna.stance": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
-      }
-    },
-    "radiance": {
-      "scope": "owner",
-      "type": {
-        "kind": "enum",
-        "values": [
-          "none",
-          "stellar-conduct",
-          "stellar-swirl"
-        ]
       }
     },
     "vesna.c6Window": {

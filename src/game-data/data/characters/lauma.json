@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lauma",
@@ -201,7 +201,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             25,
             25,
@@ -222,7 +222,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             10,
             10,
@@ -243,7 +243,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -264,7 +264,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             4,
             4,
@@ -285,7 +285,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -392,100 +392,83 @@
       "hits": [
         {
           "id": "lauma.normal.param1",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.normal.param2",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.normal.param3",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.normal.param9",
-          "element": "dendro",
+          "name": "唤灵之祷伤害",
           "category": "charged",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.normal.param10",
-          "element": "dendro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.normal.param11",
-          "element": "dendro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.normal.param12",
-          "element": "dendro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -642,7 +625,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -663,7 +646,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -705,7 +688,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -726,7 +709,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -749,52 +732,65 @@
       "hits": [
         {
           "id": "lauma.skill.param1",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "点按伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lauma.skill.param2",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "长按一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lauma.has-dew",
+              "inputs": {
+                "count": {
+                  "fact": "lauma.consumedDew"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lauma.skill.param3",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "长按二段伤害",
+          "base": [
             {
               "stat": "elementalMastery",
-              "parameter": "param3"
+              "parameter": "param3",
+              "count": "lauma.consumedDew"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "family": "lunar-bloom",
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lauma.has-dew",
+              "inputs": {
+                "count": {
+                  "fact": "lauma.consumedDew"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lauma.skill.param4",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "霜林圣域攻击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
@@ -804,10 +800,22 @@
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "inputs": [
+        {
+          "id": "lauma.consumedDew",
+          "min": 0,
+          "max": 3,
+          "integer": true,
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        }
+      ],
+      "cooldownParameter": "param10"
     },
     {
       "id": "lauma.burst",
@@ -849,7 +857,7 @@
       "parameters": [
         {
           "id": "param1",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             18,
             18,
@@ -870,7 +878,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             6,
             6,
@@ -933,7 +941,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -954,7 +962,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -975,7 +983,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -995,7 +1003,11 @@
           ]
         }
       ],
-      "hits": []
+      "hits": [],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -1015,7 +1027,32 @@
       "id": "lauma.passive3",
       "name": "月兆祝赐·千籁恩宠",
       "description": "队伍中的角色触发绽放反应时，将转为触发月绽放反应，且基于菈乌玛的元素精通，提升队伍中角色造成的月绽放反应的基础伤害：每点元素精通都将提升0.0175%月绽放反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，菈乌玛在队伍中时，队伍的月兆将会上升一级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "lauma.reaction-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-bloom"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.baseBonus",
+              "value": {
+                "call": "blessing.mastery",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "moonsignLevel": 1
     },
     {
       "id": "lauma.passive4",
@@ -1098,5 +1135,28 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lauma.consumedDew": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "lauma.has-dew",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    }
+  ]
 }

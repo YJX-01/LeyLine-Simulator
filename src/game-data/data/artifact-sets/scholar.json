@@ -12,194 +12,60 @@
     3,
     4
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.scholar.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.scholar",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "scholar.static-energyRecharge",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.scholar.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "scholar",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.2
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.energyRecharge",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "scholar.static-energyRecharge",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.scholar.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "scholar",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.scholar"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "scholar.static-energyRecharge",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.scholar.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "scholar",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.scholar"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.scholar"
-  ],
+  "revision": "1",
   "rarity": 4,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "scholar.static-energyRecharge",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.energyRecharge",
+              "value": 0.2
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.scholar.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "scholar.static-energyRecharge",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.scholar.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "unavailable",
+        "evidence": "adopted",
+        "reason": "该件数全部相关机制尚未闭合。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "unavailable",
+            "ruleIds": [],
+            "reason": "该件数全部相关机制尚未闭合。"
+          }
+        ]
+      }
     }
   ]
 }

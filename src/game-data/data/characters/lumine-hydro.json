@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lumine-hydro",
@@ -11,7 +11,8 @@
     "element": "hydro",
     "weaponType": "WEAPON_SWORD_ONE_HAND",
     "rarity": 5,
-    "gameId": 10000007
+    "gameId": 10000007,
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -276,7 +277,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -362,142 +363,117 @@
       "hits": [
         {
           "id": "lumine-hydro.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param7",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -609,7 +585,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -693,7 +669,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -714,7 +690,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -737,47 +713,76 @@
       "hits": [
         {
           "id": "lumine-hydro.skill.param2",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "喷发激流伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "露滴伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lumine-hydro.skill.param3",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "灵息之刺伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "lumine-hydro.suffusion",
+          "condition": {
+            "call": "hp.above50",
+            "inputs": {
+              "ratio": {
+                "fact": "hpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "lumine-hydro.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": {
+                    "skill": "lumine-hydro.skill",
+                    "parameter": "param6"
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param8"
     },
     {
       "id": "lumine-hydro.burst",
@@ -828,7 +833,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             4,
             4,
@@ -849,7 +854,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -870,7 +875,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -893,19 +898,20 @@
       "hits": [
         {
           "id": "lumine-hydro.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [

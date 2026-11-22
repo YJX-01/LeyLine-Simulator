@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "sandrone",
@@ -367,86 +367,166 @@
       "hits": [
         {
           "id": "sandrone.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sandrone.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sandrone.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
+          "id": "sandrone.normal.param4",
+          "name": "重击扫射",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "category": "charged",
+          "when": [
+            {
+              "call": "sandrone.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sandrone.overload"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "sandrone.normal.param5",
+          "name": "重击冷凝射线",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "stellar.radiance-ratio",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  },
+                  "ordinary": {
+                    "parameter": "param5",
+                    "skill": "sandrone.normal"
+                  },
+                  "conduct": {
+                    "parameter": "param6",
+                    "skill": "sandrone.normal"
+                  },
+                  "swirl": {
+                    "parameter": "param11",
+                    "skill": "sandrone.normal"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "category": "charged",
+          "when": [
+            {
+              "call": "sandrone.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sandrone.overload"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "ordinary",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          }
+        },
+        {
+          "id": "sandrone.normal.param7",
+          "name": "功率过载射击",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "category": "charged",
+          "when": [
+            "sandrone.overload"
+          ]
+        },
+        {
           "id": "sandrone.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sandrone.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sandrone.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -520,7 +600,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             4,
             4,
@@ -564,19 +644,59 @@
       "hits": [
         {
           "id": "sandrone.skill.param1",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "棱晶弹（第一枚）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "sandrone.skill.second",
+          "name": "棱晶弹（第二枚）",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "stellar.radiance-ratio",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  },
+                  "ordinary": {
+                    "parameter": "param1",
+                    "skill": "sandrone.skill"
+                  },
+                  "conduct": {
+                    "parameter": "param2",
+                    "skill": "sandrone.skill"
+                  },
+                  "swirl": {
+                    "parameter": "param4",
+                    "skill": "sandrone.skill"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "support": "hit-unavailable",
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "ordinary",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          }
         }
-      ]
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "sandrone.burst",
@@ -676,7 +796,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -697,7 +817,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -741,33 +861,74 @@
       "hits": [
         {
           "id": "sandrone.burst.param1",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "轰炸伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sandrone.burst.param2",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
-            {
-              "stat": "attack",
-              "parameter": "param2"
+          "name": "聚能光束伤害",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "stellar.radiance-ratio",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  },
+                  "ordinary": {
+                    "parameter": "param2",
+                    "skill": "sandrone.burst"
+                  },
+                  "conduct": {
+                    "parameter": "param3",
+                    "skill": "sandrone.burst"
+                  },
+                  "swirl": {
+                    "parameter": "param6",
+                    "skill": "sandrone.burst"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "ordinary",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
             }
-          ],
-          "outputs": [],
+          },
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "inputs": [
+        {
+          "id": "sandrone.tactics",
+          "min": 0,
+          "max": 10,
+          "integer": true,
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -775,7 +936,70 @@
       "id": "sandrone.passive1",
       "name": "悠久的演算机关",
       "description": "**辉映·星烁**：施放元素战技**事象数式·游衍解析**时，若法洁欧的**解算功率**超过50点，则会在降低解算功率的同时，使向附近敌人发射的第二枚棱晶弹造成原本400%的伤害。\n此外，法洁欧的解算功率每降低10点，都会获得一层持续60秒的改进战术效果，该效果至多叠加10层。桑多涅处于辉映·星烁状态下施放元素爆发**事象数式·万理证毕**时，将会清除全部的改进战术层数，使负温聚能光束造成原本100%+清除层数*10%的伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "sandrone.second-ray",
+          "appliesTo": {
+            "hitIds": [
+              "sandrone.skill.second"
+            ],
+            "families": [
+              "stellar-conduct",
+              "stellar-swirl"
+            ]
+          },
+          "condition": {
+            "fact": "sandrone.powerAbove50"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.baseMultiplier",
+              "value": 4
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.baseMultiplier",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "id": "sandrone.beam-tactics",
+          "appliesTo": {
+            "hitIds": [
+              "sandrone.burst.param2"
+            ],
+            "families": [
+              "stellar-conduct",
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.baseMultiplier",
+              "value": {
+                "call": "sandrone.tactics-factor",
+                "inputs": {
+                  "input": {
+                    "fact": "sandrone.tactics"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.baseMultiplier",
+              "value": {
+                "call": "sandrone.tactics-factor",
+                "inputs": {
+                  "input": {
+                    "fact": "sandrone.tactics"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sandrone.passive2",
@@ -787,7 +1011,43 @@
       "id": "sandrone.passive3",
       "name": "星耀祝礼·唯理为光",
       "description": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，桑多涅将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于桑多涅的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.7%上述反应的基础伤害，至多通过这种方式提升14%伤害。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "sandrone.reaction-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct",
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.baseBonus",
+              "value": {
+                "call": "blessing.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.baseBonus",
+              "value": {
+                "call": "blessing.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sandrone.passive4",
@@ -870,5 +1130,53 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "sandrone.overload": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "sandrone.powerAbove50": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "sandrone.tactics": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "sandrone.not",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 1,
+        "negate": true
+      }
+    },
+    {
+      "id": "sandrone.tactics-factor",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 1,
+        "threshold": 0,
+        "maxInput": 10,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ]
 }

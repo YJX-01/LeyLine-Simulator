@@ -12,203 +12,69 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.shimenawasreminiscence.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.shimenawasreminiscence",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "shimenawasreminiscence.static-attackPercent",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.shimenawasreminiscence.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "shimenawasreminiscence",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.18
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.attackPercent",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "shimenawasreminiscence.static-attackPercent",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.shimenawasreminiscence.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "shimenawasreminiscence",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.shimenawasreminiscence"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "shimenawasreminiscence.static-attackPercent",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.shimenawasreminiscence.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "shimenawasreminiscence",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.shimenawasreminiscence"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "impact": {
-                "recipient": "owner",
-                "families": [
-                  "ordinary"
-                ],
-                "attributes": [
-                  "attribute.damageBonus"
-                ]
-              },
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1",
-  "sources": [
-    "content.set.shimenawasreminiscence"
-  ],
+  "revision": "2",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "shimenawasreminiscence.static-attackPercent",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.18
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.shimenawasreminiscence.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "shimenawasreminiscence.static-attackPercent",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.shimenawasreminiscence.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592-scope1"
-        }
-      ]
+      "support": {
+        "resolution": "unavailable",
+        "evidence": "adopted",
+        "reason": "该件数全部相关机制尚未闭合。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "unavailable",
+            "ruleIds": [],
+            "impact": {
+              "recipient": "owner",
+              "families": [
+                "ordinary"
+              ],
+              "attributes": [
+                "attribute.damageBonus"
+              ]
+            },
+            "reason": "该件数全部相关机制尚未闭合。"
+          }
+        ]
+      }
     }
   ]
 }

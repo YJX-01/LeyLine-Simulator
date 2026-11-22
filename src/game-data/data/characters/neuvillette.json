@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "neuvillette",
@@ -239,7 +239,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -302,7 +302,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             0.5,
             0.5,
@@ -409,115 +409,105 @@
       "hits": [
         {
           "id": "neuvillette.normal.param1",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param2",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param3",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param4",
-          "element": "hydro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param5",
-          "element": "hydro",
+          "name": "重击·衡平推裁持续伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "hp",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param11",
-          "element": "hydro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param12",
-          "element": "hydro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.normal.param13",
-          "element": "hydro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param13",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param13"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "heals": [
+        {
+          "id": "neuvillette.normal.heal.param7",
+          "detail": 6,
+          "stat": "hp",
+          "rate": "param7",
+          "recipient": "self"
         }
       ]
     },
@@ -595,7 +585,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -616,7 +606,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -637,7 +627,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -660,33 +650,28 @@
       "hits": [
         {
           "id": "neuvillette.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.skill.param2",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "灵息之刺伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param4"
     },
     {
       "id": "neuvillette.burst",
@@ -758,7 +743,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -779,7 +764,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -802,33 +787,31 @@
       "hits": [
         {
           "id": "neuvillette.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "neuvillette.burst.param2",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "水瀑伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -843,8 +826,24 @@
       "name": "至高仲裁的纪律",
       "description": "基于当前生命值超出生命值上限30%的部分，每1%使那维莱特获得0.6%水元素伤害加成，通过这种方式，至多提升30%。",
       "unlockAscension": 4,
-      "effects": [
-        "neuvillette.ascension-four.hydro-bonus"
+      "buffs": [
+        {
+          "id": "neuvillette.ascension-four.hydro-bonus",
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "call": "neuvillette.ascension-four",
+                "inputs": {
+                  "hp-ratio": {
+                    "fact": "hpRatio"
+                  }
+                },
+                "output": "bonus"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -921,33 +920,6 @@
       }
     }
   ],
-  "effects": [
-    {
-      "id": "neuvillette.ascension-four.hydro-bonus",
-      "target": "attribute.hydroBonus",
-      "value": {
-        "call": "neuvillette.ascension-four",
-        "inputs": {
-          "hp-ratio": {
-            "fact": "hpRatio"
-          }
-        },
-        "output": "bonus"
-      },
-      "activation": {
-        "ascension": 4
-      }
-    }
-  ],
-  "facts": {
-    "hpRatio": {
-      "scope": "owner",
-      "type": {
-        "kind": "quantity",
-        "unit": "scalar"
-      }
-    }
-  },
   "support": {
     "hit-unavailable": {
       "maxConstellation": 0,

@@ -13,124 +13,63 @@
     2,
     3
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.set.adventurer",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.adventurer.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "adventurer",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.adventurer"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.adventurer.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "adventurer",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.adventurer"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.adventurer"
-  ],
+  "revision": "1",
   "rarity": 3,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "两件直接增加生命值上限 1000 点。",
+        "mechanisms": [
+          {
+            "id": "flat-hp",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "adventurer.hp",
+                "revision": "1"
+              }
+            ],
+            "reason": "固定生命值增益。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.adventurer.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "adventurer.hp",
+          "modifiers": [
+            {
+              "target": "attribute.hp",
+              "value": {
+                "amount": 1000,
+                "unit": "hp"
+              }
+            }
+          ]
         }
       ]
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.adventurer.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "unavailable",
+        "evidence": "adopted",
+        "reason": "该件数全部相关机制尚未闭合。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "unavailable",
+            "ruleIds": [],
+            "reason": "该件数全部相关机制尚未闭合。"
+          }
+        ]
+      }
     }
   ]
 }

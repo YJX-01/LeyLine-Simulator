@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "shikanoinheizou",
@@ -298,7 +298,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -384,156 +384,127 @@
       "hits": [
         {
           "id": "shikanoinheizou.normal.param1",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param2",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param3",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param4",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param5",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param6",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "四段伤害（第3击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param7",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param7",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param8",
-          "element": "anemo",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param10",
-          "element": "anemo",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param11",
-          "element": "anemo",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "shikanoinheizou.normal.param12",
-          "element": "anemo",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -633,7 +604,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -654,7 +625,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             60,
             60,
@@ -677,19 +648,71 @@
       "hits": [
         {
           "id": "shikanoinheizou.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param2",
+              "count": "shikanoinheizou.declension"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "inputs": [
+        {
+          "id": "shikanoinheizou.declension",
+          "min": 0,
+          "max": 4,
+          "integer": true,
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        }
+      ],
+      "buffs": [
+        {
+          "id": "shikanoinheizou.full-charge-base",
+          "appliesTo": {
+            "hitIds": [
+              "shikanoinheizou.skill.param1"
+            ]
+          },
+          "condition": {
+            "call": "shikanoinheizou.maximum-momentum",
+            "inputs": {
+              "count": {
+                "fact": "shikanoinheizou.declension"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "parameter": "param3",
+                    "skill": "shikanoinheizou.skill"
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param4"
     },
     {
       "id": "shikanoinheizou.burst",
@@ -761,7 +784,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -782,7 +805,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             40,
             40,
@@ -805,19 +828,32 @@
       "hits": [
         {
           "id": "shikanoinheizou.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "不动流·真空弹伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "shikanoinheizou.burst.param2",
+          "name": "聚风真眼伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -837,7 +873,25 @@
       "id": "shikanoinheizou.passive3",
       "name": "在罪之先",
       "description": "队伍中自己的角色冲刺消耗的体力降低20%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "shikanoinheizou.stamina-sprint",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.stamina-sprint",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.sprint",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -914,5 +968,28 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "shikanoinheizou.declension": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "shikanoinheizou.maximum-momentum",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "count",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 4
+      }
+    }
+  ]
 }

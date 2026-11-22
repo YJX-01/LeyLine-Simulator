@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "mavuika",
@@ -231,7 +231,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -317,115 +317,183 @@
       "hits": [
         {
           "id": "mavuika.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param5",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param7",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param8",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "mavuika.normal.param9",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "mavuika.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "mavuika.flamestrider"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ]
     },
@@ -539,7 +607,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             2,
             2,
@@ -749,7 +817,7 @@
         },
         {
           "id": "param13",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             80,
             80,
@@ -770,7 +838,7 @@
         },
         {
           "id": "param14",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -793,145 +861,164 @@
       "hits": [
         {
           "id": "mavuika.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mavuika.skill.param2",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "焚曜之环伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "mavuika.skill.param4",
-          "element": "pyro",
+          "name": "驰轮车普通攻击一段伤害",
           "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param5",
-          "element": "pyro",
+          "name": "驰轮车普通攻击二段伤害",
           "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param6",
-          "element": "pyro",
+          "name": "驰轮车普通攻击三段伤害",
           "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param7",
-          "element": "pyro",
+          "name": "驰轮车普通攻击四段伤害",
           "category": "normal",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param8",
-          "element": "pyro",
+          "name": "驰轮车普通攻击五段伤害",
           "category": "normal",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param10",
-          "element": "pyro",
+          "name": "驰轮车重击循环伤害",
           "category": "charged",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param11",
-          "element": "pyro",
+          "name": "驰轮车重击终结伤害",
           "category": "charged",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         },
         {
           "id": "mavuika.skill.param12",
-          "element": "pyro",
+          "name": "驰轮车坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param12",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param12"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "mavuika.flamestrider"
+          ]
+        },
+        {
+          "id": "mavuika.skill.param9",
+          "name": "驰轮车冲刺伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "support": "hit-unavailable",
+          "element": "pyro",
+          "category": "normal",
+          "when": [
+            "mavuika.flamestrider"
+          ]
         }
-      ]
+      ],
+      "cooldownParameter": "param14"
     },
     {
       "id": "mavuika.burst",
@@ -994,7 +1081,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             7,
             7,
@@ -1120,7 +1207,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -1141,7 +1228,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             200,
             200,
@@ -1164,19 +1251,18 @@
       "hits": [
         {
           "id": "mavuika.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": 0,
+      "cooldownParameter": "param8"
     }
   ],
   "passives": [
@@ -1279,5 +1365,25 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "mavuika.flamestrider": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "mavuika.outside-stance",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 1,
+        "negate": true
+      }
+    }
+  ]
 }

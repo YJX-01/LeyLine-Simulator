@@ -221,76 +221,88 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.thecatch",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "已采用武器各精炼档的完整常驻条款。",
+    "mechanisms": [
+      {
+        "id": "thecatch.burst.damageBonus",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.thecatch",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "thecatch.burst.damageBonus",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用武器各精炼档的完整常驻条款。"
+      },
+      {
+        "id": "thecatch.burst.critRate",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "thecatch",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.thecatch"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+            "id": "thecatch.burst.critRate",
+            "revision": "1"
+          }
+        ],
+        "reason": "已采用武器各精炼档的完整常驻条款。"
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "id": "thecatch.burst.damageBonus",
+      "appliesTo": {
+        "categories": [
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.thecatch",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.thecatch",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "thecatch.burst.critRate",
+      "appliesTo": {
+        "categories": [
+          "burst"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.critRate",
+          "value": {
+            "refinement": [
+              0.06,
+              0.075,
+              0.09,
+              0.105,
+              0.12
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "barbara",
@@ -231,7 +231,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -317,152 +317,92 @@
       "hits": [
         {
           "id": "barbara.normal.param1",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param1.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param2",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param2.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param3",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param3.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param4",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param4.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param5",
-          "element": "hydro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param5.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param7",
-          "element": "hydro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param7.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param8",
-          "element": "hydro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param8.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "barbara.normal.param9",
-          "element": "hydro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "barbara.normal.param9.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
@@ -522,7 +462,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             385.18774,
             423.71188,
@@ -564,7 +504,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             72.2227,
             79.44598,
@@ -606,7 +546,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -627,7 +567,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             32,
             32,
@@ -650,17 +590,25 @@
       "hits": [
         {
           "id": "barbara.skill.param5",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param5",
-          "scaling": [
+          "name": "水珠伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param7",
+      "heals": [
+        {
+          "id": "barbara.skill.heal.param1",
+          "detail": 1,
+          "stat": "hp",
+          "rate": "param1",
+          "flat": "param2",
+          "recipient": "on-field"
         }
       ]
     },
@@ -710,7 +658,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1694.2819,
             1863.7336,
@@ -731,7 +679,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -752,7 +700,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -772,7 +720,22 @@
           ]
         }
       ],
-      "hits": []
+      "hits": [],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3",
+      "heals": [
+        {
+          "id": "barbara.burst.heal.param1",
+          "detail": 0,
+          "stat": "hp",
+          "rate": "param1",
+          "flat": "param2",
+          "recipient": "party",
+          "trigger": "cast"
+        }
+      ]
     }
   ],
   "passives": [

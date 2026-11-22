@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lyney",
@@ -427,7 +427,7 @@
         },
         {
           "id": "param14",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             4,
             4,
@@ -490,7 +490,7 @@
         },
         {
           "id": "param17",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -513,157 +513,164 @@
       "hits": [
         {
           "id": "lyney.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param9",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param10",
+          "name": "一段蓄力瞄准射击",
           "element": "pyro",
           "category": "charged",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param11",
+          "name": "隐具魔术箭伤害",
           "element": "pyro",
           "category": "charged",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param6",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param7",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.normal.param8",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "lyney.normal.param15",
+          "name": "礼花术弹伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param15"
+            }
+          ],
+          "support": "hit-unavailable",
+          "category": "charged",
+          "element": "pyro",
+          "when": [
+            "lyney.pyrotechnicStrike"
+          ]
+        },
+        {
+          "id": "lyney.normal.param16",
+          "name": "灵息之刺伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param16"
+            }
+          ],
+          "support": "hit-unavailable",
+          "category": "charged",
+          "element": "pyro",
+          "when": [
+            "lyney.spiritbreath"
+          ]
         }
       ]
     },
@@ -758,7 +765,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -844,17 +851,44 @@
       "hits": [
         {
           "id": "lyney.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param2",
+              "count": "lyney.propSurplus"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "lyney.propSurplus",
+          "min": 0,
+          "max": 5,
+          "integer": true,
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          }
+        }
+      ],
+      "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "lyney.skill.heal.param3",
+          "detail": 2,
+          "stat": "hp",
+          "rate": "param3",
+          "recipient": "self",
+          "count": {
+            "fact": "lyney.propSurplus"
+          }
         }
       ]
     },
@@ -932,7 +966,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             3,
             3,
@@ -953,7 +987,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -974,7 +1008,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -997,33 +1031,31 @@
       "hits": [
         {
           "id": "lyney.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "lyney.burst.param2",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "引爆礼花伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -1120,5 +1152,26 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lyney.pyrotechnicStrike": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "lyney.spiritbreath": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "lyney.propSurplus": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      }
+    }
+  }
 }

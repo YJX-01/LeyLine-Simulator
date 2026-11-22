@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "nefer",
@@ -239,7 +239,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             18.15,
             18.15,
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -344,7 +344,7 @@
         },
         {
           "id": "param11",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -367,114 +367,94 @@
       "hits": [
         {
           "id": "nefer.normal.param1",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param2",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param3",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param4",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param5",
-          "element": "dendro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param8",
-          "element": "dendro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param9",
-          "element": "dendro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.normal.param10",
-          "element": "dendro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -569,7 +549,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             3,
             3,
@@ -590,7 +570,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -758,7 +738,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -781,10 +761,8 @@
       "hits": [
         {
           "id": "nefer.skill.param1",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
@@ -794,10 +772,48 @@
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "nefer.skill.param5",
+          "name": "幻戏自身一段伤害",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param6"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "nefer.phantasm"
+          ]
+        },
+        {
+          "id": "nefer.skill.param7",
+          "name": "幻戏自身二段伤害",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param8"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "nefer.phantasm"
+          ]
         }
-      ]
+      ],
+      "cooldownParameter": "param12"
     },
     {
       "id": "nefer.burst",
@@ -936,7 +952,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -957,7 +973,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -980,10 +996,8 @@
       "hits": [
         {
           "id": "nefer.burst.param1",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
@@ -993,15 +1007,12 @@
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nefer.burst.param3",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param3",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
@@ -1011,10 +1022,13 @@
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -1034,7 +1048,32 @@
       "id": "nefer.passive3",
       "name": "月兆祝赐·廊下暮影",
       "description": "队伍中的角色触发绽放反应时，将转为触发月绽放反应，且基于奈芙尔的元素精通，提升队伍中角色造成的月绽放反应的基础伤害：每点元素精通都将提升0.0175%月绽放反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，奈芙尔在队伍中时，队伍的月兆将会上升一级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "nefer.reaction-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-bloom"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.baseBonus",
+              "value": {
+                "call": "blessing.mastery",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "moonsignLevel": 1
     },
     {
       "id": "nefer.passive4",
@@ -1117,5 +1156,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "nefer.phantasm": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

@@ -12,122 +12,78 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.set.lavawalker",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.lavawalker.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "lavawalker",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.lavawalker"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.lavawalker.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "lavawalker",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.lavawalker"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.lavawalker"
-  ],
+  "revision": "1",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "火元素抗性提高40%。",
+        "mechanisms": [
+          {
+            "id": "lavawalker.resistances",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "lavawalker.resistances",
+                "revision": "1"
+              }
+            ],
+            "reason": "火元素抗性提高40%。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.lavawalker.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "lavawalker.resistances",
+          "modifiers": [
+            {
+              "target": "attribute.resistance.pyro",
+              "value": 0.4
+            }
+          ]
         }
       ]
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。",
+        "mechanisms": [
+          {
+            "id": "lavawalker.4",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "lavawalker.4",
+                "revision": "1"
+              }
+            ],
+            "reason": "正式条款已采用，数值与适用条件按精炼或件数分别核对。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.lavawalker.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "lavawalker.4",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.35
+            }
+          ],
+          "condition": {
+            "fact": "aura.pyro"
+          }
         }
       ]
     }

@@ -1,0 +1,480 @@
+{
+  "facts": {},
+  "resonances": [
+    {
+      "element": "pyro",
+      "name": "热诚之火",
+      "buffs": [
+        {
+          "id": "resonance.pyro",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.25
+            }
+          ]
+        },
+        {
+          "id": "resonance.pyro.aura",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.auraDurationReduction.cryo",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "hydro",
+      "name": "愈疗之水",
+      "buffs": [
+        {
+          "id": "resonance.hydro",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.25
+            }
+          ]
+        },
+        {
+          "id": "resonance.hydro.aura",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.auraDurationReduction.pyro",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "cryo",
+      "name": "粉碎之冰",
+      "buffs": [
+        {
+          "id": "resonance.cryo",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.any",
+            "inputs": {
+              "term0": {
+                "fact": "aura.cryo"
+              },
+              "term1": {
+                "fact": "aura.frozen"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "id": "resonance.cryo.aura",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.auraDurationReduction.electro",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "dendro",
+      "name": "蔓生之草",
+      "buffs": [
+        {
+          "id": "resonance.dendro",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 50,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        },
+        {
+          "id": "resonance.dendro.first",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "any",
+              "reactionIds": [
+                "burning",
+                "quicken",
+                "bloom",
+                "lunar-bloom"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 30,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        },
+        {
+          "id": "resonance.dendro.second",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "any",
+              "reactionIds": [
+                "aggravate",
+                "spread",
+                "hyperbloom",
+                "burgeon"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 20,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "geo",
+      "name": "坚定之岩",
+      "buffs": [
+        {
+          "id": "resonance.geo.shield",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldStrength",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "id": "resonance.geo.damage",
+          "recipient": "team",
+          "condition": {
+            "fact": "shielded",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "id": "resonance.geo.resistance",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "any",
+              "target": "query"
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "event-actor",
+                "at": "source-event"
+              },
+              "term1": {
+                "fact": "shielded",
+                "of": "event-actor",
+                "at": "source-event"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "group": "resonance.geo.resistance",
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.geo",
+              "value": -0.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "anemo",
+      "name": "迅捷之风",
+      "buffs": [
+        {
+          "id": "resonance.anemo",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.movementSpeed",
+              "value": 0.1
+            },
+            {
+              "target": "attribute.skillCooldownReduction",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "distinct",
+      "name": "交织之护",
+      "buffs": [
+        {
+          "id": "resonance.protectiveCanopy",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.resistance.physical",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.anemo",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.pyro",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": 0.15
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "element": "electro",
+      "name": "强能之雷",
+      "buffs": [
+        {
+          "id": "resonance.electro.aura",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.auraDurationReduction.hydro",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "particles": {
+        "id": "resonance.electro.particles",
+        "element": "electro",
+        "count": 1,
+        "cooldownMs": 5000,
+        "reactions": [
+          "electro-charged",
+          "superconduct",
+          "overloaded",
+          "quicken",
+          "aggravate",
+          "hyperbloom"
+        ],
+        "swirlElements": [
+          "electro"
+        ]
+      }
+    }
+  ],
+  "gleam": {
+    "name": "月兆·满辉",
+    "buffs": [
+      {
+        "id": "public.gleam",
+        "recipient": "team",
+        "condition": {
+          "fact": "fullMoonsign"
+        },
+        "trigger": {
+          "kind": "event",
+          "selector": {
+            "kinds": [
+              "action"
+            ],
+            "categories": [
+              "skill",
+              "burst"
+            ],
+            "actor": "owner",
+            "target": "any"
+          }
+        },
+        "lifetime": {
+          "kind": "interval",
+          "durationMs": 20000,
+          "phase": "after"
+        },
+        "stacking": {
+          "group": "public.gleam",
+          "scope": "team",
+          "policy": "replace",
+          "endOnNewTrigger": true
+        },
+        "appliesTo": {
+          "families": [
+            "lunar-bloom",
+            "lunar-charged",
+            "lunar-crystallize"
+          ]
+        },
+        "modifiers": [
+          {
+            "ownerElements": [
+              "pyro",
+              "electro",
+              "cryo"
+            ],
+            "target": "attribute.reaction.lunar.damageBonus",
+            "value": {
+              "call": "capped.attack-hundred",
+              "inputs": {
+                "basis": {
+                  "stat": "attack"
+                },
+                "rate": 0.009,
+                "cap": 0.36
+              }
+            }
+          },
+          {
+            "ownerElements": [
+              "hydro"
+            ],
+            "target": "attribute.reaction.lunar.damageBonus",
+            "value": {
+              "call": "capped.hp-thousand",
+              "inputs": {
+                "basis": {
+                  "stat": "hp"
+                },
+                "rate": 0.006,
+                "cap": 0.36
+              }
+            }
+          },
+          {
+            "ownerElements": [
+              "geo"
+            ],
+            "target": "attribute.reaction.lunar.damageBonus",
+            "value": {
+              "call": "capped.defense-hundred",
+              "inputs": {
+                "basis": {
+                  "stat": "defense"
+                },
+                "rate": 0.01,
+                "cap": 0.36
+              }
+            }
+          },
+          {
+            "ownerElements": [
+              "anemo",
+              "dendro"
+            ],
+            "target": "attribute.reaction.lunar.damageBonus",
+            "value": {
+              "call": "capped.elementalMastery-hundred",
+              "inputs": {
+                "basis": {
+                  "stat": "elementalMastery"
+                },
+                "rate": 0.0225,
+                "cap": 0.36
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

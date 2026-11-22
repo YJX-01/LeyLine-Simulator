@@ -12,194 +12,116 @@
     4,
     5
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.oceanhuedclam.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.oceanhuedclam",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "oceanhuedclam.static-healingBonus",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.oceanhuedclam.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "oceanhuedclam",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.15
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.healingBonus",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "oceanhuedclam.static-healingBonus",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.oceanhuedclam.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "oceanhuedclam",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.oceanhuedclam"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "oceanhuedclam.static-healingBonus",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.oceanhuedclam.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "oceanhuedclam",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.oceanhuedclam"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.oceanhuedclam"
-  ],
+  "revision": "1",
   "rarity": 5,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "oceanhuedclam.static-healingBonus",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": 0.15
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.oceanhuedclam.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "oceanhuedclam.static-healingBonus",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "unavailable",
+        "evidence": "independently-checked",
+        "reason": "按创建者累计治疗及溢出量，对所选命中结算物理抗性。全队同时一个泡沫，生成冷却按佩戴者计算。范围内多个目标的命中尚未核验。",
+        "mechanisms": [
+          {
+            "id": "oceanhuedclam.bubble",
+            "resolution": "implemented",
+            "ruleIds": [],
+            "reason": "按来源、累计上限、到期与个人冷却结算泡沫。"
+          },
+          {
+            "id": "oceanhuedclam.targets",
+            "resolution": "unavailable",
+            "ruleIds": [],
+            "reason": "尚未按各目标与泡沫的距离选择范围内的所有敌人。"
+          }
+        ]
+      },
+      "hits": [
         {
-          "namespace": "builtin",
-          "id": "coverage.oceanhuedclam.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "oceanhuedclam.bubble",
+          "name": "海染泡沫",
+          "element": "physical",
+          "category": null,
+          "family": "resistance-only",
+          "base": {
+            "template": "oceanhuedclam.bubble-base",
+            "inputs": {
+              "healing": {
+                "fact": "oceanhuedclam.healing"
+              }
+            },
+            "output": "base"
+          },
+          "accumulate": {
+            "eventFact": "healingDone",
+            "hitFact": "oceanhuedclam.healing",
+            "durationMs": 3000,
+            "cooldownMs": 3500
+          }
         }
       ]
+    }
+  ],
+  "facts": {
+    "oceanhuedclam.healing": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "oceanhuedclam.bubble-base",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "healing",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.9,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 27000,
+        "output": "base"
+      }
     }
   ]
 }

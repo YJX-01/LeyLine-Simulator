@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "lohen",
@@ -277,7 +277,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             25,
             25,
@@ -363,143 +363,227 @@
       "hits": [
         {
           "id": "lohen.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "五段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param7",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lohen.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "lohen.outside-masterstroke",
+              "inputs": {
+                "term0": {
+                  "fact": "lohen.masterstroke"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ]
     },
@@ -714,7 +798,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             10,
             10,
@@ -798,7 +882,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             13,
             13,
@@ -945,7 +1029,7 @@
         },
         {
           "id": "param19",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -968,145 +1052,220 @@
       "hits": [
         {
           "id": "lohen.skill.param1",
-          "element": "cryo",
+          "name": "一段伤害",
           "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param2",
-          "element": "cryo",
+          "name": "二段伤害",
           "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param3",
-          "element": "cryo",
+          "name": "三段伤害",
           "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param4",
-          "element": "cryo",
+          "name": "四段伤害",
           "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param5",
-          "element": "cryo",
+          "name": "五段伤害（第1击）",
           "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param6",
-          "element": "cryo",
+          "name": "五段伤害（第2击）",
           "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param7",
-          "element": "cryo",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param9",
-          "element": "cryo",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param10",
-          "element": "cryo",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
         },
         {
           "id": "lohen.skill.param11",
-          "element": "cryo",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
+          "support": "hit-unavailable",
+          "when": [
+            "lohen.masterstroke"
+          ]
+        },
+        {
+          "id": "lohen.skill.param17",
+          "name": "镂骨彻心（单击）",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param17"
+            }
+          ],
+          "when": [
+            "lohen.masterstroke"
+          ],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "inputs": [
+        {
+          "id": "lohen.will",
+          "min": 0,
+          "max": 100,
+          "integer": false,
+          "type": {
+            "kind": "quantity",
+            "unit": "scalar"
+          },
+          "constellationLimits": [
+            {
+              "rank": 1,
+              "max": 300
+            }
+          ]
+        }
+      ],
+      "buffs": [
+        {
+          "id": "lohen.skill.will-factor",
+          "appliesTo": {
+            "hitIds": [
+              "lohen.skill.param17"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "call": "lohen.will-factor",
+                "inputs": {
+                  "input": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "parameter": "param18",
+                        "skill": "lohen.skill"
+                      },
+                      "rate": {
+                        "fact": "lohen.will"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param19"
     },
     {
       "id": "lohen.burst",
@@ -1178,7 +1337,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -1199,7 +1358,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -1222,19 +1381,70 @@
       "hits": [
         {
           "id": "lohen.burst.param1",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "inputs": [
+        {
+          "id": "lohen.will",
+          "min": 0,
+          "max": 100,
+          "integer": false,
+          "type": {
+            "kind": "quantity",
+            "unit": "scalar"
+          },
+          "constellationLimits": [
+            {
+              "rank": 1,
+              "max": 300
+            }
+          ]
+        }
+      ],
+      "buffs": [
+        {
+          "id": "lohen.burst.will-factor",
+          "appliesTo": {
+            "hitIds": [
+              "lohen.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "call": "lohen.will-factor",
+                "inputs": {
+                  "input": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "parameter": "param2",
+                        "skill": "lohen.burst"
+                      },
+                      "rate": {
+                        "fact": "lohen.will"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -1331,5 +1541,46 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lohen.masterstroke": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "lohen.will": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "lohen.outside-masterstroke",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 1,
+        "negate": true
+      }
+    },
+    {
+      "id": "lohen.will-factor",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 1,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

@@ -221,76 +221,101 @@
     155.6,
     186.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.lightbearingmoonshard",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "防御力提高20%。装备者施放元素战技后的5秒内，月结晶反应伤害提升64%。",
+    "mechanisms": [
+      {
+        "id": "lightbearingmoonshard.defensePercent",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.lightbearingmoonshard",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "lightbearingmoonshard.defensePercent",
+            "revision": "1"
+          }
+        ],
+        "reason": "防御力提高20%。装备者施放元素战技后的5秒内，月结晶反应伤害提升64%。"
+      },
+      {
+        "id": "lightbearingmoonshard.lunar-crystallize",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "lightbearingmoonshard",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.lightbearingmoonshard"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+            "id": "lightbearingmoonshard.lunar-crystallize",
+            "revision": "1"
+          }
+        ],
+        "reason": "防御力提高20%。装备者施放元素战技后的5秒内，月结晶反应伤害提升64%。"
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "id": "lightbearingmoonshard.defensePercent",
+      "modifiers": [
+        {
+          "target": "attribute.defensePercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.lightbearingmoonshard",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.lightbearingmoonshard",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "lightbearingmoonshard.lunar-crystallize",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "action"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "categories": [
+            "skill"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 5000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.lunar.damageBonus",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.64,
+              0.8,
+              0.96,
+              1.12,
+              1.28
+            ]
+          }
+        }
+      ],
+      "appliesTo": {
+        "families": [
+          "lunar-crystallize"
+        ]
+      }
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

@@ -1,9 +1,4 @@
 {
-  "source": "https://github.com/yoimiya-kokomi/miao-plugin",
-  "commit": "9d8972c2b060ede67d1b0dc7565abb4fe39b3aa7",
-  "path": "resources/meta-gs/artifact/artis-mark.js",
-  "license": "MIT",
-  "policy": "Nonzero default usefulAttr substat groups; traveler uses explicit per-element artis.js rules, Manekin uses declared calc.js mainAttr. No dynamic per-build thresholds or scoring weights applied.",
   "characters": {
     "芭芭拉": [
       "hp",
@@ -810,16 +805,5 @@
       "critDamage",
       "elementalMastery"
     ]
-  },
-  "supplements": [
-    {
-      "path": "resources/meta-gs/character/旅行者/artis.js"
-    },
-    {
-      "path": "resources/meta-gs/character/奇偶·男性/calc.js"
-    },
-    {
-      "path": "resources/meta-gs/character/奇偶·女性/calc.js"
-    }
-  ]
+  }
 }

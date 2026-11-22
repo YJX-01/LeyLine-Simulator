@@ -221,76 +221,123 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.deathmatch",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "unavailable",
+    "evidence": "adopted",
+    "reason": "攻击与防御按持有者上次刷新时的敌人数结算，离场保留该档。重新登场后的首次刷新时刻需要确认。",
+    "mechanisms": [
+      {
+        "id": "deathmatch.multiple",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.deathmatch",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "deathmatch.multiple",
+            "revision": "1"
+          }
+        ],
+        "reason": "身边至少有2个敌人时，获得16%攻击力提升与16%防御力提升；身边的敌人少于2个时，获得24%攻击力提升。"
+      },
+      {
+        "id": "deathmatch.single",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "deathmatch",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.deathmatch"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+            "id": "deathmatch.single",
+            "revision": "1"
+          }
+        ],
+        "reason": "身边至少有2个敌人时，获得16%攻击力提升与16%防御力提升；身边的敌人少于2个时，获得24%攻击力提升。"
+      },
+      {
+        "id": "deathmatch.refresh",
+        "resolution": "unavailable",
+        "ruleIds": [],
+        "reason": "重新登场后的精确刷新间隔缺少本地实测值。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "deathmatch.multiple",
+      "condition": {
+        "call": "nearby.two",
+        "inputs": {
+          "count": {
+            "fact": "deathmatch.enemiesAtUpdate",
+            "at": "last-observation"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ]
+          }
+        },
+        {
+          "target": "attribute.defensePercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ]
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.deathmatch",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.deathmatch",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "deathmatch.single",
+      "condition": {
+        "call": "condition.not",
+        "inputs": {
+          "term0": {
+            "call": "nearby.two",
+            "inputs": {
+              "count": {
+                "fact": "deathmatch.enemiesAtUpdate",
+                "at": "last-observation"
+              }
+            },
+            "output": "active"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.24,
+              0.3,
+              0.36,
+              0.42,
+              0.48
+            ]
+          }
+        }
+      ]
     }
   ]
 }

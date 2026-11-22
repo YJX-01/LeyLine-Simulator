@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "tighnari",
@@ -367,156 +367,133 @@
       "hits": [
         {
           "id": "tighnari.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param5",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param6",
+          "name": "一段蓄力瞄准射击",
           "element": "dendro",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param7",
+          "name": "花筥箭伤害",
           "element": "dendro",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param8",
+          "name": "藏蕴花矢伤害",
           "element": "dendro",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -570,7 +547,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             8,
             8,
@@ -591,7 +568,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -612,7 +589,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -635,19 +612,17 @@
       "hits": [
         {
           "id": "tighnari.skill.param1",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param4"
     },
     {
       "id": "tighnari.burst",
@@ -719,7 +694,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -740,7 +715,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             40,
             40,
@@ -763,33 +738,31 @@
       "hits": [
         {
           "id": "tighnari.burst.param1",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "缠藤箭伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "tighnari.burst.param2",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "次级缠藤箭伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -803,7 +776,51 @@
       "id": "tighnari.passive2",
       "name": "诸叶辨通",
       "description": "提纳里的每点元素精通，都会使其重击与造生缠藤箭造成的伤害提升0.06%。\n通过这种方式，至多使上述攻击造成的伤害提升60%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "tighnari.scholarly-blade",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "capped.elementalMastery-hundred",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  },
+                  "rate": 0.06,
+                  "cap": 0.6
+                }
+              },
+              "appliesTo": {
+                "categories": [
+                  "charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "capped.elementalMastery-hundred",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  },
+                  "rate": 0.06,
+                  "cap": 0.6
+                }
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "tighnari.burst.param1",
+                  "tighnari.burst.param2"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tighnari.passive3",
@@ -817,7 +834,23 @@
       "rank": 1,
       "name": "由根须断定肇始",
       "description": "提纳里重击的暴击率提高15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "tighnari.beginnings",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,

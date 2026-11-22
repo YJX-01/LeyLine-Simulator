@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "sangonomiyakokomi",
@@ -206,7 +206,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -292,100 +292,83 @@
       "hits": [
         {
           "id": "sangonomiyakokomi.normal.param1",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sangonomiyakokomi.normal.param2",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sangonomiyakokomi.normal.param3",
-          "element": "hydro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sangonomiyakokomi.normal.param4",
-          "element": "hydro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sangonomiyakokomi.normal.param6",
-          "element": "hydro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sangonomiyakokomi.normal.param7",
-          "element": "hydro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "sangonomiyakokomi.normal.param8",
-          "element": "hydro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -439,7 +422,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             423.7063,
             466.08282,
@@ -481,7 +464,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -502,7 +485,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -525,17 +508,25 @@
       "hits": [
         {
           "id": "sangonomiyakokomi.skill.param3",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "波纹伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "sangonomiyakokomi.skill.heal.param1",
+          "detail": 0,
+          "stat": "hp",
+          "rate": "param1",
+          "flat": "param2",
+          "recipient": "on-field"
         }
       ]
     },
@@ -625,7 +616,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             77.03738,
             84.74218,
@@ -688,7 +679,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -709,7 +700,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -730,7 +721,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             70,
             70,
@@ -774,17 +765,85 @@
       "hits": [
         {
           "id": "sangonomiyakokomi.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param8"
+      },
+      "cooldownParameter": "param7",
+      "castWindow": {
+        "fact": "sangonomiyakokomi.garment",
+        "durationParameter": "param6",
+        "cancelOnLeave": true
+      },
+      "buffs": [
+        {
+          "id": "sangonomiyakokomi.garment-damage",
+          "condition": {
+            "fact": "sangonomiyakokomi.garment"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "appliesTo": {
+                "categories": [
+                  "normal"
+                ]
+              },
+              "value": {
+                "call": "sangonomiyakokomi.hp-damage",
+                "inputs": {
+                  "hp": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "skill": "sangonomiyakokomi.burst",
+                    "parameter": "param4"
+                  }
+                },
+                "output": "bonus"
+              }
+            },
+            {
+              "target": "attribute.baseDamageBonus",
+              "appliesTo": {
+                "categories": [
+                  "charged"
+                ]
+              },
+              "value": {
+                "call": "sangonomiyakokomi.hp-damage",
+                "inputs": {
+                  "hp": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "skill": "sangonomiyakokomi.burst",
+                    "parameter": "param5"
+                  }
+                },
+                "output": "bonus"
+              }
+            }
+          ]
+        }
+      ],
+      "heals": [
+        {
+          "id": "sangonomiyakokomi.burst.heal.param2",
+          "detail": 4,
+          "stat": "hp",
+          "rate": "param2",
+          "flat": "param3",
+          "recipient": "party"
         }
       ]
     }
@@ -800,19 +859,89 @@
       "id": "sangonomiyakokomi.passive2",
       "name": "真珠御呗",
       "description": "处于海人化羽的仪来羽衣状态下时，珊瑚宫心海的普通攻击与重击基于生命值上限造成的伤害获得额外提升，提升程度相当于她的治疗加成的15%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "sangonomiyakokomi.song-of-pearls",
+          "condition": {
+            "fact": "sangonomiyakokomi.garment"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "sangonomiyakokomi.hp-damage",
+                "inputs": {
+                  "hp": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "healingBonus"
+                      },
+                      "rate": 0.15
+                    }
+                  }
+                },
+                "output": "bonus"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sangonomiyakokomi.passive3",
       "name": "海祇姬君",
       "description": "队伍中自己的角色游泳消耗的体力降低20%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "sangonomiyakokomi.stamina-swim",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.stamina-swim",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.swim",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sangonomiyakokomi.passive4",
       "name": "庙算无遗",
       "description": "珊瑚宫心海的治疗加成提升25%，暴击率降低100%。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "sangonomiyakokomi.flawless-strategy",
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": 0.25
+            },
+            {
+              "target": "attribute.critRate",
+              "value": -1
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -889,5 +1018,27 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "sangonomiyakokomi.garment": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "sangonomiyakokomi.hp-damage",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "hp",
+        "target": "damage",
+        "attribute": "hp",
+        "rate": "rate",
+        "output": "bonus"
+      }
+    }
+  ]
 }

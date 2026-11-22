@@ -87,5 +87,101 @@
     "tests/unit/engine/calculation/state-machine.test.ts",
     "tools/lib/numeric-audit.mjs"
   ],
-  "evidence": "catalog and explicit-condition software checks; not observed"
+  "evidence": "catalog and explicit-condition software checks; not observed",
+  "fieldGaps": {
+    "vesna.action-timing": {
+      "classification": "缺少本地依据",
+      "fields": [
+        "/actions/0/durationMs",
+        "/actions/0/cancelAfterMs",
+        "/actions/0/hits/0/offsetsMs",
+        "/actions/1/durationMs",
+        "/actions/1/cancelAfterMs",
+        "/actions/1/hits/0/offsetsMs",
+        "/actions/2/durationMs",
+        "/actions/2/cancelAfterMs",
+        "/actions/2/hits/0/offsetsMs",
+        "/actions/2/hits/1/offsetsMs",
+        "/actions/2/hits/2/offsetsMs",
+        "/actions/3/durationMs",
+        "/actions/3/cancelAfterMs",
+        "/actions/3/hits/0/offsetsMs",
+        "/actions/3/hits/1/offsetsMs",
+        "/actions/3/hits/2/offsetsMs",
+        "/actions/3/hits/3/offsetsMs",
+        "/actions/4/durationMs",
+        "/actions/4/cancelAfterMs",
+        "/actions/4/hits/0/offsetsMs",
+        "/actions/4/hits/1/offsetsMs",
+        "/actions/5/durationMs",
+        "/actions/5/cancelAfterMs",
+        "/actions/5/hits/0/offsetsMs",
+        "/actions/5/hits/1/offsetsMs",
+        "/actions/6/durationMs",
+        "/actions/6/cancelAfterMs",
+        "/actions/6/hits/0/offsetsMs",
+        "/actions/6/hits/1/offsetsMs",
+        "/actions/7/durationMs",
+        "/actions/7/cancelAfterMs",
+        "/actions/7/hits/0/offsetsMs",
+        "/actions/7/hits/1/offsetsMs",
+        "/actions/8/durationMs",
+        "/actions/8/cancelAfterMs",
+        "/actions/8/hits/0/offsetsMs",
+        "/actions/8/hits/1/offsetsMs",
+        "/actions/9/durationMs",
+        "/actions/9/cancelAfterMs",
+        "/actions/9/hits/0/offsetsMs",
+        "/actions/9/hits/1/offsetsMs",
+        "/actions/10/durationMs",
+        "/actions/10/cancelAfterMs",
+        "/actions/10/hits/0/offsetsMs",
+        "/actions/10/hits/1/offsetsMs",
+        "/actions/11/durationMs",
+        "/actions/11/cancelAfterMs",
+        "/actions/11/hits/0/offsetsMs",
+        "/actions/11/hits/1/offsetsMs",
+        "/actions/12/durationMs",
+        "/actions/12/cancelAfterMs",
+        "/actions/12/hits/0/offsetsMs",
+        "/actions/12/hits/1/offsetsMs",
+        "/actions/13/durationMs",
+        "/actions/13/cancelAfterMs",
+        "/actions/13/hits/0/offsetsMs",
+        "/actions/14/durationMs",
+        "/actions/14/cancelAfterMs"
+      ],
+      "reason": "缺动作时长、取消帧、各段命中及飞羽发射偏移的逐帧依据。"
+    },
+    "vesna.sword-qi-capacity-and-cost": {
+      "classification": "缺少本地依据",
+      "fields": [
+        "/calculation/bundle/stateMachines/0/states/5/capacity",
+        "/calculation/bundle/stateMachines/0/requirements/0/predicate/bindings/term2/inputs/value/key"
+      ],
+      "reason": "已知六分之一层的单位与发射、入场、爆发的获取量。缺剑气的确切容量及非免费特殊攻击的消耗量。"
+    },
+    "vesna.c6-discipline-and-reuse": {
+      "classification": "缺少本地依据",
+      "fields": [
+        "/calculation/bundle/stateMachines/0/transitions/13",
+        "/calculation/bundle/stateMachines/0/requirements/4"
+      ],
+      "reason": "本地材料未确定六命特殊攻击是否授予戒律，以及窗口内是否可以再次施放。"
+    },
+    "vesna.radiance-priority": {
+      "classification": "待实现与核验",
+      "fields": [
+        "/gaps/3"
+      ],
+      "reason": "可按明确给定的辉映结算。队伍辉映冲突的优先级和反应自动转换仍需核对。"
+    },
+    "vesna.action-recording": {
+      "classification": "缺少本地依据",
+      "fields": [
+        "/gaps/4"
+      ],
+      "reason": "现有授权展柜可验配装。缺含动作、能量、冷却与命中时刻的完整实战记录。"
+    }
+  }
 }

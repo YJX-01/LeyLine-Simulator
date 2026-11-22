@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "aino",
@@ -235,7 +235,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -256,7 +256,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -342,114 +342,95 @@
       "hits": [
         {
           "id": "aino.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param4",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param5",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -519,7 +500,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -542,33 +523,28 @@
       "hits": [
         {
           "id": "aino.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "aino.skill.param2",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "aino.burst",
@@ -618,7 +594,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             14,
             14,
@@ -639,7 +615,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             13.5,
             13.5,
@@ -660,7 +636,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             50,
             50,
@@ -683,19 +659,20 @@
       "hits": [
         {
           "id": "aino.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "水弹伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -709,13 +686,39 @@
       "id": "aino.passive2",
       "name": "结构化功率提升",
       "description": "爱诺元素爆发造成的伤害提升，提升值基于爱诺的元素精通的50%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "aino.talent-flat-bonus",
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "aino.talent-flat",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  },
+                  "rate": 0.5
+                },
+                "output": "bonus"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aino.passive3",
       "name": "月兆祝赐·力极演算",
       "description": "爱诺在队伍中时，队伍的月兆将会上升一级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "moonsignLevel": 1
     },
     {
       "id": "aino.passive4",
@@ -798,5 +801,19 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "aino.talent-flat",
+      "template": {
+        "id": "attribute-conversion",
+        "stat": "elementalMastery",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "bonus",
+        "revision": "1"
+      }
+    }
+  ]
 }

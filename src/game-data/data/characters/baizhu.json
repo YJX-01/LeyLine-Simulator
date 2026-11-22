@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "baizhu",
@@ -231,7 +231,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -317,114 +317,94 @@
       "hits": [
         {
           "id": "baizhu.normal.param1",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param2",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param3",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param4",
-          "element": "dendro",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param5",
-          "element": "dendro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param7",
-          "element": "dendro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param8",
-          "element": "dendro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "baizhu.normal.param9",
-          "element": "dendro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -495,7 +475,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             770.3755,
             847.42377,
@@ -516,7 +496,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -539,17 +519,26 @@
       "hits": [
         {
           "id": "baizhu.skill.param1",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param4",
+      "skillCharges": 1,
+      "heals": [
+        {
+          "id": "baizhu.skill.heal.param2",
+          "detail": 1,
+          "stat": "hp",
+          "rate": "param2",
+          "flat": "param3",
+          "recipient": "party"
         }
       ]
     },
@@ -614,7 +603,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             77.03752,
             84.74235,
@@ -635,7 +624,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             2.5,
             2.5,
@@ -698,7 +687,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             500.74408,
             550.82544,
@@ -740,7 +729,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             14,
             14,
@@ -761,7 +750,7 @@
         },
         {
           "id": "param9",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -782,7 +771,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -805,17 +794,28 @@
       "hits": [
         {
           "id": "baizhu.burst.param7",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param7",
-          "scaling": [
+          "name": "灵气脉技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param10"
+      },
+      "cooldownParameter": "param9",
+      "heals": [
+        {
+          "id": "baizhu.burst.heal.param5",
+          "detail": 2,
+          "stat": "hp",
+          "rate": "param5",
+          "flat": "param6",
+          "recipient": "on-field"
         }
       ]
     }
@@ -845,7 +845,8 @@
       "rank": 1,
       "name": "呿吟至微",
       "description": "太素诊要的可使用次数增加1次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "extraSkillCharge": 1
     },
     {
       "rank": 2,
@@ -868,7 +869,40 @@
       "rank": 4,
       "name": "法古观冥",
       "description": "施放愈气全形论之后的15秒内，队伍中附近的所有角色元素精通提升80点。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "baizhu.c4-cast",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "baizhu.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 80,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,

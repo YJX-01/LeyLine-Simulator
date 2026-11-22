@@ -59,7 +59,7 @@ export function catalogPlugin() {
       if (group === 'characters') lines.push('import {assembleCharacter} from ' + runtimePath('src/character-metadata.mjs'),
         'import curves from ' + runtimePath('data/tables/character-curves.json'), 'import {DATA_VERSION} from ' + runtimePath('src/version.mjs'),
         'const entity = assembleCharacter(source, curves, DATA_VERSION)');
-      else lines.push('const entity = {...source, calculation:{...source.calculation}}');
+      else lines.push('import {assembleEquipment} from ' + runtimePath('src/equipment-metadata.mjs'), 'const entity = assembleEquipment(source)');
       lines.push('const bundle = {...entity.calculation.bundle, requiredFeatures:' + literal(bundle.requiredFeatures) + ', damageFamilies:' + literal(bundle.damageFamilies) + '}',
         'for (const field of Object.keys(shared)) bundle[field] = [...shared[field], ...bundle[field]]',
         'entity.calculation.bundle = bundle', 'export default entity');

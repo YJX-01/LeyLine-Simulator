@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "yoimiya",
@@ -367,157 +367,273 @@
       "hits": [
         {
           "id": "yoimiya.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "yoimiya.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "yoimiya.niwabi"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "yoimiya.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "yoimiya.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "yoimiya.niwabi"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "yoimiya.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "yoimiya.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "yoimiya.niwabi"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "yoimiya.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "yoimiya.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "yoimiya.niwabi"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "yoimiya.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "yoimiya.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "yoimiya.niwabi"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "yoimiya.normal.param6",
-          "element": "physical",
+          "name": "瞄准射击",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yoimiya.normal.param7",
+          "name": "满蓄力瞄准射击",
           "element": "pyro",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yoimiya.normal.param8",
+          "name": "焰硝矢伤害",
           "element": "pyro",
           "category": "charged",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "yoimiya.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "yoimiya.niwabi"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "yoimiya.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yoimiya.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yoimiya.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "yoimiya.normal.param1.pyro",
+          "name": "一段伤害·炽焰箭",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "yoimiya.niwabi"
+          ],
+          "element": "pyro"
+        },
+        {
+          "id": "yoimiya.normal.param2.pyro",
+          "name": "二段伤害·炽焰箭",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "yoimiya.niwabi"
+          ],
+          "element": "pyro"
+        },
+        {
+          "id": "yoimiya.normal.param3.pyro",
+          "name": "三段伤害·炽焰箭",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "yoimiya.niwabi"
+          ],
+          "element": "pyro"
+        },
+        {
+          "id": "yoimiya.normal.param4.pyro",
+          "name": "四段伤害·炽焰箭",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "yoimiya.niwabi"
+          ],
+          "element": "pyro"
+        },
+        {
+          "id": "yoimiya.normal.param5.pyro",
+          "name": "五段伤害·炽焰箭",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "support": "hit-unavailable",
+          "when": [
+            "yoimiya.niwabi"
+          ],
+          "element": "pyro"
         }
       ]
     },
@@ -567,7 +683,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -588,7 +704,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -629,7 +745,31 @@
           ]
         }
       ],
-      "hits": []
+      "hits": [],
+      "buffs": [
+        {
+          "id": "yoimiya.niwabi-multiplier",
+          "appliesTo": {
+            "hitIds": [
+              "yoimiya.normal.param1.pyro",
+              "yoimiya.normal.param2.pyro",
+              "yoimiya.normal.param3.pyro",
+              "yoimiya.normal.param4.pyro",
+              "yoimiya.normal.param5.pyro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "parameter": "param4",
+                "skill": "yoimiya.skill"
+              }
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param3"
     },
     {
       "id": "yoimiya.burst",
@@ -726,7 +866,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -747,7 +887,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -768,7 +908,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -791,33 +931,31 @@
       "hits": [
         {
           "id": "yoimiya.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "yoimiya.burst.param2",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "琉金火光爆炸伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "cooldownParameter": "param5"
     }
   ],
   "passives": [
@@ -914,5 +1052,25 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "yoimiya.niwabi": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "yoimiya.outside-stance",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 1,
+        "negate": true
+      }
+    }
+  ]
 }

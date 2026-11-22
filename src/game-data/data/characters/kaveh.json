@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "kaveh",
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -367,129 +367,143 @@
       "hits": [
         {
           "id": "kaveh.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param5",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param6",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         },
         {
           "id": "kaveh.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaveh.painting",
+            "element": "dendro"
+          }
         }
       ]
     },
@@ -534,7 +548,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -557,19 +571,17 @@
       "hits": [
         {
           "id": "kaveh.skill.param1",
-          "element": "dendro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param2"
     },
     {
       "id": "kaveh.burst",
@@ -624,7 +636,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             12,
             12,
@@ -666,7 +678,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -687,7 +699,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -710,17 +722,46 @@
       "hits": [
         {
           "id": "kaveh.burst.param1",
-          "element": "dendro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "castWindow": {
+        "fact": "kaveh.painting",
+        "durationParameter": "param2",
+        "cancelOnLeave": true
+      },
+      "cooldownParameter": "param4",
+      "buffs": [
+        {
+          "id": "kaveh.painting-bonus",
+          "condition": {
+            "fact": "kaveh.painting"
+          },
+          "recipient": "team",
+          "appliesTo": {
+            "reactionIds": [
+              "bloom"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "parameter": "param3",
+                "skill": "kaveh.burst"
+              }
+            }
+          ]
         }
       ]
     }
@@ -750,7 +791,41 @@
       "rank": 1,
       "name": "高门的谒礼",
       "description": "施放画则巧施后的3秒内，卡维的草元素抗性提升50%，受治疗加成提升25%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaveh.c1-cast",
+          "recipient": "owner",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "kaveh.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 3000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.dendro",
+              "value": 0.5
+            },
+            {
+              "target": "attribute.incomingHealingBonus",
+              "value": 0.25
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -819,5 +894,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kaveh.painting": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

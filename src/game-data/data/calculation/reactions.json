@@ -1,25 +1,8 @@
 {
   "rules": {
-    "schemaVersion": "0.1.0",
+    "schemaVersion": "0.2.0",
     "id": "standard-hit-reactions",
     "revision": "1",
-    "sources": {
-      "levels": {
-        "repository": "KQM-git/TCL",
-        "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-        "path": "src/data/elemental_curves/player.json"
-      },
-      "amplifying": {
-        "repository": "KQM-git/TCL",
-        "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-        "path": "docs/combat-mechanics/_formulas/amplifying.md"
-      },
-      "additive": {
-        "repository": "KQM-git/TCL",
-        "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
-        "path": "docs/combat-mechanics/_formulas/additive.md"
-      }
-    },
     "levelMultipliers": [
       null,
       17.165606,
@@ -126,8 +109,8 @@
     "algorithmRevision": "1"
   },
   "calculation": {
-    "schemaVersion": "0.1.0",
-    "runtimeVersion": "0.1.0",
+    "schemaVersion": "0.2.0",
+    "runtimeVersion": "0.2.0",
     "requiredFeatures": [
       "fixed-templates-v1",
       "formula-call-v1",
@@ -206,11 +189,19 @@
       {
         "id": "kqm.reaction-levels",
         "kind": "definition"
+      },
+      {
+        "id": "public.stellar-attachments",
+        "kind": "definition"
+      },
+      {
+        "id": "content.reaction-blessings",
+        "kind": "definition"
       }
     ],
     "formulas": [
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "additive",
@@ -226,7 +217,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "amplifying",
@@ -242,7 +233,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "anemo-ordinary-reaction",
@@ -258,7 +249,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "cryo-ordinary-reaction",
@@ -279,7 +270,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "dendro-ordinary-reaction",
@@ -300,7 +291,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "electro-ordinary-reaction",
@@ -321,7 +312,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "geo-ordinary-reaction",
@@ -337,7 +328,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "hydro-ordinary-reaction",
@@ -358,7 +349,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-bloom-direct",
@@ -381,7 +372,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-charged-direct",
@@ -404,7 +395,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-charged-individual",
@@ -427,7 +418,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-crystallize-direct",
@@ -450,7 +441,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-crystallize-individual",
@@ -473,7 +464,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "lunar-em-bonus",
@@ -490,7 +481,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "physical-ordinary-reaction",
@@ -506,7 +497,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "pyro-ordinary-reaction",
@@ -527,7 +518,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "reaction-level-multiplier",
@@ -547,7 +538,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-conduct-direct",
@@ -570,7 +561,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-em-bonus",
@@ -587,7 +578,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-swirl-direct",
@@ -610,7 +601,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-swirl-individual",
@@ -633,7 +624,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "transformative",
@@ -649,7 +640,7 @@
         ]
       },
       {
-        "schemaVersion": "0.1.0",
+        "schemaVersion": "0.2.0",
         "identity": {
           "namespace": "builtin",
           "id": "stellar-elevation-factor",
@@ -669,9 +660,267 @@
         "sources": [
           "kqm.web.stellar"
         ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar.attach-coefficient",
+          "revision": "1"
+        },
+        "template": {
+          "id": "count-coefficient",
+          "table": {
+            "namespace": "builtin",
+            "id": "stellar.attach-count",
+            "revision": "1"
+          },
+          "max": 12,
+          "revision": "1"
+        },
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar.radiance-ratio",
+          "revision": "1"
+        },
+        "template": {
+          "id": "radiance-ratio",
+          "revision": "1"
+        },
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "blessing.attack",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "basis",
+          "inputUnit": "attack",
+          "outputUnit": "scalar",
+          "rate": 0.00007,
+          "offset": 0,
+          "threshold": 0,
+          "cap": 0.14,
+          "output": "value"
+        },
+        "sources": [
+          "content.reaction-blessings"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "blessing.lowerAttack",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "basis",
+          "inputUnit": "attack",
+          "outputUnit": "scalar",
+          "rate": 0.000035,
+          "offset": 0,
+          "threshold": 0,
+          "cap": 0.07,
+          "output": "value"
+        },
+        "sources": [
+          "content.reaction-blessings"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "blessing.defense",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "basis",
+          "inputUnit": "defense",
+          "outputUnit": "scalar",
+          "rate": 0.00007,
+          "offset": 0,
+          "threshold": 0,
+          "cap": 0.14,
+          "output": "value"
+        },
+        "sources": [
+          "content.reaction-blessings"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "blessing.mastery",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "basis",
+          "inputUnit": "elementalMastery",
+          "outputUnit": "scalar",
+          "rate": 0.000175,
+          "offset": 0,
+          "threshold": 0,
+          "cap": 0.14,
+          "output": "value"
+        },
+        "sources": [
+          "content.reaction-blessings"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "blessing.stellarMastery",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "basis",
+          "inputUnit": "elementalMastery",
+          "outputUnit": "scalar",
+          "rate": 0.00028,
+          "offset": 0,
+          "threshold": 0,
+          "cap": 0.14,
+          "output": "value"
+        },
+        "sources": [
+          "content.reaction-blessings"
+        ]
+      },
+      {
+        "schemaVersion": "0.2.0",
+        "identity": {
+          "namespace": "builtin",
+          "id": "blessing.hp",
+          "revision": "1"
+        },
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "basis",
+          "inputUnit": "hp",
+          "outputUnit": "scalar",
+          "rate": 0.000002,
+          "offset": 0,
+          "threshold": 0,
+          "cap": 0.07,
+          "output": "value"
+        },
+        "sources": [
+          "content.reaction-blessings"
+        ]
       }
     ],
-    "tables": [],
+    "tables": [
+      {
+        "kind": "integer",
+        "identity": {
+          "namespace": "builtin",
+          "id": "stellar.attach-count",
+          "revision": "1"
+        },
+        "start": 0,
+        "valueType": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "values": [
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.45
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.5
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.55
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.6
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.65
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.7
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.75
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.8
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.85
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.9
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.95
+          },
+          {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 2
+          }
+        ],
+        "sources": [
+          "public.stellar-attachments"
+        ]
+      }
+    ],
     "attributes": [
       {
         "identity": {
@@ -885,6 +1134,366 @@
           }
         },
         "combine": "product",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.stellar-conduct.baseMultiplier",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1
+          }
+        },
+        "combine": "product",
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.stellar-conduct.baseBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.stellar-conduct.damageBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.stellar-conduct.flatBaseBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "damage"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "damage",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.stellar-conduct.elevation",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.stellar-conduct-direct"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.transformative.damageBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.burning.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.25
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.superconduct.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 1.5
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.swirl.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0.6
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.electro-charged.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 2
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.shatter.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 3
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.overloaded.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 2.75
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.bloom.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 2
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.burgeon.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 3
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.hyperbloom.coefficient",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 3
+          }
+        },
+        "combine": "sum",
         "sources": [
           "kqm.web.lunar"
         ]

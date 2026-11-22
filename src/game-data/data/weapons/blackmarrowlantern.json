@@ -221,76 +221,112 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.blackmarrowlantern",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "绽放反应造成的伤害提升48%，月绽放反应伤害提升12%。月兆·满辉：月绽放反应伤害额外提升12%。",
+    "mechanisms": [
+      {
+        "id": "blackmarrowlantern.bloom",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.blackmarrowlantern",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "blackmarrowlantern.bloom",
+            "revision": "1"
+          }
+        ],
+        "reason": "绽放反应造成的伤害提升48%，月绽放反应伤害提升12%。月兆·满辉：月绽放反应伤害额外提升12%。"
+      },
+      {
+        "id": "blackmarrowlantern.lunar-bloom",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "blackmarrowlantern",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+            "id": "blackmarrowlantern.lunar-bloom",
+            "revision": "1"
           },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.blackmarrowlantern"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+          {
+            "namespace": "builtin",
+            "id": "blackmarrowlantern.lunar-bloom.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "绽放反应造成的伤害提升48%，月绽放反应伤害提升12%。月兆·满辉：月绽放反应伤害额外提升12%。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "blackmarrowlantern.bloom",
+      "appliesTo": {
+        "families": [
+          "transformative"
+        ],
+        "reactionIds": [
+          "bloom"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.transformative.damageBonus",
+          "value": {
+            "refinement": [
+              0.48,
+              0.6,
+              0.72,
+              0.84,
+              0.96
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.blackmarrowlantern",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.blackmarrowlantern",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "blackmarrowlantern.lunar-bloom",
+      "appliesTo": {
+        "families": [
+          "lunar-bloom"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.lunar.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          }
+        },
+        {
+          "target": "attribute.reaction.lunar.damageBonus",
+          "value": {
+            "refinement": [
+              0.12,
+              0.15,
+              0.18,
+              0.21,
+              0.24
+            ],
+            "unit": "scalar"
+          },
+          "condition": {
+            "fact": "fullMoonsign"
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "furina",
@@ -239,7 +239,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -344,7 +344,7 @@
         },
         {
           "id": "param11",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -365,7 +365,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -388,114 +388,107 @@
       "hits": [
         {
           "id": "furina.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param5",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param7",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param8",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.normal.param9",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "furina.normal.arkhe",
+          "name": "灵息之刺/流涌之刃伤害",
+          "element": "hydro",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param10"
+            }
+          ],
+          "origin": "triggered",
           "support": "hit-unavailable"
         }
       ]
@@ -573,7 +566,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             30,
             30,
@@ -741,7 +734,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             462.2253,
             508.45425,
@@ -762,7 +755,7 @@
         },
         {
           "id": "param11",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -785,59 +778,58 @@
       "hits": [
         {
           "id": "furina.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "荒性泡沫伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.skill.param3",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "乌瑟勋爵伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.skill.param4",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "海薇玛夫人伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "furina.skill.param5",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param5",
-          "scaling": [
+          "name": "谢贝蕾妲小姐伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "cooldownParameter": "param11",
+      "heals": [
+        {
+          "id": "furina.skill.heal.param9",
+          "detail": 8,
+          "stat": "hp",
+          "rate": "param9",
+          "flat": "param10",
+          "recipient": "on-field"
         }
       ]
     },
@@ -902,7 +894,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -944,7 +936,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             300,
             300,
@@ -1007,7 +999,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -1028,7 +1020,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -1051,19 +1043,101 @@
       "hits": [
         {
           "id": "furina.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "hp",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "furina.fanfare",
+          "recipient": "team",
+          "trigger": "cast",
+          "duration": {
+            "parameter": "param2"
+          },
+          "stacking": {
+            "policy": "replace",
+            "scope": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "fact": "furina.fanfarePoints"
+                  },
+                  "rate": {
+                    "skill": "furina.burst",
+                    "parameter": "param5"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.incomingHealingBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "fact": "furina.fanfarePoints"
+                  },
+                  "rate": {
+                    "skill": "furina.burst",
+                    "parameter": "param6"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.hpPercent",
+              "recipient": "owner",
+              "constellation": 2,
+              "value": {
+                "call": "furina.overflow-health",
+                "inputs": {
+                  "basis": {
+                    "fact": "furina.excessFanfare"
+                  },
+                  "rate": 0.0035,
+                  "cap": 1.4
+                }
+              }
+            }
+          ],
+          "counter": {
+            "fact": "furina.fanfarePoints",
+            "change": "hpRatioChange",
+            "perRatio": 100,
+            "cap": {
+              "parameter": "param4"
+            },
+            "bonuses": [
+              {
+                "constellation": 1,
+                "initial": 150,
+                "extraCap": 100
+              },
+              {
+                "constellation": 2,
+                "gainFactor": 3.5
+              }
+            ],
+            "overflowFact": "furina.excessFanfare"
+          }
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param8"
+      },
+      "cooldownParameter": "param7"
     }
   ],
   "passives": [
@@ -1160,5 +1234,33 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "furina.fanfarePoints": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      }
+    },
+    "furina.excessFanfare": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "furina.overflow-health",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "scalar",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

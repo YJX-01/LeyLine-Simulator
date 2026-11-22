@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "nicole",
@@ -11,7 +11,8 @@
     "element": "pyro",
     "weaponType": "WEAPON_CATALYST",
     "rarity": 5,
-    "gameId": 10000131
+    "gameId": 10000131,
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -205,7 +206,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -291,100 +292,83 @@
       "hits": [
         {
           "id": "nicole.normal.param1",
-          "element": "pyro",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nicole.normal.param2",
-          "element": "pyro",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nicole.normal.param3",
-          "element": "pyro",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nicole.normal.param4",
-          "element": "pyro",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param4",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nicole.normal.param6",
-          "element": "pyro",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nicole.normal.param7",
-          "element": "pyro",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "nicole.normal.param8",
-          "element": "pyro",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -470,7 +454,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1386.6697,
             1525.356,
@@ -491,7 +475,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -533,7 +517,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "attack",
           "values": [
             330,
             360,
@@ -554,7 +538,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -575,7 +559,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             16,
             16,
@@ -598,19 +582,54 @@
       "hits": [
         {
           "id": "nicole.skill.param1",
-          "element": "pyro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "nicole.kenosis",
+          "trigger": "cast",
+          "duration": {
+            "parameter": "param7"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "recipient",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "call": "capped.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack",
+                    "excludeCurrentEffect": true
+                  },
+                  "rate": {
+                    "skill": "nicole.skill",
+                    "parameter": "param5"
+                  },
+                  "cap": {
+                    "skill": "nicole.skill",
+                    "parameter": "param6",
+                    "unit": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param8"
     },
     {
       "id": "nicole.burst",
@@ -689,7 +708,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "count",
           "values": [
             4,
             4,
@@ -710,7 +729,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -731,7 +750,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -752,7 +771,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -775,19 +794,41 @@
       "hits": [
         {
           "id": "nicole.burst.param1",
-          "element": "pyro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "nicole.burst.projection",
+          "name": "奥迹造影",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "origin": "triggered",
+          "coordinated": {
+            "dealer": "on-field",
+            "readyFact": "nicole.projectionReady",
+            "cooldownMs": 3000,
+            "window": {
+              "duration": "param4",
+              "charges": "param3"
+            }
+          },
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "cooldownParameter": "param5"
     }
   ],
   "passives": [
@@ -815,13 +856,57 @@
       "rank": 1,
       "name": "「不要惧怕，蒙眷爱的人之子呀」",
       "description": "队伍中自己的当前场上角色攻击命中敌人时，将会额外召唤出特殊的「奥迹造影·合一」，对敌人进行协同攻击，依据该角色的元素类型，造成对应元素范围伤害，该伤害相当于该角色攻击力的600%，并视为由该角色造成的伤害。\n该效果每6秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "nicole.c1.unity",
+          "skill": "nicole.burst",
+          "name": "奥迹造影·合一",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 6
+            }
+          ],
+          "coordinated": {
+            "dealer": "on-field",
+            "readyFact": "nicole.unityReady",
+            "cooldownMs": 6000
+          },
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "「我要教导你，指引你应走的路」",
       "description": "元素战技**圣言默示·未现之光**的效果获得强化：**虚己之赐**还会额外提升300点攻击力（不计入该效果的攻击力加成上限），**圣祝之引**还会依据角色的元素类型，使附近敌人的对应元素抗性降低25%，同元素类型的元素抗性降低效果不能叠加。\n此外，尼可施放元素战技圣言默示·未现之光时，也会为附近的当前场上角色赋予炽光护盾。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nicole.kenosis-c2",
+          "trigger": {
+            "cast": "nicole.skill"
+          },
+          "duration": {
+            "parameter": "param7"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "recipient",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "amount": 300,
+                "unit": "attack"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -884,5 +969,19 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "nicole.projectionReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "nicole.unityReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

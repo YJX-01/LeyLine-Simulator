@@ -12,124 +12,114 @@
     3,
     4
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.set.tinymiracle",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tinymiracle.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tinymiracle",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.tinymiracle"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.tinymiracle.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tinymiracle",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.tinymiracle"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.tinymiracle"
-  ],
+  "revision": "1",
   "rarity": 4,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "所有元素抗性提高20%。",
+        "mechanisms": [
+          {
+            "id": "tinymiracle.resistances",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances.1",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances.2",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances.3",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances.4",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances.5",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.resistances.6",
+                "revision": "1"
+              }
+            ],
+            "reason": "所有元素抗性提高20%。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.tinymiracle.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "tinymiracle.resistances",
+          "modifiers": [
+            {
+              "target": "attribute.resistance.pyro",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.resistance.anemo",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": 0.2
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": 0.2
+            }
+          ]
         }
       ]
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.tinymiracle.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "unavailable",
+        "evidence": "adopted",
+        "reason": "该件数全部相关机制尚未闭合。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "unavailable",
+            "ruleIds": [],
+            "reason": "该件数全部相关机制尚未闭合。"
+          }
+        ]
+      }
     }
   ]
 }

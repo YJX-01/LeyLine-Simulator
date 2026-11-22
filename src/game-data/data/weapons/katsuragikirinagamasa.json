@@ -221,76 +221,47 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.katsuragikirinagamasa",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.katsuragikirinagamasa",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "katsuragikirinagamasa",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.katsuragikirinagamasa"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.katsuragikirinagamasa",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "unavailable",
+    "evidence": "adopted",
+    "reason": "武器全部相关伤害机制尚未闭合。",
+    "mechanisms": [
+      {
+        "id": "explicit-output-scope",
+        "resolution": "unavailable",
+        "ruleIds": [],
+        "reason": "武器全部相关伤害机制尚未闭合。"
+      }
+    ]
+  },
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.katsuragikirinagamasa",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "katsuragikirinagamasa.skill.damageBonus",
+      "appliesTo": {
+        "categories": [
+          "skill"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.damageBonus",
+          "value": {
+            "refinement": [
+              0.06,
+              0.075,
+              0.09,
+              0.105,
+              0.12
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "maxRefinement": 5
 }

@@ -1,0 +1,72 @@
+{
+  "artifact-rolls": {
+    "source": {
+      "repository": "Rafs-kk/LunaGC-6.6-res",
+      "commit": "b0501c5d89767ead5f647869a2412521447f7682",
+      "path": "ExcelBinOutput/ReliquaryAffixExcelConfigData.json"
+    }
+  },
+  "artifact-set-short-names": {
+    "source": {
+      "url": "https://wiki.biligame.com/ys/黑话#XX套",
+      "accessedAt": "2026-11-08",
+      "section": "圣遗物相关 / XX套",
+      "method": "逐项核对社区简称；优先不歧义的名称，优先两字简称；没有已核对简称时使用全称。",
+      "additionalReference": "https://warpeas.github.io/genshin-artifact-lock/",
+      "fourStarReferences": [
+        "https://www.miyoushe.com/ys/article/36757199",
+        "https://www.taptap.cn/moment/400075122267918272",
+        "https://www.bilibili.com/video/BV1xf4y1G7hB/"
+      ],
+      "fourStarAccessedAt": "2026-11-09",
+      "userOverrides": "保留用户手动指定的shortName，包含尾部套字的名称也按原值使用。"
+    }
+  },
+  "catalog-release-metadata": {
+    "source": {
+      "repository": "theBowja/genshin-db",
+      "commit": "8e5badd60b5d894284ccc927a56c9683529d2592"
+    }
+  },
+  "effective-roll-basis": {
+    "source": "https://github.com/yoimiya-kokomi/miao-plugin",
+    "commit": "9d8972c2b060ede67d1b0dc7565abb4fe39b3aa7",
+    "path": "models/artis/ArtisMarkCfg.js",
+    "policy": "Fallback white stats: hp 14000, character attack 230 plus weapon attack 520, defense 700. Actual created build/weapon white stats take precedence and are captured with combinations."
+  },
+  "character-effective-stats": {
+    "source": "https://github.com/yoimiya-kokomi/miao-plugin",
+    "commit": "9d8972c2b060ede67d1b0dc7565abb4fe39b3aa7",
+    "path": "resources/meta-gs/artifact/artis-mark.js",
+    "supplements": [
+      {
+        "path": "resources/meta-gs/character/旅行者/artis.js"
+      },
+      {
+        "path": "resources/meta-gs/character/奇偶·男性/calc.js"
+      },
+      {
+        "path": "resources/meta-gs/character/奇偶·女性/calc.js"
+      }
+    ],
+    "policy": "Nonzero default usefulAttr substat groups; traveler uses explicit per-element artis.js rules, Manekin uses declared calc.js mainAttr. No dynamic per-build thresholds or scoring weights applied.",
+    "license": "MIT"
+  },
+  "reaction-rules": {
+    "levels": {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "src/data/elemental_curves/player.json"
+    },
+    "amplifying": {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/_formulas/amplifying.md"
+    },
+    "additive": {
+      "repository": "KQM-git/TCL",
+      "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "docs/combat-mechanics/_formulas/additive.md"
+    }
+  }
+}

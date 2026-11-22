@@ -221,76 +221,140 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.emberwell",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "触发元素反应的12秒内，装备者的攻击力提升16%；触发星烁反应的12秒内，装备者造成的星烁反应伤害提升16%。装备者处于队伍后台时，依然能触发上述效果。",
+    "mechanisms": [
+      {
+        "id": "emberwell.reaction",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.emberwell",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "emberwell.reaction",
+            "revision": "1"
+          }
+        ],
+        "reason": "触发元素反应的12秒内，装备者的攻击力提升16%；触发星烁反应的12秒内，装备者造成的星烁反应伤害提升16%。装备者处于队伍后台时，依然能触发上述效果。"
+      },
+      {
+        "id": "emberwell.stellar",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "emberwell",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+            "id": "emberwell.stellar",
+            "revision": "1"
           },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.emberwell"
+          {
+            "namespace": "builtin",
+            "id": "emberwell.stellar.1",
+            "revision": "1"
+          }
+        ],
+        "reason": "触发元素反应的12秒内，装备者的攻击力提升16%；触发星烁反应的12秒内，装备者造成的星烁反应伤害提升16%。装备者处于队伍后台时，依然能触发上述效果。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
+    {
+      "id": "emberwell.reaction",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "reaction"
           ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+          "actor": "owner",
+          "target": "enemy"
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 12000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ]
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.emberwell",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.emberwell",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "emberwell.stellar",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "reaction"
+          ],
+          "actor": "owner",
+          "target": "enemy",
+          "reactionIds": [
+            "stellar-conduct",
+            "stellar-swirl"
+          ]
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 12000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.reaction.stellar-conduct.damageBonus",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ]
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          }
+        },
+        {
+          "target": "attribute.reaction.stellar-swirl.damageBonus",
+          "value": {
+            "unit": "scalar",
+            "refinement": [
+              0.16,
+              0.2,
+              0.24,
+              0.28,
+              0.32
+            ]
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          }
+        }
+      ]
     }
   ]
 }

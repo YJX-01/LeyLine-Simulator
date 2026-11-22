@@ -18,7 +18,7 @@ export function catalogList(inventory = catalogInventory()) {
     }),
     weapons: inventory.weapons.map(id => {
       const w = read('weapons/' + id + '.json');
-      return { id, name: w.name, weaponType: w.weaponType, rarity: w.rarity, ...supported(w.calculation.bundle.coverage.some(s => s.resolution === 'complete')) };
+      return { id, name: w.name, weaponType: w.weaponType, rarity: w.rarity, ...supported(w.support.resolution === 'complete') };
     }),
     sets: inventory.sets.map(id => {
       const { name, rarity, rarities, slots } = read('artifact-sets/' + id + '.json');
@@ -30,7 +30,9 @@ export function catalogList(inventory = catalogInventory()) {
 export async function createRuntimeCatalog() {
   const schemas = await loadContentSchema(), engine = await loadContentSchema('/src/engine/src/index.ts');
   const inventory = catalogInventory(), library = readCalculationLibrary(readCalculationData);
-  const linker = createContentLinker({ schemas, ...engine, library });
+  const compiled = engine.compileCalculation(library);
+  if (!compiled.ok) throw new Error(JSON.stringify(compiled.diagnostics));
+  const linker = createContentLinker({ schemas, ...engine, library: compiled.program });
   async function get(group, id) {
     if (!inventory[group]?.includes(id)) throw new Error('Undefined catalog entry: ' + group + '/' + id);
     const file = new URL(folders[group] + '/' + id + '.json', data);
@@ -39,15 +41,16 @@ export async function createRuntimeCatalog() {
       return linker.character(readCalculationData(file));
     }
     const raw = readContentSource(file);
-    if (group === 'weapons') return linker.weapon(raw);
-    if (group === 'sets') return linker.set(raw);
+    if (group === 'weapons') return linker.weapon(readCalculationData(file));
+    if (group === 'sets') return linker.set(readCalculationData(file));
     const actions = schemas.characterActionsDefinitionSchema.parse(raw);
-    const checked = engine.compileCharacterActions(actions, await get('characters', actions.character.id), library);
-    if (!checked.ok) throw new Error(JSON.stringify(checked.diagnostics));
-    const closure = engine.collectCalculationRoots(checked.bundle, { roots: [actions.calculation.stateMachine],
+    const closure = engine.collectCalculationRoots(compiled.program, { roots: [actions.calculation.stateMachine],
       sourceIds: [...new Set([...actions.sources, ...actions.actions.flatMap(a => a.sources), ...actions.gaps.flatMap(g => g.sources)])], families: [] });
     if (!closure.ok) throw new Error(JSON.stringify(closure.diagnostics));
-    return { ...actions, calculation: { ...actions.calculation, bundle: closure.bundle } };
+    const linked = { ...actions, calculation: { ...actions.calculation, bundle: closure.bundle } };
+    const checked = engine.compileCharacterActions(linked, await get('characters', actions.character.id));
+    if (!checked.ok) throw new Error(JSON.stringify(checked.diagnostics));
+    return linked;
   }
   return { inventory, library, get };
 }

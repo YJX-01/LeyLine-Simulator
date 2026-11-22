@@ -219,81 +219,22 @@
     35,
     46.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.silversword",
-          "kind": "definition"
-        },
-        {
-          "id": "content.weapon.silversword.explicit-scope",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.silversword",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "silversword",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。",
-          "sources": [
-            "content.weapon.silversword",
-            "content.weapon.silversword.explicit-scope"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "irrelevant",
-              "ruleIds": [],
-              "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.silversword",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
-    {
-      "namespace": "builtin",
-      "id": "coverage.weapon.silversword",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-    }
-  ]
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。",
+    "mechanisms": [
+      {
+        "id": "explicit-output-scope",
+        "resolution": "irrelevant",
+        "ruleIds": [],
+        "reason": "在明确的一次伤害输出范围内不增加伤害乘区；能量、暴击触发产球与冷却刷新不在此证书内，动作与伤害必须明确提供。"
+      }
+    ]
+  },
+  "maxRefinement": 1
 }

@@ -1,3 +1,4 @@
+import { assembleEquipment } from '../../src/game-data/src/equipment-metadata.mjs';
 import { readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
@@ -28,6 +29,7 @@ export function catalogInventory() {
 export function readCalculationData(path) {
   const file = path instanceof URL ? fileURLToPath(path) : resolve(root, path);
   const raw = readContentSource(file);
+  if (raw.kind === 'weapon-definition' || raw.kind === 'artifact-set-definition') return assembleEquipment(raw);
   if (raw.kind !== 'character-definition') return raw;
   const curves = readContentSource(resolve(root, 'src/game-data/data/tables/character-curves.json'));
   return assembleCharacter(raw, curves, DATA_VERSION);

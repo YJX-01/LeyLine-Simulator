@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "jean",
@@ -256,7 +256,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -342,171 +342,103 @@
       "hits": [
         {
           "id": "jean.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param1.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param2.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param3.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param4.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param5.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param6.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param8.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param9.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.normal.param10.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
@@ -562,7 +494,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             20,
             20,
@@ -583,7 +515,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -604,7 +536,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -627,24 +559,17 @@
       "hits": [
         {
           "id": "jean.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [
-            {
-              "id": "jean.skill.param1.damage",
-              "family": "ordinary"
-            }
-          ],
           "support": "hit-complete"
         }
-      ]
+      ],
+      "cooldownParameter": "param4"
     },
     {
       "id": "jean.burst",
@@ -745,7 +670,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             1540.3248,
             1694.3788,
@@ -787,7 +712,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             154.03249,
             169.43788,
@@ -808,7 +733,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -829,7 +754,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -852,28 +777,24 @@
       "hits": [
         {
           "id": "jean.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "爆发伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.burst.param1.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "jean.burst.param2",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param2",
+          "name": "出入领域伤害",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
           "snapshot": {
             "sourceSkillId": "jean.burst",
             "attributes": [
@@ -883,19 +804,30 @@
               "anemoBonus"
             ]
           },
-          "scaling": [
-            {
-              "stat": "attack",
-              "parameter": "param2"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "jean.burst.param2.damage",
-              "family": "ordinary"
-            }
-          ],
           "support": "hit-complete"
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param8"
+      },
+      "cooldownParameter": "param7",
+      "heals": [
+        {
+          "id": "jean.burst.heal.param3",
+          "detail": 2,
+          "stat": "attack",
+          "rate": "param3",
+          "flat": "param4",
+          "recipient": "party",
+          "trigger": "cast"
+        },
+        {
+          "id": "jean.burst.heal.param5",
+          "detail": 3,
+          "stat": "attack",
+          "rate": "param5",
+          "flat": "param6",
+          "recipient": "on-field"
         }
       ]
     }

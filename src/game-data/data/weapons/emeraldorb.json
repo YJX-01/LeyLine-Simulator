@@ -221,76 +221,90 @@
     97.3,
     116.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.emeraldorb",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.emeraldorb",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "emeraldorb",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.emeraldorb"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.emeraldorb",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "unavailable",
+    "evidence": "adopted",
+    "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。",
+    "mechanisms": [
+      {
+        "id": "emeraldorb.after-trigger",
+        "resolution": "unavailable",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "emeraldorb.after-trigger",
+            "revision": "1"
+          }
+        ],
+        "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.emeraldorb",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "emeraldorb.after-trigger",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "reaction"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "reactionIds": [
+            "vaporize",
+            "electro-charged",
+            "freeze",
+            "bloom",
+            "lunar-charged",
+            "lunar-bloom"
+          ],
+          "reactionElements": {
+            "swirl": [
+              "hydro"
+            ]
+          }
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 12000,
+        "phase": "after"
+      },
+      "condition": {
+        "call": "condition.any",
+        "inputs": {
+          "term0": {
+            "fact": "onField",
+            "at": "source-event"
+          },
+          "term1": {
+            "fact": "weaponTriggeredOffField",
+            "at": "source-event"
+          }
+        },
+        "output": "active"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.2,
+              0.25,
+              0.3,
+              0.35,
+              0.4
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ]
 }

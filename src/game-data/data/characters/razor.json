@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "razor",
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -367,128 +367,106 @@
       "hits": [
         {
           "id": "razor.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param5",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param6",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "razor.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -596,7 +574,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             5,
             5,
@@ -617,7 +595,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             18,
             18,
@@ -638,7 +616,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -659,7 +637,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -682,38 +660,22 @@
       "hits": [
         {
           "id": "razor.skill.param1",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "点按技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "razor.skill.param1.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
         },
         {
           "id": "razor.skill.param2",
-          "element": "electro",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "长按技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
-            }
-          ],
-          "outputs": [
-            {
-              "id": "razor.skill.param2.damage",
-              "family": "ordinary"
             }
           ],
           "support": "hit-complete"
@@ -844,7 +806,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -865,7 +827,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -886,7 +848,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -909,19 +871,152 @@
       "hits": [
         {
           "id": "razor.burst.param1",
-          "element": "electro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "爆发伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "razor.burst.wolf.1",
+          "name": "狼魂·一段伤害",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param1",
+                    "skill": "razor.normal"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "razor.burst"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "element": "electro",
+          "category": "burst",
+          "origin": "triggered",
+          "when": [
+            "razor.wolfWithin"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "razor.burst.wolf.2",
+          "name": "狼魂·二段伤害",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param2",
+                    "skill": "razor.normal"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "razor.burst"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "element": "electro",
+          "category": "burst",
+          "origin": "triggered",
+          "when": [
+            "razor.wolfWithin"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "razor.burst.wolf.3",
+          "name": "狼魂·三段伤害",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param3",
+                    "skill": "razor.normal"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "razor.burst"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "element": "electro",
+          "category": "burst",
+          "origin": "triggered",
+          "when": [
+            "razor.wolfWithin"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "razor.burst.wolf.4",
+          "name": "狼魂·四段伤害",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param4",
+                    "skill": "razor.normal"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "razor.burst"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "element": "electro",
+          "category": "burst",
+          "origin": "triggered",
+          "when": [
+            "razor.wolfWithin"
+          ],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -941,7 +1036,25 @@
       "id": "razor.passive3",
       "name": "奔狼",
       "description": "队伍中自己的角色冲刺消耗的体力降低20%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "razor.stamina-sprint",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.stamina-sprint",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.sprint",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1046,5 +1159,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "razor.wolfWithin": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

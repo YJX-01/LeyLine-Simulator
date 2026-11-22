@@ -12,194 +12,329 @@
     3,
     4
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "combat-binding-v1",
-        "effect-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "genshin-db.defenderswill.static",
-          "kind": "definition"
-        },
-        {
-          "id": "content.set.defenderswill",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "defenderswill.static-defensePercent",
-            "revision": "1"
-          },
-          "sources": [
-            "genshin-db.defenderswill.static"
-          ],
-          "activation": {
-            "set": {
-              "id": "defenderswill",
-              "pieces": 2
-            }
-          },
-          "recipient": {
-            "role": "owner"
-          },
-          "trigger": {
-            "kind": "permanent"
-          },
-          "lifetime": {
-            "kind": "permanent"
-          },
-          "value": {
-            "kind": "constant",
-            "value": {
-              "kind": "quantity",
-              "unit": "scalar",
-              "value": 0.3
-            }
-          },
-          "target": {
-            "kind": "attribute",
-            "attribute": {
-              "namespace": "builtin",
-              "id": "attribute.defensePercent",
-              "revision": "1"
-            }
-          },
-          "appliesTo": {},
-          "application": "always",
-          "priority": 0,
-          "stacking": {
-            "group": "defenderswill.static-defensePercent",
-            "scope": "owner",
-            "policy": "add",
-            "maxStacks": 1,
-            "retain": "latest"
-          }
-        }
-      ],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.defenderswill.2",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "defenderswill",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 2
-          },
-          "resolution": "complete",
-          "evidence": "adopted",
-          "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
-          "sources": [
-            "content.set.defenderswill"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "implemented",
-              "ruleIds": [
-                {
-                  "namespace": "builtin",
-                  "id": "defenderswill.static-defensePercent",
-                  "revision": "1"
-                }
-              ],
-              "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
-            }
-          ]
-        },
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.defenderswill.4",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "defenderswill",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment",
-            "pieces": 4
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "该件数全部相关机制尚未闭合。",
-          "sources": [
-            "content.set.defenderswill"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "该件数全部相关机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "artifact-set-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.set.defenderswill"
-  ],
+  "revision": "1",
   "rarity": 4,
   "effects": [
     {
       "pieces": 2,
-      "ruleIds": [
+      "buffs": [
         {
-          "namespace": "builtin",
           "id": "defenderswill.static-defensePercent",
-          "revision": "1"
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": 0.3
+            }
+          ]
         }
       ],
-      "coverageRefs": [
-        {
-          "namespace": "builtin",
-          "id": "coverage.defenderswill.2",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-        }
-      ]
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "已采用该件数的共同效果，按实际装备件数解锁。",
+        "mechanisms": [
+          {
+            "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.static-defensePercent",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用该件数的共同效果，按实际装备件数解锁。"
+          }
+        ]
+      }
     },
     {
       "pieces": 4,
-      "ruleIds": [],
-      "coverageRefs": [
+      "support": {
+        "resolution": "complete",
+        "evidence": "adopted",
+        "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。",
+        "mechanisms": [
+          {
+            "id": "defenderswill.resistance.pyro",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.pyro",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          },
+          {
+            "id": "defenderswill.resistance.hydro",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.hydro",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          },
+          {
+            "id": "defenderswill.resistance.cryo",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.cryo",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          },
+          {
+            "id": "defenderswill.resistance.electro",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.electro",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          },
+          {
+            "id": "defenderswill.resistance.anemo",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.anemo",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          },
+          {
+            "id": "defenderswill.resistance.geo",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.geo",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          },
+          {
+            "id": "defenderswill.resistance.dendro",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "defenderswill.resistance.dendro",
+                "revision": "1"
+              }
+            ],
+            "reason": "队伍里每有不同一种元素类型的自己的角色，自身获得30%相应的元素抗性。"
+          }
+        ]
+      },
+      "buffs": [
         {
-          "namespace": "builtin",
-          "id": "coverage.defenderswill.4",
-          "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+          "id": "defenderswill.resistance.pyro",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "pyro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.pyro",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "defenderswill.resistance.hydro",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "hydro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.hydro",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "defenderswill.resistance.cryo",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "cryo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.cryo",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "defenderswill.resistance.electro",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "electro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.electro",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "defenderswill.resistance.anemo",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "anemo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.anemo",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "defenderswill.resistance.geo",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "geo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.geo",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "defenderswill.resistance.dendro",
+          "condition": {
+            "call": "defenderswill.party-element",
+            "inputs": {
+              "members": {
+                "teamCount": {
+                  "elements": [
+                    "dendro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false,
+                  "cap": 1
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.dendro",
+              "value": 0.3
+            }
+          ]
         }
       ]
+    }
+  ],
+  "formulas": [
+    {
+      "id": "defenderswill.party-element",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "members",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 4,
+        "unit": "count"
+      }
     }
   ]
 }

@@ -219,86 +219,22 @@
     35,
     46.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.oldmercspal",
-          "kind": "definition"
-        },
-        {
-          "id": "content.oldmercspal.review-source-2",
-          "kind": "definition"
-        },
-        {
-          "id": "content.oldmercspal.review-source-3",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.oldmercspal",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "oldmercspal",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "complete",
-          "evidence": "independently-checked",
-          "reason": "武器原始资料无被动效果，直接伤害仅使用其基础成长。",
-          "sources": [
-            "content.weapon.oldmercspal",
-            "content.oldmercspal.review-source-2",
-            "content.oldmercspal.review-source-3"
-          ],
-          "mechanisms": [
-            {
-              "id": "no-passive",
-              "resolution": "irrelevant",
-              "ruleIds": [],
-              "reason": "已对照原始武器资料，未声明被动。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.oldmercspal",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
-    {
-      "namespace": "builtin",
-      "id": "coverage.weapon.oldmercspal",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-    }
-  ]
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "independently-checked",
+    "reason": "武器原始资料无被动效果，直接伤害仅使用其基础成长。",
+    "mechanisms": [
+      {
+        "id": "no-passive",
+        "resolution": "irrelevant",
+        "ruleIds": [],
+        "reason": "已对照原始武器资料，未声明被动。"
+      }
+    ]
+  },
+  "maxRefinement": 1
 }

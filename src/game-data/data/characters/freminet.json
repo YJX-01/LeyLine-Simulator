@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "freminet",
@@ -260,7 +260,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "staminaPerSecond",
           "values": [
             40,
             40,
@@ -281,7 +281,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             5,
             5,
@@ -367,128 +367,106 @@
       "hits": [
         {
           "id": "freminet.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param5",
-          "element": "physical",
+          "name": "重击循环伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param6",
-          "element": "physical",
+          "name": "重击终结伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -776,7 +754,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -797,7 +775,7 @@
         },
         {
           "id": "param13",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             9,
             9,
@@ -820,159 +798,131 @@
       "hits": [
         {
           "id": "freminet.skill.param1",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "上挑攻击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param3",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param3",
-          "scaling": [
+          "name": "霜寒伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param4",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param4",
-          "scaling": [
+          "name": "零阶高压粉碎伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param5",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param5",
-          "scaling": [
+          "name": "一阶高压粉碎伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param6",
+          "name": "一阶高压粉碎伤害（第2击）",
           "element": "physical",
-          "category": "skill",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param7",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param7",
-          "scaling": [
+          "name": "二阶高压粉碎伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param8",
+          "name": "二阶高压粉碎伤害（第2击）",
           "element": "physical",
-          "category": "skill",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param9",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param9",
-          "scaling": [
+          "name": "三阶高压粉碎伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param10",
+          "name": "三阶高压粉碎伤害（第2击）",
           "element": "physical",
-          "category": "skill",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param11",
+          "name": "四阶高压粉碎伤害",
           "element": "physical",
-          "category": "skill",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "freminet.skill.param2",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "灵息之刺伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "cooldownParameter": "param12"
     },
     {
       "id": "freminet.burst",
@@ -1023,7 +973,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             10,
             10,
@@ -1044,7 +994,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -1065,7 +1015,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -1088,19 +1038,20 @@
       "hits": [
         {
           "id": "freminet.burst.param1",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param4"
+      },
+      "cooldownParameter": "param3"
     }
   ],
   "passives": [
@@ -1114,7 +1065,48 @@
       "id": "freminet.passive2",
       "name": "并流式冷凝机关",
       "description": "菲米尼对敌人触发碎冰反应后，会使浮冰增压·高压粉碎造成的伤害提高40%，持续5秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "freminet.parallel-condensers",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "shatter"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "freminet.skill.param4",
+              "freminet.skill.param5",
+              "freminet.skill.param6",
+              "freminet.skill.param7",
+              "freminet.skill.param8",
+              "freminet.skill.param9",
+              "freminet.skill.param10",
+              "freminet.skill.param11"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "freminet.passive3",
@@ -1128,7 +1120,30 @@
       "rank": 1,
       "name": "深水与泡沫之梦",
       "description": "浮冰增压·高压粉碎的暴击率提高15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "freminet.constellation-one",
+          "appliesTo": {
+            "hitIds": [
+              "freminet.skill.param4",
+              "freminet.skill.param5",
+              "freminet.skill.param6",
+              "freminet.skill.param7",
+              "freminet.skill.param8",
+              "freminet.skill.param9",
+              "freminet.skill.param10",
+              "freminet.skill.param11"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1151,7 +1166,44 @@
       "rank": 4,
       "name": "雪月与芦笛之舞",
       "description": "菲米尼对敌人触发冰冻、碎冰、超导、星超导反应后，攻击力提升9%。该效果持续6秒，至多叠加2次，每0.3秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "freminet.snowy-moon",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "freeze",
+                "shatter",
+                "superconduct",
+                "stellar-conduct"
+              ]
+            },
+            "cooldownMs": 300
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "stacking": {
+            "maxStacks": 2,
+            "refreshUnverified": true
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.09
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1168,7 +1220,44 @@
       "rank": 6,
       "name": "梦晓与决意之刻",
       "description": "菲米尼对敌人触发冰冻、碎冰、超导、星超导反应后，暴击伤害提升12%。该效果持续6秒，至多叠加3次，每0.3秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "freminet.dreams-and-determination",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "freeze",
+                "shatter",
+                "superconduct",
+                "stellar-conduct"
+              ]
+            },
+            "cooldownMs": 300
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "stacking": {
+            "maxStacks": 3,
+            "refreshUnverified": true
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.12
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {

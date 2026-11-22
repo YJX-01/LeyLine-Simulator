@@ -221,76 +221,107 @@
     155.6,
     186.7
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.redhornstonethresher",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
+  "schemaVersion": "0.2.0",
+  "kind": "weapon-definition",
+  "namespace": "builtin",
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "防御力提高28%；普通攻击与重击造成的伤害值提高，提高数值相当于防御力的40%。",
+    "mechanisms": [
+      {
+        "id": "redhornstonethresher.defensePercent",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "coverage.weapon.redhornstonethresher",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
+            "id": "redhornstonethresher.defensePercent",
+            "revision": "1"
+          }
+        ],
+        "reason": "防御力提高28%；普通攻击与重击造成的伤害值提高，提高数值相当于防御力的40%。"
+      },
+      {
+        "id": "redhornstonethresher.normal-charged-base",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
             "namespace": "builtin",
-            "id": "redhornstonethresher",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.redhornstonethresher"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
+            "id": "redhornstonethresher.normal-charged-base",
+            "revision": "1"
+          }
+        ],
+        "reason": "防御力提高28%；普通攻击与重击造成的伤害值提高，提高数值相当于防御力的40%。"
+      }
+    ]
+  },
+  "buffs": [
+    {
+      "id": "redhornstonethresher.defensePercent",
+      "modifiers": [
+        {
+          "target": "attribute.defensePercent",
+          "value": {
+            "refinement": [
+              0.28,
+              0.35,
+              0.42,
+              0.49,
+              0.56
+            ],
+            "unit": "scalar"
+          }
         }
       ]
     },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
-  "kind": "weapon-definition",
-  "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.redhornstonethresher",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.redhornstonethresher",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "redhornstonethresher.normal-charged-base",
+      "appliesTo": {
+        "categories": [
+          "normal",
+          "charged"
+        ]
+      },
+      "modifiers": [
+        {
+          "target": "attribute.baseDamageBonus",
+          "value": {
+            "call": "redhornstonethresher.defense-damage",
+            "inputs": {
+              "defense": {
+                "stat": "defense"
+              },
+              "rate": {
+                "refinement": [
+                  0.4,
+                  0.5,
+                  0.6,
+                  0.7,
+                  0.8
+                ],
+                "unit": "scalar"
+              }
+            },
+            "output": "bonus"
+          }
+        }
+      ]
+    }
+  ],
+  "maxRefinement": 5,
+  "formulas": [
+    {
+      "id": "redhornstonethresher.defense-damage",
+      "template": {
+        "id": "attribute-conversion",
+        "revision": "1",
+        "stat": "defense",
+        "target": "damage",
+        "attribute": "defense",
+        "rate": "rate",
+        "output": "bonus"
+      }
     }
   ]
 }

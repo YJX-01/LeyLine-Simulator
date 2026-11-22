@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "manekina-hydro",
@@ -14,7 +14,8 @@
     "gameId": 10000118,
     "notes": [
       "奇偶没有命座；固有天赋与对应元素形态按实际配置收录。"
-    ]
+    ],
+    "region": ""
   },
   "attributes": {
     "base": {
@@ -550,129 +551,143 @@
       "hits": [
         {
           "id": "manekina-hydro.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param5",
-          "element": "physical",
+          "name": "重击伤害（第1击）",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param6",
-          "element": "physical",
+          "name": "重击伤害（第2击）",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         },
         {
           "id": "manekina-hydro.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "infusion": {
+            "fact": "manekin.infused",
+            "element": "hydro"
+          }
         }
       ]
     },
@@ -1122,19 +1137,23 @@
       "hits": [
         {
           "id": "manekina-hydro.skill.param1",
-          "element": "hydro",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         }
-      ]
+      ],
+      "cooldownParameter": "param3",
+      "castWindow": {
+        "fact": "manekin.infused",
+        "durationParameter": "param2",
+        "cancelOnLeave": true
+      },
+      "skillCharges": 2
     },
     {
       "id": "manekina-hydro.burst",
@@ -1590,33 +1609,49 @@
       "hits": [
         {
           "id": "manekina-hydro.burst.param1",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "禁限区域生成伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete"
         },
         {
           "id": "manekina-hydro.burst.param2",
-          "element": "hydro",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "禁限区域踏入伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-complete",
+          "when": [
+            "manekin.zone",
+            "manekin.contactReady"
+          ]
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param5"
+      },
+      "castWindow": {
+        "fact": "manekin.zone",
+        "durationParameter": "param3",
+        "cancelOnLeave": true,
+        "contact": {
+          "hit": "manekina-hydro.burst.param2",
+          "ready": "manekin.contactReady",
+          "intervalMs": 500
+        },
+        "exit": {
+          "hit": "manekina-hydro.passive.zone-exit",
+          "ready": "manekin.zoneExit"
+        }
+      },
+      "cooldownParameter": "param4"
     }
   ],
   "passives": [
@@ -1624,13 +1659,42 @@
       "id": "manekina-hydro.passive1",
       "name": "战域重划",
       "description": "奇偶离场时，如果场上存在奇偶自己创造的「禁限区域」，则「禁限区域」会发生爆炸，造成相当于奇偶攻击力200%的自身元素范围伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "manekina-hydro.passive.zone-exit",
+          "name": "战域重划 · 禁限区域爆炸",
+          "skill": "manekina-hydro.burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "when": [
+            "manekin.zoneExit"
+          ],
+          "support": "hit-complete"
+        }
+      ]
     },
     {
       "id": "manekina-hydro.passive2",
       "name": "交战持备",
       "description": "奇偶处于队伍后台时，若元素能量低于30%，每秒为自己恢复2点元素能量。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "manekina-hydro.reserve-energy",
+          "periodicEnergy": {
+            "belowRatio": 0.3,
+            "amount": 2,
+            "intervalMs": 1000,
+            "offField": true
+          },
+          "modifiers": []
+        }
+      ]
     },
     {
       "id": "manekina-hydro.passive3",
@@ -1641,30 +1705,67 @@
   ],
   "constellations": [],
   "support": {
-    "hit-unavailable": {
+    "hit-complete": {
       "maxConstellation": 0,
-      "resolution": "unavailable",
+      "resolution": "complete",
       "evidence": "adopted",
-      "reason": "稳定命中身份及原参数关系已保留；伤害族、全部相关机制及新运行时独立检查尚未闭合。",
+      "reason": "各段的倍率、元素、归属及生效条件按持有者配装和当前施放状态计算。",
       "mechanisms": [
         {
-          "id": "explicit-output-scope",
-          "resolution": "unavailable"
+          "id": "talent-hits",
+          "resolution": "implemented"
         }
       ]
     },
-    "context-unavailable": {
+    "context-complete": {
       "maxConstellation": 0,
-      "resolution": "unavailable",
+      "resolution": "complete",
       "evidence": "adopted",
-      "reason": "角色的队伍影响及未表达机制仍待逐项核验。",
+      "reason": "战技按可用次数施放，转化和禁限区域在离场时解除。爆发消耗持有者能量。",
       "mechanisms": [
         {
-          "id": "explicit-output-scope",
-          "resolution": "unavailable"
+          "id": "manekina-hydro.passive1",
+          "resolution": "implemented",
+          "reason": "在自己创建的区域中离场时触发一次本元素爆发伤害。"
+        },
+        {
+          "id": "manekina-hydro.passive2",
+          "resolution": "implemented",
+          "reason": "在后台且元素能量低于上限的30%时，每秒仅为自己恢复2点。"
+        },
+        {
+          "id": "manekina-hydro.passive3",
+          "resolution": "irrelevant",
+          "reason": "只切换已有装扮搭配。"
         }
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-complete",
+  "facts": {
+    "manekin.infused": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "manekin.zone": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "manekin.contactReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    },
+    "manekin.zoneExit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

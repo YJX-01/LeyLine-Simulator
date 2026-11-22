@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "wanderer",
@@ -227,7 +227,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             50,
             50,
@@ -313,115 +313,128 @@
       "hits": [
         {
           "id": "wanderer.normal.param1",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "wanderer.normal.param2",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "wanderer.normal.param3",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "wanderer.normal.param4",
-          "element": "anemo",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "wanderer.normal.param5",
-          "element": "anemo",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param5",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "wanderer.normal.param7",
-          "element": "anemo",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "wanderer.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "wanderer.windfavored"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "wanderer.normal.param8",
-          "element": "anemo",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "wanderer.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "wanderer.windfavored"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "wanderer.normal.param9",
-          "element": "anemo",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "wanderer.outside-stance",
+              "inputs": {
+                "term0": {
+                  "fact": "wanderer.windfavored"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ]
     },
@@ -520,7 +533,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "scalar",
           "values": [
             100,
             100,
@@ -541,7 +554,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             6,
             6,
@@ -606,19 +619,62 @@
       "hits": [
         {
           "id": "wanderer.skill.param1",
-          "element": "anemo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "wanderer.stance-normal",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.normal.param1",
+              "wanderer.normal.param2",
+              "wanderer.normal.param3",
+              "wanderer.normal.param4"
+            ]
+          },
+          "condition": {
+            "fact": "wanderer.windfavored"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "parameter": "param2",
+                "skill": "wanderer.skill"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wanderer.stance-charged",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.normal.param5"
+            ]
+          },
+          "condition": {
+            "fact": "wanderer.windfavored"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "parameter": "param3",
+                "skill": "wanderer.skill"
+              }
+            }
+          ]
+        }
+      ],
+      "cooldownParameter": "param5"
     },
     {
       "id": "wanderer.burst",
@@ -665,7 +721,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -686,7 +742,7 @@
         },
         {
           "id": "param3",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -709,19 +765,20 @@
       "hits": [
         {
           "id": "wanderer.burst.param1",
-          "element": "anemo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "energyCapacity": {
+        "parameter": "param3"
+      },
+      "cooldownParameter": "param2"
     }
   ],
   "passives": [
@@ -818,5 +875,25 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "wanderer.windfavored": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  },
+  "formulas": [
+    {
+      "id": "wanderer.outside-stance",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 1,
+        "negate": true
+      }
+    }
+  ]
 }

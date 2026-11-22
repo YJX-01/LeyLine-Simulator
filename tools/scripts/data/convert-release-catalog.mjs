@@ -8,7 +8,7 @@ if (process.argv.includes('--capture')) {
   const reference = new URL('.references/genshin-db/', root);
   if (execFileSync('git', ['rev-parse', 'HEAD'], { cwd: reference, encoding: 'utf8' }).trim() !== commit) throw new Error('Use the pinned genshin-db reference.');
   const data = new URL('src/data/', reference);
-  const output = { source: { repository: 'theBowja/genshin-db', commit, path: 'src/data/version' }, characters: {}, weapons: {}, artifacts: {} };
+  const output = { characters: {}, weapons: {}, artifacts: {} };
   for (const group of ['characters', 'weapons', 'artifacts']) {
     const raw = readFileSync(new URL(`version/${group}.json`, data));
     for (const [id, version] of Object.entries(JSON.parse(raw))) {

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "qiqi",
@@ -256,7 +256,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -342,128 +342,105 @@
       "hits": [
         {
           "id": "qiqi.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param6",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param6",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param8",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param8",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param9",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.normal.param10",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -537,7 +514,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             67.40786,
             74.149574,
@@ -579,7 +556,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             450.5507,
             495.612,
@@ -621,7 +598,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -642,7 +619,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             30,
             30,
@@ -705,7 +682,7 @@
         },
         {
           "id": "param10",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             2.2,
             2.2,
@@ -726,7 +703,7 @@
         },
         {
           "id": "param11",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -749,45 +726,54 @@
       "hits": [
         {
           "id": "qiqi.skill.param8",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param8",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.skill.param5",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param5",
-          "scaling": [
+          "name": "寒病鬼差伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "qiqi.skill.param9",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param9",
-          "scaling": [
+          "name": "寒病鬼差协同攻击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        }
+      ],
+      "heals": [
+        {
+          "id": "qiqi.skill.heal.param1",
+          "detail": 1,
+          "stat": "attack",
+          "rate": "param1",
+          "flat": "param2",
+          "recipient": "party"
+        },
+        {
+          "id": "qiqi.skill.heal.param3",
+          "detail": 2,
+          "stat": "attack",
+          "rate": "param3",
+          "flat": "param4",
+          "recipient": "on-field"
         }
       ]
     },
@@ -848,7 +834,7 @@
         },
         {
           "id": "param2",
-          "unit": "unknown",
+          "unit": "hp",
           "values": [
             577.3388,
             635.0807,
@@ -890,7 +876,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -911,7 +897,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -932,7 +918,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             80,
             80,
@@ -976,17 +962,43 @@
       "hits": [
         {
           "id": "qiqi.burst.param3",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param3",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "qiqi.burst.param7",
+          "name": "度厄真符·星超导",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct",
+          "when": [
+            "qiqi.stellarConduct"
+          ]
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param6"
+      },
+      "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "qiqi.burst.heal.param1",
+          "detail": 1,
+          "stat": "attack",
+          "rate": "param1",
+          "flat": "param2",
+          "recipient": "party"
         }
       ]
     }
@@ -1085,5 +1097,13 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "qiqi.stellarConduct": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      }
+    }
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "odette",
@@ -277,7 +277,7 @@
         },
         {
           "id": "param8",
-          "unit": "unknown",
+          "unit": "stamina",
           "values": [
             20,
             20,
@@ -363,142 +363,116 @@
       "hits": [
         {
           "id": "odette.normal.param1",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param1",
-          "scaling": [
+          "name": "一段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param2",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param2",
-          "scaling": [
+          "name": "二段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param3",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param3",
-          "scaling": [
+          "name": "三段伤害（第1击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param4",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param4",
-          "scaling": [
+          "name": "三段伤害（第2击）",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param5",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param5",
-          "scaling": [
+          "name": "四段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param6",
-          "element": "physical",
-          "category": "normal",
-          "parameter": "param6",
-          "scaling": [
+          "name": "五段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param7",
-          "element": "physical",
+          "name": "重击伤害",
           "category": "charged",
-          "parameter": "param7",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param7"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param9",
-          "element": "physical",
+          "name": "下坠期间伤害",
           "category": "plunge",
-          "parameter": "param9",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param9"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param10",
-          "element": "physical",
+          "name": "低空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param10",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param10"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.normal.param11",
-          "element": "physical",
+          "name": "高空坠地冲击伤害",
           "category": "plunge",
-          "parameter": "param11",
-          "scaling": [
+          "base": [
             {
               "stat": "attack",
               "parameter": "param11"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
       ]
@@ -764,7 +738,7 @@
         },
         {
           "id": "param11",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -785,7 +759,7 @@
         },
         {
           "id": "param12",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -806,7 +780,7 @@
         },
         {
           "id": "param13",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -829,59 +803,210 @@
       "hits": [
         {
           "id": "odette.skill.param1",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param1",
-          "scaling": [
+          "name": "技能伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.skill.param2",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param2",
-          "scaling": [
+          "name": "破晓终奏持续伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.skill.param5",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param5",
-          "scaling": [
+          "name": "拂羽舞步伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param5"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.skill.param8",
-          "element": "cryo",
-          "category": "skill",
-          "parameter": "param8",
-          "scaling": [
+          "name": "旋翼舞步伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param8"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "odette.skill.param3",
+          "name": "破晓终奏终击",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "stellar.radiance-ratio",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  },
+                  "ordinary": {
+                    "parameter": "param3",
+                    "skill": "odette.skill"
+                  },
+                  "conduct": {
+                    "parameter": "param3",
+                    "skill": "odette.skill"
+                  },
+                  "swirl": {
+                    "parameter": "param4",
+                    "skill": "odette.skill"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "stellar-conduct",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          }
+        },
+        {
+          "id": "odette.skill.param6",
+          "name": "拂羽舞步·星烁",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "stellar.radiance-ratio",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  },
+                  "ordinary": {
+                    "parameter": "param6",
+                    "skill": "odette.skill"
+                  },
+                  "conduct": {
+                    "parameter": "param6",
+                    "skill": "odette.skill"
+                  },
+                  "swirl": {
+                    "parameter": "param7",
+                    "skill": "odette.skill"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "stellar-conduct",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          },
+          "when": [
+            {
+              "call": "odette.radiant",
+              "inputs": {
+                "term0": {
+                  "call": "odette.no-radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "odette.skill.param9",
+          "name": "旋翼舞步·星烁",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "stellar.radiance-ratio",
+                "inputs": {
+                  "mode": {
+                    "fact": "radiance"
+                  },
+                  "ordinary": {
+                    "parameter": "param9",
+                    "skill": "odette.skill"
+                  },
+                  "conduct": {
+                    "parameter": "param9",
+                    "skill": "odette.skill"
+                  },
+                  "swirl": {
+                    "parameter": "param10",
+                    "skill": "odette.skill"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "support": "hit-unavailable",
+          "element": "cryo",
+          "family": {
+            "by": "radiance",
+            "cases": {
+              "none": "stellar-conduct",
+              "stellar-conduct": "stellar-conduct",
+              "stellar-swirl": "stellar-swirl"
+            }
+          },
+          "when": [
+            {
+              "call": "odette.radiant",
+              "inputs": {
+                "term0": {
+                  "call": "odette.no-radiance",
+                  "inputs": {
+                    "mode": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ]
     },
@@ -987,7 +1112,7 @@
         },
         {
           "id": "param4",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -1008,7 +1133,7 @@
         },
         {
           "id": "param5",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             20,
             20,
@@ -1029,7 +1154,7 @@
         },
         {
           "id": "param6",
-          "unit": "unknown",
+          "unit": "seconds",
           "values": [
             15,
             15,
@@ -1050,7 +1175,7 @@
         },
         {
           "id": "param7",
-          "unit": "unknown",
+          "unit": "energy",
           "values": [
             60,
             60,
@@ -1073,33 +1198,56 @@
       "hits": [
         {
           "id": "odette.burst.param1",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param1",
-          "scaling": [
+          "name": "斩击伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         },
         {
           "id": "odette.burst.param2",
-          "element": "cryo",
-          "category": "burst",
-          "parameter": "param2",
-          "scaling": [
+          "name": "斩击最终段伤害",
+          "base": [
             {
               "stat": "attack",
               "parameter": "param2"
             }
           ],
-          "outputs": [],
           "support": "hit-unavailable"
         }
-      ]
+      ],
+      "buffs": [
+        {
+          "id": "odette.swanDream",
+          "trigger": "cast",
+          "duration": {
+            "parameter": "param4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "skill": "odette.burst",
+                "parameter": "param3"
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "skill": "odette.burst",
+                "parameter": "param3"
+              }
+            }
+          ]
+        }
+      ],
+      "energyCapacity": {
+        "parameter": "param7"
+      },
+      "cooldownParameter": "param6"
     }
   ],
   "passives": [
@@ -1119,7 +1267,43 @@
       "id": "odette.passive3",
       "name": "星耀祝礼·银晓之舞",
       "description": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，奥黛塔将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于奥黛塔的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.7%上述反应的基础伤害，至多通过这种方式提升14%伤害。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "odette.reaction-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct",
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.baseBonus",
+              "value": {
+                "call": "blessing.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.baseBonus",
+              "value": {
+                "call": "blessing.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "odette.passive4",
@@ -1202,5 +1386,31 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "odette.no-radiance",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "mode",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "none"
+      }
+    },
+    {
+      "id": "odette.radiant",
+      "template": {
+        "id": "condition-group",
+        "revision": "1",
+        "operator": "all",
+        "terms": 1,
+        "negate": true
+      }
+    }
+  ]
 }

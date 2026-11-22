@@ -221,76 +221,67 @@
     129.7,
     155.6
   ],
-  "calculation": {
-    "bundle": {
-      "schemaVersion": "0.1.0",
-      "runtimeVersion": "0.1.0",
-      "requiredFeatures": [
-        "fixed-templates-v1",
-        "coverage-v1"
-      ],
-      "sources": [
-        {
-          "id": "content.weapon.tidalshadow",
-          "kind": "definition"
-        }
-      ],
-      "tables": [],
-      "formulas": [],
-      "attributes": [],
-      "effects": [],
-      "damageFamilies": [
-        "ordinary"
-      ],
-      "stateMachines": [],
-      "aggregates": [],
-      "coverage": [
-        {
-          "identity": {
-            "namespace": "builtin",
-            "id": "coverage.weapon.tidalshadow",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "entity": {
-            "namespace": "builtin",
-            "id": "tidalshadow",
-            "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
-          },
-          "scope": {
-            "kind": "equipment"
-          },
-          "resolution": "unavailable",
-          "evidence": "adopted",
-          "reason": "武器全部相关伤害机制尚未闭合。",
-          "sources": [
-            "content.weapon.tidalshadow"
-          ],
-          "mechanisms": [
-            {
-              "id": "explicit-output-scope",
-              "resolution": "unavailable",
-              "ruleIds": [],
-              "reason": "武器全部相关伤害机制尚未闭合。"
-            }
-          ]
-        }
-      ]
-    },
-    "ruleIds": []
-  },
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "kind": "weapon-definition",
   "namespace": "builtin",
-  "revision": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "sources": [
-    "content.weapon.tidalshadow",
-    "content.weapon-curves"
-  ],
-  "coverageRefs": [
+  "revision": "1",
+  "support": {
+    "resolution": "complete",
+    "evidence": "adopted",
+    "reason": "受到治疗后，攻击力提升24%，持续8秒。角色处于队伍后台也能触发。",
+    "mechanisms": [
+      {
+        "id": "tidalshadow.after-trigger",
+        "resolution": "implemented",
+        "ruleIds": [
+          {
+            "namespace": "builtin",
+            "id": "tidalshadow.after-trigger",
+            "revision": "1"
+          }
+        ],
+        "reason": "受到治疗后，攻击力提升24%，持续8秒。角色处于队伍后台也能触发。"
+      }
+    ]
+  },
+  "maxRefinement": 5,
+  "buffs": [
     {
-      "namespace": "builtin",
-      "id": "coverage.weapon.tidalshadow",
-      "revision": "8e5badd60b5d894284ccc927a56c9683529d2592"
+      "id": "tidalshadow.after-trigger",
+      "trigger": {
+        "kind": "event",
+        "selector": {
+          "kinds": [
+            "state-change"
+          ],
+          "actor": "owner",
+          "target": "any",
+          "observation": {
+            "key": "healingReceived",
+            "test": "increase"
+          }
+        }
+      },
+      "lifetime": {
+        "kind": "interval",
+        "durationMs": 8000,
+        "phase": "after"
+      },
+      "modifiers": [
+        {
+          "target": "attribute.attackPercent",
+          "value": {
+            "refinement": [
+              0.24,
+              0.3,
+              0.36,
+              0.42,
+              0.48
+            ],
+            "unit": "scalar"
+          }
+        }
+      ]
     }
   ]
 }
