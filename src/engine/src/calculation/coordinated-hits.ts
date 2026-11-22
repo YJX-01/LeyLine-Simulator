@@ -1,4 +1,4 @@
-import { characterHitRef, hitBelongsToCharacter, findBuildHit, putHitFact, subjectFacts, talentLevelBonus, type Diagnostic, type Project } from '@leyline/schema';
+import { characterHitRef, hitBelongsToCharacter, findBuildHit, putHitFact, subjectFacts, talentParameterAt, type Diagnostic, type Project } from '@leyline/schema';
 import { authoredHitEntries } from '@leyline/schema/hit-bindings';
 import { actorIsOnField } from './build-context';
 import { prepareProjectRuntime, recordedAttackApplies } from './project';
@@ -35,15 +35,18 @@ export function resolveCoordinatedHits(project: Project): { project: Project; di
     const manual = records.filter(record => record.actor === owner && record.damage?.hit.hitId === hit.id
       && hitBelongsToCharacter(record.damage.hit,build.character));
     const unknownSources = new Set<string>();
-    const level = build.talents[talent.category] + talentLevelBonus(build.character, talent.category, build.constellation);
-    const param = (id: string) => talent.parameters.find(p => p.id === id)!.values[level - 1];
+    const rank = runtime.team.talentRank(build, talent.category);
     let cast: RecordEntry | undefined, end = 0, charges = 0, next = 0, uncertainUntil = 0;
     for (const record of records) {
       if (rule.window && record.kind === 'action' && record.actor === owner && record.skillId === talent.id && !rejected.has(record.id)) {
         cast = record;
-        end = record.timeMs + param(rule.window.duration) * 1000;
-        charges = param(rule.window.charges);
-        uncertainUntil = 0;
+        const duration = talentParameterAt(talent, rule.window.duration, rank);
+        const limit = talentParameterAt(talent, rule.window.charges, rank);
+        const possible = talent.parameters.find(p => p.id === rule.window!.duration)!.values.slice(rank.level - 1, rank.upperLevel ?? rank.level);
+        end = record.timeMs + (duration ?? Math.max(...possible)) * 1000;
+        charges = limit ?? 1;
+        uncertainUntil = duration === undefined || limit === undefined ? end : 0;
+        if (uncertainUntil) diagnostics.push({ code: 'unknown', path: 'timeline.' + record.id, message: '协同攻击的时长或次数依赖尚未确定的队伍天赋等级。' });
         continue;
       }
       if (!sourceIds.has(record.id) || rule.window && (!cast || record.timeMs >= end || charges === 0) || record.timeMs < next) continue;

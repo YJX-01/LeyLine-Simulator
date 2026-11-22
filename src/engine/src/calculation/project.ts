@@ -1,6 +1,6 @@
 import { authoredHit, effectiveHitElement } from '@leyline/schema/hit-bindings';
 import { isTransformative } from '@leyline/schema';
-import { subjectFacts, findBuildHit, buildSchema, combatConditionsSchema, damageRequestSchema, definitionKey, elements, statKeys, talentInputIssues, talentLevelBonus,
+import { subjectFacts, findBuildHit, buildSchema, combatConditionsSchema, damageRequestSchema, definitionKey, elements, statKeys, talentInputIssues, talentParameterAt,
   type AttributePanel, type Build, type CalculationBinding, type CalculationFact, type CalculationIssue, type CombatConditions,
   type CalculationEvent, type CombatContext, type CombatFrame, type DamageRequest, type DamageResult, type Enemy, type CalculationFeasibility, type QuantityUnit,
   type CalculationBundle, type EffectInstance, type EvaluationResult, type Project, type StatKey, type StructuredCombatSetup, type StructuredDamageEvaluation, type Value } from '@leyline/schema';
@@ -238,13 +238,13 @@ export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: Re
   if (triggerPending) issues.push(issue('unknown', '反应触发归属尚未确认。'));
   const base = authoredHit(build.character.metadata, skill?.id, hit?.id)?.base;
   const primary = Array.isArray(base) ? base[0] : undefined;
-  const parameter = skill?.parameters.find(parameter => parameter.id === primary?.parameter), level = skill ? build.talents[skill.category] + talentLevelBonus(build.character, skill.category, build.constellation) : 0;
+  const selectedMultiplier = skill ? talentParameterAt(skill, primary?.parameter, runtime.team.talentRank(build, skill.category)) : undefined;
   const dealer = hit?.coordinated ? result.outputs[0]?.actorId : actorId;
   const dealtPanel = dealer && dealer !== actorId ? readRuntimePanel(runtime, dealer, record) : panel;
   const dealtElement = dealer && hit?.coordinated ? runtime.builds.get(dealer)?.character.identity.element : undefined;
   const resolvedHit = hit && dealtElement ? { ...hit, element: dealtElement } : hit?.elementBy ? { ...hit, element: effectiveHitElement(hit, (subjectFacts(damage.facts, { kind: 'event' })?.[hit.elementBy] ?? record.facts?.[hit.elementBy])?.value, runtime.context.actors.map(actor => actor.identity?.element)) } : hit;
   const breakdown = damageBreakdown(compiledData(runtime.team.program)!, damage, resolvedHit, result);
-  const multiplier = parameter?.values[level - 1] ?? breakdown.scaling[0]?.multiplier ?? null;
+  const multiplier = selectedMultiplier ?? breakdown.scaling[0]?.multiplier ?? null;
   const attackRead = lastTrace(result.trace, node => node.kind === 'attribute' && node.nodeId === 'attribute.attack' && node.context?.actorId === dealer);
   return { status: result.execution, ...resultValues(result, triggerPending), panel: dealtPanel,
     ...breakdown, parts: { attack: attackRead?.value?.kind === 'quantity' ? attackRead.value.value : dealtPanel.stats.attack, multiplier, ...breakdown.parts },

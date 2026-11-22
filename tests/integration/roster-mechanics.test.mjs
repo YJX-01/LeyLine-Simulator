@@ -9,6 +9,29 @@ import { auditHealingWindows, auditSetConditions } from '../../tools/lib/set-con
 import { auditBuild, auditHit } from '../../tools/lib/roster-evaluation.mjs';
 
 const catalog = await createRuntimeCatalog(), engine = await loadContentSchema('/src/engine/src/index.ts');
+test('an unknown party element preserves a rank-invariant cooldown and identifies the missing damage rank', async () => {
+  const sword = await catalog.get('weapons','dullblade');
+  const kaeya = auditBuild(await catalog.get('characters','kaeya'), sword);
+  const skirk = auditBuild(await catalog.get('characters','skirk'), sword);
+  const skill = kaeya.character.talents.find(t => t.category === 'skill');
+  const { setup, request } = auditHit(kaeya.character,skill,skill.hits[0]);
+  const frame = { ...request.frame, ownerId:'actor',recipientId:'actor',contributorId:null,hit:null };
+  const binding = (parameterId,unit) => ({kind:'talent-parameter',actor:{role:'owner'},skillId:skill.id,parameterId,type:{kind:'quantity',unit}});
+  const inputs = [{id:'actor',build:kaeya},{id:'teacher',build:skirk},{id:'third'}];
+  const baseline = JSON.stringify(inputs);
+  for (const [element,expected] of [[undefined,null],['hydro',2.0554],['pyro',1.912]]) {
+    const party = [inputs[0],inputs[1],{id:'third',element}];
+    const prepared = engine.prepareStructuredBuilds(party);
+    assert.equal(prepared.ok,true);
+    const context = engine.createStructuredCombatContext(prepared.team,setup);
+    const result = engine.evaluateCombatBindings(prepared.team.program,context,{rate:binding('param1','scalar'),cooldown:binding('param2','milliseconds')},frame);
+    assert.equal(result.outputs.cooldown.value.value,6000);
+    assert.equal(result.outputs.rate.value?.value ?? null,expected);
+    if (expected === null) assert.ok(result.requiredInputs.some(entry => entry.key === 'kaeya.skill.teamTalentLevel'));
+    if (element === 'hydro') assert.ok(context.actors[0].talents.find(t=>t.id===skill.id).sourceRefs.includes(skirk.character.sources[0]));
+  }
+  assert.equal(JSON.stringify(inputs),baseline);
+});
 test('recorded talent heals validate the saved count and remove the recipient without mutating the original build', async () => {
   const { createEmptyProject, removeProjectActor } = await loadContentSchema('/src/web/src/domain/workbench-project.ts');
   const { addActorFromBuild, addTalentHeal } = await loadContentSchema('/src/web/src/domain/real-project.ts');

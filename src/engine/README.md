@@ -19,11 +19,13 @@
 | compileStructuredCharacter | 校验v3角色的闭包、属性面板、命中输出、参数单位与全部绑定 |
 | compileCharacterActions / evaluateStateMachine | 校验精确角色动作闭包，按显式事件运行状态与独立时效，返回事件阶段快照 |
 | collectCalculationRoots / collectCalculationClosure | 从明确注册表收集精确依赖，输出独立JSON；工具与浏览器共用 |
-| prepareStructuredBuilds | 校验v3内容及配装，装配每名队员的原始属性、一次天赋加级和条件效果 |
+| prepareStructuredBuilds | 校验内容及配装，根据每名队员的快照汇总原始属性、命座与队伍天赋加级和条件效果 |
 | createStructuredCombatContext / evaluateStructuredHit | 用已准备配装及明确世界事实求值稳定命中/输出，检查相关覆盖缺口 |
 | evaluateAggregate | 逐贡献者求值、按声明依据排序和加权；在每个独立/联合概率状态内重排后求精确期望 |
 
 角色、装备和公共效果在各自的授予处定义 Buff。修饰项从持有者、受益者、精炼、天赋参数和记录的战斗事实读取数值，触发器按项目中的动作或命中筛选事件。相加和比较要求单位相容，换算先统一来源单位再乘系数。
+
+天赋参数按受益人的基础等级、命座和实际队伍读取。达达利亚提升全队普通攻击等级，丝柯克在队伍只有冰水元素且两者齐备时提升全队元素战技等级。队员元素待定时，只对可能随等级变化的参数报告缺项，固定持续时间和冷却仍可求值。
 
 效果实例身份保留所有者、来源实体及修订、规则与触发事件。常驻效果显式permanent，在合法最大查询时刻3600000毫秒仍常驻；触发效果使用左闭右开区间和before/after。修订中的禁用、固定值及失效引用按现有语义执行，完整五类修订的接入状态登记于[计算资料](../../tools/data/README.md#计算支持与验证资料)。
 

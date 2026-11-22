@@ -1,4 +1,5 @@
 import { auditBuild, auditHit } from './roster-evaluation.mjs';
+import { readContentSource } from './content-source.mjs';
 
 const white = {WEAPON_SWORD_ONE_HAND:'dullblade',WEAPON_POLE:'beginnersprotector',WEAPON_CATALYST:'apprenticesnotes',WEAPON_CLAYMORE:'wastergreatsword',WEAPON_BOW:'huntersbow'};
 const boolean = value => ({value:{kind:'boolean',value},provenance:'explicit',sourceRefs:[]});
@@ -44,6 +45,41 @@ export function auditCharacterBuffs(entities,engine) {
     const result=engine.evaluateCombatBindings(team.program,context,{value:binding},{...request.frame,
       ownerId:recipient,recipientId:recipient,contributorId:null,hit:{skillId:attackTalent?.id??'equipment',hitId:hitId??h.id,category,element:'physical',origin:attackTalent?'talent':'triggered',family:'ordinary',reactionId:null}});
     return result.outputs.value?.value?.value ?? null;
+  }
+  const sourceCharacters = readContentSource(new URL('../data/sources/catalog/genshin-db/characters.json', import.meta.url));
+  // Independent expected party bonuses from 诸武精通 and 诸武相授. A question mark is an unfilled party identity.
+  const parties = [
+    [['kaeya'], 0, 0], [['tartaglia'], 1, 0], [['skirk'], 0, 0], [['skirk','kaeya'], 0, 0],
+    [['tartaglia','kaeya'], 1, 0], [['skirk','xingqiu'], 0, 1], [['tartaglia','skirk','kaeya'], 1, 1],
+    [['skirk','tartaglia','kaeya','amber'], 1, 0], [['skirk','xingqiu','?'], 0, null], [['skirk','?'], 0, null],
+    [['skirk','amber','?'], 0, 0], [['skirk','element:hydro'], 0, 1], [['tartaglia','tartaglia','skirk'], 1, 1],
+  ];
+  for (const [party, normal, skill] of parties) for (const base of [1, 10]) {
+    const members = party.map((id, i) => id === '?' ? { id: 'slot'+i } : id === 'element:hydro' ? { id: 'slot'+i, element: 'hydro' } : {
+      id: 'slot'+i, build: { ...build(id), ...(base === 10 ? { level:90, ascension:6, constellation:id==='kaeya'?3:0 } : {}),
+        talents:{normal:base,skill:base,burst:base} },
+    });
+    const prepared = engine.prepareStructuredBuilds(members);
+    if (!prepared.ok) throw Error(JSON.stringify(prepared.diagnostics));
+    for (const member of members.filter(m => m.build)) {
+      const recipient = member.build.character.id;
+      const role = member.build.character;
+      const { setup, request } = auditHit(role, role.talents[0], role.talents[0].hits[0], member.build.level);
+      setup.events[0].actorId = member.id;
+      const context = engine.createStructuredCombatContext(prepared.team, setup);
+      const frame = { ...request.frame, ownerId:member.id, recipientId:member.id, contributorId:null, factOverrides:[], captures:{}, hit:null };
+      for (const [index, category] of ['normal','skill','burst'].entries()) {
+        const talent = role.talents.find(t => t.category === category);
+        const binding = { kind:'talent-parameter', actor:{role:'owner'}, skillId:talent.id, parameterId:'param1', type:{kind:'quantity',unit:'scalar'} };
+        const output = engine.evaluateCombatBindings(prepared.team.program, context, { multiplier:binding }, frame).outputs.multiplier;
+        const bonus = category === 'normal' ? normal : category === 'skill' ? skill : 0;
+        const level = base + (recipient === 'kaeya' && base === 10 && category === 'skill' ? 3 : 0);
+        const expected = bonus === null ? null : sourceCharacters[recipient].talents['combat'+(index+1)].param1[level + bonus - 1];
+        const actual = output?.state === 'known' ? output.value.value : null;
+        const entity = category === 'skill' || category === 'burst' && party.includes('skirk') ? 'skirk' : 'tartaglia';
+        record(entity,'/passives/2',{party,recipient,category,base},actual,expected);
+      }
+    }
   }
   for (const rank of [0, 1, 2]) {
     const b = { ...build('furina'), level: 90, ascension: 6, constellation: rank };

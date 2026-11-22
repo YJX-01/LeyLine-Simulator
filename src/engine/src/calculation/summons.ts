@@ -1,4 +1,4 @@
-import { characterHitRef, definitionKey, talentLevelBonus, type Diagnostic, type Project } from '@leyline/schema';
+import { characterHitRef, createTalentRankReader, definitionKey, talentParameterAt, type Diagnostic, type Project } from '@leyline/schema';
 import { projectCombatEvents } from './combat-changes';
 
 type Entry = Project['timeline'][number];
@@ -12,6 +12,7 @@ export function resolveSummons(project: Project): { project: Project; diagnostic
   const reserved = new Set(timeline.map(record => record.id)), consumed = new Set<string>();
   let sequence = 0, remaining = 10000;
   let rejected: Set<string> | undefined;
+  const talentRank = createTalentRankReader(project.candidate.actors);
   for (const { id: actor, build } of project.candidate.actors) {
     if (!build) continue;
     for (const talent of build.character.talents) {
@@ -20,8 +21,7 @@ export function resolveSummons(project: Project): { project: Project; diagnostic
       const casts = project.timeline.filter(entry => entry.actor === actor && entry.kind === 'action' && [talent.id, rule.release.skill].includes(entry.skillId ?? ''));
       if (!casts.length) continue;
       rejected ??= new Set(projectCombatEvents(project).filter(e=>e.kind==='action' && e.occurred===false).map(e=>e.id));
-      const level = build.talents[talent.category] + talentLevelBonus(build.character, talent.category, build.constellation);
-      const duration = talent.parameters.find(param => param.id === rule.durationParameter)?.values[level - 1];
+      const duration = talentParameterAt(talent, rule.durationParameter, talentRank(build, talent.category));
       const active: Placement[] = [], shots: Scheduled[] = [], transitions: Scheduled[] = [];
       const milliseconds = (frame: number) => Math.round(frame * 1000 / rule.fps);
       function addHit(cast: Entry, hitId: string, timeMs: number, sources: string[]) {

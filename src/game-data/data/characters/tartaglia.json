@@ -3,7 +3,7 @@
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "tartaglia",
-  "revision": "3",
+  "revision": "4",
   "identity": {
     "name": "达达利亚",
     "title": "「公子」",
@@ -1350,7 +1350,14 @@
       "id": "tartaglia.passive3",
       "name": "诸武精通",
       "description": "队伍中自己的角色普通攻击等级提高1级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "talentBonuses": [
+        {
+          "category": "normal",
+          "levels": 1,
+          "recipient": "team"
+        }
+      ]
     }
   ],
   "constellations": [

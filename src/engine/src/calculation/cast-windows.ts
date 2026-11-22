@@ -1,5 +1,5 @@
 import { authoredHitEntries } from '@leyline/schema/hit-bindings';
-import { characterHitRef, createFieldPresenceReader, hitBelongsToCharacter, putHitFact, subjectFacts, talentInputMaximum, talentLevelBonus, type CalculationEvent, type CalculationFact, type Project } from '@leyline/schema';
+import { characterHitRef, createFieldPresenceReader, createTalentRankReader, hitBelongsToCharacter, putHitFact, subjectFacts, talentInputMaximum, type CalculationEvent, type CalculationFact, type Project } from '@leyline/schema';
 
 type Entry = Project['timeline'][number];
 type World = Pick<Project,'timeline'|'candidate'|'combatStates'>;
@@ -15,16 +15,18 @@ const count = (value:number | null):CalculationFact => ({value:value === null ? 
 export function castWindowStates(world: World, rejected:ReadonlySet<string>=new Set()) {
   const frames = new Map<string,Frames>(), contacts = new Map<string,{key:string;ready:boolean|null}>();
   const followUps = new Map<string,FollowUp>();
-  const exits: { owner:string; build:Build; hit:string; ready:string; cast:Entry; time:number; source?:Entry; interval?:string }[] = [];
+  const exits: { owner:string; build:Build; hit:string; ready:string; certain:boolean; cast:Entry; time:number; source?:Entry; interval?:string }[] = [];
   const members = world.candidate.actors;
+  const talentRank = createTalentRankReader(members);
   const windows = members.flatMap(({id:owner,build}) => !build ? [] : build.character.talents.flatMap(talent => {
     const rule = talent.castWindow;
     if (!rule) return [];
-    const level = build.talents[talent.category] + talentLevelBonus(build.character,talent.category,build.constellation);
-    const duration = talent.parameters.find(p => p.id === rule.durationParameter)!.values[level-1] * 1000;
+    const rank = talentRank(build, talent.category);
+    const durations = talent.parameters.find(p => p.id === rule.durationParameter)!.values.slice(rank.level - 1, rank.upperLevel ?? rank.level);
+    const duration = Math.max(...durations) * 1000, certainDuration = Math.min(...durations) * 1000;
     const input=talent.inputs?.find(i=>i.id===rule.hitCounter?.input);
     const follow=rule.followUp, unlock=follow&&authoredHitEntries(build.character.metadata,talent.id).find(entry=>entry.hit.id===follow.hit)?.unlock;
-    return [{ owner,build,talent,rule,duration,end:0,nextContact:0,cast:undefined as Entry|undefined,
+    return [{ owner,build,talent,rule,duration,certainDuration,certainEnd:0,end:0,nextContact:0,cast:undefined as Entry|undefined,
       follow:(!unlock || build[unlock.state]>=unlock.rank) ? follow : undefined, claim:undefined as FollowUp|undefined,
       counter:0 as number|null,max:input?talentInputMaximum(input,build.constellation):0,nextGain:0 }];
   }));
@@ -40,7 +42,7 @@ export function castWindowStates(world: World, rejected:ReadonlySet<string>=new 
       const exit = w.rule.exit;
       const hit = exit && authoredHitEntries(w.build.character.metadata,w.talent.id).find(entry => entry.hit.id === exit.hit);
       if (exit && hit && (!hit.unlock || w.build[hit.unlock.state] >= hit.unlock.rank)) {
-        exits.push({owner,build:w.build,hit:hit.hit.id,ready:exit.ready,time,source,interval,cast:w.cast});
+        exits.push({owner,build:w.build,hit:hit.hit.id,ready:exit.ready,certain:time<w.certainEnd,time,source,interval,cast:w.cast});
       }
       w.end = time;
     }
@@ -58,12 +60,13 @@ export function castWindowStates(world: World, rejected:ReadonlySet<string>=new 
       const state=states[w.owner] ??= {}, active=!!w.cast && entry.timeMs < w.end;
       const standalone=!!w.rule.hitCounter && !w.cast && entry.actor===w.owner && entry.damage && hitBelongsToCharacter(entry.damage.hit,w.build.character)
         && w.rule.hitCounter.hits.includes(entry.damage.hit.hitId);
-      state[w.rule.fact]=flag(active || !!standalone);
+      const uncertain = active && entry.timeMs >= w.certainEnd;
+      state[w.rule.fact]=flag(uncertain ? null : active || !!standalone);
       const counter=w.rule.hitCounter;
       if (counter) {
         const observed=entry.actor===w.owner && entry.damage && hitBelongsToCharacter(entry.damage.hit,w.build.character)
           && subjectFacts(entry.damage.facts,{kind:'event'})?.[counter.input];
-        state[counter.input]=!after && observed ? observed : count(active?w.counter:standalone?null:0);
+        state[counter.input]=!after && observed ? observed : count(uncertain ? null : active?w.counter:standalone?null:0);
       }
     }
   }
@@ -80,7 +83,7 @@ export function castWindowStates(world: World, rejected:ReadonlySet<string>=new 
     }
     for (const w of windows) if (entry.actor === w.owner) {
       if (entry.kind === 'action' && entry.skillId === w.talent.id && !rejected.has(entry.id)) {
-        w.cast=entry; w.end=entry.timeMs+w.duration; w.nextContact=entry.timeMs; w.claim=undefined;
+        w.cast=entry; w.end=entry.timeMs+w.duration; w.certainEnd=entry.timeMs+w.certainDuration; w.nextContact=entry.timeMs; w.claim=undefined;
         w.counter=w.rule.hitCounter && w.build.ascension>=w.rule.hitCounter.ascension.rank?w.rule.hitCounter.ascension.initial:0;
         w.nextGain=entry.timeMs;
       }
@@ -91,7 +94,7 @@ export function castWindowStates(world: World, rejected:ReadonlySet<string>=new 
         const active=subjectFacts(entry.damage?.facts,{kind:'actor',id:w.owner})?.[w.rule.fact];
         if (!w.claim && w.cast && entry.timeMs<w.end && follow.triggers.includes(hit.hitId)
           && active?.value?.value!==false && fields?.targetsDamaged?.value?.value!==0) {
-          w.claim={owner:w.owner,hit:follow.hit,source:entry.id,remaining:follow.recordedHits,uncertain:active?.value===null || fields?.targetsDamaged?.value===null};
+          w.claim={owner:w.owner,hit:follow.hit,source:entry.id,remaining:follow.recordedHits,uncertain:active?.value===null || !active && entry.timeMs>=w.certainEnd || fields?.targetsDamaged?.value===null};
           followUps.set(entry.id,w.claim);
         }
         if (hit.hitId===follow.hit && (w.cast || entry.sourceEventIds?.length)) {
@@ -148,7 +151,9 @@ export function scheduleCastExits(project:Project,rejected?:ReadonlySet<string>)
     ids.add(id);
     const choices=exit.source?.fieldSwitch ?? {crit:null,reaction:null};
     const damage=structuredClone(prior?.damage ?? {...choices,hit});
-    putHitFact(damage.facts ??= [],{kind:'event'},exit.ready,{kind:'boolean',value:true},'derived');
+    if (!prior || !subjectFacts(prior.damage?.facts,{kind:'event'})?.[exit.ready]) {
+      putHitFact(damage.facts ??= [],{kind:'event'},exit.ready,exit.certain ? {kind:'boolean',value:true} : null,'derived');
+    }
     const record:Entry={...prior,id,actor:exit.owner,timeMs:exit.time,order:Math.max(prior?.order ?? 0,(exit.source?.order ?? -1)+1),
       kind:'damage',definition:exit.owner+'-real-damage',sourceEventIds:sources,damage};
     if (prior) records[records.indexOf(prior)]=record;

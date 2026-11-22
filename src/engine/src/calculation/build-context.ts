@@ -5,7 +5,7 @@ import { evaluateCombatBindings } from './context';
 import { grantedBuildEffects, grantedGleamEffects, grantedResonances, suppliesMoonsign, type Grant } from './grants';
 import { APP_VERSION } from '@leyline/schema/version';
 import { artifactSubstatLimits, calculationBundleSchema, calculationJsonPointer, combatContextSchema, definitionKey, inspectCalculationStructure, inventoryAllocationsSchema, statKeys, structuredBuildActorsSchema, structuredCombatSetupSchema, structuredHitRequestSchema, valueMatchesType,
-  talentInputIssues, talentLevelBonus, type CalculationBundle, type CalculationDiagnostic, type CalculationFact, type CombatActor, type CombatContext, type EvaluatedValue,
+  talentInputIssues, createTalentRankReader, type CalculationBundle, type CalculationDiagnostic, type CalculationFact, type CombatActor, type CombatContext, type EvaluatedValue,
   type DamageOccurrence, type DefinitionRef, type InventoryAllocation, type StructuredBuild, type StructuredDamageEvaluation, type Value, type ValueType } from '@leyline/schema';
 import { calculationBudgets, compileCalculation, compiledData, type CompiledCalculation, type CompiledData } from './compile';
 import { validateCharacterBindings } from './character';
@@ -14,7 +14,7 @@ import type { BoundAttributeReader } from './context';
 import { checkInventoryFeasibility } from './feasibility';
 
 declare const teamBrand: unique symbol;
-export interface PreparedStructuredTeam { readonly [teamBrand]: true; readonly program: CompiledCalculation; readonly actorCount: number }
+export interface PreparedStructuredTeam { readonly [teamBrand]: true; readonly program: CompiledCalculation; readonly actorCount: number; readonly talentRank: ReturnType<typeof createTalentRankReader> }
 interface TeamData { builds: Map<string, StructuredBuild>; actors: CombatActor[]; inventory: InventoryAllocation[]; scenes: SceneSelection[]; sceneGrants: Map<string, Grant[]> }
 const teams = new WeakMap<PreparedStructuredTeam, TeamData>();
 type PreparedTeamResult = { ok: true; team: PreparedStructuredTeam; diagnostics: CalculationDiagnostic[] } | { ok: false; diagnostics: CalculationDiagnostic[] };
@@ -61,6 +61,7 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
     identities.set(key, content);
     appendBundle(entity.calculation.bundle);
   };
+  const talentRank = createTalentRankReader(parsed.data);
   for (const [index, entry] of parsed.data.entries()) {
     if (!entry.build) {
       data.actors.push({ id: entry.id, inputs: {}, facts: {}, actorFacts: {}, ascension: null, constellation: null, refinement: null,
@@ -125,7 +126,9 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
     if (energy !== undefined) inputs.energyCapacity = derived(quantity('energy', energy), character.sources);
     for (const key of ['defenseIgnore', 'amplifyingReactionBonus', 'additiveReactionBonus']) inputs[key] = derived(quantity('scalar', 0), []);
     const effects = grantedBuildEffects(build, setCounts).map(grant => grant.effect.identity);
-    const talents: CombatActor['talents'] = character.talents.map(talent => ({ id: talent.id, level: build.talents[talent.category] + talentLevelBonus(character, talent.category, build.constellation), sourceRefs: talent.sources,
+    const talents: CombatActor['talents'] = character.talents.map(talent => {
+      const rank = talentRank(build, talent.category);
+      return { id: talent.id, ...rank, sourceRefs: [...new Set([...talent.sources, ...rank.sourceRefs])],
       parameters: talent.parameters.map(parameter => {
         const unit = parameter.unit === 'ratio' || parameter.unit === 'scalar' ? 'scalar' : parameter.unit === 'seconds' ? 'milliseconds' : parameter.unit === 'unknown' ? null : parameter.unit;
         const type: ValueType | null = unit ? { kind: 'quantity', unit } : null;
@@ -134,7 +137,8 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
           const number = parameter.unit === 'seconds' ? Number(String(value) + 'e3') : value;
           return unit === 'milliseconds' && (!Number.isSafeInteger(number) || number < 0) ? null : quantity(unit, number);
         }) };
-      }) }));
+      }) };
+    });
     data.actors.push({ id, identity: { element: character.identity.element, region:character.identity.region, weaponType: character.identity.weaponType, sourceRefs: character.sources }, inputs, facts: {}, actorFacts: {}, ascension: build.ascension, constellation: build.constellation, refinement: build.refinement, setCounts, effects, talents }); data.inventory.push(allocation);
   }
   if (diagnostics.length) return { ok: false, diagnostics };
@@ -186,7 +190,7 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
   const sources = new Set(programData.sources.map(source => source.id));
   for (const actor of data.actors) if (Object.values(actor.inputs).some(fact => fact.sourceRefs.some(source => !sources.has(source))) || actor.talents.some(talent => talent.sourceRefs.some(source => !sources.has(source)))) report('missing-dependency', '/sources', '配装属性或参数缺少来源记录。');
   if (diagnostics.length) return { ok: false, diagnostics };
-  const team = Object.freeze({ program: compiled.program, actorCount: data.actors.length }) as PreparedStructuredTeam; teams.set(team, data);
+  const team = Object.freeze({ program: compiled.program, actorCount: data.actors.length, talentRank }) as PreparedStructuredTeam; teams.set(team, data);
   return { ok: true, team, diagnostics };
 }
 

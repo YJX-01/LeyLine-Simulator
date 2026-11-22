@@ -3,7 +3,7 @@
   "kind": "character-definition",
   "namespace": "builtin",
   "id": "skirk",
-  "revision": "3",
+  "revision": "4",
   "identity": {
     "name": "丝柯克",
     "title": "虚渊暗星",
@@ -1229,7 +1229,18 @@
       "id": "skirk.passive3",
       "name": "诸武相授",
       "description": "队伍中所有角色的元素类型均为水元素或冰元素，并且至少有一名水元素角色、一名冰元素角色时，队伍中自己的角色的元素战技等级提高1级。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "talentBonuses": [
+        {
+          "category": "skill",
+          "levels": 1,
+          "recipient": "team",
+          "exactPartyElements": [
+            "hydro",
+            "cryo"
+          ]
+        }
+      ]
     }
   ],
   "constellations": [

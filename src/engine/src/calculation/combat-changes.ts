@@ -1,5 +1,5 @@
 import { passiveEnergyClock } from './passive-energy';
-import { findBuildHit, subjectFacts, talentLevelBonus, type CalculationBinding, type CalculationFact, type CombatChange, type CombatFrame, type Project } from '@leyline/schema';
+import { findBuildHit, subjectFacts, talentParameterAt, type CalculationBinding, type CalculationFact, type CombatChange, type CombatFrame, type Project } from '@leyline/schema';
 import { actorIsOnField, grantedSceneEffects } from './build-context';
 import { evaluateCombatBindings } from './context';
 import { grantedBuildEffects, grantedDamageChanges, grantedPeriodicEnergy, grantedResonances } from './grants';
@@ -143,8 +143,7 @@ export function resolveCombatChanges(project: Project, runtime: ProjectRuntime):
     if (build && entry.kind === 'action') {
       const talent = build.character.talents.find(t => t.id === entry.skillId);
       if (talent?.category === 'skill') {
-        const level = build.talents.skill + talentLevelBonus(build.character, 'skill', build.constellation);
-        const seconds = talent.parameters.find(p => p.id === talent.cooldownParameter)?.values[level - 1];
+        const seconds = talentParameterAt(talent, talent.cooldownParameter, runtime.team.talentRank(build, 'skill'));
         const queue = queues.get(entry.actor) ?? [];
         const maxCharges = (talent.skillCharges ?? 1) + build.character.constellations.filter(c=>c.rank<=build.constellation && c.extraSkillCharge).length;
         const saved = queue.length ? chargeReduction.get(entry.actor) : undefined;
@@ -163,10 +162,9 @@ export function resolveCombatChanges(project: Project, runtime: ProjectRuntime):
         else queues.delete(entry.actor);
       }
       if (talent?.category === 'burst' && (energy.has(entry.actor) || talent.energyCapacity || talent.cooldownParameter)) {
-        const level = build.talents.burst + talentLevelBonus(build.character, 'burst', build.constellation);
         const previous = energy.get(entry.actor), capacity = capacities.get(entry.actor);
         const spent = entry.facts?.energySpent ? number(entry.facts.energySpent) : talent.energyCapacity ? capacity : undefined;
-        const cooldown = talent.parameters.find(p => p.id === talent.cooldownParameter)?.values[level-1];
+        const cooldown = talentParameterAt(talent, talent.cooldownParameter, runtime.team.talentRank(build, 'burst'));
         const next = burstReady.get(entry.actor) ?? 0;
         const source = { actor:entry.actor, source:entry.id, effect:talent.id, timeMs:entry.timeMs };
         if (entry.timeMs < next) {

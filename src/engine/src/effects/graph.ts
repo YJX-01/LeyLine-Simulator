@@ -4,7 +4,7 @@ import { expandCastExits, resolveCombatChanges } from '../calculation/combat-cha
 import { accumulateHealingHits } from '../calculation/accumulated-hits';
 import { resolveTalentHealing } from '../calculation/talent-healing';
 import { findCharacterHit } from '@leyline/schema';
-import { statKeys, reactionBonusKeys, talentLevelBonus, type Project, type Diagnostic, type QuantityUnit, type StatKey, type ReactionBonusKey, type HitDamageKey } from '@leyline/schema';
+import { statKeys, reactionBonusKeys, createTalentRankReader, talentParameterAt, type Project, type Diagnostic, type QuantityUnit, type StatKey, type ReactionBonusKey, type HitDamageKey } from '@leyline/schema';
 import { resolveStaticBuild } from '../attributes/build';
 import { percentStat, relevantPanelIssues, statUnit } from '../attributes/stat-dependencies';
 import type { DamagePoint, EvaluationResult, EffectInstance, AttributeRead } from '@leyline/schema';
@@ -33,6 +33,7 @@ export function evaluateDependencyGraph(input: Project, options: GraphOptions = 
   const project = coordinated.project;
   const preparedRuntime = project.candidate.actors.some(actor => actor.build) || project.timeline.some(record => record.reactionEvent) ? prepareProjectRuntime(project) : undefined;
   const runtime = preparedRuntime?.ok ? preparedRuntime.runtime : undefined;
+  const talentRank = runtime?.team.talentRank ?? createTalentRankReader(project.candidate.actors);
   const diagnostics: Diagnostic[] = [...summons.diagnostics, ...coordinated.diagnostics];
   const report = (code: Diagnostic['code'], path: string, message: string) => {
     if (!diagnostics.some(d => d.code === code && d.path === path && d.message === message)) diagnostics.push({ code, path, message });
@@ -361,8 +362,7 @@ export function evaluateDependencyGraph(input: Project, options: GraphOptions = 
         case 'talent-parameter': {
           const build = actors.get(ctx.actor)?.build;
           const skill = build?.character.talents.find(talent => talent.id === node.skillId);
-          const level = build && skill ? build.talents[skill.category] + talentLevelBonus(build.character, skill.category, build.constellation) : 0;
-          const value = skill?.parameters.find(parameter => parameter.id === node.parameter)?.values[level - 1];
+          const value = build && skill ? talentParameterAt(skill, node.parameter, talentRank(build, skill.category)) : undefined;
           if (value === undefined) { report('missing-reference', path, '规则引用的技能参数或天赋等级缺失。'); return null; }
           return { value, unit: node.unit };
         }

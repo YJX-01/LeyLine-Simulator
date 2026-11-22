@@ -27,9 +27,9 @@ export const combatActorSchema = z.object({
   identity: z.object({ element: z.enum(elements), region:z.string().max(160).optional(), weaponType: idSchema.optional(), sourceRefs: z.array(idSchema).max(1000) }).strict().optional(),
   ascension: z.number().int().min(0).max(6).nullable(), constellation: z.number().int().min(0).max(6).nullable(), refinement: z.number().int().min(1).max(5).nullable(),
   setCounts: z.record(idSchema, z.number().int().min(0).max(5)), effects: z.array(definitionRefSchema).max(10000),
-  talents: z.array(z.object({ id: idSchema, level: z.number().int().min(1).max(30), sourceRefs: z.array(idSchema).max(1000).default([]),
+  talents: z.array(z.object({ id: idSchema, level: z.number().int().min(1).max(30), upperLevel: z.number().int().min(1).max(30).optional(), sourceRefs: z.array(idSchema).max(1000).default([]),
     parameters: z.array(z.object({ id: idSchema, type: calculationValueTypeSchema.nullable(), values: z.array(calculationValueSchema.nullable()).min(1).max(30) }).strict()).max(1000),
-  }).strict()).max(1000),
+  }).strict().refine(talent => talent.upperLevel === undefined || talent.upperLevel > talent.level, '可能的天赋等级上限须高于已确定等级。')).max(1000),
 }).strict().refine(actor => !actor.effects.length || actor.ascension !== null && actor.constellation !== null && actor.refinement !== null,
   '启用配装效果需要对应的突破、命座和精炼。');
 export const combatContextSchema = z.object({

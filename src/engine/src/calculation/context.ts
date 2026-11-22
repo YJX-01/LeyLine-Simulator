@@ -1,4 +1,4 @@
-import { subjectFacts, boundFormulaSchema, calculationBindingSchema, calculationJsonPointer, combatContextSchema, combatFrameSchema, definitionKey, inspectCalculationStructure, valueMatchesType, valueTypeAssignable,
+import { subjectFacts, boundFormulaSchema, calculationBindingSchema, calculationJsonPointer, combatContextSchema, combatFrameSchema, definitionKey, inspectCalculationStructure, talentCurveValue, valueMatchesType, valueTypeAssignable,
   type AttributeDefinition, type BoundFormula, type CalculationActorSelector, type CalculationBinding, type CalculationDiagnostic, type CalculationFact,
   type CalculationReadTime, type CombatContext, type CombatFrame, type DefinitionRef, type EvaluatedValue, type FormulaEvaluation, type Value, type ValueType } from '@leyline/schema';
 import { compiledData, type CompiledCalculation, type CompiledData } from './compile';
@@ -166,7 +166,8 @@ class BoundEvaluator {
       const pointer = () => '/context/actors/' + this.context.actors.findIndex(actor => actor.id === actorId) + '/talents';
       if (!parameter) return this.session.invalid(origin, binding.parameterId, pointer(), '队员缺少绑定的技能参数：' + binding.skillId + '.' + binding.parameterId, 'missing-dependency');
       if (parameter.type && !valueTypeAssignable(parameter.type, binding.type)) return this.session.invalid(origin, binding.parameterId, pointer(), '队员参数与绑定的类型或单位不匹配。', 'unit-mismatch');
-      const value = parameter?.values[talent!.level - 1];
+      const value = talentCurveValue(parameter.values, talent!, (a, b) => a?.kind === b?.kind && a?.value === b?.value);
+      if (value === undefined && talent?.upperLevel) return this.missing(origin, binding.skillId + '.teamTalentLevel', binding.type, actorId);
       if (value == null || !parameter?.type) return this.missing(origin, binding.skillId + '.' + binding.parameterId, binding.type, actorId);
       return this.readFact(origin, binding.parameterId, binding.type, actorId, { value, provenance: 'derived', sourceRefs: talent!.sourceRefs });
     }

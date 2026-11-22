@@ -64,7 +64,8 @@ function referenceDamage(build, talent, hit, frame, withBuffs = true) {
   function parameter(skillId, key) {
     const source = skillId ? character.talents.find(entry => entry.id === skillId) : talent;
     if (!source) return NaN;
-    return source.parameters.find(p => p.id === key)?.values[build.talents[source.category] - 1] ?? NaN;
+    const bonus = character.id === 'tartaglia' && source.category === 'normal' ? 1 : 0;
+    return source.parameters.find(p => p.id === key)?.values[build.talents[source.category] + bonus - 1] ?? NaN;
   }
   function valueOfFact(key) {
     if(talent.inputs?.some(input=>input.id===key) && Object.hasOwn(frame.facts,key)) return frame.facts[key].value?.value;

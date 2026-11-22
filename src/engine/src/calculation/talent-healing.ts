@@ -1,4 +1,4 @@
-import { definitionKey, subjectFacts, talentLevelBonus, type CalculationFact, type CombatChange, type Project } from '@leyline/schema';
+import { definitionKey, subjectFacts, talentParameterAt, type CalculationFact, type CombatChange, type Project } from '@leyline/schema';
 import { expression } from '@leyline/schema/buffs';
 import { actorIsOnField } from './build-context';
 import { evaluateCombatBindings } from './context';
@@ -41,8 +41,8 @@ function healingAt(runtime: ProjectRuntime, record: Entry, healing: Heal): Pick<
       if (!applies.value.value) return { status: 'excluded', healing: 0 };
     } else missing.push(...(reading.diagnostics.length ? reading.diagnostics.map(d => d.message) : ['治疗生效条件']));
   }
-  const level = build.talents[talent.category] + talentLevelBonus(build.character, talent.category, build.constellation);
-  const parameter = (id: string) => talent.parameters.find(p => p.id === id)?.values[level - 1];
+  const rank = runtime.team.talentRank(build, talent.category);
+  const parameter = (id: string) => talentParameterAt(talent, id, rank);
   const rate = parameter(heal.rate), flat = heal.flat ? parameter(heal.flat) : 0;
   const owner = readRuntimePanel(runtime, record.actor, record);
   const receiver = recipient === record.actor ? owner : readRuntimePanel(runtime, recipient, record);

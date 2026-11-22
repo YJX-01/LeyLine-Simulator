@@ -15,7 +15,7 @@ import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
 import { getReactionCalculationBundle, loadCatalog, type GameCatalog } from '@leyline/game-data';
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
-import { damageCalculatorSchema, projectSchema, type ValueType, elements, talentLevelBonus, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
+import { damageCalculatorSchema, projectSchema, type ValueType, elements, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
 import type { AccountCharacter } from '../domain/account';
 import { calculatorRequest, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
 import { addActorFromBuild, addAttributeCapture, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
@@ -93,6 +93,13 @@ const character = computed<AccountCharacter | undefined>(() => actor.value?.buil
 } : undefined);
 const queryCharacter = computed(() => hitOwner.value?.build?.character);
 const skill = computed(() => findBuildHit(hitOwner.value?.build, damage.value.hit)?.talent);
+const talentBonusLabel = computed(() => {
+  const build = hitOwner.value?.build, category = skill.value?.category;
+  if (!document.value || !build || !category) return '';
+  const rank = createTalentRankReader(document.value.project.candidate.actors)(build, category);
+  const base = build.talents[category];
+  return rank.upperLevel === undefined ? String(rank.level - base) : `${rank.level - base}–${rank.upperLevel - base}（队伍元素待定）`;
+});
 const selectedHit = computed(() => findBuildHit(hitOwner.value?.build, damage.value.hit)?.hit);
 const selectedOutput = computed(() => Object.values(selectedHit.value?.damage ?? {})[0]);
 const hitFacts = computed(() => queryCharacter.value ? selectionFacts(selectedOutput.value?.predicate, queryCharacter.value.calculation.bundle) : []);
@@ -630,7 +637,7 @@ defineExpose({ requestLeave: leaveCalculator });
         <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(comparisonPoint?.delta) }}</td></tr></tbody></table>
         <details v-if="point?.real" class="result-support"><summary>配装属性与来源</summary>
           <p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p>
-          <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentLevelBonus(hitOwner.build.character, skill.category, hitOwner.build.constellation) }}</p>
+          <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentBonusLabel }}</p>
           <dl><template v-for="(value, key) in point.real.panel.stats" :key="key"><dt>{{ realStatLabel(key) }}</dt><dd>{{ number(value) }}</dd></template></dl>
           <p v-for="entry in point.real.panel.contributions" :key="entry.source + ':' + entry.stat + ':' + entry.value">{{ entry.source }} / {{ realStatLabel(entry.stat) }} {{ number(entry.value) }}</p>
         </details>

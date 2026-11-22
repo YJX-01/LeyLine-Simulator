@@ -9,7 +9,7 @@ import { readCalculationData } from '../../../tools/lib/catalog-data.mjs';
 import { assembleCalculationLibrary } from '../../../tools/lib/calculation-library.mjs';
 import { auditHealingWindows, type HealingWindowCase } from '../../../tools/lib/set-condition-audit.mjs';
 
-type ReopenedCase = RosterReplayQuery & { anemoResistance?: number; missingInput?: string; hpChanges?: number[];
+type ReopenedCase = RosterReplayQuery & { anemoResistance?: number; missingInput?: string; hpChanges?: number[]; additionalMembers?: Build[];
   reactionRecords?: { kind: 'freeze' | 'shatter'; timeMs: number; byTeammate?: boolean }[];
   reactionRules?: Project['reactionRules']; timeMs?: number };
 async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
@@ -28,11 +28,12 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
     });
     const values = [];
     try {
-      for (const { build, damage, teammate, capture, cast, anemoResistance, hpChanges, reactionRecords, reactionRules, timeMs } of cases) {
+      for (const { build, damage, teammate, additionalMembers, capture, cast, anemoResistance, hpChanges, reactionRecords, reactionRules, timeMs } of cases) {
         const enemy = defaultEnemy(); enemy.level = build.level;
         if (anemoResistance !== undefined) enemy.resistances.anemo = anemoResistance;
         const file = createDamageCalculation(build, damage, enemy);
         const peer = teammate && addActorFromBuild(file.project, teammate);
+        for (const member of additionalMembers ?? []) addActorFromBuild(file.project, member);
         if (timeMs !== undefined) file.project.timeline[0].timeMs = timeMs;
         if (cast) {
           file.project.timeline[0].timeMs = cast.delayMs;
@@ -95,7 +96,7 @@ test('every character form reopens its first normal attack in the calculator and
         + build.weapon!.baseAttack * build.weapon!.attackCurve[1] + build.weapon!.promotion[0];
       const expected = first.base.reduce((sum, term) => {
         if (term.stat !== 'attack' || term.count || term.skill) throw new Error(id + ' 首段的独立算式需复核');
-        const rate = term.ratio ?? normal.parameters.find(p => p.id === term.parameter)!.values[0];
+        const rate = term.ratio ?? normal.parameters.find(p => p.id === term.parameter)!.values[id === 'tartaglia' ? 1 : 0];
         return sum + atk * rate;
       }, 0) * .5 * .9;
       const flag = (value: boolean) => ({ value: { kind: 'boolean' as const, value }, sourceRefs: [], provenance: 'explicit' as const });
@@ -119,6 +120,25 @@ async function replayCatalog() {
     weapons: await Promise.all(catalog.inventory.weapons.map(id => catalog.get('weapons', id))), sets: await Promise.all(catalog.inventory.sets.map(id => catalog.get('sets', id)))
   };
 }
+test('party talent levels use the saved lineup in both files and the actual Worker', async ({ page }) => {
+  const base = { sets:[], artifacts:[], level:1, ascension:0, constellation:0, weaponLevel:1, weaponAscension:0,
+    refinement:1, talents:{normal:1,skill:1,burst:1} };
+  const member = async (id: string, weapon: string): Promise<Build> => ({ ...await catalogSnapshotFields(id, weapon), ...base });
+  const [kaeya, tartaglia, skirk, amber] = await Promise.all([member('kaeya','dullblade'),member('tartaglia','huntersbow'),
+    member('skirk','dullblade'),member('amber','huntersbow')]);
+  const cases: ReopenedCase[] = [];
+  const lineups: [Build[], number, number][] = [[[],0,0],[[tartaglia],1,0],[[skirk],0,0],[[skirk,tartaglia],1,1],[[skirk,tartaglia,amber],1,0]];
+  for (const [members, normal, skill] of lineups) for (const [category, bonus] of [['normal',normal],['skill',skill]] as const) {
+    const talent = kaeya.character.talents.find(t => t.category === category)!;
+    const attack = kaeya.character.attributes.base.attack + kaeya.weapon!.baseAttack;
+    const rates = category === 'normal' ? [.5375,.58125] : [1.912,2.0554];
+    cases.push({label:category+'/'+members.map(m=>m.character.id).join(','), build:kaeya, additionalMembers:members,
+      damage:{hit:{definition:{group:'characters',namespace:'builtin',id:'kaeya',revision:kaeya.character.revision},hitId:talent.id+'.param1'},
+        crit:'noncritical',reaction:'none',facts:[]},expected:attack*rates[bonus]*.5*.9});
+  }
+  await page.goto('/');
+  expect(await compareReopenedQueries(page, cases)).toEqual([]);
+});
 test('Varka keeps the recorded striking hand and reports an undetermined charged hit in both save formats', async ({ page }) => {
   const starter = { sets: [], artifacts: [], level: 1, ascension: 0, constellation: 0, weaponLevel: 1, weaponAscension: 0,
     refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };
