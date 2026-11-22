@@ -4,7 +4,7 @@ import { formatWorkbenchExpression, getDamagePresentation } from '../../../../sr
 
 function customProject(nodes: ExpressionNode[], root = 'root'): Project {
   return {
-    schemaVersion: '0.1.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'custom-axis', revision: '1',
+    schemaVersion: '0.2.0', rulesVersion: 'timeline-v1', calculationProfile: 'direct', id: 'custom-axis', revision: '1',
     definitions: [{ id: 'custom-formula', version: '7', source: { kind: 'user', reference: 'independent-display-example', verified: false }, nodes, effects: [], damage: root }],
     candidate: { id: 'candidate', actors: [{ id: 'invented-actor', character: 'fictional-character', weapon: 'fictional-weapon', inputs: {} }] },
     conditions: {}, timeline: [{ id: 'hit', actor: 'invented-actor', kind: 'damage', definition: 'custom-formula', timeMs: 700, order: 0 }], objective: {},

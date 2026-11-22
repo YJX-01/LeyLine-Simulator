@@ -1,3 +1,4 @@
+import { characterHitRef } from '@leyline/schema';
 import { exportCharacterSnapshot } from '../../../../src/web/src/domain/structured-character-import';
 import { talentLevelBonus } from '@leyline/schema';
 import { describe, expect, it } from 'vitest';
@@ -37,19 +38,20 @@ describe('portable real character metadata', () => {
     const before = JSON.stringify(project), accountBefore = JSON.stringify(account);
     const file = copyCharacterDefinition(recorded.character, recorded.dataVersion);
     const talent=file.talents.find(talent=>talent.category==='skill')!;
-    const parameter=talent.parameters.find(parameter=>parameter.id===talent.hits[0].parameter)!;
+    const base = file.metadata.talents.find(entry => entry.id === talent.id)!.hits[0].base;
+    const parameter = talent.parameters.find(parameter => Array.isArray(base) && parameter.id === base[0].parameter)!;
     const level=recorded.talents.skill+talentLevelBonus(file,'skill',recorded.constellation);
     // An explicit custom trial, without an invented enemy, crit, or observed damage value.
-    const trialValue=parameter.values[level-1]*2;
-    const trial=prepareCharacterDefinition(file,{[JSON.stringify([talent.id,'0',String(level-1)])]:String(trialValue)});
+    const calculatorFactValue=parameter.values[level-1]*2;
+    const trial=prepareCharacterDefinition(file,{[JSON.stringify([talent.id,'0',String(level-1)])]:String(calculatorFactValue)});
     const trialProject=applyCharacterDefinition(project,actorId,trial);
     const trialBuild=trialProject.candidate.actors[0].build!;
-    const calculation=evaluateDamage(trialBuild,{skillId:talent.id,hitId:talent.hits[0].id,outputId:talent.hits[0].outputs[0].id,crit:null,reaction:null},undefined);
-    expect(calculation.parts.multiplier).toBe(trialValue);
+    const calculation=evaluateDamage(trialBuild,{hit:characterHitRef(trialBuild.character,talent.hits[0].id),crit:null,reaction:null},undefined);
+    expect(calculation.parts.multiplier).toBe(calculatorFactValue);
     expect(calculation.value).toBeNull(); // The original showcase has no observed combat conditions.
     const trialTalent=trialBuild.character.talents.find(talent=>talent.category==='skill')!;
     const template=trialTalent.details.find(detail=>detail.template.includes(`{${parameter.id}:`))!.template;
-    expect(formatTalentDetail(trialTalent,template,level)).toContain(`${(trialValue*100).toFixed(1)}%`);
+    expect(formatTalentDetail(trialTalent,template,level)).toContain(`${(calculatorFactValue*100).toFixed(1)}%`);
     const next = applyCharacterDefinition(project, actorId, file);
     expect(next.candidate.actors[0].build!.character.id).toBe(file.id);
     expect(next.candidate.actors[0].build!.artifacts).toEqual(recorded.artifacts);

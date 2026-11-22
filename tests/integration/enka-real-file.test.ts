@@ -1,3 +1,4 @@
+import { hpFacts } from '../helpers/catalog-calculation';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount, cloneAccount, parseAccount, equipArtifact, artifactOwners } from '../../src/web/src/domain/account';
@@ -98,9 +99,9 @@ describe.skipIf(!existsSync(path))('explicit hit conditions derived from recorde
     expect(pending.stats.critRate).toBeNull();
     expect(pending.issues).toContainEqual(expect.objectContaining({code:'unknown',message:expect.stringContaining('hpRatio')}));
     expect(pending.status).toBe('partial');
-    const request={skillId:'xingqiu.skill',hitId: 'xingqiu.skill.param1',outputId: 'xingqiu.skill.param1.damage',crit:'noncritical' as const,reaction:'none' as const};
-    expect(evaluateDamage(build,{...request,conditions:{hpRatio:1}},undefined).panel.stats.critRate).toBe(active.stats.critRate);
-    expect(evaluateDamage(build,{...request,conditions:{hpRatio:0.9}},undefined).panel.stats.critRate).toBe(inactive.stats.critRate);
+    const request={hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.skill.param1' },crit:'noncritical' as const,reaction:'none' as const};
+    expect(evaluateDamage(build,{...request,facts:hpFacts('owner',1)},undefined).panel.stats.critRate).toBe(active.stats.critRate);
+    expect(evaluateDamage(build,{...request,facts:hpFacts('owner',0.9)},undefined).panel.stats.critRate).toBe(inactive.stats.critRate);
     expect(build).not.toHaveProperty('hpRatio');
     const project=createEmptyProject(),id=addActorFromBuild(project,build);
     expect(project.enemy).toBeUndefined();
@@ -112,8 +113,8 @@ describe.skipIf(!existsSync(path))('explicit hit conditions derived from recorde
     const calculation=structuredClone(build);calculation.constellation=0;
     const axis=createEmptyProject(),actor=addActorFromBuild(axis,calculation);axis.enemy=defaultEnemy();
     const unknown=addSkillHit(axis,actor,'xingqiu.skill',0,0,{crit:'expected',reaction:'none'});
-    const high=addSkillHit(axis,actor,'xingqiu.skill',0,1000,{crit:'expected',reaction:'none',conditions:{hpRatio:1}});
-    const low=addSkillHit(axis,actor,'xingqiu.skill',0,2000,{crit:'expected',reaction:'none',conditions:{hpRatio:0.9}});
+    const high=addSkillHit(axis,actor,'xingqiu.skill',0,1000,{crit:'expected',reaction:'none',facts:hpFacts(actor,1)});
+    const low=addSkillHit(axis,actor,'xingqiu.skill',0,2000,{crit:'expected',reaction:'none',facts:hpFacts(actor,0.9)});
     const result=evaluateTimeline(axis),point=(id:string)=>result.points.find(point=>point.id===id)!;
     expect(point(unknown).value).toBeNull();
     expect(point(high).value).not.toBeNull();expect(point(low).value).not.toBeNull();

@@ -1,8 +1,8 @@
 import * as schemas from '@leyline/schema';
 import { DATA_VERSION } from '@leyline/game-data';
-import { describeCharacter, linkCharacterFile } from '@leyline/game-data/character-file';
+import { linkCharacterFile } from '@leyline/game-data/character-file';
 import { definitionKey, parseCalculationJson, type CalculationDiagnostic, type DefinitionRef, type StructuredCharacterDefinition } from '@leyline/schema';
-import { collectCalculationClosure, collectCalculationRoots, compileStructuredCharacter } from '@leyline/engine';
+import { collectCalculationRoots, compileStructuredCharacter } from '@leyline/engine';
 
 export interface CharacterImportConflict { kind: 'builtin-claim' | 'character' | 'calculation' | 'source'; identity: string; message: string }
 declare const preparedBrand: unique symbol;
@@ -48,9 +48,14 @@ export function prepareResolvedCharacterImport(value: unknown, registry: readonl
   }
   let character = incoming.character;
   if (character.origin === 'custom') {
-    const knownCoverage = new Map(current.flatMap(entry => entry.calculation.bundle.coverage).map(record => [definitionKey(record.identity), canonical(record)]));
-    for (const record of character.calculation.bundle.coverage) if (knownCoverage.get(definitionKey(record.identity)) !== canonical(record)) record.evidence = 'declared';
-    const normalized = compileStructuredCharacter(character);
+    const existing = current.find(entry => definitionKey(entry) === definitionKey(character));
+    const metadata = structuredClone(character.metadata);
+    for (const [id, scope] of Object.entries(metadata.support)) {
+      if (canonical(existing?.metadata.support[id]) !== canonical(scope)) scope.evidence = 'declared';
+    }
+    const normalizedSource = linkCharacterFile(metadata, character.dataVersion, collectCalculationRoots);
+    const normalized = compileStructuredCharacter({ ...character, metadata, calculation: { ...character.calculation,
+      bundle: { ...character.calculation.bundle, coverage: normalizedSource.calculation.bundle.coverage } } });
     if (!normalized.ok) return normalized;
     character = normalized.character;
   }
@@ -100,9 +105,7 @@ export function applyCharacterImport(registry: readonly StructuredCharacterDefin
 export function exportCharacterSnapshot(input: unknown): string {
   const character = compileStructuredCharacter(input);
   if (!character.ok) throw new Error(character.diagnostics.map(diagnostic => diagnostic.message).join('\n'));
-  const closure = collectCalculationClosure(character.character);
-  if (!closure.ok) throw new Error(closure.diagnostics.map(diagnostic => diagnostic.message).join('\n'));
-  const value = schemas.characterMetadataSchema.parse(describeCharacter({ ...character.character, calculation: { ...character.character.calculation, bundle: closure.bundle } }));
+  const value = character.character.metadata;
   const text = JSON.stringify(value, null, 2) + '\n', parsed = parseCalculationJson(text);
   if (!parsed.ok) throw new Error(parsed.diagnostics.map(diagnostic => diagnostic.message).join('\n'));
   return text;

@@ -51,7 +51,7 @@ describe('current optional action companion transactions from actual Vesna metad
     expect(prepareActionsImport(format(version), character, original).ok).toBe(false);
     const stale = custom(); stale.character.revision = 'missing';
     expect(prepareActionsImport(format(stale), character, original).ok).toBe(false);
-    const output = custom(); output.actions[0].hits[0].outputIds[0] = 'absent-output';
+    const output = custom(); output.actions[0].hits[0].hitId = 'absent-hit';
     expect(prepareActionsImport(format(output), character, original).ok).toBe(false);
     expect(prepareActionsImport(format(custom()).slice(0, -8), character, original).ok).toBe(false);
   });

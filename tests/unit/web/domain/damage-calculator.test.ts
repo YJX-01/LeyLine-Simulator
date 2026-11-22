@@ -1,17 +1,19 @@
+import { hpFacts } from '../../../helpers/catalog-calculation';
+import { characterHitRef } from '@leyline/schema';
 import { officialShowcase } from '../../../helpers/recorded-reference';
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
 import { calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
-import { ordinaryTrialId, projectSchema, type DamageCalculatorDocument } from '@leyline/schema';
+import { projectSchema, type DamageCalculatorDocument } from '@leyline/schema';
 import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
 import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
 import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject, nextRecordId } from '../../../../src/web/src/domain/workbench-project';
 import { evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
-import { calculatorIntervals, setTrialCondition } from '../../../../src/web/src/domain/calculator-conditions';
+import { calculatorIntervals, setCalculatorCondition } from '../../../../src/web/src/domain/calculator-conditions';
 
 describe.skipIf(!existsSync(officialShowcase))('calculator reads original public showcase and local inventory independently', () => {
   it('retains real wearing IDs when a format derivative lacks a local cultivation build', async () => {
@@ -49,24 +51,25 @@ it.skipIf(!existsSync(vesnaRecording))('the recorded Varesa trial uses the same 
   project.enemy = defaultEnemy();
   const actorId = addActorFromBuild(project, build);
   const skill = build.character.talents.find(skill => skill.id === 'varesa.burst')!;
-  const hit = skill.hits.find(hit => hit.parameter === 'param5')!;
+  const hit = skill.hits.find(hit => hit.id === 'varesa.burst.param5')!;
   const recordId = nextRecordId(project);
   project.timeline.push({ id: recordId, actor: actorId, kind: 'damage', definition: actorId + '-real-damage', timeMs: 0, order: 0,
-    damage: { skillId: skill.id, hitId: hit.id, outputId: ordinaryTrialId(hit.id), crit: 'critical', reaction: 'none' } });
+    damage: { hit: characterHitRef(build.character, hit.id), crit: 'critical', reaction: 'none' } });
   const document: DamageCalculatorDocument = { schemaVersion: project.schemaVersion, kind: 'damage-calculator', project, actorId, recordId };
   expect(projectSchema.safeParse(project).success).toBe(true);
   const saved = JSON.stringify(document);
   const evaluate = () => evaluateTimeline(calculatorWorkerRequest(document, 1).project).points.find(point => point.id === recordId)!;
   const point = evaluate();
-  expect(point.value).toBeNull();
-  expect(point.modeledValue).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
-  const modeled = point.real!.structured!.outputs[0].modeledValue?.value;
+
+  expect(point.value).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
+  const output = point.real!.structured!.outputs[0].value;
+  const modeled = output.state === 'known' ? output.value : undefined;
   expect(modeled?.kind === 'quantity' && modeled.value).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
   expect(JSON.stringify(document)).toBe(saved);
   project.timeline[0].damage!.crit = null;
   const unknown = evaluate();
   expect(unknown.value).toBeNull();
-  expect(unknown.real!.structured!.outputs[0].modeledValue).toBeUndefined();
+  expect(unknown.real!.structured!.outputs[0].value.state).toBe('unknown');
 }, 20000);
 
 it.skipIf(!existsSync(officialShowcase))('Harbinger trial uses the actual HP threshold, interval and hit override', async () => {
@@ -83,14 +86,14 @@ it.skipIf(!existsSync(officialShowcase))('Harbinger trial uses the actual HP thr
   project.combatStates = [{ id: 'trial-hp', actor, startMs: 1000, endMs: 2000, values: { hpRatio: 0.95 } }];
   expect(option().checked).toBe(true);
   expect(calculatorIntervals(project, actor, 2000, id)).toEqual({});
-  damage.stateOverrides = [{ actor, values: { hpRatio: 0.9 } }];
+  damage.facts = hpFacts(actor, 0.9);
   expect(option().checked).toBe(false);
   const rate = () => evaluateTimeline(project).points[0].real!.panel.stats.critRate!;
   const before = rate();
-  setTrialCondition(damage, actor, 'hpRatio', option().hp!.preset);
+  setCalculatorCondition(damage, actor, 'hpRatio', option().hp!.preset);
   expect(option().checked).toBe(true);
   expect(rate() - before).toBeCloseTo(0.14, 10);
-  expect(damage.stateOverrides[0].values.hpRatio).toBe(1);
+  expect(damage.facts[0].values.hpRatio.value?.value).toBe(1);
   expect(project.combatStates[0].values.hpRatio).toBe(0.95);
 });
 
@@ -103,8 +106,9 @@ it.skipIf(!existsSync(officialShowcase))('selecting the recorded Bennett Nobless
   const recipient = addActorFromBuild(project,build('xingqiu'));
   const hitId = addSkillHit(project,recipient,'xingqiu.skill',0,1000,{crit:'noncritical',reaction:'none'});
   const damage = project.timeline[0].damage!;
+  damage.facts = [{ subject: { kind: 'actor', id: recipient }, values: { onField: { value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] } } }];
   const initial = calculatorBuffChoices(project,recipient,damage,1000,hitId);
-  const set = initial.find(option => option.ownerId === source && option.triggerSkill === 'bennett.burst')!;
+  const set = initial.find(option => option.ownerId === source && option.effect.id === 'noblesseoblige.burst-team-attack.team-attack')!;
   expect(set.checked).toBe(false);
   const active = applyCalculatorBuffs(project,damage,initial,new Map([[set.id,true]]),1000,hitId);
   expect(project.timeline).toHaveLength(1);

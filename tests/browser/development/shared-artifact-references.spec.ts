@@ -9,8 +9,8 @@ test('shared local equipment survives combination use and selected showcase sync
   await page.setViewportSize({width:1440,height:1000});
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
   await page.route('**/api/enka/618285856',route=>route.fulfill({json:JSON.parse(readFileSync(source,'utf8'))}));
-  const account=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document);
-  const combinations=()=>page.evaluate(()=>localStorage.getItem('leyline-artifact-combinations-0.1.0'));
+  const account=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document);
+  const combinations=()=>page.evaluate(()=>localStorage.getItem('leyline-artifact-combinations-0.2.0'));
   await page.goto('/');
   await page.getByRole('button',{name:'展柜导入',exact:true}).click();
   await page.getByLabel('游戏 UID',{exact:true}).pressSequentially('618285856');

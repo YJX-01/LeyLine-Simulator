@@ -12,7 +12,7 @@ test('real showcase: character favorites persist, filter and sort independently 
   const iconTreatments=await page.locator('.character-card .level-badge').evaluateAll(nodes=>nodes.every(node=>getComputedStyle(node).backgroundColor===getComputedStyle(node.parentElement!).backgroundColor && getComputedStyle(node).backgroundColor!=='rgb(255, 255, 255)'));
   expect(iconTreatments).toBe(true);
   expect(await page.locator('.character-card .element-badge').first().evaluate(node=>getComputedStyle(node).filter)).toContain('drop-shadow');
-  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
+  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
   await page.getByRole('button',{name:'查看甘雨详情',exact:true}).click();
   const role=page.getByRole('dialog',{name:'甘雨',exact:true});
   const favorite=role.getByRole('button',{name:'设置甘雨收藏',exact:true});
@@ -62,7 +62,7 @@ test('real showcase: character favorites persist, filter and sort independently 
   await expect(page.getByRole('button',{name:'设置甘雨收藏',exact:true})).toHaveAttribute('aria-description','3级收藏');
   await page.getByRole('button',{name:'设置甘雨收藏',exact:true}).click();
   await expect(page.getByRole('button',{name:'设置甘雨收藏',exact:true})).toHaveAttribute('aria-description','未收藏');
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
 });
 
 test('preferred and alternate configurations keep separate ratings across sorting, filtering and promotion', async ({ page }) => {

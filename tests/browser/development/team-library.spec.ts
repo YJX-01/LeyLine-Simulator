@@ -19,11 +19,11 @@ test('recorded team library keeps slot positions and links saved character confi
   await page.getByLabel('游戏 UID', { exact: true }).fill('618285856');
   await page.getByRole('button', { name: '查询角色展柜', exact: true }).click();
   await page.getByRole('button', { name: '确认导入 4 位角色', exact: true }).click();
-  const account = (await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0')))!;
+  const account = (await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0')))!;
   const loaded = await readDocument<LocalAccount>(page, 'account', account);
   const character = loaded.characters.find(entry => entry.build?.character.id === 'xingqiu')!;
   const build = character.build!;
-  const axis = await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.1.0'));
+  const axis = await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.2.0'));
   const role = page.getByRole('dialog', { name: '行秋', exact: true });
   const refinement = build.refinement === 1 ? 2 : 1;
   // Save an explicit refinement trial using the recorded character and equipment.
@@ -33,11 +33,11 @@ test('recorded team library keeps slot positions and links saved character confi
   const savePreset = page.getByRole('dialog', { name: '另存角色配装方案', exact: true });
   await savePreset.getByRole('button', { name: '确认另存', exact: true }).click();
   await expect(savePreset).toHaveCount(0);
-  const presets = (await page.evaluate(() => localStorage.getItem('leyline-character-loadouts-0.1.0')))!;
+  const presets = (await page.evaluate(() => localStorage.getItem('leyline-character-loadouts-0.2.0')))!;
   const presetId = (JSON.parse(presets) as { document: { id: string }[] }).document[0].id;
   await page.keyboard.press('Escape');
   const readTeams = async () => {
-    const content = await page.evaluate(() => localStorage.getItem('leyline-saved-teams-0.1.0'));
+    const content = await page.evaluate(() => localStorage.getItem('leyline-saved-teams-0.2.0'));
     return content ? readDocument<SavedTeam[]>(page, 'saved-teams', content) : [];
   };
 
@@ -419,8 +419,8 @@ test('recorded team library keeps slot positions and links saved character confi
   await expect(search).toBeFocused();
   await expect(top.getByRole('spinbutton', { name: '顶部页码', exact: true })).toHaveValue('1');
   expect((await readTeams()).map(team => team.id)).toEqual(copied.slice(0, 5).map(team => team.id));
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'))).toBe(account);
-  expect(await page.evaluate(() => localStorage.getItem('leyline-character-loadouts-0.1.0'))).toBe(presets);
-  expect(await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.1.0'))).toBe(axis);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'))).toBe(account);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-character-loadouts-0.2.0'))).toBe(presets);
+  expect(await page.evaluate(() => localStorage.getItem('leyline-axis-recovery-0.2.0'))).toBe(axis);
   expect(errors).toEqual([]);
 });

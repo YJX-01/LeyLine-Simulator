@@ -1,26 +1,46 @@
-import { createCombatStateReader } from '@leyline/engine';
-import { definitionKey, type CalculationBinding, type CalculationBundle, type CombatConditions, type CombatStateField, type DamageRequest, type Project, type Value, type ValueType } from '@leyline/schema';
+import { createCombatStateReader, projectCastFact } from '@leyline/engine';
+import { putHitFact, subjectFacts, definitionKey, type FactSubject, type CalculationBinding, type CalculationBundle, type CombatConditions, type CombatStateField, type DamageRequest, type Project, type Value, type ValueType } from '@leyline/schema';
 import { nextRecordId } from './workbench-project';
 
-export interface CalculatorFactSetting { key: string; value: Value }
-export interface CalculatorFactField { key: string; type: ValueType }
+export interface CalculatorFactSetting { key: string; value: Value; subject?: FactSubject }
+export interface CalculatorFactField { key: string; type: ValueType; subject?: FactSubject }
 export function calculatorIntervals(project: Project, actor: string, timeMs: number, recordId?: string): CombatConditions {
-  if (!project.combatStates?.length) return {};
-  return createCombatStateReader(project)(actor, { actor, id: recordId ?? nextRecordId(project), timeMs, kind: 'damage' }).conditions;
+  if (!project.combatStates?.length && !project.timeline.some(r => r.fieldSwitch)) return {};
+  const order = project.timeline.find(r => r.id === recordId)?.order;
+  return createCombatStateReader(project)(actor, { actor, id: recordId ?? nextRecordId(project), order, timeMs, kind: 'damage' }).conditions;
+}
+export function calculatorOnFieldActor(project: Project, damage: DamageRequest, timeMs: number, recordId?: string) {
+  const active = project.candidate.actors.filter(member => {
+    const explicit = subjectFacts(damage.facts, { kind: 'actor', id: member.id })?.onField;
+    return explicit ? explicit.value?.value === true : calculatorIntervals(project, member.id, timeMs, recordId).onField === true;
+  });
+  return active.length === 1 ? active[0] : undefined;
 }
 export function withCurrentConditions(damage: DamageRequest, intervals: CombatConditions, actorId: string): DamageRequest {
-  const scoped = damage.stateOverrides?.find(entry => entry.actor === actorId);
-  return { ...damage, conditions: { ...intervals, ...damage.conditions, ...scoped?.values } };
+  const copy: DamageRequest = { ...damage, facts: damage.facts?.map(row => ({ ...row, values: { ...row.values } })) ?? [] };
+  const own = subjectFacts(copy.facts, { kind: 'actor', id: actorId });
+  for (const key of ['hpRatio', 'onField', 'shielded'] as const) if (intervals[key] !== undefined && !Object.hasOwn(own ?? {}, key)) {
+    setCalculatorCondition(copy, actorId, key, intervals[key]!);
+  }
+  return copy;
 }
-export function ownerFactFields(binding?: CalculationBinding): CalculatorFactField[] {
-  if (binding?.kind === 'formula') return Object.values(binding.inputs).flatMap(ownerFactFields);
-  return binding?.kind === 'fact' && binding.scope === 'owner' ? [{ key: binding.key, type: binding.type }] : [];
+function bindingSubject(scope: Extract<CalculationBinding, { kind: 'fact' }>['scope'], owner: string, recipient: string): FactSubject | undefined {
+  if (scope === 'owner' || scope === 'recipient') return { kind: 'actor', id: scope === 'owner' ? owner : recipient };
+  if (scope === 'query') return { kind: 'event' };
+  if (scope === 'team') return { kind: 'team' };
+  if (scope === 'target') return { kind: 'target', id: 'target' };
+}
+export function bindingFactFields(binding: CalculationBinding | undefined, owner: string, recipient: string): CalculatorFactField[] {
+  if (binding?.kind === 'formula') return Object.values(binding.inputs).flatMap(term => bindingFactFields(term, owner, recipient));
+  if (binding?.kind !== 'fact' || binding.at === 'source-event') return [];
+  const subject = bindingSubject(binding.scope, owner, recipient);
+  return subject ? [{ key: binding.key, type: binding.type, subject }] : [];
 }
 
 /** Only facts uniquely implied by an explicit choice. Alternatives and open ranges stay editable. */
 export function selectionFacts(binding: CalculationBinding | undefined, bundle: CalculationBundle, active = true): CalculatorFactSetting[] {
   if (!binding) return [];
-  if (binding.kind === 'fact' && binding.scope === 'owner' && binding.type.kind === 'boolean') {
+  if (binding.kind === 'fact' && binding.at !== 'source-event' && binding.scope === 'owner' && binding.type.kind === 'boolean') {
     return [{ key: binding.key, value: { kind: 'boolean', value: active } }];
   }
   if (binding.kind !== 'formula') return [];
@@ -54,7 +74,7 @@ export function stackChoice(binding: CalculationBinding, bundle: CalculationBund
   if (input?.kind === 'fact' && input.scope === 'owner') return { key: input.key, max: template.maxInput };
 }
 
-/** The displayed HP preset is a trial value. Keep any entered HP that already activates the rule. */
+/** Keep an entered HP value when it already activates the selected rule. */
 export function hpChoice(binding: CalculationBinding | undefined, bundle: CalculationBundle) {
   if (binding?.kind !== 'formula') return;
   const rule = bundle.formulas.find(entry => definitionKey(entry.identity) === definitionKey(binding.formula))?.template;
@@ -69,7 +89,7 @@ export function hpChoice(binding: CalculationBinding | undefined, bundle: Calcul
   return { relation, threshold: rule.threshold, preset };
 }
 
-export function hpMatches(choice: NonNullable<ReturnType<typeof hpChoice>>, value: ReturnType<typeof trialValue>) {
+export function hpMatches(choice: NonNullable<ReturnType<typeof hpChoice>>, value: ReturnType<typeof calculatorFactValue>) {
   if (typeof value !== 'number') return false;
   switch (choice.relation) {
     case 'gt': return value > choice.threshold;
@@ -80,21 +100,18 @@ export function hpMatches(choice: NonNullable<ReturnType<typeof hpChoice>>, valu
   }
 }
 
-export function trialValue(damage: DamageRequest, key: string) {
-  if (damage.facts && Object.hasOwn(damage.facts, key)) return damage.facts[key].value?.value;
-  if (key === 'onField' || key === 'shielded' || key === 'hpRatio') return damage.conditions?.[key];
+export function calculatorFactValue(damage: DamageRequest, key: string, actorId: string, subject?: FactSubject) {
+  const fact = subjectFacts(damage.facts, subject ?? { kind: 'actor', id: actorId })?.[key];
+  return fact ? fact.value?.value ?? null : undefined;
 }
-
-export function setTrialCondition(damage: DamageRequest, actorId: string, field: CombatStateField, value: number | boolean | null) {
-  const scoped = damage.stateOverrides?.find(entry => entry.actor === actorId && Object.hasOwn(entry.values, field));
-  if (scoped) scoped.values = { ...scoped.values, [field]: value };
-  else damage.conditions = { ...damage.conditions, [field]: value };
-  if (damage.facts) delete damage.facts[field];
+export function setCalculatorCondition(damage: DamageRequest, actorId: string, field: CombatStateField, value: number | boolean | null) {
+  putHitFact(damage.facts ??= [], { kind: 'actor', id: actorId }, field, value === null ? null : typeof value === 'number'
+    ? { kind: 'quantity', unit: 'scalar', value } : { kind: 'boolean', value });
 }
-export function setTrialFact(damage: DamageRequest, { key, value }: CalculatorFactSetting, actorId: string) {
-  if ((key === 'onField' || key === 'shielded') && value.kind === 'boolean' || key === 'hpRatio' && value.kind === 'quantity') {
-    setTrialCondition(damage, actorId, key, value.value);
-  } else {
-    damage.facts = { ...damage.facts, [key]: { value, provenance: 'explicit', sourceRefs: [] } };
-  }
+export function setCalculatorFact(damage: DamageRequest, { key, value, subject }: CalculatorFactSetting, actorId: string) {
+  putHitFact(damage.facts ??= [], subject ?? { kind: 'actor', id: actorId }, key, value);
+}
+export function calculatorInfusion(project:Project,damage:DamageRequest,actor:string,fact:string,time:number,record?:string) {
+  const selected=subjectFacts(damage.facts,{kind:'actor',id:actor})?.[fact];
+  return selected ? selected.value?.kind==='boolean' ? selected.value.value : null : projectCastFact(project,actor,fact,time,record);
 }

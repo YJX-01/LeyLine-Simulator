@@ -20,7 +20,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await preview.getByRole('button', { name: '查询角色展柜', exact: true }).click();
   await preview.getByRole('button', { name: '清空选择', exact: true }).click();
   await preview.getByRole('button', { name: '导入薇斯纳', exact: true }).click();
-  const storage = () => page.evaluate(() => [localStorage.getItem('leyline-account-0.1.0'), localStorage.getItem('leyline-axis-recovery-0.1.0')]);
+  const storage = () => page.evaluate(() => [localStorage.getItem('leyline-account-0.2.0'), localStorage.getItem('leyline-axis-recovery-0.2.0')]);
   const pending = (await storage())[0];
   expect(pending ? JSON.parse(pending).document.characters : []).toHaveLength(0);
   await preview.getByRole('button', { name: '确认导入 1 位角色', exact: true }).click();
@@ -41,13 +41,13 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await expect(calculator.locator('.configuration-row.compact')).toContainText('蝶变');
   await expect(button('更换武器')).toHaveCount(0);
   await button('选择伤害').click();
-  await calculator.getByRole('dialog', { name: '选择伤害' }).locator('[data-output-id="vesna.skill.param5.stellar-swirl"]').click();
+  await calculator.getByRole('dialog', { name: '选择伤害' }).locator('[data-hit-id="vesna.skill.param5"]').click();
   const buffDialog = page.getByRole('dialog', { name: '选择增益' });
   await button('选择增益').click();
-  await expect(select('星辉状态')).toHaveValue('stellar-swirl');
-  await expect(select('薇斯纳战技姿态')).toHaveValue('true');
+  await expect(select('薇斯纳 · 星辉状态')).toHaveValue('stellar-swirl');
+  await expect(select('薇斯纳 · 薇斯纳战技姿态')).toHaveValue('true');
   for (const option of await buffDialog.getByRole('checkbox').all()) await option.check();
-  await expect(calculator.getByRole('spinbutton', { name: '律令层数', exact: true })).toHaveValue('6');
+  await expect(calculator.getByRole('spinbutton', { name: '薇斯纳 · 律令层数', exact: true })).toHaveValue('6');
   await button('应用增益').click();
   const number = (id: string) => expect.poll(async () => Number((await calculator.getByTestId(id).textContent())?.replaceAll(',', '')));
   const baseline = recordedVesnaDamage(1), candidate = recordedVesnaDamage(2);
@@ -56,7 +56,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   await number('calculator-value').toBeCloseTo(recordedVesnaDamage(1, 1, true, 'critical'), 5);
   await select('暴击').selectOption('expected');
   await button('选择增益').click();
-  await select('蝶变 / 叛弃之风（10秒内）').selectOption('');
+  await select('薇斯纳 · 蝶变 / 叛弃之风（10秒内）').selectOption('');
   await button('应用增益').click();
   await button('计算伤害').click();
   await expect(calculator.getByTestId('calculator-value')).toHaveText('需补充条件');
@@ -123,7 +123,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   const document: DamageCalculatorDocument = await readDocument(page, 'damage-calculator', readFileSync(info.outputPath('vesna-comparison.json'), 'utf8'));
   expect(document.baseline!.candidate.actors[0].build!.refinement).toBe(1);
   expect(document.project.candidate.actors[0].build!.refinement).toBe(2);
-  expect(document.project.timeline[0].damage?.outputId).toBe('vesna.skill.param5.stellar-swirl');
+  expect(document.project.timeline[0].damage?.hit.hitId).toBe('vesna.skill.param5');
   await calculator.getByLabel('打开伤害计算文件', { exact: true }).setInputFiles(info.outputPath('vesna-comparison.json'));
   await number('calculator-value').toBeCloseTo(candidate, 5);
   await number('calculator-delta').toBeCloseTo(candidate - baseline, 5);
@@ -139,7 +139,7 @@ test('recorded Vesna goes through showcase confirmation, Worker comparison, file
   modified.talents.find(talent => talent.id === 'vesna.skill')!.parameters.find(parameter => parameter.id === 'param5')!.values[9] *= 1.1;
   await calculator.getByLabel('导入计算器角色定义', { exact: true }).setInputFiles({ name: 'vesna-adjusted.character.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(modified, null, 2) + '\n') });
   await number('calculator-value').toBeCloseTo(recordedVesnaDamage(2, 1.1), 5);
-  await expect(button('选择伤害')).toHaveAttribute('data-output-id', 'vesna.skill.param5.stellar-swirl');
+  await expect(button('选择伤害')).toHaveAttribute('data-hit-id', 'vesna.skill.param5');
   expect(await storage()).toEqual(before);
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await calculator.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);

@@ -1,11 +1,24 @@
 <script setup lang="ts">
+import BattleSceneSettings from '../components/BattleSceneSettings.vue';
+import AuraObservationForm from '../components/AuraObservationForm.vue';
+import TalentHealingForm from '../components/TalentHealingForm.vue';
+import ReactionRecordForm from '../components/ReactionRecordForm.vue';
+import { addAuraObservation, addReactionObservation, addParticlePickup, addTalentHeal } from '../domain/real-project';
+import CombatChangeList from '../components/CombatChangeList.vue';
+import { grantedDamageChanges } from '@leyline/engine';
+import { calculatorInfusion } from '../domain/calculator-conditions';
+import type { SceneSelection } from '@leyline/schema';
+import { combatFactDeclaration } from '@leyline/schema/buffs';
+import { authoredHit, effectiveHitElement, ordinaryReactions } from '@leyline/schema/hit-bindings';
+import { putHitFact, subjectFacts, findBuildHit } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
-import { loadCatalog, type GameCatalog } from '@leyline/game-data';
+import { getReactionCalculationBundle, loadCatalog, type GameCatalog } from '@leyline/game-data';
+import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
 import { damageCalculatorSchema, projectSchema, type ValueType, elements, talentLevelBonus, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
 import type { AccountCharacter } from '../domain/account';
 import { calculatorRequest, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
-import { addActorFromBuild, addAttributeCapture, defaultEnemy } from '../domain/real-project';
+import { addActorFromBuild, addAttributeCapture, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
 import { teamArtifactEntries } from '../domain/team-members';
 import { buildRollBasis } from '../domain/effective-roll-basis';
@@ -15,7 +28,7 @@ import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefini
 import { exportCharacterSnapshot } from '../domain/structured-character-import';
 import { packDocument } from '../domain/content-document';
 import { downloadJson, downloadJsonText } from '../domain/download';
-import { realElementLabel, realStatLabel, recordLabel, actorLabel } from '../domain/workbench-labels';
+import { realElementLabel, realStatLabel, recordLabel, actorLabel, damageFamilyLabel } from '../domain/workbench-labels';
 import { useAccountStore } from '../stores/account';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
 import { useUnsavedChanges } from '../composables/use-unsaved-changes';
@@ -32,7 +45,7 @@ import CalculatorBuffPicker from '../components/CalculatorBuffPicker.vue';
 import CalculatorFactorCards from '../components/CalculatorFactorCards.vue';
 import { calculatorHitChoices, type CalculatorHitChoice } from '../domain/calculator-hits';
 import { applyCalculatorBuffs, buffFactNames, calculatorBuffChoices, resolveBuffSelection } from '../domain/calculator-buffs';
-import { calculatorIntervals, ownerFactFields, selectionFacts, setTrialFact } from '../domain/calculator-conditions';
+import { calculatorIntervals, calculatorOnFieldActor, bindingFactFields, type CalculatorFactField, selectionFacts, setCalculatorFact } from '../domain/calculator-conditions';
 import { damageNumber as number, reactionNames, critNames } from '../domain/calculator-factors';
 import type { SavedTeam } from '../stores/saved-teams';
 import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
@@ -66,7 +79,7 @@ const editor = shallowRef<{ name: string; character?: AccountCharacter; initialC
 const editorDialog = ref<InstanceType<typeof CalculatorBuildEditor>>();
 const contentReview = ref<Awaited<ReturnType<typeof prepareCalculatorContentUpdate>>>();
 let reviewSignature = '';
-const emptyDamage = (): DamageRequest => ({ skillId: '', hitId: '', outputId: '', crit: 'critical', reaction: 'none' });
+const emptyDamage = (): DamageRequest => ({ hit: { definition: { group: 'characters', namespace: 'builtin', id: '', revision: '' }, hitId: '' }, crit: 'critical', reaction: 'none' });
 const damage = ref<DamageRequest>(emptyDamage());
 const enemy = ref(defaultEnemy());
 const hitTime = ref(0), captureTime = ref<number | string>('');
@@ -79,12 +92,15 @@ const character = computed<AccountCharacter | undefined>(() => actor.value?.buil
   id: actor.value.id, name: actor.value.build.character.identity.name, attack: 0, weapon: actor.value.build.weapon?.name ?? '', equipment: {}, build: actor.value.build,
 } : undefined);
 const queryCharacter = computed(() => hitOwner.value?.build?.character);
-const skill = computed(() => queryCharacter.value?.talents.find(skill => skill.id === damage.value.skillId));
-const selectedHit = computed(() => skill.value?.hits.find(hit => hit.id === damage.value.hitId));
-const selectedOutput = computed(() => selectedHit.value?.outputs.find(output => output.id === damage.value.outputId));
-const hitFacts = computed(() => queryCharacter.value ? selectionFacts(selectedOutput.value?.invocation.predicate, queryCharacter.value.calculation.bundle) : []);
-const hitChoices = computed(() => queryCharacter.value ? calculatorHitChoices(queryCharacter.value) : []);
-const selectedChoice = computed(() => hitChoices.value.find(choice => choice.outputId === damage.value.outputId));
+const skill = computed(() => findBuildHit(hitOwner.value?.build, damage.value.hit)?.talent);
+const selectedHit = computed(() => findBuildHit(hitOwner.value?.build, damage.value.hit)?.hit);
+const selectedOutput = computed(() => Object.values(selectedHit.value?.damage ?? {})[0]);
+const hitFacts = computed(() => queryCharacter.value ? selectionFacts(selectedOutput.value?.predicate, queryCharacter.value.calculation.bundle) : []);
+const hitChoices = computed(() => queryCharacter.value ? calculatorHitChoices(queryCharacter.value, hitOwner.value?.build) : []);
+const selectedChoice = computed(() => hitChoices.value.find(choice => choice.available && choice.hitId === damage.value.hit.hitId));
+const standalone = computed(() => !damage.value.hit.hitId ? document.value?.project.timeline.find(r=>r.id===document.value?.recordId)?.reactionEvent : undefined);
+const selectedLabel = computed(() => standalone.value ? damageFamilyLabel(standalone.value.family)+' · '+realElementLabel(standalone.value.element) :
+  selectedChoice.value ? selectedChoice.value.alias+'　'+selectedChoice.value.name : '');
 const intervals = computed(() => document.value && hitOwner.value
   ? calculatorIntervals(document.value.project, hitOwner.value.id, Math.round(hitTime.value * 1000), document.value.recordId) : {});
 const buffs = computed(() => document.value && hitOwner.value ? calculatorBuffChoices(document.value.project, hitOwner.value.id, damage.value,
@@ -92,14 +108,43 @@ const buffs = computed(() => document.value && hitOwner.value ? calculatorBuffCh
 const includedBuffs = computed(() => buffs.value.filter(buff => buff.checked));
 const factFields = computed(() => {
   const hit = selectedHit.value, output = selectedOutput.value;
-  const fields = new Map<string, ValueType>();
-  const bindings = [...Object.values(hit?.base.bindings ?? {}), ...Object.values(output?.invocation.bindings ?? {}), output?.invocation.predicate];
-  for (const field of [...bindings.flatMap(ownerFactFields), ...buffs.value.flatMap(buff => buff.fields)]) {
-    if (!['hpRatio', 'shielded', 'onField'].includes(field.key)) fields.set(field.key, field.type);
+  const owner = hitOwner.value?.id;
+  if (!owner) return [];
+  const fields = new Map<string, CalculatorFactField & { label: string }>();
+  const family = authoredHit(queryCharacter.value?.metadata, skill.value?.id, hit?.id)?.family;
+  const familyField = family && typeof family === 'object' && combatFactDeclaration(queryCharacter.value?.metadata.facts, family.by);
+  const bindings = [...Object.values(hit?.base.bindings ?? {}), ...Object.values(hit?.damage ?? {}).flatMap(branch => Object.values(branch.bindings)), output?.predicate,
+    ...(familyField && typeof family === 'object' ? [{ kind: 'fact' as const, key: family.by, ...familyField }] : []),
+    ...(hit?.infusion ? [{kind:'fact' as const, key:hit.infusion.fact, scope:'owner' as const,type:{kind:'boolean' as const}}] : [])];
+  const partyFields: CalculatorFactField[] = hit?.coordinated ? (document.value?.project.candidate.actors ?? []).map(member => ({
+    key: 'onField', type: { kind: 'boolean' }, subject: { kind: 'actor', id: member.id },
+  })) : [];
+  if (hit?.elementBy === 'strikingHand') {
+    partyFields.push({ key: hit.elementBy, type: combatFactDeclaration(undefined, hit.elementBy)!.type, subject: { kind: 'event' } });
   }
-  return [...fields].map(([key, type]) => ({ key, type, label: buffFactNames[key] ?? key }));
+  const dealerBuild = hit?.coordinated && document.value ? calculatorOnFieldActor(document.value.project, damage.value, Math.round(hitTime.value * 1000), document.value.recordId)?.build : hitOwner.value?.build;
+  const changes = dealerBuild ? grantedDamageChanges(dealerBuild).filter(({ rule }) => !rule.categories || hit?.category && rule.categories.includes(hit.category)) : [];
+  if (changes.length) {
+    const keys = ['targetsDamaged', 'triggerRoll', ...changes.some(({ rule }) => rule.critical) ? ['criticalTargets'] : []];
+    for (const key of keys) partyFields.push({ key, type: combatFactDeclaration(undefined, key)!.type, subject: { kind: 'event' } });
+  }
+  for (const field of [...partyFields, ...bindings.flatMap(binding => bindingFactFields(binding, owner, owner)), ...buffs.value.flatMap(buff => buff.fields)]) {
+    const subject = field.subject;
+    if (!subject || subject.kind === 'actor' && subject.id === owner && ['hpRatio', 'shielded', 'onField'].includes(field.key)
+      || subject.kind === 'event' && (skill.value?.inputs?.some(input => input.id === field.key) || ['critMode', 'reactionMode'].includes(field.key))) continue;
+    const name = subject.kind === 'actor' ? document.value?.project.candidate.actors.find(actor => actor.id === subject.id)?.build?.character.identity.name
+      : subject.kind === 'team' ? '队伍' : subject.kind === 'target' ? '目标' : '本击';
+    fields.set(JSON.stringify([subject, field.key]), { ...field, label: [name, buffFactNames[field.key] ?? field.key].filter(Boolean).join(' · ') });
+  }
+  return [...fields.values()];
 });
 const metadataFile = ref<HTMLInputElement>();
+function updateScenes(scenes: SceneSelection[]) {
+  if (!document.value) return;
+  invalidate();
+  document.value = { ...document.value, project: { ...document.value.project, sceneEffects: scenes } };
+  if (document.value.recordId) void calculate();
+}
 function exportMetadata() {
   if (!actor.value?.build) return;
   try {
@@ -120,20 +165,16 @@ async function importMetadata(event: Event) {
     const current = prepareDocument()!;
     const next = { ...current, project: applyCharacterDefinition(current.project, actorId, definition) };
     calculatorRequest(next, 0);
-    document.value = next;
-    if (document.value.recordId) await calculate();
+    install(next);
+    if (next.recordId) await calculate();
   } catch (cause) { showError(cause); }
 }
 const result = computed(() => response.value?.comparison?.candidates[0]?.result ?? response.value?.result);
 const point = computed(() => result.value?.points.find(point => point.id === document.value?.recordId));
 const expectedPoint = computed(() => expectedResult.value?.points.find(point => point.id === document.value?.recordId));
-const trial = computed(() => point.value?.modeledValue);
-const expectedTrial = computed(() => expectedPoint.value?.modeledValue);
 const baselinePoint = computed(() => response.value?.comparison?.baseline.points.find(point => point.id === document.value?.recordId));
 const comparisonPoint = computed(() => response.value?.comparison?.candidates[0]?.points.find(point => point.id === document.value?.recordId));
-function comparisonNumber(value: number | null | undefined, modeled?: number) {
-  return value == null && modeled !== undefined ? '试算 ' + number(modeled) : number(value);
-}
+
 const inputNames: Record<string, string> = { counterCharge: '反击档位', namisen: '浪闪层数', resolve: '施放时消耗的愿力', lightfallEnergy: '光降之剑能量层数' };
 const factLabels: Record<string, string> = { ...buffFactNames, ...inputNames, critMode: '暴击', reactionMode: '反应' };
 function diagnosticText(message: string) {
@@ -159,13 +200,16 @@ function unavailable(assessment: AxisResponse['result'] | undefined, record: typ
 const reactionType = computed({ get: () => damage.value.reaction === null ? '' : damage.value.reaction === 'none' ? 'none' : damage.value.reaction.type,
   set: (value: string) => { damage.value.reaction = !value ? null : value === 'none' ? 'none' : { type: value as 'melt' | 'vaporize' | 'aggravate' | 'spread', trigger: 'record-owner' }; } });
 const reactionChoices = computed(() => {
-  const element = selectedHit.value?.element ?? skill.value?.element;
-    const choices: Record<string, string[]> = { pyro: ['vaporize', 'melt'], hydro: ['vaporize'], cryo: ['melt'], electro: ['aggravate'], dendro: ['spread'] };
-    return ['none', ...(choices[element ?? 'physical'] ?? [])] as (keyof typeof reactionNames)[];
+  const selected = selectedHit.value;
+  const dealer = selected?.coordinated && document.value ? calculatorOnFieldActor(document.value.project, damage.value, Math.round(hitTime.value * 1000), document.value.recordId) : undefined;
+  const element = selected?.coordinated ? dealer?.build?.character.identity.element ?? dealer?.element : selected ? effectiveHitElement(selected, selected.elementBy ? subjectFacts(damage.value.facts, { kind: 'event' })?.[selected.elementBy]?.value : null,
+    document.value?.project.candidate.actors.map(actor => actor.build?.character.identity.element ?? actor.element),
+    selected.infusion && document.value && hitOwner.value ? calculatorInfusion(document.value.project,damage.value,hitOwner.value.id,selected.infusion.fact,Math.round(hitTime.value*1000),document.value.recordId) : undefined) : skill.value?.element;
+  return ['none' as const, ...ordinaryReactions(element)];
 });
-const records = computed(() => document.value?.project.timeline.filter(record => record.kind === 'damage' && record.damage) ?? []);
+const records = computed(() => document.value?.project.timeline.filter(record => record.kind === 'damage' && (record.damage || record.reactionEvent)) ?? []);
 const captures = computed(() => document.value?.project.timeline.filter(record => record.actor === hitOwner.value?.id
-  && (record.kind === 'damage' ? record.damage?.skillId : record.skillId) === selectedHit.value?.snapshot?.sourceSkillId) ?? []);
+  && (record.kind === 'damage' ? findBuildHit(hitOwner.value?.build, record.damage?.hit)?.talent?.id : record.skillId) === selectedHit.value?.snapshot?.sourceSkillId) ?? []);
 const loadouts = useCharacterLoadoutsStore();
 const entries = computed(() => teamArtifactEntries(actor.value?.build, account.account));
 const basis = computed(() => buildRollBasis(actor.value?.build));
@@ -257,24 +301,26 @@ function chooseCharacter(id: string) {
   }
 }
 function selectDamage(choice: CalculatorHitChoice) {
-  if (!choice.outputId) return;
+  if (!choice.available) return;
   picker.value = undefined;
-  if (damage.value.outputId === choice.outputId && damage.value.hitId === choice.hitId && damage.value.skillId === choice.skillId) {
+  if (JSON.stringify(damage.value.hit) === JSON.stringify(choice.ref) && selectedChoice.value) {
     if (!result.value && !working.value) void calculate();
     return;
   }
-  const previousSkill = damage.value.skillId, previousReaction = reactionType.value;
-  damage.value = { ...damage.value, skillId: choice.skillId, hitId: choice.hitId, outputId: choice.outputId };
-  if (previousSkill !== choice.skillId) delete damage.value.inputs;
+  const previousInputs = skill.value?.inputs ?? [];
+  const previousSkill = skill.value?.id, previousReaction = reactionType.value;
+  damage.value = { ...damage.value, hit: choice.ref };
+  const priorFacts = subjectFacts(damage.value.facts, { kind: 'event' });
+  if (previousSkill !== choice.skillId && priorFacts) for (const input of previousInputs) delete priorFacts[input.id];
   delete damage.value.capture;
-  if (hitOwner.value) for (const setting of hitFacts.value) setTrialFact(damage.value, setting, hitOwner.value.id);
+  if (hitOwner.value) for (const setting of hitFacts.value) setCalculatorFact(damage.value, setting, hitOwner.value.id);
   if (previousReaction && !reactionChoices.value.some(kind => kind === previousReaction)) damage.value.reaction = 'none';
   if (damage.value.effectApplications?.length) {
-    const applicable = new Set(buffs.value.filter(option => option.explicit && !option.triggerSkill).map(option => option.id));
+    const applicable = new Set(buffs.value.filter(option => option.explicit && !option.triggerSkill && !option.confirmTrigger).map(option => option.id));
     damage.value.effectApplications = damage.value.effectApplications.filter(entry => applicable.has(entry.instanceId));
   }
   if (!previousSkill || previousSkill !== choice.skillId) {
-    for (const input of skill.value?.inputs ?? []) damage.value.inputs = { ...damage.value.inputs, [input.id]: input.min };
+    for (const input of skill.value?.inputs ?? []) putHitFact(damage.value.facts ??= [], { kind: 'event' }, input.id, { ...input.type, value: input.min });
   }
   if (hitOwner.value) {
     const draft: DamageRequest = JSON.parse(JSON.stringify(damage.value));
@@ -282,15 +328,27 @@ function selectDamage(choice: CalculatorHitChoice) {
     applyBuffs(changes, draft);
   } else void calculate();
 }
-function applyBuffs(changes: Map<string,boolean>, draft: DamageRequest) {
+async function selectReaction(family:TransformativeFamily,element:ProjectReaction['element']) {
+  const current=document.value, owner=hitOwner.value?.id;
+  if (!current || !owner || current.baseline) return;
+  try {
+    const before=signature(), rules=current.project.reactionRules ?? await getReactionCalculationBundle();
+    if (before!==signature()) return;
+    const next=prepareDocument()!;
+    next.recordId=addTransformativeReaction(next.project,owner,family,element,Math.round(hitTime.value*1000),rules,next.recordId);
+    install(next); picker.value=undefined;
+    await calculate();
+  } catch(cause) { showError(cause); }
+}
+function applyBuffs(changes: Map<string,boolean>, draft: DamageRequest, durations?: Map<string,number[]>) {
   if (!document.value || document.value.baseline) return;
   try {
-    const next = applyCalculatorBuffs(document.value.project, draft, buffs.value, changes, Math.round(hitTime.value * 1000), document.value.recordId);
+    const next = applyCalculatorBuffs(document.value.project, draft, buffs.value, changes, Math.round(hitTime.value * 1000), document.value.recordId, durations);
     if (next.project !== document.value.project) document.value = { ...document.value, project: next.project };
     damage.value = { ...draft, effectApplications: next.applications };
     picker.value = undefined;
-    if (selectedChoice.value) void calculate();
-  } catch (cause) { picker.value = undefined; showError(cause); }
+    if (selectedLabel.value) void calculate();
+  } catch (cause) { showError(cause); }
 }
 async function loadSource(kind: 'local' | 'showcase', id: string) {
   const read = ++sourceRead;
@@ -323,7 +381,22 @@ function applyBuild(build: Build) {
   const { project } = current;
   const actors = project.candidate.actors.map(member => member.id === current.actorId ? { ...member, build } : member);
   document.value = { ...current, project: { ...project, candidate: { ...project.candidate, actors } } };
-  if (selectedChoice.value) void calculate();
+  if (selectedLabel.value) void calculate();
+}
+function recordBeforeHit(add:(project:DamageCalculatorDocument['project'],timeMs:number)=>string) {
+  if (!document.value || document.value.baseline) return;
+  try {
+    const next=prepareDocument()!;
+    const id=add(next.project,Math.round(hitTime.value*1000));
+    const query=next.project.timeline.find(r=>r.id===next.recordId),source=next.project.timeline.find(r=>r.id===id)!;
+    if (query) {
+      const order=query.order;
+      for (const record of next.project.timeline) if (record!==source && record.timeMs===source.timeMs && record.order>=order) record.order++;
+      source.order=order;
+    }
+    install(next);
+    void calculate();
+  } catch (cause) { showError(cause); }
 }
 function prepareDocument() {
   const current = document.value;
@@ -333,14 +406,17 @@ function prepareDocument() {
   const next = { ...current, project: { ...current.project, enemy: enemy.value, timeline } };
   const timeMs = Math.round(hitTime.value * 1000);
   if (!Number.isFinite(hitTime.value) || timeMs < 0 || timeMs > 3600000) throw new Error('请填写0至3600秒内的命中时刻。');
-  if (damage.value.skillId) {
+  if (damage.value.hit.hitId) {
     const index = timeline.findIndex(record => record.id === next.recordId);
-    if (index >= 0) timeline[index] = { ...timeline[index], timeMs, damage: damage.value };
+    if (index >= 0) timeline[index] = { ...timeline[index], reactionEvent:undefined, timeMs, damage: damage.value };
     else {
       next.recordId = nextRecordId(next.project);
       timeline.push({ id: next.recordId, actor: next.actorId, kind: 'damage', definition: `${next.actorId}-real-damage`,
         timeMs, order: Math.max(-1, ...timeline.map(record => record.order)) + 1, damage: damage.value });
     }
+  } else if (standalone.value) {
+    const i=timeline.findIndex(r=>r.id===next.recordId);
+    if (i>=0) timeline[i]={...timeline[i],timeMs};
   }
   return damageCalculatorSchema.parse(next);
 }
@@ -381,7 +457,7 @@ async function calculate() {
       if (event.data.taskId !== request.taskId) return;
       response.value = event.data;
       if (event.data.error) { error.value = event.data.error; stop(); return; }
-      if (damage.value.crit === 'expected') { expectedResult.value = result.value; stop(); return; }
+      if (standalone.value || damage.value.crit === 'expected') { expectedResult.value = result.value; stop(); return; }
       try {
         const evaluated = request.candidates ? calculatorWorkerRequest({ ...next, baseline: undefined }, expectedTask).project : request.project;
         const timeline = evaluated.timeline.map(record => record.id === recordId && record.damage
@@ -413,7 +489,7 @@ async function applyContent() {
   if (document.value?.recordId) await calculate();
 }
 async function pinBaseline() {
-  if (!document.value?.recordId || (point.value?.value ?? trial.value) == null) return;
+  if (!document.value?.recordId || point.value?.value == null) return;
   document.value = { ...document.value, baseline: projectSchema.parse(document.value.project) };
   await calculate();
 }
@@ -428,7 +504,7 @@ async function save() {
   catch (cause) { showError(cause); return false; }
 }
 async function saveDamage() {
-  if (!document.value || !selectedChoice.value || savingDamage.value) return false;
+  if (!document.value || !selectedLabel.value || savingDamage.value) return false;
   savingDamage.value = true;
   error.value = '';
   try {
@@ -439,10 +515,10 @@ async function saveDamage() {
     if (calculationFinished) await calculationFinished;
     else if (!result.value) await calculate();
     if (signature() !== before || !result.value) return false;
-    const value = point.value?.value ?? trial.value;
+    const value = point.value?.value ?? undefined;
     const id = await saveDamageSnapshot({
-      name: [roleName.value, selectedChoice.value.alias, selectedChoice.value.name].join(' / '),
-      team: next.team?.name, value, trial: trial.value != null,
+      name: [roleName.value,...(standalone.value ? [selectedLabel.value] : [selectedChoice.value!.alias,selectedChoice.value!.name])].join(' / '),
+      team: next.team?.name, value, verification: point.value?.real?.status === 'partial' ? 'pending' : undefined,
     }, next);
     if (signature() !== before) return false;
     listed.value = { id, signature: before };
@@ -482,12 +558,15 @@ async function selectRecord(id: string) {
   try {
     const next = prepareDocument()!;
     const record = next.project.timeline.find(record => record.id === id);
-    if (!record?.damage) return;
+    if (!record?.damage && !record?.reactionEvent) return;
     next.recordId = id; next.actorId = record.actor; install(next);
     await calculate();
   } catch (cause) { showError(cause); }
 }
-function setInput(id: string, event: Event) { const raw = (event.target as HTMLInputElement).value; damage.value.inputs = { ...damage.value.inputs, [id]: raw.trim() ? Number(raw) : null }; }
+function setInput(id: string, event: Event) {
+  const raw = (event.target as HTMLInputElement).value, input = skill.value?.inputs?.find(input => input.id === id);
+  if (input) putHitFact(damage.value.facts ??= [], { kind: 'event' }, id, raw.trim() ? { ...input.type, value: Number(raw) } : null);
+}
 function setCapture(event: Event) { damage.value.capture = { recordId: (event.target as HTMLSelectElement).value || null, phase: damage.value.capture?.phase ?? null }; }
 function leaveCalculator(action: () => void) {
   if (editorDialog.value) editorDialog.value.requestLeave(() => { editor.value = undefined; requestLeave(action); });
@@ -501,7 +580,7 @@ defineExpose({ requestLeave: leaveCalculator });
     <LibraryCornerOrnaments />
     <header class="library-page-toolbar damage-toolbar">
       <button type="button" class="ui-action soft" data-accent="hydro" aria-haspopup="dialog" @click="picker = 'list'">伤害列表</button>
-      <button type="button" class="ui-action" data-accent="anemo" :disabled="!selectedChoice || savingDamage || listed?.signature === signature()" @click="saveDamage">保存伤害</button>
+      <button type="button" class="ui-action" data-accent="anemo" :disabled="!selectedLabel || savingDamage || listed?.signature === signature()" @click="saveDamage">保存伤害</button>
     </header>
     <div class="calculator-selections" aria-label="计算选择">
       <TeamCard v-if="selectedTeam && teamProject" class="calculator-team" action="replace" :name="selectedTeam.name" :members="teamProject.candidate.actors"
@@ -518,10 +597,10 @@ defineExpose({ requestLeave: leaveCalculator });
         </template>
         <template v-else><span class="add-mark" aria-hidden="true">+</span><strong>选择角色</strong></template>
       </button>
-      <button type="button" class="selection-tile secondary-slot" :data-card-action="selectedChoice ? 'replace' : 'select'" aria-label="选择伤害" aria-haspopup="dialog" :data-output-id="damage.outputId"
+      <button type="button" class="selection-tile secondary-slot" :data-card-action="selectedLabel ? 'replace' : 'select'" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
-        <GameIcon v-if="selectedChoice" kind="skills" :id="selectedChoice.icon" :size="32" :replaceable="!document?.baseline" /><span v-else class="add-mark small" aria-hidden="true">+</span>
-        <span><small v-if="selectedChoice">伤害</small><strong>{{ selectedChoice ? selectedChoice.alias + '　' + selectedChoice.name : '选择伤害' }}</strong></span>
+        <GameIcon v-if="selectedChoice" kind="skills" :id="selectedChoice.icon" :size="32" :replaceable="!document?.baseline" /><span v-else-if="!standalone" class="add-mark small" aria-hidden="true">+</span>
+        <span><small v-if="selectedLabel">伤害</small><strong>{{ selectedLabel || '选择伤害' }}</strong></span>
       </button>
       <button type="button" class="selection-tile secondary-slot" data-card-action="select" aria-label="选择增益" aria-haspopup="dialog" :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'buff'">
         <GameIcon v-if="includedBuffs.length" :kind="includedBuffs[0].icon.kind" :id="includedBuffs[0].icon.id" :monochrome="includedBuffs[0].icon.kind === 'constellations'" :size="32" />
@@ -532,23 +611,23 @@ defineExpose({ requestLeave: leaveCalculator });
     <p v-if="error" role="alert">{{ error }}</p>
     <section class="library-section calculator-result" aria-label="计算结果">
       <header class="result-heading"><h3>伤害结果</h3><div class="library-page-actions">
-        <button class="ui-action soft" v-if="!document?.baseline && (point?.value ?? trial) != null" data-accent="anemo" :disabled="working" @click="pinBaseline">设为比较基准</button>
+        <button class="ui-action soft" v-if="!document?.baseline && point?.value != null" data-accent="anemo" :disabled="working" @click="pinBaseline">设为比较基准</button>
         <button v-if="document?.baseline" class="ui-action soft" data-accent="pyro" @click="endComparison">结束对照</button>
-        <button class="ui-action" data-accent="anemo" :disabled="working || !selectedChoice" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
+        <button class="ui-action" data-accent="anemo" :disabled="working || !selectedLabel" @click="calculate">{{ working ? '计算中' : document?.baseline ? '重算候选' : '计算伤害' }}</button>
       </div></header>
       <div class="damage-totals">
-        <div><span>{{ trial != null ? '已实现效果试算' : '最终伤害值' }} <small v-if="damage.crit">{{ critNames[damage.crit] }}</small></span>
-          <output v-if="result" data-testid="calculator-value">{{ point?.value == null && trial == null ? unavailable(result, point) : number(point?.value ?? trial) }}</output><strong v-else>—</strong></div>
-        <div><span>{{ expectedTrial != null ? '已实现效果期望' : '期望伤害值' }}</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null && expectedTrial == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint?.value ?? expectedTrial) }}</output><strong v-else>—</strong></div>
+        <div><span>{{ point?.real?.status === 'partial' ? '模型伤害（待核验）' : '最终伤害值' }} <small v-if="damage.crit">{{ critNames[damage.crit] }}</small></span>
+          <output v-if="result" data-testid="calculator-value">{{ point?.value == null ? unavailable(result, point) : number(point?.value) }}</output><strong v-else>—</strong></div>
+        <div><span>{{ expectedPoint?.real?.status === 'partial' ? '模型期望（待核验）' : '期望伤害值' }}</span><output v-if="result" data-testid="calculator-expected">{{ working && !expectedResult ? '…' : expectedPoint?.value == null ? unavailable(expectedResult, expectedPoint) : number(expectedPoint?.value) }}</output><strong v-else>—</strong></div>
       </div>
       <template v-if="result">
         <details v-if="diagnostics.length" class="result-support"
-          :open="point?.value == null && trial == null || !!expectedResult && expectedPoint?.value == null && expectedTrial == null"><summary>计算条件与支持范围</summary>
+          :open="point?.value == null || !!expectedResult && expectedPoint?.value == null"><summary>计算条件与支持范围</summary>
           <ul aria-label="未完成的计算条件"><li v-for="message in diagnostics" :key="message">{{ message }}</li></ul>
           <button v-if="missingBuff && !document?.baseline" type="button" class="ui-action soft" data-size="md" @click="picker = 'buff'">补充增益条件</button>
         </details>
         <CalculatorFactorCards v-if="point?.real" :real="point.real" :damage="damage" :buffs="buffs" />
-        <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ comparisonNumber(baselinePoint?.value, baselinePoint?.modeledValue) }}</td><td>{{ comparisonNumber(point?.value, point?.modeledValue) }}</td><td data-testid="calculator-delta">{{ comparisonNumber(comparisonPoint?.delta, comparisonPoint?.modeledDelta) }}</td></tr></tbody></table>
+        <table v-if="response?.comparison"><thead><tr><th>基准</th><th>当前候选</th><th>差值</th></tr></thead><tbody><tr><td>{{ number(baselinePoint?.value) }}</td><td>{{ number(point?.value) }}</td><td data-testid="calculator-delta">{{ number(comparisonPoint?.delta) }}</td></tr></tbody></table>
         <details v-if="point?.real" class="result-support"><summary>配装属性与来源</summary>
           <p v-if="queryCharacter?.origin === 'custom'">角色来源 / 自定义声明</p>
           <p v-if="hitOwner?.build && skill">{{ skill.name }} / 天赋 {{ hitOwner.build.talents[skill.category] }} + {{ talentLevelBonus(hitOwner.build.character, skill.category, hitOwner.build.constellation) }}</p>
@@ -557,19 +636,25 @@ defineExpose({ requestLeave: leaveCalculator });
         </details>
       </template>
     </section>
-    <section v-if="selectedChoice || records.length" class="library-section calculator-conditions"><h3>命中条件</h3>
+    <section v-if="selectedLabel || records.length" class="library-section calculator-conditions"><h3>命中条件</h3>
       <label v-if="records.length > 1 && !document?.team">查看记录<select :value="document?.recordId" @change="selectRecord(($event.target as HTMLSelectElement).value)"><option v-for="record in records" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label>
       <fieldset :disabled="!!document?.baseline"><div class="calculator-fields">
             <label>命中时刻（秒）<input v-model.number="hitTime" type="number" min="0" max="3600" step="0.001"></label>
-            <label>暴击<select v-model="damage.crit"><option :value="null">待确认</option><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
-            <label>反应<select v-model="reactionType"><option value="">待确认</option><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
-            <label v-for="input in skill?.inputs" :key="input.id">{{ inputNames[input.id] ?? input.id }}<select v-if="input.id === 'counterCharge'" :value="damage.inputs?.[input.id] ?? ''" @change="setInput(input.id, $event)"><option value="">待确认</option><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select><input v-else type="number" :min="input.min" :max="input.max" :step="input.integer ? 1 : 'any'" :value="damage.inputs?.[input.id] ?? ''" placeholder="待确认" @input="setInput(input.id, $event)"></label>
+            <label v-if="!standalone">暴击<select v-model="damage.crit"><option :value="null">待确认</option><option value="noncritical">非暴击</option><option value="critical">暴击</option><option value="expected">期望伤害</option></select></label>
+            <label v-if="!standalone">反应<select v-model="reactionType"><option value="">待确认</option><option v-for="reaction in reactionChoices" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
+            <label v-for="input in skill?.inputs" :key="input.id">{{ inputNames[input.id] ?? input.id }}<select v-if="input.id === 'counterCharge'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" @change="setInput(input.id, $event)"><option value="">待确认</option><option :value="0">0 / 无反击加成</option><option :value="1">1 / 一档反击</option><option :value="2">2 / 满档／完美反击</option></select><input v-else type="number" :min="input.min" :max="input.max" :step="input.integer ? 1 : 'any'" :value="subjectFacts(damage.facts, { kind: 'event' })?.[input.id]?.value?.value ?? ''" placeholder="待确认" @input="setInput(input.id, $event)"></label>
             <template v-if="selectedHit?.snapshot"><label>属性捕获来源<select :value="damage.capture?.recordId ?? ''" @change="setCapture"><option value="">待确认</option><option v-for="record in captures" :key="record.id" :value="record.id">{{ actorLabel(document!.project, record.actor) }} / {{ recordLabel(document!.project, record.id) }} / {{ record.timeMs / 1000 }}秒</option></select></label><label>捕获时点<select :value="damage.capture?.phase ?? ''" @change="damage.capture = { recordId: damage.capture?.recordId ?? null, phase: (($event.target as HTMLSelectElement).value || null) as 'before' | 'after' | null }"><option value="">待确认</option><option value="before">记录生效前</option><option value="after">记录生效后</option></select></label></template>
           </div><details><summary>目标与计算条件</summary><div class="calculator-fields">
             <label>目标等级<input v-model.number="enemy.level" type="number" min="1" max="200"></label>
             <label>减防比例<input v-model.number="enemy.defenseReduction" type="number" min="0" max="1" step="0.01"></label><label>无视防御比例<input v-model.number="enemy.defenseIgnore" type="number" min="0" max="1" step="0.01"></label>
             <label v-for="element in elements" :key="element">{{ realElementLabel(element) }}抗性（比例）<input v-model.number="enemy.resistances[element]" type="number" step="0.01"></label>
           </div></details></fieldset>
+          <BattleSceneSettings v-if="document" :selections="document.project.sceneEffects" @change="updateScenes" />
+          <TalentHealingForm v-if="document && !document.baseline" :members="document.project.candidate.actors" @apply="(actor,recipient,heal,facts)=>recordBeforeHit((p,t)=>addTalentHeal(p,actor,recipient,heal,t,facts))" />
+          <AuraObservationForm v-if="document && hitOwner && !document.baseline" :members="document.project.candidate.actors.filter(a=>a.build)" :actor="hitOwner.id" @apply="(actor,aura)=>recordBeforeHit((p,t)=>addAuraObservation(p,actor,t,aura))" />
+          <ReactionRecordForm v-if="document && hitOwner && !document.baseline" :project="document.project" :actor="hitOwner.id" :time-ms="Math.round(hitTime*1000)" :before="document.recordId" :changes="result?.combatChanges"
+            @reaction="(actor,reaction,element)=>recordBeforeHit((p,t)=>addReactionObservation(p,actor,t,reaction,element))"
+            @pickup="(actor,source,effect)=>recordBeforeHit((p,t)=>addParticlePickup(p,actor,source,t,effect))" />
           <fieldset v-if="selectedHit?.snapshot" :disabled="!!document?.baseline"><label>独立捕获时刻（秒）<input v-model="captureTime" type="number" min="0" max="3600" step="0.001" placeholder="填写已确认时刻"></label><button class="ui-action soft" data-accent="hydro" @click="createCapture">添加属性捕获点</button></fieldset>
     </section>
     <section v-if="character?.build" class="library-section calculator-build" aria-label="角色配置">
@@ -586,6 +671,7 @@ defineExpose({ requestLeave: leaveCalculator });
         <input ref="metadataFile" hidden type="file" accept=".json,application/json" aria-label="导入计算器角色定义" @change="importMetadata">
       </details>
     </section>
+    <CombatChangeList v-if="document" :changes="result?.combatChanges" :team="document.project.candidate.actors" />
     <footer class="library-page-toolbar">
       <span v-if="dirty || document" class="library-page-status">{{ dirty ? '未保存' : '已保存' }}</span>
       <div class="library-page-actions">
@@ -611,14 +697,14 @@ defineExpose({ requestLeave: leaveCalculator });
         <CatalogBrowser :options="catalog?.characters ?? []" kind="characters" label="游戏角色" :selected-id="queryCharacter?.id" @select="chooseCharacter" />
       </template>
     </CharacterSelectionDialog>
-    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :selected="damage.outputId ?? undefined" @close="picker = undefined" @select="selectDamage" />
+    <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :selected="damage.hit.hitId ?? undefined" @close="picker = undefined" @select="selectDamage" @reaction="selectReaction" />
     <CalculatorBuffPicker v-if="picker === 'buff' && hitOwner" :choices="buffs" :damage="damage" :actor-id="hitOwner.id" :intervals="intervals"
       :fields="factFields" :hit-facts="hitFacts" :time="hitTime" @close="picker = undefined" @apply="applyBuffs" />
     <CharacterSelectionDialog v-if="picker === 'candidate' && document" title="试配队员" :members="document.project.candidate.actors" :selected-id="document.actorId" @close="picker = undefined" @select="switchActor" />
     <CalculatorBuildEditor v-if="editor" ref="editorDialog" :name="editor.name" :initial-character-id="editor.initialCharacterId" :character="editor.character"
       :equipment="editor.equipment" :effective-stats="effectiveStats(editor.name)" @close="editor = undefined" @apply="applyBuild" />
     <WorkbenchDialog v-if="contentReview" title="更新计算副本内容" @close="contentReview = undefined"><p>替换当前试配队员的内容定义，保留培养与装备选择。账号和原轴保留原记录，已有条件与效果引用继续校验。</p><ul v-if="contentReview.changes.length"><li v-for="change in contentReview.changes" :key="change">{{ change }}</li></ul><p v-else>当前定义已与内置内容一致。</p><button v-if="contentReview.changes.length" class="ui-action" data-accent="hydro" @click="applyContent">采用当前内容并重算</button></WorkbenchDialog>
-    <UnsavedChangesDialog v-if="discardOpen" @continue="cancelDiscard" @discard="discardChanges" @save="saveAndLeave(selectedChoice ? saveDamage : save)" />
+    <UnsavedChangesDialog v-if="discardOpen" @continue="cancelDiscard" @discard="discardChanges" @save="saveAndLeave(selectedLabel ? saveDamage : save)" />
   </section>
 </template>
 

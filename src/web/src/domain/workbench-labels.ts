@@ -1,7 +1,8 @@
+import { findBuildHit } from '@leyline/schema';
 import type { CharacterDefinition, Project, QuantityUnit } from '@leyline/schema';
-import { canTryOrdinaryHit, ordinaryTrialId } from '@leyline/schema/hit-bindings';
+export const observedReactionNames = {quicken:'原激化',freeze:'冻结',crystallize:'结晶','lunar-bloom':'月绽放','stellar-conduct':'星超导'};
 
-const units: Record<QuantityUnit, string> = { milliseconds: '毫秒', count: '数量', energy: '能量', stamina: '体力', scalar: '倍率', attack: '攻击力', hp: '生命值', defense: '防御力', elementalMastery: '元素精通', damage: '伤害' };
+const units: Record<QuantityUnit, string> = { milliseconds: '毫秒', count: '数量', energy: '能量', stamina: '体力', staminaPerSecond: '体力/秒', pointsPerSecond: '点/秒', scalar: '倍率', attack: '攻击力', hp: '生命值', defense: '防御力', elementalMastery: '元素精通', damage: '伤害' };
 const operations: Record<string, string> = { attribute: '时刻属性读取', capture: '属性捕获', history: '历史累计与计数', constant: '常量', input: '输入属性', add: '相加', multiply: '相乘', divide: '相除', condition: '条件选择', unsupported: '尚未支持', 'game-damage': '真实技能伤害' };
 const diagnostics: Record<string, string> = { budget: '计算预算已用尽', 'stale-revision': '来源修订待核对', 'invalid-input': '输入格式有误', 'missing-reference': '引用内容缺失', 'duplicate-id': '标识重复', cycle: '公式存在循环引用', unit: '计算单位不匹配', unknown: '条件尚未确定', unsupported: '当前尚不支持此机制', arithmetic: '数值计算有误' };
 const lookup = (labels: Record<string, string>, value: string, fallback: string) => Object.hasOwn(labels, value) ? labels[value] : fallback;
@@ -27,7 +28,18 @@ export function actorLabel(project: Project, id: string): string {
 export function recordLabel(project: Project, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
+  if (record.talentHeal) {
+    const build = project.candidate.actors.find(actor => actor.id === record.actor)?.build;
+    const talent = build?.character.talents.find(t => t.heals?.some(h => h.id === record.talentHeal!.healId));
+    return (talent?.name ?? '技能') + '治疗 · ' + actorLabel(project, record.talentHeal.recipientId);
+  }
   if (record.reactionEvent) return damageFamilyLabel(record.reactionEvent.family);
+  if (record.observedReaction) return (record.crystalElement ? realElementLabel(record.crystalElement)+'元素' : '') + observedReactionNames[record.observedReaction];
+  if (record.aura) return realElementLabel(record.aura.element)+'元素附着';
+  if (record.confirmedBuff) return '已触发增益 · ' + record.confirmedBuff.id;
+  if (record.particleSource) return record.particleEffect ? '拾取元素微粒' : '拾取无元素微粒';
+  if (record.fieldSwitch) return '切换上场';
+  if (record.kind==='state-change' && record.facts?.currentEnergy) return '元素能量记录';
   if (record.actionId) {
     const label = project.definitions.find(definition => definition.id === record.definition)?.name;
     if (label) return label;
@@ -39,8 +51,8 @@ export function recordLabel(project: Project, id: string): string {
   if (record.kind === 'action') { const definition = project.definitions.find(entry => entry.id === record.definition); if (definition?.name) return definition.name; }
   if (record.damage) {
     const actor = project.candidate.actors.find(entry => entry.id === record.actor);
-    const skill = actor?.build?.character.talents.find(entry => entry.id === record.damage?.skillId);
-    return `${skill?.name ?? '真实技能'} · 第${(project.candidate.actors.find(actor => actor.id === record.actor)?.build?.character.talents.find(talent => talent.id === record.damage?.skillId)?.hits.findIndex(hit => hit.id === record.damage?.hitId) ?? -1) + 1}段`;
+    const selected = findBuildHit(actor?.build, record.damage.hit);
+    return selected ? (selected.talent?.name ?? ('name' in selected.entity ? selected.entity.name : selected.entity.identity.name)) + ' · ' + selected.hit.name : record.damage.hit.hitId;
   }
   const index = project.timeline.filter(entry => entry.kind === record.kind).findIndex(entry => entry.id === id);
   return `${record.kind === 'damage' ? '命中' : '动作'}${index + 1}`;
@@ -65,11 +77,5 @@ export const realStatLabels: Record<string, string> = { hp: '生命值', hpPerce
 export const realStatLabel = (key: string) => lookup(realStatLabels, key, '未识别属性');
 export const realElementLabel = (key: string) => lookup({ physical: '物理', anemo: '风', geo: '岩', electro: '雷', hydro: '水', pyro: '火', cryo: '冰', dendro: '草' }, key, '未知元素');
 export const damageFamilyLabel = (key: string) => lookup({ ordinary: '普通直伤', 'stellar-swirl': '星扩散', 'stellar-conduct': '星超导',
-  'lunar-charged': '月感电', 'lunar-bloom': '月绽放', 'lunar-crystallize': '月结晶' }, key, key);
-
-type Talent = CharacterDefinition['talents'][number];
-export function hitOutputOptions(skill: Talent, hit: Talent['hits'][number]) {
-  const options = hit.outputs.map(output => ({ id: output.id, label: damageFamilyLabel(output.family) }));
-  if (canTryOrdinaryHit(skill, hit)) options.push({ id: ordinaryTrialId(hit.id), label: '普通直伤试算' });
-  return options;
-}
+  'lunar-charged': '月感电', 'lunar-bloom': '月绽放', 'lunar-crystallize': '月结晶', transformative: '剧变反应',
+  burning:'燃烧',superconduct:'超导',swirl:'扩散','electro-charged':'感电',shatter:'碎冰',overloaded:'超载',bloom:'绽放',burgeon:'烈绽放',hyperbloom:'超绽放' }, key, key);

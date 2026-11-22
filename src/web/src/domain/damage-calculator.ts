@@ -1,3 +1,4 @@
+import { findBuildHit } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { unpackDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
@@ -43,6 +44,15 @@ export async function prepareCalculatorContentUpdate(input: DamageCalculatorDocu
   const after: Build = { ...before, character, weapon, sets, artifactMain: data.main, sources: [...before.sources, ...data.sources.filter(source => !before.sources.some(existing => existing.id === source.id))], artifactMainSourceRefs: data.artifactMainSourceRefs, dataVersion: data.catalog.version };
   const labels = { character: `角色定义（${before.character.revision} → ${character.revision}）`, weapon: '武器定义', sets: '套装定义', artifactMain: '圣遗物主词条表', dataVersion: '内容版本' };
   const changes = (Object.keys(labels) as (keyof typeof labels)[]).filter(key => JSON.stringify(before[key]) !== JSON.stringify(after[key])).map(key => labels[key]);
+  for (const record of document.project.timeline) {
+    if (record.actor !== actor.id || !record.damage || !findBuildHit(before, record.damage.hit)) continue;
+    const previous = record.damage.hit;
+    const owner = previous.definition.group === 'characters' ? character : previous.definition.group === 'weapons' ? weapon : sets.find(set => set.id === previous.definition.id && set.namespace === previous.definition.namespace);
+    if (!owner || owner.namespace !== previous.definition.namespace || owner.id !== previous.definition.id) throw new Error('新版缺少已选命中的定义：' + previous.hitId);
+    const ref = { ...previous, definition: { ...previous.definition, revision: owner.revision } };
+    if (!findBuildHit(after, ref)) throw new Error('新版缺少已选命中：' + ref.hitId);
+    record.damage.hit = ref;
+  }
   actor.build = after;
   // Refresh only the metadata of this actor's carried calculation snapshots; keep authored graph rules/revisions intact.
   const definitionIds = new Set([actor.character, actor.weapon, ...document.project.timeline.filter(record => record.actor === actor.id).map(record => record.definition)]);
@@ -59,6 +69,8 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
   const project = createEmptyProject();
   project.enemy = enemy;
   const actorId = addActorFromBuild(project, build);
+  damage = { ...damage, ...(damage.facts ? { facts: damage.facts.map(row => row.subject.kind === 'actor' && row.subject.id === 'owner'
+    ? { ...row, subject: { kind: 'actor', id: actorId } } : row) } : {}) };
   const recordId = nextRecordId(project);
   project.timeline.push({ id: recordId, actor: actorId, timeMs: 0, order: 0, kind: 'damage', definition: `${actorId}-real-damage`, damage });
   return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, recordId });
@@ -67,7 +79,7 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
 export function calculatorRequest(input: DamageCalculatorDocument, taskId: number): AxisRequest {
   const document = damageCalculatorSchema.parse(input);
   for (const project of [document.project, ...document.baseline ? [document.baseline] : []]) {
-    const prepared = prepareStructuredBuilds(project.candidate.actors.map(({ id, build, element }) => ({ id, build, element })));
+    const prepared = prepareStructuredBuilds(project.candidate.actors.map(({ id, build, element }) => ({ id, build, element })), undefined, project.sceneEffects);
     if (!prepared.ok) throw new Error(prepared.diagnostics.map(diagnostic => diagnostic.message).join('；'));
   }
   return calculatorWorkerRequest(document, taskId);
@@ -99,7 +111,7 @@ export function parseDamageCalculator(content: string): DamageCalculatorDocument
 
 export function copyProjectForCalculator(input: Project): DamageCalculatorDocument {
   const project = projectSchema.parse(input);
-  const record = project.timeline.find(record => record.kind === 'damage' && record.damage);
+  const record = project.timeline.find(record => record.kind === 'damage' && (record.damage || record.reactionEvent));
   const actorId = record?.actor ?? project.candidate.actors.find(actor => actor.build)?.id;
   if (!actorId) throw new Error('当前轴没有完整配装，请先准备队伍。');
   return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });

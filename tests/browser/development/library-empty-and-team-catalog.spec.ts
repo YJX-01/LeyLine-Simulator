@@ -31,7 +31,7 @@ test('a team slot can create a recorded character from the catalog and reuse the
   const constellation = recording.talentIdList.length;
   const refinement = Number(Object.values(weapon.affixMap)[0]) + 1;
   const state = (key: string) => page.evaluate(key => localStorage.getItem(key), key);
-  const accountKey = 'leyline-account-0.1.0', teamKey = 'leyline-saved-teams-0.1.0';
+  const accountKey = 'leyline-account-0.2.0', teamKey = 'leyline-saved-teams-0.2.0';
   await page.goto('/');
   await page.getByTestId('workspace-nav-team').click();
   const initialAccount = await state(accountKey), initialTeams = await state(teamKey);
@@ -117,7 +117,7 @@ test('an equipment-only local configuration opens its own editor and returns to 
   await page.getByLabel('游戏 UID', { exact: true }).fill('618285856');
   await page.getByRole('button', { name: '查询角色展柜', exact: true }).click();
   await page.getByRole('button', { name: '确认导入 4 位角色', exact: true }).click();
-  const content = (await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0')))!;
+  const content = (await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0')))!;
   const account = await readDocument<LocalAccount>(page, 'account', content);
   const amber = account.characters.find(entry => entry.build?.character.id === 'amber')!;
   const role = page.getByRole('dialog', { name: '安柏', exact: true });

@@ -10,7 +10,7 @@ test('actual inventory: fixed rows, multi-select matching, release order and tra
   await page.getByRole('button',{name:'莫娜导入',exact:true}).click();
   await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles(recordedJsonFile('.references/artifacts_mona.json'));
   await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
-  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'));
+  const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
   const cards = page.locator('.inventory-card');
   await cards.first().hover();
   await expect(cards.first()).toHaveCSS('border-top-color', 'rgb(76, 169, 139)');
@@ -64,7 +64,7 @@ test('actual inventory: fixed rows, multi-select matching, release order and tra
   for(const [label,icon] of [['生命值','hpPercent'],['攻击力','attackPercent'],['防御力','defensePercent']])await expect(subs.getByRole('button',{name:label,exact:true}).locator('.stat-label')).toHaveAttribute('data-stat',icon);
   await subs.getByRole('button',{name:'暴击率',exact:true}).click();await subs.getByRole('button',{name:'暴击伤害',exact:true}).click();
   const expected=await page.evaluate(()=>{
-    const items=JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts;
+    const items=JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.artifacts;
     return {all:items.filter((item:any)=>['critRate','critDamage'].every(stat=>item.real.substats.some((sub:any)=>sub.stat===stat))).length,any:items.filter((item:any)=>item.real.substats.some((sub:any)=>['critRate','critDamage'].includes(sub.stat))).length};
   });
   await expect(page.locator('.artifact-browser .library-result-count')).toContainText(`${expected.all} 件圣遗物`);
@@ -75,7 +75,7 @@ test('actual inventory: fixed rows, multi-select matching, release order and tra
   const setChoices=filter.getByRole('group',{name:'筛选套装选项',exact:true}).getByRole('button');
   const names=[await setChoices.nth(0).getAttribute('aria-label'),await setChoices.nth(1).getAttribute('aria-label')];
   const releaseCatalog=JSON.parse(readFileSync('src/game-data/data/tables/catalog-release-metadata.json','utf8')).artifacts;
-  const expectedFirst=await page.evaluate(meta=>{const ids=[...new Set(JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts.map((item:any)=>item.real.setId))] as string[];return ids.map(id=>meta[id]).filter(Boolean).sort((a:any,b:any)=>{const av=a.version.split('.').map(Number),bv=b.version.split('.').map(Number);return bv[0]-av[0] || bv[1]-av[1] || b.gameId-a.gameId;})[0].name;},releaseCatalog);
+  const expectedFirst=await page.evaluate(meta=>{const ids=[...new Set(JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.artifacts.map((item:any)=>item.real.setId))] as string[];return ids.map(id=>meta[id]).filter(Boolean).sort((a:any,b:any)=>{const av=a.version.split('.').map(Number),bv=b.version.split('.').map(Number);return bv[0]-av[0] || bv[1]-av[1] || b.gameId-a.gameId;})[0].name;},releaseCatalog);
   expect(names[0]).toBe(expectedFirst);
   await setChoices.nth(0).click();await setChoices.nth(1).click();
   await expect(filter.getByLabel('筛选套装',{exact:true})).toContainText('已选 2 项');
@@ -90,7 +90,7 @@ test('actual inventory: fixed rows, multi-select matching, release order and tra
   await page.getByRole('button',{name:'完成',exact:true}).click();
   const metadata=JSON.parse(readFileSync('src/game-data/data/tables/catalog-release-metadata.json','utf8')).artifacts;
   const expectedSet=await page.evaluate(meta=>{
-    const items=JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts;
+    const items=JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.artifacts;
     return items.map((item:any)=>meta[item.real.setId]).filter(Boolean).sort((a:any,b:any)=>{
       const av=a.version.split('.').map(Number),bv=b.version.split('.').map(Number);
       return bv[0]-av[0] || bv[1]-av[1] || b.gameId-a.gameId;
@@ -117,7 +117,7 @@ test('actual inventory: fixed rows, multi-select matching, release order and tra
   await expect.poll(()=>page.getByRole('spinbutton',{name:'顶部页码',exact:true}).evaluate((node:HTMLInputElement)=>Number(node.value)<=Number(node.max))).toBe(true);
   await expect(page.locator('.inventory-card')).not.toHaveCount(0);
 
-  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0'))).toBe(baseline);
+  expect(await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'))).toBe(baseline);
   await page.setViewportSize({width:1280,height:900});
   await page.getByTestId('workspace-nav-characters').click();
   await restoreRecordedNoteSetup(page);

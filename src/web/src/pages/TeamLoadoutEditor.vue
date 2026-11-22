@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue';
-import { getArtifactSet } from '@leyline/game-data';
+import { getArtifactSet, loadCatalog, type GameCatalog } from '@leyline/game-data';
 import { buildSchema, type Build, type Project, type StatKey } from '@leyline/schema';
 import { resolveBuild } from '@leyline/engine';
 import { calculationArtifact } from '../domain/build-snapshot';
@@ -45,10 +45,26 @@ async function equip(item?:AccountArtifact,part=slot.value) {
     if(item&&(!item.real||item.mona?.setIdentityPending||item.slot!==part))throw Error('该实物的词条或套装身份待补全，不能用于计算。');
     if(item&&props.project.candidate.actors.some(actor=>actor.id!==actorId&&actor.build?.artifacts.some(piece=>piece.id===item.id&&piece.inventory?.accountId===owner.id)))throw Error('当前队伍已使用这件实物，请先卸下其他队员的候选装备。');
     const artifacts=original.artifacts.filter(piece=>piece.slot!==part);if(item?.real)artifacts.push(calculationArtifact(JSON.parse(JSON.stringify(item.real)),owner.id));
-    const sets=await Promise.all([...new Set(artifacts.map(piece=>piece.setId))].filter(id=>id!=='none').map(id=>getArtifactSet(id)));
+    const theoreticalSetSlots = (original.theoreticalSetSlots ?? []).filter(entry => !item || entry.slot !== part);
+    const sets=await Promise.all([...new Set([...artifacts, ...theoreticalSetSlots].map(piece=>piece.setId))].filter(id=>id!=='none').map(id=>getArtifactSet(id)));
     if(original!==draft.value||owner!==accounts.account)return;
-    draft.value={...original,artifacts,sets};slot.value=undefined;
+    draft.value={...original,artifacts,sets,theoreticalSetSlots};slot.value=undefined;
   }catch(cause){error.value=cause instanceof Error?cause.message:'换装失败。';}finally{busy.value=false;}
+}
+const catalogSets = ref<GameCatalog['sets']>([]);
+async function loadSets() { if (!catalogSets.value.length) catalogSets.value = (await loadCatalog()).sets; }
+async function setTheoreticalSlot(part: AccountSlot, id: string) {
+  const original = draft.value;
+  if (!original || busy.value || original.artifacts.some(item => item.slot === part)) return;
+  busy.value = true;
+  try {
+    const theoreticalSetSlots = (original.theoreticalSetSlots ?? []).filter(item => item.slot !== part);
+    if (id) theoreticalSetSlots.push({ slot: part, setId: id });
+    const ids = new Set([...original.artifacts, ...theoreticalSetSlots].map(item => item.setId).filter(id => id !== 'none'));
+    const sets = await Promise.all([...ids].map(id => original.sets.find(set => set.id === id) ?? getArtifactSet(id)));
+    if (draft.value === original) draft.value = { ...original, sets, theoreticalSetSlots };
+  } catch (cause) { error.value = cause instanceof Error ? cause.message : '套装选择无效。'; }
+  finally { busy.value = false; }
 }
 function currentBuildMatches() {
   return props.project.id === projectId && props.actorId === actorId && JSON.stringify(actor.value?.build) === baseline;
@@ -59,7 +75,7 @@ async function save() {
   try {
     if(!currentBuildMatches())throw Error('配装已变化，请还原后重新核对。');
     const prepared=await form.value?.prepare();if(!prepared?.build)return false;
-    const next=buildSchema.parse({...draft.value,...prepared.build,artifacts:draft.value.artifacts,sets:draft.value.sets});
+    const next=buildSchema.parse({...draft.value,...prepared.build,artifacts:draft.value.artifacts,sets:draft.value.sets,theoreticalSetSlots:draft.value.theoreticalSetSlots});
     const issues=resolveBuild(next).issues.filter(issue=>issue.code==='invalid-input');if(issues.length)throw Error(issues.map(issue=>issue.message).join('；'));
     if (!currentBuildMatches()) throw Error('编辑对象已变化，未保存。');
     props.applyBuild(actorId, next);
@@ -78,6 +94,14 @@ defineExpose({dirty,busy,save,restore,requestLeave});
       <section class="editor-section"><DisclosureHeading title="角色面板" label="面板" controls="team-character-panel" :expanded="panelOpen" @toggle="panelOpen=!panelOpen" /><div v-if="panelOpen" id="team-character-panel"><p v-for="(issue,index) in panel?.issues" :key="index">{{ issue.message }}</p><dl v-if="panel"><template v-for="(value,stat) in panel.stats" :key="stat"><dt><StatLabel :stat="stat as StatKey" /></dt><dd>{{ formatGameStat(stat as StatKey,value) }}</dd></template></dl></div></section>
       <section class="editor-section"><h3>圣遗物</h3>
         <ArtifactEquipmentGrid :entries="entries" :busy="busy" :wearers="[]" @change="slot=$event" @inspect="inspecting=entries.find(entry=>entry.slot===$event)?.item" />
+        <details v-if="draft" @toggle="loadSets"><summary>空闲部位的理论套装</summary>
+          <label v-for="piece in entries.filter(entry => !draft?.artifacts.some(item => item.slot === entry.slot))" :key="piece.slot">
+            {{ { flower: '生之花', plume: '死之羽', sands: '时之沙', goblet: '空之杯', circlet: '理之冠' }[piece.slot] }}
+            <select :value="draft.theoreticalSetSlots?.find(item => item.slot === piece.slot)?.setId ?? ''" :disabled="busy" @change="setTheoreticalSlot(piece.slot, ($event.target as HTMLSelectElement).value)">
+              <option value="">未选择</option><option v-for="set in catalogSets.filter(set => set.slots.includes(piece.slot))" :key="set.id" :value="set.id">{{ set.name }}</option>
+            </select>
+          </label>
+        </details>
         <ArtifactPickerDialog v-if="slot" :slot="slot" :account="accounts.account" :current="entries.find(entry=>entry.slot===slot)?.item"
           @select="equip" @remove="equip()" @close="slot=undefined" />
         <ArtifactDetail v-if="inspecting" :item="inspecting" readonly @close="inspecting=undefined" />

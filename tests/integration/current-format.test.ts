@@ -26,7 +26,7 @@ async function recordedDocuments() {
   const build=account.characters[0].showcase!.build;
   const project=createEmptyProject();
   addActorFromBuild(project,build);
-  const library={schemaVersion:'0.1.0',kind:'definition-library',id:project.id,name:'公开展柜定义快照',definitions:project.definitions};
+  const library={schemaVersion:'0.2.0',kind:'definition-library',id:project.id,name:'公开展柜定义快照',definitions:project.definitions};
   return {account,build,project,library};
 }
 
@@ -81,9 +81,9 @@ it.skipIf(!existsSync('.references/enka/official-example.json'))('restores curre
   const configurations=[{id:character.id,name:character.name,accountId:account.id,characterId:character.id,snapshot:{...account,characters:[character]}}];
   const teams=[{id:project.id,name:character.name,project}];
   const memory=new Map([
-    ['leyline-account-0.1.0',JSON.stringify(packDocument('account',account))],['leyline-character-loadouts-0.1.0',JSON.stringify(packDocument('character-loadouts',configurations))],
-    ['leyline-saved-teams-0.1.0',JSON.stringify(packDocument('saved-teams',teams))],['leyline-definition-library-0.1.0',JSON.stringify(library)],
-    ['leyline-axis-recovery-0.1.0',JSON.stringify(packDocument('axis-recovery',{project,savedProject:null}))],
+    ['leyline-account-0.2.0',JSON.stringify(packDocument('account',account))],['leyline-character-loadouts-0.2.0',JSON.stringify(packDocument('character-loadouts',configurations))],
+    ['leyline-saved-teams-0.2.0',JSON.stringify(packDocument('saved-teams',teams))],['leyline-definition-library-0.2.0',JSON.stringify(library)],
+    ['leyline-axis-recovery-0.2.0',JSON.stringify(packDocument('axis-recovery',{project,savedProject:null}))],
   ]);
   vi.stubGlobal('localStorage',{getItem:(key:string)=>memory.get(key)??null,setItem:(key:string,value:string)=>memory.set(key,value)});
   const pinia=createPinia();setActivePinia(pinia);

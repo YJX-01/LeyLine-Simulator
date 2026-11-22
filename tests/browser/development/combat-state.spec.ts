@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
 import type { AxisResponse, Build, Project } from '@leyline/schema';
 import { vesnaRecording } from '../../helpers/recorded-vesna';
 
-test('timeline saves a pending hit and evaluates its explicitly selected trial output', async ({ page }) => {
+test('timeline saves a pending hit and evaluates its selected character damage', async ({ page }) => {
   test.skip(!existsSync(vesnaRecording), 'Requires the original authorized showcase.');
   test.setTimeout(90000);
   await page.goto('/');
@@ -26,7 +26,7 @@ test('timeline saves a pending hit and evaluates its explicitly selected trial o
     project.enemy = defaultEnemy();
     addActorFromBuild(project, builds.find(build => build.character.id === 'varesa'));
     const burst = builds.find(build => build.character.id === 'varesa')!.character.talents.find(talent => talent.category === 'burst')!;
-    return { document: packDocument('axis', project), burst: burst.name, hitIndex: String(burst.hits.findIndex(hit => hit.parameter === 'param5')) };
+    return { document: packDocument('axis', project), burst: burst.name, hitIndex: String(burst.hits.findIndex(hit => hit.id === 'varesa.burst.param5')) };
   }, JSON.parse(readFileSync(vesnaRecording, 'utf8')));
   await page.getByTestId('workspace-nav-timeline').click();
   await page.getByLabel('导入轴项目文件').setInputFiles({ name: 'showcase-calculation.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(material.document)) });
@@ -36,16 +36,13 @@ test('timeline saves a pending hit and evaluates its explicitly selected trial o
   await editor.getByRole('button', { name: material.burst, exact: true }).click();
   await editor.getByLabel('标注技能段数').selectOption(material.hitIndex);
   await editor.getByRole('button', { name: '在光标处记录伤害点' }).click();
-  const output = inspector.getByLabel('所选命中输出');
-  await expect(output.locator('option:checked')).toHaveText('待建模');
-  await output.selectOption({ label: '普通直伤试算' });
   await inspector.getByLabel('所选真实命中暴击').selectOption('critical');
   await inspector.getByLabel('所选真实命中反应').selectOption('none');
-  await expect(inspector.locator('.inspector-damage')).toContainText(/试算 \d/);
+  await expect(inspector.locator('.inspector-damage')).toContainText(/\d[\d,]*\.\d/);
 
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.1.0')!).document.project as Project);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
   expect(saved.timeline).toHaveLength(1);
-  expect(saved.timeline[0].damage).toMatchObject({ outputId: 'varesa.burst.param5.ordinary-trial', crit: 'critical', reaction: 'none' });
+  expect(saved.timeline[0].damage).toMatchObject({ hit: { hitId: 'varesa.burst.param5' }, crit: 'critical', reaction: 'none' });
 });
 
 test('Cinnabar flat damage recalculates through actual Worker and file round-trip with an explicit application', async ({ page }) => {
@@ -73,20 +70,23 @@ test('Cinnabar flat damage recalculates through actual Worker and file round-tri
       worker.postMessage({ taskId, session: 1, revision: taskId, project: input });
     });
     try {
-      const unknown = await evaluate(project, 1);
-      const instance = unknown.result.effectInstances!.find(instance => instance.content?.entity === 'cinnabarspindle')!;
+      const automatic = await evaluate(project, 1);
+      const instance = automatic.result.effectInstances!.find(instance => instance.content?.entity === 'cinnabarspindle')!;
+      setDamageEffectApplication(project, hit, instance.id, null);
+      const unknown = await evaluate(project, 2);
       setDamageEffectApplication(project, hit, instance.id, true);
       // @ts-expect-error Vite browser source URL.
       const { packDocument } = await import('/src/domain/content-document.ts');
       const reopened: Project = importProject(JSON.stringify(packDocument('axis', project)));
-      const complete = await evaluate(reopened, 2);
-      return { unknown, complete, reopened, original: project };
+      const complete = await evaluate(reopened, 3);
+      return { automatic, unknown, complete, reopened, original: project };
     } finally { worker.terminate(); }
   }, build);
   const attack = 18.62 * 8.739 + 76.4582 + 41.0671 * 7.275 + 155.6;
   const defense = (59.83 * 8.739 + 245.7) * (1 + 0.150133 * 4.594);
   expect(result.unknown.result.status).toBe('partial');
   expect(result.unknown.result.totalValue).toBeNull();
+  expect(result.automatic.result.totalValue).toBeCloseTo((attack * 4.964 + defense * .4) * .45, 8);
   expect(result.complete.result.status).toBe('complete');
   expect(result.complete.result.points).toHaveLength(1);
   expect(result.complete.result.points[0].real?.baseDamageBonus).toBeCloseTo(defense * 0.4, 8);
@@ -111,7 +111,7 @@ test('R1 counter coverage survives files and Worker while a missing tier stays u
     const actor = addActorFromBuild(project, build);
     project.enemy = { level: 90, resistances: { physical: 0.1, anemo: 0.1, geo: 0.1, electro: 0.1, hydro: 0.1, pyro: 0.1, cryo: 0.1, dendro: 0.1 }, defenseReduction: 0, defenseIgnore: 0 };
     project.timeline.push({ id: 'counter-input-query', actor, timeMs: 0, order: 0, kind: 'damage', definition: `${actor}-real-damage`,
-      damage: { skillId: 'beidou.skill', hitId: 'beidou.skill.param3', outputId: 'beidou.skill.param3.damage', crit: 'noncritical', reaction: 'none', inputs: { counterCharge: 2 } } });
+      damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'beidou', revision: '5' }, hitId: 'beidou.skill.param3' }, crit: 'noncritical', reaction: 'none', facts: [{ subject: { kind: 'event' }, values: { counterCharge: { value: { kind: 'quantity', unit: 'count', value: 2 }, provenance: 'explicit', sourceRefs: [] } } }] } });
     // @ts-expect-error Vite browser source URL.
     const { packDocument } = await import('/src/domain/content-document.ts');
     const reopened: Project = importProject(JSON.stringify(packDocument('axis', project)));
@@ -124,8 +124,8 @@ test('R1 counter coverage survives files and Worker while a missing tier stays u
     });
     try {
       const known = await evaluate(reopened, 1);
-      const unknownProject = importProject(JSON.stringify(packDocument('axis', reopened)));
-      unknownProject.timeline[0].damage!.inputs!.counterCharge = null;
+      const unknownProject: Project = importProject(JSON.stringify(packDocument('axis', reopened)));
+      unknownProject.timeline[0].damage!.facts!.find(row => row.subject.kind === 'event')!.values.counterCharge.value = null;
       const unknown = await evaluate(unknownProject, 2);
       return { known, unknown, reopened, original: project };
     } finally { worker.terminate(); }
@@ -207,7 +207,7 @@ test('recorded showcase state annotations survive file parsing and the actual ax
     const actor = addActorFromBuild(project, build);
     // One explicit format query, not a claim that the showcase includes observed combat.
     project.timeline.push({ id: 'worker-state-query', actor, timeMs: 0, order: 0, kind: 'damage', definition: `${actor}-real-damage`,
-      damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param1', outputId: 'xingqiu.skill.param1.damage', crit: null, reaction: { type: 'vaporize', trigger: 'record-owner' } } });
+      damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.skill.param1' }, crit: null, reaction: { type: 'vaporize', trigger: 'record-owner' } } });
     setCombatStateInterval(project, { id: 'worker-hp-annotation', actor, startMs: 0, endMs: 1000, values: { hpRatio: 1, shielded: false } });
     setDamageStateOverride(project, 'worker-state-query', actor, { hpRatio: null });
     // @ts-expect-error Vite browser source URL.
@@ -273,9 +273,9 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
   await page.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(2);
   await expect(page.locator('.desk-record.damage')).toHaveCount(1);
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.1.0')!).document.project as Project);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
   expect(saved.timeline[0]).toMatchObject({ kind: 'action', skillId: 'xingqiu.skill' });
-  expect(saved.timeline[1]).toMatchObject({ kind: 'damage', timeMs: 1234, damage: { skillId: 'xingqiu.skill', hitId: 'xingqiu.skill.param2', outputId: 'xingqiu.skill.param2.damage', crit: null, reaction: null } });
+  expect(saved.timeline[1]).toMatchObject({ kind: 'damage', timeMs: 1234, damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.skill.param2' }, crit: null, reaction: null } });
   // The new ordinary-attack binding is another explicit format edit, never an inferred combat sequence.
   await page.locator('.skill-palette').getByRole('button').filter({ hasText: '古华剑法' }).click();
   await page.getByLabel('标注技能段数', { exact: true }).selectOption('2');
@@ -285,7 +285,7 @@ test('recorded Xingqiu format project keeps actions and individually selected hi
   await page.getByRole('button', { name: '在光标处记录伤害点', exact: true }).click();
   await expect(page.locator('.desk-record')).toHaveCount(3);
   await expect(page.locator('.desk-record.damage')).toHaveCount(2);
-  const withNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.1.0')!).document.project as Project);
+  const withNormal = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-axis-recovery-0.2.0')!).document.project as Project);
   expect(withNormal.timeline[2]).toMatchObject({ kind: 'damage', timeMs: 1235,
-    damage: { skillId: 'xingqiu.normal', hitId: 'xingqiu.normal.param3', outputId: 'xingqiu.normal.param3.damage', crit: null, reaction: null } });
+    damage: { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'xingqiu', revision: '3' }, hitId: 'xingqiu.normal.param3' }, crit: null, reaction: null } });
 });

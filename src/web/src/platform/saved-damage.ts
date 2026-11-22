@@ -8,7 +8,7 @@ export interface SavedDamageSummary {
   team?: string;
   savedAt: number;
   value?: number;
-  trial?: boolean;
+  verification?: 'pending';
 }
 
 // Keep the list cheap to open, even when each entry carries a whole team's definitions.

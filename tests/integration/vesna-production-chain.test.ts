@@ -16,11 +16,11 @@ import { recordedVesnaDamage } from '../helpers/recorded-vesna';
 
 const path = '.references/enka/uid-107590923.json';
 const fact = (value: Value): CalculationFact => ({ value, provenance: 'explicit', sourceRefs: [] });
-const request = (): DamageRequest => ({ skillId: 'vesna.skill', hitId: 'vesna.skill.param5', outputId: 'vesna.skill.param5.stellar-swirl', crit: 'expected', reaction: 'none',
-  facts: { radiance: fact({ kind: 'enum', value: 'stellar-swirl' }), 'vesna.stance': fact({ kind: 'boolean', value: true }),
+const request = (): DamageRequest => ({ hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'vesna', revision: '4' }, hitId: 'vesna.skill.param5' }, crit: 'expected', reaction: 'none',
+  facts: [{ subject: { kind: 'actor', id: 'owner' }, values: { radiance: fact({ kind: 'enum', value: 'stellar-swirl' }), 'vesna.stance': fact({ kind: 'boolean', value: true }),
     'vesna.disciplineStacks': fact({ kind: 'quantity', unit: 'count', value: 6 }),
     'beyondthechrysalis.loyalWind': fact({ kind: 'boolean', value: true }), 'beyondthechrysalis.betrayalWind': fact({ kind: 'boolean', value: true }),
-    'scarletproof.stellarWindow': fact({ kind: 'boolean', value: true }) } });
+    'scarletproof.stellarWindow': fact({ kind: 'boolean', value: true }) } }] });
 
 async function recordedBuilds() {
   const raw = JSON.parse(readFileSync(path, 'utf8'));
@@ -37,21 +37,19 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     const teammate = addActorFromBuild(document.project, builds.get('varesa')!);
     const expected = (rank: 1 | 2) => recordedVesnaDamage(rank, 1, true, 'expected', 1);
     const baseline = evaluateTimeline(document.project);
-    expect(baseline.totalValue).toBeNull();
-    expect(baseline.modeledTotalValue).toBeCloseTo(expected(1), 8);
+    expect(baseline.totalValue).toBeCloseTo(expected(1), 8);
     expect(baseline.diagnostics.map(diagnostic => diagnostic.message)).toEqual([expect.stringContaining('瓦雷莎 ·')]);
     delete document.project.candidate.actors.find(actor => actor.id === teammate)!.build;
     const incomplete = evaluateTimeline(document.project);
-    expect(incomplete.points[0].modeledValue).toBeCloseTo(expected(1), 8);
+    expect(incomplete.points[0].value).toBeCloseTo(expected(1), 8);
     document.baseline = structuredClone(document.project);
     document.project.candidate.actors[0].build!.refinement = 2;
     const evaluation = calculatorRequest(document, 4);
     const comparison = compareTimelineLoadouts(evaluation.project, evaluation.candidates!);
-    expect(comparison.candidates[0].delta).toBeNull();
-    expect(comparison.candidates[0].modeledDelta).toBeCloseTo(expected(2) - expected(1), 8);
-    expect(comparison.candidates[0].points[0].modeledDelta).toBeCloseTo(expected(2) - expected(1), 8);
+    expect(comparison.candidates[0].delta).toBeCloseTo(expected(2) - expected(1), 8);
+    expect(comparison.candidates[0].points[0].delta).toBeCloseTo(expected(2) - expected(1), 8);
     delete document.project.candidate.actors.find(actor => actor.id === teammate)!.element;
-    expect(evaluateTimeline(document.project).points[0].modeledValue).toBeUndefined();
+    expect(evaluateTimeline(document.project).points[0].value).toBeNull();
   }, 20_000);
 
   it('reopens pending, direct lunar and explicitly ranked reaction records', async () => {
@@ -59,8 +57,8 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     const project = createEmptyProject();
     const flinsId = addActorFromBuild(project, flins), columbinaId = addActorFromBuild(project, columbina);
     const skill = flins.character.talents.find(talent => talent.category === 'burst')!;
-    const middle = skill.hits.findIndex(hit => hit.parameter === 'param2'), final = skill.hits.findIndex(hit => hit.parameter === 'param3');
-    const pending = addSkillHit(project, flinsId, skill.id, middle, 0, { outputId: null, crit: null, reaction: null });
+    const middle = skill.hits.findIndex(hit => hit.id === 'flins.burst.param2'), final = skill.hits.findIndex(hit => hit.id === 'flins.burst.param3');
+    const pending = addSkillHit(project, flinsId, skill.id, middle, 0, { crit: null, reaction: null });
     const direct = addSkillHit(project, flinsId, skill.id, final, 1000, { crit: 'noncritical', reaction: 'none' });
     const reacted = nextRecordId(project);
     project.enemy = defaultEnemy();
@@ -70,20 +68,21 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     const reopened = importProject(JSON.stringify(packDocument('axis', project)));
     const result = evaluateTimeline(reopened);
     const points = new Map(result.points.map(point => [point.id, point]));
-    expect(points.get(pending)?.modeledValue).toBeUndefined();
-    expect(result.modeledTotalValue).toBeUndefined();
+    expect(points.get(pending)?.value).toBeNull();
+    expect(result.totalValue).toBeNull();
     const panels = [flins, columbina].map(build => resolveBuild(build).stats);
     const lunarBonus = (em: number) => 1 + 6 * em / (em + 2000);
+    const blessing = 1 + Math.min(.14, panels[0].attack! * .00007) + Math.min(.07, panels[1].hp! * .000002);
     const upstream = JSON.parse(readFileSync('tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/stats/talents.json', 'utf8'));
     const multiplier = upstream.flins.combat3.param3[flins.talents.burst - 1];
-    expect(points.get(direct)?.modeledValue).toBeCloseTo(panels[0].attack! * multiplier * 3 * lunarBonus(panels[0].elementalMastery!) * 0.9, 8);
+    expect(points.get(direct)?.value).toBeCloseTo(panels[0].attack! * multiplier * 3 * blessing * lunarBonus(panels[0].elementalMastery!) * 0.9, 8);
     const levels = JSON.parse(readFileSync('src/game-data/data/calculation/reactions.json', 'utf8')).rules.levelMultipliers;
     let expected = 0;
     for (const first of [false, true]) for (const second of [false, true]) {
       const flags = [first, second];
       const values = [flins, columbina].map((build, index) => {
         const panel = panels[index];
-        return levels[build.level] * 3 * lunarBonus(panel.elementalMastery!) * (1 + (flags[index] ? panel.critDamage! : 0)) * 0.9;
+        return levels[build.level] * 3 * blessing * lunarBonus(panel.elementalMastery!) * (1 + (flags[index] ? panel.critDamage! : 0)) * 0.9;
       }).sort((a, b) => b - a);
       const probability = flags.reduce((product, critical, index) => product * (critical ? panels[index].critRate! : 1 - panels[index].critRate!), 1);
       expected += (values[0] * 0.6 + values[1] * 0.3) * probability;
@@ -91,14 +90,14 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     const outcome = points.get(reacted)?.real?.structured?.outputs[0];
     expect(outcome?.actorId).toBeNull();
     expect(outcome?.aggregation?.states).toHaveLength(4);
-    expect(points.get(reacted)?.modeledValue).toBeCloseTo(expected, 8);
+    expect(points.get(reacted)?.value).toBeCloseTo(expected, 8);
   });
 
   it('reads the derived stance and stack count from explicit project actions after reopening', async () => {
     const build = (await recordedBuilds()).get('vesna')!;
     const damage = request();
-    delete damage.facts!['vesna.stance'];
-    delete damage.facts!['vesna.disciplineStacks'];
+    delete damage.facts![0].values['vesna.stance'];
+    delete damage.facts![0].values['vesna.disciplineStacks'];
     const document = createDamageCalculation(build, damage, defaultEnemy());
     document.project.timeline[0].timeMs = 1000;
     expect(evaluateTimeline(document.project).points[0].value).toBeNull();
@@ -171,12 +170,12 @@ describe.skipIf(!existsSync(path))('recorded Vesna through the production calcul
     delete document.baseline;
     // Edit the exported common metadata contract, then reopen it without a code change.
     const custom = copyCharacterDefinition(build.character, build.dataVersion);
-    custom.talents.find(skill => skill.id === damage.skillId)!.parameters.find(parameter => parameter.id === 'param5')!.values[9] *= 1.1;
+    custom.metadata.talents.find(skill => skill.hits.some(hit => hit.id === damage.hit.hitId))!.parameters.find(parameter => parameter.id === 'param5')!.values[9] *= 1.1;
     const imported = parseCharacterDefinition(exportCharacterSnapshot(custom), [build.character]);
     document.project = applyCharacterDefinition(document.project, document.actorId, imported);
     const changed = evaluateTimeline(parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', document))).project);
     expect(changed.totalValue).toBeCloseTo(comparison.candidates[0].result.totalValue! * 1.1, 7);
-    const unknown = request(); delete unknown.facts!['beyondthechrysalis.betrayalWind'];
+    const unknown = request(); delete unknown.facts![0].values['beyondthechrysalis.betrayalWind'];
     expect(evaluateDamage(build, unknown, defaultEnemy()).value).toBeNull();
     expect(JSON.stringify(account)).toBe(before);
   }, 20_000);

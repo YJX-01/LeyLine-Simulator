@@ -18,7 +18,7 @@ describe.skipIf(!existsSync('.references/enka/official-example.json'))('current 
 
   it('rejects missing references and duplicate IDs in derivatives of recorded definitions', async () => {
     const source = await recordedProject();
-    const file = { schemaVersion: '0.1.0', kind: 'definition-library', id: source.id, name: 'Recorded definitions', definitions: source.definitions };
+    const file = { schemaVersion: '0.2.0', kind: 'definition-library', id: source.id, name: 'Recorded definitions', definitions: source.definitions };
     expect(parseDefinitionLibrary(file).definitions).toEqual(source.definitions);
     const duplicate = structuredClone(file);
     duplicate.definitions.push(structuredClone(duplicate.definitions[0]));

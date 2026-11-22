@@ -12,7 +12,7 @@ export interface CalculatorFactor { label: string; value: number | null; multipl
 
 /** Read the stages and dependencies of this output, including the inputs actually evaluated at the hit or capture. */
 export function calculatorFactors(real: DamageResult, damage: DamageRequest, buffs: readonly CalculatorBuff[]): CalculatorFactor[] {
-  const result = real.structured, output = result?.outputs.find(entry => entry.outputId === damage.outputId);
+  const result = real.structured, output = result?.outputs.find(entry => entry.outputId === damage.hit.hitId);
   if (!result || !output) return [];
   const trace = new Map(result.trace.map(node => [node.id, node]));
   const stages = new Map(output.stages.map(stage => [stage.id, stage.value]));

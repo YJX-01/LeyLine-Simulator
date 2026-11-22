@@ -27,7 +27,7 @@ test('manual selection opens directly, preserves the list on return, and display
     await traveler.getByRole('button',{name:'返回角色列表',exact:true}).click();
   }
   await page.setViewportSize({width:390,height:844});expect(await dialog.evaluate(node=>node.scrollWidth>node.clientWidth)).toBe(false);await page.screenshot({path:'artifacts/manual-character-list-mobile.png',fullPage:true});
-  await page.keyboard.press('Escape');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0') ?? '{"characters":[]}').characters)).toEqual([]);expect(errors).toEqual([]);
+  await page.keyboard.press('Escape');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0') ?? '{"characters":[]}').characters)).toEqual([]);expect(errors).toEqual([]);
 });
 
 test('account UID persists, prefills the showcase import, and the three entry dialogs share actions',async({page})=>{
@@ -49,8 +49,8 @@ test('actual Mona export accepts formatting above the former byte cap and still 
   // Only trailing JSON whitespace changes; item contents are the original recorded export.
   const bytes=Buffer.concat([readFileSync('.references/artifacts_mona.json'),Buffer.alloc(8*1024*1024,32)]);
   await page.getByLabel('导入莫娜圣遗物文件',{exact:true}).setInputFiles({name:'recorded-export-with-whitespace.json',mimeType:'application/json',buffer:bytes});
-  await expect(page.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0') ?? '{"artifacts":[]}').artifacts.length)).toBe(0);
-  await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')!).document.artifacts.length)).toBe(458);
+  await expect(page.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0') ?? '{"artifacts":[]}').artifacts.length)).toBe(0);
+  await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.artifacts.length)).toBe(458);
 });
 
 
@@ -63,7 +63,7 @@ test('manual cultivation transcribes the recorded Amber and saves once before re
   await expect(role.getByRole('button',{name:'保存',exact:true})).toBeEnabled();
   await role.getByRole('button',{name:'6命',exact:true}).click();await role.getByRole('button',{name:'更换武器',exact:true}).click();await role.getByLabel('搜索装备武器',{exact:true}).fill('天空之翼');await role.getByRole('button',{name:'天空之翼',exact:true}).click();await role.getByRole('button',{name:'精炼2阶',exact:true}).click();
   await role.getByRole('button',{name:'保存',exact:true}).click();await expect(dialog).toHaveCount(0);await expect(page.getByRole('dialog',{name:'安柏',exact:true})).toBeVisible();
-  const characters=(await readDocument<LocalAccount>(page, 'account', (await page.evaluate(()=>localStorage.getItem('leyline-account-0.1.0')))!) ).characters;expect(characters).toHaveLength(1);expect(characters[0].build).toMatchObject({level:90,ascension:6,constellation:6,talents:{normal:10,skill:10,burst:10},weapon:{name:'天空之翼'},weaponLevel:90,weaponAscension:6,refinement:2});
+  const characters=(await readDocument<LocalAccount>(page, 'account', (await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0')))!) ).characters;expect(characters).toHaveLength(1);expect(characters[0].build).toMatchObject({level:90,ascension:6,constellation:6,talents:{normal:10,skill:10,burst:10},weapon:{name:'天空之翼'},weaponLevel:90,weaponAscension:6,refinement:2});
 });
 
 test('an empty weapon slot survives save and reload and the open panel previews equip, unequip and restore', async ({ page }) => {
@@ -74,7 +74,7 @@ test('an empty weapon slot survives save and reload and the open panel previews 
   const bowAttack = bow.baseAttack * bow.attackCurve[90] + bow.promotion[6];
   // Recorded white ATK, removing only Skyward Harp. Both manual trials have Amber's 24% ascension stat and empty artifact slots.
   const attack = (withBow: boolean) => Math.round((amber.fightPropMap['4'] - (withBow ? 0 : bowAttack)) * 1.24).toLocaleString('zh-CN');
-  const stored = () => page.evaluate(() => localStorage.getItem('leyline-account-0.1.0'));
+  const stored = () => page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'));
   await page.goto('/');
   await page.getByRole('button', { name: '手动添加角色', exact: true }).click();
   await page.getByLabel('搜索游戏角色', { exact: true }).fill('安柏');
@@ -120,7 +120,7 @@ test('an empty weapon slot survives save and reload and the open panel previews 
   await expect(team.locator('[data-slot="1"] .configuration-title')).toContainText('未配武器');
   await team.getByRole('button', { name: '保存', exact: true }).click();
   await expect(page.getByRole('dialog', { name: '队伍详情', exact: true })).toBeVisible();
-  const snapshot = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-saved-teams-0.1.0')!));
+  const snapshot = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-saved-teams-0.2.0')!));
   expect(snapshot.document[0].project.candidate.actors[0].build.weapon).toBeNull();
 });
 
@@ -159,7 +159,7 @@ test('a showcase merge reuses all five scanned Vesna artifacts and their referen
     }
     await page.keyboard.press('Escape');
   }
-  const saved = await readDocument<LocalAccount>(page, 'account', (await page.evaluate(() => localStorage.getItem('leyline-account-0.1.0')))!);
+  const saved = await readDocument<LocalAccount>(page, 'account', (await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0')))!);
   expect(saved.artifacts).toHaveLength(458);
   expect(saved.artifacts.find(item => item.id === saved.characters[0].equipment.flower)?.real?.source?.key).toBe('id:7356583031583997');
 });

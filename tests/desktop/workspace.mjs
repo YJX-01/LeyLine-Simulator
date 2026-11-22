@@ -1,18 +1,28 @@
 import { _electron as electron, expect } from '@playwright/test';
+import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile, mkdtemp } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { desktopExecutable } from '../../tools/lib/desktop-location.mjs';
 import { sourceFingerprint } from '../../tools/lib/source-fingerprint.mjs';
 
-const directory=resolve('artifacts/workspace-desktop-validation');
+const recorded = process.argv.includes('--recorded');
+if (recorded && ['.references/enka/official-example.json', '.references/artifacts_mona.json'].some(path => !existsSync(path))) {
+  console.log('Skipped recorded desktop check: original inventory or showcase is unavailable.');
+  process.exit(0);
+}
+const directory = resolve(recorded ? 'artifacts/workspace-desktop-recorded-validation' : 'artifacts/workspace-desktop-validation');
 await mkdir(directory,{recursive:true});
 const userData=await mkdtemp(resolve(tmpdir(),'leyline-workspace-'));
 const executable=await desktopExecutable(true);
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE;
 const app=await electron.launch({executablePath:executable,args:['--smoke',`--user-data-dir=${userData}`],env,timeout:30000});
 try {
-  const page=await app.firstWindow(),errors=[];
+  const page=await app.firstWindow({ timeout: 30000 }),errors=[];
+  page.setDefaultTimeout(15000);
+  await app.evaluate(({ BrowserWindow }) => {
+    for (const window of BrowserWindow.getAllWindows()) window.webContents.setBackgroundThrottling(false);
+  });
   page.on('pageerror',error=>errors.push(error.message));
   await expect(page.getByTestId('workspace-nav-characters')).toHaveAttribute('aria-current','page');
   await page.getByTestId('workspace-nav-artifacts').click();
@@ -21,7 +31,7 @@ try {
   await expect(page.getByLabel('莫娜导入预览',{exact:true})).toContainText('新增 458 件');
   await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')).document);
+  const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document);
   if(before.artifacts.length!==458 || before.characters.length)throw new Error('Actual inventory import changed source counts or invented characters.');
   await expect.poll(()=>page.locator('.inventory-card .game-icon > img').first().evaluate(image=>image.complete && image.naturalWidth>0 && image.src.startsWith('leyline://app/assets/game/'))).toBe(true);
   await page.screenshot({path:resolve(directory,'actual-inventory.png'),fullPage:true});
@@ -35,7 +45,7 @@ try {
   if(!content.endsWith('\n') || JSON.stringify(JSON.parse(content).document)!==JSON.stringify(before))throw new Error('Native account export changed the actual snapshot or JSON formatting.');
   await page.getByRole('button',{name:'打开 / 切换账号',exact:true}).click();
   await expect(page.getByLabel('账号管理',{exact:true})).toContainText('458 件圣遗物');
-  if(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.1.0')).document))!==JSON.stringify(before))throw new Error('Native account round-trip changed inventory IDs or values.');
+  if(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document))!==JSON.stringify(before))throw new Error('Native account round-trip changed inventory IDs or values.');
   const nameField = page.getByRole('textbox', {name:'账号名称', exact:true});
   const draftName = before.name + '（编辑中）';
   await nameField.fill(draftName);
@@ -60,21 +70,37 @@ try {
   await page.getByTestId('workspace-nav-characters').click();
   await page.getByRole('button',{name:'展柜导入',exact:true}).click();
   const enka=page.getByRole('dialog',{name:'从角色展柜导入',exact:true});
-  await enka.getByLabel('游戏 UID',{exact:true}).fill('618285856');
+  let uid = '618285856';
+  if (recorded) {
+    const content = await readFile(resolve('.references/enka/official-example.json'), 'utf8');
+    uid = String(JSON.parse(content).uid);
+    await app.evaluate((_, { uid, content }) => {
+      globalThis.fetch = async url => {
+        if (String(url) !== 'https://enka.network/api/uid/' + uid + '/') throw new Error('Unexpected showcase request.');
+        return new Response(content, { status: 200, headers: { 'Content-Type': 'application/json' } });
+      };
+    }, { uid, content });
+  }
+  await enka.getByLabel('游戏 UID',{exact:true}).fill(uid);
   await enka.getByRole('button',{name:'查询角色展柜',exact:true}).click();
   await expect.poll(()=>enka.locator('.import-row').count(),{timeout:25000}).toBeGreaterThan(0);
   const imported=await enka.locator('.import-row[aria-pressed=true]').count();
   await enka.getByRole('button',{name:'仅保存展柜',exact:true}).click();
-  if(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')).document.characters.length)!==0)throw new Error('Showcase preview wrote before confirmation.');
+  if(await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document.characters.length)!==0)throw new Error('Showcase preview wrote before confirmation.');
   await enka.getByRole('button',{name:`确认导入 ${imported} 位角色`,exact:true}).click();
   await expect(enka).toHaveCount(0);
-  const publicAccount=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.1.0')).document);
+  const publicAccount=await page.evaluate(()=>JSON.parse(localStorage.getItem('leyline-account-0.2.0')).document);
   if(publicAccount.id===before.id || publicAccount.artifacts.length || publicAccount.characters.length!==imported)throw new Error('Showcase snapshots crossed account or physical-inventory boundaries.');
   await page.screenshot({path:resolve(directory,'enka-showcase.png'),fullPage:true});
   if(errors.length)throw new Error(errors.join('\n'));
   await writeFile(resolve(directory,'report.json'),JSON.stringify({status:'passed',sourceFingerprint:sourceFingerprint(),executable,userData,actualInventory:458,enkaProfiles:imported,
     rawHashes:[...new Set(publicAccount.characters.map(character=>character.showcase.rawHash))],
-    checks:['actual-inventory-preview-confirm','packaged-offline-image','native-account-save-open','native-save-cancel','live-enka-ipc','preview-does-not-write','explicit-snapshot-only','account-isolation'],
+    checks:['actual-inventory-preview-confirm','packaged-offline-image','native-account-save-open','native-save-cancel',recorded ? 'recorded-enka-ipc' : 'live-enka-ipc','preview-does-not-write','explicit-snapshot-only','account-isolation'],
     gap:'No recorded combat timeline or game damage observation.'},null,2)+'\n');
-  console.log('Packaged desktop account files, assets and separate live showcase checks passed.');
-} finally {await app.close();}
+  console.log('Packaged desktop account files, assets and separate ' + (recorded ? 'recorded' : 'live') + ' showcase checks passed.');
+} finally {
+  await app.evaluate(({ BrowserWindow }) => {
+    for (const window of BrowserWindow.getAllWindows()) window.destroy();
+  }).catch(() => {});
+  await app.close();
+}

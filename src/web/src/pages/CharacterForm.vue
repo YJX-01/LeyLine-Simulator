@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 import { getCharacter, getWeapon } from '@leyline/game-data';
 import { resolveBuild } from '@leyline/engine';
 import type { Build, CharacterDefinition } from '@leyline/schema';
+import { weaponRefinementLimit } from '@leyline/schema';
 import type { AccountCharacter } from '../domain/account';
 import { assembleBuildSnapshot } from '../domain/build-snapshot';
 import { loadAccountGameData } from '../domain/account-presentation';
@@ -52,6 +53,10 @@ const weaponAscension = ref(sourceBuild.value?.weapon ? sourceBuild.value.weapon
 const level = ref(sourceBuild.value?.level ?? 90);
 const constellation = ref(sourceBuild.value?.constellation ?? 0);
 const refinement = ref(sourceBuild.value?.refinement ?? 1);
+const refinementLimit = computed(() => selectedWeapon.value ? weaponRefinementLimit(selectedWeapon.value) : 1);
+watch(selectedWeapon, weapon => {
+  if (weapon && weapon.id !== sourceBuild.value?.weapon?.id) refinement.value = Math.min(refinement.value, weaponRefinementLimit(weapon));
+});
 const talents = ref({ ...(sourceBuild.value?.talents ?? { normal: 10, skill: 10, burst: 10 }) });
 const talentMaximum = computed(() => [1,1,2,4,6,8,10][ascension.value] ?? 10);
 const talentRows = computed(() => talentIcons.value.map(row => ({...row, bonus:row.constellations.filter(rank => rank <= constellation.value).length * 3})));
@@ -141,7 +146,7 @@ defineExpose({ prepare, reset, canSave, draftBuild, rollBasis, getRollBasis });
           <fieldset class="constellation-row" :disabled="showcase"><strong>命座</strong><div class="constellation-strip" role="group" aria-label="命座" :style="elementStyle">
             <button v-for="rank in 7" :key="rank" :disabled="showcase" :aria-label="`${rank-1}命`" :aria-pressed="constellation===rank-1" :class="{lit:rank===1 ? constellation===0 : rank-1<=constellation}" @click="constellation=rank-1"><svg v-if="rank===1" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></svg><GameIcon v-else kind="constellations" :id="`${constellationPrefix}-c${rank-1}`" :size="32" monochrome /><CornerBadge small transparent class="constellation-number">{{ rank-1 }}</CornerBadge></button>
           </div></fieldset>
-          <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase || !weaponId"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="[1,2,3,4,5].map(rank=>({value:rank,label:String(rank),accessibleLabel:`精炼${rank}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase || !weaponId" @update:model-value="refinement=Number($event)" /></fieldset>
+          <fieldset class="refinement-field" aria-label="武器精炼" :disabled="showcase || !weaponId"><ChoiceGroup class="refinement-options" :model-value="refinement" :options="Array.from({length:refinementLimit},(_,i)=>({value:i+1,label:String(i+1),accessibleLabel:`精炼${i+1}阶`}))" label="武器精炼" joined tone="hydro" :disabled="showcase || !weaponId" @update:model-value="refinement=Number($event)" /></fieldset>
       </div>
       <CatalogPicker v-if="!showcase" ref="weaponPicker" hide-trigger label="装备武器" image-kind="weapons" v-model="weaponId" :options="weapons" :disabled="!characterId" />
     </template>

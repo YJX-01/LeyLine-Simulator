@@ -1,11 +1,20 @@
 <script setup lang="ts">
+import BattleSceneSettings from '../components/BattleSceneSettings.vue';
+import AuraObservationForm from '../components/AuraObservationForm.vue';
+import TalentHealingForm from '../components/TalentHealingForm.vue';
+import ReactionRecordForm from '../components/ReactionRecordForm.vue';
 import GameIcon from '../components/GameIcon.vue';
 import ChoiceGroup from '../components/ChoiceGroup.vue';
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import { useAxisWorkspaceStore } from '../stores/axis-workspace';
-import { addSkillAction, addSkillHit } from '../domain/real-project';
-import { hitOutputOptions, recordLabel } from '../domain/workbench-labels';
-import type { Project } from '@leyline/schema';
+import { equipmentHits, putHitFact, transformativeElements, transformativeFamilies, type TransformativeFamily, type HitRef, type HitFacts } from '@leyline/schema';
+import { getReactionCalculationBundle } from '@leyline/game-data';
+import { grantedDamageChanges } from '@leyline/engine';
+import { ordinaryReactions } from '@leyline/schema/hit-bindings';
+import { reactionNames } from '../domain/calculator-factors';
+import { addAuraObservation, addFieldChange, addCombatObservation, addParticlePickup, addReactionObservation, addSelectedHit, addSkillAction, addSkillHit, addTalentHeal, addTransformativeReaction } from '../domain/real-project';
+import { recordLabel, realElementLabel, damageFamilyLabel } from '../domain/workbench-labels';
+import type { CombatObservation, Project } from '@leyline/schema';
 type TimelineRecord = Project['timeline'][number];
 const axis = useAxisWorkspaceStore();
 const cursor = ref(0);
@@ -13,7 +22,6 @@ const scale = ref(60);
 const layer = ref<'action' | 'damage'>('action');
 const skillId = ref('');
 const hitIndex = ref(0);
-const outputId = ref('');
 const error = ref('');
 const playing = ref(false);
 let frame = 0;
@@ -33,7 +41,71 @@ function toggleClock() {
 const skills = computed(() => axis.actor?.build?.character.talents ?? []);
 const skill = computed(() => skills.value.find(item => item.id === skillId.value) ?? skills.value[0]);
 const hit = computed(() => skill.value?.hits[hitIndex.value]);
-const outputOptions = computed(() => skill.value && hit.value ? hitOutputOptions(skill.value, hit.value) : []);
+const summonTalent = computed(() => skills.value.find(t => t.summon && (t.id === skill.value?.id || t.summon.release.skill === skill.value?.id)));
+const priorSummons = computed(() => axis.project.timeline.filter(record => record.actor === axis.actorId && record.kind === 'action'
+  && record.skillId === summonTalent.value?.id && record.summon && record.timeMs <= cursor.value));
+const nearby = ref<string[]>([]), replace = ref(''), targetInRange = ref(true);
+const summonCrit = ref<'noncritical' | 'critical' | 'expected'>('noncritical');
+const summonReaction = ref<'none' | 'aggravate'>('none');
+const coordinatedParty = computed(() => axis.project.candidate.actors.some(actor =>
+  actor.build?.character.talents.some(talent => talent.hits.some(item => item.coordinated))));
+const coordinatedSource = computed(() => layer.value === 'action' ? skill.value?.hits.some(item => item.coordinated?.window)
+  : coordinatedParty.value && hit.value && !hit.value.coordinated);
+const coordinatedCrit = ref<'inherit' | 'unknown' | 'noncritical' | 'critical' | 'expected'>('inherit');
+const coordinatedReaction = ref<'unknown' | keyof typeof reactionNames>('unknown');
+const projectionReactions = computed(() => layer.value === 'damage' ? ordinaryReactions(axis.actor?.build?.character.identity.element) : []);
+watch([() => axis.actorId, layer, skillId], () => { coordinatedCrit.value = 'inherit'; coordinatedReaction.value = 'unknown'; }, { flush: 'sync' });
+watch([() => axis.actorId, skillId], () => { nearby.value = []; replace.value = ''; });
+const equipment = computed(() => axis.actor?.build ? equipmentHits(axis.actor.build) : []);
+const reactionFamily = ref<TransformativeFamily>('swirl'), reactionElement = ref<typeof transformativeElements.swirl[number]>('pyro');
+watch(reactionFamily, family => { reactionElement.value = transformativeElements[family][0]; });
+async function addReaction() {
+  const owner = axis.actor?.id, at = Math.round(cursor.value), family = reactionFamily.value, element = reactionElement.value, projectId = axis.project.id;
+  if (!owner) return;
+  try {
+    const rules = axis.project.reactionRules ?? await getReactionCalculationBundle();
+    if (axis.project.id !== projectId) return;
+    axis.command(draft => { axis.selectedId = addTransformativeReaction(draft,owner,family,element,at,rules); });
+    error.value = '';
+  } catch (cause) { error.value = cause instanceof Error ? cause.message : '无法记录反应伤害。'; }
+}
+const damageChanges = computed(() => axis.actor?.build ? grantedDamageChanges(axis.actor.build) : []);
+const hasDefeatTrigger = computed(() => axis.actor?.build?.weapon?.metadata.buffs?.some(b => typeof b.trigger === 'object' && 'selector' in b.trigger && b.trigger.selector.observation?.key === 'enemyDefeated'));
+const hitTargets = ref<number | ''>(''), criticalTargets = ref<number | ''>(''), triggerRoll = ref<number | ''>('');
+function setSeed(event: Event) {
+  const raw = (event.target as HTMLInputElement).value;
+  if (raw && (!Number.isInteger(Number(raw)) || Number(raw) < 0 || Number(raw) > 4294967295)) {
+    error.value = '随机种子须为 0 到 4294967295 的整数。'; return;
+  }
+  axis.command(draft => { if (raw) draft.seed = Number(raw); else delete draft.seed; });
+}
+const defeated = ref(''), remainingCooldown = ref<number | ''>('');
+watch([() => axis.actorId, skillId], () => { hitTargets.value = ''; criticalTargets.value = ''; triggerRoll.value = ''; defeated.value = ''; remainingCooldown.value = ''; });
+const observationLabels: Record<CombatObservation,string> = {hpRatioChange:'生命变化（%）',damageTaken:'实际受到的伤害',healingDone:'治疗量（含溢出）',healingReceived:'受到治疗量（含溢出）',bondOfLifeChange:'生命之契变化量',nightsoulChange:'夜魂值变化量',nightsoulBurst:'触发夜魂迸发'};
+const healthField = ref<CombatObservation>('hpRatioChange'), healthValue = ref<number | string>('');
+const energyReading=ref<number|''>(''), exitCrit=ref<NonNullable<Project['timeline'][number]['fieldSwitch']>['crit']>(null);
+function recordField(enter:boolean) {
+  const id=axis.actor?.id;
+  if (!id) return;
+  try { axis.command(draft=>{axis.selectedId=addFieldChange(draft,id,Math.round(cursor.value),{
+    ...(enter ? {mode:{crit:exitCrit.value,reaction:exitCrit.value===null?null:'none'}} : {}), ...(energyReading.value===''?{}:{energy:energyReading.value}) });}); error.value=''; }
+  catch(cause){error.value=cause instanceof Error?cause.message:'状态记录无效。';}
+}
+function recordHealth() {
+  const actor = axis.actor;
+  if (!actor || healthField.value !== 'nightsoulBurst' && (healthValue.value === '' || !Number.isFinite(Number(healthValue.value)))) { error.value = '请填写所选事件的变化量。'; return; }
+  const value = healthField.value === 'nightsoulBurst' ? true : Number(healthValue.value) / (healthField.value === 'hpRatioChange' ? 100 : 1);
+  try {
+    axis.command(project => { axis.selectedId = addCombatObservation(project, actor.id, Math.round(cursor.value), healthField.value, value); });
+    error.value = '';
+  } catch (cause) { error.value = cause instanceof Error ? cause.message : '无法记录生命变化。'; }
+}
+function addEquipmentHit(ref: HitRef) {
+  const owner = axis.actor;
+  if (!owner) return;
+  try { axis.command(project => { axis.selectedId = addSelectedHit(project, owner.id, ref, Math.round(cursor.value)); }); error.value = ''; }
+  catch (cause) { error.value = cause instanceof Error ? cause.message : '无法添加装备伤害。'; }
+}
 const duration = computed(() => Math.min(3600000, Math.max(15000, cursor.value + 3000, ...axis.project.timeline.map(record => record.timeMs + 3000))));
 const width = computed(() => Math.max(600, duration.value / 1000 * scale.value));
 const records = (actor: string, kind: string) => axis.project.timeline.filter(record => record.actor === actor
@@ -47,13 +119,27 @@ function add(kind = layer.value, selectedSkill = skill.value) {
   let id = '';
   try { axis.command(draft => {
     if (kind === 'damage') {
-      const hit = selectedSkill.hits[hitIndex.value];
-      const options = hitOutputOptions(selectedSkill, hit);
-      const chosen = options.some(option => option.id === outputId.value) ? outputId.value : hit.outputs.length === 1 ? hit.outputs[0].id : null;
-      id = addSkillHit(draft, owner.id, selectedSkill.id, hitIndex.value, time, { crit: null, reaction: null, outputId: chosen });
-      return;
+      const facts: HitFacts = [];
+      if (damageChanges.value.length) {
+        for (const [key, input] of [['targetsDamaged',hitTargets],['criticalTargets',criticalTargets],['triggerRoll',triggerRoll]] as const) {
+          if (input.value !== '') putHitFact(facts,{kind:'event'},key,{ kind:'quantity', unit: key === 'triggerRoll' ? 'scalar' : 'count', value: input.value });
+        }
+        if (remainingCooldown.value !== '') putHitFact(facts,{kind:'actor',id:owner.id},'skillCooldownRemaining',{kind:'quantity',unit:'milliseconds',value:remainingCooldown.value});
+      }
+      if (hasDefeatTrigger.value && defeated.value) putHitFact(facts,{kind:'event'},'enemyDefeated',{kind:'boolean',value:defeated.value === 'true'});
+      id = addSkillHit(draft, owner.id, selectedSkill.id, hitIndex.value, time, { crit: null, reaction: null, ...(facts.length ? { facts } : {}) });
+    } else {
+      const rule = skills.value.find(t => t.summon && (t.id === selectedSkill.id || t.summon.release.skill === selectedSkill.id));
+      const summon: TimelineRecord['summon'] = rule ? { nearby: nearby.value.filter(id => priorSummons.value.some(record => record.id === id)),
+        ...(rule.id === selectedSkill.id && replace.value ? { replace: replace.value } : {}),
+        targetInRange: targetInRange.value, crit: summonCrit.value, reaction: summonReaction.value === 'none' ? 'none' : { type: summonReaction.value, trigger: 'record-owner' } } : undefined;
+      id = addSkillAction(draft, owner.id, selectedSkill.id, time, summon);
     }
-    id = addSkillAction(draft, owner.id, selectedSkill.id, time);
+    if (coordinatedSource.value && coordinatedCrit.value !== 'inherit') {
+      const reaction = coordinatedReaction.value;
+      draft.timeline.find(entry => entry.id === id)!.coordinatedMode = { crit: coordinatedCrit.value === 'unknown' ? null : coordinatedCrit.value,
+        reaction: reaction === 'unknown' ? null : reaction === 'none' ? 'none' : { type: reaction, trigger: 'record-owner' } };
+    }
   }); } catch (cause) { error.value = cause instanceof Error ? cause.message : '命中记录无效。'; return; }
   axis.selectedId = id;
   error.value = '';
@@ -99,7 +185,7 @@ function key(event: KeyboardEvent) {
   if (/^[1-4]$/.test(event.key)) { const actor = axis.project.candidate.actors[index]; if (actor) axis.actorId = actor.id; event.preventDefault(); return; }
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { pause(); cursor.value = Math.max(0, Math.min(3600000, cursor.value + (event.key === 'ArrowLeft' ? -1 : 1) * (event.shiftKey ? 1000 : 10))); event.preventDefault(); return; }
   const category = event.key.toLowerCase() === 'e' ? 'skill' : event.key.toLowerCase() === 'q' ? 'burst' : undefined;
-  if (category) { const selected = skills.value.find(skill => skill.category === category); if (selected) { skillId.value = selected.id; hitIndex.value = 0; outputId.value = ''; add(layer.value, selected); } event.preventDefault(); }
+  if (category) { const selected = skills.value.find(skill => skill.category === category); if (selected) { skillId.value = selected.id; hitIndex.value = 0; add(layer.value, selected); } event.preventDefault(); }
   if (event.key === 'Enter') { add(); event.preventDefault(); }
 }
 onMounted(() => window.addEventListener('keydown', key));
@@ -130,23 +216,67 @@ onBeforeUnmount(() => { pause(); window.removeEventListener('keydown', key); });
     </div>
     <div v-if="skills.length" class="skill-palette">
       <button v-for="item in skills" :key="item.id" class="desk-option" data-card-action="select" :aria-pressed="skill?.id === item.id"
-        @click="skillId = item.id; hitIndex = 0; outputId = ''">
+        @click="skillId = item.id; hitIndex = 0">
         <span>{{ item.name }}</span>
         <small v-if="!item.hits.length">仅可记动作</small>
       </button>
       <label v-if="layer === 'damage' && skill">命中段数
-        <select v-model.number="hitIndex" aria-label="标注技能段数" @change="outputId = ''">
+        <select v-model.number="hitIndex" aria-label="标注技能段数">
           <option v-for="(_, index) in skill.hits" :key="index" :value="index">第 {{ index + 1 }} 段</option>
         </select>
       </label>
-      <label v-if="layer === 'damage' && hit && hit.outputs.length !== 1 && outputOptions.length">伤害输出
-        <select v-model="outputId" aria-label="标注伤害输出">
-          <option value="">待建模</option>
-          <option v-for="option in outputOptions" :key="option.id" :value="option.id">{{ option.label }}</option>
-        </select>
-      </label>
+
       <button class="ui-action" :disabled="!skill" @click="add()">在光标处记录{{ layer === 'action' ? '动作' : '伤害点' }}</button>
     </div>
+    <div v-if="layer === 'damage' && equipment.length" class="skill-palette">
+      <button v-for="entry in equipment" :key="JSON.stringify(entry.ref)" class="desk-option" @click="addEquipmentHit(entry.ref)">{{ entry.entity.name }} · {{ entry.hit.name }}</button>
+    </div>
+    <details v-if="layer === 'damage' && axis.actor?.build"><summary>独立反应伤害</summary><div class="skill-palette">
+      <label>剧变反应<select v-model="reactionFamily"><option v-for="key in transformativeFamilies" :key="key" :value="key">{{ damageFamilyLabel(key) }}</option></select></label>
+      <label v-if="transformativeElements[reactionFamily].length > 1">反应伤害元素<select v-model="reactionElement"><option v-for="e in transformativeElements[reactionFamily]" :key="e" :value="e">{{ realElementLabel(e) }}</option></select></label>
+      <button class="ui-action" type="button" @click="addReaction">记录一次反应伤害</button>
+    </div></details>
+    <fieldset v-if="layer === 'action' && summonTalent" class="skill-palette"><legend>召唤物与目标</legend>
+      <label><input v-model="targetInRange" type="checkbox">目标在作用范围内</label>
+      <label v-for="source in priorSummons" :key="source.id"><input v-model="nearby" type="checkbox" :value="source.id">{{ source.timeMs }} ms 创建的召唤物在附近</label>
+      <label v-if="skill?.id === summonTalent.id && priorSummons.length">过近时替换<select v-model="replace"><option value="">无</option>
+        <option v-for="source in priorSummons" :key="source.id" :value="source.id">{{ source.timeMs }} ms</option></select></label>
+      <label>召唤伤害暴击<select v-model="summonCrit"><option value="noncritical">不暴击</option><option value="critical">暴击</option><option value="expected">期望</option></select></label>
+      <label>召唤伤害反应<select v-model="summonReaction"><option value="none">无反应</option><option value="aggravate">超激化</option></select></label>
+    </fieldset>
+    <fieldset v-if="coordinatedSource" class="skill-palette"><legend>协同攻击</legend>
+      <label>协同伤害暴击<select v-model="coordinatedCrit"><option value="inherit">继承施放设置</option><option value="unknown">待确认</option><option value="noncritical">不暴击</option><option value="critical">暴击</option><option value="expected">期望</option></select></label>
+      <label v-if="coordinatedCrit !== 'inherit'">协同伤害反应<select v-model="coordinatedReaction"><option value="unknown">待确认</option><option value="none">无反应</option>
+        <option v-for="reaction in projectionReactions" :key="reaction" :value="reaction">{{ reactionNames[reaction] }}</option></select></label>
+    </fieldset>
+    <fieldset v-if="layer === 'damage' && (damageChanges.length || hasDefeatTrigger)" class="skill-palette"><legend>命中与装备触发</legend>
+      <template v-if="damageChanges.length">
+        <label>实际受到伤害的目标数<input v-model.number="hitTargets" type="number" min="0" max="1000" placeholder="待确认"></label>
+        <label v-if="damageChanges.some(c => c.rule.critical)">其中受到暴击的目标数<input v-model.number="criticalTargets" type="number" min="0" max="1000" placeholder="待确认"></label>
+        <label>触发抽样值<input v-model.number="triggerRoll" type="number" min="0" max="0.999999999" step="any" placeholder="使用项目种子"></label>
+        <label>项目随机种子<input type="number" min="0" max="4294967295" step="1" :value="axis.project.seed" placeholder="待确认" @change="setSeed"></label>
+        <label v-if="damageChanges.some(c => c.rule.change.kind === 'reset-skill')">当前战技剩余冷却（毫秒）<input v-model.number="remainingCooldown" type="number" min="0" placeholder="继承记录"></label>
+      </template>
+      <label v-if="hasDefeatTrigger">本击击败目标<select v-model="defeated"><option value="">未记录</option><option value="true">是</option><option value="false">否</option></select></label>
+    </fieldset>
+    <ReactionRecordForm v-if="axis.actor?.build" :project="axis.project" :actor="axis.actor.id" :time-ms="Math.round(cursor)" :changes="axis.result.combatChanges"
+      @reaction="(actor,reaction,element)=>axis.command(draft=>{axis.selectedId=addReactionObservation(draft,actor,Math.round(cursor),reaction,element);})"
+      @pickup="(actor,source,effect)=>axis.command(draft=>{axis.selectedId=addParticlePickup(draft,actor,source,Math.round(cursor),effect);})" />
+    <details v-if="axis.actor?.build"><summary>战斗事件记录</summary>
+      <div class="skill-palette"><label>记录类型<select v-model="healthField"><option v-for="(name,id) in observationLabels" :key="id" :value="id">{{ name }}</option></select></label>
+        <label v-if="healthField !== 'nightsoulBurst'">{{ observationLabels[healthField] }}<input v-model="healthValue" type="number" step="any"></label>
+        <button class="ui-action" @click="recordHealth">在光标处记录</button></div>
+    </details>
+    <details v-if="axis.actor?.build && layer === 'action'"><summary>换人与能量</summary><div class="skill-palette">
+      <label>当前队员元素能量<input type="number" min="0" step="any" v-model.number="energyReading" placeholder="待确认"></label>
+      <button type="button" class="ui-action" :disabled="energyReading === ''" @click="recordField(false)">记录能量</button>
+      <label>离场追击口径<select v-model="exitCrit"><option :value="null">待确认</option><option value="noncritical">非暴击、无反应</option><option value="critical">暴击、无反应</option><option value="expected">暴击期望、无反应</option></select></label>
+      <button type="button" class="ui-action" @click="recordField(true)">切换至当前队员</button>
+    </div></details>
+    <TalentHealingForm :members="axis.project.candidate.actors" @apply="(actor,recipient,heal,facts)=>axis.command(draft=>{axis.selectedId=addTalentHeal(draft,actor,recipient,heal,Math.round(cursor),facts);})" />
+    <AuraObservationForm v-if="axis.actor?.build" :members="axis.project.candidate.actors.filter(a=>a.build)" :actor="axis.actor.id"
+      @apply="(id,aura)=>axis.command(draft=>{axis.selectedId=addAuraObservation(draft,id,Math.round(cursor),aura);})" />
+    <BattleSceneSettings v-if="axis.actor?.build" :selections="axis.project.sceneEffects" @change="entries => axis.command(draft => { draft.sceneEffects = entries; })" />
     <p v-if="error" role="alert">{{ error }}</p>
     <div class="desk-scroll" role="region" aria-label="时间轴轨道" tabindex="0">
       <div class="desk-tracks" :style="{ width: `${width + 120}px`, '--second-width': `${scale}px` }">

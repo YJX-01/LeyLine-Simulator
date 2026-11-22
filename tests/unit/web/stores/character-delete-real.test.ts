@@ -19,7 +19,7 @@ describe.skipIf(!hasRecordedReference(path))('whole character removal from recor
       const next=cloneAccount(account);next.characters=next.characters.filter(character=>character.id!==target.id);
       store.removeCharacter(account.id,target.id,()=>{account.characters=parseAccount(next).characters;});
       expect(account.characters).toHaveLength(3);expect(JSON.stringify(account.artifacts)).toBe(inventory);expect(store.loadouts).toHaveLength(1);expect(store.loadouts[0].characterId).toBe(other.id);
-      expect(store.favoriteLevel(account.id,target.id)).toBe(0);expect(store.favoriteLevel(account.id,other.id)).toBe(1);expect(JSON.parse(memory.get('leyline-effective-stats-0.1.0')!)[`${account.id}/${target.id}`]).toBeUndefined();
+      expect(store.favoriteLevel(account.id,target.id)).toBe(0);expect(store.favoriteLevel(account.id,other.id)).toBe(1);expect(JSON.parse(memory.get('leyline-effective-stats-0.2.0')!)[`${account.id}/${target.id}`]).toBeUndefined();
     }finally{vi.unstubAllGlobals();}
   });
 });

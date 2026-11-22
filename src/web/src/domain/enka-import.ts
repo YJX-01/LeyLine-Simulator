@@ -1,5 +1,5 @@
 import { enkaAvatarSchema, enkaResponseSchema } from '@leyline/schema/enka';
-import { buildSchema, type ArtifactItem, type StatKey } from '@leyline/schema';
+import { buildSchema, weaponRefinementLimit, type ArtifactItem, type StatKey } from '@leyline/schema';
 import { getCharacter, getWeapon, getArtifactSet } from '@leyline/game-data';
 import mapping from 'virtual:leyline-display/enka-catalog';
 import { loadAccountGameData } from './account-presentation';
@@ -66,13 +66,18 @@ export async function previewEnkaImport(input:unknown,uid:string,account:LocalAc
       const levels=entry.skills.map(id=>value.skillLevelMap[String(id)]);
       if (levels.some(level=>level===undefined)) throw new Error('缺少天赋等级，未使用默认值填补。');
       const refinements=Object.values(weaponEntry.weapon.affixMap??{});
-      if (!refinements.length&&weapon.rarity>2) throw new Error('缺少武器精炼等级。');
-      const recordingSource = { id: `enka.showcase.${uid}.${value.avatarId}.${rawHash}`, kind: 'recording' as const, reference: 'enka/' + uid + '/' + value.avatarId + '/' + rawHash };
+      if (!refinements.length && weaponRefinementLimit(weapon) > 1) throw new Error('缺少武器精炼等级。');
+      if (refinements.some(value => value + 1 > weaponRefinementLimit(weapon))) throw new Error('武器精炼超出该武器的可用档位。');
+      const current=account.characters.find(item=>item.build?.character.id===entry.id||item.name===character.identity.name);
+      const prior = current?.showcase?.uid === uid ? current.showcase : undefined;
+      const priorId = prior?.build.sources.find(source => source.kind === 'recording')?.id;
+      const revision = Number(/\.r(\d+)$/.exec(priorId ?? '')?.[1] ?? 0);
+      const recordingId = priorId && prior?.rawHash === rawHash ? priorId : ['enka.showcase', uid, value.avatarId, 'r' + (revision + 1)].join('.');
+      const recordingSource = { id: recordingId, kind: 'recording' as const, reference: recordingId };
       const build=createBuildSnapshot({dataVersion:data.catalog.version,character,weapon,artifactMain:data.main,sets,level:prop('4001'),ascension:prop('1002'),constellation:value.talentIdList?.length??0,
         talents:{normal:levels[0],skill:levels[1],burst:levels[2]},weaponLevel:weaponEntry.weapon.level,weaponAscension:weaponEntry.weapon.promoteLevel,refinement:(refinements[0]??0)+1,
         artifacts: artifacts.map(item => ({ ...item, inventory: null, sourceRefs: [recordingSource.id] })) },
         { sources: [...data.sources, recordingSource], artifactMainSourceRefs: data.artifactMainSourceRefs });
-      const current=account.characters.find(item=>item.build?.character.id===entry.id||item.name===character.identity.name);
       preview.rows.push({action:current?.build?.weapon?'update':current?'complete':'add',before:current?JSON.stringify(current):undefined,character:{...current,id:current?.id??crypto.randomUUID(),name:current?.name??character.identity.name,attack:0,weapon:weapon.name,equipment:{...current?.equipment},
         build:{...build,artifacts:[],sets:[]},showcase:{uid,avatarId:value.avatarId,fetchedAt:new Date().toISOString(),rawHash,build:{...build,weapon}}}});
     } catch(cause) { preview.skipped.push(`${label}：${cause instanceof Error && cause.name === 'ZodError'?'培养或装备数值不在当前支持范围，请在预览中核对。':cause instanceof Error?cause.message:'资料解析失败。'}`); }
