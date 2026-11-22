@@ -5,7 +5,8 @@ import { numericAudit, assertNumericAudit, readAuditJson } from '../../tools/lib
 test('adopted current numeric fields match actual source tables without a hash inventory',async()=>{
   const report = await numericAudit();
   assertNumericAudit(report);
-  assert.equal(Object.values(report.comparedValues).reduce((sum,count)=>sum+count,0),168359);
+  assert.equal(Object.values(report.comparedValues).reduce((sum,count)=>sum+count,0),168324);
+  assert.equal(report.comparedValues['effect-refinements'],45);
   assert.equal(report.comparedValues['stellar-equipment'],12);
   assert.equal(report.comparedValues['stellar-action-state'],14);
   assert.equal(report.comparedValues['reaction-levels'],100);

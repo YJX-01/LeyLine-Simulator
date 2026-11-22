@@ -1,0 +1,5199 @@
+[
+  {
+    "entity": "scene.food.adeptustemptation.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/adeptustemptation.json",
+    "text": "队伍中所有角色攻击力提高260点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.adeptustemptation.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/adeptustemptation.json",
+    "text": "队伍中所有角色攻击力提高316点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.adeptustemptation.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/adeptustemptation.json",
+    "text": "队伍中所有角色攻击力提高372点，暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.adventurersbreakfastsandwich.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/adventurersbreakfastsandwich.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.adventurersbreakfastsandwich.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/adventurersbreakfastsandwich.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.adventurersbreakfastsandwich.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/adventurersbreakfastsandwich.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.afragrantfeastofflavors.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/afragrantfeastofflavors.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.aleisurelysip.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/aleisurelysip.json",
+    "text": "队伍中所有角色治疗加成提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.almondtofu.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/almondtofu.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.almondtofu.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/almondtofu.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.almondtofu.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/almondtofu.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.aprizecatch.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/aprizecatch.json",
+    "text": "队伍中所有角色防御力提高282点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.baklava.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/baklava.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.baklava.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/baklava.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.baklava.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/baklava.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.berryherbalcandy.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/berryherbalcandy.json",
+    "text": "队伍中所有角色生命值上限提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.berryherbalcandy.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/berryherbalcandy.json",
+    "text": "队伍中所有角色生命值上限提升22%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.berryherbalcandy.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/berryherbalcandy.json",
+    "text": "队伍中所有角色生命值上限提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.biryani.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/biryani.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.biryani.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/biryani.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.biryani.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/biryani.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blazedmeatstew.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/blazedmeatstew.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blazedmeatstew.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/blazedmeatstew.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blazedmeatstew.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/blazedmeatstew.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blubbercream.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/blubbercream.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blubbercream.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/blubbercream.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blubbercream.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/blubbercream.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blubberprofiterole.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/blubberprofiterole.json",
+    "text": "队伍中所有角色物理伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blubberprofiterole.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/blubberprofiterole.json",
+    "text": "队伍中所有角色物理伤害提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.blubberprofiterole.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/blubberprofiterole.json",
+    "text": "队伍中所有角色物理伤害提升40%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.borderlandcrispbread.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/borderlandcrispbread.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.borderlandcrispbread.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/borderlandcrispbread.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.borderlandcrispbread.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/borderlandcrispbread.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.bountifulyear.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/bountifulyear.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.bountifulyear.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/bountifulyear.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.bountifulyear.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/bountifulyear.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.braisedmeat.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/braisedmeat.json",
+    "text": "队伍中所有角色物理伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.braisedmeat.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/braisedmeat.json",
+    "text": "队伍中所有角色物理伤害提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.braisedmeat.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/braisedmeat.json",
+    "text": "队伍中所有角色物理伤害提升40%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.braisedmeatball.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/braisedmeatball.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.braisedmeatball.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/braisedmeatball.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.braisedmeatball.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/braisedmeatball.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.bubblemilkpie.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/bubblemilkpie.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.bubblemilkpie.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/bubblemilkpie.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.bubblemilkpie.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/bubblemilkpie.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.butterchicken.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/butterchicken.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.butterchicken.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/butterchicken.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.butterchicken.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/butterchicken.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.buttercrab.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/buttercrab.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.buttercrab.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/buttercrab.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.buttercrab.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/buttercrab.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.callalilyseafoodsoup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/callalilyseafoodsoup.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.callalilyseafoodsoup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/callalilyseafoodsoup.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.callalilyseafoodsoup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/callalilyseafoodsoup.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.candiedajilenakhnut.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/candiedajilenakhnut.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.candiedajilenakhnut.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/candiedajilenakhnut.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.candiedajilenakhnut.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/candiedajilenakhnut.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.candyshells.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/candyshells.json",
+    "text": "队伍中所有角色护盾强效提升25%，防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.candyshells.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/candyshells.json",
+    "text": "队伍中所有角色护盾强效提升30%，防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.candyshells.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/candyshells.json",
+    "text": "队伍中所有角色护盾强效提升35%，防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cassoulet.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/cassoulet.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cassoulet.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/cassoulet.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cassoulet.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/cassoulet.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.caviarblini.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/caviarblini.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.caviarblini.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/caviarblini.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.caviarblini.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/caviarblini.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.celestialteacrisp.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/celestialteacrisp.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.celestialteacrisp.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/celestialteacrisp.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.celestialteacrisp.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/celestialteacrisp.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cheesycrabhotpot.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/cheesycrabhotpot.json",
+    "text": "队伍中所有角色生命值上限提升20%，元素充能效率提升14%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cheesycrabhotpot.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/cheesycrabhotpot.json",
+    "text": "队伍中所有角色生命值上限提升25%，元素充能效率提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cheesycrabhotpot.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/cheesycrabhotpot.json",
+    "text": "队伍中所有角色生命值上限提升30%，元素充能效率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cheesymushroomskewer.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/cheesymushroomskewer.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cheesymushroomskewer.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/cheesymushroomskewer.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cheesymushroomskewer.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/cheesymushroomskewer.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chickenkitezhgrad.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/chickenkitezhgrad.json",
+    "text": "队伍中所有角色物理伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chickenkitezhgrad.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/chickenkitezhgrad.json",
+    "text": "队伍中所有角色物理伤害提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chickenkitezhgrad.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/chickenkitezhgrad.json",
+    "text": "队伍中所有角色物理伤害提升40%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chickentofupudding.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/chickentofupudding.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chickentofupudding.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/chickentofupudding.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chickentofupudding.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/chickentofupudding.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chilimincecornbreadbuns.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/chilimincecornbreadbuns.json",
+    "text": "队伍中所有角色护盾强效提升25%，防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chilimincecornbreadbuns.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/chilimincecornbreadbuns.json",
+    "text": "队伍中所有角色护盾强效提升30%，防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.chilimincecornbreadbuns.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/chilimincecornbreadbuns.json",
+    "text": "队伍中所有角色护盾强效提升35%，防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.coldcutplatter.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/coldcutplatter.json",
+    "text": "队伍中所有角色物理伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.coldcutplatter.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/coldcutplatter.json",
+    "text": "队伍中所有角色物理伤害提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.coldcutplatter.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/coldcutplatter.json",
+    "text": "队伍中所有角色物理伤害提升40%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.comeandgetit.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/comeandgetit.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.comeandgetit.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/comeandgetit.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.comeandgetit.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/comeandgetit.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.conchmadeleine.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/conchmadeleine.json",
+    "text": "队伍中所有角色治疗加成提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.conchmadeleine.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/conchmadeleine.json",
+    "text": "队伍中所有角色治疗加成提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.conchmadeleine.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/conchmadeleine.json",
+    "text": "队伍中所有角色治疗加成提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.consomme.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/consomme.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.consomme.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/consomme.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.consomme.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/consomme.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.consommepurete.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/consommepurete.json",
+    "text": "队伍中所有角色暴击率提升20%，暴击伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crabroekourayaki.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/crabroekourayaki.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crabroekourayaki.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/crabroekourayaki.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crabroekourayaki.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/crabroekourayaki.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crispyroast.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/crispyroast.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crispyroast.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/crispyroast.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crispyroast.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/crispyroast.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crispyspringrolls.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/crispyspringrolls.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crispyspringrolls.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/crispyspringrolls.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.crispyspringrolls.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/crispyspringrolls.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.cubictricks.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/cubictricks.json",
+    "text": "队伍中所有角色暴击率提升20%，暴击伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.curedporkdryhotpot.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/curedporkdryhotpot.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.curedporkdryhotpot.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/curedporkdryhotpot.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.curedporkdryhotpot.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/curedporkdryhotpot.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.deepfrieddoublecrisp.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/deepfrieddoublecrisp.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.deepfrieddoublecrisp.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/deepfrieddoublecrisp.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.deepfrieddoublecrisp.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/deepfrieddoublecrisp.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.derweisheitletzterschlusslife.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/derweisheitletzterschlusslife.json",
+    "text": "队伍中所有角色暴击率提升16%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.dewdippedshrimp.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/dewdippedshrimp.json",
+    "text": "队伍中所有角色护盾强效提升35%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.dieheiligesinfonie.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/dieheiligesinfonie.json",
+    "text": "队伍中所有角色物理伤害提升55%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.dragonbeardnoodles.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/dragonbeardnoodles.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.dragonbeardnoodles.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/dragonbeardnoodles.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.dragonbeardnoodles.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/dragonbeardnoodles.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.drunkenplumsinsnow.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/drunkenplumsinsnow.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.drunkenplumsinsnow.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/drunkenplumsinsnow.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.drunkenplumsinsnow.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/drunkenplumsinsnow.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.eighttreasureduck.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/eighttreasureduck.json",
+    "text": "队伍中所有角色护盾强效提升25%，防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.eighttreasureduck.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/eighttreasureduck.json",
+    "text": "队伍中所有角色护盾强效提升30%，防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.eighttreasureduck.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/eighttreasureduck.json",
+    "text": "队伍中所有角色护盾强效提升35%，防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.emotionalsupport.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/emotionalsupport.json",
+    "text": "队伍中所有角色防御力提高282点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.encompassinggladness.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/encompassinggladness.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.feastos.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/feastos.json",
+    "text": "队伍中所有角色治疗加成提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.feastos.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/feastos.json",
+    "text": "队伍中所有角色治疗加成提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.feastos.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/feastos.json",
+    "text": "队伍中所有角色治疗加成提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.firesidemerriment.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/firesidemerriment.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.firesidemerriment.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/firesidemerriment.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.firesidemerriment.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/firesidemerriment.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fishermanstoast.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fishermanstoast.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fishermanstoast.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fishermanstoast.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fishermanstoast.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fishermanstoast.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fishflavoredtoast.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/fishflavoredtoast.json",
+    "text": "队伍中所有角色防御力提高151点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.flavorofspring.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/flavorofspring.json",
+    "text": "队伍中所有角色防御力提高282点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontaineaspic.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fontaineaspic.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontaineaspic.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fontaineaspic.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontaineaspic.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fontaineaspic.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontainianfoiegras.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fontainianfoiegras.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontainianfoiegras.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fontainianfoiegras.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontainianfoiegras.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fontainianfoiegras.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontainianonionsoup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fontainianonionsoup.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontainianonionsoup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fontainianonionsoup.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontainianonionsoup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fontainianonionsoup.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontinaliamousse.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fontinaliamousse.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontinaliamousse.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fontinaliamousse.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fontinaliamousse.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fontinaliamousse.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.forestwatcherschoice.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/forestwatcherschoice.json",
+    "text": "队伍中所有角色防御力提高151点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fragrantmashedpotatoes.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fragrantmashedpotatoes.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fragrantmashedpotatoes.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fragrantmashedpotatoes.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fragrantmashedpotatoes.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fragrantmashedpotatoes.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fricasseedepoulet.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fricasseedepoulet.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fricasseedepoulet.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fricasseedepoulet.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fricasseedepoulet.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fricasseedepoulet.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.friedradishballs.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/friedradishballs.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.friedradishballs.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/friedradishballs.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.friedradishballs.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/friedradishballs.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.friedshrimpbeanballs.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/friedshrimpbeanballs.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.friedshrimpbeanballs.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/friedshrimpbeanballs.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.friedshrimpbeanballs.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/friedshrimpbeanballs.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fruitsofthefestival.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fruitsofthefestival.json",
+    "text": "队伍中所有角色治疗加成提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fruitsofthefestival.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fruitsofthefestival.json",
+    "text": "队伍中所有角色治疗加成提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fruitsofthefestival.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fruitsofthefestival.json",
+    "text": "队伍中所有角色治疗加成提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fruityduet.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/fruityduet.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fruityduet.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/fruityduet.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.fruityduet.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/fruityduet.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.garlicbaguette.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/garlicbaguette.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.garlicbaguette.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/garlicbaguette.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.garlicbaguette.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/garlicbaguette.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.gateaudebordmagnifique.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/gateaudebordmagnifique.json",
+    "text": "队伍中所有角色攻击力提高384点，暴击率提升14%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.gildedtajine.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/gildedtajine.json",
+    "text": "队伍中所有角色生命值上限提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.gildedtajine.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/gildedtajine.json",
+    "text": "队伍中所有角色生命值上限提升22%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.gildedtajine.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/gildedtajine.json",
+    "text": "队伍中所有角色生命值上限提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldenapplepastry.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/goldenapplepastry.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldenapplepastry.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/goldenapplepastry.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldenapplepastry.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/goldenapplepastry.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldencrab.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/goldencrab.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldencrab.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/goldencrab.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldencrab.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/goldencrab.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldenfriedchicken.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/goldenfriedchicken.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldenfriedchicken.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/goldenfriedchicken.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldenfriedchicken.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/goldenfriedchicken.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.goldflametajine.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/goldflametajine.json",
+    "text": "队伍中所有角色生命值上限提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.grainfruitwrap.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/grainfruitwrap.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.grainfruitwrap.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/grainfruitwrap.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.grainfruitwrap.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/grainfruitwrap.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.guhuafishlambsoup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/guhuafishlambsoup.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.guhuafishlambsoup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/guhuafishlambsoup.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.guhuafishlambsoup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/guhuafishlambsoup.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.haggis.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/haggis.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.haggis.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/haggis.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.haggis.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/haggis.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.halvamazd.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/halvamazd.json",
+    "text": "队伍中所有角色防御力提高282点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.harborfishburger.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/harborfishburger.json",
+    "text": "队伍中所有角色生命值上限提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.harborfishburger.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/harborfishburger.json",
+    "text": "队伍中所有角色生命值上限提升22%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.harborfishburger.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/harborfishburger.json",
+    "text": "队伍中所有角色生命值上限提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.heartstringnoodles.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/heartstringnoodles.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.heatquellingsoup.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/heatquellingsoup.json",
+    "text": "队伍中所有角色治疗加成提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.hoarfrostsoup.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/hoarfrostsoup.json",
+    "text": "队伍中所有角色防御力提高282点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.honeyglazedceviche.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/honeyglazedceviche.json",
+    "text": "队伍中所有角色攻击力提高114点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.hymnofgatheredflame.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/hymnofgatheredflame.json",
+    "text": "队伍中所有角色暴击率提升20%，暴击伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.importedpoultry.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/importedpoultry.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.importedpoultry.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/importedpoultry.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.importedpoultry.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/importedpoultry.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jadefruitsoup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/jadefruitsoup.json",
+    "text": "队伍中所有角色治疗加成提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jadefruitsoup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/jadefruitsoup.json",
+    "text": "队伍中所有角色治疗加成提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jadefruitsoup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/jadefruitsoup.json",
+    "text": "队伍中所有角色治疗加成提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jadeparcels.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/jadeparcels.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jadeparcels.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/jadeparcels.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jadeparcels.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/jadeparcels.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jewelrysoup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/jewelrysoup.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jewelrysoup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/jewelrysoup.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jewelrysoup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/jewelrysoup.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jueyunchilichicken.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/jueyunchilichicken.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jueyunchilichicken.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/jueyunchilichicken.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jueyunchilichicken.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/jueyunchilichicken.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jueyunguoba.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/jueyunguoba.json",
+    "text": "队伍中所有角色物理伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jueyunguoba.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/jueyunguoba.json",
+    "text": "队伍中所有角色物理伤害提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.jueyunguoba.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/jueyunguoba.json",
+    "text": "队伍中所有角色物理伤害提升40%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.katsusandwich.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/katsusandwich.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.katsusandwich.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/katsusandwich.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.katsusandwich.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/katsusandwich.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lakesidesnowswan.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/lakesidesnowswan.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lakkaberrykrumkakes.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/lakkaberrykrumkakes.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lakkaberrykrumkakes.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/lakkaberrykrumkakes.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lakkaberrykrumkakes.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/lakkaberrykrumkakes.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lalettreafocalors.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/lalettreafocalors.json",
+    "text": "队伍中所有角色生命值上限提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lalettreafocalors.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/lalettreafocalors.json",
+    "text": "队伍中所有角色生命值上限提升22%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lalettreafocalors.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/lalettreafocalors.json",
+    "text": "队伍中所有角色生命值上限提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lotusflowercrisp.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/lotusflowercrisp.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lotusflowercrisp.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/lotusflowercrisp.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.lotusflowercrisp.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/lotusflowercrisp.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.magmicode.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/magmicode.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.magmicode.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/magmicode.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.magmicode.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/magmicode.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.masalacheeseballs.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/masalacheeseballs.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.masalacheeseballs.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/masalacheeseballs.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.masalacheeseballs.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/masalacheeseballs.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.meatloversfeast.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/meatloversfeast.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.meatloversfeast.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/meatloversfeast.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.meatloversfeast.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/meatloversfeast.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.meatloversmushroompizza.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/meatloversmushroompizza.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.meatloversmushroompizza.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/meatloversmushroompizza.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.meatloversmushroompizza.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/meatloversmushroompizza.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mintsalad.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/mintsalad.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mintsalad.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/mintsalad.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mintsalad.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/mintsalad.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mintyfruittea.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/mintyfruittea.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mintyfruittea.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/mintyfruittea.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mintyfruittea.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/mintyfruittea.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moonlitmirage.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/moonlitmirage.json",
+    "text": "队伍中所有角色生命值上限提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moonpie.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/moonpie.json",
+    "text": "队伍中所有角色护盾强效提升25%，防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moonpie.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/moonpie.json",
+    "text": "队伍中所有角色护盾强效提升30%，防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moonpie.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/moonpie.json",
+    "text": "队伍中所有角色护盾强效提升35%，防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moreandmore.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/moreandmore.json",
+    "text": "队伍中所有角色物理伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moreandmore.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/moreandmore.json",
+    "text": "队伍中所有角色物理伤害提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.moreandmore.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/moreandmore.json",
+    "text": "队伍中所有角色物理伤害提升40%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mtmushroomforone.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/mtmushroomforone.json",
+    "text": "队伍中所有角色暴击率提升16%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mushroomhodgepodge.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/mushroomhodgepodge.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mushroomhodgepodge.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/mushroomhodgepodge.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.mushroomhodgepodge.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/mushroomhodgepodge.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.nanascake.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/nanascake.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.nanascake.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/nanascake.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.nanascake.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/nanascake.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.ninefruitnectar.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/ninefruitnectar.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.ninefruitnectar.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/ninefruitnectar.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.ninefruitnectar.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/ninefruitnectar.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.nodkraihotdog.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/nodkraihotdog.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.nodkraihotdog.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/nodkraihotdog.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.nodkraihotdog.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/nodkraihotdog.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.notomorrow.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/notomorrow.json",
+    "text": "队伍中所有角色暴击率提升20%，暴击伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.onceuponatimeinmondstadt.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/onceuponatimeinmondstadt.json",
+    "text": "队伍中所有角色暴击率提升20%，暴击伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.passtheluck.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/passtheluck.json",
+    "text": "队伍中所有角色护盾强效提升35%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.patedefruit.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/patedefruit.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.patedefruit.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/patedefruit.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.patedefruit.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/patedefruit.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.petitgateaudebordrevisedversion.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/petitgateaudebordrevisedversion.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.petitgateaudebordrevisedversion.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/petitgateaudebordrevisedversion.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.petitgateaudebordrevisedversion.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/petitgateaudebordrevisedversion.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.pileemup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/pileemup.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.pileemup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/pileemup.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.pileemup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/pileemup.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.pourlajustice.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/pourlajustice.json",
+    "text": "队伍中所有角色生命值上限提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.qingcehouseholddish.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/qingcehouseholddish.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.qingcestirfry.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/qingcestirfry.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.qingcestirfry.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/qingcestirfry.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.qingcestirfry.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/qingcestirfry.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.quietelegance.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/quietelegance.json",
+    "text": "队伍中所有角色护盾强效提升35%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.radishandfishstew.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/radishandfishstew.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.radishandfishstew.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/radishandfishstew.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.radishandfishstew.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/radishandfishstew.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.ricecakesoup.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/ricecakesoup.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.ricecakesoup.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/ricecakesoup.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.ricecakesoup.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/ricecakesoup.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.rightathome.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/rightathome.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.rightathome.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/rightathome.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.rightathome.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/rightathome.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.rockinriffinchicken.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/rockinriffinchicken.json",
+    "text": "队伍中所有角色暴击率提升16%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.royalgrilledfish.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/royalgrilledfish.json",
+    "text": "队伍中所有角色防御力提高215点，治疗效果提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.royalgrilledfish.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/royalgrilledfish.json",
+    "text": "队伍中所有角色防御力提高261点，治疗效果提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.royalgrilledfish.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/royalgrilledfish.json",
+    "text": "队伍中所有角色防御力提高308点，治疗效果提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sakurashrimpcrackers.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sakurashrimpcrackers.json",
+    "text": "队伍中所有角色生命值上限提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sakurashrimpcrackers.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sakurashrimpcrackers.json",
+    "text": "队伍中所有角色生命值上限提升22%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sakurashrimpcrackers.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sakurashrimpcrackers.json",
+    "text": "队伍中所有角色生命值上限提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sakuratempura.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sakuratempura.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sakuratempura.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sakuratempura.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sakuratempura.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sakuratempura.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sashimiplatter.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sashimiplatter.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sashimiplatter.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sashimiplatter.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sashimiplatter.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sashimiplatter.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.satisfyingsalad.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/satisfyingsalad.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.satisfyingsalad.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/satisfyingsalad.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.satisfyingsalad.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/satisfyingsalad.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.saurianhuntersreward.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/saurianhuntersreward.json",
+    "text": "队伍中所有角色暴击率提升20%，暴击伤害提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sauteedmatsutake.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sauteedmatsutake.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sauteedmatsutake.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sauteedmatsutake.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sauteedmatsutake.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sauteedmatsutake.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shawarmawrap.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/shawarmawrap.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shawarmawrap.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/shawarmawrap.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shawarmawrap.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/shawarmawrap.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shimichazuke.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/shimichazuke.json",
+    "text": "队伍中所有角色治疗加成提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.showmethemora.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/showmethemora.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shrimpbisque.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/shrimpbisque.json",
+    "text": "队伍中所有角色治疗加成提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shrimpbisque.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/shrimpbisque.json",
+    "text": "队伍中所有角色治疗加成提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.shrimpbisque.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/shrimpbisque.json",
+    "text": "队伍中所有角色治疗加成提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sinthekindthatdoesntneedtobedealtwith.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/sinthekindthatdoesntneedtobedealtwith.json",
+    "text": "队伍中所有角色治疗加成提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowballbloomsatopsnowfields.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/snowballbloomsatopsnowfields.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowballbloomsatopsnowfields.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/snowballbloomsatopsnowfields.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowballbloomsatopsnowfields.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/snowballbloomsatopsnowfields.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowrealmokroshkas.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/snowrealmokroshkas.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowrealmokroshkas.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/snowrealmokroshkas.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowrealmokroshkas.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/snowrealmokroshkas.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowynocturne.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/snowynocturne.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowynocturne.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/snowynocturne.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.snowynocturne.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/snowynocturne.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.soursauceceviche.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/soursauceceviche.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.soursauceceviche.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/soursauceceviche.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.soursauceceviche.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/soursauceceviche.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stirfriedshrimp.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/stirfriedshrimp.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stirfriedshrimp.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/stirfriedshrimp.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stirfriedshrimp.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/stirfriedshrimp.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stoneharbordelicacies.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/stoneharbordelicacies.json",
+    "text": "队伍中所有角色暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stoneharbordelicacies.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/stoneharbordelicacies.json",
+    "text": "队伍中所有角色暴击率提升9%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stoneharbordelicacies.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/stoneharbordelicacies.json",
+    "text": "队伍中所有角色暴击率提升12%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stormcrestpie.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/stormcrestpie.json",
+    "text": "队伍中所有角色护盾强效提升40%，防御力提高282点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stroganina.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/stroganina.json",
+    "text": "队伍中所有角色攻击力提高66点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stroganina.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/stroganina.json",
+    "text": "队伍中所有角色攻击力提高81点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.stroganina.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/stroganina.json",
+    "text": "队伍中所有角色攻击力提高95点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sunsetberrytea.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sunsetberrytea.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sunsetberrytea.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sunsetberrytea.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sunsetberrytea.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sunsetberrytea.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sunshinesprat.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sunshinesprat.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sunshinesprat.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sunshinesprat.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sunshinesprat.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sunshinesprat.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.superdeeduperdeliciousmeatroll.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/superdeeduperdeliciousmeatroll.json",
+    "text": "队伍中所有角色攻击力提高114点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.supermagnificentpizza.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/supermagnificentpizza.json",
+    "text": "队伍中所有角色物理伤害提升25%，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.supermagnificentpizza.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/supermagnificentpizza.json",
+    "text": "队伍中所有角色物理伤害提升35%，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.supermagnificentpizza.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/supermagnificentpizza.json",
+    "text": "队伍中所有角色物理伤害提升45%，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.surveyorsbreakfastsandwich.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/surveyorsbreakfastsandwich.json",
+    "text": "队伍中所有角色攻击力提高274点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sweetdream.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/sweetdream.json",
+    "text": "队伍中所有角色攻击力提高114点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sweetscoops.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/sweetscoops.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sweetscoops.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/sweetscoops.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.sweetscoops.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/sweetscoops.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tandooriroastchicken.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/tandooriroastchicken.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tandooriroastchicken.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/tandooriroastchicken.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tandooriroastchicken.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/tandooriroastchicken.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.theonlytruth.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/theonlytruth.json",
+    "text": "队伍中所有角色攻击力提高114点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thepalacejewels.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/thepalacejewels.json",
+    "text": "队伍中所有角色生命值上限提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thepalacejewels.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/thepalacejewels.json",
+    "text": "队伍中所有角色生命值上限提升22%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thepalacejewels.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/thepalacejewels.json",
+    "text": "队伍中所有角色生命值上限提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thickcutduelistsburger.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/thickcutduelistsburger.json",
+    "text": "队伍中所有角色攻击力提高224点，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thickcutduelistsburger.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/thickcutduelistsburger.json",
+    "text": "队伍中所有角色攻击力提高272点，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thickcutduelistsburger.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/thickcutduelistsburger.json",
+    "text": "队伍中所有角色攻击力提高320点，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.thunderclapslash.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/thunderclapslash.json",
+    "text": "队伍中所有角色护盾强效提升35%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tianshumeat.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/tianshumeat.json",
+    "text": "队伍中所有角色物理伤害提升25%，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tianshumeat.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/tianshumeat.json",
+    "text": "队伍中所有角色物理伤害提升35%，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tianshumeat.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/tianshumeat.json",
+    "text": "队伍中所有角色物理伤害提升45%，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tomatesnarbonnaises.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/tomatesnarbonnaises.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tomatesnarbonnaises.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/tomatesnarbonnaises.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tomatesnarbonnaises.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/tomatesnarbonnaises.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tremblingstringsandrushingreeds.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/tremblingstringsandrushingreeds.json",
+    "text": "队伍中所有角色暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tremblingstringsandrushingreeds.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/tremblingstringsandrushingreeds.json",
+    "text": "队伍中所有角色暴击率提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.tremblingstringsandrushingreeds.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/tremblingstringsandrushingreeds.json",
+    "text": "队伍中所有角色暴击率提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.triflavoredskewer.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/triflavoredskewer.json",
+    "text": "队伍中所有角色攻击力提高160点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.triflavoredskewer.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/triflavoredskewer.json",
+    "text": "队伍中所有角色攻击力提高194点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.triflavoredskewer.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/triflavoredskewer.json",
+    "text": "队伍中所有角色攻击力提高228点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.triplelayeredconsomme.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/triplelayeredconsomme.json",
+    "text": "队伍中所有角色护盾强效提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.triplelayeredconsomme.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/triplelayeredconsomme.json",
+    "text": "队伍中所有角色护盾强效提升25%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.triplelayeredconsomme.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/triplelayeredconsomme.json",
+    "text": "队伍中所有角色护盾强效提升30%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.unagichazuke.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/unagichazuke.json",
+    "text": "队伍中所有角色治疗加成提升15%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.unagichazuke.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/unagichazuke.json",
+    "text": "队伍中所有角色治疗加成提升17%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.unagichazuke.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/unagichazuke.json",
+    "text": "队伍中所有角色治疗加成提升20%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.vessiechicken.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/vessiechicken.json",
+    "text": "队伍中所有角色物理伤害提升25%，暴击率提升6%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.vessiechicken.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/vessiechicken.json",
+    "text": "队伍中所有角色物理伤害提升35%，暴击率提升8%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.vessiechicken.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/vessiechicken.json",
+    "text": "队伍中所有角色物理伤害提升45%，暴击率提升10%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.wakatakeni.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/wakatakeni.json",
+    "text": "队伍中所有角色防御力提高88点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.wakatakeni.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/wakatakeni.json",
+    "text": "队伍中所有角色防御力提高107点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.wakatakeni.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/wakatakeni.json",
+    "text": "队伍中所有角色防御力提高126点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.woodlanddream.special",
+    "field": "/effect",
+    "source": "ChineseSimplified/foods/woodlanddream.json",
+    "text": "队伍中所有角色护盾强效提升35%，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.xocoatl.suspicious",
+    "field": "/suspicious/effect",
+    "source": "ChineseSimplified/foods/xocoatl.json",
+    "text": "队伍中所有角色防御力提高165点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.xocoatl.normal",
+    "field": "/normal/effect",
+    "source": "ChineseSimplified/foods/xocoatl.json",
+    "text": "队伍中所有角色防御力提高200点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.food.xocoatl.delicious",
+    "field": "/delicious/effect",
+    "source": "ChineseSimplified/foods/xocoatl.json",
+    "text": "队伍中所有角色防御力提高235点，持续300秒。多人游戏时，仅对自己的角色生效。"
+  },
+  {
+    "entity": "scene.potion.flamingessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "pyro Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.potion.gushingessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "anemo Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.potion.frostingessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "cryo Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.potion.unmovingessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "geo Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.potion.streamingessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "hydro Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.potion.shockingessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "electro Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.potion.forestessentialoil",
+    "field": "/durationMs",
+    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
+    "text": "dendro Bonus 0.25",
+    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
+    "missingFields": [
+      "/durationMs"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhunti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhunti.json",
+    "text": "挑战平台的地面会间歇性地变为「炎祝」与「霜祝」状态。依据状态的不同，处在对应平台上的角色会获得不同的效果。",
+    "issue": "本地场地说明只给出间歇变化。 按当时记录的炎祝或霜祝区域可计算当前角色的加成。",
+    "missingFields": [
+      "/disorder/0 · 初始平台状态",
+      "/disorder/0 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhunti.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhunti.json",
+    "text": "「炎祝」：其中的当前场上角色获得60%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhunti.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhunti.json",
+    "text": "「霜祝」：其中的当前场上角色获得60%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntii.json",
+    "text": "挑战平台的地面会间歇性地变为「炎祝」与「霜祝」状态。依据状态的不同，处在对应平台上的角色会获得不同的效果。",
+    "issue": "本地场地说明只给出间歇变化。 按当时记录的炎祝或霜祝区域可计算当前角色的加成。",
+    "missingFields": [
+      "/disorder/0 · 初始平台状态",
+      "/disorder/0 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntii.json",
+    "text": "「炎祝」：其中的当前场上角色获得60%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntii.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntii.json",
+    "text": "「霜祝」：其中的当前场上角色获得60%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntiii.json",
+    "text": "挑战平台的地面会间歇性地变为「炎祝」与「霜祝」状态。依据状态的不同，处在对应平台上的角色会获得不同的效果。",
+    "issue": "本地场地说明只给出间歇变化。 按当时记录的炎祝或霜祝区域可计算当前角色的加成。",
+    "missingFields": [
+      "/disorder/0 · 初始平台状态",
+      "/disorder/0 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntiii.json",
+    "text": "「炎祝」：其中的当前场上角色获得60%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntiii.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntiii.json",
+    "text": "「霜祝」：其中的当前场上角色获得60%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntiv.json",
+    "text": "挑战平台的地面会间歇性地变为「炎祝」与「霜祝」状态。依据状态的不同，处在对应平台上的角色会获得不同的效果。",
+    "issue": "本地场地说明只给出间歇变化。 按当时记录的炎祝或霜祝区域可计算当前角色的加成。",
+    "missingFields": [
+      "/disorder/0 · 初始平台状态",
+      "/disorder/0 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntiv.json",
+    "text": "「炎祝」：其中的当前场上角色获得60%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingautumnhuntiv.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingautumnhuntiv.json",
+    "text": "「霜祝」：其中的当前场上角色获得60%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingcrumblingassemblyi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyi.json",
+    "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingcrumblingassemblyii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyii.json",
+    "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingcrumblingassemblyiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyiii.json",
+    "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingcrumblingassemblyiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyiv.json",
+    "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingdanceofsteeli.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdanceofsteeli.json",
+    "text": "队伍中所有角色造成的物理伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdanceofsteelii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdanceofsteelii.json",
+    "text": "队伍中所有角色造成的物理伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdanceofsteeliii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdanceofsteeliii.json",
+    "text": "队伍中所有角色造成的物理伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdanceofsteeliv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdanceofsteeliv.json",
+    "text": "队伍中所有角色造成的物理伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdanceofsteelv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdanceofsteelv.json",
+    "text": "队伍中所有角色造成的物理伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdeepfireconstructi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdeepfireconstructi.json",
+    "text": "角色的下落攻击命中敌人后，该角色的暴击伤害提升30%，攻击力提升20%，持续15秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdeepfireconstructii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdeepfireconstructii.json",
+    "text": "角色的下落攻击命中敌人后，该角色的暴击伤害提升30%，攻击力提升20%，持续15秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdeepfireconstructiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdeepfireconstructiii.json",
+    "text": "角色的下落攻击命中敌人后，该角色的暴击伤害提升30%，攻击力提升20%，持续15秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdeepfireconstructiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdeepfireconstructiv.json",
+    "text": "角色的下落攻击命中敌人后，该角色的暴击伤害提升30%，攻击力提升20%，持续15秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingderivationsfromthedeepi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingderivationsfromthedeepi.json",
+    "text": "队伍的月兆等级至少为初辉时，队伍中所有角色的元素精通提升200点。"
+  },
+  {
+    "entity": "scene.field.domainofblessingderivationsfromthedeepii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingderivationsfromthedeepii.json",
+    "text": "队伍的月兆等级至少为初辉时，队伍中所有角色的元素精通提升200点。"
+  },
+  {
+    "entity": "scene.field.domainofblessingderivationsfromthedeepiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingderivationsfromthedeepiii.json",
+    "text": "队伍的月兆等级至少为初辉时，队伍中所有角色的元素精通提升200点。"
+  },
+  {
+    "entity": "scene.field.domainofblessingderivationsfromthedeepiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingderivationsfromthedeepiv.json",
+    "text": "队伍的月兆等级至少为初辉时，队伍中所有角色的元素精通提升200点。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdesertcitadeli.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdesertcitadeli.json",
+    "text": "角色对敌人触发扩散反应后，队伍中所有角色获得50%风元素伤害加成，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdesertcitadelii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdesertcitadelii.json",
+    "text": "角色对敌人触发扩散反应后，队伍中所有角色获得50%风元素伤害加成，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdesertcitadeliii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdesertcitadeliii.json",
+    "text": "角色对敌人触发扩散反应后，队伍中所有角色获得50%风元素伤害加成，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingdesertcitadeliv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingdesertcitadeliv.json",
+    "text": "角色对敌人触发扩散反应后，队伍中所有角色获得50%风元素伤害加成，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimei.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimei.json",
+    "text": "挑战平台中的角色会持续积累「严寒」。严寒达到上限时，会损失生命值。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/0 · 严寒上限",
+      "/disorder/0 · 严寒累积速度",
+      "/disorder/0 · 满额后每次生命损失及间隔"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimei.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimei.json",
+    "text": "挑战平台中的地面会间歇性变为「温暖」与「极寒」状态。",
+    "issue": "本地场地说明只给出间歇变化。",
+    "missingFields": [
+      "/disorder/1 · 初始平台状态",
+      "/disorder/1 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimei.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimei.json",
+    "text": "温暖状态的地面可以削减严寒积累，极寒的地面会加速严寒积累。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/2 · 温暖地面严寒衰减速度",
+      "/disorder/2 · 极寒地面严寒累积速度"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeii.json",
+    "text": "挑战平台中的角色会持续积累「严寒」。严寒达到上限时，会损失生命值。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/0 · 严寒上限",
+      "/disorder/0 · 严寒累积速度",
+      "/disorder/0 · 满额后每次生命损失及间隔"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeii.json",
+    "text": "挑战平台中的地面会间歇性变为「温暖」与「极寒」状态。",
+    "issue": "本地场地说明只给出间歇变化。",
+    "missingFields": [
+      "/disorder/1 · 初始平台状态",
+      "/disorder/1 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeii.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeii.json",
+    "text": "温暖状态的地面可以削减严寒积累，极寒的地面会加速严寒积累。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/2 · 温暖地面严寒衰减速度",
+      "/disorder/2 · 极寒地面严寒累积速度"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeiii.json",
+    "text": "挑战平台中的角色会持续积累「严寒」。严寒达到上限时，会损失生命值。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/0 · 严寒上限",
+      "/disorder/0 · 严寒累积速度",
+      "/disorder/0 · 满额后每次生命损失及间隔"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeiii.json",
+    "text": "挑战平台中的地面会间歇性变为「温暖」与「极寒」状态。",
+    "issue": "本地场地说明只给出间歇变化。",
+    "missingFields": [
+      "/disorder/1 · 初始平台状态",
+      "/disorder/1 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeiii.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeiii.json",
+    "text": "温暖状态的地面可以削减严寒积累，极寒的地面会加速严寒积累。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/2 · 温暖地面严寒衰减速度",
+      "/disorder/2 · 极寒地面严寒累积速度"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeiv.json",
+    "text": "挑战平台中的角色会持续积累「严寒」。严寒达到上限时，会损失生命值。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/0 · 严寒上限",
+      "/disorder/0 · 严寒累积速度",
+      "/disorder/0 · 满额后每次生命损失及间隔"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeiv.json",
+    "text": "挑战平台中的地面会间歇性变为「温暖」与「极寒」状态。",
+    "issue": "本地场地说明只给出间歇变化。",
+    "missingFields": [
+      "/disorder/1 · 初始平台状态",
+      "/disorder/1 · 平台切换时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingelegiacrimeiv.2",
+    "field": "/disorder/2",
+    "source": "ChineseSimplified/domains/domainofblessingelegiacrimeiv.json",
+    "text": "温暖状态的地面可以削减严寒积累，极寒的地面会加速严寒积累。",
+    "issue": "本地该阶场地说明仅给出变化方向。",
+    "missingFields": [
+      "/disorder/2 · 温暖地面严寒衰减速度",
+      "/disorder/2 · 极寒地面严寒累积速度"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationi.json",
+    "text": "引发融化反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationii.json",
+    "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationii.json",
+    "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiii.json",
+    "text": "引发融化反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiii.json",
+    "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiv.json",
+    "text": "引发蒸发反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiv.json",
+    "text": "引发感电反应时，会受到高能打击，承受伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationv.json",
+    "text": "引发融化反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationv.json",
+    "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationvi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationvi.json",
+    "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingfiresofpurificationvi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationvi.json",
+    "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingflowerfeasti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingflowerfeasti.json",
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingflowerfeastii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingflowerfeastii.json",
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingflowerfeastiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingflowerfeastiii.json",
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingflowerfeastiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingflowerfeastiv.json",
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingforsakenramparti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingforsakenramparti.json",
+    "text": "队伍中触发草元素相关反应时，队伍中所有角色元素精通提升150点。该效果持续8秒，每1秒至多触发一次。"
+  },
+  {
+    "entity": "scene.field.domainofblessingforsakenrampartii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingforsakenrampartii.json",
+    "text": "队伍中触发草元素相关反应时，队伍中所有角色元素精通提升150点。该效果持续8秒，每1秒至多触发一次。"
+  },
+  {
+    "entity": "scene.field.domainofblessingforsakenrampartiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingforsakenrampartiii.json",
+    "text": "队伍中触发草元素相关反应时，队伍中所有角色元素精通提升150点。该效果持续8秒，每1秒至多触发一次。"
+  },
+  {
+    "entity": "scene.field.domainofblessingforsakenrampartiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingforsakenrampartiv.json",
+    "text": "队伍中触发草元素相关反应时，队伍中所有角色元素精通提升150点。该效果持续8秒，每1秒至多触发一次。"
+  },
+  {
+    "entity": "scene.field.domainofblessingharmonyi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingharmonyi.json",
+    "text": "角色的当前生命值提升或降低时，队伍中所有角色的暴击伤害提升7%，此效果持续10秒，每0.1秒至多触发一次，至多叠加10层，每层独立计算持续时间。"
+  },
+  {
+    "entity": "scene.field.domainofblessingharmonyii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingharmonyii.json",
+    "text": "角色的当前生命值提升或降低时，队伍中所有角色的暴击伤害提升7%，此效果持续10秒，每0.1秒至多触发一次，至多叠加10层，每层独立计算持续时间。"
+  },
+  {
+    "entity": "scene.field.domainofblessingharmonyiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingharmonyiii.json",
+    "text": "角色的当前生命值提升或降低时，队伍中所有角色的暴击伤害提升7%，此效果持续10秒，每0.1秒至多触发一次，至多叠加10层，每层独立计算持续时间。"
+  },
+  {
+    "entity": "scene.field.domainofblessingharmonyiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingharmonyiv.json",
+    "text": "角色的当前生命值提升或降低时，队伍中所有角色的暴击伤害提升7%，此效果持续10秒，每0.1秒至多触发一次，至多叠加10层，每层独立计算持续时间。"
+  },
+  {
+    "entity": "scene.field.domainofblessingiceerosioni.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingiceerosioni.json",
+    "text": "角色触发冰元素相关反应后，队伍中所有角色的元素精通提升250点，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingiceerosionii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingiceerosionii.json",
+    "text": "角色触发冰元素相关反应后，队伍中所有角色的元素精通提升250点，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingiceerosioniii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingiceerosioniii.json",
+    "text": "角色触发冰元素相关反应后，队伍中所有角色的元素精通提升250点，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingiceerosioniv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingiceerosioniv.json",
+    "text": "角色触发冰元素相关反应后，队伍中所有角色的元素精通提升250点，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofblessingmachinenesti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingmachinenesti.json",
+    "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingmachinenestii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingmachinenestii.json",
+    "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingmachinenestiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingmachinenestiii.json",
+    "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingmachinenestiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingmachinenestiv.json",
+    "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisi.json",
+    "text": "队伍中所有角色获得40%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisi.json",
+    "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisii.json",
+    "text": "队伍中所有角色获得40%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisii.json",
+    "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisiii.json",
+    "text": "队伍中所有角色获得40%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisiii.json",
+    "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisiv.json",
+    "text": "队伍中所有角色获得40%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingnecropolisiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingnecropolisiv.json",
+    "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingroaringfirei.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingroaringfirei.json",
+    "text": "队伍中所有角色获得75%水元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingroaringfireii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingroaringfireii.json",
+    "text": "队伍中所有角色获得75%水元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingroaringfireiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingroaringfireiii.json",
+    "text": "队伍中所有角色获得75%水元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingroaringfireiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingroaringfireiv.json",
+    "text": "队伍中所有角色获得75%水元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsacredvaulti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsacredvaulti.json",
+    "text": "角色触发月感电、月结晶、月绽放反应后的10秒内，队伍内所有角色造成的月感电、月结晶、月绽放伤害提升35%，防御力提升30%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsacredvaultii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsacredvaultii.json",
+    "text": "角色触发月感电、月结晶、月绽放反应后的10秒内，队伍内所有角色造成的月感电、月结晶、月绽放伤害提升35%，防御力提升30%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsacredvaultiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsacredvaultiii.json",
+    "text": "角色触发月感电、月结晶、月绽放反应后的10秒内，队伍内所有角色造成的月感电、月结晶、月绽放伤害提升35%，防御力提升30%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsacredvaultiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsacredvaultiv.json",
+    "text": "角色触发月感电、月结晶、月绽放反应后的10秒内，队伍内所有角色造成的月感电、月结晶、月绽放伤害提升35%，防御力提升30%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesi.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesi.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesii.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesii.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesiii.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesiii.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesiv.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingsevensensesiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingsevensensesiv.json",
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofblessingspringi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingspringi.json",
+    "text": "感电反应造成的伤害提高150%，影响范围扩大100%。",
+    "issue": "已采用感电伤害提高150%。影响范围扩大100%的多目标命中仍待接入。"
+  },
+  {
+    "entity": "scene.field.domainofblessingspringii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingspringii.json",
+    "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingspringiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingspringiii.json",
+    "text": "引发超导或星超导反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingspringiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingspringiv.json",
+    "text": "感电反应造成的伤害提高150%，影响范围扩大100%。",
+    "issue": "已采用感电伤害提高150%。影响范围扩大100%的多目标命中仍待接入。"
+  },
+  {
+    "entity": "scene.field.domainofblessingspringv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingspringv.json",
+    "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingspringvi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingspringvi.json",
+    "text": "引发超导或星超导反应时，会释放能量冲击，对周围的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingstonechamberi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingstonechamberi.json",
+    "text": "队伍中所有角色造成的岩元素伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingstonechamberii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingstonechamberii.json",
+    "text": "队伍中所有角色造成的岩元素伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingstonechamberiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingstonechamberiii.json",
+    "text": "队伍中所有角色造成的岩元素伤害提高75%。"
+  },
+  {
+    "entity": "scene.field.domainofblessingtheburninggauntleti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingtheburninggauntleti.json",
+    "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingtheburninggauntletii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingtheburninggauntletii.json",
+    "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingtheburninggauntletiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingtheburninggauntletiii.json",
+    "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingtheburninggauntletiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingtheburninggauntletiv.json",
+    "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingunyieldingi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingunyieldingi.json",
+    "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingunyieldingii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingunyieldingii.json",
+    "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingunyieldingiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingunyieldingiii.json",
+    "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingunyieldingiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingunyieldingiii.json",
+    "text": "（test)血量+20%",
+    "issue": "本地条目标为测试值，未指明受益对象或实际启用范围。",
+    "missingFields": [
+      "/disorder/1 · 生命加成受益对象",
+      "/disorder/1 · 正式挑战是否启用"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingunyieldingiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingunyieldingiv.json",
+    "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingunyieldingiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofblessingunyieldingiv.json",
+    "text": "（test)血量+50%",
+    "issue": "本地条目标为测试值，未指明受益对象或实际启用范围。",
+    "missingFields": [
+      "/disorder/1 · 生命加成受益对象",
+      "/disorder/1 · 正式挑战是否启用"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofblessingvariationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingvariationi.json",
+    "text": "生命之契的数值提升或降低时，该角色获得15%所有元素伤害与物理伤害加成，持续10秒。此效果至多叠加4层，每层独立计时。"
+  },
+  {
+    "entity": "scene.field.domainofblessingvariationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingvariationii.json",
+    "text": "生命之契的数值提升或降低时，该角色获得15%所有元素伤害与物理伤害加成，持续10秒。此效果至多叠加4层，每层独立计时。"
+  },
+  {
+    "entity": "scene.field.domainofblessingvariationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingvariationiii.json",
+    "text": "生命之契的数值提升或降低时，该角色获得15%所有元素伤害与物理伤害加成，持续10秒。此效果至多叠加4层，每层独立计时。"
+  },
+  {
+    "entity": "scene.field.domainofblessingvariationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofblessingvariationiv.json",
+    "text": "生命之契的数值提升或降低时，该角色获得15%所有元素伤害与物理伤害加成，持续10秒。此效果至多叠加4层，每层独立计时。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsi.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsi.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsii.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsii.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsiii.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsiii.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsiv.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryaltarofsandsiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsiv.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryartisanshipi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryartisanshipi.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryartisanshipii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryartisanshipii.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryartisanshipiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryartisanshipiii.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryartisanshipiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryartisanshipiv.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryattentiveobservationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryattentiveobservationi.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryattentiveobservationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryattentiveobservationii.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryattentiveobservationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryattentiveobservationiii.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryattentiveobservationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryattentiveobservationiv.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycastironi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycastironi.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycastironii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycastironii.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycastironiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycastironiii.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycastironiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycastironiv.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerychaintracki.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerychaintracki.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerychaintrackii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerychaintrackii.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerychaintrackiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerychaintrackiii.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerychaintrackiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerychaintrackiv.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycityofreflectionsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycityofreflectionsi.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycityofreflectionsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycityofreflectionsii.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycityofreflectionsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycityofreflectionsiii.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycityofreflectionsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycityofreflectionsiv.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerycuriouscontraptionsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsi.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerycuriouscontraptionsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsii.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerycuriouscontraptionsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsiii.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerycuriouscontraptionsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsiv.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryestimationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryestimationi.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryestimationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryestimationii.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryestimationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryestimationiii.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryestimationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryestimationiv.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryleadingkarmai.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryleadingkarmai.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryleadingkarmaii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryleadingkarmaii.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryleadingkarmaiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryleadingkarmaiii.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryleadingkarmaiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryleadingkarmaiv.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgerylunaroblationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerylunaroblationi.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerylunaroblationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerylunaroblationii.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerylunaroblationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerylunaroblationiii.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerylunaroblationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerylunaroblationiv.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryobsessioni.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryobsessioni.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryobsessionii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryobsessionii.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryobsessioniii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryobsessioniii.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryobsessioniv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryobsessioniv.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryprayerssungi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryprayerssungi.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryprayerssungii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryprayerssungii.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryprayerssungiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryprayerssungiii.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryprayerssungiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryprayerssungiv.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryradiantsplendori.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryradiantsplendori.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryradiantsplendorii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryradiantsplendorii.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryradiantsplendoriii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryradiantsplendoriii.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryradiantsplendoriv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryradiantsplendoriv.json",
+    "text": "角色触发的绽放、超绽放、烈绽放反应造成的伤害提升150%，月绽放反应造成的伤害提升50%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryroboticrusei.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryroboticrusei.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryroboticruseii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryroboticruseii.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryroboticruseiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryroboticruseiii.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryroboticruseiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryroboticruseiv.json",
+    "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
+    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
+    "missingFields": [
+      "/disorder/0 · 满层抗打断系数",
+      "/disorder/0 · 重复获得层数时的刷新方式"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryruinsofthirstingcapitali.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryruinsofthirstingcapitali.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryruinsofthirstingcapitalii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryruinsofthirstingcapitalii.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryruinsofthirstingcapitaliii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryruinsofthirstingcapitaliii.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryruinsofthirstingcapitaliv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryruinsofthirstingcapitaliv.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburiali.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysandburiali.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburiali.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysandburiali.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburialii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysandburialii.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburialii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysandburialii.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburialiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysandburialiii.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburialiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysandburialiii.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburialiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysandburialiv.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysandburialiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysandburialiv.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgeryscryingshadowsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryscryingshadowsi.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryscryingshadowsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryscryingshadowsii.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryscryingshadowsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryscryingshadowsiii.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryscryingshadowsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryscryingshadowsiv.json",
+    "text": "触发「夜魂迸发」后，队伍中所有角色造成的伤害提升35%，持续10秒。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryseveredsteeli.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryseveredsteeli.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryseveredsteelii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryseveredsteelii.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryseveredsteeliii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryseveredsteeliii.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgeryseveredsteeliv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgeryseveredsteeliv.json",
+    "text": "角色触发的扩散反应造成的伤害提升200%，星扩散反应伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysubmergedvalleyi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysubmergedvalleyi.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysubmergedvalleyii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysubmergedvalleyii.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysubmergedvalleyiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysubmergedvalleyiii.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysubmergedvalleyiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysubmergedvalleyiv.json",
+    "text": "队伍中所有角色获得75%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsi.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsi.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsii.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsii.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsiii.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsiii.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsiv.json",
+    "text": "队伍中所有角色的护盾强效提升40%。"
+  },
+  {
+    "entity": "scene.field.domainofforgerysunkensandsiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofforgerysunkensandsiv.json",
+    "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofforgerytaintedcloudsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsi.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytaintedcloudsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsii.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytaintedcloudsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsiii.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytaintedcloudsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsiv.json",
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythundercloudaltari.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythundercloudaltari.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythundercloudaltarii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythundercloudaltarii.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythundercloudaltariii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythundercloudaltariii.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythundercloudaltariv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythundercloudaltariv.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythunderingruinsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythunderingruinsi.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythunderingruinsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythunderingruinsii.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythunderingruinsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythunderingruinsiii.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerythunderingruinsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerythunderingruinsiv.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytrialgroundsofthunderi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytrialgroundsofthunderi.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytrialgroundsofthunderii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytrialgroundsofthunderii.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytrialgroundsofthunderiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytrialgroundsofthunderiii.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofforgerytrialgroundsofthunderiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofforgerytrialgroundsofthunderiv.json",
+    "text": "队伍中所有角色获得75%冰元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryadmonishingengravingi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingi.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryadmonishingengravingii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingii.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryadmonishingengravingiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingiii.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryadmonishingengravingiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingiv.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryaltarofflamesi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesi.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryaltarofflamesii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesii.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryaltarofflamesiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesiii.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryaltarofflamesiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesiv.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterybasketofdisciplinei.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplinei.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterybasketofdisciplineii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplineii.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterybasketofdisciplineiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplineiii.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterybasketofdisciplineiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplineiv.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterychimingrecitationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterychimingrecitationi.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterychimingrecitationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterychimingrecitationii.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterychimingrecitationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterychimingrecitationiii.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterychimingrecitationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterychimingrecitationiv.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterycircleofembersi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycircleofembersi.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycircleofembersii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycircleofembersii.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycircleofembersiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycircleofembersiii.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycircleofembersiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycircleofembersiv.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycontemplationi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycontemplationi.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycontemplationii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycontemplationii.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycontemplationiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycontemplationiii.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterycontemplationiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterycontemplationiv.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryfallencityi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfallencityi.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryfallencityii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfallencityii.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryfallencityiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfallencityiii.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryfallencityiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfallencityiv.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrostedaltari.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrostedaltari.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrostedaltarii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrostedaltarii.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrostedaltariii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrostedaltariii.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrostedaltariv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrostedaltariv.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrozenabyssi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrozenabyssi.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrozenabyssii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrozenabyssii.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrozenabyssiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrozenabyssiii.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfrozenabyssiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfrozenabyssiv.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfullmooni.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfullmooni.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfullmoonii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfullmoonii.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfullmooniii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfullmooniii.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryfullmooniv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryfullmooniv.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryheartoftheflamesi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesi.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryheartoftheflamesii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesii.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryheartoftheflamesiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesiii.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryheartoftheflamesiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesiv.json",
+    "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
+    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "missingFields": [
+      "/disorder/0 · 附着周期",
+      "/disorder/0 · 持续伤害间隔",
+      "/disorder/0 · 每跳伤害基数"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryhermitagei.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryhermitagei.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryhermitageii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryhermitageii.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryhermitageiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryhermitageiii.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryhermitageiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryhermitageiv.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterymyriadillusionsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterymyriadillusionsi.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterymyriadillusionsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterymyriadillusionsii.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterymyriadillusionsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterymyriadillusionsiii.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterymyriadillusionsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterymyriadillusionsiv.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryoverturnedroosti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryoverturnedroosti.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryoverturnedroostii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryoverturnedroostii.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryoverturnedroostiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryoverturnedroostiii.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryoverturnedroostiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryoverturnedroostiv.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryrealmofslumberi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrealmofslumberi.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrealmofslumberii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrealmofslumberii.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrealmofslumberiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrealmofslumberiii.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrealmofslumberiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrealmofslumberiv.json",
+    "text": "队伍中所有角色获得75%火元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioleti.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioleti.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioleti.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioleti.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioletii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioletii.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioletii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioletii.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioletiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioletiii.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioletiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioletiii.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioletiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioletiv.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreignofvioletiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryreignofvioletiv.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryreturni.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreturni.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreturnii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreturnii.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreturniii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreturniii.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryreturniv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryreturniv.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrhymingrhythmi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmi.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrhymingrhythmii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmii.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrhymingrhythmiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmiii.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryrhymingrhythmiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmiv.json",
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryshadowedlegacyi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyi.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryshadowedlegacyii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyii.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryshadowedlegacyiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyiii.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryshadowedlegacyiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyiv.json",
+    "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率",
+      "/disorder/0 · 独立伤害元素及结算类别"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterysharedvisioni.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysharedvisioni.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterysharedvisionii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysharedvisionii.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterysharedvisioniii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysharedvisioniii.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterysharedvisioniv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysharedvisioniv.json",
+    "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/0 · 独立伤害基数或倍率"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterysublimeturningi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysublimeturningi.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterysublimeturningii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysublimeturningii.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterysublimeturningiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysublimeturningiii.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterysublimeturningiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterysublimeturningiv.json",
+    "text": "角色的夜魂值提升或降低后的6秒内，该角色的暴击伤害提升60%。"
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyi.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyi.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyii.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyii.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyiii.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyiii.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyiv.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasterythunderingvalleyiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasterythunderingvalleyiv.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsi.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsi.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsi.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsii.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsii.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsiii.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsiii.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsiii.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsiv.json",
+    "text": "队伍中所有角色获得25%雷元素伤害加成。"
+  },
+  {
+    "entity": "scene.field.domainofmasteryvineinfestedruinsiv.1",
+    "field": "/disorder/1",
+    "source": "ChineseSimplified/domains/domainofmasteryvineinfestedruinsiv.json",
+    "text": "挑战中存在雷晶实，其中会间歇性涌现「稚雷珠」。角色获取稚雷珠后，普通攻击、重击、下落攻击、元素战技与元素爆发在命中敌人时，会释放落雷，造成雷元素伤害。",
+    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "missingFields": [
+      "/disorder/1 · 独立伤害基数或倍率",
+      "/disorder/1 · 稚雷珠出现与落雷的时刻"
+    ]
+  },
+  {
+    "entity": "scene.field.domainofmasterywitticismi.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterywitticismi.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterywitticismii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterywitticismii.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterywitticismiii.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterywitticismiii.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  },
+  {
+    "entity": "scene.field.domainofmasterywitticismiv.0",
+    "field": "/disorder/0",
+    "source": "ChineseSimplified/domains/domainofmasterywitticismiv.json",
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
+    "issue": "场地触发、目标或事件机制尚未采用。"
+  }
+]

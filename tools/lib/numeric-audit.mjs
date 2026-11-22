@@ -178,6 +178,7 @@ export async function numericAudit(read = readAuditJson) {
   const vesnaConstellations = read(`tools/data/sources/genshin-db/${commit}/ChineseSimplified/constellations/vesna.json`);
   const discipline = numbers(vesnaTalents.passive1.description), composition = numbers(vesnaTalents.passive2.description), linchpin = numbers(vesnaTalents.passive3.description);
   const vesnaFormula = id => formulaDefinition('vesna.' + id).template;
+  const linchpinFormula = formulaDefinition(effectDefinition('vesna.linchpin-base.effect').value.formula.id).template;
   for (const [field, value] of [['rate', discipline[3]], ['offset', discipline[2]], ['maxInput', discipline[1]]]) check('stellar-character-formulas', vesnaFormula('discipline')[field], value, 'vesna/discipline/' + field);
   check('stellar-character-formulas', vesnaFormula('max-discipline').threshold, discipline[1], 'vesna/max-discipline');
   check('stellar-character-formulas', vesnaFormula('cryo-anemo-attack').rate, composition[0], 'vesna/party-attack');
@@ -185,9 +186,9 @@ export async function numericAudit(read = readAuditJson) {
   const triple = vesnaConstellations.c4.description.includes('三倍') ? 3 : NaN;
   check('stellar-character-formulas', vesnaFormula('cryo-anemo-attack-c4').rate, composition[0] * triple, 'vesna/c4-attack');
   check('stellar-character-formulas', vesnaFormula('other-element-mastery-c4').rate, composition[1] * triple, 'vesna/c4-mastery');
-  check('stellar-character-formulas', vesnaFormula('linchpin-base').rate, Number(String(linchpin[1]) + 'e-2'), 'vesna/linchpin-rate');
+  check('stellar-character-formulas', linchpinFormula.rate, Number(String(linchpin[1]) + 'e-2'), 'vesna/linchpin-rate');
   check('stellar-character-formulas', linchpin[0], 100, 'vesna/linchpin-unit');
-  check('stellar-character-formulas', vesnaFormula('linchpin-base').cap, linchpin[2], 'vesna/linchpin-cap');
+  check('stellar-character-formulas', linchpinFormula.cap, linchpin[2], 'vesna/linchpin-cap');
   for (const [id, key, index] of [['c1-bonus', 'c1', 0], ['c2-attack', 'c2', 0], ['c6-elevation', 'c6', 3]]) check('stellar-character-effects', effectDefinition('vesna.' + id + '.effect').value.value.value, numbers(vesnaConstellations[key].description)[index], 'vesna/' + id);
   const vesna = read('src/game-data/data/characters/vesna.json');
   const c6Ratios = numbers(vesnaConstellations.c6.description);
@@ -198,7 +199,8 @@ export async function numericAudit(read = readAuditJson) {
     for (const rank of stellarEquipment.weapon.ranks) check('stellar-equipment', values[rank.rank - 1], numbers(rank.description)[index], `beyondthechrysalis/${key}/${rank.rank}`);
   }
   for (const [key, index] of [['critRate', 1], ['reaction.stellar-swirl.damageBonus', 2]]) {
-    check('stellar-equipment', effectDefinition(`scarletproof.stellar.${key}`).value.value.value, numbers(stellarEquipment.set.effect4Pc)[index], `scarletproof/${key}`);
+    const modifiers = library.effects.filter(effect => effect.buff?.id === 'scarletproof.stellar' && effect.target.attribute?.id === 'attribute.'+key);
+    check('stellar-equipment', modifiers.length === 1 ? modifiers[0].value.value.value : null, numbers(stellarEquipment.set.effect4Pc)[index], `scarletproof/${key}`);
   }
   const vesnaActions = read('src/game-data/data/actions/vesna.json').calculation.bundle.stateMachines[0];
   const state = key => vesnaActions.states.find(state => state.key === 'vesna.' + key);

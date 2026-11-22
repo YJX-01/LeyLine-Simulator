@@ -1,0 +1,503 @@
+{
+  "references": [
+    "kqm-tcl/docs/combat-mechanics/elemental-effects/elemental-resonance.md",
+    "GenshinTools/src/domain/combat/damage/core/teamResonance.ts",
+    "kqm-tcl/docs/characters/electro/yae-miko.md",
+    "mona-community/beta-data/team-engine/characters/yae-miko.mjs",
+    "GenshinTools/src/domain/combat/damage/impl/character5Mondstadt.ts",
+    "GenshinTools/src/domain/combat/damage/constants.ts",
+    "GenshinTools/src/domain/combat/damage/impl/character5Snezhnaya.ts",
+    "GenshinTools/src/domain/combat/damage/impl/character5None.ts",
+    "GenshinTools/src/generated/catalog/character_5_zh.json",
+    "kqm-tcl/docs/equipment/artifacts.md",
+    "mona-community/mona_core/src/character/characters/pyro/mavuika.rs",
+    "meropide/pages/team-bonuses.html",
+    "kqm-tcl/docs/evidence/combat-mechanics/damage/other/on-field-and-off-field.md",
+    "kqm-tcl/docs/evidence/equipment/artifacts.md",
+    "kqm-tcl/docs/evidence/characters/hydro/kamisato-ayato.md",
+    "kqm-tcl/src/data/frames/Kamisato_Ayato.json",
+    "kqm-tcl/docs/equipment/weapons/swords.md",
+    "kqm-tcl/docs/evidence/equipment/weapons.md",
+    "mona-current/beta-data/equipment-axis-rules.mjs",
+    "genshin-db/src/data/English/weapons/rainbowserpentsrainbow.json",
+    "GenshinTools/src/domain/combat/damage/impl/weapon4Bow.ts",
+    "kqm-tcl/docs/combat-mechanics/damage/healing.md",
+    "kqm-tcl/docs/characters/pyro/hu-tao.md"
+  ],
+  "oceanHuedClam": {
+    "entity": "oceanhuedclam",
+    "material": "kqm-tcl/docs/evidence/equipment/artifacts.md",
+    "section": "Limit for Bubble Count On Field is Shared while ICD is Not",
+    "roles": [
+      "qiqi",
+      "sangonomiyakokomi"
+    ],
+    "activeBubblesPerTeam": 1,
+    "creationCooldownPerHolderMs": 3500,
+    "collectionMs": 3000,
+    "healingOwner": "creator",
+    "includesOverflow": true,
+    "damageRadiusMeters": 5.5,
+    "notes": "本地单人队伍记录给出七七与珊瑚宫心海交替生成泡沫的顺序。多个佩戴者只累计各自泡沫创建者的治疗，冷却按创建者记录。"
+  },
+  "summon": {
+    "id": "yaemiko.skill",
+    "fields": {
+      "durationSeconds": 14,
+      "maximum": 3,
+      "maximumHits": 5,
+      "spawnFrames": 34,
+      "firstShotFrames": 120,
+      "intervalFrames": 176,
+      "impactFrames": 1,
+      "fps": 60
+    },
+    "release": {
+      "initialFrames": 100,
+      "firstAdditionalFrames": 154,
+      "spacingFrames": 24
+    },
+    "scope": "每株独立计时，逐对记录距离。采用本地角色持续时间，释放时仅清除靠近的杀生樱。帧时序是本地模型值。"
+  },
+  "publicGaps": [],
+  "stellarConduct": {
+    "attachmentCounts": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "coefficients": [
+      1,
+      1.45,
+      1.5,
+      1.55,
+      1.6,
+      1.65,
+      1.7,
+      1.75,
+      1.8,
+      1.85,
+      1.9,
+      1.95,
+      2
+    ]
+  },
+  "pendingHits": [
+    {
+      "entity": "charlotte",
+      "field": "/talents/0/details/7",
+      "classification": "缺少本地依据",
+      "missingFields": [
+        "/talents/0/hits/charlotte.normal.spiritbreath/category"
+      ],
+      "reason": "已确认重击后触发、冰元素、倍率 param9 和间隔 param10。现有本地角色资料未确认该段适用普攻、重击或独立类别的伤害加成。"
+    }
+  ],
+  "interpretations": [
+    {
+      "entity": "varka",
+      "fields": [
+        "/talents/1/hits/varka.skill.param12/elementBy",
+        "/talents/1/hits/varka.skill.param13/elementBy"
+      ],
+      "reason": "本地条款给出两段倍率和左右手各自的元素，未标注每项倍率对应哪只手。两手元素有别时，单击须记录当次出手侧。若两手均为风元素，伤害可直接计算。"
+    }
+  ],
+  "publicChecks": [
+    {
+      "entity": "resonance.geo",
+      "field": "/target/geoResistance/afterShieldedOnFieldHit",
+      "localValue": {
+        "value": -0.2,
+        "durationMs": 15000
+      },
+      "source": "kqm-tcl/docs/evidence/combat-mechanics/elemental-effects/elemental-resonance.md",
+      "case": "命中时站场且受护盾保护的队员将目标岩抗降低20%，从触发击之后结算，15秒后到期。仅在后台持盾者不能触发。"
+    },
+    {
+      "entity": "resonance.anemo",
+      "field": "/stamina/consumption",
+      "localValue": -0.15,
+      "scope": "在四人队、元素组合及队员面板中核对实际属性贡献。"
+    },
+    {
+      "entity": "resonance.anemo",
+      "field": "/movement/speed",
+      "localValue": 0.1,
+      "scope": "在四人队、元素组合及队员面板中核对实际属性贡献。"
+    },
+    {
+      "entity": "resonance.anemo",
+      "field": "/skill/cooldown",
+      "localValue": -0.05,
+      "scope": "在四人队、元素组合及队员面板中核对实际属性贡献。"
+    },
+    {
+      "entity": "resonance.protectiveCanopy",
+      "field": "/recipient/resistances/all",
+      "localValue": 0.15,
+      "scope": "在四人队、元素组合及队员面板中核对实际属性贡献。"
+    },
+    {
+      "entity": "resonance.pyro",
+      "field": "/recipient/aura/cryo/duration",
+      "localValue": -0.4,
+      "source": "kqm-tcl/docs/equipment/artifacts.md",
+      "case": "4 人队伍中同元素两人使相应附着缩短 40%。与佩戴者对应祭冠相加至 80%，逐项核对其他队员、其他元素、清除和到期时刻。"
+    },
+    {
+      "entity": "resonance.hydro",
+      "field": "/recipient/aura/pyro/duration",
+      "localValue": -0.4,
+      "source": "kqm-tcl/docs/equipment/artifacts.md",
+      "case": "4 人队伍中同元素两人使相应附着缩短 40%。与佩戴者对应祭冠相加至 80%，逐项核对其他队员、其他元素、清除和到期时刻。"
+    },
+    {
+      "entity": "resonance.cryo",
+      "field": "/recipient/aura/electro/duration",
+      "localValue": -0.4,
+      "source": "kqm-tcl/docs/equipment/artifacts.md",
+      "case": "4 人队伍中同元素两人使相应附着缩短 40%。与佩戴者对应祭冠相加至 80%，逐项核对其他队员、其他元素、清除和到期时刻。"
+    },
+    {
+      "entity": "resonance.electro",
+      "field": "/recipient/aura/hydro/duration",
+      "localValue": -0.4,
+      "source": "kqm-tcl/docs/equipment/artifacts.md",
+      "case": "4 人队伍中同元素两人使相应附着缩短 40%。与佩戴者对应祭冠相加至 80%，逐项核对其他队员、其他元素、清除和到期时刻。"
+    },
+    {
+      "entity": "resonance.electro",
+      "field": "/particles/reaction/cooldownMs",
+      "localValue": 5000,
+      "source": "GenshinTools/src/domain/combat/energy/constants.ts",
+      "case": "双雷四人队的允许反应共用 5 秒冷却并产生 1 个雷微粒。与同击西风分开拾取，逐队员核对元素、充能效率、前后台份额。"
+    },
+    {
+      "entity": "public.gleam",
+      "field": "/team/lunarReactionBonus/elementBasis",
+      "localValue": {
+        "pyro": 0.00009,
+        "electro": 0.00009,
+        "cryo": 0.00009,
+        "hydro": 0.000006,
+        "geo": 0.0001,
+        "anemo": 0.000225,
+        "dendro": 0.000225,
+        "cap": 0.36,
+        "durationMs": 20000
+      },
+      "source": "meropide/pages/team-bonuses.html",
+      "case": "满辉时，非月兆角色施放战技或爆发按其元素与实时面板提高全队三种月曜反应的伤害。最高36%，持续20秒，后触发者覆盖前一人，即使数值较低。"
+    }
+  ],
+  "reactionBlessings": [
+    {
+      "entity": "columbina",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发感电/绽放/水元素结晶反应时，将转为触发月感电/月绽放/月结晶反应，且基于哥伦比娅的生命值上限，提升队伍中角色造成的月曜反应的基础伤害：每1000点生命值上限都将提升0.2%月曜反应的基础伤害，至多通过这种方式提升7%伤害。\n\n此外，哥伦比娅在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "flins",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发感电反应时，将转为触发月感电反应，且基于菲林斯的攻击力，提升月感电反应的基础伤害：每100点攻击力都将提升0.7%基础伤害，至多通过这种方式提升14%伤害。\n\n此外，菲林斯在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "ineffa",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发感电反应时，将转为触发月感电反应，且基于伊涅芙的攻击力，提升月感电反应的基础伤害：每100点攻击力都将提升0.7%基础伤害，至多通过这种方式提升14%伤害。\n\n此外，伊涅芙在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "lauma",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发绽放反应时，将转为触发月绽放反应，且基于菈乌玛的元素精通，提升队伍中角色造成的月绽放反应的基础伤害：每点元素精通都将提升0.0175%月绽放反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，菈乌玛在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "nefer",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发绽放反应时，将转为触发月绽放反应，且基于奈芙尔的元素精通，提升队伍中角色造成的月绽放反应的基础伤害：每点元素精通都将提升0.0175%月绽放反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，奈芙尔在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "linnea",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发水元素结晶反应时，将转为触发月结晶反应，且基于莉奈娅的防御力，提升队伍中角色造成的月结晶反应的基础伤害：每100点防御力都将提升0.7%月结晶反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，莉奈娅在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "zibai",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发水元素结晶反应时，将转为触发月结晶反应，且基于兹白的防御力，提升队伍中角色造成的月结晶反应的基础伤害：每100点防御力都将提升0.7%月结晶反应的基础伤害，至多通过这种方式提升14%伤害。\n\n此外，兹白在队伍中时，队伍的月兆将会上升一级。"
+    },
+    {
+      "entity": "lumine-cryo",
+      "field": "/passives/2/description",
+      "text": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，旅行者将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于旅行者的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.35%上述反应的基础伤害，至多通过这种方式提升7%伤害。"
+    },
+    {
+      "entity": "aether-cryo",
+      "field": "/passives/2/description",
+      "text": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，旅行者将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于旅行者的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.35%上述反应的基础伤害，至多通过这种方式提升7%伤害。"
+    },
+    {
+      "entity": "odette",
+      "field": "/passives/2/description",
+      "text": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，奥黛塔将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于奥黛塔的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.7%上述反应的基础伤害，至多通过这种方式提升14%伤害。"
+    },
+    {
+      "entity": "sandrone",
+      "field": "/passives/2/description",
+      "text": "处于**极星辉域**中时/队伍中的角色在附近触发星扩散反应后的8秒内，桑多涅将分别进入辉映·星超导/辉映·星扩散状态。\n队伍中的角色触发超导/冰元素扩散反应时，将转为触发星超导/星扩散反应，且基于桑多涅的攻击力，提升队伍中角色造成的上述反应的基础伤害：每100点攻击力都将提升0.7%上述反应的基础伤害，至多通过这种方式提升14%伤害。"
+    },
+    {
+      "entity": "vesna",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发冰元素扩散反应时，将转为触发星扩散反应，且基于薇斯纳的攻击力，提升队伍中角色造成的星扩散反应的基础伤害：每100点攻击力都将提升0.7%星扩散反应的基础伤害，至多通过这种方式提升14%伤害。\n队伍中的角色在附近触发星扩散反应后的8秒内，薇斯纳将会进入辉映·星扩散状态。"
+    },
+    {
+      "entity": "mitya",
+      "field": "/passives/2/description",
+      "text": "队伍中的角色触发超导反应时，将转为触发星超导反应。触发星超导反应时，将不会创造星辉棱晶，而是改为在触发星超导反应后的3秒内，每1.5秒在附近创造一枚可以被米提亚携带的**递变信标**，并将其附近更大的区域变换为极星辉域，再次触发星超导反应时，将刷新上述效果的持续时间。\n此外，基于米提亚的元素精通，提升队伍中附近的所有角色造成的星超导反应的基础伤害：每点元素精通都将提升0.028%星超导反应的基础伤害，至多通过这种方式提升14%基础伤害。处于极星辉域中时，米提亚还会进入辉映·星超导状态。"
+    }
+  ],
+  "equipmentLifecycleGaps": [
+    {
+      "kind": "set-effect",
+      "entity": "oceanhuedclam",
+      "pieces": 4,
+      "field": "/effects/1/hits/0",
+      "area": "targets",
+      "classification": "待实现",
+      "missing": [
+        "按各敌人与泡沫的距离选择命中目标"
+      ],
+      "reason": "场上数量、归属、个人冷却、含溢出治疗的上限、所选命中的数值均已核对。本地实测记录给出半径5.5米，当前项目只结算所选目标。"
+    },
+    {
+      "kind": "weapon",
+      "entity": "cinnabarspindle",
+      "field": "/buffs/0/trigger",
+      "missing": [
+        "阿贝多刹那之花打盾后被动异常的当前适用版本和恢复条件"
+      ],
+      "reason": "常规战技伤害已按1.5秒触发间隔与命中后0.1秒清除。旧版独立记录曾出现非近战攻击触发刹那之花命中护盾后被动失效；所存资料没有当前修订的复核与恢复条件。",
+      "classification": "缺少本地依据"
+    },
+    {
+      "kind": "weapon",
+      "entity": "beyondthechrysalis",
+      "field": "/buffs",
+      "missing": [
+        "三种效果轮换",
+        "持续时间",
+        "回能",
+        "退场清除并重排"
+      ],
+      "reason": "明确给定两种风的状态可以核对加成。第三种风的回能、切换时序和退场重置尚未由事件推导。"
+    },
+    {
+      "kind": "weapon",
+      "entity": "deathmatch",
+      "field": "/buffs/0/condition",
+      "area": "timing",
+      "missing": [
+        "重新登场后的刷新间隔"
+      ],
+      "reason": "本地实测记录确认离场保留最后一档，重新登场不会立即更新；没有可采用的精确刷新时刻。",
+      "source": ".references/kqm-tcl/docs/evidence/equipment/weapons.md#deathmatch-passive-snapshot"
+    },
+    {
+      "kind": "weapon",
+      "entity": "darkironsword",
+      "field": "/buffs/0/condition",
+      "classification": "缺少本地依据",
+      "missing": [
+        "后台触发"
+      ],
+      "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。",
+      "source": "kqm-tcl/docs/evidence/combat-mechanics/damage/other/on-field-and-off-field.md"
+    },
+    {
+      "kind": "weapon",
+      "entity": "emeraldorb",
+      "field": "/buffs/0/condition",
+      "classification": "缺少本地依据",
+      "missing": [
+        "后台触发"
+      ],
+      "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。",
+      "source": "kqm-tcl/docs/evidence/combat-mechanics/damage/other/on-field-and-off-field.md"
+    },
+    {
+      "kind": "weapon",
+      "entity": "missivewindspear",
+      "field": "/buffs/0/condition",
+      "classification": "缺少本地依据",
+      "missing": [
+        "后台触发"
+      ],
+      "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。",
+      "source": "kqm-tcl/docs/evidence/combat-mechanics/damage/other/on-field-and-off-field.md"
+    },
+    {
+      "kind": "weapon",
+      "entity": "fruitfulhook",
+      "field": "/buffs/1/condition",
+      "classification": "缺少本地依据",
+      "missing": [
+        "后台触发"
+      ],
+      "reason": "本地条款给出触发事件和加成，但未标明持有者处于后台时能否触发。场上或已明确记录后台触发结果时可求值。",
+      "source": "kqm-tcl/docs/evidence/combat-mechanics/damage/other/on-field-and-off-field.md"
+    }
+  ],
+  "coordinatedHits": [
+    {
+      "entity": "nicole",
+      "field": "/talents/2/details/1",
+      "name": "奥迹造影",
+      "skill": "nicole.burst",
+      "parameter": "param2",
+      "intervalMs": 3000,
+      "durationParameter": "param4",
+      "chargesParameter": "param3",
+      "damageOwner": "on-field",
+      "element": "dealer",
+      "category": "burst",
+      "evidence": [
+        "GenshinTools/src/domain/combat/damage/impl/character5None.ts",
+        "GenshinTools/tests/domain/combat/damage/nicoleProjection.test.ts"
+      ]
+    },
+    {
+      "entity": "nicole",
+      "field": "/constellations/0",
+      "name": "奥迹造影·合一",
+      "ratio": 6,
+      "intervalMs": 6000,
+      "damageOwner": "on-field",
+      "element": "dealer",
+      "category": "burst"
+    }
+  ],
+  "regionMembership": {
+    "source": "GenshinTools/src/generated/catalog/character_stats.json",
+    "baseSource": "genshin-db/src/data/ChineseSimplified/characters",
+    "liyue": [
+      "zibai"
+    ],
+    "none": [
+      "aether-anemo",
+      "aether-cryo",
+      "aether-dendro",
+      "aether-electro",
+      "aether-geo",
+      "aether-hydro",
+      "aether-pyro",
+      "aether",
+      "aloy",
+      "lumine-anemo",
+      "lumine-cryo",
+      "lumine-dendro",
+      "lumine-electro",
+      "lumine-geo",
+      "lumine-hydro",
+      "lumine-pyro",
+      "lumine",
+      "manekin-anemo",
+      "manekin-cryo",
+      "manekin-dendro",
+      "manekin-electro",
+      "manekin-geo",
+      "manekin-hydro",
+      "manekin-pyro",
+      "manekin",
+      "manekina-anemo",
+      "manekina-cryo",
+      "manekina-dendro",
+      "manekina-electro",
+      "manekina-geo",
+      "manekina-hydro",
+      "manekina-pyro",
+      "manekina",
+      "nicole",
+      "skirk"
+    ]
+  },
+  "characterLifecycleGaps": [
+    {
+      "kind": "character",
+      "entity": "odette",
+      "area": "behavior",
+      "field": "/passives/3/description",
+      "clause": "/passives/3",
+      "classification": "缺少本地依据",
+      "missing": [
+        "闲暇练舞所触发的额外效果及其战斗适用条件"
+      ],
+      "reason": "本地中英文天赋条款均说明回响中的冬梦可标记至冬特产，仅提及练舞可能触发额外效果。现有资料未指明具体结果，无法判定整条被动的战斗贡献。"
+    },
+    {
+      "kind": "character",
+      "entity": "kamisatoayato",
+      "area": "timing",
+      "field": "/talents/1/castWindow/followUp",
+      "classification": "缺少本地依据",
+      "missing": [
+        "六命两段追加瞬水剑相对触发命中的时刻"
+      ],
+      "reason": "本地角色条款与伤害实现确定额外两击各为450%攻击力、水元素普通攻击，无浪闪加值。所存帧表只列常规瞬水剑，未提供两次追加命中的偏移。记录实际命中时刻后可分别结算，否则总伤害保留已知小计。"
+    },
+    {
+      "kind": "character",
+      "entity": "freminet",
+      "area": "timing",
+      "field": "/constellations/3/buffs/0/stacking/refreshUnverified",
+      "clause": "/constellations/3",
+      "classification": "缺少本地依据",
+      "missing": [
+        "已有层是否在新增一层时一起刷新"
+      ],
+      "reason": "本地技能条款给出六秒时长、触发间隔和层数上限。现有独立资料提供用户指定的层数，未记录先后触发的层在第一个六秒边界如何到期。两种规则给出不同数值的时间段保留未知，单层、上限与全部到期可照常计算。"
+    },
+    {
+      "kind": "character",
+      "entity": "freminet",
+      "area": "timing",
+      "field": "/constellations/5/buffs/0/stacking/refreshUnverified",
+      "clause": "/constellations/5",
+      "classification": "缺少本地依据",
+      "missing": [
+        "已有层是否在新增一层时一起刷新"
+      ],
+      "reason": "本地技能条款给出六秒时长、触发间隔和层数上限。现有独立资料提供用户指定的层数，未记录先后触发的层在第一个六秒边界如何到期。两种规则给出不同数值的时间段保留未知，单层、上限与全部到期可照常计算。"
+    }
+  ],
+  "talentHealing": {
+    "material": "kqm-tcl/docs/combat-mechanics/damage/healing.md",
+    "section": "General Formula",
+    "outgoing": "施救者的治疗加成",
+    "incoming": "受治疗者的受治疗加成",
+    "combination": "基础治疗乘以一加两项加成之和",
+    "castRecipients": {
+      "barbara.burst": "自己的队伍全员",
+      "jean.burst": "自己的队伍全员",
+      "gaming.burst": "嘉明自己"
+    },
+    "notes": "同一技能记录中的一次治疗可按实际受益队员填写。需要知道距离、命中、触发几率或治疗间隔的技能须另外提供相应战斗事件。",
+    "thresholds": {
+      "bennett": "鼓舞领域给站场、在领域内、生命不高于70%的队员治疗。",
+      "hutao": "本地技能说明以命中时的生命比例选择普通或低血量段，恰为50%时计入低血量。最多五个受击敌人可触发回复。攻击面板按本地资料在施放时捕获。",
+      "lyney": "按此次清除的隐具余数层数计算，技能伤害和治疗共用零至五层输入。",
+      "neuvillette": "按实际吸收的一枚源水之滴记录一次自身治疗。"
+    }
+  }
+}

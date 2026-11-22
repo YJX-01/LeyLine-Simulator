@@ -1,5 +1,14 @@
+import { authoredHitEntries } from '../../src/schema/src/calculation/hit-bindings.mjs';
 import { APP_VERSION } from '../../src/schema/src/version.mjs';
 import { combatRuleAudit, damagePathAudit } from './damage-path-audit.mjs';
+import { readContentSource } from './content-source.mjs';
+
+const depotArchive = readContentSource(new URL('../data/sources/character-text/base-and-manekin.json', import.meta.url));
+const { equipmentLifecycleGaps, characterLifecycleGaps } = readContentSource(new URL('../data/sources/catalog/combat-lifecycle.json', import.meta.url));
+const unranked = new Set(Object.entries(depotArchive.bindings).filter(([, binding]) => {
+  const slots = depotArchive.skillDepots[binding.skillDepotId]?.talents;
+  return slots?.length === 6 && slots.every(talentId => talentId === 0);
+}).map(([id]) => id));
 
 const definitionKey = reference => JSON.stringify([reference.namespace, reference.id, reference.revision]);
 const structured = entity => entity.schemaVersion === APP_VERSION && entity.calculation?.bundle !== undefined;
@@ -47,28 +56,31 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
       coverageRefs: references, sourceRefs: [...new Set(selected.flatMap(record => record.sources))],
       evidence: [...new Set(selected.map(record => record.evidence))], gaps: [...new Set(gaps)] };
   };
-  const full = scope => scope.resolution === 'complete' && (scope.constellations === null || scope.constellations.max === 6);
+  const full = (scope, maxRank = 6) => scope.resolution === 'complete' && (scope.constellations === null || scope.constellations.max >= maxRank);
   for (const character of characters) {
+    const maxRank = character.namespace === 'builtin' && unranked.has(character.id) && !character.constellations.length ? 0 : 6;
+    const coversAllRanks = scope => full(scope, maxRank);
     const context = proof(character, character.calculation?.contextCoverageRefs ?? [], { kind: 'context' });
-    const root = add('character', character, '', {}, { revision: character.revision }, false, [context]);
+    const root = add('character', character, '', {}, { revision: character.revision, maxConstellation: maxRank }, false, [context]);
     const branches = [];
     for (const [talentIndex, talent] of character.talents.entries()) {
       const pointer = `/talents/${talentIndex}`;
       const talentEntry = add('talent', character, pointer, { skillId: talent.id }, { noIndependentDamage: talent.noIndependentDamage ?? false });
       const hits = [];
+      const declarations = authoredHitEntries(character.metadata, talent.id);
       for (const [hitIndex, hit] of talent.hits.entries()) {
-        const scopes = (hit.outputs ?? []).map(output => ({ outputId: output.id, formula: output.invocation.formula,
-          ...proof(character, [...hit.coverageRefs, ...output.coverageRefs], { kind: 'hit', skillId: talent.id, hitId: hit.id }) }));
-        const complete = scopes.length > 0 && scopes.every(full);
+        const scopes = Object.entries(hit.damage).map(([family, invocation]) => ({ family, formula: invocation.formula,
+          ...proof(character, hit.coverageRefs, { kind: 'hit', skillId: talent.id, hitId: hit.id }) }));
+        const complete = scopes.length > 0 && scopes.every(coversAllRanks);
         hits.push(complete);
-        add('hit', character, `${pointer}/hits/${hitIndex}`, { skillId: talent.id, ...hit.id ? { hitId: hit.id } : { hitIndex } },
+        add('hit', character, declarations[hitIndex].field, { skillId: talent.id, ...hit.id ? { hitId: hit.id } : { hitIndex } },
           { ...hit, effectiveElement: hit.element ?? talent.element, effectiveCategory: hit.category ?? talent.category }, complete, scopes);
       }
-      const complete = full(context) && (hits.length ? hits.every(Boolean) : talent.noIndependentDamage === true);
+      const complete = coversAllRanks(context) && (hits.length ? hits.every(Boolean) : talent.noIndependentDamage === true);
       if (complete) { talentEntry.resolution = 'complete'; talentEntry.reason = '此技能的完整命座范围与相关机制有已采用覆盖。'; }
       branches.push(complete);
     }
-    const branchCovered = id => full(context) && (character.calculation?.bundle.coverage ?? []).some(record =>
+    const branchCovered = id => coversAllRanks(context) && (character.calculation?.bundle.coverage ?? []).some(record =>
       record.scope.kind === 'context' && character.calculation.contextCoverageRefs.some(reference => definitionKey(reference) === definitionKey(record.identity))
       && record.mechanisms.some(mechanism => mechanism.id === id && mechanism.resolution !== 'unavailable'));
     for (const [index, passive] of character.passives.entries()) {
@@ -81,11 +93,11 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
       add('constellation', character, `/constellations/${index}`, { rank: constellation.rank },
         { talentBonuses: constellation.talentBonuses, ruleIds: constellation.ruleIds }, complete);
     }
-    if (full(context) && branches.every(Boolean)) { root.resolution = 'complete'; root.reason = '角色全部输出、被动与命座范围有已采用覆盖。'; }
+    if (coversAllRanks(context) && branches.every(Boolean)) { root.resolution = 'complete'; root.reason = '角色全部输出、被动与命座范围有已采用覆盖。'; }
   }
   for (const weapon of weapons) {
     const scope = proof(weapon, weapon.coverageRefs ?? [], { kind: 'equipment' });
-    add('weapon', weapon, '', { refinements: weapon.rarity < 3 ? [1] : [1, 2, 3, 4, 5] },
+    add('weapon', weapon, '', { refinements: Array.from({ length: weapon.maxRefinement }, (_, i) => i + 1) },
       { ruleIds: weapon.calculation.ruleIds }, full(scope), [scope]);
   }
   for (const set of sets) {
@@ -97,6 +109,23 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
     }
     if (complete.length && complete.every(Boolean)) { root.resolution = 'complete'; root.reason = '套装全部件数分支有已采用覆盖。'; }
   }
+  const actionGaps = (manifest.actions ?? []).flatMap(id => {
+    const actions = readContentSource(new URL('../../src/game-data/data/actions/' + id + '.json', import.meta.url));
+    const fields = id === 'vesna' ? readContentSource(new URL('../data/sources/calculation-hits/vesna-actions.json',import.meta.url)).fieldGaps : {};
+    return actions.gaps.map((gap, index) => ({ kind: 'character', entity: actions.character.id, field: '/gaps/' + index,
+      document: 'actions/' + id, area: gap.area, missing: [gap.id], reason: '正式动作库登记的未决条件。', ...fields?.[gap.id] }));
+  });
+  const lifecycleGaps = [...equipmentLifecycleGaps.filter(gap => manifest[gap.kind === 'weapon' ? 'weapons' : 'sets'].includes(gap.entity)),
+    ...characterLifecycleGaps.filter(gap=>manifest.characters.includes(gap.entity)),...actionGaps];
+  for (const gap of lifecycleGaps) {
+    if (gap.area === 'observation') continue;
+    for (const entry of entries.filter(row => row.entityId === gap.entity && (row.kind === gap.kind && (gap.pieces === undefined || row.selector.pieces === gap.pieces)
+      || gap.kind === 'set-effect' && row.kind === 'set'))) {
+      entry.resolution = 'unavailable';
+      entry.reason = '明确单击条件下的数值与全套战斗行为分别核验。该实体仍有未决的触发、时序或状态条件。';
+      (entry.lifecycleGaps ??= []).push(gap);
+    }
+  }
   return { schemaVersion: APP_VERSION, dataVersion: manifest.dataVersion, material: 'canonical',
     meaning: 'Compiled certificates describe their adopted constellation range, inputs and sources.',
     summary: { characters: characters.length, weapons: weapons.length, sets: sets.length, entries: entries.length,
@@ -104,6 +133,6 @@ export function calculationCoverage(manifest, characters, weapons, sets, options
       boundOutputs: paths.summary.outputs,
       supportedOutputs: entries.filter(entry => entry.kind === 'hit').reduce((sum, entry) => sum + entry.scopes.filter(scope => scope.resolution === 'complete').length, 0),
       invalidDefinitions: [...validations.values()].filter(result => !result.ok).length },
-    entries, bindings: paths, rules,
+    entries, lifecycleGaps, bindings: paths, rules,
   };
 }

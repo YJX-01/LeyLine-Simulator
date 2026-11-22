@@ -2,6 +2,9 @@
 
 `scripts/data` 负责来源采集、候选与审计，`scripts/assets` 准备资源，`scripts/checks` 校验仓库输入及构建产物。构建、交付、本地服务与许可工具分别位于 `scripts/build`、`scripts/release`、`scripts/dev` 和 `scripts/licenses`。共用实现放在 `lib`，依赖补丁放在 `patches`。具体来源和采用记录见[资料入口](data/README.md)。
 
+
+上一版存档用 `pnpm data:convert-file <旧文件.json> <新文件.json>` 离线另存。目标文件必须尚未存在。命中选择无法唯一还原时，命令会列出原记录和字段供重选。全目录数值、授予和排除的逐项验收可用 `pnpm data:coverage --report <报告.json> --gaps <缺口.md>` 重跑。
+
 ## 工具命令
 
 从仓库根运行命令。环境要求和工作流见[开发入口](../README.md)及[工具维护规范](../docs/development-and-delivery.md#工具维护流程)。

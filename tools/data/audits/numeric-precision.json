@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "sourceCommit": "8e5badd60b5d894284ccc927a56c9683529d2592",
   "independentRawCommit": "b0501c5d89767ead5f647869a2412521447f7682",
   "method": "Exact numeric equality of maintained JSON parameters and fixed TS algorithm constants against adopted sources; no stored file hashes. Does not prove game float32 evaluation equivalence.",
@@ -22,7 +22,7 @@
     "lunar-stellar-aggregation": 12,
     "bound-reaction-formulas": 6,
     "effect-static": 46,
-    "effect-refinements": 80,
+    "effect-refinements": 45,
     "effect-formulas": 15,
     "stellar-character-formulas": 11,
     "stellar-character-effects": 5,

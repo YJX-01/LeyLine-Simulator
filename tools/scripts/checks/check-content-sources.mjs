@@ -4,18 +4,25 @@ import { readContentSource } from '../../lib/content-source.mjs';
 import { numericAudit, assertNumericAudit } from '../../lib/numeric-audit.mjs';
 import { displayData } from '../../lib/display-data.mjs';
 import { checkCatalog } from './check-catalog.mjs';
+import { metadataAcquisitionPath } from '../../../src/schema/src/content/metadata-fields.mjs';
 
 const root = resolve(import.meta.dirname, '../../..');
 const read = path => readContentSource(resolve(root, path));
 function walk(directory) {
   return readdirSync(resolve(root, directory), { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(`${directory}/${entry.name}`) : [`${directory}/${entry.name}`]);
 }
+function checkRuntimeMetadata(value, path) {
+  const field = metadataAcquisitionPath(value);
+  if (field) throw new Error([path,...field].join('/') + ': acquisition data in runtime metadata');
+}
 let sources = 0;
 for (const directory of ['src/game-data/data', 'assets', 'tools/data']) {
   const files = walk(directory);
   if (files.some(path => /\.(yaml|yml|jsonc|json5)$/.test(path))) throw new Error(`${directory}: maintained content uses strict JSON`);
   for (const path of files.filter(path => path.endsWith('.json'))) {
-    read(path); sources++;
+    const value = read(path);
+    if (path.startsWith('src/game-data/data/')) checkRuntimeMetadata(value, path);
+    sources++;
   }
 }
 

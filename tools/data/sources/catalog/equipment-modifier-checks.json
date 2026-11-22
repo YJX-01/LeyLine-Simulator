@@ -1,0 +1,885 @@
+{
+  "absolution.critDamage": {
+    "entity": "absolution",
+    "stat": "critDamage",
+    "pattern": "暴击伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "amosbow.normal-charged.damageBonus": {
+    "entity": "amosbow",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "angelosheptades.attackPercent": {
+    "entity": "angelosheptades",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "aquasimulacra.hpPercent": {
+    "entity": "aquasimulacra",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "aquasimulacra.nearby-bonus": {
+    "entity": "aquasimulacra",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "aquilafavonia.attackPercent": {
+    "entity": "aquilafavonia",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "ateaspoonoftranscendence.attackPercent": {
+    "entity": "ateaspoonoftranscendence",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "azurelight.after-skill": {
+    "entity": "azurelight",
+    "stat": "attackPercent",
+    "pattern": "施放元素战技后的[\\d.]+秒内，攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "azurelight.after-skill.1": {
+    "entity": "azurelight",
+    "stat": "attackPercent",
+    "pattern": "元素能量为0时，攻击力还会提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "azurelight.after-skill.2": {
+    "entity": "azurelight",
+    "stat": "critDamage",
+    "pattern": "暴击伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "balladofthefjords.team-elements": {
+    "entity": "balladofthefjords",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
+  "beaconofthereedsea.injured": {
+    "entity": "beaconofthereedsea",
+    "stat": "attackPercent",
+    "pattern": "受到伤害后，攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "beaconofthereedsea.skill": {
+    "entity": "beaconofthereedsea",
+    "stat": "attackPercent",
+    "pattern": "元素战技命中敌人后，攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "beaconofthereedsea.unshielded": {
+    "entity": "beaconofthereedsea",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "beyondthechrysalis.betrayalWind": {
+    "entity": "beyondthechrysalis",
+    "stat": "reaction.stellar-swirl.damageBonus",
+    "pattern": "星(?:烁|扩散)反应伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "beyondthechrysalis.loyalWind": {
+    "entity": "beyondthechrysalis",
+    "stat": "critDamage",
+    "pattern": "暴击伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackcliffagate.defeat": {
+    "entity": "blackcliffagate",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackclifflongsword.defeat": {
+    "entity": "blackclifflongsword",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackcliffpole.defeat": {
+    "entity": "blackcliffpole",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackcliffslasher.defeat": {
+    "entity": "blackcliffslasher",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackcliffwarbow.defeat": {
+    "entity": "blackcliffwarbow",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackmarrowlantern.bloom": {
+    "entity": "blackmarrowlantern",
+    "stat": "reaction.transformative.damageBonus",
+    "pattern": "绽放反应造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackmarrowlantern.lunar-bloom": {
+    "entity": "blackmarrowlantern",
+    "stat": "reaction.lunar.damageBonus",
+    "pattern": "月绽放反应伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "blackmarrowlantern.lunar-bloom.1": {
+    "entity": "blackmarrowlantern",
+    "stat": "reaction.lunar.damageBonus",
+    "pattern": "月绽放反应伤害额外提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "blacktassel.targetBonus": {
+    "entity": "blacktassel",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "bladeofatonement.reaction": {
+    "entity": "bladeofatonement",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
+  "bladeofatonement.stellar": {
+    "entity": "bladeofatonement",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "bloodtaintedgreatsword.targetBonus": {
+    "entity": "bloodtaintedgreatsword",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "breezebornerefrain.energyRecharge": {
+    "entity": "breezebornerefrain",
+    "stat": "energyRecharge",
+    "pattern": "元素充能效率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "calamityofeshu.shield-crit": {
+    "entity": "calamityofeshu",
+    "stat": "critRate",
+    "pattern": "普通攻击和重击的暴击率提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "calamityofeshu.shield-damage": {
+    "entity": "calamityofeshu",
+    "stat": "damageBonus",
+    "pattern": "普通攻击和重击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "cashflowsupervision.attackPercent": {
+    "entity": "cashflowsupervision",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "coolsteel.targetBonus": {
+    "entity": "coolsteel",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "covenantoffrostandsnow.skill-mastery": {
+    "entity": "covenantoffrostandsnow",
+    "stat": "elementalMastery",
+    "pattern": "元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "darkironsword.after-trigger": {
+    "entity": "darkironsword",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "dawningfrost.charged-mastery": {
+    "entity": "dawningfrost",
+    "stat": "elementalMastery",
+    "pattern": "重击命中敌人后的[\\d.]+秒内，元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "dawningfrost.skill-mastery": {
+    "entity": "dawningfrost",
+    "stat": "elementalMastery",
+    "pattern": "元素战技命中敌人后的[\\d.]+秒内，元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "deathmatch.multiple": {
+    "entity": "deathmatch",
+    "stat": "attackPercent",
+    "pattern": "至少有[\\d.]+个敌人时，获得([\\d.]+)%攻击力提升",
+    "divisor": 100
+  },
+  "deathmatch.multiple.1": {
+    "entity": "deathmatch",
+    "stat": "defensePercent",
+    "pattern": "与([\\d.]+)%防御力提升",
+    "divisor": 100
+  },
+  "deathmatch.single": {
+    "entity": "deathmatch",
+    "stat": "attackPercent",
+    "pattern": "敌人少于[\\d.]+个时，获得([\\d.]+)%攻击力提升",
+    "divisor": 100
+  },
+  "dodocotales.charged-attack": {
+    "entity": "dodocotales",
+    "stat": "attackPercent",
+    "pattern": "攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "dodocotales.charged-bonus": {
+    "entity": "dodocotales",
+    "stat": "damageBonus",
+    "pattern": "重击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "dragonsbane.targetBonus": {
+    "entity": "dragonsbane",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "earthshaker.after-trigger": {
+    "entity": "earthshaker",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "echoesoftheheart.reaction": {
+    "entity": "echoesoftheheart",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
+  "echoesoftheheart.stellar": {
+    "entity": "echoesoftheheart",
+    "stat": "reaction.stellar-conduct.damageBonus",
+    "pattern": "星烁反应伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "echoesoftheheart.stellar.1": {
+    "entity": "echoesoftheheart",
+    "stat": "reaction.stellar-swirl.damageBonus",
+    "pattern": "星(?:烁|扩散)反应伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "emberwell.reaction": {
+    "entity": "emberwell",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "emberwell.stellar": {
+    "entity": "emberwell",
+    "stat": "reaction.stellar-conduct.damageBonus",
+    "pattern": "星烁反应伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "emberwell.stellar.1": {
+    "entity": "emberwell",
+    "stat": "reaction.stellar-swirl.damageBonus",
+    "pattern": "星(?:烁|扩散)反应伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "emeraldorb.after-trigger": {
+    "entity": "emeraldorb",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "engulfinglightning.burst-recharge": {
+    "entity": "engulfinglightning",
+    "stat": "energyRecharge",
+    "pattern": "元素充能效率提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "etherlightspindlelute.skill-mastery": {
+    "entity": "etherlightspindlelute",
+    "stat": "elementalMastery",
+    "pattern": "元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "festeringdesire.skill": {
+    "entity": "festeringdesire",
+    "stat": "damageBonus",
+    "pattern": "元素战技造成的伤害增加([\\d.]+)%",
+    "divisor": 100
+  },
+  "festeringdesire.skill.1": {
+    "entity": "festeringdesire",
+    "stat": "critRate",
+    "pattern": "元素战技的暴击率提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "fleuvecendreferryman.skill-crit": {
+    "entity": "fleuvecendreferryman",
+    "stat": "critRate",
+    "pattern": "元素战技暴击率提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "fleuvecendreferryman.skill-recharge": {
+    "entity": "fleuvecendreferryman",
+    "stat": "energyRecharge",
+    "pattern": "元素充能效率提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "fluteofezpitzal.skill-defense": {
+    "entity": "fluteofezpitzal",
+    "stat": "defensePercent",
+    "pattern": "防御力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "footprintoftherainbow.skill-defense": {
+    "entity": "footprintoftherainbow",
+    "stat": "defensePercent",
+    "pattern": "防御力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "fruitfulhook.after-trigger": {
+    "entity": "fruitfulhook",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "fruitfulhook.plunge.critRate": {
+    "entity": "fruitfulhook",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "goldenfrostboundoath.defensePercent": {
+    "entity": "goldenfrostboundoath",
+    "stat": "defensePercent",
+    "pattern": "防御力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "hamayumi.charged.damageBonus": {
+    "entity": "hamayumi",
+    "stat": "damageBonus",
+    "pattern": "重击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "hamayumi.full-energy": {
+    "entity": "hamayumi",
+    "stat": "damageBonus",
+    "pattern": "普通攻击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "hamayumi.full-energy.1": {
+    "entity": "hamayumi",
+    "stat": "damageBonus",
+    "pattern": "重击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "hamayumi.normal.damageBonus": {
+    "entity": "hamayumi",
+    "stat": "damageBonus",
+    "pattern": "普通攻击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "harbingerofdawn.static-critRate": {
+    "entity": "harbingerofdawn",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "katsuragikirinagamasa.skill.damageBonus": {
+    "entity": "katsuragikirinagamasa",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "keyofkhajnisut.hpPercent": {
+    "entity": "keyofkhajnisut",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "kitaincrossspear.skill.damageBonus": {
+    "entity": "kitaincrossspear",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "lightbearingmoonshard.defensePercent": {
+    "entity": "lightbearingmoonshard",
+    "stat": "defensePercent",
+    "pattern": "防御力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "lightbearingmoonshard.lunar-crystallize": {
+    "entity": "lightbearingmoonshard",
+    "stat": "reaction.lunar.damageBonus",
+    "pattern": "月结晶反应伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "lightoffoliarincision.critRate": {
+    "entity": "lightoffoliarincision",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "lionsroar.targetBonus": {
+    "entity": "lionsroar",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "lumidouceelegy.attackPercent": {
+    "entity": "lumidouceelegy",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "luxurioussealord.burst.damageBonus": {
+    "entity": "luxurioussealord",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "magicguide.targetBonus": {
+    "entity": "magicguide",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "mappamare.reaction-elements": {
+    "entity": "mappamare",
+    "stat": "damageBonus",
+    "pattern": "获得([\\d.]+)%元素伤害加成",
+    "divisor": 100
+  },
+  "masterkey.after-trigger": {
+    "entity": "masterkey",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
+  "masterkey.after-trigger.1": {
+    "entity": "masterkey",
+    "stat": "elementalMastery",
+    "pattern": "元素精通额外提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "memoryofdust.shield-strength": {
+    "entity": "memoryofdust",
+    "stat": "shieldStrength",
+    "pattern": "护盾强效提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "missivewindspear.after-trigger": {
+    "entity": "missivewindspear",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "missivewindspear.after-trigger.1": {
+    "entity": "missivewindspear",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
+  "mitternachtswaltz.normal-bonus": {
+    "entity": "mitternachtswaltz",
+    "stat": "damageBonus",
+    "pattern": "普通攻击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "mitternachtswaltz.skill-bonus": {
+    "entity": "mitternachtswaltz",
+    "stat": "damageBonus",
+    "pattern": "元素战技造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "moonweaversdawn.burst.damageBonus": {
+    "entity": "moonweaversdawn",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "moonweaversdawn.capacity": {
+    "entity": "moonweaversdawn",
+    "stat": "damageBonus",
+    "pattern": "额外提高[\\d.]+%/([\\d.]+)%",
+    "divisor": 100
+  },
+  "moonweaversdawn.capacity.1": {
+    "entity": "moonweaversdawn",
+    "stat": "damageBonus",
+    "pattern": "额外提高([\\d.]+)%/[\\d.]+%",
+    "divisor": 100
+  },
+  "nocturnescurtaincall.hpPercent": {
+    "entity": "nocturnescurtaincall",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "oathsworneye.recharge": {
+    "entity": "oathsworneye",
+    "stat": "energyRecharge",
+    "pattern": "元素充能效率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "polarstar.skill-burst.damageBonus": {
+    "entity": "polarstar",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "primordialjadecutter.static-hpPercent": {
+    "entity": "primordialjadecutter",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "rainbowserpentsrainbow.off-field-hit": {
+    "entity": "rainbowserpentsrainbow",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "rainslasher.targetBonus": {
+    "entity": "rainslasher",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "ravenbow.targetBonus": {
+    "entity": "ravenbow",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "redhornstonethresher.defensePercent": {
+    "entity": "redhornstonethresher",
+    "stat": "defensePercent",
+    "pattern": "防御力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "reliquaryoftruth.critRate": {
+    "entity": "reliquaryoftruth",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "rust.charged.damageBonus": {
+    "entity": "rust",
+    "stat": "damageBonus",
+    "pattern": "重击造成的伤害下降([\\d.]+)%",
+    "divisor": 100,
+    "sign": -1
+  },
+  "rust.normal.damageBonus": {
+    "entity": "rust",
+    "stat": "damageBonus",
+    "pattern": "普通攻击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "serenityscall.after-trigger": {
+    "entity": "serenityscall",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "serenityscall.after-trigger.1": {
+    "entity": "serenityscall",
+    "stat": "hpPercent",
+    "pattern": "生命值上限额外提高([\\d.]+)%",
+    "divisor": 100
+  },
+  "sharpshootersoath.targetBonus": {
+    "entity": "sharpshootersoath",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "silverlight.skill-mastery": {
+    "entity": "silverlight",
+    "stat": "elementalMastery",
+    "pattern": "元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "skyridersword.swiftness": {
+    "entity": "skyridersword",
+    "stat": "attackPercent",
+    "pattern": "提高([\\d.]+)%攻击力和移动速度",
+    "divisor": 100
+  },
+  "skyridersword.swiftness.1": {
+    "entity": "skyridersword",
+    "stat": "movementSpeed",
+    "pattern": "提高([\\d.]+)%攻击力和移动速度",
+    "divisor": 100
+  },
+  "skywardatlas.elements": {
+    "entity": "skywardatlas",
+    "stat": "damageBonus",
+    "pattern": "元素伤害加成提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "skywardblade.critRate": {
+    "entity": "skywardblade",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "skywardharp.critDamage": {
+    "entity": "skywardharp",
+    "stat": "critDamage",
+    "pattern": "暴击伤害(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "skywardpride.damage": {
+    "entity": "skywardpride",
+    "stat": "damageBonus",
+    "pattern": "造成的伤害提高([\\d.]+)%",
+    "divisor": 100
+  },
+  "skywardspine.critRate": {
+    "entity": "skywardspine",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "snarehook.reaction": {
+    "entity": "snarehook",
+    "stat": "elementalMastery",
+    "pattern": "元素精通(?:提升|提高|增加)([\\d.]+)点",
+    "divisor": 1
+  },
+  "snarehook.reaction.1": {
+    "entity": "snarehook",
+    "stat": "elementalMastery",
+    "pattern": "元素精通额外提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "solarpearl.normal-bonus": {
+    "entity": "solarpearl",
+    "stat": "damageBonus",
+    "pattern": "普通攻击的伤害提高([\\d.]+)%",
+    "divisor": 100
+  },
+  "solarpearl.skill-burst-bonus": {
+    "entity": "solarpearl",
+    "stat": "damageBonus",
+    "pattern": "元素战技与元素爆发的伤害提高([\\d.]+)%",
+    "divisor": 100
+  },
+  "songofstillness.after-trigger": {
+    "entity": "songofstillness",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "staffofhoma.static-hpPercent": {
+    "entity": "staffofhoma",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "starsealededict.critDamage": {
+    "entity": "starsealededict",
+    "stat": "critDamage",
+    "pattern": "^暴击伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "summitshaper.shield-strength": {
+    "entity": "summitshaper",
+    "stat": "shieldStrength",
+    "pattern": "护盾强效提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "sunnymorningsleepin.burst": {
+    "entity": "sunnymorningsleepin",
+    "stat": "elementalMastery",
+    "pattern": "元素爆发命中敌人后的[\\d.]+秒内，元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "sunnymorningsleepin.skill": {
+    "entity": "sunnymorningsleepin",
+    "stat": "elementalMastery",
+    "pattern": "元素战技命中敌人后的[\\d.]+秒内，元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "sunnymorningsleepin.swirl": {
+    "entity": "sunnymorningsleepin",
+    "stat": "elementalMastery",
+    "pattern": "触发扩散、星扩散反应后的[\\d.]+秒内，元素精通提升([\\d.]+)点",
+    "divisor": 1
+  },
+  "surfsup.hpPercent": {
+    "entity": "surfsup",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "symphonistofscents.attackPercent": {
+    "entity": "symphonistofscents",
+    "stat": "attackPercent",
+    "pattern": "^攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "tamayurateinoohanashi.swiftness": {
+    "entity": "tamayurateinoohanashi",
+    "stat": "attackPercent",
+    "pattern": "提高([\\d.]+)%攻击力和",
+    "divisor": 100
+  },
+  "tamayurateinoohanashi.swiftness.1": {
+    "entity": "tamayurateinoohanashi",
+    "stat": "movementSpeed",
+    "pattern": "攻击力和([\\d.]+)%移动速度",
+    "divisor": 100
+  },
+  "thebell.shield-damage": {
+    "entity": "thebell",
+    "stat": "damageBonus",
+    "pattern": "造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "theblacksword.normal-charged.damageBonus": {
+    "entity": "theblacksword",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "thecatch.burst.critRate": {
+    "entity": "thecatch",
+    "stat": "critRate",
+    "pattern": "暴击率(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "thecatch.burst.damageBonus": {
+    "entity": "thecatch",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "thefirstgreatmagic.charged.damageBonus": {
+    "entity": "thefirstgreatmagic",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "thestringless.skill-burst.damageBonus": {
+    "entity": "thestringless",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "theunforged.shield-strength": {
+    "entity": "theunforged",
+    "stat": "shieldStrength",
+    "pattern": "护盾强效提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "thunderingpulse.attackPercent": {
+    "entity": "thunderingpulse",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "tidalshadow.after-trigger": {
+    "entity": "tidalshadow",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "tomeoftheeternalflow.hpPercent": {
+    "entity": "tomeoftheeternalflow",
+    "stat": "hpPercent",
+    "pattern": "生命值(?:上限)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "twinnephrite.defeat": {
+    "entity": "twinnephrite",
+    "stat": "attackPercent",
+    "pattern": "移动速度和攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "twinnephrite.defeat.1": {
+    "entity": "twinnephrite",
+    "stat": "movementSpeed",
+    "pattern": "移动速度和攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "ultimateoverlordsmegamagicsword.attackPercent": {
+    "entity": "ultimateoverlordsmegamagicsword",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "urakumisugiri.normal.damageBonus": {
+    "entity": "urakumisugiri",
+    "stat": "damageBonus",
+    "pattern": "普通攻击造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "urakumisugiri.skill.damageBonus": {
+    "entity": "urakumisugiri",
+    "stat": "damageBonus",
+    "pattern": "元素战技造成的伤害提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "verdict.attackPercent": {
+    "entity": "verdict",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "vividnotions.attackPercent": {
+    "entity": "vividnotions",
+    "stat": "attackPercent",
+    "pattern": "攻击力(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "vortexvanquisher.shield-strength": {
+    "entity": "vortexvanquisher",
+    "stat": "shieldStrength",
+    "pattern": "护盾强效提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "whitetassel.normal.damageBonus": {
+    "entity": "whitetassel",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "windblumeode.skill-attack": {
+    "entity": "windblumeode",
+    "stat": "attackPercent",
+    "pattern": "攻击力提升([\\d.]+)%",
+    "divisor": 100
+  },
+  "wolffang.skill-burst.damageBonus": {
+    "entity": "wolffang",
+    "stat": "damageBonus",
+    "pattern": "伤害(?:都会)?(?:提升|提高|增加)([\\d.]+)%",
+    "divisor": 100
+  },
+  "wolfsgravestone.attackPercent": {
+    "entity": "wolfsgravestone",
+    "stat": "attackPercent",
+    "pattern": "^攻击力提高([\\d.]+)%",
+    "divisor": 100
+  }
+}

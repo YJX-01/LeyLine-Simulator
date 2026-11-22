@@ -2,6 +2,7 @@ import { readCalculationData as read } from '../../tools/lib/catalog-data.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { calculationCoverage } from '../../tools/lib/calculation-coverage.mjs';
+import { auditCharacterClauses } from '../../tools/lib/roster-evaluation.mjs';
 import { loadContentSchema } from '../../tools/lib/load-content-schema.mjs';
 import { createRuntimeCatalog } from '../../tools/lib/runtime-catalog.mjs';
 
@@ -9,6 +10,18 @@ const catalog = await createRuntimeCatalog();
 const manifest = catalog.inventory;
 const engine = await loadContentSchema('/src/engine/src/index.ts');
 const validate = (kind, entity) => kind === 'character' ? engine.compileStructuredCharacter(entity) : engine.compileCalculation(entity.calculation.bundle);
+
+test('map markers with a combat contribution remain open while crafting, fishing and wildlife passives close', async () => {
+  const mixed = { kachina: 3, kinich: 3, lynette: 2, mualani: 3 };
+  const noncombat = ['qiqi', 'yoimiya', 'thoma', 'yaoyao', 'wanderer', 'aratakiitto'];
+  const characters = await Promise.all([...Object.keys(mixed), ...noncombat].map(id => catalog.get('characters', id)));
+  const weapons = await Promise.all(['dullblade', 'wastergreatsword', 'apprenticesnotes', 'huntersbow', 'beginnersprotector'].map(id => catalog.get('weapons', id)));
+  const rows = auditCharacterClauses({ characters, weapons, sets: [] }, engine).rows;
+  for (const { id } of characters) {
+    const row = rows.find(entry => entry.entity === id && entry.field === '/passives/' + (mixed[id] ?? 2));
+    assert.equal(row?.status, Object.hasOwn(mixed, id) ? '战斗贡献待逐条件验收' : '生活用途', id);
+  }
+});
 
 test('the linked catalog preserves authored values and reports every entity and branch', async () => {
   const [characters, weapons, sets] = await Promise.all([
@@ -30,7 +43,7 @@ test('the linked catalog preserves authored values and reports every entity and 
     const entries = report.entries.filter(entry => entry.entityId === character.id && !['weapon', 'set', 'set-effect'].includes(entry.kind));
     const hits = character.talents.flatMap(talent => talent.hits);
     assert.equal(entries.filter(entry => entry.kind === 'hit').length, hits.length);
-    outputs += hits.reduce((total, hit) => total + hit.outputs.length, 0);
+    outputs += hits.reduce((total, hit) => total + Object.keys(hit.damage).length, 0);
     for (const branch of [...character.passives.map((passive, index) => `/passives/${index}`), ...character.constellations.map((item, index) => `/constellations/${index}`)]) {
       assert.ok(entries.some(entry => entry.pointer === branch), `${character.id}${branch}`);
     }
@@ -48,7 +61,21 @@ test('the linked catalog preserves authored values and reports every entity and 
   assert.equal(dullblade.calculation.bundle.coverage[0].resolution, 'complete');
   assert.equal(report.summary.boundOutputs, outputs);
   assert.ok(report.summary.supportedOutputs < outputs);
-  assert.equal(report.entries.find(entry => entry.kind === 'character' && entry.entityId === 'vesna').resolution, 'complete');
+  assert.equal(report.entries.find(entry => entry.kind === 'character' && entry.entityId === 'vesna').scopes[0].resolution, 'complete');
+  for (const id of ['aether', 'lumine']) {
+    const root = report.entries.find(entry => entry.kind === 'character' && entry.entityId === id);
+    assert.equal(root.declarations.maxConstellation, 0);
+    assert.deepEqual(root.scopes[0].constellations, { min: 0, max: 0 });
+    assert.equal(root.resolution, 'complete');
+  }
+  for (const [kind, id] of [['character', 'vesna'], ['weapon', 'beyondthechrysalis'], ['weapon', 'cinnabarspindle']]) {
+    const root = report.entries.find(entry => entry.kind === kind && entry.entityId === id);
+    assert.equal(root.resolution, 'unavailable', id);
+    assert.ok(root.lifecycleGaps.some(gap => gap.field && gap.missing.length), id);
+  }
+  for (const id of ['favoniussword','sacrificialsword','scarletproof']) {
+    assert.equal(report.entries.find(row => row.entityId === id && ['set','weapon'].includes(row.kind)).resolution,'complete',id);
+  }
 });
 
 test('structured coverage follows real scoped certificates and loses support when a dependency or proof is removed', async () => {
