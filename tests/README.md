@@ -5,6 +5,7 @@
 | 命令 | 用途 |
 | --- | --- |
 | `pnpm test` | Vitest 单元及 TypeScript 集成检查 |
+| `pnpm exec vitest run tests/unit/web/domain/calculator-catalog-defaults.test.ts` | 遍历正式目录的命中与增益，检查默认值、命座限制和计算页文案 |
 | `pnpm test:content` | Node 内容、目录及文件工具检查 |
 | `pnpm test:ui` | Chromium 真实库存流程 |
 | `pnpm test:ui:contracts` | Chromium 真实样式、焦点与窄屏 |
@@ -21,3 +22,9 @@
 游戏资料验收直接读取获授权的 `.references/artifacts_mona.json` 与 [Enka 展柜原件](../tools/data/README.md#验证资料与独立计算记录)。记录依赖的检查在原件缺失时明确跳过。版本、错误和边界从原件派生，保存与取消等行为可用当前空文档。机制期望按来源独立推导，游戏观测单独登记。详见[测试规范](../docs/evidence-and-validation.md#测试与验证)。
 
 Playwright 辅助代码的运行时映射在 `browser/playwright-runtime.json`，类型检查使用仓库根 `tsconfig.json`。
+
+## 伤害计算器回归
+
+[全目录测试](unit/web/domain/calculator-catalog-defaults.test.ts)随正式数据扩展，检查增益在初始和启用时的取值、计数的合法范围，以及已有的零值和“否”能否保留。伤害数值另用独立公式核对，具体案例见[计算支持与验证资料](../tools/data/README.md#计算支持与验证资料)。
+
+[伤害计算](browser/development/damage-calculator.spec.ts)、[场景冲击](browser/development/scene-damage.spec.ts)和[展柜配装重放](browser/development/vesna-production-chain.spec.ts)覆盖页面与 Worker 的实际操作。三组用例共用[浏览器检查](helpers/calculator-browser.ts)，在渲染时检查增益卡控件的初始值，并检查页面、弹窗、输入提示和无障碍标签是否出现旧的待确认文案。
