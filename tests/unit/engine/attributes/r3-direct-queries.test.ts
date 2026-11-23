@@ -56,7 +56,12 @@ describe('R3 reviewed direct queries, without broad support flag changes', () =>
         expect(JSON.stringify(document.baseline)).toBe(JSON.stringify(JSON.parse(original).project));
         const uncovered = { ...build, constellation: entry.max + 1 };
         expect(evaluateDamage(uncovered, damage, defaultEnemy()).status).toBe('partial');
-        expect(evaluateDamage({ ...build, weapon: await getWeapon(entry.id === 'barbara' ? 'thrillingtalesofdragonslayers' : 'wolfsgravestone') }, damage, defaultEnemy()).status).toBe('partial');
+        const equipped = evaluateDamage({ ...build, weapon: await getWeapon(entry.id === 'barbara' ? 'thrillingtalesofdragonslayers' : 'wolfsgravestone') }, damage, defaultEnemy());
+        // Noelle's shield cast scales with DEF. Barbara's solo handoff has no next team member.
+        const needsWolfWindow = ['xinyan','razor'].includes(entry.id);
+        expect(equipped.status).toBe(needsWolfWindow ? 'partial' : 'complete');
+        if (needsWolfWindow) expect(equipped.structured?.requiredInputs.map(input => input.key)).toContain('wolfsgravestone.low-target-hitActive');
+        else expect(equipped.value).toBeGreaterThan(0);
       }
     });
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
-import { elements, projectSchema, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { elements, projectSchema, putHitFact, type Build, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
 import { evaluateDamage, evaluateTimeline, resolveBuild, compileCalculation, evaluateFormula } from '@leyline/engine';
 import { addActorFromBuild, addSkillHit, addAttributeCapture, setDamageEffectApplication } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
@@ -183,10 +183,12 @@ describe('Yun Jin source component and canonical unknown boundaries', () => {
     project.definitions.push({ id: 'yunjin-cast', version: DATA_VERSION, source: { kind: 'preset', reference: 'yunjin.burst', verified: false }, nodes: [], effects: [] });
     project.timeline.push({ id: 'explicit-yunjin-burst', actor: owner, timeMs: 0, order: 0, kind: 'action', definition: 'yunjin-cast', skillId: 'yunjin.burst' });
     const hit = addSkillHit(project, recipient, 'kaeya.normal', 0, 1000, { crit: 'noncritical', reaction: 'none' });
-    const instance = evaluateTimeline(project).effectInstances!.find(instance => instance.content?.entity === 'yunjin')!;
+    putHitFact(project.timeline.find(record => record.id === hit)!.damage!.facts ??= [], { kind: 'actor', id: recipient },
+      'yunjin.flagFormation', { kind: 'boolean', value: false });
+    const instance = evaluateTimeline(project).effectInstances!.find(instance => instance.modifiers?.some(modifier => modifier.definition === 'yunjin.flying-cloud-base.base'))!;
     setDamageEffectApplication(project, hit, instance.id, active);
     const result = evaluateTimeline(project);
-    expect(result.status).toBe(active === false ? 'complete' : 'partial');
+    expect(result.status, result.diagnostics.map(row => row.message).join(' / ')).toBe(active === false ? 'complete' : 'partial');
     expect(result.points[0].real?.baseDamageBonus).toBe(active === false ? 0 : null);
     if (active === true) expect(result.reads?.some(read => read.actor === owner && read.key === 'defense')).toBe(true);
     else expect(result.reads?.some(read => read.actor === owner && read.key === 'defense')).toBe(false);

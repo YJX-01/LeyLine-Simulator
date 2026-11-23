@@ -64,7 +64,12 @@ describe('build-bound stellar contributions and per-state ranking', () => {
     const growth = character.progression.promotion[6];
     const stat = (key: string) => (character.attributes.base[key] ?? 0) + (character.attributes.specialized === key ? growth.specialized : 0)
       + (weapon.stat === key ? weapon.baseStat * weapon.statCurve[90] : 0);
-    const em = stat('elementalMastery'), level = read('src/game-data/data/calculation/reactions.json').rules.levelMultipliers[90];
+    const curve = read('src/game-data/data/tables/character-curves.json')[character.metadata.progression.curveIds.attack];
+    const white = character.attributes.base.attack * curve[90] + growth.attack + weapon.baseAttack * weapon.attackCurve[90] + weapon.promotion[6];
+    const attack = white * (1 + stat('attackPercent'));
+    // The Cryo Traveler's fourth ascension grants 8% of ATK as mastery, up to 160.
+    const em = stat('elementalMastery') + (id === 'aether-cryo' ? Math.min(160, .08 * attack) : 0);
+    const level = read('src/game-data/data/calculation/reactions.json').rules.levelMultipliers[90];
     return { base: level * 0.75 * (1 + 6 * em / (em + 2000)) * 0.9, chance: stat('critRate'), critical: 1 + stat('critDamage') };
   }
   function expected(weaponId = 'favoniussword', secondChanceBonus = 0) {

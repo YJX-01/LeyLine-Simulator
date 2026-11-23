@@ -7,6 +7,7 @@ import { readContentSource } from '../../tools/lib/content-source.mjs';
 import { catalogPlugin } from '../../tools/scripts/build/catalog-plugin.mjs';
 import { auditHealingWindows, auditSetConditions } from '../../tools/lib/set-condition-audit.mjs';
 import { auditBuild, auditHit } from '../../tools/lib/roster-evaluation.mjs';
+import { auditVarkaChargedHands } from '../../tools/lib/varka-charged-hands-audit.mjs';
 
 const catalog = await createRuntimeCatalog(), engine = await loadContentSchema('/src/engine/src/index.ts');
 test('an unknown party element preserves a rank-invariant cooldown and identifies the missing damage rank', async () => {
@@ -123,6 +124,7 @@ test('Flins checks both direct lunar bases, the event and team gates', async () 
   const b = await build('flins', 'beginnersprotector'), t = b.character.talents.find(t => t.category === 'burst'), team = prepare([{ id: 'actor', build: b }]);
   const attack = b.character.attributes.base.attack * b.character.progression.curves.attack[90] + b.character.progression.promotion[6].attack + b.weapon.baseAttack * b.weapon.attackCurve[1];
   const blessing = Math.min(.14, attack * .00007);
+  const mastery = Math.min(160, attack * .08);
   for (const [hit, expected] of [['symphony', 1301.720302], ['symphony-extra', 1893.411349]]) {
     const h = t.hits.find(h => h.id === 'flins.burst.' + hit);
     for (const [window, moon, cloud] of [[true, true, true], [false, true, true], [true, false, true], [true, true, false]]) {
@@ -132,11 +134,12 @@ test('Flins checks both direct lunar bases, the event and team gates', async () 
       request.frame.facts.nearThundercloud = yes(cloud);
       const result = engine.evaluateStructuredHit(team, setup, request);
       const enabled = window && (hit === 'symphony' || moon && cloud);
+      const reactionBonus = 1 + 6 * mastery / (2000 + mastery) + (moon ? .2 : 0);
       assert.equal(result.outputs.length, 1);
-      near(result.totals.all.value.value, enabled ? expected * (1 + blessing) : 0);
+      near(result.totals.all.value.value, enabled ? expected * reactionBonus * (1 + blessing) : 0);
       const context = engine.createStructuredCombatContext(team, setup);
       context.effectRevisions = [{ instanceId: engine.calculationEffectInstanceId('actor', { namespace: 'builtin', id: 'flins.reaction-blessing', revision: '1' }, null), disabled: true }];
-      near(engine.evaluateStructuredHit(team, setup, request, { context }).totals.all.value.value, enabled ? expected : 0);
+      near(engine.evaluateStructuredHit(team, setup, request, { context }).totals.all.value.value, enabled ? expected * reactionBonus : 0);
     }
   }
 });
@@ -277,32 +280,29 @@ test('Xiao, Kaveh, Yanfei and Kokomi use the correct base, element, recipient an
     for(const [rid,expected] of checks)near(result.points.find(point=>point.id===rid)?.value,expected);
   }
 });
-test('Nicole refreshes one shared attack bonus, takes the caster attack, and keeps her C2 flat bonus outside the cap', async () => {
+test('Nicole refreshes one shared attack bonus and uses the increased C3 skill rank', async () => {
   const recipient=await build('kaeya','dullblade'),caster=await build('nicole','apprenticesnotes');
   const talent=recipient.character.talents[0];
   const attack={kind:'attribute',key:{id:'attribute.attack',namespace:'builtin',revision:'1'},actor:{role:'owner'},at:{kind:'current',phase:'same'}};
   for (const rank of [0,2,3]) {
     const team=prepare([{id:'actor',build:recipient},{id:'support',build:{...caster,constellation:rank}}]);
     const {setup,request}=auditHit(recipient.character,talent,talent.hits[0],90);
+    request.frame.factOverrides[0].facts['nicole.blessedDirection'] = yes(false);
+    request.frame.factOverrides.push({ subject: { kind: 'actor', id: 'support' }, facts: { onField: yes(false), 'nicole.blessedDirection': yes(false) } });
     const scope=engine.createStructuredCombatContext(team,setup);
-    for (const added of [0,5000]) {
-      const actors=structuredClone(scope.actors);
-      const own=actors.find(member=>member.id==='support');
-      own.inputs.flatAttack=number('attack',added);
-      const stats=id=>({ ...request.frame, ownerId:id,recipientId:id,contributorId:null,hit:null });
-      function attribute(id,events) {
-        const result=engine.evaluateCombatBindings(team.program,{...scope,actors,events},{value:attack},stats(id));
-        assert.equal(result.outputs.value.state,'known',JSON.stringify(result.diagnostics));
-        return result.outputs.value.value.value;
-      }
-      const ownerBase=attribute('support',setup.events),recipientBase=attribute('actor',setup.events);
-      const flat=rank>=2?300:0,scaled=Math.min((ownerBase+flat)*(rank===3?.177:.15),rank===3?708:600);
-      for (const [time,enabled] of [[1,true],[19999,true],[20000,true],[38999,true],[39000,false]]) {
-        const cast=(ms)=>({id:'skill-'+ms,kind:'action',actorId:'support',skillId:'nicole.skill',targetIds:[],timeMs:ms,order:0,sourceEventIds:[],facts:{}});
-        const events=[cast(0),...(time>=19000?[cast(19000)]:[]),{...setup.events[0],timeMs:time}];
-        near(attribute('actor',events)-recipientBase,enabled?scaled+flat:0);
-        near(attribute('support',events)-ownerBase,enabled?scaled+flat:0);
-      }
+    const stats=id=>({ ...request.frame, ownerId:id,recipientId:id,contributorId:null,hit:null });
+    function attribute(id,events) {
+      const result=engine.evaluateCombatBindings(team.program,{...scope,events},{value:attack},stats(id));
+      assert.equal(result.outputs.value.state,'known',JSON.stringify(result.diagnostics));
+      return result.outputs.value.value.value;
+    }
+    const ownerBase=attribute('support',setup.events),recipientBase=attribute('actor',setup.events);
+    const flat=rank>=2?300:0,scaled=ownerBase*(rank===3?.177:.15);
+    for (const [time,enabled] of [[1,true],[19999,true],[20000,true],[38999,true],[39000,false]]) {
+      const cast=(ms)=>({id:'skill-'+ms,kind:'action',actorId:'support',skillId:'nicole.skill',targetIds:[],timeMs:ms,order:0,sourceEventIds:[],facts:{}});
+      const events=[cast(0),...(time>=19000?[cast(19000)]:[]),{...setup.events[0],timeMs:time}];
+      near(attribute('actor',events)-recipientBase,enabled?scaled+flat:0);
+      near(attribute('support',events)-ownerBase,enabled?scaled+flat:0);
     }
   }
 });
@@ -371,6 +371,8 @@ test('Yun Jin counts normal attacks separately for each recipient and honors exp
     const { setup, request } = auditHit(b.character, t, h, 90);
     const current = setup.events[0];
     current.timeMs = 5000;
+    const remaining = priorActor !== 'actor' || priorCount - (skipped ? 1 : 0) < quota;
+    request.frame.factOverrides[0].facts['yunjin.flagFormation'] = yes(remaining);
     request.frame.applications.push({ instanceId: instance, active: true });
     setup.events.unshift({ id: 'cast', kind: 'action', actorId: 'support', skillId: 'yunjin.burst', category: 'burst', targetIds: [], timeMs: 0, order: 0, sourceEventIds: [], facts: {} });
     for (let i = 0; i < priorCount; i++) setup.events.push({ ...current, id: 'prior-' + i, actorId: priorActor, timeMs: i + 1, order: i + 1, applications: [{ instanceId: instance, active: !(skipped && i === 0) }] });
@@ -381,7 +383,8 @@ test('Yun Jin counts normal attacks separately for each recipient and honors exp
   const base = damage('actor', quota), available = damage('actor', 0);
   const defense = support.character.attributes.base.defense * support.character.progression.curves.defense[90] + support.character.progression.promotion[6].defense;
   const ratio = support.character.talents.find(t => t.id === 'yunjin.burst').parameters.find(p => p.id === 'param2').values[9];
-  near(available - base, defense * ratio * .45);
+  // Kaeya, Jean and Yun Jin supply three different elements for Yun Jin's A4.
+  near(available - base, defense * (ratio + .075) * .45);
   near(damage('other', quota), available);
   near(damage('actor', quota - 1), available);
   near(damage('actor', quota, true), available);
@@ -455,6 +458,8 @@ test('Lohen uses skill ranks for Cryo normals and distinct Will multipliers on e
       const { setup, request } = auditHit(b.character, talent, hit, 90);
       request.frame.facts['lohen.will'] = number('scalar', will);
       request.frame.factOverrides[0].facts['lohen.masterstroke'] = yes(true);
+      request.frame.factOverrides[0].facts['lohen.cryoReactionAttackWindow'] = yes(false);
+      request.frame.factOverrides[0].facts['lohen.banebladeAttackWindow'] = yes(false);
       const result = engine.evaluateStructuredHit(team, setup, request);
       near(result.totals.all.value?.value, attack * rate(baseIndex) * (1 + will * (rateIndex ? rate(rateIndex) : 0)) * .45 * (1 + cryo));
       if (category === 'skill') {
@@ -490,18 +495,27 @@ test('Yae resolves 14-second independent Sakura clocks, only destroys nearby sum
   assert.equal(JSON.stringify(p), original);
 });
 
-test('Varka uses each hand and its recipient element, and C2 follows the triggering attack category', async () => {
+test('Varka binds each stance hit to its hand and C2 follows the triggering attack category', async () => {
   const b = auditBuild(await catalog.get('characters', 'varka'), await catalog.get('weapons', 'wastergreatsword'));
+  const audited = auditVarkaChargedHands({ characters: [b.character], weapons: [b.weapon] }, engine);
+  assert.deepEqual(audited.rows.filter(row => row.issue), []);
+  assert.equal(audited.rows.length, 113);
+  assert.equal(audited.verified.size, 11);
   const skill = b.character.talents[1], attack = b.character.attributes.base.attack + b.weapon.baseAttack;
   const rate = n => skill.parameters.find(p => p.id === 'param' + n).values[0];
-  for (const [party, right] of [[[], 'anemo'], [['electro','hydro'], 'hydro'], [['hydro','pyro'], 'pyro']]) {
-    const team = prepare([{ id: 'actor', build: b }, ...party.map((element, i) => ({ id: 'party-' + i, element }))]);
-    for (const [index, element] of [[5, right], [4, 'anemo'], [14, right]]) {
-      const h = skill.hits.find(h => h.id === skill.id + '.param' + index), { setup, request } = auditHit(b.character, skill, h);
-      request.frame.factOverrides[0].facts['varka.stance'] = yes(true);
-      setup.targets[0].inputs['resistance.' + element] = number('scalar', .4);
-      near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, index === 14 && !party.length ? 0 : attack * rate(index) * .5 * .6);
-    }
+  const fourWinds = skill.hits.find(hit => hit.id === 'varka.skill.param14');
+  const burst = b.character.talents[2];
+  const burstHit = burst.hits.find(hit => hit.id === 'varka.burst.param1');
+  for (const element of [undefined, 'hydro', 'pyro']) {
+    const team = prepare([{ id: 'actor', build: b }, ...(element ? [{ id: 'other', element }] : [])]);
+    const { setup, request } = auditHit(b.character, skill, fourWinds);
+    request.frame.factOverrides[0].facts['varka.stance'] = yes(true);
+    setup.targets[0].inputs['resistance.' + (element ?? 'anemo')] = number('scalar', .4);
+    near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, element ? attack * rate(14) * .5 * .6 : 0);
+    const burstQuery = auditHit(b.character, burst, burstHit);
+    burstQuery.setup.targets[0].inputs['resistance.' + (element ?? 'anemo')] = number('scalar', .4);
+    const burstRate = burst.parameters.find(parameter => parameter.id === 'param1').values[0];
+    near(engine.evaluateStructuredHit(team, burstQuery.setup, burstQuery.request).totals.all.value?.value, attack * burstRate * .5 * .6);
   }
   for (const rank of [1, 2]) for (const mode of ['none','four-winds','azure-fang']) {
     const team = prepare([{ id: 'actor', build: { ...b, constellation: rank } }, { id: 'other', element: 'pyro' }]);
@@ -514,22 +528,23 @@ test('Varka uses each hand and its recipient element, and C2 follows the trigger
       near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, rank === 2 && h.id === 'varka.c2.' + mode ? attack * 8 * .45 : 0);
     }
   }
-  for (const index of [12, 13]) {
-    const h = skill.hits.find(hit => hit.id === skill.id + '.param' + index);
-    const { setup, request } = auditHit(b.character, skill, h);
-    setup.targets[0].inputs['resistance.anemo'] = number('scalar', .4);
+  const pyroTeam = prepare([{ id: 'actor', build: b }, { id: 'other', element: 'pyro' }]);
+  const unknownParty = prepare([{ id: 'actor', build: b }, { id: 'unknown' }]);
+  for (const [index, element, opposite] of [[12, 'pyro', 'left'], [13, 'anemo', 'right']]) {
+    const hit = skill.hits.find(entry => entry.id === skill.id + '.param' + index);
+    const { setup, request } = auditHit(b.character, skill, hit);
+    setup.targets[0].inputs['resistance.' + element] = number('scalar', .4);
     request.frame.factOverrides[0].facts['varka.stance'] = yes(true);
-    const team = prepare([{ id: 'actor', build: b }, { id: 'other', element: 'pyro' }]);
-    const run = () => engine.evaluateStructuredHit(team, setup, request);
-    for (const hand of ['right', 'left']) {
-      setup.events[0].facts.strikingHand = f({ kind: 'enum', value: hand });
-      near(run().totals.all.value?.value, attack * rate(index) * .5 * (hand === 'left' ? .6 : .9));
+    request.frame.facts.strikingHand = f({ kind: 'enum', value: opposite });
+    const expected = attack * rate(index) * .5 * .6;
+    near(engine.evaluateStructuredHit(pyroTeam, setup, request).totals.all.value?.value, expected);
+    const pending = engine.evaluateStructuredHit(unknownParty, setup, request);
+    if (index === 12) {
+      assert.equal(pending.totals.all.state, 'unknown');
+      assert.ok(pending.requiredInputs.some(input => input.key === 'partyPriorityElement' && input.scope === 'team'));
+    } else {
+      near(pending.totals.all.value?.value, expected);
     }
-    request.frame.facts.strikingHand = f(null);
-    assert.deepEqual(run().requiredInputs.filter(input => input.key === 'strikingHand').map(input => input.scope), ['query']);
-    assert.equal(run().totals.all.state, 'unknown');
-    request.frame.factOverrides[0].facts['varka.stance'] = yes(false);
-    near(run().totals.all.value?.value, 0);
   }
 });
 
@@ -749,7 +764,7 @@ test('Nicole projections use the dealer’s ATK, level, element and crit, and Ni
       setup.targets[0].inputs['resistance.cryo'] = number('scalar', .35);
       setup.targets[0].inputs['resistance.pyro'] = number('scalar', .7);
       request.frame.factOverrides[0].facts.onField = yes(false);
-      request.frame.factOverrides.push({ subject: { kind: 'actor', id: 'dealer' }, facts: { onField: yes(true) } });
+      request.frame.factOverrides.push({ subject: { kind: 'actor', id: 'dealer' }, facts: { onField: yes(true), 'nicole.blessedDirection': yes(false) } });
       request.frame.facts[hit.coordinated.readyFact] = yes(true);
       request.critMode = 'critical';
       const result = engine.evaluateStructuredHit(team, setup, request);
@@ -774,6 +789,8 @@ test('Nicole shares four projections per cast across dealers, separates C1, and 
   const kaeya = auditBuild(await catalog.get('characters','kaeya'), await catalog.get('weapons','dullblade'));
   const lisa = auditBuild(await catalog.get('characters','lisa'), await catalog.get('weapons','apprenticesnotes'));
   const owner = addActorFromBuild(project, { ...n, constellation: 1 }), first = addActorFromBuild(project, kaeya), second = addActorFromBuild(project, lisa);
+  // Isolate the projection from the optional 300 ATK granted by Blessed Direction.
+  project.effectRevisions = [{ instanceId: engine.calculationEffectInstanceId(owner, { namespace: 'builtin', id: 'nicole.a0.blessed-direction', revision: '1' }, null), disabled: true }];
   const mode = { crit: 'noncritical', reaction: 'none' };
   const cast = addSkillAction(project, owner, 'nicole.burst', 0);
   const trigger = (dealer, character, time, onField = true) => {

@@ -23,6 +23,20 @@ test('map markers with a combat contribution remain open while crafting, fishing
   }
 });
 
+test('the Yanfei C1 clause checks the fourth seal at C6 and the other seal grants at C1', async () => {
+  const character = await catalog.get('characters', 'yanfei');
+  const weapon = await catalog.get('weapons', 'apprenticesnotes');
+  const granted = engine.grantedBuildEffects;
+  function checkGrant(grantedBuildEffects) {
+    return auditCharacterClauses({ characters: [character], weapons: [weapon], sets: [] }, { ...engine, grantedBuildEffects })
+      .rows.find(row => row.field === '/constellations/0').grantGate;
+  }
+  assert.equal(checkGrant(granted), true);
+  const fourth = character.metadata.constellations[0].buffs.find(buff => buff.activation?.constellation === 6).id;
+  assert.equal(checkGrant(build => granted(build).filter(grant => grant.effect.identity.id !== fourth)), false);
+  assert.equal(checkGrant(build => build.constellation === 5 ? granted({ ...build, constellation: 6 }) : granted(build)), false);
+});
+
 test('the linked catalog preserves authored values and reports every entity and branch', async () => {
   const [characters, weapons, sets] = await Promise.all([
     Promise.all(manifest.characters.map(id => catalog.get('characters', id))),

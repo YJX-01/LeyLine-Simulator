@@ -112,15 +112,19 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(JSON.stringify(build)).toBe(original);
   });
 
-  it('retains missing counter, relevant unaudited weapon, unknown crit and invalid structural derivatives', async () => {
+  it('retains the counter and weapon trigger inputs, unknown crit and invalid structural derivatives', async () => {
     const build = await buildFor('beidou', 'wastergreatsword');
     const missing = evaluateDamage(build, { ...request(build), facts: undefined }, defaultEnemy());
     expect(missing.value).toBeNull();
     expect(missing.issues.some(issue => issue.code === 'unknown' && issue.message.includes('counterCharge'))).toBe(true);
-    const weapon = await getWeapon('wolfsgravestone'); // Real ATK/passive dependencies are still unreviewed.
+    const weapon = await getWeapon('wolfsgravestone');
     const unsupported = evaluateDamage({ ...build, weapon }, request(build), defaultEnemy());
-    expect(unsupported.value).toBeGreaterThan(0);
-    expect(unsupported.issues.some(issue => issue.code === 'unsupported')).toBe(true);
+    expect(unsupported.value).toBeNull();
+    expect(unsupported.structured?.requiredInputs.map(input => input.key)).toContain('wolfsgravestone.low-target-hitActive');
+    const configured = request(build);
+    configured.facts!.push({ subject: { kind: 'actor', id: 'owner' }, values: { 'wolfsgravestone.low-target-hitActive': {
+      value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] } } });
+    expect(evaluateDamage({ ...build, weapon }, configured, defaultEnemy()).value).toBeGreaterThan(0);
     expect(evaluateDamage(build, { ...request(build), crit: null }, defaultEnemy()).value).toBeNull();
     expect(evaluateDamage({ ...build, weapon: await getWeapon('dullblade') }, request(build), defaultEnemy()).status).toBe('invalid');
     expect(evaluateDamage({ ...build, refinement: 2 }, request(build), defaultEnemy()).status).toBe('invalid');
@@ -142,7 +146,7 @@ describe('source-backed query coverage preserves all other guards', () => {
     const candidate = { ...build, weapon: await getWeapon('oldmercspal') };
     const candidates = [{ id: 'oldmercspal', replacements: [{ actorId: document.actorId, build: candidate }] }];
     const comparison = compareTimelineLoadouts(document.project, [...candidates,
-      { id: 'unaudited-wolfsgravestone', replacements: [{ actorId: document.actorId, build: { ...build, weapon: await getWeapon('wolfsgravestone') } }] },
+      { id: 'unknown-wolfsgravestone-window', replacements: [{ actorId: document.actorId, build: { ...build, weapon: await getWeapon('wolfsgravestone') } }] },
       { id: 'unchanged-source', replacements: [{ actorId: document.actorId, build }] },
     ]);
     const attack = 18.87648 * 8.349 + 67.54129;
@@ -153,8 +157,9 @@ describe('source-backed query coverage preserves all other guards', () => {
     expect(comparison.candidates[0].delta).toBeCloseTo(expectedAfter - expectedBefore, 8);
     expect(comparison.candidates[0].sources.builds).toEqual([{ actorId: document.actorId, fields: ['weapon'] }]);
     expect(comparison.candidates[1].result.status).toBe('partial');
-    expect(comparison.candidates[1].result.totalValue).toBeGreaterThan(0);
-    expect(comparison.candidates[1].delta).toBeCloseTo(comparison.candidates[1].result.totalValue! - expectedBefore, 8);
+    expect(comparison.candidates[1].result.totalValue).toBeNull();
+    expect(comparison.candidates[1].result.points[0].real?.structured?.requiredInputs.map(input => input.key)).toContain('wolfsgravestone.low-target-hitActive');
+    expect(comparison.candidates[1].delta).toBeNull();
     expect(comparison.candidates[2].result.totalValue).toBeCloseTo(expectedBefore, 8);
     expect(comparison.candidates[2].delta).toBe(0);
     document.baseline = JSON.parse(JSON.stringify(document.project));

@@ -158,13 +158,31 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ### 计算支持与内容绑定
 
+`pnpm data:coverage --report artifacts/round-after.json --gaps artifacts/round-after.md` 遍历正式角色、武器、套装的伤害菜单、解锁门槛、受益对象和条件控件。JSON 的 `calculator` 保存逐项入口，`evaluatedHits` 保存实际值、独立期望、关闭增益后的基础对照和排除情形。各专项的 `rows` 保存具体设定与结果，`verified` 按实体和字段记录已经核验的条款。武器、套装、场景与共鸣使用各自的来源表。运行 `--check --require-complete` 另外检查完整机制与证据缺口。
+
+`currentClauseInventory` 按原文字段和修饰项记录证据，`currentSceneGaps` 列出仍影响当次数值的场景字段。`--require-current` 在计算器专项仍有缺项时返回非零退出码。惊蛰的范围增加 100%，匠理等场地满五层增加 0.3 抗打断参数。传播到哪些目标及最终是否中断仍需位置和受击记录。哥伦比娅的复苏以受益者生命上限为基数，每级好感取 10%。[场地条款](sources/catalog/battle-scenes.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
+
+19 条秘境冲击可按输入的 `ElementLevelCo` 复核减伤前数值。固定系数表分别保留环境与角色两列。山脊守望 IV 的旧录像可辨 8419 白字，仍需改变目标抗性与防御的独立对照，以及关卡实际读取等级的证据。[秘境冲击系数与结算证据](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-hit-settlement-evidence.json)
+
+芬德尼尔之顶的严寒和平台、太山府的阴燃之火、菫色之庭的稚雷珠共 32 条说明指向空的关卡能力入口。已固定各阶的秘境与场景 ID。通用严寒、暖源与持续火伤配置仅作排查参考，当前场景仍需对应的区域或机关绑定。太山府 1.5 版测得开战后 3 秒首次附着、此后每 30 秒再次附着，当前版本的每跳伤害和间隔仍待证。菫色之庭 IV 的两份公开画面分别显示 50 级凯亚和 80 级班尼特触发后出现 74208 雷伤。凯亚画面发表于 2.0 期间，班尼特画面发表于 2022 年 7 月且游戏版本不明。两图可辨难度 IV 与 88 级敌人，日程和各伤害数字对应的敌方身份未能核定。[固定配置与实战来源](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/scene-environment-amount-facts.json)
+
+独立剧变伤害在精通与反应加成后计入固定加值，再应用适用的暴击和目标抗性。绽放等反应的暴击率和暴击伤害来自对应角色的明确授予。[固定版本计算依据](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/transformative-modifiers.json)
+
+尼可的战技按施放时可用于转化的攻击力封顶。米提亚六命对稳态炉心归属的技能基数施加 1.15 倍率，固定反应加值另行计算。久岐忍的安心之所按施救者精通加算治疗。一心传名刀的祟灵治疗按实际武器版本取持有者攻击力。[尼可战技取值](sources/catalog/nicole-kenosis.json) · [米提亚稳态炉心](sources/mona-community/589ac6919057709924c0c20d5a9d673fe9b0be1a/mitya-steady-core.json) · [条件治疗依据](sources/catalog/conditional-healing-sources.json)
+
+沃雅妮莎四命治疗严格低于 40% 生命的受益者时，固定值和生命倍率先乘 1.5，再应用常规治疗加成。芭芭拉六命的复苏治疗量含溢出并计入两项治疗加成，实际恢复至多回满。七七六命的复苏已核验施救者治疗加成，受益者自身常驻受治疗加成仍缺对照。塔利雅及哥伦比娅的复苏动作确认了生命上限比例，两项治疗加成交互仍需核验。[固定动作与复苏观测](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/character-healing-facts.json) · [月的守望复苏配置](sources/catalog/columbina-revival.json)
+
+法尔伽狂飙突进的常规重击中，右手使用 `param12`，左手使用 `param13`。左手始终造成风伤，右手按火、水、雷、冰的队伍优先级转化。队伍无对应元素且武器未获得外部元素时，右手为物理伤害。独立数值对照覆盖五种右手伤害、普攻左右手以及旧事件的出手侧输入。[固定配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/varka-charged-hands.json)
+
 数值审计核对 TS 固定算法和 JSON 参数。防御与抗性常数采用 KQM 公式事实，增幅与激化采用 reaction-facts，模板常数通过 `describeCalculationTemplate` 核对。[KQM 公式事实](sources/kqm-tcl/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/calculation-formula-facts.json)
 
 `pnpm data:coverage --json` 编译正式目录的依赖闭包，按输出列出证书命座范围、来源和缺口。完整命座、角色和装备分支分别判断，外部 `declared` 证据仍待本地采用，未闭合条目标记 `unavailable`。报告同时包含命中绑定和效果，`--require-complete` 用于全目录验收。[内容包说明](../../src/game-data/README.md)
 
 逐项报告可用 `pnpm data:coverage --report artifacts/roster-calculation-acceptance.json --gaps artifacts/roster-calculation-gaps.md --check --require-complete` 生成。每个命中保留本地倍率的独立算式期望和引擎结果。有非零增益的命中另存关闭增益后的对照。祝赐覆盖持有者属性、受益队员、伤害族以及封顶前后，共鸣覆盖队伍人数、触发对象和到期。场景与装备分别记录持续时间和合法精炼或件数门槛的结果。角斗士与乐团按五类武器测试，冰风按命中前的附冰或冻结判定，深林按命中的敌人和八秒有效期判定。千岩四件核对战技命中护盾时的零伤害、后台触发及两名持有者刷新同一增益。花海四件按持有者实际受伤逐层计时。守护之心按队伍元素去重并区分四元素共鸣自身的抗性。[战斗条款](sources/catalog/combat-lifecycle.json)
 
-菲林斯在 90 级零命、十级爆发、一级精一新手长枪、无圣遗物和敌方 10% 雷抗的条件下，攻击力为 374.8372196。关闭固有天赋「月兆祝赐」的两段非暴击对照值为 1301.720302、1893.411349。按其每 100 攻击力增加 0.7% 月感电基础伤害求值后，两段分别为 1335.875628、1943.091822。关闭附近雷暴云条件仅排除额外一击。
+菲林斯在 90 级零命、十级爆发、一级精一新手长枪、无圣遗物和敌方 10% 雷抗的条件下，攻击力为 374.8372196，固有天赋按攻击力的 8% 提供 29.986977568 元素精通。满辉且附近有雷暴云时，计入满辉的 20% 月感电增伤后，两段非暴击对照值约为 1677.438474、2439.910509。再计入月兆祝赐每 100 攻击力增加的 0.7% 月感电基础伤害，两段分别约为 1721.452121、2503.930358。关闭附近雷暴云条件仅排除额外一击。
+
+伊法的每点救援要义对扩散和感电提供 1.5% 增伤，对月感电提供 0.2%，对星扩散提供 0.24%。冒险家四件套的固定配置给出 1 秒间隔和每次 6% 生命上限，五秒全程的基础总量为 30%。这两项按实际受益人核验。装备回复与治疗加成的交互仍缺独立记录。[救援要义](sources/catalog/ifa-rescue-reactions.json) · [冒险家回复配置](sources/anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/equipment-healing-facts.json)
 
 共同效果的[采用对应](sources/calculation-effects/retained-rules.json)关联现有内容规则、静态修饰与新的直接JSON定义。[固定来源字段](sources/calculation-effects/catalog-facts.json)保留原精炼字符串和套装效果文本；数值审计直接比较所有精炼档、静态数值、被动阈值/上限和持续时间。百分比按十进制指数解析为比例，避免转换时增加一次二进制除法舍入。绑定、属性、状态及捕获组件的独立计算检查见tests/unit/engine/calculation/context.test.ts；这些明确计算设定不声称为玩家配装或实录战斗。
 
@@ -208,7 +226,7 @@ tests/unit/engine/calculation/bound-aggregate.test.ts使用薇斯纳、冰旅行
 
 战斗记录可指定敌方生命比例、元素附着、站场、护盾、生命变化、受伤、施予治疗和接受治疗。治疗事件可包含溢出量。受伤记录使用实际扣除的伤害值，生命消耗使用单独的生命变化记录。
 
-逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。未覆盖的触发方式以及缺少独立数值对照的字段保留在逐项报告中。[战斗条款](sources/catalog/combat-lifecycle.json)
+逐技能验收列出治疗量和护盾吸收量的每个详情字段。治疗的数值对照从本地天赋原始精度、角色和武器白值独立计算，并在施救者和受益人之间交换少女与游医二件套。施放治疗另核对受益人数、已有记录去重和海染泡沫伤害。擢升验收分别计算本人和队友的增幅，保留不同角色同时擢升同一伤害时的叠加缺口。逐项报告记录原文字段、相关输入、验过的分支及待补证据。[战斗条款](sources/catalog/combat-lifecycle.json) · [六命擢升依据](sources/kqm-web/2026-11-22/constellation-elevation-facts.json)
 
 菲林斯爆发中间段和最终段、哥伦比娅月露涤荡单段及兹白月转时隙第四段额外伤害已绑定相应月伤模板。单段倍率与伤害类别来自固定天赋表。时间轴接入明确贡献者的月感电、月结晶与星扩散聚合，以及薇斯纳明确动作和初始状态求值。配装比较保留覆盖诊断。记录完整性、自动次数与冷却、完整修订类型和全目录机制仍待接入。
 

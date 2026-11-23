@@ -107,9 +107,11 @@ describe('shared damage formula with source-derived calculation settings', () =>
     const build = await setting('jean');
     const request = { hit: { definition: { group: 'characters' as const, namespace: 'builtin', id: 'jean', revision: '4' }, hitId: 'jean.skill.param1' }, crit: 'noncritical' as const, reaction: 'none' as const };
     expect(evaluateDamage({ ...build, level: 19, ascension: 1 }, request, hilichurl).status).toBe('invalid');
-    const c5 = evaluateDamage({ ...build, constellation: 5 }, request, hilichurl);
+    const c5 = evaluateDamage({ ...build, constellation: 5 }, { ...request, facts: [{ subject: { kind: 'event' },
+      values: { 'jean.galeBladeHeld': { value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] } } },
+      { subject: { kind: 'target', id: 'target' }, values: { 'jean.c4EnemyInsideDandelion': { value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] } } }] }, hilichurl);
     expect(c5.status).toBe('partial');
-    expect(c5.value).toBeCloseTo(c5.baseDamage! * 0.45, 8);
+    expect(c5.value, c5.diagnostics.join(' / ')).toBeCloseTo(c5.baseDamage! * 0.45, 8);
     expect(talentBonus(build.character, 'skill', 5)).toBe(3);
     expect(c5.parts.multiplier).toBe(build.character.talents.find(talent => talent.category === 'skill')!.parameters[0].values[11]);
   });
@@ -154,7 +156,11 @@ describe('source-bound base-damage components, with character rules still pendin
     expect(catalogBaseValue(evaluateCatalogBase(gorou, talent.id, 0, 9, stat => stat === 'defense' ? defense : null))).toBeCloseTo(defense * 1.669672, 8);
     const xinyan = await getCharacter('xinyan');
     expect(xinyan.talents.find(talent => talent.category === 'burst')!.hits[0].element).toBe('physical');
-    expect((await getCharacter('kachina')).talents.find(talent => talent.category === 'skill')!.hits.every(hit => hit.category === 'skill')).toBe(true);
+    const kachina = await getCharacter('kachina');
+    const skill = kachina.talents.find(talent => talent.category === 'skill')!;
+    const native = kachina.metadata.talents.find(talent => talent.id === skill.id)!.hits;
+    expect(native.length).toBeGreaterThan(0);
+    expect(native.every(source => skill.hits.find(hit => hit.id === source.id)?.category === 'skill')).toBe(true);
     expect((await getCharacter('faruzan')).talents.find(talent => talent.category === 'skill')!.hits[1].category).toBe('skill');
   });
 

@@ -1,46 +1,15 @@
+import { auditBuild, auditHit, bool, elements, fact, number, subject, novice, setGateFacts, setAuditDefaults, projectQuery, projectFacts } from './roster-audit-settings.mjs';
+export { rosterEquipmentEvaluation } from './roster-equipment-evaluation.mjs';
+export { auditBuild, auditHit } from './roster-audit-settings.mjs';
 import { combatFactDeclaration } from '../../src/schema/src/calculation/buffs.mjs';
 import { authoredHitEntries } from '../../src/schema/src/calculation/hit-bindings.mjs';
 import { readContentSource } from './content-source.mjs';
 import { auditSceneTrigger } from './scene-trigger-audit.mjs';
+import { auditCurrentScene } from './scene-current-facts-audit.mjs';
 
 const read = path => readContentSource(new URL('../../src/game-data/data/' + path + '.json', import.meta.url));
-const fact = value => ({ value, provenance: 'explicit', sourceRefs: [] });
-const number = (unit, value) => fact({ kind: 'quantity', unit, value });
-const bool = value => fact({ kind: 'boolean', value });
-const novice = { WEAPON_SWORD_ONE_HAND: 'dullblade', WEAPON_CATALYST: 'apprenticesnotes', WEAPON_CLAYMORE: 'wastergreatsword',
-  WEAPON_BOW: 'huntersbow', WEAPON_POLE: 'beginnersprotector' };
-const elements = ['physical', 'anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro'];
-const main = read('tables/artifact-main');
 const commonTemplates = new Map(read('calculation/common').formulas.map(f => [f.identity.id, f.template]));
-const subject = { kind: 'actor', id: 'actor' };
 
-/** Independent, legal level-one calculation settings, with no inventory or combat recording. */
-export function auditBuild(character, weapon, sets = []) {
-  return { schemaVersion: character.schemaVersion, kind: 'calculation-build', dataVersion: character.dataVersion, character, weapon, sets, artifacts: [],
-    artifactMain: main, artifactMainSourceRefs: ['content.artifact-main'], sources: [{ id: 'content.artifact-main', kind: 'definition' }],
-    level: 1, ascension: 0, weaponLevel: 1, weaponAscension: 0, constellation: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };
-}
-export function auditHit(character, talent, hit, level = 1) {
-  const event = { id: 'hit', kind: 'hit', actorId: 'actor', targetIds: ['enemy'], timeMs: 1, order: 1, skillId: talent.id, hitId: hit.id,
-    category: hit.category, sourceEventIds: [], facts: {} };
-  const rate = Object.fromEntries((talent.inputs ?? []).map(input => [input.id, number(input.type.unit, input.min)]));
-  const setup = { targets: [{ id: 'enemy', inputs: { level: number('count', level), defenseReduction: number('scalar', 0), ordinaryDamageReduction: number('scalar', 0),
-    ...Object.fromEntries(elements.map(e => ['resistance.' + e, number('scalar', 0.1)])) }, facts: {} }],
-    team: { inputs: {}, facts: {}, actorFacts: {} }, sources: [], factIntervals: [], events: [event] };
-  const frame = { eventId: 'hit', targetId: 'enemy', sourceEventId: null, phase: 'before', facts: rate, actorFacts: {}, applications: [], captures: {},
-    factOverrides: [{ subject, facts: { onField: bool(true), shielded: bool(false), hpRatio: number('scalar', 1) } }] };
-  if (hit.infusion) frame.factOverrides[0].facts[hit.infusion.fact] = bool(false);
-  for (const {castWindow} of character.talents) if (castWindow) frame.factOverrides[0].facts[castWindow.fact] = bool(false);
-  for (const key of ['vesna.stance', 'wanderer.windfavored', 'wriothesley.chillingPenalty']) {
-    if (Object.hasOwn(character.metadata.facts ?? {}, key)) frame.factOverrides[0].facts[key] = bool(false);
-  }
-  for (const slot of hit.base.captures) {
-    setup.events.unshift({ id: slot.id, kind: 'capture', actorId: 'actor', targetIds: [], timeMs: 0, order: 0, skillId: slot.sourceSkillId, sourceEventIds: [], facts: {} });
-    frame.captures[slot.id] = { eventId: slot.id, phase: slot.allowedPhases[0] };
-  }
-  return { setup, request: { actorId: 'actor', hit: { definition: { group: 'characters', namespace: character.namespace, id: character.id, revision: character.revision }, hitId: hit.id },
-    critMode: 'noncritical', reactionMode: 'none', frame } };
-}
 const reactionConstants = readContentSource(new URL('../data/sources/kqm-web/2026-11-15/reaction-formulas.json', import.meta.url)).constants;
 const lifecycle = readContentSource(new URL('../data/sources/catalog/combat-lifecycle.json', import.meta.url));
 const attachmentRates = lifecycle.stellarConduct.coefficients;
@@ -53,18 +22,22 @@ const blessings = new Map(lifecycle.reactionBlessings.map(row => {
   const stat = { 攻击力: 'attack', 防御力: 'defense', 生命值上限: 'hp', 元素精通: 'elementalMastery' }[match[2]];
   return [row.entity, { stat, rate: Number(match[3]) / 100 / Number(match[1] || 1), cap: Number(match[4]) / 100, families }];
 }));
-function referenceDamage(build, talent, hit, frame, withBuffs = true) {
+function referenceDamage(build, talent, hit, setup, request, party, withBuffs = true) {
   const { character, weapon } = build;
-  const stats = { elementalMastery: 0 };
+  const { frame } = request;
+  const stats = { elementalMastery: weapon.stat === 'elementalMastery' ? weapon.baseStat * weapon.statCurve[build.weaponLevel] : 0 };
   for (const stat of ['hp', 'attack', 'defense']) stats[stat] = character.attributes.base[stat] * character.progression.curves[stat][build.level] + character.progression.promotion[build.ascension][stat];
   stats.attack += weapon.baseAttack * weapon.attackCurve[build.weaponLevel] + weapon.promotion[build.weaponAscension];
   const specialized = character.attributes.specialized, bonus = character.progression.promotion[build.ascension].specialized;
   if (specialized === 'elementalMastery') stats.elementalMastery += bonus;
+  if (withBuffs && character.id === 'citlali' && build.constellation >= 2) stats.elementalMastery += 125;
   for (const key of ['hp', 'attack', 'defense']) if (specialized === key + 'Percent') stats[key] *= 1 + bonus;
   function parameter(skillId, key) {
     const source = skillId ? character.talents.find(entry => entry.id === skillId) : talent;
     if (!source) return NaN;
-    const bonus = character.id === 'tartaglia' && source.category === 'normal' ? 1 : 0;
+    const constellation = character.constellations.filter(c => c.rank <= build.constellation)
+      .flatMap(c => c.talentBonuses ?? []).filter(b => b.category === source.category).reduce((sum, b) => sum + b.levels, 0);
+    const bonus = constellation + (character.id === 'tartaglia' && source.category === 'normal' ? 1 : 0);
     return source.parameters.find(p => p.id === key)?.values[build.talents[source.category] + bonus - 1] ?? NaN;
   }
   function valueOfFact(key) {
@@ -76,37 +49,110 @@ function referenceDamage(build, talent, hit, frame, withBuffs = true) {
   }
   function termValue(term) {
     if (typeof term === 'number') return term;
+    if (term.amount !== undefined) return term.amount;
     if (term.stat) return stats[term.stat];
     if (term.fact) return valueOfFact(term.fact);
     if (term.parameter) return parameter(term.skill, term.parameter);
     const name = term.template ?? term.call, input = term.inputs;
-    if (name === 'product.scalar') return termValue(input.basis) * termValue(input.rate);
+    if (name === 'product.scalar' || name === 'product.damage') return termValue(input.basis) * termValue(input.rate);
+    // Nefer, talent and C1: each Veil stack increases the Phantasm terms by 8%.
+    if (name === 'nefer.phantasm-veil-multiplier') return 1 + .08 * termValue(input.basis);
     if (name === 'stellar.radiance-ratio') {
       const mode = termValue(input.mode);
       return termValue(input[mode === 'stellar-swirl' ? 'swirl' : mode === 'stellar-conduct' ? 'conduct' : 'ordinary']);
     }
     if (name?.startsWith('damage-sum-')) return Object.values(input).reduce((sum, item) => sum + termValue(item), 0);
-    if (name?.endsWith('-damage-base')) return termValue(input.attribute) * termValue(input.ratio) * (input.count ? termValue(input.count) : 1);
+    // Zibai C4 scales the skill's fourth-hit DEF ratio by the declared 250%.
+    if (name?.endsWith('-damage-base') || name === 'zibai.lunar-flourish-base') {
+      return termValue(input.attribute) * termValue(input.ratio) * (input.count ? termValue(input.count) : 1);
+    }
     return NaN;
+  }
+  // Wanderer A1 reads ATK from the source E hit with the declared snapshot phase.
+  const capture = hit.snapshot && setup.events.find(event => event.id === Object.values(frame.captures)[0]?.eventId);
+  if (withBuffs && hit.id === 'wanderer.a1.descent-arrow') {
+    const owner = capture?.subjectFacts?.find(row => row.subject.kind === 'actor' && row.subject.id === 'actor')?.values;
+    if (owner?.['wanderer.windfavored']?.value?.value && owner?.['wanderer.jadeClaimed-pyro']?.value?.value) stats.attack *= 1.3;
+  }
+  // Mavuika C2 gains 200 base ATK in Nightsoul. Her C6 motorcycle also carries the ring's DEF reduction.
+  const ring = character.id === 'mavuika' && valueOfFact('mavuika.ringActive');
+  const riding = character.id === 'mavuika' && valueOfFact('mavuika.flamestrider');
+  if (withBuffs && build.constellation >= 2 && (ring || riding || character.id === 'mavuika' && valueOfFact('mavuika.nightsoulActive'))) {
+    stats.attack += 200 * (specialized === 'attackPercent' ? 1 + bonus : 1);
   }
   const base = Array.isArray(hit.base) ? hit.base.reduce((sum, term) => {
     if (term.formula && term.formula !== 'raidenshogun.resolve-damage-base') return NaN;
     return sum + stats[term.stat] * (term.ratio ?? parameter(term.skill, term.parameter)) * (term.count ? valueOfFact(term.count) : 1);
   }, 0) : termValue(hit.base);
   const family = typeof hit.family === 'object' ? hit.family.cases[valueOfFact(hit.family.by)] : hit.family ?? 'ordinary';
+  const id = hit.id;
+  const steadyCore = withBuffs && build.constellation >= 6 && valueOfFact('mitya.stable') === true
+    && ['mitya.skill.param3', 'mitya.skill.param4', 'mitya.skill.param5', 'mitya.c4.beacon-consumption'].includes(id) ? 1.15 : 1;
+  const absorbed = hit.elementBy === 'absorbedElement' ? valueOfFact('absorbedElement') : undefined;
+  if (absorbed === 'none') return 0;
+  const priority = (hit.elementBy === 'partyPriorityElement' || hit.elementBy === 'strikingHand' && valueOfFact('strikingHand') === 'right')
+    ? ['pyro', 'hydro', 'electro', 'cryo'].find(element => party.includes(element)) : undefined;
+  const element = absorbed ?? priority ?? hit.element ?? talent.element;
+  const target = setup.targets[0].inputs;
+  const resistance = target['resistance.' + element]?.value?.value;
+  const resistanceFactor = resistance < 0 ? 1 - resistance / 2 : resistance >= .75 ? 1 / (1 + 4 * resistance) : 1 - resistance;
+  const c6 = withBuffs && build.constellation >= 6;
+  const stride = id === 'zibai.skill.param1' || id === 'zibai.skill.param2';
+  const strideWindow = family === 'lunar-crystallize' && valueOfFact('zibai.strideElevationWindow');
+  const strideFactor = c6 && character.id === 'zibai' && (stride || strideWindow)
+    ? 1 + .016 * Math.max(0, valueOfFact('zibai.strideRadianceConsumed') - 70) : 1;
   if (family === 'ordinary') {
-    let flat = 0, multiplier = 1;
-    if (withBuffs && ['aether-hydro.skill.param1', 'lumine-hydro.skill.param1'].includes(hit.id) && valueOfFact('hpRatio') > .5) flat += stats.hp * parameter(talent.id, 'param6');
-    if (withBuffs && character.id === 'yoimiya' && hit.id.endsWith('.pyro')) multiplier *= parameter('yoimiya.skill', 'param4');
-    if (withBuffs && ['lohen.skill.param17', 'lohen.burst.param1'].includes(hit.id)) multiplier *= 1 + valueOfFact('lohen.will') * parameter(talent.id, talent.category === 'skill' ? 'param18' : 'param2');
-    return (base * multiplier + flat) * .5 * .9 * (1 + (specialized === (hit.element ?? talent.element) + 'Bonus' ? bonus : 0));
+    let flat = 0, multiplier = 1, damageBonus = specialized === element + 'Bonus' ? bonus : 0;
+    // Clause ratios come from the captured talent and constellation text, with the supporting cases
+    // in character-clause-grants-audit and talent-condition-grants-audit. Resolve talent curves at this build's rank.
+    if (withBuffs) {
+      if (['aether-hydro.skill.param1', 'lumine-hydro.skill.param1'].includes(id) && valueOfFact('hpRatio') > .5) flat += stats.hp * parameter(talent.id, 'param6');
+      if (id.startsWith('aloy.normal.ice-')) damageBonus += parameter('aloy.skill', 'param8');
+      if (id.startsWith('amber.normal.c1-')) multiplier *= .2;
+      if (id.startsWith('chasca.a1.covering-fire')) multiplier *= 1.5;
+      if (id === 'chiori.c2.kinu') multiplier *= 1.7;
+      if (id.startsWith('emilie.normal.c6-fragrance-')) flat += 3 * stats.attack;
+      if (id === 'eula.a0.shattered-lightfall') multiplier *= .5;
+      if (id === 'fischl.a0.stellar-predator') multiplier *= 1.527;
+      if (id.startsWith('furina.normal.c6-param')) flat += .18 * stats.hp;
+      if (id.startsWith('kamisatoayaka.c2.smaller-frostflake-')) multiplier *= .2;
+      if (id === 'klee.c1.chained-reactions') multiplier *= 1.2;
+      if (id === 'lanyan.a0.absorbed-ring') multiplier *= .5;
+      if (id === 'linnea.normal.ultra-convenient-quick-arrow') multiplier *= .2;
+      if (['lohen.skill.param17', 'lohen.burst.param1'].includes(id)) multiplier *= 1 + valueOfFact('lohen.will') * parameter(talent.id, talent.category === 'skill' ? 'param18' : 'param2');
+      if (id === 'lyney.c6.reprised-strike') multiplier *= .8;
+      if (id === 'mavuika.burst.param1') flat += stats.attack * valueOfFact('mavuika.fightingSpirit') * parameter(talent.id, 'param3');
+      if (id === 'mona.skill.illusory-torrent') multiplier *= .5;
+      if (id === 'mualani.skill.param1' && valueOfFact('mualani.waveMomentum') === 3) flat += stats.hp * parameter(talent.id, 'param3');
+      if (id === 'shikanoinheizou.skill.param1' && valueOfFact('shikanoinheizou.declension') === 4) flat += stats.attack * parameter(talent.id, 'param3');
+      if (id.startsWith('wanderer.c6.kuugo-param')) multiplier *= .4 * parameter('wanderer.skill', 'param2');
+      if (id === 'wriothesley.a0.rebuke-vaulting-fist') damageBonus += build.constellation >= 1 ? 2 : .5;
+      if (id === 'wriothesley.c6.gracious-icicle') damageBonus += 2;
+      if (id === 'yelan.c6.mastermind-barb') multiplier *= 1.56;
+      if (id.startsWith('yoimiya.c6.kindling-arrow-')) multiplier *= .6 * parameter('yoimiya.skill', 'param4');
+      if (character.id === 'yoimiya' && id.endsWith('.pyro')) multiplier *= parameter('yoimiya.skill', 'param4');
+    }
+    const attackLevel = build.level + 100, enemyLevel = target.level.value.value + 100;
+    const defenseReduction = target.defenseReduction.value.value + (withBuffs && build.constellation >= 2 && (ring || riding && build.constellation >= 6) ? .2 : 0);
+    return (base * multiplier * steadyCore + flat) * attackLevel / (attackLevel + enemyLevel * (1 - defenseReduction)) * resistanceFactor * (1 + damageBonus) * strideFactor;
   }
   const coefficient = family === 'stellar-conduct' ? attachmentRates[valueOfFact('stellarAttachments')]
     : reactionConstants.find(entry => entry.formula === family + '-direct' && entry.node === 'reactionCoefficient')?.value;
   const mastery = stats.elementalMastery;
   const blessing = blessings.get(character.id);
   const passive = withBuffs && blessing?.families.includes(family) ? Math.min(blessing.cap, stats[blessing.stat] * blessing.rate) : 0;
-  return base * (1 + passive) * coefficient * (1 + 6 * mastery / (2000 + mastery)) * .9;
+  const lunarBloom = family === 'lunar-bloom';
+  const neferC6 = id.startsWith('nefer.skill.c6-phantasm-');
+  const flat = withBuffs && lunarBloom && character.id === 'nefer' && build.constellation >= 1
+    ? .6 * mastery * (1 + .08 * valueOfFact('nefer.phantasmVeil')) : 0;
+  const stellarC6 = build.constellation >= 6 && (character.id === 'sandrone' || character.id === 'vesna' && family === 'stellar-swirl');
+  let elevation = withBuffs && stellarC6 ? 1.2
+    : withBuffs && neferC6 && valueOfFact('fullMoonsign') ? 1.15 : 1;
+  if (c6 && character.id === 'flins' && family === 'lunar-charged') elevation = valueOfFact('fullMoonsign') ? 1.45 : 1.35;
+  if (c6 && character.id === 'mitya' && family === 'stellar-conduct') elevation = 1.2;
+  if (c6 && character.id === 'odette' && ['stellar-conduct', 'stellar-swirl'].includes(family)) elevation = valueOfFact('odette.splendorStacks') > 0 ? 1.45 : 1.2;
+  const lunarBonus = withBuffs && character.id === 'zibai' && family === 'lunar-crystallize' && build.constellation >= 2 && valueOfFact('zibai.lunarPhase') ? .3 : 0;
+  return (base * steadyCore * (1 + passive) * coefficient * (1 + 6 * mastery / (2000 + mastery) + lunarBonus) + flat) * resistanceFactor * elevation * strideFactor;
 }
 
 function parameterRefs(value, skill, out = new Set()) {
@@ -120,134 +166,179 @@ function talentDetailKind(label) {
   if (/护盾.*吸收量|^吸收量$/.test(label)) return '护盾吸收量';
   if (/总伤害/.test(label)) return '子段总计';
   if (/间隔|时间|时长|时限|冷却/.test(label)) return '时间';
-  if (/伤害/.test(label) && !/减免|加成|提升|提高|增加|吸收|转化/.test(label)) return '伤害';
-  if (/能量|体力|消耗|获取|恢复|回复/.test(label)) return '资源';
-  if (/次数|层数|数量|个数/.test(label)) return '计数';
-  if (/提升|提高|加成|增加|减少|减免|转化|强化|抗性/.test(label)) return '属性或机制';
+  if (/伤害/.test(label) && !/减免|加成|提升|提高|增加|吸收|转化|降低/.test(label)) return '伤害';
+  if (/次数|层数|数量|个数|攻击段数/.test(label)) return '计数';
+  if (/能量|体力|消耗|获取|恢复|回复|生命流失|损失生命值|赋予生命之契|空居力|夜魂值上限|引力值上限|战意上限|气氛值上限|蛇之狡谋上限|赤鬃之血上限/.test(label)) return '资源';
+  if (/提升|提高|降低|加成|增加|减少|减免|减伤|转化|强化|抗性|攻速|攻击速度|继承生命|触发几率/.test(label)) return '属性或机制';
   return '其他技能说明';
 }
-function gateCases(character, declaration) {
+function gateCases(character, talent, declaration, owner, defaultParty) {
   const gates = [...declaration.when ?? [], ...declaration.coordinated ? [declaration.coordinated.readyFact] : []];
   if (!gates.length) return [];
-  const facts = new Set(), thresholds = new Map();
+  const facts = new Map(), states = new Map(), teams = [];
   const template = id => character.metadata.formulas?.find(f => f.id === id)?.template ?? commonTemplates.get(id);
-  function collect(node) {
-    if (typeof node === 'string') facts.add(node);
-    else if (node.fact) facts.add(node.fact);
-    else {
+  function collect(node, condition) {
+    const key = typeof node === 'string' ? node : node.fact ?? node.state;
+    if (key) {
+      const fields = node.state ? states : facts;
+      const thresholds = fields.get(key) ?? [];
+      if (condition) thresholds.push(condition);
+      fields.set(key, thresholds);
+    } else if (node.teamCount) teams.push({ ...node.teamCount, threshold: condition?.threshold ?? 0 });
+    else if (node.call) {
       const definition = template(node.call);
-      if (definition?.id === 'quantity-condition') {
-        const key = node.inputs?.[definition.input]?.fact;
-        if (key) thresholds.set(key, definition.threshold);
+      for (const [input, child] of Object.entries(node.inputs)) {
+        collect(child, definition?.id === 'quantity-condition' && definition.input === input ? definition : undefined);
       }
-      Object.values(node.inputs ?? {}).forEach(collect);
     }
   }
-  gates.forEach(collect);
-  function test(node, values) {
-    if (typeof node === 'string' || node.fact) return values[typeof node === 'string' ? node : node.fact];
+  for (const gate of gates) collect(gate);
+  function test(node, testCase) {
+    if (typeof node === 'number') return node;
+    if (typeof node === 'string' || node.fact) return testCase.values[typeof node === 'string' ? node : node.fact];
+    if (node.amount !== undefined) return node.amount;
+    if (node.state) return testCase.ranks[node.state] ?? owner[node.state];
+    if (node.teamCount) {
+      const { elements, match, excludeOwner, cap, distinctElements } = node.teamCount;
+      const party = excludeOwner ? testCase.party : [character.identity.element, ...testCase.party];
+      const matches = party.filter(element => elements.includes(element) === (match === 'include'));
+      return Math.min(cap ?? Infinity, distinctElements ? new Set(matches).size : matches.length);
+    }
     const definition = template(node.call);
-    const args = Object.values(node.inputs ?? {}).map(child => test(child, values));
-    if (node.teamCount) return node.teamCount.elements.includes('pyro') ? 1 : 0;
     if (definition?.id === 'quantity-condition') {
-      const a = args[0], b = definition.threshold;
+      const a = test(node.inputs[definition.input], testCase), b = definition.threshold;
+      if (!Number.isFinite(a)) return undefined;
       return ({ gt: a > b, gte: a >= b, eq: a === b, lt: a < b, lte: a <= b })[definition.relation];
     }
-    if (definition?.id === 'enum-condition') return args[0] === definition.equals;
+    if (definition?.id === 'enum-condition') return test(node.inputs[definition.input], testCase) === definition.equals;
+    const args = Object.values(node.inputs ?? {}).map(child => test(child, testCase));
     if (definition?.id !== 'condition-group' || args.some(arg => arg === undefined)) return undefined;
     const value = definition.operator === 'all' ? args.every(Boolean) : args.some(Boolean);
     return definition.negate ? !value : value;
   }
-  let cases = [{}];
-  for (const key of facts) {
+  const parties = [defaultParty];
+  if (teams.length) parties.push([]);
+  for (const team of teams) {
+    const matching = (team.match === 'include' ? team.elements : elements.filter(element => !team.elements.includes(element)))
+      .filter(element => element !== 'physical');
+    for (let count = 1; count <= Math.min(3, team.threshold + 1); count++) {
+      if (team.distinctElements && matching.length < count) continue;
+      if (matching.length) parties.push(Array.from({ length: count }, (_, index) => matching[index % matching.length]));
+    }
+  }
+  let cases = Array.from(new Map(parties.map(party => [JSON.stringify(party), party])).values(), party => ({ values: {}, ranks: {}, party }));
+  for (const [key, thresholds] of facts) {
     const field = combatFactDeclaration(character.metadata.facts, key);
-    if (!field || field.type.kind === 'quantity' && !thresholds.has(key)) return [];
-    const threshold = thresholds.get(key), step = field.type.unit === 'scalar' ? 0.01 : 1;
-    const options = field.type.kind === 'quantity' ? [Math.max(0, threshold - step), threshold, threshold + step]
+    if (!field || field.type.kind === 'quantity' && !thresholds.length) return [];
+    const input = talent.inputs?.find(input => input.id === key);
+    const step = field.type.unit === 'scalar' ? .01 : 1;
+    const options = field.type.kind === 'quantity' ? [...new Set(thresholds.flatMap(({ threshold, maxInput }) =>
+      [threshold - step, threshold, threshold + step].filter(value => value >= (input?.min ?? 0) && value <= (input?.max ?? maxInput ?? Infinity))))]
       : field.type.kind === 'boolean' ? [false, true] : field.type.values;
-    cases = cases.flatMap(values => options.map(value => ({ ...values, [key]: value })));
+    cases = cases.flatMap(test => options.map(value => ({ ...test, values: { ...test.values, [key]: value } })));
   }
-  return cases.map(values => ({ values, active: gates.every(gate => test(gate, values) === true) }));
-}
-function setGateFacts(character, frame, values) {
-  for (const [key, value] of Object.entries(values)) {
-    const field = combatFactDeclaration(character.metadata.facts, key);
-    const input = typeof value === 'number' ? number(field.type.unit, value) : typeof value === 'boolean' ? bool(value) : fact({ kind: 'enum', value });
-    if (field.scope === 'query') { frame.facts[key] = input; continue; }
-    const subject = field.scope === 'team' ? { kind: 'team' } : field.scope === 'target' ? { kind: 'target', id: 'enemy' } : { kind: 'actor', id: 'actor' };
-    let row = frame.factOverrides.find(row => row.subject.kind === subject.kind && row.subject.id === subject.id);
-    if (!row) frame.factOverrides.push(row = { subject, facts: {} });
-    row.facts[key] = input;
+  for (const [state, thresholds] of states) {
+    const minimum = owner[state], maximum = state === 'refinement' ? 5 : 6;
+    const options = [...new Set([minimum, ...thresholds.flatMap(({ threshold }) => [threshold - 1, threshold, threshold + 1])])]
+      .filter(value => value >= minimum && value <= maximum).sort((a, b) => a - b);
+    cases = cases.flatMap(test => options.map(value => ({ ...test, ranks: { ...test.ranks, [state]: value } })));
   }
+  cases.sort((a, b) => (a.ranks.ascension ?? owner.ascension) - (b.ranks.ascension ?? owner.ascension)
+    || (a.ranks.constellation ?? owner.constellation) - (b.ranks.constellation ?? owner.constellation)
+    || (a.ranks.refinement ?? owner.refinement) - (b.ranks.refinement ?? owner.refinement));
+  return cases.map(testCase => ({ ...testCase, active: gates.every(gate => test(gate, testCase) === true) }));
 }
 
-function projectQuery(request, targetFacts={}) {
-  const facts=request.frame.factOverrides.map(({subject,facts})=>({
-    subject:subject.kind==='actor'?{kind:'actor',id:'owner'}:subject.kind==='target'?{kind:'target',id:'target'}:subject, values:structuredClone(facts),
-  }));
-  if (Object.keys(targetFacts).length) {
-    const target=facts.find(row=>row.subject.kind==='target');
-    if (target) target.values={...targetFacts,...target.values};
-    else facts.push({subject:{kind:'target',id:'target'},values:structuredClone(targetFacts)});
-  }
-  if (Object.keys(request.frame.facts).length) facts.push({subject:{kind:'event'},values:structuredClone(request.frame.facts)});
-  return {hit:request.hit,crit:request.critMode,reaction:request.reactionMode,facts};
+const ascensionLevels = [1, 20, 40, 50, 60, 70, 80];
+const convertedElements = ['pyro', 'hydro', 'electro', 'cryo'];
+const elementRepresentatives = { anemo: 'jean', geo: 'noelle', electro: 'lisa', hydro: 'barbara', pyro: 'amber', cryo: 'kaeya', dendro: 'collei' };
+
+function withRanks(build, ranks) {
+  return { ...build, ...ranks, level: Math.max(build.level, ascensionLevels[ranks.ascension ?? build.ascension]) };
 }
+
+function agrees(actual, expected) {
+  return Number.isFinite(actual) && Number.isFinite(expected) && Math.abs(actual - expected) <= Math.max(1e-8, Math.abs(expected) * 1e-9);
+}
+
 export function rosterEvaluation(entities, engine, onQuery) {
   const rows = [], gaps = [], otherDetails = [], talentDetails = [];
-  const pending = readContentSource(new URL('../data/sources/catalog/combat-lifecycle.json', import.meta.url)).pendingHits;
+  const pending = lifecycle.pendingHits;
   const weapons = new Map(entities.weapons.map(weapon => [weapon.id, weapon]));
+  const characters = new Map(entities.characters.map(character => [character.id, character]));
   for (const character of entities.characters) {
     const build = auditBuild(character, weapons.get(novice[character.identity.weaponType]));
-    const priority = character.talents.some(t => t.hits.some(h => h.elementBy === 'partyPriorityElement' || h.elementBy === 'strikingHand'));
-    const members = [{ id: 'actor', build }, ...(priority ? [{ id: 'party-element', element: 'pyro' }] : [])];
-    const prepared = engine.prepareStructuredBuilds(members);
-    if (!prepared.ok) throw new Error(character.id + ': ' + JSON.stringify(prepared.diagnostics));
+    const preparedTeams = new Map();
+    function prepare(candidate, party) {
+      const key = JSON.stringify([candidate.weapon.id, candidate.ascension, candidate.constellation, candidate.refinement, party]);
+      if (!preparedTeams.has(key)) {
+        const members = [{ id: 'actor', build: candidate }, ...party.map((element, i) => ({ id: 'party-element-' + i, element }))];
+        const prepared = engine.prepareStructuredBuilds(members);
+        if (!prepared.ok) throw new Error(character.id + ': ' + JSON.stringify(prepared.diagnostics));
+        preparedTeams.set(key, prepared.team);
+      }
+      return preparedTeams.get(key);
+    }
     for (const [i, talent] of character.talents.entries()) {
       const meta = character.metadata.talents[i], entries = authoredHitEntries(character.metadata, talent.id);
       const parameters = parameterRefs([entries.map(row => row.hit.base), ...character.metadata.talents.map(t => t.buffs), ...character.metadata.passives.map(p => p.buffs), ...character.metadata.constellations.map(c => c.buffs)], talent.id);
       for (const [j, detail] of meta.details.entries()) {
-        const keys = [...detail.template.matchAll(/\{(param\d+)(?:[:}])/g)].map(match => match[1]);
+        const keys = [...new Set([...detail.template.matchAll(/\{(param\d+)(?:[:}])/g)].map(match => match[1]))];
         const kind = talentDetailKind(detail.label);
-        const detailRow = { entity: character.id, skill: talent.id, field: '/talents/' + i + '/details/' + j,
-          name: detail.label, kind, template: detail.template, parameters: [...new Set(keys)] };
-        talentDetails.push(detailRow);
-        if (!/伤害/.test(detail.label)) continue;
-        if (/间隔|减免|伤害增加$|加成|提升|吸收|增加比例|伤害提高|转化|总伤害/.test(detail.label)) {
-          otherDetails.push({ entity: character.id, field: '/talents/' + i + '/details/' + j, name: detail.label, template: detail.template,
-            kind: /总伤害/.test(detail.label) ? '子段总计' : /间隔/.test(detail.label) ? '时间参数' : '属性或机制贡献',
-            parameters: keys, missingContributionParameters: keys.filter(k => !parameters.has(k)) });
-          continue;
+        const field = '/talents/' + i + '/details/' + j;
+        const detailRow = { entity: character.id, skill: talent.id, field,
+          name: detail.label, kind, template: detail.template, parameters: keys };
+        if (kind === '属性或机制') {
+          detailRow.boundContributionParameters = keys.filter(key => parameters.has(key));
+          detailRow.missingContributionParameters = keys.filter(key => !parameters.has(key));
+          const source = 'src/game-data/data/characters/' + character.id + '.json#' + field;
+          const interpretation = lifecycle.interpretations.find(row => row.entity === character.id && row.fields.includes(field));
+          otherDetails.push({ ...detailRow, kind: '属性或机制贡献', source, ...(interpretation ? { reason: interpretation.reason } : {}) });
+        } else if (kind === '子段总计' || kind === '时间' || kind === '资源') {
+          otherDetails.push({ ...detailRow, kind: kind === '时间' ? '时间参数' : kind === '资源' ? '资源参数' : kind });
         }
+        talentDetails.push(detailRow);
+        if (kind !== '伤害') continue;
         if (keys.some(key => !parameters.has(key))) {
-          const field = '/talents/' + i + '/details/' + j;
           const remaining = pending.find(row => row.entity === character.id && row.field === field);
           gaps.push({ entity: character.id, field, name: detail.label, parameters: keys, issue: remaining?.reason ?? '详情倍率尚需判定独立命中或机制归属',
             ...(remaining ? { classification: remaining.classification, missingFields: remaining.missingFields } : {}) });
         }
       }
       for (const [j, hit] of talent.hits.entries()) {
-        const { setup, request } = auditHit(character, talent, hit);
-        setup.targets[0].facts.targetHpRatio = number('scalar', 1);
-        const { hit: declaration, field, unlock } = entries[j], cases = gateCases(character, declaration);
+        const { hit: declaration, field, unlock } = entries[j];
+        const masteryOnly = declaration.base?.inputs?.basis?.inputs?.attribute?.stat === 'elementalMastery' && character.id === 'nefer';
+        const baseline = masteryOnly ? { ...build, weapon: weapons.get('sacrificialfragments') } : build;
+        const owner = withRanks(baseline, unlock?.rank ? { [unlock.state]: unlock.rank } : {});
+        const defaultParty = ['partyPriorityElement', 'strikingHand'].includes(hit.elementBy) ? ['pyro'] : [];
+        const cases = gateCases(character, talent, declaration, owner, defaultParty);
         const enabled = cases.find(test => test.active);
+        const party = enabled?.party ?? defaultParty;
+        const gateBuild = withRanks(owner, enabled?.ranks ?? {});
+        const activeTeam = prepare(gateBuild, party);
+        const { setup, request } = auditHit(character, talent, hit);
+        setAuditDefaults(character, request.frame);
+        setup.targets[0].facts.targetHpRatio = number('scalar', 1);
         if (enabled) setGateFacts(character, request.frame, enabled.values);
         const family = declaration.family;
-        if (hit.elementBy === 'absorbedElement') request.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: 'pyro' });
+        if (hit.elementBy === 'absorbedElement') request.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: party.find(e => convertedElements.includes(e)) ?? 'pyro' });
         if (hit.elementBy === 'strikingHand') request.frame.facts.strikingHand = fact({ kind: 'enum', value: 'right' });
         if (typeof family === 'object') setGateFacts(character, request.frame, { [family.by]: enabled?.values[family.by] ?? Object.keys(family.cases)[0] });
         if (family === 'stellar-conduct' || typeof family === 'object' && Object.values(family.cases).includes('stellar-conduct')) request.frame.facts.stellarAttachments = number('count', 1);
-        const gateBuild = unlock?.rank ? { ...build, [unlock.state]: unlock.rank,
-          ...(unlock.state === 'ascension' ? { level: [1, 20, 40, 50, 60, 70, 80][unlock.rank] } : {}) } : build;
-        const activeTeam = gateBuild === build ? prepared.team : engine.prepareStructuredBuilds([{ id: 'actor', build: gateBuild }, ...members.slice(1)]).team;
         setup.targets[0].inputs.level = number('count', gateBuild.level);
         const evaluated = engine.evaluateStructuredHit(activeTeam, setup, request);
-        const expected = referenceDamage(gateBuild, talent, declaration, request.frame);
+        const expected = referenceDamage(gateBuild, talent, declaration, setup, request, party);
         if (onQuery) {
-          const anchor=setup.events.find(event=>event.kind==='capture');
-          onQuery({label:character.id+'/'+hit.id,build:gateBuild,damage:projectQuery(request,setup.targets[0].facts),expected,
-            ...(priority?{teammate:auditBuild(entities.characters.find(c=>c.id==='amber'),weapons.get('huntersbow'))}:{}),
-            ...(anchor?{capture:{skillId:anchor.skillId,phase:request.frame.captures[anchor.id].phase}}:{})});
+          const anchor = setup.events.find(event => event.kind === 'capture');
+          const teammates = party.map(element => {
+            const member = characters.get(elementRepresentatives[element]);
+            return auditBuild(member, weapons.get(novice[member.identity.weaponType]));
+          });
+          onQuery({ label: character.id + '/' + hit.id, build: gateBuild, damage: projectQuery(request, setup.targets[0].facts), expected: Number.isFinite(expected) ? expected : null,
+            ...(teammates.length ? { teammate: teammates[0] } : {}),
+            ...(teammates.length > 1 ? { additionalMembers: teammates.slice(1) } : {}),
+            ...(anchor ? { capture: { skillId: anchor.skillId, phase: request.frame.captures[anchor.id].phase,
+              ...(anchor.subjectFacts?.length ? { facts: projectFacts(anchor.subjectFacts, anchor.facts) } : {}) } } : {}) });
         }
         const applied = [...new Set(evaluated.trace.filter(node => node.kind === 'effect' && node.value?.kind === 'quantity' && node.value.value !== 0)
           .map(node => node.context?.effectInstanceId).filter(Boolean))];
@@ -255,80 +346,105 @@ export function rosterEvaluation(entities, engine, onQuery) {
         const row = { entity: character.id, field, ...(unlock ? { unlock } : {}), hit: hit.id, value, status: evaluated.execution };
         if (Number.isFinite(expected) && value !== null) {
           row.expected = expected;
-          if (Math.abs(expected - value) > Math.max(1e-8, Math.abs(expected) * 1e-9)) row.issue = '独立基础伤害不符';
+          if (!agrees(value, expected)) row.issue = '独立基础伤害不符';
           if (applied.length) {
             const context = engine.createStructuredCombatContext(activeTeam, setup);
             context.effectRevisions = applied.map(instanceId => ({ instanceId, disabled: true }));
             const neutral = engine.evaluateStructuredHit(activeTeam, setup, request, { context }).totals.all.value?.value ?? null;
-            const expectedBase = referenceDamage(gateBuild, talent, declaration, request.frame, false);
+            const expectedBase = referenceDamage(gateBuild, talent, declaration, setup, request, party, false);
             row.baseComparison = { excludedInstances: applied, value: neutral, expected: expectedBase };
-            if (neutral === null || Math.abs(expectedBase - neutral) > Math.max(1e-8, Math.abs(expectedBase) * 1e-9)) row.issue = '独立基础伤害不符';
+            if (!agrees(neutral, expectedBase)) row.issue = '独立基础伤害不符';
           }
         }
         if (unlock?.rank) {
-          row.lockedValue = engine.evaluateStructuredHit(prepared.team, setup, request).totals.all.value?.value ?? null;
+          const locked = withRanks(gateBuild, { [unlock.state]: unlock.rank - 1 });
+          locked.level = ascensionLevels[locked.ascension];
+          row.lockedValue = engine.evaluateStructuredHit(prepare(locked, party), setup, request).totals.all.value?.value ?? null;
           if (row.lockedValue !== 0) row.issue = '未解锁命中仍有贡献或缺值';
         }
-        if (enabled) row.activeFacts = enabled.values;
+        if (enabled && Object.keys(enabled.values).length) row.activeFacts = enabled.values;
+        if (gateBuild.ascension || gateBuild.constellation) row.activeRanks = { ascension: gateBuild.ascension, constellation: gateBuild.constellation };
+        if (party.length) row.party = party;
+        if (masteryOnly) row.weapon = gateBuild.weapon.id;
         if (typeof family === 'object') row.branches = Object.entries(family.cases).map(([choice, expectedFamily]) => {
-          setGateFacts(character, request.frame, { [family.by]: choice });
-          const result = engine.evaluateStructuredHit(activeTeam, setup, request);
-          const branch = { choice, family: expectedFamily, value: result.totals.all.value?.value ?? null };
-          if (branch.value === null || result.outputs.length !== 1 || result.outputs[0].family !== expectedFamily) row.issue = '条件分支缺失或重复';
+          const probe = structuredClone(request);
+          setGateFacts(character, probe.frame, { [family.by]: choice });
+          const result = engine.evaluateStructuredHit(activeTeam, setup, probe);
+          const gate = cases.find(test => Object.hasOwn(test.values, family.by) && test.values[family.by] === choice && test.party === party
+            && Object.entries(test.ranks).every(([key, rank]) => gateBuild[key] === rank)
+            && Object.entries(test.values).every(([key, value]) => key === family.by || enabled?.values[key] === value));
+          const branch = { choice, family: expectedFamily, value: result.totals.all.value?.value ?? null,
+            expected: gate?.active === false ? 0 : referenceDamage(gateBuild, talent, declaration, setup, probe, party) };
+          if (!agrees(branch.value, branch.expected) || result.outputs.length !== 1 || result.outputs[0].family !== expectedFamily) row.issue = '条件分支缺失或重复';
           return branch;
         });
-        if (hit.elementBy === 'absorbedElement') row.elementCases = ['none', 'pyro', 'hydro', 'electro', 'cryo'].map(element => {
-          request.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: element });
+        if (hit.elementBy === 'absorbedElement') row.elementCases = ['none', ...convertedElements].map(element => {
+          const probe = structuredClone(request);
+          probe.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: element });
           const input = structuredClone(setup);
           if (element !== 'none') input.targets[0].inputs['resistance.' + element] = number('scalar', .3);
-          const output = engine.evaluateStructuredHit(activeTeam, input, request);
+          const variant = declaration.id === 'chasca.a1.covering-fire-converted' && element !== 'none' ? [element] : party;
+          const output = engine.evaluateStructuredHit(prepare(gateBuild, variant), input, probe);
           const result = output.totals.all.value?.value ?? null;
-          const expected = element === 'none' ? 0 : value * .7 / .9;
-          if (result === null || Math.abs(result - expected) > 1e-6 || output.outputs.length !== 1) row.issue = '元素转化分支不符';
+          const expected = referenceDamage(gateBuild, talent, declaration, input, probe, variant);
+          if (!agrees(result, expected) || output.outputs.length !== 1) row.issue = '元素转化分支不符';
           return { element, value: result, expected };
         });
-        if (hit.elementBy === 'absorbedElement') request.frame.facts[hit.elementBy] = fact({ kind: 'enum', value: 'pyro' });
         if (hit.elementBy === 'partyPriorityElement') row.elementCases = [['anemo'], ['cryo'], ['cryo', 'electro'], ['cryo', 'hydro', 'electro'], ['hydro', 'pyro']].map(party => {
           const input = structuredClone(setup);
-          const chosen = ['pyro', 'hydro', 'electro', 'cryo'].find(element => party.includes(element)) ?? 'anemo';
+          const converted = convertedElements.find(element => party.includes(element));
+          const chosen = converted ?? hit.element;
           input.targets[0].inputs['resistance.' + chosen] = number('scalar', .3);
-          const altered = engine.prepareStructuredBuilds([{ id: 'actor', build }, ...party.map((element, i) => ({ id: 'other-' + i, element }))]);
-          const output = engine.evaluateStructuredHit(altered.team, input, request);
+          const output = engine.evaluateStructuredHit(prepare(gateBuild, party), input, request);
           const result = output.totals.all.value?.value ?? null;
-          const expected = chosen === 'anemo' && declaration.when?.some(gate => gate.call === 'varka.has-element') ? 0 : value * .7 / .9;
-          if (result === null || Math.abs(result - expected) > 1e-6 || output.outputs.length !== 1) row.issue = '元素转化分支不符';
+          const expected = !converted && declaration.when?.some(gate => gate.call === 'varka.has-element') ? 0
+            : referenceDamage(gateBuild, talent, declaration, input, request, party);
+          if (!agrees(result, expected) || output.outputs.length !== 1) row.issue = '元素转化分支不符';
           return { elements: party, chosen, value: result, expected };
         });
         if (hit.elementBy === 'strikingHand') {
           row.elementCases = [];
           for (const party of [[], ['electro', 'hydro'], ['pyro', 'cryo']]) {
-            const altered = engine.prepareStructuredBuilds([{ id: 'actor', build }, ...party.map((element, i) => ({ id: 'other-' + i, element }))]);
             const input = structuredClone(setup);
             input.targets[0].inputs['resistance.anemo'] = number('scalar', .4);
             for (const hand of ['left', 'right', null]) {
               const probe = structuredClone(request);
               probe.frame.facts.strikingHand = fact(hand ? { kind: 'enum', value: hand } : null);
-              const output = engine.evaluateStructuredHit(altered.team, input, probe);
+              const output = engine.evaluateStructuredHit(prepare(gateBuild, party), input, probe);
               const actual = output.totals.all.value?.value ?? null;
               const unknown = hand === null && party.length > 0;
-              const expected = unknown ? null : hand === 'left' || !party.length ? value * .6 / .9 : value;
-              const agrees = unknown ? actual === null && output.requiredInputs.some(input => input.key === 'strikingHand' && input.scope === 'query')
-                : Number.isFinite(actual) && Math.abs(actual - expected) < 1e-6 && output.outputs.length === 1;
-              if (!agrees) row.issue = '重击的出手侧或缺项判定不符';
+              const expected = unknown ? null : referenceDamage(gateBuild, talent, declaration, input, probe, party);
+              const matches = unknown ? actual === null && output.requiredInputs.some(input => input.key === 'strikingHand' && input.scope === 'query')
+                : agrees(actual, expected) && output.outputs.length === 1;
+              if (!matches) row.issue = '重击的出手侧或缺项判定不符';
               row.elementCases.push({ elements: party, hand, value: actual, expected });
             }
+          }
+        }
+        if (hit.id === 'wanderer.a1.descent-arrow') {
+          const input = structuredClone(setup);
+          const capture = input.events.find(event => event.kind === 'capture');
+          capture.subjectFacts[0].values['wanderer.jadeClaimed-pyro'] = bool(true);
+          const captured = engine.evaluateStructuredHit(activeTeam, input, request).totals.all.value?.value ?? null;
+          const expected = referenceDamage(gateBuild, talent, declaration, input, request, party);
+          const missing = engine.evaluateStructuredHit(activeTeam, setup, { ...request, frame: { ...request.frame, captures: {} } });
+          const inputs = missing.requiredInputs.map(input => ({ key: input.key, scope: input.scope }));
+          row.captureComparison = { captured, expected, missing: missing.totals.all.value?.value ?? null, inputs };
+          if (!agrees(captured, expected) || row.captureComparison.missing !== null || !inputs.some(input => input.key === capture.id && (input.scope === 'capture' || input.scope.endsWith(':capture')))) {
+            row.issue = '捕获点属性或缺项判定不符';
           }
         }
         if (Array.isArray(declaration.base)) {
           const counts = [...new Set(declaration.base.map(term => term.count).filter(Boolean))];
           const mastery = declaration.base.some(term => term.stat === 'elementalMastery');
           if (counts.length || mastery) {
-            const counting = auditHit(character, talent, hit);
+            const counting = { request: structuredClone(request), setup: structuredClone(setup) };
             if (enabled) setGateFacts(character, counting.request.frame, enabled.values);
             if (family === 'stellar-conduct') counting.request.frame.facts.stellarAttachments = number('count', 1);
             if (typeof family === 'object') setGateFacts(character, counting.request.frame, { [family.by]: enabled?.values[family.by] ?? Object.keys(family.cases)[0] });
             const gear = mastery ? entities.weapons.find(w => w.id === 'sacrificialfragments' && w.weaponType === character.identity.weaponType) : undefined;
-            const countTeam = gear ? engine.prepareStructuredBuilds([{ id: 'actor', build: { ...gateBuild, weapon: gear } }]).team : activeTeam;
+            const countBuild = gear ? { ...gateBuild, weapon: gear } : gateBuild;
+            const countTeam = prepare(countBuild, party);
             row.countCases = [];
             for (const key of counts.length ? counts : [null]) {
               const input = talent.inputs?.find(i => i.id === key);
@@ -338,15 +454,8 @@ export function rosterEvaluation(entities, engine, onQuery) {
                 const calc = engine.evaluateStructuredHit(countTeam, counting.setup, counting.request);
                 const test = { input: key, count, ...(gear ? { weapon: gear.id } : {}), value: calc.totals.all.value?.value ?? null };
                 if (test.value === null) row.issue = '合法计数或精通配装缺少数值';
-                if (gear && declaration.base.every(term => term.stat === 'elementalMastery') && ['stellar-conduct','lunar-bloom'].includes(family)) {
-                  const em = gear.baseStat * gear.statCurve[1];
-                  const sum = declaration.base.reduce((sum, term) => sum + em * talent.parameters.find(p => p.id === term.parameter).values[0] * (term.count ? count : 1), 0);
-                  const factor = family === 'stellar-conduct' ? 1.45 : 1;
-                  const blessing = blessings.get(character.id);
-                  const extra = blessing?.stat === 'elementalMastery' && blessing.families.includes(family) ? Math.min(blessing.cap, blessing.rate * em) : 0;
-                  test.expected = sum * factor * (1 + extra) * (1 + 6 * em / (2000 + em)) * .9;
-                  if (Math.abs(test.expected - test.value) > 1e-7) row.issue = '计数或精通缩放数值不符';
-                }
+                test.expected = referenceDamage(countBuild, talent, declaration, counting.setup, counting.request, party);
+                if (test.value !== null && !agrees(test.value, test.expected)) row.issue = '计数或精通缩放数值不符';
                 row.countCases.push(test);
               }
             }
@@ -354,11 +463,13 @@ export function rosterEvaluation(entities, engine, onQuery) {
         }
 
         if (enabled) row.exclusions = cases.filter(test => !test.active).map(test => {
-          setGateFacts(character, request.frame, test.values);
-          const result = engine.evaluateStructuredHit(activeTeam, setup, request);
+          const probe = structuredClone(request);
+          setGateFacts(character, probe.frame, test.values);
+          const variant = withRanks(owner, test.ranks);
+          const result = engine.evaluateStructuredHit(prepare(variant, test.party), setup, probe);
           const value = result.totals.all.value?.value ?? null;
           if (value !== 0) row.issue = '不满足单项门槛仍有贡献或缺值';
-          return { facts: test.values, value };
+          return { facts: test.values, ...(Object.keys(test.ranks).length ? { ranks: test.ranks } : {}), ...(test.party !== party ? { party: test.party } : {}), value };
         });
         if (evaluated.outputs.length > 1) row.issue = '同一命中重复结算';
         else if (!Object.keys(hit.damage).length) row.issue = '伤害族或求值公式未绑定';
@@ -374,225 +485,20 @@ export function rosterEvaluation(entities, engine, onQuery) {
       }
     }
   }
-  return { settings: '角色与对应一星武器均为一级零突破、零命、精一、天赋一级、无圣遗物。敌人一级、各抗性10%，不暴击，无反应。默认计数取技能下界。受门槛约束的段采用明确有效的条件。被动和命座命中按授予门槛装配。基础值对照若关闭增益，逐项保留关闭的实例、对照结果及独立期望。', rows, gaps, otherDetails, talentDetails,
+  return { settings: '默认角色与对应一星武器均为一级零突破、零命、精一、天赋一级、无圣遗物。敌人与角色同级、各抗性10%，不暴击，不另加反应。默认计数取技能下界。受门槛约束的命中按授予条件设置突破、命座、队伍和明确事实。奈芙尔纯精通虚影段使用一级祭礼残章。保留增益生效时的独立数值对照，并逐项记录关闭实例后的基础值。', rows, gaps, otherDetails, talentDetails,
     summary: { talents: entities.characters.reduce((count, character) => count + character.talents.length, 0), talentDetails: talentDetails.length,
       healingDetails: talentDetails.filter(row => row.kind === '治疗量').length, shieldDetails: talentDetails.filter(row => row.kind === '护盾吸收量').length,
       evaluated: rows.length, numeric: rows.filter(row => row.value !== null).length, compared: rows.filter(row => row.expected !== undefined).length, neutralComparisons: rows.filter(row => row.baseComparison).length,
       mismatches: rows.filter(row => row.issue === '独立基础伤害不符').length, duplicate: rows.filter(row => row.issue === '同一命中重复结算').length,
       missingBindings: rows.filter(row => row.issue === '伤害族或求值公式未绑定').length, missingValues: rows.filter(row => row.issue === '缺少求值输入或公式').length,
-      conditionFailures: rows.filter(row => row.issue === '不满足单项门槛仍有贡献或缺值' || row.issue === '条件分支缺失或重复' || row.issue === '元素转化分支不符' || row.issue === '未解锁命中仍有贡献或缺值').length,
+      conditionFailures: rows.filter(row => ['不满足单项门槛仍有贡献或缺值', '条件分支缺失或重复', '元素转化分支不符', '未解锁命中仍有贡献或缺值',
+        '重击的出手侧或缺项判定不符', '捕获点属性或缺项判定不符'].includes(row.issue)).length,
       elementCases: rows.reduce((sum, row) => sum + (row.elementCases?.length ?? 0), 0),
       countCases: rows.reduce((sum, row) => sum + (row.countCases?.length ?? 0), 0),
       countFailures: rows.filter(row => row.issue === '合法计数或精通配装缺少数值' || row.issue === '计数或精通缩放数值不符').length,
       positiveHits: rows.filter(row => row.value > 0 || [...row.branches ?? [], ...row.countCases ?? []].some(test => test.value > 0)).length,
       familyCases: rows.reduce((sum, row) => sum + (row.branches?.length ?? 0), 0),
       conditionExclusions: rows.reduce((sum, row) => sum + (row.exclusions?.length ?? 0), 0), detailCandidates: gaps.filter(row => !row.hit).length, contextualDetails: otherDetails.length, contextualContributionsPending: otherDetails.filter(row => row.kind === '属性或机制贡献' && row.missingContributionParameters.length).length } };
-}
-
-const equipmentChecks = readContentSource(new URL('../data/sources/catalog/equipment-modifier-checks.json', import.meta.url));
-const evidence = group => readContentSource(new URL('../data/sources/catalog/genshin-db/' + group + '.json', import.meta.url));
-
-function conditionFacts(effect, entity, frame, enabled, build, sourceEvent) {
-  function apply(binding, active = enabled) {
-    if (!binding) return;
-    if (binding.kind === 'formula') {
-      const definition = entity.calculation.bundle.formulas.find(f => f.identity.id === binding.formula.id);
-      const operator = definition?.template;
-      if (operator?.id === 'energy-full') {
-        const burst=build.character.talents.find(t=>t.category==='burst');
-        const capacity=burst.parameters.find(p=>p.id===burst.energyCapacity?.parameter)?.values[build.talents.burst-1] ?? 0;
-        assign(binding.inputs.energy,number('energy',active?capacity:0));
-        return;
-      }
-      const desired = operator?.id === 'condition-group' && operator.negate ? !active : active;
-      for (const value of Object.values(binding.inputs)) {
-        if (value.kind === 'fact' && value.type.kind === 'quantity' && operator && 'threshold' in operator) {
-          const small = value.type.unit === 'count' ? Math.max(0, operator.threshold - 1) : operator.threshold / 2;
-          const large = value.type.unit === 'count' ? operator.threshold + 1 : (operator.threshold + 1) / 2;
-          assign(value, number(value.type.unit, (operator.relation === 'gt' || operator.relation === 'gte') === desired ? large : small));
-        } else apply(value, desired);
-      }
-    } else if (binding.kind === 'fact' && binding.type.kind === 'boolean') assign(binding, bool(active));
-  }
-  function assign(binding, fact) {
-    if (binding.scope==='source-event') { if(sourceEvent) sourceEvent.facts[binding.key]=fact; return; }
-    if (binding.scope === 'query') { frame.facts[binding.key] = fact; return; }
-    const subject = binding.scope === 'team' ? { kind: 'team' } : binding.scope === 'target' ? { kind: 'target', id: 'enemy' } : { kind: 'actor', id: 'actor' };
-    if (binding.at==='source-event') {
-      if(!sourceEvent)return;
-      const subjects=sourceEvent.subjectFacts??=[];
-      let row=subjects.find(r=>r.subject.kind===subject.kind && r.subject.id===subject.id);
-      if(!row)subjects.push(row={subject,values:{}});
-      row.values[binding.key]=fact;
-      return;
-    }
-    let row = frame.factOverrides.find(entry => entry.subject.kind === subject.kind && entry.subject.id === subject.id);
-    if (!row) frame.factOverrides.push(row = { subject, facts: {} });
-    row.facts[binding.key] = fact;
-  }
-  apply(effect.predicate);
-}
-function evaluateEquipmentCase(engine, build, owner, row, expectedWhite, holderCases, observationUnits, onQuery) {
-  const prepared = engine.prepareStructuredBuilds([{ id: 'actor', build }]);
-  if (!prepared.ok) return { ...row, issue: '配装无法装配', diagnostics: prepared.diagnostics.map(d => d.message) };
-  const talent = build.character.talents[0], hit = talent.hits[0];
-  const { setup, request } = auditHit(build.character, talent, hit);
-  const allGrants = engine.grantedBuildEffects(build);
-  for (const grant of allGrants) conditionFacts(grant.effect, grant.entity, request.frame, false, build);
-  const context = engine.createStructuredCombatContext(prepared.team, setup);
-  const result = engine.evaluateStructuredHit(prepared.team, setup, request, { context });
-  const white = context.actors[0].inputs.whiteAttack.value?.value;
-  const grants = allGrants.filter(grant => grant.entity.id === owner.id);
-  if (result.totals.all.state !== 'known') row.missingHitFields = result.requiredInputs.map(input => ({ key: input.key, scope: input.scope }));
-  row.whiteAttack = white;
-  row.expectedWhiteAttack = expectedWhite;
-  row.hit = hit.id;
-  row.value = result.totals.all.state === 'known' ? result.totals.all.value.value : null;
-  if (onQuery) {
-    onQuery({label:[row.entity,row.refinement??row.pieces,row.count].filter(value=>value!==undefined).join('/'),
-      build,damage:projectQuery(request),expected:row.value});
-  }
-  row.grants = grants.map(grant => grant.effect.identity.id);
-  row.modifiers = [];
-  if (!Number.isFinite(white) || Math.abs(expectedWhite - white) > 1e-8) row.issue = '白值与来源不符';
-  for (const { effect } of grants) {
-    const id = effect.identity.id;
-    if (effect.target.kind !== 'attribute') { row.modifiers.push({ id, issue: '乘区端口待逐项核验' }); continue; }
-    const selector = effect.appliesTo;
-    const frame = { ...request.frame, ownerId: 'actor', recipientId: 'actor', contributorId: null,
-      hit: { skillId: selector.skillIds?.[0] ?? talent.id, hitId: selector.hitIds?.[0] ?? hit.id, element: selector.elements?.[0] ?? hit.element,
-        category: selector.categories?.[0] ?? hit.category, family: selector.families?.[0] ?? 'ordinary', origin: selector.origins?.[0] ?? 'talent', reactionId: selector.reactionIds?.[0] ?? null } };
-    const target = effect.recipient.role === 'target';
-    const input = { kind: target ? 'enemy' : 'attribute', key: effect.target.attribute, at: { kind: 'current', phase: 'same' }, ...(target ? {} : { actor: { role: 'owner' } }) };
-    const evaluate = (world, applications, active = true) => {
-      const current = { ...frame, facts: { ...frame.facts }, factOverrides: structuredClone(frame.factOverrides), applications };
-      const trigger=world.events.find(event=>event.id==='trigger'),source=trigger && structuredClone(trigger);
-      if(source)world={...world,events:world.events.map(event=>event===trigger?source:event)};
-      conditionFacts(effect, owner, current, active, build,source);
-      const sample=holderCases?.get(id)?.[active?'included':'excluded'];
-      if(sample) {
-        if(sample.useBurst) {
-          const burst=sample.build.character.talents.find(t=>t.category==='burst'),hit=burst.hits[0];
-          current.hit={...current.hit,skillId:burst.id,hitId:hit.id,element:hit.element};
-        }
-        const real=engine.createStructuredCombatContext(sample.team,setup);
-        return engine.evaluateCombatBindings(sample.team.program,{...real,events:world.events,effectRevisions:world.effectRevisions},{value:input},current);
-      }
-      return engine.evaluateCombatBindings(prepared.team.program, world, { value: input }, current);
-    };
-    const selection = effect.trigger.kind === 'event' ? effect.trigger.selector : undefined;
-    const trigger = Array.isArray(selection) ? selection[0] : selection;
-    let activeContext = context, sourceId = null;
-    if (trigger) {
-      const skill = build.character.talents.find(t => trigger.categories?.includes(t.category) || trigger.skillIds?.includes(t.id));
-      const event = { id: 'trigger', kind: trigger.kinds[0], actorId: 'actor', targetIds: ['enemy'], timeMs: 0, order: 0,
-        category: trigger.categories?.[0] ?? skill?.category, skillId: trigger.skillIds?.[0] ?? skill?.id,
-        sourceEventIds: [], ...(trigger.reactionIds ? { reactionId: trigger.reactionIds[0] } : {}),
-        facts: trigger.observation ? { [trigger.observation.key]: trigger.observation.test === 'true' ? bool(true) : number(observationUnits[trigger.observation.key] ?? 'scalar', trigger.observation.test === 'decrease' ? -.1 : .1) } : {} };
-      activeContext = { ...context, events: [event, ...context.events] };
-      sourceId = event.id;
-    }
-    const instanceId = engine.calculationEffectInstanceId('actor', effect.buff ?? effect.identity, sourceId);
-    const on = evaluate(activeContext, effect.application === 'explicit' ? [{ instanceId, active: true }] : []);
-    const off = evaluate(trigger ? context : { ...context, effectRevisions: [{ instanceId, disabled: true }] }, []);
-    const contribution = on.trace.findLast(node => node.kind === 'effect' && node.nodeId === id);
-    const excluded = off.outputs.value?.state === 'known' && !off.trace.some(node => node.kind === 'effect' && node.nodeId === id);
-    const amount = contribution?.value?.kind === 'quantity' ? contribution.value.value : null;
-    const expected = effect.value.kind === 'constant' ? effect.value.value.value
-      : effect.value.kind === 'refinement-parameter' ? effect.value.values[build.refinement - 1] : undefined;
-    const disabledCondition = effect.predicate ? evaluate(activeContext, [], false) : null;
-    const inactive = disabledCondition ? disabledCondition.outputs.value?.state === 'known' && !disabledCondition.trace.some(node => node.kind === 'effect' && node.nodeId === id) : undefined;
-    const record = { id, target: effect.target.attribute.id, amount, excluded, ...(inactive === undefined ? {} : { conditionExcluded: inactive }), ...(expected === undefined ? {} : { declaredValue: expected }) };
-    const holders=holderCases?.get(id);
-    if(holders) record.holders={included:holders.included.build.character.id,excluded:holders.excluded.build.character.id};
-    const source = equipmentChecks[id];
-    if (source && row.kind === 'weapon') {
-      const matches = [...row.description.matchAll(new RegExp(source.pattern, 'g'))];
-      record.sourceValue = matches.length === 1 ? (source.sign ?? 1) * Number(matches[0][1]) / source.divisor : null;
-      if (source.entity !== row.entity || source.stat !== effect.target.attribute.id.slice('attribute.'.length)
-        || record.sourceValue === null || amount === null || Math.abs(amount - record.sourceValue) > 1e-8) record.issue = '实际贡献与采用值不符';
-    } else if (row.kind === 'weapon' && expected !== undefined) record.issue = '数值贡献缺少精炼原文的独立对照';
-    if (trigger && effect.lifetime.kind === 'interval') {
-      const shifted = { ...activeContext, events: activeContext.events.map(event => event.id === request.frame.eventId
-        ? { ...event, timeMs: effect.lifetime.durationMs } : event) };
-      const timed = evaluate(shifted, []);
-      record.expired = !timed.trace.some(node => node.kind === 'effect' && node.nodeId === id);
-      if (!record.expired) record.issue = '排除后仍然生效';
-    }
-    if (amount !== null && expected !== undefined && Math.abs(amount - expected) > 1e-9) record.issue = '实际贡献与采用值不符';
-    if (off.trace.some(node => node.kind === 'effect' && node.nodeId === id)) record.issue = '排除后仍然生效';
-    else if (!excluded) record.issue = '排除场景缺少其他输入';
-    if (inactive === false) record.issue = '排除条件尚待核验';
-    if (amount === null) record.issue = '此条件场景未观察到数值贡献';
-    row.modifiers.push(record);
-  }
-  return row;
-}
-
-/** Every legal refinement and every set threshold is queried with the same evaluator as a project. */
-export function rosterEquipmentEvaluation(entities, engine, observationUnits, onQuery) {
-  const weapons = evidence('weapons'), sets = evidence('sets'), rows = [], gaps = [];
-  const memberIds = { WEAPON_SWORD_ONE_HAND: 'kaeya', WEAPON_CLAYMORE: 'noelle', WEAPON_POLE: 'xiangling', WEAPON_BOW: 'amber', WEAPON_CATALYST: 'lisa' };
-  const member = type => entities.characters.find(c => c.id === memberIds[type]);
-  function whiteBase(c) { return c.attributes.base.attack * c.progression.curves.attack[1] + c.progression.promotion[0].attack; }
-  for (const weapon of entities.weapons) {
-    const c = member(weapon.weaponType), data = weapons[weapon.id];
-    const refinements = Object.keys(data.metadata).filter(key => /^r[1-5]$/.test(key)).map(key => Number(key.slice(1))).sort((a, b) => a - b);
-    if (!refinements.length) refinements.push(1);
-    if (weapon.maxRefinement !== refinements.at(-1)) throw new Error(weapon.id + ': 正式精炼上限与本地档位不符。');
-    for (const refinement of refinements) {
-      const build = { ...auditBuild(c, weapon), refinement };
-      const text = data.metadata['r' + refinement]?.description;
-      let capacityCases;
-      if(weapon.id==='moonweaversdawn') {
-        const samples=['keqing','kaeya','kamisatoayaka'].map(id=>{
-          const build={...auditBuild(entities.characters.find(c=>c.id===id),weapon),refinement};
-          const prepared=engine.prepareStructuredBuilds([{id:'actor',build}]);
-          if(!prepared.ok)throw Error(JSON.stringify(prepared.diagnostics));
-          return {build,team:prepared.team,useBurst:true};
-        });
-        capacityCases=new Map([['moonweaversdawn.capacity',{included:samples[0],excluded:samples[2]}],['moonweaversdawn.capacity.1',{included:samples[1],excluded:samples[0]}]]);
-      }
-      const row = evaluateEquipmentCase(engine, build, weapon, { kind: 'weapon', entity: weapon.id, field: '/buffs', refinement, description: text ?? '' }, whiteBase(c) + data.stats.base.attack + data.stats.promotion[0].attack,capacityCases,observationUnits,onQuery);
-      rows.push(row);
-      if (row.issue || row.modifiers.some(m => m.issue) || weapon.metadata.support.resolution !== 'complete') gaps.push({ ...row, reason: row.issue ?? (weapon.metadata.support.resolution !== 'complete' ? weapon.metadata.support.reason : '仍有待验条件') });
-    }
-  }
-  for (const set of entities.sets) for (const [i, piece] of set.metadata.effects.entries()) {
-    const type = piece.buffs?.find(buff => buff.activation?.weaponTypes)?.activation.weaponTypes[0] ?? 'WEAPON_SWORD_ONE_HAND';
-    const c = member(type), w = entities.weapons.find(weapon => weapon.id === novice[type]);
-    const counts = [piece.pieces - 1, piece.pieces];
-    const pair = counts.map(count => {
-      const build = { ...auditBuild(c, w, [set]), theoreticalSetSlots: set.slots.slice(0, count).map(slot => ({ slot, setId: set.id })) };
-      let holders;
-      if(set.id==='defenderswill' && count===4) {
-        const byElement = new Map(['amber','barbara','kaeya','lisa','noelle','sucrose','collei'].map(id=>{
-          const character=entities.characters.find(c=>c.id===id);
-          const weapon=entities.weapons.find(w=>w.id===novice[character.identity.weaponType]);
-          const sample={...auditBuild(character,weapon,[set]),theoreticalSetSlots:build.theoreticalSetSlots};
-          const prepared=engine.prepareStructuredBuilds([{id:'actor',build:sample}]);
-          if(!prepared.ok)throw Error(JSON.stringify(prepared.diagnostics));
-          return [character.identity.element,{build:sample,team:prepared.team}];
-        }));
-        holders=new Map([...byElement].map(([element,included])=>['defenderswill.resistance.'+element,{included,excluded:byElement.get(element==='cryo'?'hydro':'cryo')}]));
-      }
-      return evaluateEquipmentCase(engine, build, set, { kind: 'set', entity: set.id, pieces: piece.pieces, count, field: '/effects/' + i,
-        description: sets[set.id]['effect' + piece.pieces + 'Pc'] ?? '' }, whiteBase(c) + weapons[w.id].stats.base.attack,holders,observationUnits,onQuery);
-    });
-    const ids = set.effects[i].ruleIds.map(ref => ref.id);
-    if (ids.some(id => pair[0].grants?.includes(id) || !pair[1].grants?.includes(id))) pair[1].issue = '件数门槛的授予与排除不符';
-    rows.push(...pair);
-    if (pair.some(row => row.issue || row.modifiers.some(m => m.issue)) || piece.support.resolution !== 'complete') gaps.push({ ...pair[1], reason: pair[1].issue ?? piece.support.reason });
-  }
-  const modifiers = rows.flatMap(row => row.modifiers ?? []);
-  return { rows, gaps, summary: { weaponRefinementsEvaluated: rows.filter(r => r.kind === 'weapon').length,
-    weaponClausesPending: new Set(gaps.filter(row => row.kind === 'weapon').map(row => row.entity)).size,
-    setClausesPending: gaps.filter(row => row.kind === 'set').length,
-    setThresholdsEvaluated: rows.filter(r => r.kind === 'set').length / 2, equipmentScenarios: rows.length,
-    weaponTextComparisons: modifiers.filter(m => Number.isFinite(m.sourceValue) && !m.issue).length,
-    equipmentNumericHits: rows.filter(row => Number.isFinite(row.value)).length, equipmentMissingValues: rows.filter(row => !Number.isFinite(row.value)).length, equipmentMismatches: rows.filter(row => row.issue).length,
-    modifierScenarios: modifiers.length, numericModifierContributions: modifiers.filter(m => m.amount !== null && !m.issue).length,
-    modifierMismatches: modifiers.filter(m => m.issue === '实际贡献与采用值不符' || m.issue === '排除后仍然生效').length } };
 }
 
 export function auditReactionBlessings(entities, engine) {
@@ -701,7 +607,7 @@ export function auditResonances(entities, engine) {
   return { rows, summary: { publicResonanceScenarios: rows.length, publicResonanceMismatches: rows.filter(row => row.issue).length } };
 }
 
-export function auditPublicScenes(entities, engine) {
+export function auditPublicScenes(entities, engine, verified = new Set()) {
   const c = entities.characters.find(c => c.id === 'kaeya'), w = entities.weapons.find(w => w.id === 'dullblade'), build = auditBuild(c, w);
   const definitions = read('calculation/battle-scenes'), sources = readContentSource(new URL('../data/sources/catalog/battle-scenes.json', import.meta.url));
   const rows = [], gaps = [], branches = [], triggers = [];
@@ -711,6 +617,7 @@ export function auditPublicScenes(entities, engine) {
     hydroBonus:'水元素伤害',anemoBonus:'风元素伤害',electroBonus:'雷元素伤害',dendroBonus:'草元素伤害' };
   function sourceAmount(text, target) {
     if (text.includes(' Bonus ')) return Number(text.split(' Bonus ')[1]);
+    if (target === 'attribute.reaction.electro-charged.rangeBonus') return Number(text.match(/影响范围扩大([\d.]+)%/)?.[1]) / 100;
     if (target.startsWith('attribute.reaction.')) return Number([...text.matchAll(/([\d.]+)%/g)][target.includes('.transformative.') ? 0 : 1]?.[1]) / 100;
     const key = target.slice(10), name = labels[key];
     const match = text.match(new RegExp(name + '(?:提高|提升)([\\d.]+)(点|%)')) ?? text.match(new RegExp('获得([\\d.]+)(%)' + name));
@@ -718,7 +625,14 @@ export function auditPublicScenes(entities, engine) {
   }
   const ids = new Set(definitions.map(d => d.id));
   for (const definition of definitions) {
+    if (!definition.buffs.length) continue;
     const localText = sourceById.get(definition.id)?.text ?? '';
+    const currentScene = auditCurrentScene(definition, sourceById.get(definition.id), entities, engine);
+    if (currentScene) {
+      rows.push(...currentScene.rows);
+      gaps.push(...currentScene.gaps);
+      continue;
+    }
     if (/^「(?:炎祝|霜祝)」/.test(localText)) {
       const expectedElement = localText.includes('火元素') ? 'pyro' : 'cryo';
       const rate = Number(localText.match(/获得([\d.]+)%/)[1]) / 100;
@@ -776,7 +690,8 @@ export function auditPublicScenes(entities, engine) {
       let counted = false;
       for (const probe of probes) {
         const family = ['swirl','bloom','burgeon','hyperbloom','overloaded','electro-charged'].includes(probe) ? 'transformative' : probe;
-        const matches = !reaction || (target.includes('.transformative.') ? (text.includes('感电反应') ? probe === 'electro-charged' : text.includes('星扩散') ? probe === 'swirl' : ['bloom','burgeon','hyperbloom'].includes(probe))
+        const matches = !reaction || (target === 'attribute.reaction.electro-charged.rangeBonus' ? probe === 'electro-charged'
+          : target.includes('.transformative.') ? (text.includes('感电反应') ? probe === 'electro-charged' : text.includes('星扩散') ? probe === 'swirl' : ['bloom','burgeon','hyperbloom'].includes(probe))
           : target.includes('.stellar-swirl.') ? probe === 'stellar-swirl' : probe === 'lunar-bloom');
         const hit = reaction ? { skillId:null,hitId:null,category:null,element:probe==='swirl'?'hydro':probe==='electro-charged'?'electro':'dendro',family,origin:'reaction',reactionId:probe } : null;
         const [active,expired] = times.map(context => engine.evaluateCombatBindings(prepared.team.program,context,{value:binding},
@@ -801,9 +716,11 @@ export function auditPublicScenes(entities, engine) {
   const observed=new Set(rows.map(row=>row.entity));
   const failedCases=gaps.length;
   for (const source of sources) {
+    if (verified.has(source.entity + source.field)) { observed.add(source.entity); continue; }
     if (ids.has(source.entity) && observed.has(source.entity) && !source.issue) continue;
     gaps.push({entity:source.entity,field:source.field,text:source.text,
       ...(source.missingFields ? {missingFields:source.missingFields} : {}),
+      ...(source.evidence ? {evidence: source.evidence} : {}),
       issue:source.issue ?? (ids.has(source.entity)?'已登记，尚无实际贡献用例':'尚未采用此条款')});
   }
   const incomplete=new Set(gaps.map(row=>row.entity));
@@ -842,7 +759,15 @@ export function auditCharacterClauses(entities, engine, verifiedForms = new Set(
   const rows = [], weapons = new Map(entities.weapons.map(weapon => [weapon.id, weapon]));
   for (const character of entities.characters) {
     const base = { ...auditBuild(character, weapons.get(novice[character.identity.weaponType])), level: 90, ascension: 6 };
-    const grants = build => new Set(engine.grantedBuildEffects(build).map(grant => grant.effect.identity.id));
+    const grantCache = new Map();
+    function grants(ascension, constellation) {
+      const key = ascension + '/' + constellation;
+      if (!grantCache.has(key)) {
+        const effects = engine.grantedBuildEffects({ ...base, ascension, constellation });
+        grantCache.set(key, new Set(effects.map(grant => grant.effect.identity.id)));
+      }
+      return grantCache.get(key);
+    }
     const cache = new Map();
     function levels(rank) {
       if (!cache.has(rank)) {
@@ -867,11 +792,18 @@ export function auditCharacterClauses(entities, engine, verifiedForms = new Set(
         if (row.verifiedLevels && bonusOnly) row.status = '技能加级全条核对';
       }
       if (row.grantIds.length) {
-        const gate = group === 'passives' ? branch.unlockAscension ?? 0 : branch.rank;
-        const active = group === 'passives' ? { ...base, ascension: gate } : { ...base, constellation: gate };
-        const before = group === 'passives' ? { ...base, ascension: gate - 1 } : { ...base, constellation: gate - 1 };
-        const on = grants(active), off = gate > 0 ? grants(before) : null;
-        row.grantGate = row.grantIds.every(id => on.has(id) && (!off || !off.has(id)));
+        const rules = new Map();
+        for (const buff of character.metadata[group][i].buffs ?? []) {
+          for (const [index, modifier] of buff.modifiers.entries()) {
+            const id = index ? buff.id + '.' + index : buff.id;
+            const ascension = Math.max(branch.unlockAscension ?? 0, buff.activation?.ascension ?? 0);
+            const constellation = Math.max(branch.rank ?? 0, buff.activation?.constellation ?? 0, modifier.constellation ?? 0);
+            rules.set(id, grants(ascension, constellation).has(id)
+              && (ascension === 0 || !grants(ascension - 1, constellation).has(id))
+              && (constellation === 0 || !grants(ascension, constellation - 1).has(id)));
+          }
+        }
+        row.grantGate = rules.size === row.grantIds.length && row.grantIds.every(id => rules.get(id));
       }
       if (group === 'passives' && !row.status && !row.grantIds.length && hasOnlyNoncombatEffects(row.text)) row.status = '生活用途';
       if (verifiedForms.has(character.id) && group === 'passives') row.status = i === 2 ? '生活用途' : '战斗贡献已按形态核对';
