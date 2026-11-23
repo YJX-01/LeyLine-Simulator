@@ -713,7 +713,40 @@
       "id": "kachina.passive1",
       "name": "山的回声",
       "description": "队伍中的附近的角色触发「夜魂迸发」后，卡齐娜的岩元素伤害加成提升20%，持续12秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "kachina.a0.nightsoul-burst-geo",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "any",
+              "target": "any",
+              "observation": {
+                "key": "nightsoulBurst",
+                "test": "true"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kachina.passive2",
@@ -765,7 +798,25 @@
       "rank": 1,
       "name": "晶片，也是一种宝石",
       "description": "卡齐娜搭乘或脱离冲天转转时，将获取附近的结晶反应产生的晶片。\n此外，队伍中的角色获取晶片或触发月结晶反应时，将为卡齐娜恢复3点元素能量，每5秒至多通过这种方式恢复一次元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kachina.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "kachina.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -788,7 +839,54 @@
       "rank": 4,
       "name": "敌人越多，越要小心",
       "description": "现在，认真时间！的超级钻钻领域中，存在的敌人数量为1/2/3/4名或更多时，领域中的队伍中当前场上角色的防御力提升8%/12%/16%/20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kachina.c4.drill-field-defence",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "kachina.turboTwirlyField"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "kachina.drill-enemy-present",
+                "inputs": {
+                  "value": {
+                    "fact": "kachina.drillEnemies"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "call": "kachina.drill-field-defence",
+                "inputs": {
+                  "input": {
+                    "fact": "kachina.drillEnemies"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -867,15 +965,63 @@
         "output": "bonus",
         "revision": "1"
       }
+    },
+    {
+      "id": "kachina.drill-field-defence",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.04,
+        "offset": 0.04,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.2,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kachina.drill-enemy-present",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "gt",
+        "threshold": 0,
+        "revision": "1"
+      }
     }
   ],
   "facts": {
+    "kachina.turboTwirlyField": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于超级钻钻领域"
+    },
+    "kachina.drillEnemies": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "超级钻钻领域中的敌人数量"
+    },
     "kachina.c6ShieldShockwaveReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "本次场上角色护盾被替换或摧毁并触发冲击波"
+    },
+    "kachina.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队员获取晶片或触发月结晶，本次可回复能量（间隔至少5秒）"
     }
   }
 }

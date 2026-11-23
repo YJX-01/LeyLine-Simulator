@@ -578,7 +578,32 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "buffs": [
+        {
+          "id": "amber.summon-initial-hp",
+          "condition": {
+            "fact": "amber.baronBunnyCreated"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.summonInitialHp",
+              "value": {
+                "call": "product.hp",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "amber.skill"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "amber.burst",
@@ -740,13 +765,47 @@
       "id": "amber.passive1",
       "name": "百发百中！",
       "description": "箭雨的暴击率提高10%，影响范围扩大30%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "amber.fiery-rain-crit",
+          "appliesTo": {
+            "hitIds": [
+              "amber.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.1
+            },
+            {
+              "target": "attribute.impactRangeBonus",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "amber.passive2",
       "name": "压制射击",
       "description": "瞄准射击命中弱点时，攻击力提高15%，持续10秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "amber.precise-shot",
+          "condition": {
+            "fact": "amber.weakPointWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "amber.passive3",
@@ -808,13 +867,49 @@
           ],
           "support": "conditional-branch"
         }
+      ],
+      "buffs": [
+        {
+          "id": "amber.second-arrow",
+          "appliesTo": {
+            "hitIds": [
+              "amber.normal.c1-aimed",
+              "amber.normal.c1-full"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 0.2
+            }
+          ]
+        }
       ]
     },
     {
       "rank": 2,
       "name": "一触即发",
       "description": "兔兔伯爵进行了全新改良！蓄力完成的瞄准射击命中兔兔伯爵脚部时，能直接引爆兔兔伯爵…\n通过这种方式主动引爆兔兔伯爵时，会额外造成200%伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "amber.manual-detonation",
+          "appliesTo": {
+            "hitIds": [
+              "amber.skill.param2"
+            ]
+          },
+          "condition": {
+            "fact": "amber.manualDetonation"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -831,7 +926,19 @@
       "rank": 4,
       "name": "才不是普通的布偶",
       "description": "爆弹玩偶的冷却时间减少20%，并增加1次可使用次数。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "extraSkillCharge": 1,
+      "buffs": [
+        {
+          "id": "amber.doll-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -907,6 +1014,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "箭雨总段数与命中范围仍依赖实际目标和完整命中记录。瞄准命中弱点、主动引爆兔兔伯爵及兔兔伯爵面板快照需对应实际事件。"
         }
       ]
     },
@@ -927,5 +1039,28 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "amber.weakPointWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "瞄准命中弱点后的十秒"
+    },
+    "amber.manualDetonation": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "满蓄力瞄准兔兔伯爵脚部引爆"
+    },
+    "amber.baronBunnyCreated": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次投出并生成兔兔伯爵"
+    }
+  }
 }

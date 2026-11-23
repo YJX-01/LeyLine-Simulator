@@ -669,7 +669,47 @@
           "support": "hit-complete"
         }
       ],
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "beidou.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "beidou.tidecallerGuard"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "beidou.skill"
+                  },
+                  "flat": {
+                    "parameter": "param2",
+                    "skill": "beidou.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "beidou.burst",
@@ -859,7 +899,31 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "beidou.stormbreaker-reduction",
+          "recipient": "team",
+          "trigger": "cast",
+          "duration": {
+            "parameter": "param4"
+          },
+          "windowFact": "beidou.stormbreaker",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingDamageReduction",
+              "value": {
+                "skill": "beidou.burst",
+                "parameter": "param3"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -900,7 +964,31 @@
       "id": "beidou.passive2",
       "name": "霹雳连霄",
       "description": "施放拥有最高伤害加成的捉浪后的10秒内，获得如下效果：\n·普通攻击与重击造成的伤害提高15%，攻击速度提高15%；\n·大幅减少重击需要的准备时间。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "beidou.lightning-storm",
+          "condition": {
+            "fact": "beidou.perfectCounterWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.15,
+              "appliesTo": {
+                "categories": [
+                  "normal",
+                  "charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "beidou.passive3",
@@ -932,7 +1020,106 @@
       "rank": 1,
       "name": "鱼龙沉四方",
       "description": "施放斫雷时：\n生成一个伤害吸收量等于生命值上限16%的护盾，持续15秒。\n该护盾对雷元素伤害有250%的吸收效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "beidou.c1-shield",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "beidou.stormbreakerShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.16,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": 0.16,
+                      "flat": {
+                        "amount": 0,
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "beidou.c1-shield.electro",
+                "inputs": {
+                  "mode": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.16,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "beidou.c1-shield.electro",
+                    "inputs": {
+                      "mode": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -991,7 +1178,41 @@
       "rank": 6,
       "name": "北斗祓幽孽",
       "description": "斫雷持续期间，周围敌人的雷元素抗性降低15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "beidou.stormbreaker-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "beidou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "windowFact": "beidou.stormbreaker",
+          "condition": {
+            "fact": "beidou.stormbreakerNear"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": -0.15
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1044,6 +1265,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "捉浪和一命护盾可按本次配装与来伤元素计算吸收量。护盾实例的剩余量、斫雷减伤后的实际扣血、二命闪雷跳数与折返对象仍需受击记录。"
         }
       ]
     },
@@ -1066,6 +1292,13 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "beidou.perfectCounterWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "满加成捉浪后的十秒"
+    },
     "beidou.instantCounter": {
       "scope": "query",
       "type": {
@@ -1079,6 +1312,55 @@
         "kind": "boolean"
       },
       "label": "北斗受击后的十秒"
+    },
+    "beidou.stormbreaker": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "斫雷持续中"
+    },
+    "beidou.stormbreakerNear": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标位于雷兽之盾减抗范围内"
+    },
+    "beidou.tidecallerGuard": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "北斗正在长按战技格挡"
+    },
+    "beidou.stormbreakerShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由斫雷一命护盾庇护"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "beidou.c1-shield.electro",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "physical",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "electro",
+        "revision": "1"
+      }
+    }
+  ]
 }

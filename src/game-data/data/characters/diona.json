@@ -627,6 +627,140 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "diona.shield-absorption.tap",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "diona.icyPawsShieldMode.tap",
+                "inputs": {
+                  "mode": {
+                    "fact": "diona.icyPawsShieldMode"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": {
+                        "parameter": "param2",
+                        "skill": "diona.skill"
+                      },
+                      "flat": {
+                        "parameter": "param3",
+                        "skill": "diona.skill",
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "diona.shield-constellation-rate",
+                    "inputs": {
+                      "progress": {
+                        "call": "diona.shield-c2-progress",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "diona.shield-absorption.hold",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "diona.icyPawsShieldMode.hold",
+                "inputs": {
+                  "mode": {
+                    "fact": "diona.icyPawsShieldMode"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-scale",
+                    "inputs": {
+                      "basis": {
+                        "call": "shield.hp-base",
+                        "inputs": {
+                          "basis": {
+                            "stat": "hp"
+                          },
+                          "rate": {
+                            "parameter": "param2",
+                            "skill": "diona.skill"
+                          },
+                          "flat": {
+                            "parameter": "param3",
+                            "skill": "diona.skill",
+                            "unit": "hp"
+                          }
+                        }
+                      },
+                      "rate": {
+                        "call": "diona.shield-constellation-rate",
+                        "inputs": {
+                          "progress": {
+                            "call": "diona.shield-c2-progress",
+                            "inputs": {
+                              "rank": {
+                                "state": "constellation"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "rate": 1.75
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -856,13 +990,63 @@
       "id": "diona.passive1",
       "name": "猫尾隐藏菜单",
       "description": "处于猫爪冻冻的护盾保护下的角色，移动速度提升10%，体力消耗降低10%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "diona.a1.icy-paws",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "diona.icyPawsShield"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.movementSpeed",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.staminaCostReduction",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "diona.passive2",
       "name": "滑稽百出的醉相",
       "description": "敌人进入最烈特调的领域后的15秒内，攻击力降低10%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "diona.drunkards-farce",
+          "recipient": "target",
+          "condition": {
+            "fact": "diona.drunkardsFarceActive"
+          },
+          "modifiers": [
+            {
+              "target": "target.attackReduction",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "diona.passive3",
@@ -876,13 +1060,50 @@
       "rank": 1,
       "name": "特调的余韵",
       "description": "最烈特调的效果结束时，为迪奥娜恢复15点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "diona.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "diona.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 15,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "猫爪冰摇",
       "description": "猫爪冻冻造成的伤害提高15%，护盾的伤害吸收量提高15%；\n此外，命中时，将为附近的当前其他场上角色生成一个伤害吸收量为猫爪冻冻50%的护盾，持续5秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "diona.c2.icy-paws-damage",
+          "appliesTo": {
+            "hitIds": [
+              "diona.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -899,7 +1120,36 @@
       "rank": 4,
       "name": "「酒业杀手」",
       "description": "在最烈特调的领域内，迪奥娜的瞄准射击的所需的蓄力时间减少60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "diona.c4.signature-mix-aim",
+          "recipient": "owner",
+          "trigger": {
+            "cast": "diona.burst"
+          },
+          "duration": {
+            "parameter": "param7"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "diona.normal.param8"
+            ]
+          },
+          "condition": {
+            "fact": "diona.signatureMixArea"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionRatio",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -916,7 +1166,52 @@
       "rank": 6,
       "name": "猫尾打烊之时",
       "description": "处在最烈特调领域内的角色，依据生命值获得如下效果：\n·生命值低于或等于50%时，受治疗加成提升30%；\n·生命值高于50%时，元素精通提升200。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "diona.c6.signature-mix",
+          "recipient": "team",
+          "condition": {
+            "fact": "diona.signatureMixArea"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingHealingBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "hp.at-most50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "hp.above50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -945,5 +1240,106 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "diona.signatureMixArea": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于最烈特调的领域"
+    },
+    "diona.drunkardsFarceActive": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标进入最烈特调领域后的15秒内"
+    },
+    "diona.icyPawsShieldMode": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "tap",
+          "hold"
+        ]
+      },
+      "label": "命中后当前场上角色的猫爪冻冻护盾（tap 点按、hold 长按）"
+    },
+    "diona.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "最烈特调本次效果结束"
+    },
+    "diona.icyPawsShield": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前角色受猫爪冻冻的护盾保护"
+    }
+  },
+  "formulas": [
+    {
+      "id": "diona.shield-constellation-rate",
+      "template": {
+        "id": "conditional-bonus",
+        "revision": "1",
+        "input": "progress",
+        "relation": "gte",
+        "threshold": 1,
+        "value": 1.15,
+        "otherwise": 1,
+        "output": "value"
+      }
+    },
+    {
+      "id": "diona.icyPawsShieldMode.tap",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "tap",
+          "hold"
+        ],
+        "equals": "tap",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "diona.icyPawsShieldMode.hold",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "tap",
+          "hold"
+        ],
+        "equals": "hold",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "diona.shield-c2-progress",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "rank",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 6,
+        "cap": 1
+      }
+    }
+  ]
 }

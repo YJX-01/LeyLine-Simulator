@@ -733,6 +733,85 @@
           "flat": "param8",
           "recipient": "party"
         }
+      ],
+      "buffs": [
+        {
+          "id": "noelle.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "noelle.breastplateShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.defense-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "noelle.skill"
+                  },
+                  "flat": {
+                    "parameter": "param7",
+                    "skill": "noelle.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "noelle.breastplate-healing-chance",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "noelle.breastplateShieldActive"
+              },
+              "term1": {
+                "fact": "noelle.breastplateAttackLanded"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.talentHealingChance",
+              "value": {
+                "parameter": "param3",
+                "skill": "noelle.skill"
+              }
+            },
+            {
+              "target": "attribute.talentHealingChance",
+              "value": 1,
+              "condition": {
+                "fact": "noelle.sweepingTime"
+              },
+              "constellation": 1
+            }
+          ]
+        }
       ]
     },
     {
@@ -923,7 +1002,37 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "noelle.t2.sweeping-time-attack",
+          "condition": {
+            "fact": "noelle.sweepingTime"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "call": "product.attack",
+                "inputs": {
+                  "basis": {
+                    "call": "noelle.sweeping-defence-to-attack",
+                    "inputs": {
+                      "input": {
+                        "fact": "noelle.defenseAtSweeping"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "skill": "noelle.burst",
+                    "parameter": "param3"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -931,7 +1040,98 @@
       "id": "noelle.passive1",
       "name": "全心全意",
       "description": "诺艾尔处于队伍后台，且当前场上自己的角色的生命值低于30%时自动触发：\n为当前场上自己的角色生成一个伤害吸收量等同于诺艾尔防御力400%的护盾，持续20秒。\n·对所有元素伤害与物理伤害有150%的吸收效果。\n该效果60秒内只能触发一次。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "noelle.a1.devotion",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "noelle.a1.devotion.eligible"
+                      },
+                      "term1": {
+                        "call": "condition.not",
+                        "inputs": {
+                          "term0": {
+                            "fact": "onField"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "noelle.a1.devotion.below-threshold",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.defense-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": 4,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.defense-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "defense"
+                      },
+                      "rate": 4,
+                      "flat": {
+                        "amount": 0,
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 1.5
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "noelle.passive2",
@@ -957,7 +1157,26 @@
       "rank": 2,
       "name": "旋风女仆",
       "description": "诺艾尔的重击的体力消耗降低20%，伤害提升15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "noelle.c2.combat-maid",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1010,7 +1229,28 @@
       "rank": 6,
       "name": "要一尘不染才行",
       "description": "大扫除额外提高诺艾尔防御力50%的攻击力；\n此外，在技能持续时间内，每打倒1个敌人，其持续时间将延长1秒，最多不会超过10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "noelle.c6.sweeping-time-extra-attack",
+          "condition": {
+            "fact": "noelle.sweepingTime"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "call": "noelle.sweeping-time-extra-attack",
+                "inputs": {
+                  "input": {
+                    "fact": "noelle.defenseAtSweeping"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1097,6 +1337,77 @@
         "kind": "boolean"
       },
       "label": "护心铠到期或受伤破碎"
+    },
+    "noelle.defenseAtSweeping": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "defense"
+      },
+      "label": "施放大扫除时捕获的防御力"
+    },
+    "noelle.breastplateShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由护心铠护盾庇护"
+    },
+    "noelle.breastplateAttackLanded": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普通攻击或重击已经命中"
+    },
+    "noelle.a1.devotion.eligible": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "诺艾尔的全心全意本次可触发（60秒间隔已满足）"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "noelle.sweeping-defence-to-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "attack",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "noelle.sweeping-time-extra-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "attack",
+        "rate": 0.5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "noelle.a1.devotion.below-threshold",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "lt",
+        "threshold": 0.3,
+        "maxInput": 1,
+        "revision": "1"
+      }
+    }
+  ]
 }

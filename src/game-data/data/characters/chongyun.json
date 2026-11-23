@@ -708,7 +708,35 @@
       "id": "chongyun.passive1",
       "name": "吐纳真定",
       "description": "处在灵刃·重华叠霜领域内的单手剑、双手剑、长柄武器角色，普通攻击的攻击速度提升8%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "chongyun.a0.frost-field-speed",
+          "condition": {
+            "fact": "chongyun.insideFrostField"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "amount": 0.08,
+                "unit": "scalar"
+              },
+              "recipientWeaponTypes": [
+                "WEAPON_SWORD_ONE_HAND",
+                "WEAPON_CLAYMORE",
+                "WEAPON_POLE"
+              ]
+            }
+          ],
+          "recipient": "team"
+        }
+      ]
     },
     {
       "id": "chongyun.passive2",
@@ -742,6 +770,39 @@
               "cryoBonus"
             ]
           }
+        }
+      ],
+      "buffs": [
+        {
+          "id": "chongyun.a1.rimechaser-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "chongyun.a1.rimechaser"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ]
     },
@@ -782,7 +843,51 @@
       "rank": 2,
       "name": "周天运转",
       "description": "在灵刃·重华叠霜领域内施放的元素战技与元素爆发的冷却时间减少15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chongyun.c2.frost-field-cast-cooldown",
+          "application": "explicit",
+          "recipient": "team",
+          "appliesTo": {
+            "origins": [
+              "talent"
+            ]
+          },
+          "condition": {
+            "fact": "chongyun.c2.recipientCastInFrostField"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.currentCastSkillCooldownReduction",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "categories": [
+                  "skill"
+                ],
+                "excludeHitIds": [
+                  "flins.skill.param7"
+                ]
+              }
+            },
+            {
+              "target": "attribute.currentCastBurstCooldownReduction",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "categories": [
+                  "burst"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -799,7 +904,25 @@
       "rank": 4,
       "name": "浮云霜天",
       "description": "重云的所有攻击命中受到冰元素影响的敌人时，自身将恢复1点元素能量。\n该效果每2秒最多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chongyun.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "chongyun.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -832,6 +955,28 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "chongyun.c6.lower-hp-burst",
+          "condition": {
+            "fact": "chongyun.lowerHpEnemy"
+          },
+          "appliesTo": {
+            "skillIds": [
+              "chongyun.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -863,6 +1008,13 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "chongyun.lowerHpEnemy": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "敌人当前生命值百分比低于重云"
+    },
     "chongyun.frostFieldEnded": {
       "scope": "query",
       "type": {
@@ -876,6 +1028,27 @@
         "kind": "boolean"
       },
       "label": "已打出四段普通攻击末击"
+    },
+    "chongyun.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "重云的攻击命中有冰元素影响的敌人，本次可回复能量（间隔至少2秒）"
+    },
+    "chongyun.insideFrostField": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队员处于重云的重华叠霜领域内"
+    },
+    "chongyun.c2.recipientCastInFrostField": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益人本次施放时位于重华叠霜领域内"
     }
   }
 }

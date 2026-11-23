@@ -22,7 +22,8 @@
     "genshin-db/src/data/English/weapons/rainbowserpentsrainbow.json",
     "GenshinTools/src/domain/combat/damage/impl/weapon4Bow.ts",
     "kqm-tcl/docs/combat-mechanics/damage/healing.md",
-    "kqm-tcl/docs/characters/pyro/hu-tao.md"
+    "kqm-tcl/docs/characters/pyro/hu-tao.md",
+    "anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/varka-charged-hands.json"
   ],
   "oceanHuedClam": {
     "entity": "oceanhuedclam",
@@ -92,25 +93,17 @@
       2
     ]
   },
-  "pendingHits": [
-    {
-      "entity": "charlotte",
-      "field": "/talents/0/details/7",
-      "classification": "缺少本地依据",
-      "missingFields": [
-        "/talents/0/hits/charlotte.normal.spiritbreath/category"
-      ],
-      "reason": "已确认重击后触发、冰元素、倍率 param9 和间隔 param10。现有本地角色资料未确认该段适用普攻、重击或独立类别的伤害加成。"
-    }
-  ],
-  "interpretations": [
+  "pendingHits": [],
+  "interpretations": [],
+  "confirmedInterpretations": [
     {
       "entity": "varka",
-      "fields": [
-        "/talents/1/hits/varka.skill.param12/elementBy",
-        "/talents/1/hits/varka.skill.param13/elementBy"
+      "source": "anime-game-data-2/bd35e243fa436f141f015cf221a6e19d0c34b7ca/varka-charged-hands.json",
+      "hits": [
+        "varka.skill.param12",
+        "varka.skill.param13"
       ],
-      "reason": "本地条款给出两段倍率和左右手各自的元素，未标注每项倍率对应哪只手。两手元素有别时，单击须记录当次出手侧。若两手均为风元素，伤害可直接计算。"
+      "case": "狂飙突进常规重击的 param12 固定为右手，param13 固定为风伤左手。右手依队伍按火、水、雷、冰顺序转化，没有适用队友时按物理伤害计算。"
     }
   ],
   "publicChecks": [
@@ -298,10 +291,10 @@
       "missing": [
         "三种效果轮换",
         "持续时间",
-        "回能",
+        "四秒回能限制的时序判定",
         "退场清除并重排"
       ],
-      "reason": "明确给定两种风的状态可以核对加成。第三种风的回能、切换时序和退场重置尚未由事件推导。"
+      "reason": "已核对两种风的当次加成及丰获之风在资格已确认时的回能。三种效果轮换、持续时间、四秒资格和退场重置仍待由事件推导。"
     },
     {
       "kind": "weapon",

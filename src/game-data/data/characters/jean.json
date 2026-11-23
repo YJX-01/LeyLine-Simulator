@@ -857,13 +857,81 @@
       "rank": 1,
       "name": "流转剑脊的暴风",
       "description": "风压剑长按超过1秒后，提升牵引速度，并使造成的伤害提升40%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "jean.c1.gale-blade-long-hold",
+          "appliesTo": {
+            "hitIds": [
+              "jean.skill.param1"
+            ]
+          },
+          "condition": {
+            "fact": "jean.galeBladeHeld"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "守护众人的坚盾",
       "description": "琴获得元素晶球或元素微粒时，队伍中所有角色获得15%攻击速度和15%移动速度提升，持续15秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "jean.c2.peoples-aegis-speed",
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "categories": [
+                  "normal"
+                ]
+              }
+            },
+            {
+              "target": "attribute.movementSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ],
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "observation": {
+                "key": "jean.pickedUpElementalEnergy",
+                "test": "true"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "recipient": "team"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -880,7 +948,25 @@
       "rank": 4,
       "name": "蒲公英的国土",
       "description": "在蒲公英之风的领域内，所有敌人的风元素抗性下降40%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "jean.c4.dandelion-anemo-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "jean.c4EnemyInsideDandelion"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -897,7 +983,22 @@
       "rank": 6,
       "name": "恩眷万民的狮牙",
       "description": "在蒲公英之风的领域内，角色受到的伤害降低35%。\n离开领域后，这个效果会在承受3次攻击或10秒后消失。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "jean.lionsfang-reduction",
+          "recipient": "team",
+          "condition": {
+            "fact": "jean.lionsFangActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingDamageReduction",
+              "value": 0.35
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -926,5 +1027,35 @@
       ]
     }
   },
-  "contextSupport": "context-complete"
+  "contextSupport": "context-complete",
+  "facts": {
+    "jean.galeBladeHeld": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "风压剑已长按超过一秒"
+    },
+    "jean.lionsFangActive": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于蒲公英之风领域内，或离开后仍保有狮牙减伤"
+    },
+    "jean.c4EnemyInsideDandelion": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "敌人位于此琴的蒲公英之风领域内"
+    },
+    "jean.pickedUpElementalEnergy": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "琴本次拾取了元素晶球或元素微粒"
+    }
+  }
 }

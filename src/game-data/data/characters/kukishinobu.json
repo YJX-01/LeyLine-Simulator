@@ -888,7 +888,32 @@
       "id": "kukishinobu.passive2",
       "name": "安心之所",
       "description": "基于久岐忍的元素精通，越祓雷草之轮获得以下提升：\n·治疗量提升值：元素精通的75%；\n·伤害提升值：元素精通的25%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kukishinobu.heart-repose-damage",
+          "appliesTo": {
+            "hitIds": [
+              "kukishinobu.skill.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": 0.25
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kukishinobu.passive3",
@@ -902,7 +927,23 @@
       "rank": 1,
       "name": "割舍怜悯之心",
       "description": "御咏鸣神刈山祭的影响范围提升50%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kukishinobu.c1.burst-range",
+          "appliesTo": {
+            "hitIds": [
+              "kukishinobu.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.impactRangeBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -961,7 +1002,24 @@
       "rank": 6,
       "name": "割舍软弱之心",
       "description": "久岐忍承受足以使她倒下的伤害时，此次伤害不会使她倒下，这个效果在久岐忍生命值为1时会自动触发，该效果每60秒只能触发一次。\n久岐忍生命值降至25%以下时，会提升自身150点精通，持续15秒，该效果每60秒只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kukishinobu.c6-resolve",
+          "condition": {
+            "fact": "kukishinobu.c6Resolve"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 150,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -986,6 +1044,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "生命阈值延长结界的命中总数、六命免于倒下以及雷草标触发间隔尚待接入。"
         }
       ]
     },
@@ -1014,6 +1077,13 @@
         "kind": "boolean"
       },
       "label": "越祓草轮携带者命中触发雷草标"
+    },
+    "kukishinobu.c6Resolve": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "生命低于25%触发精通加成后的十五秒"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { auditBuild, auditHit } from './roster-evaluation.mjs';
+import { auditBuild, auditHit, setAuditDefaults } from './roster-audit-settings.mjs';
 import { readContentSource } from './content-source.mjs';
 
 const white = {WEAPON_SWORD_ONE_HAND:'dullblade',WEAPON_POLE:'beginnersprotector',WEAPON_CATALYST:'apprenticesnotes',WEAPON_CLAYMORE:'wastergreatsword',WEAPON_BOW:'huntersbow'};
@@ -34,6 +34,7 @@ export function auditCharacterBuffs(entities,engine) {
   }
   function read(b,team,key,{recipient='actor',category='normal',hitId,events=[],time=1,facts={},targetFacts,ownerInputs}={}) {
     const talent=b.character.talents[0],h=talent.hits[0],{setup,request}=auditHit(b.character,talent,h,b.level);
+    if (b.character.id === 'tighnari') setAuditDefaults(b.character, request.frame);
     setup.events[0].timeMs=time;
     setup.events.push(...events);
     Object.assign(request.frame.factOverrides[0].facts,facts);
@@ -186,7 +187,7 @@ export function auditCharacterBuffs(entities,engine) {
         const facts={hpRatio:hp(state)},targetFacts=id==='kaeya'?{'aura.cryo':boolean(state),'aura.frozen':boolean(frozen)}:{targetHpRatio:hp(state)};
         const opts={category:hit.category,hitId:hit.id,recipient,...typeof state==='number'?{facts}:{},...id==='freminet'||passive?{}:{targetFacts}};
         const grant=id==='kaeya'?((state||frozen)&&['normal','charged'].includes(hit.category)?.15:0):id==='diluc'?(state>.5?.15:0)
-          :id==='kamisatoayato'?(state<=.5 && (/^kamisatoayato\.skill\.param[123]$/.test(hit.id) || hit.id==='kamisatoayato.c6.shunsuiken') ? .4 : 0)
+          :id==='kamisatoayato'?(state<=.5 && (/^kamisatoayato\.skill\.param[123]$/.test(hit.id) || ['kamisatoayato.c6.shunsuiken','kamisatoayato.c6.shunsuiken-second'].includes(hit.id)) ? .4 : 0)
           :id==='freminet'?(/^freminet\.skill\.param(?:[4-9]|10|11)$/.test(hit.id)?.15:0):state<=.5?.33:0;
         record(id,passive?'/passives/1':'/constellations/0',{unlocked,state,frozen,recipient,hit:hit.id},read(b,team,stat,opts),(stat==='critRate'?.05:0)+(recipient==='actor'&&unlocked?grant:0));
       }

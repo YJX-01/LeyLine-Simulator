@@ -1069,7 +1069,48 @@
       "rank": 2,
       "name": "理清逃跑路线",
       "description": "呜呼流·风隐急进获得如下效果：\n·点按施放时，风风轮舞踢造成的伤害提高3.3%；\n·处于长按施放后的风风轮状态下时，每0.5秒，就会使这次施展的风风轮舞踢造成的伤害提高3.3%。通过这种方式，风风轮舞踢造成的伤害至多可以提高66%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sayu.c2.press-kick",
+          "appliesTo": {
+            "hitIds": [
+              "sayu.skill.param3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.033,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sayu.c2.hold-kick",
+          "appliesTo": {
+            "hitIds": [
+              "sayu.skill.param4",
+              "sayu.skill.param5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "sayu.roll-kick",
+                "inputs": {
+                  "input": {
+                    "fact": "sayu.rollHalfSeconds"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1086,7 +1127,25 @@
       "rank": 4,
       "name": "偷懒的新方法",
       "description": "早柚在场上触发扩散或星扩散反应时，将恢复1.2点元素能量。\n该效果每2秒只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sayu.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "sayu.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1.2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1103,7 +1162,43 @@
       "rank": 6,
       "name": "呼呼大睡时间",
       "description": "早柚自己通过呜呼流·影貉缭乱召唤的不倒貉貉的攻击与回复量，受益于早柚的元素精通。早柚的每点元素精通，能产生如下效果：\n·使不倒貉貉的攻击额外造成0.2%攻击力的伤害。通过这种方式至多额外造成400%攻击力的伤害；\n·使不倒貉貉的回复量提高3点。通过这种方式，至多提高6000点回复量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sayu.c6.daruma-attack",
+          "appliesTo": {
+            "hitIds": [
+              "sayu.burst.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "sayu.daruma-attack",
+                    "inputs": {
+                      "input": {
+                        "stat": "attack"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "sayu.daruma-mastery",
+                    "inputs": {
+                      "input": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1132,5 +1227,68 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "sayu.rollHalfSeconds": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次长按处于风风轮状态的完整半秒数"
+    },
+    "sayu.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "早柚在场上触发扩散或星扩散，本次可回复能量（间隔至少2秒）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "sayu.roll-kick",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.033,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.66,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sayu.daruma-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sayu.daruma-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 0.002,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 4,
+        "revision": "1"
+      }
+    }
+  ]
 }

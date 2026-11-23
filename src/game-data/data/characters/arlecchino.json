@@ -614,6 +614,45 @@
             "element": "pyro"
           }
         }
+      ],
+      "buffs": [
+        {
+          "id": "arlecchino.t0.masque-red-death",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "fact": "arlecchino.masqueRedDeath"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "skill": "arlecchino.normal",
+                        "parameter": "param12"
+                      },
+                      "rate": {
+                        "fact": "arlecchino.bondOfLifeRatio"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -996,7 +1035,44 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "arlecchino.skillReset",
+          "application": "explicit",
+          "appliesTo": {
+            "hitIds": [
+              "arlecchino.burst.param1"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "arlecchino.skillReset.confirmed"
+              },
+              "term1": {
+                "call": "skill.cooldown-positive",
+                "inputs": {
+                  "duration": {
+                    "fact": "skillCooldownBeforeResetMs"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillCooldownResetMs",
+              "value": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -1010,13 +1086,125 @@
       "id": "arlecchino.passive2",
       "name": "唯力量可守护",
       "description": "基于阿蕾奇诺的攻击力超过1000的部分，每100点攻击力都将使阿蕾奇诺获得1%所有元素抗性与物理抗性。通过这种方式，阿蕾奇诺的所有元素抗性与物理抗性至多提升20%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "arlecchino.a1.excess-attack-resistance",
+          "modifiers": [
+            {
+              "target": "attribute.resistance.anemo",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.physical",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.resistance.pyro",
+              "value": {
+                "call": "arlecchino.excess-attack-resistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "arlecchino.passive3",
       "name": "唯厄月可知晓",
       "description": "在战斗状态下，阿蕾奇诺获得40%火元素伤害加成，并且仅能通过厄月将升恢复生命值。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "arlecchino.a2.combat-pyro",
+          "condition": {
+            "fact": "arlecchino.inCombat"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1024,13 +1212,119 @@
       "rank": 1,
       "name": "「所有的仇与债皆由我偿…」",
       "description": "红死之宴提升进一步提高，提高值为100%；此外，在红死之宴状态下进行普通攻击或重击时，提高阿蕾奇诺的抗打断能力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "arlecchino.c1.red-death-poise",
+          "condition": {
+            "fact": "arlecchino.masqueRedDeath"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "arlecchino.normal.param1",
+              "arlecchino.normal.param2",
+              "arlecchino.normal.param3",
+              "arlecchino.normal.param4",
+              "arlecchino.normal.param5",
+              "arlecchino.normal.param6",
+              "arlecchino.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "「所有的赏与罚皆自我出…」",
       "description": "血偿勒令施加时即为血偿勒令·结。\n阿蕾奇诺回收血偿勒令·结时，将在前方唤出厄月血火，造成相当于她的攻击力900%的火元素范围伤害，并使她的所有元素抗性与物理抗性提升20%，持续15秒。此效果每10秒至多触发一次。\n需要解锁突破天赋「唯苦痛可偿还」。",
       "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "arlecchino.c2.bloodfire-resistance",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-1",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "arlecchino.bloodfireResistanceWindow"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.anemo",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.physical",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.pyro",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ],
       "hits": [
         {
           "id": "arlecchino.c2.balemoon-bloodfire",
@@ -1076,7 +1370,32 @@
       "rank": 4,
       "name": "「此后，你们须相爱相护…」",
       "description": "阿蕾奇诺成功回收血偿勒令时，厄月将升的冷却时间缩短2秒，并为她恢复15点元素能量，此效果每10秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "arlecchino.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "arlecchino.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 15,
+                "unit": "energy"
+              }
+            },
+            {
+              "target": "attribute.elementalBurstCooldownReductionMs",
+              "value": {
+                "amount": 2000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1093,7 +1412,82 @@
       "rank": 6,
       "name": "「自此以后，我们将共飨新生。」",
       "description": "厄月将升造成的伤害提高，提升值相当于阿蕾奇诺的攻击力乘以当前生命之契百分比的700%。\n施放万相化灰后的20秒内，阿蕾奇诺的普通攻击与元素爆发的暴击率提升10%、暴击伤害提升70%。该效果每15秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "arlecchino.c6.burst-bond",
+          "appliesTo": {
+            "hitIds": [
+              "arlecchino.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "arlecchino.burst-bond-attack",
+                    "inputs": {
+                      "input": {
+                        "stat": "attack"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "fact": "arlecchino.bondOfLifeRatio"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "arlecchino.c6.burst-crit",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "arlecchino.burst"
+              ]
+            },
+            "cooldownMs": 15000
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 20000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.7,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1123,7 +1517,60 @@
     }
   },
   "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "arlecchino.excess-attack-resistance",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.0001,
+        "offset": 0,
+        "threshold": 1000,
+        "output": "value",
+        "cap": 0.2,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "arlecchino.burst-bond-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 7,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ],
   "facts": {
+    "arlecchino.inCombat": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "阿蕾奇诺处于战斗状态"
+    },
+    "arlecchino.bloodfireResistanceWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "回收血偿勒令·结后十五秒内且已触发厄月血火"
+    },
+    "arlecchino.bondOfLifeRatio": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "命中时或施放厄月将升时生命之契占生命上限的比例"
+    },
     "arlecchino.masqueRedDeath": {
       "scope": "owner",
       "type": {
@@ -1137,6 +1584,20 @@
         "kind": "boolean"
       },
       "label": "本次回收血偿勒令·结触发厄月血火"
+    },
+    "arlecchino.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次成功回收血偿勒令，且为首次触发或距上次至少10秒"
+    },
+    "arlecchino.skillReset.confirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次厄月将升已完成冷却清除"
     }
   }
 }

@@ -1,0 +1,93 @@
+{
+  "capture": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/",
+  "scope": "固定天赋和命座文本明确写出的相对范围或距离增量。攻击范围是召唤物的攻击覆盖语义，影响范围是指定技能命中的覆盖语义，喷火距离是锅巴喷火的向前距离。原文未给出几何形状、基础长度或面积口径，百分比按原文显示。",
+  "entries": [
+    {
+      "entity": "amber",
+      "source": "talents/amber.json#passive1",
+      "talent": "combat3",
+      "hits": ["箭雨单次伤害"],
+      "exclude": ["amber.skill.param2"],
+      "field": "/passives/0/buffs/0/modifiers/1",
+      "effect": "amber.fiery-rain-crit.1",
+      "output": "attribute.impactRangeBonus"
+    },
+    {
+      "entity": "chiori",
+      "source": "constellations/chiori.json#c1",
+      "talent": "combat2",
+      "hits": ["袖伤害"],
+      "exclude": ["chiori.skill.param5", "chiori.a0.tamoto-coordinated", "chiori.c2.kinu"],
+      "field": "/constellations/0/buffs/0/modifiers/0",
+      "effect": "chiori.c1.tamoto-range",
+      "output": "attribute.attackRangeBonus",
+      "related": ["talents/chiori.json#passive1", "constellations/chiori.json#c2"],
+      "remaining": "额外唤出袖、岩造物与队友的互斥，以及锦上添花的触发需另核验。"
+    },
+    {
+      "entity": "fischl",
+      "source": "constellations/fischl.json#c2",
+      "talent": "combat2",
+      "hits": ["召唤伤害"],
+      "exclude": ["fischl.skill.param1", "fischl.burst.param1"],
+      "field": "/constellations/1/buffs/0/modifiers/1",
+      "effect": "fischl.c2.nightrider-summon.1",
+      "output": "attribute.impactRangeBonus"
+    },
+    {
+      "entity": "kukishinobu",
+      "source": "constellations/kukishinobu.json#c1",
+      "talent": "combat3",
+      "hits": ["单次伤害"],
+      "exclude": ["kukishinobu.skill.param1", "kukishinobu.skill.param4"],
+      "field": "/constellations/0/buffs/0/modifiers/0",
+      "effect": "kukishinobu.c1.burst-range",
+      "output": "attribute.impactRangeBonus"
+    },
+    {
+      "entity": "xiangling",
+      "source": "talents/xiangling.json#passive1",
+      "talent": "combat2",
+      "hits": ["喷火伤害"],
+      "exclude": ["xiangling.burst.param4"],
+      "field": "/passives/0/buffs/0/modifiers/0",
+      "effect": "xiangling.guoba-flame-reach",
+      "output": "attribute.flameReachBonus"
+    },
+    {
+      "entity": "yaemiko",
+      "source": "constellations/yaemiko.json#c2",
+      "talent": "combat2",
+      "hits": ["杀生樱伤害·贰阶", "杀生樱伤害·叁阶", "杀生樱伤害·肆阶"],
+      "exclude": ["yaemiko.skill.param1", "yaemiko.burst.param1", "yaemiko.burst.param2"],
+      "field": "/constellations/1/buffs/0/modifiers/0",
+      "effect": "yaemiko.c2.sesshou-sakura-range",
+      "output": "attribute.attackRangeBonus"
+    },
+    {
+      "entity": "zhongli",
+      "source": "constellations/zhongli.json#c4",
+      "talent": "combat3",
+      "hits": ["技能伤害"],
+      "exclude": ["zhongli.skill.param1", "zhongli.skill.param4"],
+      "field": "/constellations/3/buffs/0/modifiers/0",
+      "effect": "zhongli.c4.planet-befall-range",
+      "output": "attribute.impactRangeBonus",
+      "remaining": "天星石化持续时间延长2秒属于独立控制效果。"
+    }
+  ],
+  "qualitative": [
+    {
+      "entity": "gaming",
+      "field": "/constellations/5",
+      "source": "constellations/gaming.json#c6",
+      "text": "攻击范围提升"
+    },
+    {
+      "entity": "kinich",
+      "field": "/constellations/1",
+      "source": "constellations/kinich.json#c2",
+      "text": "影响范围提升"
+    }
+  ]
+}

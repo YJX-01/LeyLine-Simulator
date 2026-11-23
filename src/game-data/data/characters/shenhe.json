@@ -729,6 +729,54 @@
           "support": "hit-unavailable"
         }
       ],
+      "buffs": [
+        {
+          "id": "shenhe.icy-quill",
+          "recipient": "team",
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ],
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "condition": {
+            "call": "condition.any",
+            "inputs": {
+              "term0": {
+                "fact": "shenhe.quillTap"
+              },
+              "term1": {
+                "fact": "shenhe.quillHold"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "skill": "shenhe.skill",
+                    "parameter": "param3"
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ],
       "inputs": [
         {
           "id": "shenhe.frostStacks",
@@ -930,7 +978,44 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "shenhe.spirit-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "shenhe.burstField"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "shenhe.burst",
+                    "parameter": "param2"
+                  },
+                  "rate": -1
+                }
+              }
+            },
+            {
+              "target": "target.resistance.physical",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "shenhe.burst",
+                    "parameter": "param2"
+                  },
+                  "rate": -1
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -938,13 +1023,84 @@
       "id": "shenhe.passive1",
       "name": "大洞弥罗尊法",
       "description": "处于神女遣灵真诀的领域中的当前场上角色，冰元素伤害加成提高15%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "shenhe.divine-embrace",
+          "recipient": "team",
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "shenhe.burstField"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "shenhe.passive2",
       "name": "缚灵通真法印",
       "description": "申鹤施放仰灵威召将役咒后，将使附近的队伍中所有角色获得如下效果：\n·点按：元素战技和元素爆发造成的伤害提高15%，持续10秒；\n·长按：普通攻击、重击和下落攻击造成的伤害提高15%，持续15秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "shenhe.talisman-tap",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "skill",
+              "burst"
+            ]
+          },
+          "condition": {
+            "fact": "shenhe.tapTalisman"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "id": "shenhe.talisman-hold",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "condition": {
+            "fact": "shenhe.holdTalisman"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "shenhe.passive3",
@@ -958,13 +1114,44 @@
       "rank": 1,
       "name": "心斋",
       "description": "仰灵威召将役咒的可使用次数增加1次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "extraSkillCharge": 1
     },
     {
       "rank": 2,
       "name": "定蒙",
       "description": "神女遣灵真诀的持续时间延长6秒。领域中的当前场上角色，冰元素伤害的暴击伤害提高15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "shenhe.c2-field-crit",
+          "recipient": "team",
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "shenhe.burstField"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -981,7 +1168,30 @@
       "rank": 4,
       "name": "洞观",
       "description": "处于申鹤自己施加的「冰翎」状态下的角色，触发「冰翎」的伤害增加时，申鹤将获得一层「霜霄诀」：\n·申鹤施放仰灵威召将役咒时，将清除所有「霜霄诀」，并根据清除的层数，每层使本次仰灵威召将役咒造成的伤害提高5%；\n·该效果至多叠加50次，持续60秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "shenhe.c4-frost",
+          "appliesTo": {
+            "skillIds": [
+              "shenhe.skill"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "shenhe.frost-power",
+                "inputs": {
+                  "basis": {
+                    "fact": "shenhe.frostStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1023,12 +1233,52 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "冰翎点按五次和长按七次需按受益角色与命中敌人数逐次消费，六命普攻和重击不扣次数，领域位置与二命延时也需事件表达。"
         }
       ]
     }
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "shenhe.burstField": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于神女遣灵真诀领域"
+    },
+    "shenhe.quillTap": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "点按冰翎尚能生效"
+    },
+    "shenhe.quillHold": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "长按冰翎尚能生效"
+    },
+    "shenhe.tapTalisman": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "点按仰灵威召将役咒后的十秒"
+    },
+    "shenhe.holdTalisman": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "长按仰灵威召将役咒后的十五秒"
+    },
     "shenhe.frostStacks": {
       "scope": "query",
       "type": {
@@ -1037,5 +1287,22 @@
       },
       "label": "本次消耗的霜霄诀层数"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "shenhe.frost-power",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 50
+      }
+    }
+  ]
 }

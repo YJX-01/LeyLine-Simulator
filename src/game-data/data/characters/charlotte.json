@@ -1031,13 +1031,88 @@
       "id": "charlotte.passive1",
       "name": "冲击力瞬间",
       "description": "带有「聚焦印象」印记的敌人被击败时，取景·冰点构图法的冷却时间减少2秒。每12秒至多通过这种方式减少4次元素战技的冷却时间。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "charlotte.a1.framing-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "charlotte.a1.focusedImpressionDefeated"
+              },
+              "term1": {
+                "call": "charlotte.a1.framing-cooldown-limit",
+                "inputs": {
+                  "count": {
+                    "fact": "charlotte.a1.focusedImpressionCooldownUses"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 2000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "charlotte.passive2",
       "name": "多样性调查",
       "description": "除夏洛蒂自己以外，队伍中每存在1/2/3位枫丹角色，夏洛蒂自己获得5%/10%/15%治疗加成；队伍中每存在1/2/3位非枫丹的角色，都将使夏洛蒂自己获得5%/10%/15%冰元素伤害加成。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "charlotte.fontaine-healing",
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": {
+                "call": "charlotte.fontaine-bonus",
+                "inputs": {
+                  "basis": {
+                    "teamRegion": "枫丹",
+                    "excludeOwner": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "charlotte.non-fontaine-cryo",
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "call": "charlotte.outside-fontaine-bonus",
+                "inputs": {
+                  "basis": {
+                    "teamRegion": "枫丹",
+                    "excludeOwner": true,
+                    "match": "exclude"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "charlotte.passive3",
@@ -1057,7 +1132,25 @@
       "rank": 2,
       "name": "以求真为职守",
       "description": "施放取景·冰点构图法时，「温亨廷先生」的攻击命中了1/2/3及以上名敌人时，夏洛蒂自身的攻击力提升10%/20%/30%，持续12秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "charlotte.c2-camera-attack",
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "charlotte.camera-bonus",
+                "inputs": {
+                  "basis": {
+                    "fact": "charlotte.cameraTargets"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1074,7 +1167,43 @@
       "rank": 4,
       "name": "以督促为责任",
       "description": "定格·全方位确证命中附有「瞬时剪影」或「聚焦印象」印记的敌人时，造成的伤害提升10%，并且为夏洛蒂自身恢复2点能量。每20秒，至多通过这种方式恢复5次元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "charlotte.c4-marked-burst",
+          "condition": {
+            "fact": "charlotte.photographicMark"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "charlotte.burst.param3",
+              "charlotte.burst.param6"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "charlotte.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "charlotte.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1135,6 +1264,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "一命治疗、四命回能和六命协同治疗可按确认的触发与受益人计算。重复触发的间隔、延长聚焦印象以及实际到账仍需事件记录。"
         }
       ]
     },
@@ -1156,7 +1290,80 @@
     }
   },
   "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "charlotte.fontaine-bonus",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "charlotte.outside-fontaine-bonus",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "charlotte.camera-bonus",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "charlotte.a1.framing-cooldown-limit",
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "lt",
+        "threshold": 4,
+        "revision": "1"
+      }
+    }
+  ],
   "facts": {
+    "charlotte.cameraTargets": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "取景命中后的十二秒内计入的敌人数（最多计三名）"
+    },
+    "charlotte.photographicMark": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标有瞬时剪影或聚焦印象"
+    },
     "charlotte.c6-focus": {
       "scope": "query",
       "type": {
@@ -1170,6 +1377,28 @@
         "kind": "boolean"
       },
       "label": "本次重击触发灵息之刺"
+    },
+    "charlotte.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "定格·全方位确证命中有瞬时剪影或聚焦印象印记的敌人，本次未达每20秒5次上限"
+    },
+    "charlotte.a1.focusedImpressionCooldownUses": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前12秒计数周期内已触发的冷却缩减次数"
+    },
+    "charlotte.a1.focusedImpressionDefeated": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次击败带有聚焦印象印记的敌人"
     }
   }
 }

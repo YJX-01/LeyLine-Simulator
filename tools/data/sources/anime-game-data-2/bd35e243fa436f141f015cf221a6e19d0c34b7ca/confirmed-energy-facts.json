@@ -1,0 +1,270 @@
+{
+  "source": {
+    "repository": "https://gitlab.com/Dimbreath/animegamedata2",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+    "capturedAt": "2026-11-22"
+  },
+  "ineffa": {
+    "talent": {
+      "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+      "record": {
+        "addProps": [
+          {},
+          {}
+        ],
+        "descTextMapHash": 1798830319,
+        "icon": "UI_Talent_S_Ineffa_03",
+        "mainCostItemCount": 1,
+        "mainCostItemId": 5116,
+        "nameTextMapHash": 3299317897,
+        "openConfig": "Ineffa_Constellation_4",
+        "paramList": [
+          5,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "prevTalent": 1163,
+        "talentId": 1164,
+        "LEFEPLAGMHH": 2106714453
+      }
+    },
+    "ability": {
+      "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Ineffa.json",
+      "record": {
+        "abilityName": "Avatar_Ineffa_T4",
+        "abilitySpecials": {
+          "ElemRevive": 0,
+          "CD": 0
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "Ineffa_T4_Driver": {
+            "elementDurability": 100,
+            "modifierMixins": [
+              {
+                "$type": "LocalAvatarsMixin",
+                "modifierName": "Ineffa_T4_Avatar"
+              }
+            ],
+            "modifierName": "",
+            "IAKNCBDLFKJ": 0
+          },
+          "Ineffa_T4_Avatar": {
+            "elementDurability": 100,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "Predicated",
+                    "doOffStage": true,
+                    "successActions": [
+                      {
+                        "$type": "ApplyModifier",
+                        "doOffStage": true,
+                        "modifierName": "IneffaT4_ReviveEnery"
+                      },
+                      {
+                        "$type": "ApplyModifier",
+                        "doOffStage": true,
+                        "modifierName": "UNIQUE_Ineffa_T4_CD",
+                        "target": "Team"
+                      }
+                    ],
+                    "target": "Other",
+                    "targetPredicates": [
+                      {
+                        "$type": "ByEntityTypes",
+                        "entityTypes": [
+                          "Monster"
+                        ]
+                      },
+                      {
+                        "$type": "ByNot",
+                        "predicates": [
+                          {
+                            "$type": "ByHasModifier",
+                            "modifierName": "UNIQUE_Ineffa_T4_CD",
+                            "target": "Team"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "range": 40,
+                "reactionTypes": [
+                  "MoonShock"
+                ],
+                "HGIFDDNCIHE": true
+              }
+            ],
+            "modifierName": "",
+            "IAKNCBDLFKJ": 0
+          },
+          "IneffaT4_ReviveEnery": {
+            "duration": 0.5,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "ReviveElemEnergy",
+                "doOffStage": true,
+                "value": "ElemRevive"
+              }
+            ],
+            "stacking": "Multiple",
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_Ineffa_T4_CD": {
+            "duration": "CD",
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "AttachModifier",
+            "doOffStage": true,
+            "modifierName": "Ineffa_T4_Driver",
+            "target": "Team"
+          }
+        ]
+      }
+    },
+    "corroboration": [
+      "https://news.17173.com/content/07302025/153612645.shtml",
+      "https://news.17173.com/content/01152026/132451698.shtml"
+    ]
+  },
+  "razor": {
+    "ability": {
+      "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Razor.json",
+      "excerpt": {
+        "abilityName": "Avatar_Razor_LycanMode_LycanSimulator",
+        "abilitySpecials": {
+          "Energy_FeedBack_Level": 5,
+          "LycanMode_Time": 16,
+          "LycanMode_Accelerate_SpeedRatio": 0
+        },
+        "onAbilityStart": [
+          {
+            "$type": "AddGlobalValue",
+            "key": "_ABILITY_LycanMode_Energy_FeedBack",
+            "maxValue": 5,
+            "minValue": 0,
+            "useLimitRange": true,
+            "value": 5
+          },
+          {
+            "$type": "ApplyModifier",
+            "modifierName": "LycanMode_Timer"
+          },
+          {
+            "$type": "ApplyModifier",
+            "modifierName": "LycanMode_Leave"
+          }
+        ],
+        "modifiers": {
+          "LycanMode_Timer": {
+            "duration": "LycanMode_Time",
+            "thinkInterval": 3,
+            "onThinkInterval": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_ABILITY_LycanMode_Energy_FeedBack",
+                "maxValue": 5,
+                "minValue": 0,
+                "useLimitRange": true,
+                "value": -1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "ApplyModifier",
+                "doOffStage": true,
+                "modifierName": "LycanMode_Energy_FeedBack"
+              }
+            ]
+          },
+          "LycanMode_Leave": {
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAvatarOut": [
+              {
+                "$type": "RemoveModifier",
+                "doOffStage": true,
+                "modifierName": "LycanMode_Timer"
+              },
+              {
+                "$type": "RemoveUniqueModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_LycanMode_LycanMaterial"
+              }
+            ],
+            "onKill": [
+              {
+                "$type": "RemoveModifier",
+                "doOffStage": true,
+                "modifierName": "LycanMode_Timer"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "LycanMode_Energy_FeedBack": {
+            "duration": 0.3,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "SetGlobalValueToOverrideMap",
+                "abilityName": "",
+                "doOffStage": true,
+                "globalValueKey": "_ABILITY_LycanMode_Energy_FeedBack",
+                "overrideMapKey": "Energy_FeedBack_Level"
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "ApplyModifier",
+                "doOffStage": true,
+                "modifierName": "LycanMode_Energy_Regain"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "LycanMode_Energy_Regain": {
+            "duration": 0.3,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "ReviveElemEnergy",
+                "doOffStage": true,
+                "value": [
+                  "Energy_FeedBack_Level",
+                  2,
+                  "MUL"
+                ]
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          }
+        }
+      }
+    }
+  }
+}

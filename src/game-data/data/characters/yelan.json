@@ -461,6 +461,28 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "yelan.breakthrough-aim",
+          "appliesTo": {
+            "hitIds": [
+              "yelan.normal.param7"
+            ]
+          },
+          "condition": {
+            "fact": "yelan.breakthroughBarbShot"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionRatio",
+              "value": {
+                "amount": 0.8,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -760,13 +782,168 @@
       "id": "yelan.passive1",
       "name": "猜先有方",
       "description": "队伍存在1/2/3/4种元素类型的角色时，夜兰的生命值上限提升6%/12%/18%/30%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "yelan.a0.turn-control",
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "yelan.turn-control-1",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "anemo",
+                        "cryo",
+                        "dendro",
+                        "electro",
+                        "geo",
+                        "hydro",
+                        "pyro"
+                      ],
+                      "excludeOwner": false,
+                      "match": "include",
+                      "distinctElements": true
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "yelan.turn-control-2",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "anemo",
+                        "cryo",
+                        "dendro",
+                        "electro",
+                        "geo",
+                        "hydro",
+                        "pyro"
+                      ],
+                      "excludeOwner": false,
+                      "match": "include",
+                      "distinctElements": true
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "amount": 0.18,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "yelan.turn-control-3",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "anemo",
+                        "cryo",
+                        "dendro",
+                        "electro",
+                        "geo",
+                        "hydro",
+                        "pyro"
+                      ],
+                      "excludeOwner": false,
+                      "match": "include",
+                      "distinctElements": true
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "yelan.turn-control-4",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "anemo",
+                        "cryo",
+                        "dendro",
+                        "electro",
+                        "geo",
+                        "hydro",
+                        "pyro"
+                      ],
+                      "excludeOwner": false,
+                      "match": "include",
+                      "distinctElements": true
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yelan.passive2",
       "name": "妙转随心",
       "description": "「玄掷玲珑」存在期间，能使队伍中自己的当前场上角色造成的伤害提高1%，并且每1秒进一步提高3.5%，至多使角色造成的伤害提高50%。\n效果存在期间重新施放渊图玲珑骰，将移除原有的上述效果。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "yelan.a1.adapt-with-ease",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "yelan.exquisiteThrowActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "yelan.adapt-with-ease",
+                "inputs": {
+                  "input": {
+                    "fact": "yelan.exquisiteSeconds"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yelan.passive3",
@@ -823,7 +1000,29 @@
       "rank": 4,
       "name": "诓惑者，接树移花",
       "description": "依照「络命丝」标记敌人的数量，每次标记将在爆发时使队伍中所有角色的生命值上限提升10%，持续25秒。通过这种方式，生命值上限至多获得40%提升。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yelan.c4.bait-and-switch",
+          "recipient": "team",
+          "condition": {
+            "fact": "yelan.lifelineMarksWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "call": "yelan.bait-and-switch",
+                "inputs": {
+                  "input": {
+                    "fact": "yelan.lifelineMarks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -858,6 +1057,25 @@
             "yelan.mastermind"
           ],
           "support": "hit-unavailable"
+        }
+      ],
+      "buffs": [
+        {
+          "id": "yelan.c6.mastermind-barb-factor",
+          "appliesTo": {
+            "hitIds": [
+              "yelan.c6.mastermind-barb"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.56,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ]
     }
@@ -903,6 +1121,123 @@
         "kind": "boolean"
       },
       "label": "运筹帷幄可用"
+    },
+    "yelan.exquisiteSeconds": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "玄掷玲珑已存在的完整秒数"
+    },
+    "yelan.exquisiteThrowActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "玄掷玲珑存在中"
+    },
+    "yelan.lifelineMarks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "最近有效的络命丝标记敌人数量"
+    },
+    "yelan.lifelineMarksWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "络命丝爆发后二十五秒内"
+    },
+    "yelan.breakthroughBarbShot": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "这发破局矢消耗已获得的破局状态"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "yelan.turn-control-1",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yelan.turn-control-2",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yelan.turn-control-3",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yelan.turn-control-4",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yelan.adapt-with-ease",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.035,
+        "offset": 0.01,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.5,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yelan.bait-and-switch",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.4,
+        "revision": "1"
+      }
+    }
+  ]
 }

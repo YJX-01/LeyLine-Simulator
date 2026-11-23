@@ -714,7 +714,21 @@
       "id": "aether-geo.passive1",
       "name": "破碎的绝岩",
       "description": "星陨剑的冷却时间减少2秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "aether-geo.a1.starfall-sword-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 2000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aether-geo.passive2",
@@ -747,7 +761,45 @@
       "rank": 1,
       "name": "巍然的青岩",
       "description": "队伍中角色处于岩潮叠嶂的岩嶂包围中时，暴击率提升10%，并提高抗打断能力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-geo.c1.invincible-stonewall",
+          "recipient": "team",
+          "condition": {
+            "fact": "aether-geo.stonewallEnclosed"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-geo.c1.stonewall-poise",
+          "recipient": "team",
+          "condition": {
+            "fact": "aether-geo.stonewallEnclosed"
+          },
+          "stacking": {
+            "group": "traveler-geo.c1.stonewall-poise",
+            "scope": "recipient",
+            "policy": "replace",
+            "maxStacks": 1,
+            "retain": "latest"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.7
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -796,7 +848,30 @@
       "rank": 4,
       "name": "险峻的重岩",
       "description": "岩潮叠嶂引发的震荡波每击中一个敌人，都会恢复5点元素能量。\n通过这种方式，一次至多恢复25点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-geo.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "aether-geo.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "aether-geo.directEnergy.c4.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "aether-geo.energyShockwaveTargets"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -857,6 +932,45 @@
         "kind": "boolean"
       },
       "label": "普通攻击已触发末段崩毁"
+    },
+    "aether-geo.stonewallEnclosed": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于岩潮叠嶂的岩嶂包围中"
+    },
+    "aether-geo.energyShockwaveTargets": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次震荡波命中的敌人数"
+    },
+    "aether-geo.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次岩潮叠嶂产生震荡波"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "aether-geo.directEnergy.c4.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 25,
+        "revision": "1"
+      }
+    }
+  ]
 }

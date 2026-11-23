@@ -1414,7 +1414,25 @@
       "id": "raidenshogun.passive2",
       "name": "殊胜之御体",
       "description": "基于元素充能效率超过100%的部分，每1%使雷电将军获得下列效果：\n·梦想一心状态提供的元素能量恢复提高0.6%；\n·雷元素伤害加成提升0.4%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "raidenshogun.a1.enlightened-electro",
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "raidenshogun.enlightened-electro",
+                "inputs": {
+                  "input": {
+                    "stat": "energyRecharge"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "raidenshogun.passive3",
@@ -1434,7 +1452,37 @@
       "rank": 2,
       "name": "斩铁断金",
       "description": "奥义·梦想真说的梦想一刀与梦想一心状态下的雷电将军的攻击将无视敌人60%的防御力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "raidenshogun.c2.musou-defense-ignore",
+          "appliesTo": {
+            "hitIds": [
+              "raidenshogun.burst.param1",
+              "raidenshogun.burst.param5",
+              "raidenshogun.burst.param6",
+              "raidenshogun.burst.param7",
+              "raidenshogun.burst.param8",
+              "raidenshogun.burst.param9",
+              "raidenshogun.burst.param10",
+              "raidenshogun.burst.param11",
+              "raidenshogun.burst.param12",
+              "raidenshogun.burst.param14",
+              "raidenshogun.burst.param15",
+              "raidenshogun.burst.param16"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defenseIgnore",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1451,7 +1499,26 @@
       "rank": 4,
       "name": "誓奉常道",
       "description": "奥义·梦想真说施加的梦想一心状态结束后，附近的队伍中所有角色（不包括雷电将军自己）的攻击力提升30%，持续10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "raidenshogun.c4.musou-retirement",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "raidenshogun.musouEnded"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1468,7 +1535,60 @@
       "rank": 6,
       "name": "负愿前行",
       "description": "处于奥义·梦想真说施加的梦想一心状态下时，雷电将军的元素爆发伤害命中敌人时，使附近的队伍中所有角色（不包括雷电将军自己）元素爆发的冷却时间缩短1秒。\n该效果每1秒至多触发一次，在持续期间内至多触发5次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "raidenshogun.c6.wishbearer-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "raidenshogun.c6.musouIsshinBurstHit"
+                      },
+                      "term1": {
+                        "fact": "raidenshogun.c6.cooldownIntervalReady"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "raidenshogun.c6.wishbearer-cooldown-limit",
+                    "inputs": {
+                      "count": {
+                        "fact": "raidenshogun.c6.wishbearerCooldownUses"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "raidenshogun.c6.nearbyCooldownTeammate"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "excludeOwner": true,
+          "modifiers": [
+            {
+              "target": "attribute.elementalBurstCooldownReductionMs",
+              "value": {
+                "amount": 1000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "formulas": [
@@ -1500,6 +1620,31 @@
         "output": "value",
         "revision": "1"
       }
+    },
+    {
+      "id": "raidenshogun.enlightened-electro",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.4,
+        "offset": 0,
+        "threshold": 1,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "raidenshogun.c6.wishbearer-cooldown-limit",
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "lt",
+        "threshold": 5,
+        "revision": "1"
+      }
     }
   ],
   "support": {
@@ -1528,5 +1673,43 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "raidenshogun.musouEnded": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "梦想一心状态结束后十秒内"
+    },
+    "raidenshogun.c6.wishbearerCooldownUses": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本轮梦想一心中已触发的冷却缩减次数"
+    },
+    "raidenshogun.c6.musouIsshinBurstHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "梦想一心状态下，雷电将军本次元素爆发伤害命中敌人"
+    },
+    "raidenshogun.c6.cooldownIntervalReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本轮首次触发，或距上次触发此冷却缩减至少1秒"
+    },
+    "raidenshogun.c6.nearbyCooldownTeammate": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益队员在雷电将军附近"
+    }
+  }
 }

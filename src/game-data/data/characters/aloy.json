@@ -888,7 +888,168 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param10"
+      "cooldownParameter": "param10",
+      "buffs": [
+        {
+          "id": "aloy.coil-1",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "aloy.rushingIce"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "aloy.coil-count-1",
+                "inputs": {
+                  "value": {
+                    "fact": "aloy.coilStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "aloy.skill",
+                "parameter": "param5"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aloy.coil-2",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "aloy.rushingIce"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "aloy.coil-count-2",
+                "inputs": {
+                  "value": {
+                    "fact": "aloy.coilStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "aloy.skill",
+                "parameter": "param6"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aloy.coil-3",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "aloy.rushingIce"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "aloy.coil-count-3",
+                "inputs": {
+                  "value": {
+                    "fact": "aloy.coilStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "aloy.skill",
+                "parameter": "param7"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aloy.rushing-ice",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "fact": "aloy.rushingIce"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "aloy.skill",
+                "parameter": "param8"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aloy.frozen-wilds-attack-reduction",
+          "recipient": "target",
+          "condition": {
+            "fact": "aloy.frozenWildsAttackReduction"
+          },
+          "modifiers": [
+            {
+              "target": "target.attackReduction",
+              "value": {
+                "skill": "aloy.skill",
+                "parameter": "param3"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aloy.burst",
@@ -1000,13 +1161,67 @@
       "id": "aloy.passive1",
       "name": "战斗覆盖",
       "description": "埃洛伊获得冰尘雪野的线圈效果时，埃洛伊的攻击力提升16%，队伍中附近的其他角色的攻击力提升8%，持续10秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "aloy.coil-boost-self",
+          "condition": {
+            "fact": "aloy.coilAttackWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.16
+            }
+          ]
+        },
+        {
+          "id": "aloy.coil-boost-team",
+          "condition": {
+            "fact": "aloy.coilAttackWindow"
+          },
+          "recipient": "team",
+          "excludeOwner": true,
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.08
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aloy.passive2",
       "name": "强力攻击",
       "description": "埃洛伊处于冰尘雪野的冰驰状态下时，每1秒提升3.5%冰元素伤害加成，通过这种方式至多获得35%冰元素伤害加成。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "aloy.rushing-ice-bonus",
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ]
+          },
+          "condition": {
+            "fact": "aloy.rushingIce"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "call": "aloy.ice-bonus",
+                "inputs": {
+                  "basis": {
+                    "fact": "aloy.iceSeconds"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aloy.passive3",
@@ -1075,6 +1290,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "当次敌方攻击力降低由目标条件提供。命中后的线圈积累、四层转冰驰、脱战清除与冰驰每秒递增由显式条件提供。"
         }
       ]
     },
@@ -1112,6 +1332,13 @@
       },
       "label": "处于冰驰状态"
     },
+    "aloy.coilAttackWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "获线圈后的十秒攻击力加成"
+    },
     "aloy.iceSeconds": {
       "scope": "query",
       "type": {
@@ -1119,6 +1346,66 @@
         "unit": "count"
       },
       "label": "冰驰每秒获得的冰伤层数"
+    },
+    "aloy.frozenWildsAttackReduction": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标被冰尘弹或冷冻炸弹命中后仍处于降攻期间"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "aloy.coil-count-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "aloy.coil-count-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "aloy.coil-count-3",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "aloy.ice-bonus",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.035,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 10
+      }
+    }
+  ]
 }

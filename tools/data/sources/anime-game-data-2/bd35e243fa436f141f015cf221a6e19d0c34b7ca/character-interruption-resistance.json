@@ -1,0 +1,1049 @@
+{
+  "source": {
+    "repository": "https://gitlab.com/Dimbreath/AnimeGameData2",
+    "mirror": "https://github.com/DimbreathBot/AnimeGameData",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+    "capturedAt": "2026-11-22"
+  },
+  "interpretation": {
+    "uniformField": "Actor_EndureDelta",
+    "coefficient": "所列角色的额外受削韧倍率。场景修饰的原始参数增量另行记录。",
+    "stacking": {
+      "evidence": [
+        "https://github.com/KQM-git/TCL/blob/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/docs/evidence/combat-mechanics/poise.md#poise-stack",
+        "https://www.youtube.com/watch?v=dF7szUj3AWo",
+        "https://bbs.nga.cn/read.php?tid=26050939",
+        "https://www.taptap.cn/moment/148195177498935733"
+      ],
+      "staggerHit": {
+        "noResistance": 1,
+        "guideToAfterlife": 3,
+        "raincutter": 4,
+        "combined": 8
+      },
+      "rule": "独立额外受削韧倍率相乘。不同动作和护盾的内部作用范围，以及同类重叠领域的优先级，需要分别核验。"
+    }
+  },
+  "entries": {
+    "aratakiitto": {
+      "passive1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Itto.json",
+          "pointer": "/15/Default/modifiers/ExtraAttack_AddEndure/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Itto.json",
+          "pointer": "/15/Default/modifiers/Avatar_Itto_ExtraAttack_AddEndure/modifierMixins/0",
+          "value": {
+            "$type": "AttachToStateIDMixin",
+            "modifierName": "ExtraAttack_AddEndure",
+            "stateIDs": [
+              "ExtraAttack1",
+              "ExtraAttack2",
+              "ExtraAttack3"
+            ],
+            "HLGPLGFCHND": ""
+          }
+        }
+      }
+    },
+    "arlecchino": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Arlecchino.json",
+          "pointer": "/10/Default/modifiers/Avatar_Arlecchino_Constellation_1_EndureUp/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Arlecchino.json",
+          "pointer": "/10/Default/modifiers/Avatar_Arlecchino_Constellation_1_Handler/modifierMixins/0",
+          "value": {
+            "$type": "AttachToStateIDMixin",
+            "isCheckOnAttach": true,
+            "modifierName": "Avatar_Arlecchino_Constellation_1_EndureUp",
+            "stateIDs": [
+              "ExtraAttack_BS",
+              "Attack01",
+              "Attack02",
+              "Attack03",
+              "Attack04",
+              "Attack05",
+              "Attack06",
+              "ExtraAttack",
+              "ExtraAttack_AS"
+            ],
+            "HLGPLGFCHND": ""
+          }
+        },
+        "ownership": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Arlecchino.json",
+          "pointer": "/10/Default/modifiers/UNIQUE_Avatar_Arlecchino_FireAttack_Buff/onAdded",
+          "value": [
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Arlecchino_FireAttack_CurAtk",
+              "maxValue": 0,
+              "minValue": 0,
+              "value": "FIGHT_PROP_CUR_ATTACK"
+            },
+            {
+              "$type": "SetGlobalValueToOverrideMap",
+              "abilityName": "",
+              "doOffStage": true,
+              "globalValueKey": "_ABILITY_Arlecchino_FireAttack_CurAtk",
+              "overrideMapKey": "Arlecchino_FireAttack_CurAtk"
+            },
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "doOffStage": true,
+              "maxValue": 0,
+              "minValue": 0,
+              "overrideMapKey": "Cur_HPDebts_Ratio",
+              "value": 0
+            },
+            {
+              "$type": "SetOverrideMapValue",
+              "abilityName": "",
+              "doOffStage": true,
+              "maxValue": 0,
+              "minValue": 0,
+              "overrideMapKey": "Cur_HPDebts_Ratio",
+              "value": [
+                "FIGHT_PROP_CUR_HP_DEBTS",
+                "FIGHT_PROP_MAX_HP",
+                "DIV"
+              ]
+            },
+            {
+              "$type": "SetGlobalValue",
+              "doOffStage": true,
+              "key": "_ABILITY_Arlecchino_ElementalArt_Buff",
+              "maxValue": 0,
+              "minValue": 0,
+              "value": 1
+            },
+            {
+              "$type": "Predicated",
+              "successActions": [
+                {
+                  "$type": "FireEffect",
+                  "effectPattern": "Eff_Avatar_Lady_Pole_Arlecchino_HPdebtFull",
+                  "effectTempleteID": -1,
+                  "scale": 1,
+                  "JHAGIJGAKMK": ""
+                }
+              ]
+            },
+            {
+              "$type": "RemoveUniqueModifier",
+              "doOffStage": true,
+              "modifierName": "UNIQUE_Avatar_Arlecchino_FireAttack_Buff_Weather_Handler"
+            },
+            {
+              "$type": "AttachModifier",
+              "modifierName": "UNIQUE_Avatar_Arlecchino_FireAttack_Buff_Weather_Handler"
+            },
+            {
+              "$type": "SetAnimatorBool",
+              "boolID": "FireAttack",
+              "otherTargets": {
+                "$type": "SelectTargetsByEquipParts",
+                "equipPartNames": [
+                  "equip01",
+                  "equip02"
+                ]
+              },
+              "value": true
+            },
+            {
+              "$type": "AttachModifier",
+              "doOffStage": true,
+              "modifierName": "Avatar_Arlecchino_Constellation_1_Handler",
+              "predicates": [
+                {
+                  "$type": "ByUnlockTalentParam",
+                  "talentParam": "Arlecchino_Constellation_1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "clorinde": {
+      "c2": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Clorinde.json",
+          "pointer": "/3/Default/modifiers/UNIQUE_Clorinde_PermanentSkill_1_Buff_Endure/properties/Actor_EndureDelta",
+          "value": 0.3
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Clorinde.json",
+          "pointer": "/3/Default/modifiers/UNIQUE_Avatar_Clorinde_PermanentSkill_1_EndureHandler/modifierMixins/0",
+          "value": {
+            "$type": "AttachModifierToSelfGlobalValueMixin",
+            "defaultGlobalValueOnCreate": 0,
+            "globalValueKey": "_ABILITY_Clorinde_PermanentSkill_1_Stacks",
+            "modifierNameSteps": [
+              "Blank",
+              "UNIQUE_Clorinde_PermanentSkill_1_Buff_Endure"
+            ],
+            "valueSteps": [
+              -0.5,
+              2.5,
+              3.5
+            ]
+          }
+        }
+      },
+      "c6": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Clorinde.json",
+          "pointer": "/4/Default/modifiers/UNIQUE_Avatar_Clorinde_Constellation_6_Activate/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Clorinde.json",
+          "pointer": "/4/Default/modifiers/UNIQUE_Avatar_Clorinde_Constellation_6_Activate/modifierMixins",
+          "value": [
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0,
+              "globalValueKey": "_ABILITY_Clorinde_Constellation_6_Count",
+              "modifierNameSteps": [
+                "UNIQUE_Avatar_Clorinde_Constellation_6_Removal",
+                "UNIQUE_Avatar_Clorinde_Constellation_6_LifeTime"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                [
+                  "Clorinde_Constellation_6_Trigger_Count",
+                  0.5,
+                  "ADD"
+                ]
+              ]
+            },
+            {
+              "$type": "AttachModifierToSelfGlobalValueMixin",
+              "defaultGlobalValueOnCreate": 0,
+              "globalValueKey": "_ABILITY_Clorinde_ElementalArt_Active_Flag",
+              "modifierNameSteps": [
+                "UNIQUE_Avatar_Clorinde_Constellation_6_Remove_Immediate",
+                "Blank"
+              ],
+              "valueSteps": [
+                -0.5,
+                0.5,
+                1.5
+              ]
+            }
+          ]
+        },
+        "cutoff": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Clorinde.json",
+          "pointer": "/4/Default/modifiers/UNIQUE_Avatar_Clorinde_Constellation_6_Removal",
+          "value": {
+            "duration": 1.5,
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onThinkInterval": [
+              {
+                "$type": "RemoveUniqueModifier",
+                "modifierName": "UNIQUE_Avatar_Clorinde_Constellation_6_Activate"
+              }
+            ],
+            "thinkInterval": 1,
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "duration": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Clorinde.json",
+          "pointer": "/4/Default/modifiers/UNIQUE_Avatar_Clorinde_Constellation_6_Activate/duration",
+          "value": "Clorinde_Constellation_6_BuffTime"
+        },
+        "parameters": {
+          "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+          "pointer": "/539",
+          "value": {
+            "addProps": [
+              {},
+              {}
+            ],
+            "descTextMapHash": 3835955255,
+            "icon": "UI_Talent_S_Clorinde_04",
+            "mainCostItemCount": 1,
+            "mainCostItemId": 1198,
+            "nameTextMapHash": 2154722521,
+            "openConfig": "Clorinde_Constellation_6",
+            "paramList": [
+              0.1,
+              0.7,
+              1,
+              0.8,
+              2,
+              6,
+              12,
+              0,
+              0,
+              0
+            ],
+            "prevTalent": 985,
+            "talentId": 986,
+            "LEFEPLAGMHH": 4100423989
+          }
+        },
+        "cutoffOverride": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Clorinde.json",
+          "pointer": "/Clorinde_Constellation_6/6",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Clorinde_Constellation_PassiveSkill",
+            "paramDelta": "%3",
+            "paramSpecial": "Clorinde_Constellation_6_Endure_Time"
+          }
+        }
+      }
+    },
+    "columbina": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+          "pointer": "/11/Default/modifiers/Avatar_Columbina_Constellation_1_MoonOverGrowBuff_OnLocal/properties/Actor_EndureDelta",
+          "value": "EndureRatio"
+        },
+        "special": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+          "pointer": "/11/Default/abilitySpecials/EndureRatio",
+          "value": 0
+        },
+        "override": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Columbina.json",
+          "pointer": "/Columbina_Constellation_1/2",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Columbina_Constellation_1",
+            "paramDelta": "%2",
+            "paramRatio": 0,
+            "paramSpecial": "EndureRatio"
+          }
+        },
+        "durationOverride": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Columbina.json",
+          "pointer": "/Columbina_Constellation_1/3",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Columbina_Constellation_1",
+            "paramDelta": "%3",
+            "paramRatio": 0,
+            "paramSpecial": "EndureDuration"
+          }
+        },
+        "parameters": {
+          "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+          "pointer": "/684",
+          "value": {
+            "addProps": [
+              {},
+              {}
+            ],
+            "descTextMapHash": 1658129687,
+            "icon": "UI_Talent_S_Columbina_01",
+            "mainCostItemCount": 1,
+            "mainCostItemId": 5125,
+            "nameTextMapHash": 208853393,
+            "openConfig": "Columbina_Constellation_1",
+            "paramList": [
+              6,
+              0.3,
+              8,
+              0.12,
+              8,
+              15,
+              0.015,
+              0,
+              0,
+              0
+            ],
+            "talentId": 1251,
+            "LEFEPLAGMHH": 3939630165
+          }
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+          "pointer": "/11/Default/modifiers/Avatar_Columbina_Constellation_1_MoonOverGrowBuff/modifierMixins/0",
+          "value": {
+            "$type": "CurLocalAvatarMixinV2",
+            "modifierName": "Avatar_Columbina_Constellation_1_MoonOverGrowBuff_OnLocal"
+          }
+        },
+        "duration": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+          "pointer": "/11/Default/modifiers/Avatar_Columbina_Constellation_1_MoonOverGrowBuff/duration",
+          "value": "EndureDuration"
+        },
+        "selection": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+          "pointer": "/11/Default/onAbilityStart/0/failActions/0/successActions/0",
+          "value": {
+            "$type": "ApplyModifier",
+            "doOffStage": true,
+            "modifierName": "Avatar_Columbina_Constellation_1_MoonOverGrowBuff",
+            "target": "Team"
+          }
+        },
+        "selectionPredicate": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+          "pointer": "/11/Default/onAbilityStart/0/failActions/0/targetPredicates/0",
+          "value": {
+            "$type": "ByTargetGlobalValue",
+            "key": "_ABILITY_Columbina_Moon_Type",
+            "value": 2
+          }
+        }
+      }
+    },
+    "dehya": {
+      "passive1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dehya.json",
+          "pointer": "/4/Default/modifiers/Avatar_Dehya_ElementalArt_Grave_PermanentSkill_EndureUp/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "baseSkill": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dehya.json",
+          "pointer": "/4/Default/modifiers/UNIQUE_Dehya_ElementalArt_Grave_InField_OnCurAvatar/properties/Actor_EndureDelta",
+          "value": 0.7
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dehya.json",
+          "pointer": "/4/Default/modifiers/UNIQUE_Dehya_ElementalArt_Grave_InField_OnCurAvatar/modifierMixins/1",
+          "value": {
+            "$type": "AttachModifierToGlobalValueMixin",
+            "globalValueKey": "_ABILITY_Dehya_PermanentSkill_EndureUp",
+            "modifierNameSteps": [
+              "Avatar_Dehya_ElementalArt_Grave_PermanentSkill_EndureUp"
+            ],
+            "valueSteps": [
+              0.5,
+              1.5
+            ]
+          }
+        },
+        "window": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dehya.json",
+          "pointer": "/9/Default/modifiers/UNIQUE_Avatar_Dehya_PermanentSkill_B_Buff/duration",
+          "value": "EndureUp_Time"
+        },
+        "cooldown": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dehya.json",
+          "pointer": "/9/Default/modifiers/Avatar_Dehya_PermanentSkill_B_Timer/duration",
+          "value": "Trigger_CD"
+        },
+        "windowOverride": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Dehya.json",
+          "pointer": "/Dehya_PermanentSkill_1/8",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Dehya_PermanentSkill_1_B",
+            "paramDelta": "%4",
+            "paramRatio": 0,
+            "paramSpecial": "EndureUp_Time"
+          }
+        },
+        "cooldownOverride": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Dehya.json",
+          "pointer": "/Dehya_PermanentSkill_1/9",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Dehya_PermanentSkill_1_B",
+            "paramDelta": "%5",
+            "paramRatio": 0,
+            "paramSpecial": "Trigger_CD"
+          }
+        },
+        "parameters": {
+          "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+          "pointer": "/3407",
+          "value": {
+            "addProps": [
+              {},
+              {}
+            ],
+            "breakLevel": 1,
+            "costItems": [
+              {},
+              {},
+              {},
+              {}
+            ],
+            "descTextMapHash": 1650958403,
+            "filterConds": [
+              "TALENT_FILTER_NONE",
+              "TALENT_FILTER_NONE"
+            ],
+            "icon": "UI_Talent_S_Dehya_05",
+            "level": 1,
+            "lifeEffectParams": [
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nameTextMapHash": 3149191221,
+            "openConfig": "Dehya_PermanentSkill_1",
+            "paramDescList": [
+              1971474718,
+              1203449238,
+              2030913599,
+              2809214263,
+              258193542,
+              1153973610,
+              3043499439,
+              3598077029,
+              1695433076,
+              1260255687,
+              1890176140,
+              2701730019,
+              1604621671,
+              1900992803,
+              1760458030,
+              3315562957,
+              2622080129,
+              45559931,
+              3587976367,
+              3365976549
+            ],
+            "paramList": [
+              0.6,
+              6,
+              2,
+              9,
+              18,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "proudSkillGroupId": 7921,
+            "proudSkillId": 792101,
+            "proudSkillType": 2,
+            "unlockDescTextMapHash": 2508038298,
+            "LEFEPLAGMHH": 3781602316,
+            "LPHAIMKIICF": 4286345508,
+            "PPJAGIFLAKI": "PROUD_SKILL_DISPLAY_BREAK"
+          }
+        }
+      }
+    },
+    "hutao": {
+      "c6": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Hutao.json",
+          "pointer": "/13/Default/modifiers/UNIQUE_Hutao_Constellation_Limbo_Trigger_Handler/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "duration": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Hutao.json",
+          "pointer": "/13/Default/modifiers/UNIQUE_Hutao_Constellation_Limbo_Trigger_Handler/duration",
+          "value": "Hutao_Constellation_Limbo_Trigger_Duration"
+        },
+        "parameters": {
+          "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+          "pointer": "/227",
+          "value": {
+            "addProps": [
+              {},
+              {}
+            ],
+            "descTextMapHash": 3811816727,
+            "icon": "UI_Talent_S_Hutao_04",
+            "mainCostItemCount": 1,
+            "mainCostItemId": 1146,
+            "nameTextMapHash": 2361885697,
+            "openConfig": "Hutao_Constellation_6",
+            "paramList": [
+              0.25,
+              10,
+              2,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "prevTalent": 465,
+            "talentId": 466,
+            "LEFEPLAGMHH": 3111254021
+          }
+        },
+        "durationOverride": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Hutao.json",
+          "pointer": "/Hutao_Constellation_6/3",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Hutao_Constellation_Limbo_Trigger",
+            "paramDelta": "%2",
+            "paramSpecial": "Hutao_Constellation_Limbo_Trigger_Duration"
+          }
+        }
+      }
+    },
+    "lisa": {
+      "c2": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Lisa.json",
+          "pointer": "/20/Default/modifiers/Lisa_Constellation_2_DefenceUp/properties/Actor_EndureDelta",
+          "value": "Lisa_Constellation_2_DefenceUp_EndureDelta"
+        },
+        "special": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Lisa.json",
+          "pointer": "/20/Default/abilitySpecials/Lisa_Constellation_2_DefenceUp_EndureDelta",
+          "value": 0.5
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Lisa.json",
+          "pointer": "/20/Default/modifiers/UNIQUE_Lisa_Constellation_2_DefenceUp_Handler/modifierMixins/0",
+          "value": {
+            "$type": "AttachToStateIDMixin",
+            "modifierName": "Lisa_Constellation_2_DefenceUp",
+            "stateIDs": [
+              "Lisa_ThunderFall_Charge",
+              "Lisa_ThunderFall_Ready"
+            ],
+            "HLGPLGFCHND": ""
+          }
+        }
+      }
+    },
+    "neuvillette": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Neuvillette.json",
+          "pointer": "/16/Default/modifiers/Avatar_Neuvillette_Constellation_1_EndureUp/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Neuvillette.json",
+          "pointer": "/16/Default/abilityMixins/0",
+          "value": {
+            "$type": "AttachToStateIDMixin",
+            "modifierName": "Avatar_Neuvillette_Constellation_1_EndureUp",
+            "stateIDs": [
+              "ExtraAttack_Levitate_Start",
+              "ExtraAttack_Levitate_Absorb",
+              "ExtraAttack_Levitate_Trans",
+              "ExtraAttack_Levitate_Attack",
+              "ExtraAttack_Levitate_Attack_Final"
+            ],
+            "HLGPLGFCHND": ""
+          }
+        }
+      }
+    },
+    "varesa": {
+      "c2": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Varesa.json",
+          "pointer": "/7/Default/modifiers/Avatar_Varesa_Berserker_IsSpecialBurst_Constellation_2_AddEndure/properties/Actor_EndureDelta",
+          "value": 0
+        },
+        "baseSkill": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Varesa.json",
+          "pointer": "/7/Default/modifiers/Avatar_Varesa_Berserker_IsSpecialBurst_AddEndure/properties/Actor_EndureDelta",
+          "value": 0.15
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Varesa.json",
+          "pointer": "/7/Default/modifiers/UNIQUE_Avatar_Varesa_Berserker_IsSpecialBurst/onAdded/1",
+          "value": {
+            "$type": "Predicated",
+            "doOffStage": true,
+            "failActions": [
+              {
+                "$type": "AttachModifier",
+                "modifierName": "Avatar_Varesa_Berserker_IsSpecialBurst_AddEndure"
+              }
+            ],
+            "successActions": [
+              {
+                "$type": "AttachModifier",
+                "modifierName": "Avatar_Varesa_Berserker_IsSpecialBurst_Constellation_2_AddEndure"
+              }
+            ],
+            "targetPredicates": [
+              {
+                "$type": "ByUnlockTalentParam",
+                "talentParam": "Varesa_Constellation_2"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "xilonen": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Xilonen.json",
+          "pointer": "/19/Default/modifiers/UNIQUE_Avatar_Xilonen_Constellation_1_EndureUp/properties/Actor_EndureDelta",
+          "value": "Constellation_1_EndureUp"
+        },
+        "special": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Xilonen.json",
+          "pointer": "/19/Default/abilitySpecials/Constellation_1_EndureUp",
+          "value": 0.5
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Xilonen.json",
+          "pointer": "/19/Default/modifiers/UNIQUE_Avatar_Xilonen_Constellation_1_GemChecker/onThinkInterval",
+          "value": [
+            {
+              "$type": "Predicated",
+              "doOffStage": true,
+              "failActions": [
+                {
+                  "$type": "RemoveUniqueModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Avatar_Xilonen_Constellation_1_Handler"
+                }
+              ],
+              "successActions": [
+                {
+                  "$type": "AttachModifier",
+                  "doOffStage": true,
+                  "modifierName": "UNIQUE_Avatar_Xilonen_Constellation_1_Handler"
+                }
+              ],
+              "targetPredicates": [
+                {
+                  "$type": "ByAny",
+                  "predicates": [
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_ABILITY_Xilonen_Gem_1_Active",
+                      "value": 1
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_ABILITY_Xilonen_Gem_2_Active",
+                      "value": 1
+                    },
+                    {
+                      "$type": "ByTargetGlobalValue",
+                      "key": "_ABILITY_Xilonen_Gem_3_Active",
+                      "value": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "recipient": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Xilonen.json",
+          "pointer": "/19/Default/modifiers/UNIQUE_Avatar_Xilonen_Constellation_1_TeamHandler/modifierMixins/0",
+          "value": {
+            "$type": "CurLocalAvatarMixinV2",
+            "modifierName": "UNIQUE_Avatar_Xilonen_Constellation_1_EndureUp_OnAvatar"
+          }
+        },
+        "range": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Xilonen.json",
+          "pointer": "/19/Default/modifiers/UNIQUE_Avatar_Xilonen_Constellation_1_EndureUp_OnAvatar/onThinkInterval/0/otherTargets",
+          "value": {
+            "$type": "SelectTargetsByShape",
+            "campTargetType": "All",
+            "shapeName": "CircleR40",
+            "sizeRatio": 1
+          }
+        },
+        "refreshDuration": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Xilonen.json",
+          "pointer": "/19/Default/modifiers/UNIQUE_Avatar_Xilonen_Constellation_1_EndureUp/duration",
+          "value": 1
+        }
+      }
+    },
+    "yanfei": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Feiyan.json",
+          "pointer": "/8/Default/modifiers/Feiyan_Talent_EndureDelta/properties/Actor_EndureDelta",
+          "value": [
+            1,
+            "Feiyan_Talent_EndureDelta",
+            "Feiyan_Temp_WeightCount",
+            "MUL",
+            "ADD"
+          ]
+        },
+        "special": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Feiyan.json",
+          "pointer": "/8/Default/abilitySpecials/Feiyan_Talent_EndureDelta",
+          "value": 0
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Feiyan.json",
+          "pointer": "/8/Default/abilityMixins/2",
+          "value": {
+            "$type": "AttachToStateIDMixin",
+            "modifierName": "Feiyan_Talent_EndureDelta",
+            "predicates": [
+              {
+                "$type": "ByUnlockTalentParam",
+                "talentParam": "Avatar_Feiyan_Talent_SpecialCost"
+              }
+            ],
+            "stateIDs": [
+              "ExtraAttack_Charge",
+              "ExtraAttack"
+            ],
+            "HLGPLGFCHND": ""
+          }
+        },
+        "override": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+          "pointer": "/Feiyan_Constellation_1/2",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Feiyan_ExtraAttack",
+            "paramDelta": "%2",
+            "paramSpecial": "Feiyan_Talent_EndureDelta"
+          }
+        },
+        "parameters": {
+          "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+          "pointer": "/234",
+          "value": {
+            "addProps": [
+              {},
+              {}
+            ],
+            "descTextMapHash": 3765119039,
+            "icon": "UI_Talent_S_Feiyan_01",
+            "mainCostItemCount": 1,
+            "mainCostItemId": 1148,
+            "nameTextMapHash": 690499809,
+            "openConfig": "Feiyan_Constellation_1",
+            "paramList": [
+              -0.1,
+              -0.1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "talentId": 481,
+            "LEFEPLAGMHH": 300360061
+          }
+        },
+        "hitParameters": [
+          {
+            "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+            "pointer": "/Feiyan_SkillUpgrade_1/3",
+            "value": {
+              "$type": "ModifyAbility",
+              "abilityName": "Avatar_FeiyanGadgetSkill_ExtraAttack_Damage",
+              "paramDelta": "%4",
+              "paramRatio": 0,
+              "paramSpecial": "Feiyan_ExtraAttack_Weight_Damage_Lv00"
+            }
+          },
+          {
+            "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+            "pointer": "/Feiyan_SkillUpgrade_1/4",
+            "value": {
+              "$type": "ModifyAbility",
+              "abilityName": "Avatar_FeiyanGadgetSkill_ExtraAttack_Damage",
+              "paramDelta": "%5",
+              "paramRatio": 0,
+              "paramSpecial": "Feiyan_ExtraAttack_Weight_Damage_Lv01"
+            }
+          },
+          {
+            "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+            "pointer": "/Feiyan_SkillUpgrade_1/5",
+            "value": {
+              "$type": "ModifyAbility",
+              "abilityName": "Avatar_FeiyanGadgetSkill_ExtraAttack_Damage",
+              "paramDelta": "%6",
+              "paramRatio": 0,
+              "paramSpecial": "Feiyan_ExtraAttack_Weight_Damage_Lv02"
+            }
+          },
+          {
+            "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+            "pointer": "/Feiyan_SkillUpgrade_1/6",
+            "value": {
+              "$type": "ModifyAbility",
+              "abilityName": "Avatar_FeiyanGadgetSkill_ExtraAttack_Damage",
+              "paramDelta": "%7",
+              "paramRatio": 0,
+              "paramSpecial": "Feiyan_ExtraAttack_Weight_Damage_Lv03"
+            }
+          },
+          {
+            "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+            "pointer": "/Feiyan_SkillUpgrade_1/7",
+            "value": {
+              "$type": "ModifyAbility",
+              "abilityName": "Avatar_FeiyanGadgetSkill_ExtraAttack_Damage",
+              "paramDelta": "%8",
+              "paramRatio": 0,
+              "paramSpecial": "Feiyan_ExtraAttack_Weight_Damage_Lv04"
+            }
+          }
+        ],
+        "baseSealCap": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Feiyan.json",
+          "pointer": "/12/Default/abilitySpecials/Feiyan_ExtraAttack_MaxCount",
+          "value": 3
+        },
+        "sealCapOverride": {
+          "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Feiyan.json",
+          "pointer": "/Feiyan_Constellation_6/0",
+          "value": {
+            "$type": "ModifyAbility",
+            "abilityName": "Avatar_Feiyan_ExtraAttack_Weight_Handler",
+            "paramDelta": "%1",
+            "paramSpecial": "Feiyan_ExtraAttack_MaxCount"
+          }
+        },
+        "sealCapParameters": {
+          "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+          "pointer": "/239",
+          "value": {
+            "addProps": [
+              {},
+              {}
+            ],
+            "descTextMapHash": 2987376007,
+            "icon": "UI_Talent_S_Feiyan_04",
+            "mainCostItemCount": 1,
+            "mainCostItemId": 1148,
+            "nameTextMapHash": 3677492353,
+            "openConfig": "Feiyan_Constellation_6",
+            "paramList": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "prevTalent": 485,
+            "talentId": 486,
+            "LEFEPLAGMHH": 262097141
+          }
+        }
+      }
+    },
+    "aether-geo": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+          "pointer": "/11/Default/modifiers/UNIQUE_GaeaAnthem_PowerUp/properties/Actor_EndureDelta",
+          "value": "GaeaAnthem_EndureDelta"
+        },
+        "special": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+          "pointer": "/11/Default/abilitySpecials/GaeaAnthem_EndureDelta",
+          "value": 0.7
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+          "pointer": "/11/Default/modifiers/UNIQUE_RockTide_GaeaAnthem/onThinkInterval",
+          "value": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "UNIQUE_GaeaAnthem_PowerUp",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Alliance",
+                "shapeName": "CircleR7",
+                "sizeRatio": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Avatar"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "lumine-geo": {
+      "c1": {
+        "multiplier": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+          "pointer": "/11/Default/modifiers/UNIQUE_GaeaAnthem_PowerUp/properties/Actor_EndureDelta",
+          "value": "GaeaAnthem_EndureDelta"
+        },
+        "special": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+          "pointer": "/11/Default/abilitySpecials/GaeaAnthem_EndureDelta",
+          "value": 0.7
+        },
+        "activation": {
+          "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+          "pointer": "/11/Default/modifiers/UNIQUE_RockTide_GaeaAnthem/onThinkInterval",
+          "value": [
+            {
+              "$type": "ApplyModifier",
+              "modifierName": "UNIQUE_GaeaAnthem_PowerUp",
+              "otherTargets": {
+                "$type": "SelectTargetsByShape",
+                "campTargetType": "Alliance",
+                "shapeName": "CircleR7",
+                "sizeRatio": 1
+              },
+              "predicates": [
+                {
+                  "$type": "ByEntityTypes",
+                  "entityTypes": [
+                    "Avatar"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

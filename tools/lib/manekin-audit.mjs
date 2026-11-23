@@ -18,7 +18,7 @@ export async function auditManekin(catalog, engine) {
     const promoted=c.progression.promotion[4].specialized,atk=raw*(c.attributes.specialized==='attackPercent'?1+promoted:1);
     const amount=(ratio,e)=>atk*ratio*.5*(1-p.enemy.resistances[e])*(c.attributes.specialized===e+'Bonus'?1+promoted:1);
     const expected=new Map();
-    const hit=(talent,index,time,ratio,e)=>{const key=addSkillHit(p,owner,talent.id,index,time,mode);expected.set(key,amount(ratio,e));return key;};
+    const hit=(talent,index,time,ratio,e)=>{const key=addSkillHit(p,owner,talent.id,index,time,mode);expected.set(key,{amount:amount(ratio,e),hit:talent.hits[index].id,timeMs:time,element:e});return key;};
     function allNormals(time,element) {
       for (const [i,param] of ['param1','param2','param3','param4','param5','param6','param8','param9','param10'].entries())
         hit(normal,i,time,normal.parameters.find(p => p.id === param).values[0],element);
@@ -65,11 +65,11 @@ export async function auditManekin(catalog, engine) {
       addFieldChange(p,other,1000,{mode});addFieldChange(p,owner,6000,{mode});
     }
     const result=engine.evaluateTimeline(p);
-    function record(field,actual,want) {
+    function record(field,actual,want,hit) {
       const ok=typeof want==='number' ? Number.isFinite(actual) && Math.abs(actual-want)<1e-7 : JSON.stringify(actual)===JSON.stringify(want);
-      rows.push({entity:id,field,value:actual,expected:want,...(ok?{}:{issue:'数值、状态或次数不符'})});
+      rows.push({entity:id,field,value:actual,expected:want,...hit,...(ok?{}:{issue:'数值、状态或次数不符'})});
     }
-    for(const [key,want] of expected) record('hit/'+key,result.points.find(r=>r.id===key)?.value,want);
+    for(const [key,{ amount:want,...hit }] of expected) record('hit/'+key,result.points.find(r=>r.id===key)?.value,want,hit);
     const exits=result.plan.timeline.filter(entry=>entry.damage?.hit.hitId===id+'.passive.zone-exit' && result.points.find(p=>p.id===entry.id)?.value>0);
     record('/passives/0/occurrences',exits.map(r=>r.timeMs),skill?[1400]:[]);
     for(const exit of exits)record('/passives/0/exitDamage',result.points.find(r=>r.id===exit.id)?.value,amount(2,element));

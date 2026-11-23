@@ -1051,6 +1051,31 @@
           "max": 4,
           "integer": true
         }
+      ],
+      "buffs": [
+        {
+          "id": "furina.salon-allies",
+          "appliesTo": {
+            "hitIds": [
+              "furina.skill.param3",
+              "furina.skill.param4",
+              "furina.skill.param5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "call": "furina.salon-allies-scale",
+                "inputs": {
+                  "basis": {
+                    "fact": "furina.salonAllies"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1371,13 +1396,56 @@
       "id": "furina.passive2",
       "name": "无人听的自白",
       "description": "每1000点生命值上限都将使处于不同始基力属性下的芙宁娜的孤心沙龙获得相应的增益效果：\n「沙龙成员」造成的伤害提升0.7%，通过这种方式至多使「沙龙成员」造成的伤害提升28%；\n「众水的歌者」为周围的当前场上角色恢复生命值的间隔降低0.4%，通过这种方式至多使「众水的歌者」为周围的当前场上角色恢复生命值的间隔降低16%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "furina.salon-max-hp",
+          "appliesTo": {
+            "hitIds": [
+              "furina.skill.param3",
+              "furina.skill.param4",
+              "furina.skill.param5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "furina.salon-hp-bonus",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "furina.passive3",
       "name": "瀚海亦舞台",
       "description": "异色原海异种能力的冷却时间降低30%。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "furina.utility.fontemer-ability-cooldown",
+          "application": "explicit",
+          "condition": {
+            "fact": "furina.utility.fontemerAbilityUsed"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.xenochromaticFontemerAbilityCooldownReduction",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1408,7 +1476,25 @@
       "rank": 4,
       "name": "「若非处幽冥，怎知生可贵！」",
       "description": "孤心沙龙的「沙龙成员」命中敌人，或「众水的歌者」为周围的当前场上角色恢复生命值时，芙宁娜获得4点元素能量，该效果每5秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "furina.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "furina.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 4,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1563,6 +1649,82 @@
             "furina.c6Center"
           ]
         }
+      ],
+      "buffs": [
+        {
+          "id": "furina.c6-center",
+          "appliesTo": {
+            "hitIds": [
+              "furina.normal.c6-param1",
+              "furina.normal.c6-param2",
+              "furina.normal.c6-param3",
+              "furina.normal.c6-param4",
+              "furina.normal.c6-param5",
+              "furina.normal.c6-param7",
+              "furina.normal.c6-param8",
+              "furina.normal.c6-param9"
+            ]
+          },
+          "condition": {
+            "fact": "furina.c6Center"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.18
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "furina.c6-pneuma",
+          "appliesTo": {
+            "hitIds": [
+              "furina.normal.c6-param1",
+              "furina.normal.c6-param2",
+              "furina.normal.c6-param3",
+              "furina.normal.c6-param4",
+              "furina.normal.c6-param5",
+              "furina.normal.c6-param8",
+              "furina.normal.c6-param9"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "furina.c6Center"
+              },
+              "term1": {
+                "fact": "furina.pneuma"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.25
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -1588,6 +1750,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "初始沙龙状态、气氛之外的治疗间隔和溢出治疗、四命回能、六命芒荒效果的治疗与生命消耗及六次触发后结束需观察事件。"
         }
       ]
     },
@@ -1638,6 +1805,27 @@
         "kind": "boolean"
       },
       "label": "万众瞩目状态生效"
+    },
+    "furina.pneuma": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "芒性始基力"
+    },
+    "furina.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "沙龙成员命中敌人或众水的歌者治疗场上队员，本次可回复能量（间隔至少5秒）"
+    },
+    "furina.utility.fontemerAbilityUsed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次使用异色原海异种能力"
     }
   },
   "formulas": [
@@ -1649,6 +1837,36 @@
         "from": "scalar",
         "to": "scalar",
         "per": 1
+      }
+    },
+    {
+      "id": "furina.salon-allies-scale",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 1,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "furina.salon-hp-bonus",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000007,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.28
       }
     }
   ]

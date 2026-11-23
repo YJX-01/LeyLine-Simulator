@@ -1730,7 +1730,7 @@
         {
           "id": "manekin-dendro.passive1",
           "resolution": "implemented",
-          "reason": "在自己创建的区域中离场时触发一次本元素爆发伤害。"
+          "reason": "在自己创建的区域中离场时，按当前形态元素触发一次独立伤害。"
         },
         {
           "id": "manekin-dendro.passive2",

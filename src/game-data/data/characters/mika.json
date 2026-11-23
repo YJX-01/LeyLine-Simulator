@@ -673,7 +673,35 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "mika.t1.soulwind-attack-speed",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "mika.soulwindActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "skill": "mika.skill",
+                "parameter": "param4"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mika.burst",
@@ -909,7 +937,57 @@
       "id": "mika.passive1",
       "name": "速射牵制",
       "description": "在下列情况下，星霜的流旋的灵风状态将获得侦明效果强化，使角色处于场上时，造成的物理伤害提升10%：\n·霜流矢命中超过1名敌人时，每额外命中1名敌人就产生1层侦明效果；\n·冰星破片命中敌人时，将产生1层侦明效果。每枚冰星破片只能触发1次。\n\n灵风状态的侦明效果至多叠加3层，在持续期间内重复施放星霜的流旋时，将移除原有的灵风状态与其侦明效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "mika.a0.detector-physical",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "mika.soulwindActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.physicalBonus",
+              "value": {
+                "call": "mika.detector-physical",
+                "inputs": {
+                  "input": {
+                    "fact": "mika.detectorStacks"
+                  },
+                  "topographicalMapping": {
+                    "call": "rank.at-least-4",
+                    "inputs": {
+                      "rank": {
+                        "state": "ascension"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "companionsCounsel": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mika.passive2",
@@ -952,7 +1030,25 @@
       "rank": 4,
       "name": "晴霜的祝念",
       "description": "米卡自己的苍翎的颂愿的鹰翎状态为队伍中的角色进行治疗时，将为米卡恢复3点元素能量。通过一次施放苍翎的颂愿产生的鹰翎状态，至多恢复5次元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mika.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "mika.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -969,7 +1065,40 @@
       "rank": 6,
       "name": "依随的策援",
       "description": "星霜的流旋灵风状态下的侦明效果叠加层数上限提升1层。需要解锁突破天赋「速射牵制」。\n此外，处于灵风状态下的当前场上角色，其物理伤害的暴击伤害提高60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mika.c6.soulwind-physical-crit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "mika.soulwindActive"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "physical"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -998,5 +1127,57 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "mika.detectorStacks": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "该角色灵风状态的当前侦明层数"
+    },
+    "mika.soulwindActive": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于灵风状态"
+    },
+    "mika.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "米卡的鹰翎本次治疗队员且未达每次爆发5次上限"
+    }
+  },
+  "formulas": [
+    {
+      "id": "mika.detector-physical",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 5,
+        "cap": 0.3,
+        "capIncreases": [
+          {
+            "input": "topographicalMapping",
+            "amount": 0.1
+          },
+          {
+            "input": "companionsCounsel",
+            "amount": 0.1
+          }
+        ],
+        "revision": "1"
+      }
+    }
+  ]
 }

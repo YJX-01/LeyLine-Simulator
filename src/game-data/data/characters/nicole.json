@@ -607,12 +607,21 @@
           "modifiers": [
             {
               "target": "attribute.attack",
+              "extraAttack": true,
               "value": {
                 "call": "capped.attack",
                 "inputs": {
                   "basis": {
                     "stat": "attack",
-                    "excludeCurrentEffect": true
+                    "at": {
+                      "kind": "source-event",
+                      "phase": "before"
+                    },
+                    "excludeExtraAttack": true,
+                    "excludeOwnerBuffs": [
+                      "nicole.kenosis-c2",
+                      "nicole.a0.blessed-direction"
+                    ]
                   },
                   "rate": {
                     "skill": "nicole.skill",
@@ -622,6 +631,45 @@
                     "skill": "nicole.skill",
                     "parameter": "param6",
                     "unit": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "nicole.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "nicole.brillianceShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.attack-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "nicole.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "nicole.skill",
+                    "unit": "hp"
                   }
                 }
               }
@@ -836,7 +884,35 @@
       "id": "nicole.passive1",
       "name": "分有",
       "description": "施放元素战技**圣言默示·未现之光**后的20秒内，尼可将持续「观测」队伍中自己的当前场上其他角色。受观测的角色持续处于场上3秒后，其拥有的**虚己之赐**效果将会升变为**圣祝之引**，使其额外提升300点攻击力；若受观测的角色为魔导角色，则虚己之赐效果将会直接升变为圣祝之引。\n除尼可外，其他角色拥有的圣祝之引将在退场时还原为虚己之赐。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "nicole.a0.blessed-direction",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "nicole.blessedDirection"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "amount": 300,
+                "unit": "attack"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "nicole.passive2",
@@ -923,7 +999,38 @@
       "rank": 4,
       "name": "「向左或向右，无论你行往何方」",
       "description": "队伍中附近的角色拥有的**虚己之赐**升变为**圣祝之引**时，尼可还会为其赋予「先导之佑」效果，持续20秒，每名角色每16秒至多获得一次该效果。\n拥有「先导之佑」的角色的普通攻击、重击、下落攻击、元素战技与元素爆发造成的伤害提升，提升值相当于尼可攻击力的70%。该效果将在生效8次或持续时间结束时解除。\n同时命中多名敌人时，会依据命中敌人的数量消耗生效次数；队伍中具有「先导之佑」的角色，其生效次数单独计算。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nicole.c4.guiding-favor",
+          "recipient": "team",
+          "condition": {
+            "fact": "nicole.guideProtection"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "nicole.guiding-favor",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -940,7 +1047,23 @@
       "rank": 6,
       "name": "「这便是正确的道路，莫要彷徨」",
       "description": "尼可拥有的**虚己之赐**升变为**圣祝之引**时，队伍中附近的所有角色拥有的虚己之赐将会一同升变为圣祝之引。所有升变后的圣祝之引不再会还原为虚己之赐。\n此外，拥有圣祝之引的角色造成的伤害将无视敌人40%的防御力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nicole.c6.guidance-defense-ignore",
+          "recipient": "team",
+          "condition": {
+            "fact": "nicole.guidanceOfTheosis",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defenseIgnore",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -982,6 +1105,50 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "nicole.blessedDirection": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受观测角色连续站场三秒后处于圣祝之引"
+    },
+    "nicole.guideProtection": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "拥有先导之佑"
+    },
+    "nicole.brillianceShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由炽光护盾庇护"
+    },
+    "nicole.guidanceOfTheosis": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色当前拥有圣祝之引"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "nicole.guiding-favor",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 0.7,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ]
 }

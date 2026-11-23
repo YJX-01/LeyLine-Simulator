@@ -582,7 +582,34 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "buffs": [
+        {
+          "id": "kujousara.t1.tengu-attack",
+          "recipient": "team",
+          "condition": {
+            "fact": "kujousara.tenguJuuraiRecipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "extraAttack": true,
+              "value": {
+                "call": "product.attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "whiteAttack"
+                  },
+                  "rate": {
+                    "skill": "kujousara.skill",
+                    "parameter": "param2"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kujousara.burst",
@@ -730,13 +757,77 @@
       "id": "kujousara.passive1",
       "name": "不动心",
       "description": "处于鸦羽天狗霆雷召咒的「乌羽护持」状态下时，瞄准射击的所需的蓄力时间减少60%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "kujousara.a1.crowfeather-aim",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "kujousara.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 18000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "kujousara.normal.param7"
+            ]
+          },
+          "condition": {
+            "fact": "kujousara.crowfeatherCoverShot"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionRatio",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kujousara.passive2",
       "name": "御公仪",
       "description": "天狗咒雷·伏命中敌人后，将基于九条裟罗的元素充能效率，每100%为队伍中所有角色恢复1.2点元素能量。该效果每3秒至多触发一次。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kujousara.directEnergy.p1",
+          "application": "explicit",
+          "condition": {
+            "fact": "kujousara.directEnergy.p1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "kujousara.directEnergy.p1.amount",
+                "inputs": {
+                  "basis": {
+                    "stat": "energyRecharge"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ],
+          "recipient": "team"
+        }
+      ]
     },
     {
       "id": "kujousara.passive3",
@@ -750,7 +841,34 @@
       "rank": 1,
       "name": "乌眼",
       "description": "天狗咒雷为角色施加攻击力提升效果或命中敌人后，鸦羽天狗霆雷召咒的冷却时间减少1秒。\n该效果每3秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kujousara.c1.tengu-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kujousara.c1.tenguJuuraiAppliedAttackOrHit"
+              },
+              "term1": {
+                "fact": "kujousara.c1.cooldownIntervalReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 1000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -832,7 +950,30 @@
       "rank": 6,
       "name": "我界",
       "description": "处于天狗咒雷带来的攻击力提升效果状态下的角色，其雷元素伤害的暴击伤害提高60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kujousara.c6.tengu-electro-crit",
+          "recipient": "team",
+          "condition": {
+            "fact": "kujousara.tenguJuuraiRecipient"
+          },
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -863,12 +1004,63 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "kujousara.tenguJuuraiRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于天狗咒雷的攻击增益状态"
+    },
     "kujousara.c2WeakerCrowfeatherHit": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "施放战技留下的较弱乌羽已命中"
+    },
+    "kujousara.directEnergy.p1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "天狗咒雷·伏命中敌人，本次可回复能量（间隔至少3秒）"
+    },
+    "kujousara.crowfeatherCoverShot": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "这发满蓄力瞄准射击将消耗乌羽护持"
+    },
+    "kujousara.c1.tenguJuuraiAppliedAttackOrHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "九条裟罗的天狗咒雷本次为角色提升攻击力或命中敌人"
+    },
+    "kujousara.c1.cooldownIntervalReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "首次触发，或距上次触发此冷却缩减至少3秒"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "kujousara.directEnergy.p1.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "energy",
+        "rate": 1.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "revision": "1"
+      }
+    }
+  ]
 }

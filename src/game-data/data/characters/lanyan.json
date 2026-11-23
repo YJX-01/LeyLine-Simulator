@@ -622,7 +622,48 @@
         }
       ],
       "cooldownParameter": "param5",
-      "skillCharges": 1
+      "skillCharges": 1,
+      "buffs": [
+        {
+          "id": "lanyan.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "lanyan.swallowWispShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.attack-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "lanyan.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "lanyan.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lanyan.burst",
@@ -754,13 +795,76 @@
           "support": "hit-unavailable",
           "elementBy": "absorbedElement"
         }
+      ],
+      "buffs": [
+        {
+          "id": "lanyan.a0.absorbed-ring-factor",
+          "appliesTo": {
+            "hitIds": [
+              "lanyan.a0.absorbed-ring"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "id": "lanyan.passive2",
       "name": "苍翎镇邪敕符",
       "description": "元素战技凤缕随翦舞与元素爆发鹍弦踏月出造成的伤害值提升，提升值分别相当于蓝砚元素精通的309%和774%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "lanyan.a1.skill-mastery",
+          "appliesTo": {
+            "hitIds": [
+              "lanyan.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "lanyan.skill-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "lanyan.a1.burst-mastery",
+          "appliesTo": {
+            "skillIds": [
+              "lanyan.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "lanyan.burst-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lanyan.passive3",
@@ -780,7 +884,80 @@
       "rank": 2,
       "name": "「舞袂翩兮扬玉霓」",
       "description": "凤缕护盾存在期间，队伍中自己的当前场上角色的普通攻击造成伤害时，会恢复40%凤缕护盾的伤害吸收量，至多恢复至创造护盾时的伤害吸收量，该效果每2秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lanyan.c2.swallow-wisp-repair",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "lanyan.swallowWispShieldActive"
+                      },
+                      "term1": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "lanyan.c2.swallow-wisp-repair.eligible-hit"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "lanyan.c2.swallow-wisp-repair.intact",
+                "inputs": {
+                  "ratio": {
+                    "fact": "lanyan.c2.swallow-wisp-repair.remaining"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorptionAdded",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "fact": "lanyan.c2.swallow-wisp-repair.initial"
+                  },
+                  "rate": {
+                    "call": "lanyan.c2.swallow-wisp-repair.rate",
+                    "inputs": {
+                      "remaining": {
+                        "fact": "lanyan.c2.swallow-wisp-repair.remaining"
+                      }
+                    }
+                  },
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -877,5 +1054,95 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "lanyan.skill-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "damage",
+        "rate": 3.09,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lanyan.burst-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "damage",
+        "rate": 7.74,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lanyan.c2.swallow-wisp-repair.intact",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lanyan.c2.swallow-wisp-repair.rate",
+      "template": {
+        "id": "linear-bonus",
+        "input": "remaining",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": -1,
+        "offset": 1,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.4,
+        "maxInput": 1,
+        "revision": "1"
+      }
+    }
+  ],
+  "facts": {
+    "lanyan.swallowWispShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由凤缕护盾庇护"
+    },
+    "lanyan.c2.swallow-wisp-repair.eligible-hit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普攻已造成伤害，且凤缕护盾修复的2秒间隔已满足"
+    },
+    "lanyan.c2.swallow-wisp-repair.initial": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "当前凤缕护盾生成时的原始吸收量"
+    },
+    "lanyan.c2.swallow-wisp-repair.remaining": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "当前凤缕护盾修复前的剩余比例（0至1）"
+    }
+  }
 }

@@ -767,13 +767,89 @@
       "id": "aether-dendro.passive1",
       "name": "蔓生的埜草",
       "description": "草灯莲将在其存在期间每秒获得一层莲光遍照效果，使其领域内的当前场上角色的元素精通提升6点。草灯莲的莲光遍照效果至多叠加10层。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "aether-dendro.a0.lotus-light",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "aether-dendro.lotusField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "aether-dendro.lotus-light",
+                "inputs": {
+                  "input": {
+                    "fact": "aether-dendro.lotusLightStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aether-dendro.passive2",
       "name": "繁庑的丛草",
       "description": "旅行者自己的每点元素精通，能使草缘剑造成的伤害提升0.15%，偃草若化造成的伤害提升0.1%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "aether-dendro.a1.verdant-luxury-skill",
+          "appliesTo": {
+            "skillIds": [
+              "aether-dendro.skill"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "aether-dendro.verdant-luxury-skill",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-dendro.a1.verdant-luxury-burst",
+          "appliesTo": {
+            "skillIds": [
+              "aether-dendro.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "aether-dendro.verdant-luxury-burst",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -781,7 +857,25 @@
       "rank": 1,
       "name": "寄身的倚草",
       "description": "草缘剑命中敌人后，将为旅行者恢复3.5点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-dendro.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "aether-dendro.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3.5,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -821,7 +915,158 @@
       "rank": 6,
       "name": "蕴思的霜草",
       "description": "处于草灯莲的莲光遍照效果影响下的角色获得12%草元素伤害加成；若草灯莲发生过莲光幻变转化，还将获得12%对应元素伤害加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-dendro.c6.withering-aggregation-dendro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "aether-dendro.lotusField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-dendro.c6.withering-aggregation-hydro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "aether-dendro.lotusField"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "aether-dendro.lotus-transfiguration-hydro",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-dendro.lotusTransfiguration"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-dendro.c6.withering-aggregation-electro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "aether-dendro.lotusField"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "aether-dendro.lotus-transfiguration-electro",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-dendro.lotusTransfiguration"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-dendro.c6.withering-aggregation-pyro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "aether-dendro.lotusField"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "aether-dendro.lotus-transfiguration-pyro",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-dendro.lotusTransfiguration"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -850,5 +1095,132 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "aether-dendro.lotusField": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于草灯莲的领域内"
+    },
+    "aether-dendro.lotusLightStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "草灯莲当前莲光遍照层数"
+    },
+    "aether-dendro.lotusTransfiguration": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "hydro",
+          "electro",
+          "pyro"
+        ]
+      },
+      "label": "草灯莲当前的莲光幻变转化元素"
+    },
+    "aether-dendro.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "草缘剑本次命中敌人"
+    }
+  },
+  "formulas": [
+    {
+      "id": "aether-dendro.lotus-light",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "elementalMastery",
+        "rate": 6,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 10,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aether-dendro.verdant-luxury-skill",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 0.0015,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aether-dendro.verdant-luxury-burst",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 0.001,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aether-dendro.lotus-transfiguration-hydro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "hydro",
+          "electro",
+          "pyro"
+        ],
+        "equals": "hydro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aether-dendro.lotus-transfiguration-electro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "hydro",
+          "electro",
+          "pyro"
+        ],
+        "equals": "electro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aether-dendro.lotus-transfiguration-pyro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "hydro",
+          "electro",
+          "pyro"
+        ],
+        "equals": "pyro",
+        "revision": "1"
+      }
+    }
+  ]
 }

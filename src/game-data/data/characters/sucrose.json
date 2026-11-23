@@ -658,13 +658,235 @@
       "id": "sucrose.passive1",
       "name": "触媒置换术",
       "description": "砂糖触发扩散、星扩散反应时，使队伍中所有对应元素类型的角色（不包括砂糖自己）元素精通提升50，持续8秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "sucrose.a0.catalyst-conversion-pyro",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "pyro"
+                ],
+                "stellar-swirl": [
+                  "pyro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 50,
+                "unit": "elementalMastery"
+              },
+              "recipientElements": [
+                "pyro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sucrose.a0.catalyst-conversion-hydro",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "hydro"
+                ],
+                "stellar-swirl": [
+                  "hydro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 50,
+                "unit": "elementalMastery"
+              },
+              "recipientElements": [
+                "hydro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sucrose.a0.catalyst-conversion-cryo",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "cryo"
+                ],
+                "stellar-swirl": [
+                  "cryo"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 50,
+                "unit": "elementalMastery"
+              },
+              "recipientElements": [
+                "cryo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sucrose.a0.catalyst-conversion-electro",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "electro"
+                ],
+                "stellar-swirl": [
+                  "electro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 50,
+                "unit": "elementalMastery"
+              },
+              "recipientElements": [
+                "electro"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sucrose.passive2",
       "name": "小小的慧风",
       "description": "风灵作成·陆叁零捌或禁·风灵作成·柒伍同构贰型命中敌人时，基于砂糖元素精通的20%，为队伍中所有角色（不包括砂糖自己）提供元素精通加成，持续8秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "sucrose.a1.mollis-favonius",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "hitIds": [
+                "sucrose.skill.param1",
+                "sucrose.burst.param1",
+                "sucrose.burst.param2"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "sucrose.mollis-favonius-share",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery",
+                    "at": {
+                      "kind": "source-event",
+                      "phase": "after"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sucrose.passive3",
@@ -719,7 +941,97 @@
       "rank": 6,
       "name": "混元熵增论",
       "description": "禁·风灵作成·柒伍同构贰型如果发生了元素转化，则使队伍中所有角色在技能持续时间内获得20%的对应元素伤害加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sucrose.c6.spirit-bonus-pyro",
+          "recipient": "team",
+          "condition": {
+            "call": "sucrose.spirit-absorbed-pyro",
+            "inputs": {
+              "value": {
+                "fact": "sucrose.spiritAbsorbedElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.c6.spirit-bonus-hydro",
+          "recipient": "team",
+          "condition": {
+            "call": "sucrose.spirit-absorbed-hydro",
+            "inputs": {
+              "value": {
+                "fact": "sucrose.spiritAbsorbedElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.c6.spirit-bonus-cryo",
+          "recipient": "team",
+          "condition": {
+            "call": "sucrose.spirit-absorbed-cryo",
+            "inputs": {
+              "value": {
+                "fact": "sucrose.spiritAbsorbedElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sucrose.c6.spirit-bonus-electro",
+          "recipient": "team",
+          "condition": {
+            "call": "sucrose.spirit-absorbed-electro",
+            "inputs": {
+              "value": {
+                "fact": "sucrose.spiritAbsorbedElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -748,5 +1060,101 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "sucrose.spiritAbsorbedElement": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ]
+      },
+      "label": "当前风灵产生的元素转化类型"
+    }
+  },
+  "formulas": [
+    {
+      "id": "sucrose.spirit-absorbed-pyro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "pyro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sucrose.spirit-absorbed-hydro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "hydro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sucrose.spirit-absorbed-cryo",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "cryo",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sucrose.spirit-absorbed-electro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "electro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sucrose.mollis-favonius-share",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "basis",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "elementalMastery",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

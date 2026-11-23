@@ -770,13 +770,47 @@
       "id": "xiangling.passive1",
       "name": "交叉火力",
       "description": "锅巴的喷火距离提高20%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "xiangling.guoba-flame-reach",
+          "appliesTo": {
+            "hitIds": [
+              "xiangling.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.flameReachBonus",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xiangling.passive2",
       "name": "绝云朝天椒",
       "description": "锅巴出击效果结束时，锅巴会在消失的位置留下辣椒。拾取辣椒会提高10%攻击力，持续10秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "xiangling.a1.chili-attack",
+          "recipient": "team",
+          "condition": {
+            "fact": "xiangling.chiliPicked"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xiangling.passive3",
@@ -790,7 +824,40 @@
       "rank": 1,
       "name": "外酥里嫩",
       "description": "受到锅巴攻击的敌人，火元素抗性降低15%，持续6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xiangling.c1.guoba-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "xiangling.skill.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -849,7 +916,31 @@
       "rank": 6,
       "name": "大龙卷旋火轮",
       "description": "旋火轮持续期间，队伍中所有角色获得15%火元素伤害加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xiangling.c6.pyronado-team-pyro",
+          "recipient": "team",
+          "condition": {
+            "fact": "xiangling.pyronadoActive"
+          },
+          "appliesTo": {
+            "origins": [
+              "talent",
+              "triggered"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -880,6 +971,20 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "xiangling.chiliPicked": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "拾取锅巴辣椒后十秒内"
+    },
+    "xiangling.pyronadoActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旋火轮持续中"
+    },
     "xiangling.implosionExpired": {
       "scope": "query",
       "type": {

@@ -710,6 +710,30 @@
           "rate": "param4",
           "recipient": "self"
         }
+      ],
+      "buffs": [
+        {
+          "id": "sigewinne.directEnergy.t1",
+          "recipient": "owner",
+          "application": "explicit",
+          "condition": {
+            "fact": "sigewinne.bondOfLifeCleared"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "sigewinne.bond-of-life-energy",
+                "inputs": {
+                  "repaid": {
+                    "fact": "sigewinne.bondOfLifeRepaid"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -847,19 +871,169 @@
       "id": "sigewinne.passive1",
       "name": "应有适当的休憩",
       "description": "施放弹跳水疗法时，希格雯将为自己施加持续18秒的「半强制静养」效果：持续期间，希格雯获得8%水元素伤害加成与10层静养计数，除希格雯外附近队伍中处于后台的角色的元素战技造成伤害时，将消耗1层静养计数，提升此次元素战技造成的伤害值：希格雯的生命值上限超过30000的部分，每1000点生命值上限将提升80点伤害，通过这种方式，至多使本次元素战技造成的伤害提升2800点。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "sigewinne.a0.rest-hydro",
+          "condition": {
+            "fact": "sigewinne.restWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.08,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sigewinne.a0.rest-flat",
+          "recipient": "team",
+          "excludeOwner": true,
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "sigewinne.restWindow"
+                  },
+                  "term1": {
+                    "fact": "sigewinne.restStackRemaining"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "call": "rank.at-least-1",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "sigewinne.rest-flat",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sigewinne.passive2",
       "name": "细致入微的诊疗",
       "description": "希格雯进行治疗时，将基于队伍中所有角色当前生命之契的总和，提升本次治疗量：每1000点生命之契都将提升3%治疗量，至多通过这种方式提升30%治疗量。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "sigewinne.a4.diagnosis-outgoing-healing",
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": {
+                "call": "sigewinne.diagnosis-outgoing-healing",
+                "inputs": {
+                  "bond": {
+                    "fact": "sigewinne.partyBondOfLife"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sigewinne.passive3",
       "name": "急性剂量",
       "description": "在水下时，当前场上自己的角色的生命值降低至50%以下时，将在2.5秒内为其持续恢复生命值，总回复量相当于其生命值上限的50%，并在10秒内使该角色的所有元素抗性和物理抗性下降10%。该效果每20秒最多触发一次。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "sigewinne.passive.acute-dosage-resistance",
+          "recipient": "team",
+          "condition": {
+            "fact": "sigewinne.acuteDosageResistanceActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.physical",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.anemo",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.pyro",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": -0.1
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": -0.1
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -867,13 +1041,115 @@
       "rank": 1,
       "name": "「最快乐的精灵，可否懂得焦虑」",
       "description": "弹跳水疗法的激愈水球能额外弹跳3次；前3次弹跳不会使较大激愈水球变小。\n此外，突破天赋「应有适当的休憩」的效果获得提升：激愈水球弹跳时，将为希格雯赋予1层静养计数，并使静养计数产生的伤害值提升改为：希格雯的生命值上限超过30000的部分，每1000点生命值上限将提升100点，通过这种方式，至多提升3500点伤害。此效果需要解锁突破天赋「应有适当的休憩」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sigewinne.c1.rest-enhanced-flat",
+          "recipient": "team",
+          "excludeOwner": true,
+          "appliesTo": {
+            "categories": [
+              "skill"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "sigewinne.restWindow"
+                  },
+                  "term1": {
+                    "fact": "sigewinne.restStackRemaining"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "rank.at-least-1",
+                    "inputs": {
+                      "rank": {
+                        "state": "ascension"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "sigewinne.rest-enhanced-flat",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "「最仁慈的精灵，可否化解仇敌」",
       "description": "施放弹跳水疗法与过饱和心意注射时，将生成一个伤害吸收量等同于生命值上限30%的水球护盾，对水元素伤害有250%的吸收效果，持续直到施放完成。\n此外，弹跳水疗法抛出的激愈水球或过饱和心意注射命中敌人后，该敌人的水元素抗性降低35%，持续8秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sigewinne.c2.bubble-burst-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "sigewinne.skill.param1",
+                "sigewinne.burst.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.35,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -907,7 +1183,60 @@
       "rank": 6,
       "name": "「最光辉的精灵，可否为我祷告」",
       "description": "希格雯进行治疗时，将基于生命值上限，提升自己的过饱和心意注射的暴击率和暴击伤害：每1000点生命值上限都将提升0.4%暴击率与2.2%暴击伤害，持续15秒。至多通过这种方式提升20%暴击率与110%暴击伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sigewinne.c6.super-saturated-crit",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "observation": {
+                "key": "healingDone",
+                "test": "increase"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "skillIds": [
+              "sigewinne.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "sigewinne.super-saturated-crit-rate",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "sigewinne.super-saturated-crit-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -936,5 +1265,143 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "sigewinne.restWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "半强制静养持续中"
+    },
+    "sigewinne.restStackRemaining": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次命中前静养计数尚未耗尽"
+    },
+    "sigewinne.partyBondOfLife": {
+      "scope": "team",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "本次治疗前队伍所有角色当前生命之契总值（生命值）"
+    },
+    "sigewinne.acuteDosageResistanceActive": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该受益角色触发急性剂量后的10秒抗性降低仍有效"
+    },
+    "sigewinne.bondOfLifeCleared": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次触发希格雯战技的生命之契完全清除回能"
+    },
+    "sigewinne.bondOfLifeRepaid": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "本次清除前累计实际偿还的生命之契（生命值）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "sigewinne.rest-flat",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.08,
+        "offset": 0,
+        "threshold": 30000,
+        "output": "value",
+        "cap": 2800,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sigewinne.rest-enhanced-flat",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 30000,
+        "output": "value",
+        "cap": 3500,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sigewinne.super-saturated-crit-rate",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000004,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.2,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sigewinne.super-saturated-crit-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000022,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 1.1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sigewinne.diagnosis-outgoing-healing",
+      "template": {
+        "id": "linear-bonus",
+        "input": "bond",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.00003,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1",
+        "cap": 0.3
+      }
+    },
+    {
+      "id": "sigewinne.bond-of-life-energy",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "repaid",
+        "inputUnit": "hp",
+        "outputUnit": "energy",
+        "rate": 0.0005,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 5,
+        "output": "energy"
+      }
+    }
+  ]
 }

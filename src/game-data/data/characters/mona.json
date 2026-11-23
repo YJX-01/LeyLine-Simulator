@@ -731,7 +731,36 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "mona.omen",
+          "recipient": "team",
+          "condition": {
+            "fact": "mona.omen"
+          },
+          "appliesTo": {
+            "families": [
+              "ordinary"
+            ]
+          },
+          "stacking": {
+            "group": "mona.omen",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "mona.burst",
+                "parameter": "param10"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -756,6 +785,22 @@
           "support": "conditional-branch",
           "when": [
             "mona.illusoryTorrent"
+          ]
+        }
+      ],
+      "buffs": [
+        {
+          "id": "mona.torrent-base",
+          "appliesTo": {
+            "hitIds": [
+              "mona.skill.illusory-torrent"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 0.5
+            }
           ]
         }
       ]
@@ -797,7 +842,58 @@
       "rank": 1,
       "name": "沉没的预言",
       "description": "队伍中自己的角色攻击命中处于星异状态下的敌人后的8秒内，水元素相关反应的效果提升：\n·感电反应造成的伤害提升15%，月感电反应造成的伤害提升15%，蒸发反应造成的伤害提升15%，水元素扩散反应造成的伤害提升15%，月结晶反应造成的伤害提升15%；\n·冻结反应的持续时间延长15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mona.c1-reactions",
+          "recipient": "team",
+          "condition": {
+            "fact": "mona.c1Prophecy"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.amplifyingReactionBonus",
+              "value": 0.15,
+              "appliesTo": {
+                "reactionIds": [
+                  "vaporize"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": 0.15,
+              "appliesTo": {
+                "families": [
+                  "lunar-charged",
+                  "lunar-crystallize"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.15,
+              "appliesTo": {
+                "reactionIds": [
+                  "electro-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.15,
+              "appliesTo": {
+                "reactionIds": [
+                  "swirl"
+                ],
+                "elements": [
+                  "hydro"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -839,7 +935,22 @@
       "rank": 4,
       "name": "灭绝的预言",
       "description": "队伍中所有角色攻击处于星异状态下的敌人时，暴击率提升15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mona.c4-omen-crit",
+          "recipient": "team",
+          "condition": {
+            "fact": "mona.omen"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -856,7 +967,30 @@
       "rank": 6,
       "name": "厄运的修辞",
       "description": "进入虚实流动状态后，每移动1秒，莫娜的下一次重击伤害就增加60%，\n通过这种方式至多可以获得180%重击伤害加成，该效果至多持续8秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mona.c6-rhetoric",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "mona.c6-rhetoric-scale",
+                "inputs": {
+                  "basis": {
+                    "fact": "mona.c6SlideSeconds"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -881,6 +1015,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "泡影破裂到星异结束、冻结延长、虚实流动虚影自动触发、二命重击触发概率与五秒间隔、六命蓄力加成消费仍需事件状态。"
         }
       ]
     },
@@ -903,12 +1042,26 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "mona.omen": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标处于星异状态"
+    },
     "mona.illusoryTorrent": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "虚实流动生成的虚影破裂"
+    },
+    "mona.c1Prophecy": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "命中星异目标后触发沉没的预言"
     },
     "mona.c2Charged": {
       "scope": "query",
@@ -925,5 +1078,22 @@
       },
       "label": "虚实流动用于厄运的修辞的秒数"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "mona.c6-rhetoric-scale",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.6,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3
+      }
+    }
+  ]
 }

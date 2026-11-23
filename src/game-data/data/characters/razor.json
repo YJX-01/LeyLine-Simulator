@@ -680,6 +680,69 @@
           ],
           "support": "hit-complete"
         }
+      ],
+      "buffs": [
+        {
+          "id": "razor.t1.electro-sigil-recharge",
+          "modifiers": [
+            {
+              "target": "attribute.energyRecharge",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "razor.electro-sigil-count",
+                    "inputs": {
+                      "input": {
+                        "fact": "razor.electroSigils"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "skill": "razor.skill",
+                    "parameter": "param3"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "razor.directEnergy.t1",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "razor.directEnergy.t1"
+              },
+              "term1": {
+                "call": "razor.directEnergy.t1.mode",
+                "inputs": {
+                  "mode": {
+                    "fact": "razor.energySigilSpendMode"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "razor.directEnergy.t1.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "razor.energySigilsSpent"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1016,7 +1079,98 @@
       "energyCapacity": {
         "parameter": "param7"
       },
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "razor.t2.wolf-within-benefits",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "razor.wolfWithin"
+              },
+              "term1": {
+                "fact": "onField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "skill": "razor.burst",
+                "parameter": "param3"
+              }
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": {
+                "skill": "razor.burst",
+                "parameter": "param4"
+              }
+            }
+          ]
+        },
+        {
+          "id": "razor.directEnergy.t2",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "razor.directEnergy.t2"
+              },
+              "term1": {
+                "call": "razor.directEnergy.t2.mode",
+                "inputs": {
+                  "mode": {
+                    "fact": "razor.energySigilSpendMode"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "razor.directEnergy.t2.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "razor.energySigilsSpent"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        },
+        {
+          "id": "razor.directEnergy.burstExit",
+          "recipient": "owner",
+          "application": "explicit",
+          "condition": {
+            "fact": "razor.burstExitRefund"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "razor.burstExitEnergy",
+                "inputs": {
+                  "elapsedTicks": {
+                    "fact": "razor.burstRefundElapsedTicks"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -1024,13 +1178,76 @@
       "id": "razor.passive1",
       "name": "觉醒",
       "description": "利爪与苍雷的冷却时间减少18%。\n施放雷牙时，重置利爪与苍雷的冷却时间。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "razor.a1.claw-and-thunder-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": 0.18
+            }
+          ]
+        },
+        {
+          "id": "razor.skillReset",
+          "application": "explicit",
+          "appliesTo": {
+            "hitIds": [
+              "razor.burst.param1"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "razor.skillReset.confirmed"
+              },
+              "term1": {
+                "call": "skill.cooldown-positive",
+                "inputs": {
+                  "duration": {
+                    "fact": "skillCooldownBeforeResetMs"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillCooldownResetMs",
+              "value": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "razor.passive2",
       "name": "饥饿",
       "description": "雷泽的元素能量在50%以下时，元素充能效率提高30%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "razor.a1.hunger-recharge",
+          "condition": {
+            "fact": "razor.energyBelowHalf"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.energyRecharge",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "razor.passive3",
@@ -1062,13 +1279,53 @@
       "rank": 1,
       "name": "狼性",
       "description": "雷泽获取元素晶球或元素微粒后的8秒内，造成的伤害提高10%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "razor.c1.wolf-instinct",
+          "condition": {
+            "fact": "razor.particlePickupWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "压制",
       "description": "雷泽攻击生命值低于30%的敌人时，暴击率提高10%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "razor.c2.suppression",
+          "condition": {
+            "call": "razor.suppression-hp",
+            "inputs": {
+              "value": {
+                "fact": "targetHpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1085,7 +1342,40 @@
       "rank": 4,
       "name": "撕咬",
       "description": "利爪与苍雷点按时，会使命中的敌人防御力降低15%，持续7秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "razor.c4.bite-defence",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "razor.skill.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 7000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.defenseReduction",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1186,12 +1476,192 @@
         "kind": "boolean"
       }
     },
+    "razor.energyBelowHalf": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前元素能量低于一半"
+    },
+    "razor.particlePickupWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "取得元素晶球或微粒后八秒内"
+    },
     "razor.lupusFulgurReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "大剑充能完成后首次普攻触发落雷"
+    },
+    "razor.electroSigils": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前有效的雷之印数量（零至三个）"
+    },
+    "razor.energySigilSpendMode": {
+      "scope": "query",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "长按利爪与苍雷",
+          "施放雷牙"
+        ]
+      },
+      "label": "本次清除雷之印的方式"
+    },
+    "razor.energySigilsSpent": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次清除的雷之印数（0至3枚）"
+    },
+    "razor.directEnergy.t1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "雷之印本次转化为能量"
+    },
+    "razor.directEnergy.t2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "雷之印本次转化为能量"
+    },
+    "razor.burstExitRefund": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次雷牙提前退场返还已触发"
+    },
+    "razor.burstRefundElapsedTicks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "雷牙计时器在退场前已执行的三秒扣减次数（0至5次）"
+    },
+    "razor.skillReset.confirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次已施放雷牙"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "razor.suppression-hp",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "value",
+        "relation": "lt",
+        "threshold": 0.3,
+        "maxInput": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "razor.electro-sigil-count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "razor.directEnergy.t1.mode",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "长按利爪与苍雷",
+          "施放雷牙"
+        ],
+        "equals": "长按利爪与苍雷",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "razor.directEnergy.t1.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 15,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "razor.directEnergy.t2.mode",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "长按利爪与苍雷",
+          "施放雷牙"
+        ],
+        "equals": "施放雷牙",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "razor.directEnergy.t2.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 15,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "razor.burstExitEnergy",
+      "template": {
+        "id": "linear-bonus",
+        "input": "elapsedTicks",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "maxInput": 5,
+        "rate": -2,
+        "offset": 10,
+        "threshold": 0,
+        "output": "energy",
+        "revision": "1"
+      }
+    }
+  ]
 }

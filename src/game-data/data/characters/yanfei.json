@@ -695,6 +695,128 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "yanfei.scarlet-seals-held-stamina",
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction",
+              "value": {
+                "call": "yanfei.scarlet-seals-stamina",
+                "inputs": {
+                  "input": {
+                    "fact": "yanfei.heldSealStacks"
+                  },
+                  "fourthSeal": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "yanfei.scarlet-seals-charged-stamina",
+          "modifiers": [
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.15,
+              "appliesTo": {
+                "hitIds": [
+                  "yanfei.normal.param5"
+                ]
+              }
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.3,
+              "appliesTo": {
+                "hitIds": [
+                  "yanfei.normal.param6"
+                ]
+              }
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.45,
+              "appliesTo": {
+                "hitIds": [
+                  "yanfei.normal.param7"
+                ]
+              }
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.6,
+              "appliesTo": {
+                "hitIds": [
+                  "yanfei.normal.param8"
+                ]
+              },
+              "constellation": 6
+            }
+          ]
+        },
+        {
+          "id": "yanfei.charged-stamina-cost",
+          "modifiers": [
+            {
+              "target": "attribute.chargedAttackStaminaCost",
+              "value": {
+                "call": "stamina.discounted-cost",
+                "inputs": {
+                  "base": {
+                    "skill": "yanfei.normal",
+                    "parameter": "param14",
+                    "unit": "stamina"
+                  },
+                  "reduction": {
+                    "stat": "staminaCostReduction.charged"
+                  }
+                },
+                "output": "cost"
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "yanfei.normal.param4",
+                  "yanfei.normal.param5",
+                  "yanfei.normal.param6",
+                  "yanfei.normal.param7"
+                ]
+              }
+            },
+            {
+              "target": "attribute.chargedAttackStaminaCost",
+              "value": {
+                "call": "stamina.discounted-cost",
+                "inputs": {
+                  "base": {
+                    "skill": "yanfei.normal",
+                    "parameter": "param14",
+                    "unit": "stamina"
+                  },
+                  "reduction": {
+                    "stat": "staminaCostReduction.charged"
+                  }
+                },
+                "output": "cost"
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "yanfei.normal.param8"
+                ]
+              },
+              "constellation": 6
+            }
+          ]
+        }
       ]
     },
     {
@@ -986,7 +1108,25 @@
       "id": "yanfei.passive1",
       "name": "关联条款",
       "description": "烟绯通过重击消耗丹火印时，每枚丹火印会提升烟绯5%的火元素伤害加成，持续6秒。在该效果的持续时间内再次施放重击时，会先移除原有的效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "yanfei.a0.edict-scarlet-seals",
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "yanfei.edict-scarlet-seals",
+                "inputs": {
+                  "input": {
+                    "fact": "yanfei.consumedSealStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yanfei.passive2",
@@ -1025,7 +1165,84 @@
       "rank": 1,
       "name": "占理不饶人",
       "description": "烟绯进行重击时，每持有一枚丹火印，都会提高烟绯在咏唱期间的抗打断能力，并额外降低本次重击10%的体力消耗。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yanfei.c1.charged-poise.1",
+          "appliesTo": {
+            "hitIds": [
+              "yanfei.normal.param5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.9
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "yanfei.c1.charged-poise.2",
+          "appliesTo": {
+            "hitIds": [
+              "yanfei.normal.param6"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.8
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "yanfei.c1.charged-poise.3",
+          "appliesTo": {
+            "hitIds": [
+              "yanfei.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.7
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "yanfei.c1.charged-poise.4",
+          "activation": {
+            "constellation": 6
+          },
+          "appliesTo": {
+            "hitIds": [
+              "yanfei.normal.param8"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.6
+            },
+            {
+              "target": "attribute.staminaCostReduction.charged",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1073,7 +1290,106 @@
       "rank": 4,
       "name": "丹书金铁券",
       "description": "施放凭此结契时：\n生成一个伤害吸收量等于生命值上限45%的护盾，持续15秒。\n该护盾对火元素伤害有250%的吸收效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yanfei.c4-shield",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yanfei.burstShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.45,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": 0.45,
+                      "flat": {
+                        "amount": 0,
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "yanfei.c4-shield.pyro",
+                "inputs": {
+                  "mode": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.45,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "yanfei.c4-shield.pyro",
+                    "inputs": {
+                      "mode": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1133,6 +1449,87 @@
         "kind": "boolean"
       },
       "label": "主动重击命中并造成暴击"
+    },
+    "yanfei.consumedSealStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "最近六秒内最近一次重击消耗的丹火印数量"
+    },
+    "yanfei.burstShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由凭此结契四命护盾庇护"
+    },
+    "yanfei.heldSealStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前持有的丹火印数量（重击体力消耗按所选重击档位计算）"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "yanfei.edict-scarlet-seals",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yanfei.c4-shield.pyro",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "physical",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "pyro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yanfei.scarlet-seals-stamina",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.15,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "cap": 0.45,
+        "capIncreases": [
+          {
+            "input": "fourthSeal",
+            "amount": 0.15
+          }
+        ],
+        "revision": "1"
+      }
+    }
+  ]
 }

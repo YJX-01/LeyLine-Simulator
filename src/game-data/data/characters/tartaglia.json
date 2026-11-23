@@ -1333,7 +1333,26 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "tartaglia.directEnergy.t2",
+          "application": "explicit",
+          "condition": {
+            "fact": "tartaglia.directEnergy.t2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "tartaglia.burst",
+                "parameter": "param4",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -1368,13 +1387,45 @@
       "rank": 1,
       "name": "魔王武装·遏浪",
       "description": "魔王武装·狂澜的冷却时间降低20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "tartaglia.c1.raging-tide-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "魔王武装·暗流",
       "description": "处于断流效果影响下的敌人被击败时，为达达利亚恢复4点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "tartaglia.directEnergy.c2",
+          "application": "explicit",
+          "condition": {
+            "fact": "tartaglia.directEnergy.c2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 4,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1457,7 +1508,44 @@
       "rank": 6,
       "name": "极恶技·天使灭尽",
       "description": "在近战状态下施放极恶技·尽灭闪时，清除魔王武装·狂澜的冷却时间。\n该效果会在回到远程状态后触发。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "tartaglia.skillReset",
+          "application": "explicit",
+          "appliesTo": {
+            "hitIds": [
+              "tartaglia.burst.param1"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "tartaglia.skillReset.confirmed"
+              },
+              "term1": {
+                "call": "skill.cooldown-positive",
+                "inputs": {
+                  "duration": {
+                    "fact": "skillCooldownBeforeResetMs"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillCooldownResetMs",
+              "value": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1513,6 +1601,27 @@
         "kind": "boolean"
       },
       "label": "魔王武装·狂澜处于近战状态"
+    },
+    "tartaglia.directEnergy.c2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次击败一名处于断流影响下的敌人"
+    },
+    "tartaglia.directEnergy.t2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "达达利亚本次在远程状态施放极恶技·尽灭闪"
+    },
+    "tartaglia.skillReset.confirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "近战爆发后已返回远程状态"
     }
   }
 }

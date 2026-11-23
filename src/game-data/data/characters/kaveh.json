@@ -777,7 +777,28 @@
       "id": "kaveh.passive2",
       "name": "工艺家的奇想",
       "description": "在繁绘隅穹持续期间，卡维在普通攻击、重击或下落攻击命中敌人后，元素精通将提升25点。该效果每0.1秒至多触发一次，至多叠加4层。\n在繁绘隅穹效果结束时，该效果将被移除。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kaveh.a1.dream-mastery",
+          "condition": {
+            "fact": "kaveh.paintedDome"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "kaveh.dream-hit-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "kaveh.dreamHitStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kaveh.passive3",
@@ -831,7 +852,29 @@
       "rank": 2,
       "name": "御驿的径迹",
       "description": "在繁绘隅穹持续期间，卡维普通攻击的攻击速度提升15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaveh.c2.painted-dome-speed",
+          "condition": {
+            "fact": "kaveh.painting"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -848,7 +891,41 @@
       "rank": 4,
       "name": "百柱的酣宴",
       "description": "卡维触发绽放或月绽放反应产生的草原核在迸发时造成的伤害提升60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaveh.c4.bloom-bonuses",
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "reactionIds": [
+                  "bloom"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-bloom"
+                ],
+                "reactionIds": [
+                  "lunar-bloom"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -941,6 +1018,14 @@
       },
       "label": "繁绘隅穹持续中"
     },
+    "kaveh.dreamHitStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "繁绘隅穹持续期间武器攻击命中产生的层数"
+    },
     "kaveh.paintedDome": {
       "scope": "owner",
       "type": {
@@ -955,5 +1040,22 @@
       },
       "label": "本次普攻、重击或下落攻击命中并触发天园之光，距此前触发至少3秒"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "kaveh.dream-hit-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "elementalMastery",
+        "rate": 25,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    }
+  ]
 }

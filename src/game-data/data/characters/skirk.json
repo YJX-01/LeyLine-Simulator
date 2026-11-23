@@ -1417,6 +1417,279 @@
           "max": 3,
           "integer": true
         }
+      ],
+      "buffs": [
+        {
+          "id": "skirk.wither-rifts-0",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "skirk.withering"
+              },
+              "term1": {
+                "call": "skirk.rifts-0",
+                "inputs": {
+                  "value": {
+                    "fact": "skirk.consumedRifts"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "skirk.burst",
+                "parameter": "param4"
+              }
+            }
+          ]
+        },
+        {
+          "id": "skirk.wither-rifts-1",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "skirk.withering"
+              },
+              "term1": {
+                "call": "skirk.rifts-1",
+                "inputs": {
+                  "value": {
+                    "fact": "skirk.consumedRifts"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "activation": {
+            "ascension": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "skirk.burst",
+                "parameter": "param5"
+              }
+            }
+          ]
+        },
+        {
+          "id": "skirk.wither-rifts-2",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "skirk.withering"
+              },
+              "term1": {
+                "call": "skirk.rifts-2",
+                "inputs": {
+                  "value": {
+                    "fact": "skirk.consumedRifts"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "activation": {
+            "ascension": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "skirk.burst",
+                "parameter": "param6"
+              }
+            }
+          ]
+        },
+        {
+          "id": "skirk.wither-rifts-3",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "skirk.withering"
+              },
+              "term1": {
+                "call": "skirk.rifts-3",
+                "inputs": {
+                  "value": {
+                    "fact": "skirk.consumedRifts"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "activation": {
+            "ascension": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "skirk.burst",
+                "parameter": "param7"
+              }
+            }
+          ]
+        },
+        {
+          "id": "skirk.serpent-guile-0",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.burst.param1",
+              "skirk.burst.param2"
+            ]
+          },
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-2",
+                "inputs": {
+                  "rank": {
+                    "state": "constellation"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "call": "skirk.guile-ratio-0",
+                        "inputs": {
+                          "basis": {
+                            "fact": "skirk.serpentGuile"
+                          }
+                        }
+                      },
+                      "rate": {
+                        "skill": "skirk.burst",
+                        "parameter": "param3"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "skirk.serpent-guile-2",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.burst.param1",
+              "skirk.burst.param2"
+            ]
+          },
+          "activation": {
+            "constellation": 2
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "call": "skirk.guile-ratio-2",
+                        "inputs": {
+                          "basis": {
+                            "fact": "skirk.serpentGuile"
+                          }
+                        }
+                      },
+                      "rate": {
+                        "skill": "skirk.burst",
+                        "parameter": "param3"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -1431,7 +1704,168 @@
       "id": "skirk.passive2",
       "name": "万流归寂",
       "description": "队伍中附近的元素类型为水元素的角色的水元素攻击命中敌人时，或是队伍中附近的元素类型为冰元素的其他角色的冰元素攻击命中敌人时，丝柯克将获得一层持续20秒的死河渡断效果，至多叠加3层，每层独立计算持续时间。\n每名角色至多通过这种方式使丝柯克获得1层死河渡断效果。\n每层死河渡断效果会使丝柯克在**七相一闪**模式下时进行的普通攻击造成原本110%/120%/170%的伤害，且施放的元素爆发极恶技·灭造成原本105%/115%/160%的伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "skirk.crossing-na-1",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "skirk.death-crossing-1",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.1
+            }
+          ]
+        },
+        {
+          "id": "skirk.crossing-burst-1",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.burst.param1",
+              "skirk.burst.param2"
+            ]
+          },
+          "condition": {
+            "call": "skirk.death-crossing-1",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.05
+            }
+          ]
+        },
+        {
+          "id": "skirk.crossing-na-2",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "skirk.death-crossing-2",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.2
+            }
+          ]
+        },
+        {
+          "id": "skirk.crossing-burst-2",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.burst.param1",
+              "skirk.burst.param2"
+            ]
+          },
+          "condition": {
+            "call": "skirk.death-crossing-2",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.15
+            }
+          ]
+        },
+        {
+          "id": "skirk.crossing-na-3",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.skill.param1",
+              "skirk.skill.param2",
+              "skirk.skill.param3",
+              "skirk.skill.param4",
+              "skirk.skill.param5",
+              "skirk.skill.param6",
+              "skirk.skill.param7"
+            ]
+          },
+          "condition": {
+            "call": "skirk.death-crossing-3",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.7
+            }
+          ]
+        },
+        {
+          "id": "skirk.crossing-burst-3",
+          "appliesTo": {
+            "hitIds": [
+              "skirk.burst.param1",
+              "skirk.burst.param2"
+            ]
+          },
+          "condition": {
+            "call": "skirk.death-crossing-3",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.6
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "skirk.passive3",
@@ -1490,7 +1924,30 @@
       "rank": 2,
       "name": "坠渊",
       "description": "施放元素战技极恶技·闪后，丝柯克将额外获得10点**蛇之狡谋**。\n施放元素爆发极恶技·灭时，提升本次元素爆发伤害的效果，至多额外计入10点蛇之狡谋。\n此外，丝柯克施放**七相一闪**模式下的特殊元素爆发极恶技·尽后的12.5秒内，攻击力提升70%，该效果会在丝柯克退出七相一闪模式时解除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "skirk.c2-wither-attack",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "skirk.sevenfold"
+              },
+              "term1": {
+                "fact": "skirk.c2Withering"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.7
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1507,7 +1964,72 @@
       "rank": 4,
       "name": "流断",
       "description": "突破天赋**万流归寂**的效果获得强化：每层死河渡断效果还会使丝柯克的攻击力提升10%/20%/40%。\n需要解锁突破天赋「万流归寂」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "skirk.c4-crossing-attack-1",
+          "activation": {
+            "ascension": 4
+          },
+          "condition": {
+            "call": "skirk.death-crossing-1",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "skirk.c4-crossing-attack-2",
+          "activation": {
+            "ascension": 4
+          },
+          "condition": {
+            "call": "skirk.death-crossing-2",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "skirk.c4-crossing-attack-3",
+          "activation": {
+            "ascension": 4
+          },
+          "condition": {
+            "call": "skirk.death-crossing-3",
+            "inputs": {
+              "value": {
+                "fact": "skirk.deathCrossingStacks"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1640,6 +2162,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "虚境裂隙生成和吸收、蛇之狡谋获取消耗、凋尽十次上限和极恶技·斩层数消耗、六命受到伤害降低仍需事件和承伤状态。"
         }
       ]
     },
@@ -1669,12 +2196,34 @@
       },
       "label": "处于七相一闪模式"
     },
+    "skirk.withering": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普攻触发凋尽"
+    },
+    "skirk.c2Withering": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "施放极恶技·尽后十二点五秒内"
+    },
     "skirk.c1Rift": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "汲取虚境裂隙触发晶刃"
+    },
+    "skirk.deathCrossingStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "死河渡断层数"
     },
     "skirk.consumedRifts": {
       "scope": "query",
@@ -1714,5 +2263,123 @@
       },
       "label": "七相一闪受伤触发极恶技·斩"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "skirk.death-crossing-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.death-crossing-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.death-crossing-3",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.rifts-0",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 0,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.rifts-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.rifts-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.rifts-3",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "skirk.guile-ratio-0",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 50,
+        "output": "value",
+        "maxInput": 100,
+        "cap": 12
+      }
+    },
+    {
+      "id": "skirk.guile-ratio-2",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 50,
+        "output": "value",
+        "maxInput": 100,
+        "cap": 22
+      }
+    }
+  ]
 }

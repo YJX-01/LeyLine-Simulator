@@ -925,13 +925,144 @@
       "id": "nilou.passive1",
       "name": "折旋落英之庭",
       "description": "队伍中所有角色的元素类型均为草元素与水元素，并且至少有一名草元素角色、一名水元素角色时：\n妮露完成七域舞步的第三段舞步会为附近的所有角色赋予持续30秒的「金杯的丰馈」状态。\n处于金杯的丰馈状态下的角色受到草元素攻击会使附近的所有角色元素精通提升100点，持续10秒；此外，触发绽放或月绽放反应时，将取代草原核产生「丰穰之核」。\n相比草原核，丰穰之核在产生后将迅速迸发，并且具有更大的影响范围。\n丰穰之核无法触发超绽放与烈绽放反应，与草原核共享数量上限。丰穰之核的攻击视为绽放反应的草原核的攻击。\n当队伍中角色的元素类型不满足本突破天赋的条件时，将移除已有的金杯的丰馈效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "nilou.a0.golden-chalice-mastery",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "nilou.only-hydro-dendro",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "hydro",
+                            "dendro"
+                          ],
+                          "excludeOwner": false,
+                          "match": "exclude"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "nilou.contains-dendro",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "dendro"
+                          ],
+                          "excludeOwner": true,
+                          "match": "include"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "nilou.goldenChaliceDendroHit"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 100,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "nilou.passive2",
       "name": "翩舞永世之梦",
       "description": "基于妮露生命值上限超过30000的部分，每1000点生命值上限将使处于「金杯的丰馈」状态下的角色触发的丰穰之核造成的伤害提升9%。\n通过这种方式至多使丰穰之核造成的伤害提升400%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "nilou.a1.bountiful-core",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "nilou.only-hydro-dendro",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "hydro",
+                            "dendro"
+                          ],
+                          "excludeOwner": false,
+                          "match": "exclude"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "nilou.contains-dendro",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "dendro"
+                          ],
+                          "excludeOwner": true,
+                          "match": "include"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "nilou.goldenChalice"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "call": "nilou.bountiful-core",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              },
+              "appliesTo": {
+                "reactionIds": [
+                  "bloom"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "nilou.passive3",
@@ -945,13 +1076,112 @@
       "rank": 1,
       "name": "却月的轻舞",
       "description": "七域舞步获得如下强化：\n·水月造成的伤害提升65%；\n·净天水环的持续时间延长6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nilou.c1.luminous-illusion",
+          "appliesTo": {
+            "hitIds": [
+              "nilou.skill.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.65,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "星天的花雨",
       "description": "处于「金杯的丰馈」状态下的角色对敌人造成水元素伤害后，该敌人的水元素抗性降低35%，持续10秒；对敌人造成绽放或月绽放反应伤害后，该敌人的草元素抗性降低35%，持续10秒。\n需要解锁突破天赋「折旋落英之庭」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nilou.c2.starry-shred",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-1",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "nilou.only-hydro-dendro",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "hydro",
+                            "dendro"
+                          ],
+                          "excludeOwner": false,
+                          "match": "exclude"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "nilou.contains-dendro",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "dendro"
+                          ],
+                          "excludeOwner": true,
+                          "match": "include"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.35,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nilou.starryHydroShred"
+              }
+            },
+            {
+              "target": "target.resistance.dendro",
+              "value": {
+                "amount": -0.35,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "nilou.starryDendroShred"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -968,7 +1198,61 @@
       "rank": 4,
       "name": "挽漪的节音",
       "description": "七域舞步的翩转状态下的第三段舞步命中敌人后，将为妮露恢复15点元素能量，并使妮露的浮莲舞步·远梦聆泉造成的伤害提升50%，持续8秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nilou.c4.fricative-pulse",
+          "appliesTo": {
+            "skillIds": [
+              "nilou.burst"
+            ]
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "hitIds": [
+                "nilou.skill.param4",
+                "nilou.skill.param6"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "nilou.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "nilou.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 15,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -985,7 +1269,36 @@
       "rank": 6,
       "name": "断霜的弦歌",
       "description": "每1000点生命值上限，将使妮露的暴击率提升0.6%，暴击伤害提升1.2%。\n通过这种方式，妮露的暴击率至多提升30%，暴击伤害至多提升60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "nilou.c6.frostbreak",
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "nilou.frostbreak-crit",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "nilou.frostbreak-crit-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1014,5 +1327,113 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "nilou.only-hydro-dendro",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 0,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "nilou.contains-dendro",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "nilou.bountiful-core",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.00009,
+        "offset": 0,
+        "threshold": 30000,
+        "output": "value",
+        "cap": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "nilou.frostbreak-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000006,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "nilou.frostbreak-crit-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000012,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.6,
+        "revision": "1"
+      }
+    }
+  ],
+  "facts": {
+    "nilou.goldenChaliceDendroHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于金杯的丰馈的角色受草元素攻击后十秒内"
+    },
+    "nilou.goldenChalice": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于金杯的丰馈状态"
+    },
+    "nilou.starryHydroShred": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "丰馈角色造成水元素伤害后十秒内"
+    },
+    "nilou.starryDendroShred": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "丰馈角色造成绽放或月绽放伤害后十秒内"
+    },
+    "nilou.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "翩转状态下的第三段舞步本次命中敌人"
+    }
+  }
 }

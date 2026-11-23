@@ -29,14 +29,15 @@ export async function auditCastTiming(entities,engine) {
         const param=detail?.template.match(/\{(param\d+):/u)?.[1];
         const seconds=t.parameters.find(v=>v.id===param)?.values[0];
         if (!Number.isFinite(seconds)) throw Error(t.id+' 的本地冷却时间缺少数值');
-        const duration=Math.round(seconds*1000), field='/talents/'+i+'/cooldownParameter';
+        const reduction = c.id === 'amber' && rank >= 4 && t.category === 'skill' ? .2 : 0;
+        const duration=Math.round(seconds*1000*(1-reduction)), field='/talents/'+i+'/cooldownParameter';
         const first=add(t,0);
         expected.push([field,first,'首次施放',true]);
         if(t.category==='burst'){
           expected.push([field,add(t,duration-1),'冷却结束前一毫秒',false],[field,add(t,duration),'恰好冷却完成',true]);
         }else{
           expected.push([field,first,'剩余冷却',duration]);
-          if(t.skillCharges) {
+          if(t.skillCharges || gate && rank >= gate.rank) {
             const baseCount=Number(t.description.match(/拥有(\d+)次可使用次数/)?.[1] ?? (t.description.includes('2次')?2:1));
             const count=baseCount+Number(Boolean(gate && rank>=gate.rank));
             const cf=gate?'/constellations/'+(gate.rank-1):'/talents/'+i+'/skillCharges';

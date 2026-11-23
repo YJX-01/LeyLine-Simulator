@@ -684,7 +684,39 @@
       "id": "prune.passive2",
       "name": "振铃同心",
       "description": "当布伦妮使用发生过元素转化的**「狩灾誓锤」**命中敌人后，队伍中附近的其他角色将获得持续5秒的「振铃鼓舞」效果：普通攻击、重击、下落攻击、元素战技或元素爆发对敌人造成伤害时，基于其获得「振铃鼓舞」效果时，布伦妮攻击力超过2000的部分，提升本次攻击造成的伤害：每点攻击力都会使本次攻击造成的伤害提升0.025%，至多提升50%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "prune.a1.inspiration-damage",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "prune.inspirationWindow"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "prune.inspiration-damage",
+                "inputs": {
+                  "input": {
+                    "fact": "prune.inspirationAttack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "prune.passive3",
@@ -698,13 +730,52 @@
       "rank": 1,
       "name": "立下寻救的誓言，旅途由此开端",
       "description": "经过元素转化后的**「狩灾誓锤」**的攻击命中敌人后，将为布伦妮恢复2点元素能量，该效果每1.8秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "prune.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "prune.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "整理杂乱的包袱，元素妙力果然",
       "description": "元素爆发**铃鸣·狩魔之刻**中，当「诱巫饵铃」处于「寻猎」模式时，布伦妮还会获得「寻猎魔女」效果：布伦妮的攻击力提升10%；「诱巫饵铃」和经过元素转化的**「狩灾誓锤」**命中敌人时，还会进一步使攻击力提升5%。通过上述方式，至多使攻击力提升至40%。\n效果存在期间重新施放铃鸣·狩魔之刻，将移除原有的上述效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "prune.c2.hunter-attack",
+          "condition": {
+            "fact": "prune.hunterMode"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "prune.hunter-attack",
+                "inputs": {
+                  "input": {
+                    "fact": "prune.hunterHitStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -758,7 +829,60 @@
       "rank": 6,
       "name": "故事结尾在这儿，念给伙伴听完",
       "description": "元素爆发**铃鸣·狩魔之刻**中「诱巫饵铃」的「寻猎」模式的持续时间延长4秒。\n此外，队伍中处于「振铃鼓舞」效果影响下的角色在对敌人触发任意元素反应后，都会使布伦妮及附近当前场上拥有「振铃鼓舞」效果的其他角色攻击力提升350点，持续5秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "prune.c6.reaction-inspiration-owner",
+          "condition": {
+            "fact": "prune.reactionInspirationWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "amount": 350,
+                "unit": "attack"
+              }
+            }
+          ]
+        },
+        {
+          "id": "prune.c6.reaction-inspiration-others",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "prune.inspirationWindow"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "prune.reactionInspirationWindow"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "amount": 350,
+                "unit": "attack"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -820,6 +944,50 @@
       },
       "label": "寻猎模式的诱巫饵铃已触发扩散或星扩散"
     },
+    "prune.inspirationAttack": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "attack"
+      },
+      "label": "振铃鼓舞获得时布伦妮的攻击力"
+    },
+    "prune.inspirationWindow": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "经过元素转化的狩灾誓锤命中后仍处于振铃鼓舞"
+    },
+    "prune.hunterMode": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "诱巫饵铃处于寻猎模式"
+    },
+    "prune.hunterHitStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "寻猎魔女生效期间的有效命中层数"
+    },
+    "prune.reactionInspirationWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "振铃鼓舞角色触发任意元素反应后五秒内"
+    },
+    "prune.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素转化后的狩灾誓锤命中敌人，本次可回复能量（间隔至少1.8秒）"
+    },
     "prune.c4OathhammerRicochetReady": {
       "scope": "query",
       "type": {
@@ -827,5 +995,37 @@
       },
       "label": "战技或爆发产生的已转化狩灾誓锤命中后，本次弹跳已命中当前目标"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "prune.inspiration-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.00025,
+        "offset": 0,
+        "threshold": 2000,
+        "output": "value",
+        "cap": 0.5,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "prune.hunter-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0.1,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.4,
+        "revision": "1"
+      }
+    }
+  ]
 }

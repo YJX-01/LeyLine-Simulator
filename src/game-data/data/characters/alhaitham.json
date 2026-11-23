@@ -1091,7 +1091,33 @@
       "id": "alhaitham.passive2",
       "name": "谜林道破",
       "description": "艾尔海森的每点元素精通，都会使光幕伤害与殊境·显象缚结造成的伤害提升0.1%。\n通过这种方式，至多使光幕伤害与殊境·显象缚结造成的伤害提升100%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "alhaitham.a1.mysteries-laid-bare",
+          "appliesTo": {
+            "hitIds": [
+              "alhaitham.skill.param4",
+              "alhaitham.skill.param6",
+              "alhaitham.skill.param8",
+              "alhaitham.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "alhaitham.mirror-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "alhaitham.passive3",
@@ -1105,13 +1131,58 @@
       "rank": 1,
       "name": "直观",
       "description": "光幕攻击命中敌人时，将使共相·理式摹写的冷却时间减少1.2秒。该效果每1秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "alhaitham.c1.intuition-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "alhaitham.c1.projectionHit"
+              },
+              "term1": {
+                "fact": "alhaitham.c1.cooldownIntervalReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 1200,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "辩章",
       "description": "艾尔海森产生琢光镜时，每1枚产生的琢光镜将使元素精通提升50点，持续8秒。该效果最多叠加4层，每层独立计算持续时间。琢光镜数量达到上限时依然能触发该效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "alhaitham.c2.mirror-mastery",
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "alhaitham.mirror-mastery-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "alhaitham.mirrorMasteryStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1128,7 +1199,43 @@
       "rank": 4,
       "name": "义贯",
       "description": "施放殊境·显象缚结时，会依据通过本次施放消耗与产生的琢光镜数量，产生如下效果：\n·每消耗1枚琢光镜，使队伍中附近的其他角色元素精通提升30点，持续15秒；\n·每产生1枚琢光镜，使艾尔海森获得10%草元素伤害加成，持续15秒。\n\n上述效果的持续期间内重复施放殊境·显象缚结时，将先移除原有的效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "alhaitham.c4.consumed-mirrors",
+          "recipient": "team",
+          "excludeOwner": true,
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "alhaitham.consumed-mirror-count",
+                "inputs": {
+                  "input": {
+                    "fact": "alhaitham.consumedMirrors"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "alhaitham.c4.generated-mirrors",
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "call": "alhaitham.generated-mirror-count",
+                "inputs": {
+                  "input": {
+                    "fact": "alhaitham.generatedMirrors"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1145,7 +1252,31 @@
       "rank": 6,
       "name": "正理",
       "description": "艾尔海森获得如下效果：\n·殊境·显象缚结施放完成2秒后，将无视消耗琢光镜的个数，固定产生3枚琢光镜；\n·艾尔海森产生琢光镜时，若琢光镜数量已达到上限，艾尔海森的暴击率提升10%，暴击伤害提升70%，持续6秒。该效果在持续期间重复触发时，剩余持续时间将增加6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "alhaitham.c6.excess-mirror",
+          "condition": {
+            "fact": "alhaitham.excessMirrorWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.7,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1174,5 +1305,114 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "alhaitham.mirror-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 0.001,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "alhaitham.mirror-mastery-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "elementalMastery",
+        "rate": 50,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "alhaitham.consumed-mirror-count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "elementalMastery",
+        "rate": 30,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "alhaitham.generated-mirror-count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ],
+  "facts": {
+    "alhaitham.mirrorMasteryStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "八秒内诞生的琢光镜有效层数，最多四层"
+    },
+    "alhaitham.consumedMirrors": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "消耗后十五秒内的琢光镜数量"
+    },
+    "alhaitham.generatedMirrors": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "产生后十五秒内的琢光镜数量"
+    },
+    "alhaitham.excessMirrorWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "达到上限后产生琢光镜触发的六秒窗口"
+    },
+    "alhaitham.c1.projectionHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "艾尔海森自己的光幕攻击本次命中敌人"
+    },
+    "alhaitham.c1.cooldownIntervalReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "首次触发，或距上次触发此冷却缩减至少1秒"
+    }
+  }
 }

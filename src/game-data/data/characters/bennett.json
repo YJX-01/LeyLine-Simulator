@@ -990,6 +990,7 @@
           "modifiers": [
             {
               "target": "attribute.attack",
+              "extraAttack": true,
               "value": {
                 "call": "product.attack",
                 "inputs": {
@@ -1030,6 +1031,7 @@
             },
             {
               "target": "attribute.attack",
+              "extraAttack": true,
               "value": {
                 "call": "product.attack",
                 "inputs": {
@@ -1098,13 +1100,89 @@
       "id": "bennett.passive1",
       "name": "热情复燃",
       "description": "热情过载的冷却时间减少20%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "bennett.a1.passion-overload-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "bennett.passive2",
       "name": "无畏的热血",
       "description": "在美妙旅程领域内，热情过载具有如下效果：\n·冷却时间减少50%；\n·二段蓄力不会将班尼特自身击飞。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "bennett.a4.passion-overload-cooldown",
+          "application": "explicit",
+          "appliesTo": {
+            "skillIds": [
+              "bennett.skill"
+            ],
+            "origins": [
+              "talent"
+            ]
+          },
+          "condition": {
+            "fact": "bennett.a4.castInInspirationField"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.currentCastSkillCooldownReduction",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.passionOverloadCooldownAfterPassivesMs",
+              "value": {
+                "amount": 2000,
+                "unit": "milliseconds"
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "bennett.skill.param1"
+                ]
+              }
+            },
+            {
+              "target": "attribute.passionOverloadCooldownAfterPassivesMs",
+              "value": {
+                "amount": 3000,
+                "unit": "milliseconds"
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "bennett.skill.param2",
+                  "bennett.skill.param3"
+                ]
+              }
+            },
+            {
+              "target": "attribute.passionOverloadCooldownAfterPassivesMs",
+              "value": {
+                "amount": 4000,
+                "unit": "milliseconds"
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "bennett.skill.param4",
+                  "bennett.skill.param5",
+                  "bennett.skill.param6"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "bennett.passive3",
@@ -1211,7 +1289,57 @@
       "name": "烈火与勇气",
       "description": "处在美妙旅程领域内的队伍中当前场上单手剑、双手剑、长柄武器角色获得15%火元素伤害加成，并获得火元素附魔。",
       "partyInfusion": "pyro",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "bennett.c6.inspiration-pyro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "bennett.inField"
+              }
+            },
+            "output": "active"
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "bennett.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "stacking": {
+            "policy": "replace",
+            "scope": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1254,6 +1382,13 @@
         "kind": "boolean"
       },
       "label": "已在一段蓄力的第二击中接续普攻"
+    },
+    "bennett.a4.castInInspirationField": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次施放热情过载时位于美妙旅程领域内"
     }
   }
 }

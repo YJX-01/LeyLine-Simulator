@@ -1008,7 +1008,25 @@
       "id": "sandrone.passive2",
       "name": "淑女的行事准则",
       "description": "基于桑多涅的攻击力，提升其元素精通：每100点攻击力都将使桑多涅的元素精通提升8点，至多通过这种方式提升160点元素精通。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "sandrone.a1.attack-mastery",
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "sandrone.attack-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sandrone.passive3",
@@ -1064,13 +1082,90 @@
       "rank": 1,
       "name": "鎏金未凋，夕暮已远",
       "description": "处于**解算**模式下时，法洁欧的**解算功率**提升速度降低50%，且队伍中的所有角色造成的星烁反应伤害提升30%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sandrone.c1.analysis-stellar",
+          "recipient": "team",
+          "condition": {
+            "fact": "sandrone.analysisMode"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "回望镜中，时岁翩然",
       "description": "辉映·星烁：重击发射的冷凝射线的暴击伤害提升40%，且每次发射冷凝射线时，都会使本次**解算**模式期间，发射的所有冷凝射线的暴击伤害进一步提升20%，该效果至多叠加3层。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sandrone.c2.laser-crit",
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "call": "sandrone.radiance-none",
+                "inputs": {
+                  "value": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "sandrone.normal.param4",
+              "sandrone.normal.param5",
+              "sandrone.normal.param7",
+              "sandrone.c6.cluster-laser-stellar-conduct",
+              "sandrone.c6.cluster-laser-stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "sandrone.laser-crit",
+                "inputs": {
+                  "input": {
+                    "fact": "sandrone.laserCritStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1243,6 +1338,37 @@
           "support": "hit-unavailable",
           "family": "stellar-swirl"
         }
+      ],
+      "buffs": [
+        {
+          "id": "sandrone.c6.stellar-elevation",
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.elevation",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.elevation",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -1317,6 +1443,21 @@
         "kind": "boolean"
       },
       "label": "解算模式下第三次冷凝射线触发集束型追加段"
+    },
+    "sandrone.analysisMode": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于解算模式"
+    },
+    "sandrone.laserCritStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次解算模式冷凝射线已累计的暴击伤害层数"
     }
   },
   "formulas": [
@@ -1410,6 +1551,36 @@
           "stellar-swirl"
         ],
         "equals": "stellar-swirl",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.attack-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "elementalMastery",
+        "rate": 0.08,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 160,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.laser-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0.4,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
         "revision": "1"
       }
     }

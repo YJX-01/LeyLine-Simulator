@@ -958,7 +958,45 @@
       "rank": 4,
       "name": "调律",
       "description": "刻晴触发雷元素相关反应后的10秒内，攻击力提升25%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "keqing.c4.attunement-atk",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "aggravate",
+                "overloaded",
+                "electro-charged",
+                "lunar-charged",
+                "superconduct",
+                "hyperbloom",
+                "quicken"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -975,7 +1013,54 @@
       "rank": 6,
       "name": "廉贞",
       "description": "进行普通攻击、重击、施放元素战技或元素爆发时，刻晴获得6%雷元素伤害加成，持续8秒。\n由普通攻击、重击、元素战技或元素爆发引起的效果分别独立存在。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "keqing.c6.tenacious-star",
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "keqing.tenacious-normal"
+              }
+            },
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "keqing.tenacious-charged"
+              }
+            },
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "keqing.tenacious-skill"
+              }
+            },
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "keqing.tenacious-burst"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1012,6 +1097,34 @@
         "kind": "boolean"
       },
       "label": "雷楔存在期间再次施放星斗归位"
+    },
+    "keqing.tenacious-normal": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "最近八秒进行过普通攻击"
+    },
+    "keqing.tenacious-charged": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "最近八秒进行过重击"
+    },
+    "keqing.tenacious-skill": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "最近八秒施放过元素战技"
+    },
+    "keqing.tenacious-burst": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "最近八秒施放过元素爆发"
     }
   }
 }

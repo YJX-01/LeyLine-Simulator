@@ -1087,13 +1087,68 @@
       "id": "flins.passive1",
       "name": "寒冬的交响",
       "description": "依据队伍的月兆，菲林斯将获得对应的强化效果。\n\n月兆·满辉：菲林斯触发的月感电反应造成的伤害提升20%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "flins.a0.full-moonsign-thunder",
+          "condition": {
+            "fact": "fullMoonsign"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "flins.passive2",
       "name": "幽焰的呢喃",
       "description": "菲林斯的元素精通提升，提升值相当于菲林斯的攻击力的8%。通过这种方式，至多使菲林斯的元素精通提升160点。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "flins.a1.attack-mastery",
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-4",
+                "inputs": {
+                  "rank": {
+                    "state": "constellation"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "flins.attack-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "flins.passive3",
@@ -1138,7 +1193,52 @@
       "rank": 1,
       "name": "拨开雪翳之幕",
       "description": "特殊元素战技北国枪阵的基础冷却时间缩短为4秒。\n此外，队伍中的角色触发月感电反应时，还会为菲林斯恢复8点元素能量，该效果每5.5秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "flins.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "flins.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 8,
+                "unit": "energy"
+              }
+            }
+          ]
+        },
+        {
+          "id": "flins.c1.northern-spear-array-cooldown",
+          "application": "explicit",
+          "appliesTo": {
+            "skillIds": [
+              "flins.skill"
+            ],
+            "hitIds": [
+              "flins.skill.param7"
+            ],
+            "origins": [
+              "talent"
+            ]
+          },
+          "condition": {
+            "fact": "flins.c1.northernSpearArrayCast"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.northernSpearArrayBaseCooldownOverrideMs",
+              "value": {
+                "amount": 4000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1164,6 +1264,60 @@
           "support": "hit-unavailable",
           "family": "lunar-charged"
         }
+      ],
+      "buffs": [
+        {
+          "id": "flins.c2.thunder-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "flins.skill.param1",
+                "flins.skill.param2",
+                "flins.skill.param3",
+                "flins.skill.param4",
+                "flins.skill.param5",
+                "flins.burst.param1",
+                "flins.burst.param2",
+                "flins.burst.param3",
+                "flins.burst.symphony",
+                "flins.burst.symphony-extra"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 7000,
+            "phase": "after"
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "fullMoonsign"
+              },
+              "term1": {
+                "fact": "onField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1181,7 +1335,41 @@
       "rank": 4,
       "name": "荒山嘶啭之夜",
       "description": "菲林斯的攻击力提升20%。\n此外，突破天赋**「幽焰的呢喃」**获得强化：菲林斯的元素精通提升，提升值相当于菲林斯的攻击力的10%。通过这种方式，至多使菲林斯的元素精通提升220点。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "flins.c4.attack-mastery-enhanced",
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "flins.attack-mastery-enhanced",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              },
+              "condition": {
+                "call": "rank.at-least-4",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1198,7 +1386,77 @@
       "rank": 6,
       "name": "歌与亡者之舞",
       "description": "菲林斯对敌人造成的月感电反应伤害**擢升**35%。\n月兆·满辉：队伍中附近的所有角色造成的月感电反应伤害擢升10%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "flins.c6-personal-elevation",
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "fullMoonsign"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.35
+            }
+          ],
+          "stacking": {
+            "crossOwnerUnverified": true
+          }
+        },
+        {
+          "id": "flins.c6-personal-gleam-elevation",
+          "condition": {
+            "fact": "fullMoonsign"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.45
+            }
+          ],
+          "stacking": {
+            "crossOwnerUnverified": true
+          }
+        },
+        {
+          "id": "flins.c6-team-gleam-elevation",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "fullMoonsign"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.1
+            }
+          ],
+          "stacking": {
+            "crossOwnerUnverified": true
+          }
+        }
+      ]
     }
   ],
   "support": {
@@ -1263,6 +1521,52 @@
         "kind": "boolean"
       },
       "label": "北国枪阵后六秒内首次普攻命中"
+    },
+    "flins.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队员触发月感电，本次可回复能量（间隔至少5.5秒）"
+    },
+    "flins.c1.northernSpearArrayCast": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次处于幽焰显迹模式并施放北国枪阵"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "flins.attack-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "elementalMastery",
+        "rate": 0.08,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 160,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "flins.attack-mastery-enhanced",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "elementalMastery",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 220,
+        "revision": "1"
+      }
+    }
+  ]
 }

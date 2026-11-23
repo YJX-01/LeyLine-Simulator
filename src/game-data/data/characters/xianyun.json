@@ -920,19 +920,184 @@
       "id": "xianyun.passive1",
       "name": "霜翎高逐祥风势",
       "description": "朝起鹤云的闲云冲击波每命中一个敌人，都将为队伍中附近的所有角色产生一层持续20秒，至多叠加4层的「风翎」效果，使角色的下落攻击的暴击率提升4%/6%/8%/10%。\n每次命中敌人产生的「风翎」的持续时间独立计算。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "xianyun.a0.storm-pinion-crit",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.04,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.storm-pinion-1",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.stormPinionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.storm-pinion-2",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.stormPinionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.08,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.storm-pinion-3",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.stormPinionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.storm-pinion-4",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.stormPinionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xianyun.passive2",
       "name": "细想应是洞中仙",
       "description": "暮集竹星的竹星拥有仙力助推时，附近的当前场上角色的下落攻击坠地冲击造成的伤害提升，提升值相当于闲云的攻击力的200%。通过这种方式，至多使附近的当前场上角色的下落攻击坠地冲击伤害提升9000。\n一次下落攻击坠地冲击伤害中，只会对一名敌人造成上述伤害提升效果，每个角色每0.4秒至多触发一次。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "xianyun.a1.adeptal-assistance",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "plunge"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "xianyun.adeptalAssistanceTarget"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-2",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "xianyun.a1-adeptal-assistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xianyun.passive3",
       "name": "身形如鹤",
       "description": "队伍中自己的角色滑翔时移动速度提高15%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "xianyun.glide-speed",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.glide-speed",
+            "scope": "recipient",
+            "policy": "max",
+            "maxStacks": 10000
+          },
+          "condition": {
+            "call": "movement.gliding",
+            "inputs": {
+              "mode": {
+                "fact": "movement.mode"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.glideSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -946,7 +1111,74 @@
       "rank": 2,
       "name": "鹤唳远人间",
       "description": "施放朝起鹤云的步天梯后，闲云的攻击力提升20%，持续15秒。\n此外，突破天赋「细想应是洞中仙」的效果获得提升：暮集竹星的竹星拥有仙力助推时，附近的当前场上角色的下落攻击坠地冲击造成的伤害提升，提升值相当于闲云的攻击力的400%。通过这种方式，至多使附近的当前场上角色的下落攻击坠地冲击伤害提升18000。\n一次下落攻击坠地冲击伤害中，只会对一名敌人造成上述伤害提升效果，每个角色每0.4秒至多触发一次。\n该效果需要解锁突破天赋「细想应是洞中仙」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xianyun.c2.skyladder-attack",
+          "condition": {
+            "fact": "xianyun.skyladderAttackWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "xianyun.c2.adeptal-assistance",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "plunge"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "xianyun.adeptalAssistanceTarget"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "rank.at-least-4",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "xianyun.c2-adeptal-assistance",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -980,7 +1212,69 @@
       "rank": 6,
       "name": "知是留云僊",
       "description": "在一次朝起鹤云的鹤云幻化期间施放了1/2/3次步天梯后，该次鹤云幻化期间的闲云冲击波的暴击伤害提升15%/35%/70%。\n闲云施放暮集竹星后的16秒内，朝起鹤云将不再进入冷却，该效果将在闲云施放8次朝起鹤云后移除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xianyun.c6.cloudwave-crit",
+          "appliesTo": {
+            "hitIds": [
+              "xianyun.skill.param2",
+              "xianyun.skill.param3",
+              "xianyun.skill.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.cloudwave-crit-1",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.skyladderUses"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.35,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.cloudwave-crit-2",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.skyladderUses"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.7,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "xianyun.cloudwave-crit-3",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.skyladderUses"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1009,5 +1303,165 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "xianyun.stormPinionStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "闲云冲击波命中产生、仍有效的风翎层数"
+    },
+    "xianyun.skyladderAttackWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "施放步天梯后十五秒内"
+    },
+    "xianyun.skyladderUses": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次鹤云幻化中施放步天梯的次数"
+    },
+    "xianyun.adeptalAssistanceTarget": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为附有仙力助推的坠地冲击，且此敌人为本次助推目标"
+    },
+    "movement.mode": {
+      "scope": "recipient",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "other-movement",
+          "gliding",
+          "underwater-sprint"
+        ]
+      },
+      "label": "受益角色当前移动状态"
+    }
+  },
+  "formulas": [
+    {
+      "id": "xianyun.storm-pinion-1",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.storm-pinion-2",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.storm-pinion-3",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.storm-pinion-4",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.cloudwave-crit-1",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.cloudwave-crit-2",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.cloudwave-crit-3",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xianyun.a1-adeptal-assistance",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 9000
+      }
+    },
+    {
+      "id": "xianyun.c2-adeptal-assistance",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 4,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 18000
+      }
+    }
+  ]
 }

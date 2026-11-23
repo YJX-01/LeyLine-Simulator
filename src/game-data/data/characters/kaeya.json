@@ -788,7 +788,119 @@
       "rank": 4,
       "name": "极寒的轻吻",
       "description": "凯亚的生命值低于20%时自动触发：\n生成一个伤害吸收量等于生命值上限30%的护盾，持续20秒。\n该护盾对冰元素伤害有250%的吸收效果。\n该效果每60秒只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaeya.c4.frozen-kiss",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "kaeya.c4.frozen-kiss.hit-eligible"
+                  },
+                  "term1": {
+                    "fact": "onField"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "kaeya.c4.frozen-kiss.below-threshold",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.3,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": 0.3,
+                      "flat": {
+                        "amount": 0,
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "kaeya.c4.frozen-kiss.cryo",
+                "inputs": {
+                  "mode": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.3,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "kaeya.c4.frozen-kiss.cryo",
+                    "inputs": {
+                      "mode": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -833,6 +945,24 @@
               "damageBonus"
             ]
           }
+        }
+      ],
+      "buffs": [
+        {
+          "id": "kaeya.directEnergy.c6",
+          "application": "explicit",
+          "condition": {
+            "fact": "kaeya.directEnergy.c6"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 15,
+                "unit": "energy"
+              }
+            }
+          ]
         }
       ]
     }
@@ -960,6 +1090,53 @@
         "kind": "boolean"
       },
       "label": "凛冽轮舞中轮旋冰凌的额外冰棱接触目标"
+    },
+    "kaeya.directEnergy.c6": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "凯亚本次施放凛冽轮舞"
+    },
+    "kaeya.c4.frozen-kiss.hit-eligible": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "凯亚本次受击，且极寒的轻吻可触发"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "kaeya.c4.frozen-kiss.below-threshold",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "lt",
+        "threshold": 0.2,
+        "maxInput": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kaeya.c4.frozen-kiss.cryo",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "physical",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "cryo",
+        "revision": "1"
+      }
+    }
+  ]
 }

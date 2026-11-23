@@ -684,7 +684,34 @@
           ]
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "jahoda.directEnergy.t1",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "jahoda.directEnergy.t1"
+              },
+              "term1": {
+                "fact": "fullMoonsign"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "jahoda.burst",
@@ -1060,7 +1087,25 @@
       "id": "jahoda.passive2",
       "name": "蜜莓的嘉赏",
       "description": "元素爆发秘器·猎人的七道具中的**猫型家用互助协调器**对队伍中自己的当前场上角色触发治疗时，若受到治疗的角色生命值高于70%，则该角色的元素精通提升100点，持续6秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "jahoda.a1.coordinator-mastery",
+          "recipient": "team",
+          "condition": {
+            "fact": "jahoda.coordinatorHighHpHeal"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 100,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "jahoda.passive3",
@@ -1126,7 +1171,25 @@
       "rank": 4,
       "name": "尘沙之上的野莓",
       "description": "元素爆发秘器·猎人的七道具中的**猫型家用互助协调器**发生元素转化时，将会为雅珂达回复4点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "jahoda.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "jahoda.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 4,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1143,7 +1206,53 @@
       "rank": 6,
       "name": "最渺小的幸运",
       "description": "月兆·满辉：元素战技奇策·财富分配方案中的**呼噜噜秘藏瓶**装满后的20秒内，队伍中附近的月兆角色的暴击率提升5%，暴击伤害提升40%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "jahoda.c6.full-bottle-crit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "fullMoonsign"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "jahoda.fullBottleWindow"
+                  },
+                  "term1": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "jahoda.recipientMoonsign"
+                      },
+                      "term1": {
+                        "fact": "jahoda.recipientNearby"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.05
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1192,12 +1301,54 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "jahoda.coordinatorHighHpHeal": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "治疗时生命值高于百分之七十且在随后六秒内"
+    },
+    "jahoda.fullBottleWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本击处于雅珂达的呼噜噜秘藏瓶装满后的二十秒内"
+    },
+    "jahoda.recipientMoonsign": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队伍成员为月兆角色"
+    },
+    "jahoda.recipientNearby": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队伍成员在雅珂达附近"
+    },
     "jahoda.c1MeowballBounceReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "本次猫猫球命中后成功触发弹跳"
+    },
+    "jahoda.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "猫型家用互助协调器本次发生元素转化"
+    },
+    "jahoda.directEnergy.t1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "软绒绒猫猫球命中敌人，本次可回复能量（间隔至少3.5秒）"
     },
     "jahoda.coordinatorPyroBoost": {
       "scope": "query",

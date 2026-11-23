@@ -877,13 +877,116 @@
       "id": "chevreuse.passive1",
       "name": "尖兵协同战法",
       "description": "队伍中所有角色的元素类型均为火元素与雷元素，并且至少有一名火元素角色、一名雷元素角色时：\n夏沃蕾将为队伍中附近的角色施加「协同战法」：角色触发超载反应后，受本次反应影响的敌人的火元素与雷元素抗性降低40%，持续6秒。\n当队伍中角色的元素类型不满足本突破天赋的条件时，将移除已有的协同战法效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "chevreuse.a0.overloaded-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "query",
+              "reactionIds": [
+                "overloaded"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "chevreuse.only-pyro-electro",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "pyro",
+                        "electro"
+                      ],
+                      "excludeOwner": false,
+                      "match": "exclude"
+                    }
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "chevreuse.has-electro-member",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "electro"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include"
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.4,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "chevreuse.passive2",
       "name": "纵阵武力统筹",
       "description": "夏沃蕾发射近迫式急促拦射的「超量装药弹头」后，基于夏沃蕾的生命值上限，每1000点生命值上限都将使队伍中附近的所有火元素与雷元素角色的攻击力提升1%，持续30秒，至多通过这种方式提升40%攻击力。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "chevreuse.a1.overcharged-armament",
+          "recipient": "team",
+          "condition": {
+            "fact": "chevreuse.overchargedBallFired"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "chevreuse.overcharged-armament",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              },
+              "recipientElements": [
+                "pyro",
+                "electro"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "chevreuse.passive3",
@@ -915,7 +1018,40 @@
       "rank": 1,
       "name": "稳固阵线的魄力",
       "description": "当前场上处于「协同战法」状态下的角色（不包括夏沃蕾自己）触发超载反应时，将恢复6点元素能量。此效果每10秒至多触发一次。\n需要解锁突破天赋「尖兵协同战法」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chevreuse.directEnergy.c1",
+          "application": "explicit",
+          "recipient": "team",
+          "excludeOwner": true,
+          "activation": {
+            "ascension": 1
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "chevreuse.directEnergy.c1"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 6,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -991,7 +1127,37 @@
       "rank": 6,
       "name": "终结罪恶的追缉",
       "description": "近迫式急促拦射的治疗效果持续12秒后，将为队伍中附近的所有角色恢复一次生命值，回复量相当于夏沃蕾生命值上限的10%。\n队伍中的角色受到「近迫式急促拦射」的治疗后，获得20%火元素伤害加成与雷元素伤害加成，持续8秒，此效果至多叠加3层，每层独立计算持续时间。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chevreuse.c6.healing-element-bonus",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "chevreuse.healing-element-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "chevreuse.healingStacks"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "chevreuse.healing-element-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "chevreuse.healingStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1028,6 +1194,84 @@
         "kind": "boolean"
       },
       "label": "长按射击命中且连锁殉爆可触发"
+    },
+    "chevreuse.overchargedBallFired": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "发射超量装药弹头后的三十秒内"
+    },
+    "chevreuse.healingStacks": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "最近八秒内该角色受到战技治疗的有效层数"
+    },
+    "chevreuse.directEnergy.c1": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益队员处于协同战法并触发超载，本次可回复能量（间隔至少10秒）"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "chevreuse.only-pyro-electro",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 0,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "chevreuse.has-electro-member",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "chevreuse.overcharged-armament",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.00001,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "chevreuse.healing-element-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }

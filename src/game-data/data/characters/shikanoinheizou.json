@@ -867,7 +867,41 @@
       "id": "shikanoinheizou.passive2",
       "name": "因由勘破",
       "description": "勠心拳命中敌人后，队伍中所有角色（不包括鹿野院平藏自己）的元素精通提升80点，持续10秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "shikanoinheizou.a1.penetrative-reasoning",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "hitIds": [
+                "shikanoinheizou.skill.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 80,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "shikanoinheizou.passive3",
@@ -899,7 +933,46 @@
       "rank": 1,
       "name": "称名少年事件簿",
       "description": "鹿野院平藏登场后的5秒内，普通攻击的攻击速度提升15%，并获得1层勠心拳的「变格」效果，该效果每10秒最多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "shikanoinheizou.c1.field-entry-speed",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ],
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "observation": {
+                "key": "enteredField",
+                "test": "true"
+              }
+            },
+            "cooldownMs": 10000
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          }
+        }
+      ]
     },
     {
       "rank": 2,
@@ -922,7 +995,50 @@
       "rank": 4,
       "name": "虚言假说百物语",
       "description": "在一次聚风蹴中，「聚风真眼」在第一次爆发后，将为鹿野院平藏恢复9点元素能量，此后每次爆发，都将分别为鹿野院平藏额外恢复1.5点元素能量，\n一次聚风蹴，至多通过这种方式为鹿野院平藏恢复13.5点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "shikanoinheizou.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "shikanoinheizou.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 9,
+                "unit": "energy"
+              },
+              "condition": {
+                "call": "shikanoinheizou.directEnergy.c4.mode-1",
+                "inputs": {
+                  "mode": {
+                    "fact": "shikanoinheizou.directEnergy.c4.mode"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1.5,
+                "unit": "energy"
+              },
+              "condition": {
+                "call": "shikanoinheizou.directEnergy.c4.mode-2",
+                "inputs": {
+                  "mode": {
+                    "fact": "shikanoinheizou.directEnergy.c4.mode"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -939,7 +1055,46 @@
       "rank": 6,
       "name": "奇想天开捕物帐",
       "description": "施放勠心拳时，每层「变格」都将为本次勠心拳提升4%暴击率。拥有「正论」时，本次勠心拳的暴击伤害将提升32%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "shikanoinheizou.c6.declension-crit",
+          "appliesTo": {
+            "skillIds": [
+              "shikanoinheizou.skill"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "shikanoinheizou.declension-crit",
+                "inputs": {
+                  "input": {
+                    "fact": "shikanoinheizou.declensionStacks"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.32,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "shikanoinheizou.conviction",
+                "inputs": {
+                  "value": {
+                    "fact": "shikanoinheizou.declensionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -976,6 +1131,33 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "shikanoinheizou.declensionStacks": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次勠心拳的变格层数"
+    },
+    "shikanoinheizou.directEnergy.c4.mode": {
+      "scope": "query",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "首次爆发",
+          "同一聚风蹴内随后爆发"
+        ]
+      },
+      "label": "本次聚风真眼爆发的次序"
+    },
+    "shikanoinheizou.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "聚风真眼本次爆发"
     }
   },
   "formulas": [
@@ -989,6 +1171,61 @@
         "relation": "eq",
         "threshold": 4,
         "maxInput": 4
+      }
+    },
+    {
+      "id": "shikanoinheizou.declension-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.04,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "shikanoinheizou.conviction",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "shikanoinheizou.directEnergy.c4.mode-1",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "首次爆发",
+          "同一聚风蹴内随后爆发"
+        ],
+        "equals": "首次爆发",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "shikanoinheizou.directEnergy.c4.mode-2",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "首次爆发",
+          "同一聚风蹴内随后爆发"
+        ],
+        "equals": "同一聚风蹴内随后爆发",
+        "revision": "1"
       }
     }
   ]

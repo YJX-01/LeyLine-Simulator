@@ -753,7 +753,37 @@
       "id": "yaemiko.passive1",
       "name": "神篱之御荫",
       "description": "施放大密法·天狐显真时，每摧毁一株杀生樱，就会重置一次野干役咒·杀生樱的冷却时间。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "yaemiko.skillReset",
+          "application": "explicit",
+          "appliesTo": {
+            "hitIds": [
+              "yaemiko.burst.param1"
+            ]
+          },
+          "condition": {
+            "fact": "yaemiko.skillReset.confirmed"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillChargesRestored",
+              "value": {
+                "call": "yaemiko.skillReset.charges",
+                "inputs": {
+                  "available": {
+                    "fact": "yaemiko.skillReset.availableCharges"
+                  },
+                  "resets": {
+                    "fact": "yaemiko.skillReset.destroyedSesshouSakura"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yaemiko.passive2",
@@ -801,13 +831,49 @@
       "rank": 1,
       "name": "野狐供真篇",
       "description": "大密法·天狐显真每引发一次天狐霆雷，都会为八重神子自己恢复8点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yaemiko.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "yaemiko.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 8,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "望月吼哕声",
       "description": "杀生樱创造时的初始位阶提升至贰阶，位阶上限提升至肆阶，攻击范围提升60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yaemiko.c2.sesshou-sakura-range",
+          "appliesTo": {
+            "hitIds": [
+              "yaemiko.skill.param2",
+              "yaemiko.skill.param3",
+              "yaemiko.skill.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackRangeBonus",
+              "value": 0.6
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -824,7 +890,43 @@
       "rank": 4,
       "name": "绯樱引雷章",
       "description": "杀生樱的落雷命中敌人后，队伍中附近的所有角色获得20%雷元素伤害加成，持续5秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yaemiko.c4.sakura-electro",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "hitIds": [
+                "yaemiko.skill.param1",
+                "yaemiko.skill.param2",
+                "yaemiko.skill.param3",
+                "yaemiko.skill.param4"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -902,6 +1004,46 @@
         "rate": "ratio",
         "output": "bonus"
       }
+    },
+    {
+      "id": "yaemiko.skillReset.charges",
+      "template": {
+        "id": "restore-skill-charges",
+        "revision": "1",
+        "capacity": 3
+      }
     }
-  ]
+  ],
+  "facts": {
+    "yaemiko.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "天狐显真本次引发一道天狐霆雷"
+    },
+    "yaemiko.skillReset.confirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次已施放大密法·天狐显真"
+    },
+    "yaemiko.skillReset.availableCharges": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "重置前战技可用次数"
+    },
+    "yaemiko.skillReset.destroyedSesshouSakura": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次爆发实际摧毁的杀生樱株数"
+    }
+  }
 }

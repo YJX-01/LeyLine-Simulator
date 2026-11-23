@@ -807,7 +807,41 @@
       "id": "aether-pyro.passive2",
       "name": "未烬的余火",
       "description": "当前场上处于焰烈之槛或灼火之槛中的角色，对敌人触发火元素相关反应后，将为旅行者恢复5点元素能量，该效果每12秒至多触发一次。此外，队伍中的附近的角色触发「夜魂迸发」时，还将为旅行者恢复4点元素能量。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "aether-pyro.directEnergy.p1.flame",
+          "application": "explicit",
+          "condition": {
+            "fact": "aether-pyro.directEnergy.p1.flame"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 5,
+                "unit": "energy"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-pyro.directEnergy.p1.nightsoul",
+          "application": "explicit",
+          "condition": {
+            "fact": "aether-pyro.directEnergy.p1.nightsoul"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 4,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -815,7 +849,45 @@
       "rank": 1,
       "name": "流光的星火",
       "description": "焰烈之槛或灼火之槛存在期间，当前场上角色造成的伤害提升6%；若当前场上角色处于夜魂加持状态，造成的伤害还会提升9%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-pyro.c1.raging-fire",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "aether-pyro.thresholdActive"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.06,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.09,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "aether-pyro.recipientNightsoul"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -885,7 +957,31 @@
       "rank": 6,
       "name": "永燃的圣火",
       "description": "处于夜魂加持状态下时，旅行者的普通攻击、重击与下落攻击将转为具有夜魂性质且无法被附魔覆盖的火元素伤害，且这些攻击的暴击伤害提升40%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-pyro.c6.sacred-flame-crit",
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "condition": {
+            "fact": "aether-pyro.nightsoulPyroInfusion"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -916,12 +1012,40 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "aether-pyro.thresholdActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "焰烈之槛或灼火之槛存在"
+    },
+    "aether-pyro.recipientNightsoul": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色处于夜魂加持"
+    },
     "aether-pyro.nightsoulPyroInfusion": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "六命在夜魂加持中的武器火元素转化"
+    },
+    "aether-pyro.directEnergy.p1.flame": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于焰烈之槛或灼火之槛的场上角色对敌触发火相关反应，本次可回复能量（间隔至少12秒）"
+    },
+    "aether-pyro.directEnergy.p1.nightsoul": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近队员本次触发夜魂迸发"
     }
   }
 }

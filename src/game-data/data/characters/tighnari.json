@@ -625,7 +625,35 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "buffs": [
+        {
+          "id": "tighnari.skill.vijnana-suffusion-aim",
+          "trigger": {
+            "cast": "tighnari.skill"
+          },
+          "duration": {
+            "parameter": "param3"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "tighnari.normal.param7"
+            ]
+          },
+          "condition": {
+            "fact": "tighnari.vijnanaSuffusionShot"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionMs",
+              "value": {
+                "amount": 2400,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tighnari.burst",
@@ -773,7 +801,24 @@
       "id": "tighnari.passive1",
       "name": "眼识殊明",
       "description": "提纳里发射花筥箭后，元素精通提升50点，持续4秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "tighnari.a0.keen-sight",
+          "condition": {
+            "fact": "tighnari.wreathArrowFired"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 50,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tighnari.passive2",
@@ -859,7 +904,24 @@
       "rank": 2,
       "name": "由茎干剖析来缘",
       "description": "当识果种雷的识蕴领域中存在敌人时，提纳里获得20%草元素伤害加成。\n识蕴领域持续时间结束或其中不存在敌人后，该效果至多持续6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "tighnari.c2.in-field-dendro",
+          "condition": {
+            "fact": "tighnari.vijnanaFieldEnemy"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -876,7 +938,65 @@
       "rank": 4,
       "name": "由片叶管窥枯荣",
       "description": "施放造生缠藤箭时，队伍中附近的所有角色的元素精通提升60点，持续8秒。若造生缠藤箭触发了燃烧、绽放、月绽放、原激化或蔓激化反应，元素精通将进一步提升60点，并刷新该状态的持续时间。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "tighnari.c4.fashioners-form-mastery",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "tighnari.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 60,
+                "unit": "elementalMastery"
+              }
+            }
+          ],
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "tighnari.fashionerTriggeredReaction"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "tighnari.c4.fashioners-reaction-mastery",
+          "recipient": "team",
+          "condition": {
+            "fact": "tighnari.fashionerTriggeredReaction"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 120,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -912,6 +1032,25 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "tighnari.c6.wreath-arrow-aim",
+          "appliesTo": {
+            "hitIds": [
+              "tighnari.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionMs",
+              "value": {
+                "amount": 900,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -943,12 +1082,40 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "tighnari.wreathArrowFired": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "发射花筥箭后四秒内"
+    },
+    "tighnari.vijnanaFieldEnemy": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "识蕴领域有敌人，或领域消失或无敌人后未满六秒"
+    },
+    "tighnari.fashionerTriggeredReaction": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "造生缠藤箭触发指定草元素反应后的八秒刷新窗口"
+    },
     "tighnari.c6ClusterbloomReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "花筥箭命中并产生额外藏蕴花矢"
+    },
+    "tighnari.vijnanaSuffusionShot": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "这发花筥箭属于最近一次战技后的前三发"
     }
   }
 }

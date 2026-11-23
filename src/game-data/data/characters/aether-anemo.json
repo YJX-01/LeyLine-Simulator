@@ -925,7 +925,21 @@
       "rank": 4,
       "name": "眷护的和风",
       "description": "风涡剑持续期间，受到的伤害降低10%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-anemo.palm-vortex-reduction",
+          "condition": {
+            "fact": "aether-anemo.palmVortexActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingDamageReduction",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -942,7 +956,149 @@
       "rank": 6,
       "name": "纠缠的信风",
       "description": "受到风息激荡伤害的目标，风元素抗性下降20%。\n如果产生了元素转化，那么对应元素抗性也下降20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-anemo.c6.gust-surge-shred-anemo",
+          "recipient": "target",
+          "condition": {
+            "fact": "aether-anemo.c6GustSurgeShred"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-anemo.c6.gust-surge-shred-pyro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-anemo.c6GustSurgeShred"
+              },
+              "term1": {
+                "call": "aether-anemo.gust-surge-absorbed-pyro",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-anemo.c6GustSurgeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-anemo.c6.gust-surge-shred-hydro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-anemo.c6GustSurgeShred"
+              },
+              "term1": {
+                "call": "aether-anemo.gust-surge-absorbed-hydro",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-anemo.c6GustSurgeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-anemo.c6.gust-surge-shred-cryo",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-anemo.c6GustSurgeShred"
+              },
+              "term1": {
+                "call": "aether-anemo.gust-surge-absorbed-cryo",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-anemo.c6GustSurgeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-anemo.c6.gust-surge-shred-electro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-anemo.c6GustSurgeShred"
+              },
+              "term1": {
+                "call": "aether-anemo.gust-surge-absorbed-electro",
+                "inputs": {
+                  "value": {
+                    "fact": "aether-anemo.c6GustSurgeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -979,6 +1135,100 @@
         "kind": "boolean"
       },
       "label": "普通攻击已打出末段风刃"
+    },
+    "aether-anemo.palmVortexActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者正在施展风涡剑"
+    },
+    "aether-anemo.c6GustSurgeShred": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "敌人处于此旅行者的风息激荡减抗状态"
+    },
+    "aether-anemo.c6GustSurgeAbsorbed": {
+      "scope": "target",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ]
+      },
+      "label": "该次风息激荡减抗对应的转化元素"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "aether-anemo.gust-surge-absorbed-pyro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "pyro"
+      }
+    },
+    {
+      "id": "aether-anemo.gust-surge-absorbed-hydro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "hydro"
+      }
+    },
+    {
+      "id": "aether-anemo.gust-surge-absorbed-cryo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "cryo"
+      }
+    },
+    {
+      "id": "aether-anemo.gust-surge-absorbed-electro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "electro"
+      }
+    }
+  ]
 }

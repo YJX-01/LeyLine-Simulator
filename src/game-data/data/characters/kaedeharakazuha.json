@@ -924,7 +924,185 @@
       "id": "kaedeharakazuha.passive2",
       "name": "风物之诗咏",
       "description": "枫原万叶触发扩散或星扩散反应后，枫原万叶的每点元素精通，会为队伍中所有角色提供0.04%对应元素伤害加成，持续8秒。通过这种方式获得的不同元素伤害加成可以共存。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kaedeharakazuha.a1.poetics-pyro",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "pyro"
+                ],
+                "stellar-swirl": [
+                  "pyro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "kaedeharakazuha.poetics-em",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "kaedeharakazuha.a1.poetics-hydro",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "hydro"
+                ],
+                "stellar-swirl": [
+                  "hydro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "call": "kaedeharakazuha.poetics-em",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "kaedeharakazuha.a1.poetics-cryo",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "cryo"
+                ],
+                "stellar-swirl": [
+                  "cryo"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "call": "kaedeharakazuha.poetics-em",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "kaedeharakazuha.a1.poetics-electro",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "electro"
+                ],
+                "stellar-swirl": [
+                  "electro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "kaedeharakazuha.poetics-em",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kaedeharakazuha.passive3",
@@ -956,13 +1134,99 @@
       "rank": 1,
       "name": "千山红遍",
       "description": "千早振的冷却时间减少10%。\n施放万叶之一刀时，重置千早振的冷却时间。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaedeharakazuha.c1.chihayaburu-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "kaedeharakazuha.skillReset",
+          "application": "explicit",
+          "appliesTo": {
+            "hitIds": [
+              "kaedeharakazuha.burst.param1"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kaedeharakazuha.skillReset.confirmed"
+              },
+              "term1": {
+                "call": "skill.cooldown-positive",
+                "inputs": {
+                  "duration": {
+                    "fact": "skillCooldownBeforeResetMs"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillCooldownResetMs",
+              "value": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "山岚残芯",
       "description": "万叶之一刀的流风秋野具有以下效果：\n·持续期间内，枫原万叶自己的元素精通提升200点；\n·其中的场上角色的元素精通提升200点。\n\n该命之座提供的元素精通提升效果无法叠加。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaedeharakazuha.c2.autumn-em",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "kaedeharakazuha.autumnWhirlwind"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              },
+              "recipient": "owner"
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              },
+              "condition": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "kaedeharakazuha.autumnWhirlwindArea"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -979,7 +1243,81 @@
       "rank": 4,
       "name": "大空幻法",
       "description": "当枫原万叶的元素能量低于45点时，具有如下效果：\n·点按、长按施放千早振时，将分别为枫原万叶恢复3、4点元素能量；\n·处于滑翔状态下时，每秒为枫原万叶恢复2点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaedeharakazuha.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kaedeharakazuha.directEnergy.c4"
+              },
+              "term1": {
+                "call": "kaedeharakazuha.directEnergy.below-45",
+                "inputs": {
+                  "energy": {
+                    "fact": "currentEnergy"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              },
+              "condition": {
+                "call": "kaedeharakazuha.directEnergy.c4.mode-1",
+                "inputs": {
+                  "mode": {
+                    "fact": "kaedeharakazuha.directEnergy.c4.mode"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 4,
+                "unit": "energy"
+              },
+              "condition": {
+                "call": "kaedeharakazuha.directEnergy.c4.mode-2",
+                "inputs": {
+                  "mode": {
+                    "fact": "kaedeharakazuha.directEnergy.c4.mode"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              },
+              "condition": {
+                "call": "kaedeharakazuha.directEnergy.c4.mode-3",
+                "inputs": {
+                  "mode": {
+                    "fact": "kaedeharakazuha.directEnergy.c4.mode"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -996,7 +1334,51 @@
       "rank": 6,
       "name": "血赤叶红",
       "description": "枫原万叶施放千早振或万叶之一刀后的5秒内，获得风元素附魔，并且枫原万叶的每点元素精通，都会使他的普通攻击、重击、下落攻击造成的伤害提高0.2%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kaedeharakazuha.c6.crimson-momiji",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "kaedeharakazuha.skill",
+                "kaedeharakazuha.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "kaedeharakazuha.crimson-momiji",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1026,13 +1408,141 @@
     }
   },
   "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "kaedeharakazuha.poetics-em",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 0.0004,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kaedeharakazuha.crimson-momiji",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 0.002,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kaedeharakazuha.directEnergy.below-45",
+      "template": {
+        "id": "quantity-condition",
+        "input": "energy",
+        "unit": "energy",
+        "relation": "lt",
+        "threshold": 45,
+        "maxInput": 60,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kaedeharakazuha.directEnergy.c4.mode-1",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "点按千早振",
+          "长按千早振",
+          "滑翔满一秒"
+        ],
+        "equals": "点按千早振",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kaedeharakazuha.directEnergy.c4.mode-2",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "点按千早振",
+          "长按千早振",
+          "滑翔满一秒"
+        ],
+        "equals": "长按千早振",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kaedeharakazuha.directEnergy.c4.mode-3",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "点按千早振",
+          "长按千早振",
+          "滑翔满一秒"
+        ],
+        "equals": "滑翔满一秒",
+        "revision": "1"
+      }
+    }
+  ],
   "facts": {
+    "kaedeharakazuha.autumnWhirlwind": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "流风秋野持续中"
+    },
+    "kaedeharakazuha.autumnWhirlwindArea": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于流风秋野范围内"
+    },
     "kaedeharakazuha.crimsonMomijiInfusion": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "六命血赤叶红风元素附魔持续中"
+    },
+    "kaedeharakazuha.directEnergy.c4.mode": {
+      "scope": "query",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "点按千早振",
+          "长按千早振",
+          "滑翔满一秒"
+        ]
+      },
+      "label": "触发大空幻法的动作"
+    },
+    "kaedeharakazuha.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次符合大空幻法的回复时点"
+    },
+    "kaedeharakazuha.skillReset.confirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次已施放万叶之一刀"
     }
   }
 }

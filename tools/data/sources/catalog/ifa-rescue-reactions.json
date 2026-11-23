@@ -1,0 +1,89 @@
+{
+  "retrievedAt": "2026-11-22T19:58:12Z",
+  "gameData": {
+    "repository": "https://gitlab.com/Dimbreath/AnimeGameData2",
+    "revision": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+    "passive": {
+      "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+      "proudSkillId": 1132101,
+      "openConfig": "Ifa_PermanentSkill_1",
+      "breakLevel": 1,
+      "paramListPrefix": [
+        1,
+        1,
+        150,
+        0.015,
+        0.0024
+      ]
+    },
+    "constellation": {
+      "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+      "talentId": 1132,
+      "openConfig": "Ifa_Constellation_2",
+      "paramListPrefix": [
+        60,
+        4,
+        50
+      ]
+    },
+    "handler": {
+      "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Ifa.json",
+      "ability": "Avatar_Ifa_PermanentSkill_1",
+      "modifier": "UNIQUE_Ifa_PermanentSkill_1_Handler_Buff",
+      "nightsoulState": "_ABILITY_Avatar_Ifa_NyxState_Flag",
+      "recipientTarget": "AllPlayerAvatars",
+      "recipientDistanceLimit": 40,
+      "recipientOffStage": true,
+      "scanIntervalSeconds": 0.5,
+      "modifierDurationSeconds": 3,
+      "properties": {
+        "Actor_ElemReactElectricDelta": "Permanent_1_ElemReactDelta",
+        "Actor_ElemReactSwirlFireDelta": "Permanent_1_ElemReactDelta",
+        "Actor_ElemReactSwirlIceDelta": "Permanent_1_ElemReactDelta",
+        "Actor_ElemReactSwirlWaterDelta": "Permanent_1_ElemReactDelta",
+        "Actor_ElemReactSwirlElectricDelta": "Permanent_1_ElemReactDelta",
+        "Actor_ElemReactMoonShockDelta": 0.002,
+        "Actor_ElemReactStarSwirlIceDelta": "Permanent_1_ElemReactDelta_Star",
+        "Actor_ElemReactStarSwirlWindDelta": "Permanent_1_ElemReactDelta_Star"
+      }
+    }
+  },
+  "sourceChecks": [
+    {
+      "repository": "https://github.com/KQM-git/TCL",
+      "revision": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+      "path": "src/data/characters/Ifa.json",
+      "url": "https://library.keqingmains.com/characters/anemo/ifa#ascension-passives",
+      "scope": "场中医者视野链接说明给出每点加成、上限、受益范围和夜魂加持结束时的清除。二命的明文门槛及增量与游戏表吻合。"
+    },
+    {
+      "url": "https://keqingmains.com/q/ifa-quickguide/#Constellations",
+      "applicableVersion": "Luna I",
+      "scope": "二命算例给出总夜魂值88时达到200点。普通扩散、感电和月感电的倍率与游戏表及处理器吻合。"
+    }
+  ],
+  "rule": {
+    "pointsPerNightsoul": 1,
+    "baseCap": 150,
+    "c2Threshold": 60,
+    "c2AdditionalPointsPerExcess": 4,
+    "c2CapIncrease": 50,
+    "bonusPerPoint": {
+      "swirl": 0.015,
+      "electro-charged": 0.015,
+      "lunar-charged": 0.002,
+      "stellar-swirl": 0.0024
+    }
+  },
+  "ordinaryReactionFormula": {
+    "url": "https://library.keqingmains.com/combat-mechanics/elemental-effects/transformative-reactions#formula",
+    "masteryNumerator": 16,
+    "masteryDenominator": 2000,
+    "coefficients": {
+      "swirl": 0.6,
+      "electro-charged": 2,
+      "overloaded": 2.75
+    }
+  },
+  "scope": "当次救援要义使用明确提供的夜魂加持、已生效的队伍夜魂值总和及伤害归属队员的受益资格。固定更新、修饰器存续及延迟反应的采样时点需要逐帧游戏观测。"
+}

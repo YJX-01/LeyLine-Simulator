@@ -745,6 +745,25 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "fischl.a0.stellar-predator-factor",
+          "appliesTo": {
+            "hitIds": [
+              "fischl.a0.stellar-predator"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.527,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -864,7 +883,39 @@
       "rank": 2,
       "name": "圣裁影羽",
       "description": "施放夜巡影翼时，能额外造成200%攻击力的伤害，并使影响范围扩大50%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "fischl.c2.nightrider-summon",
+          "appliesTo": {
+            "hitIds": [
+              "fischl.skill.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "amount": 2,
+                    "unit": "scalar"
+                  }
+                },
+                "output": "base"
+              }
+            },
+            {
+              "target": "attribute.impactRangeBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,

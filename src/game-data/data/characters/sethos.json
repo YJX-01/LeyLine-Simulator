@@ -657,7 +657,26 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param3"
+      "cooldownParameter": "param3",
+      "buffs": [
+        {
+          "id": "sethos.directEnergy.t1",
+          "application": "explicit",
+          "condition": {
+            "fact": "sethos.directEnergy.t1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "sethos.skill",
+                "parameter": "param2",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sethos.burst",
@@ -851,13 +870,61 @@
       "id": "sethos.passive1",
       "name": "黑鸢的密喻",
       "description": "瞄准射击时，赛索斯每1点当前元素能量都将使蓄力时间减少0.285秒，通过这种方式，至多使蓄力时间降低至0.3秒并计入20点元素能量；发射时，若发射的是贯影箭，将消耗计入的元素能量；如果发射的是一段蓄力的箭矢，则消耗计入元素能量的50%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "sethos.a1.black-kite-aim-rate",
+          "appliesTo": {
+            "hitIds": [
+              "sethos.normal.param6",
+              "sethos.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionPerEnergy",
+              "value": {
+                "amount": 285,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sethos.passive2",
       "name": "砂王的赐礼",
       "description": "赛索斯获得「热砂炫影」效果，使贯影箭造成的伤害值提升，提升值相当于赛索斯的元素精通的700%。\n热砂炫影期间满足以下任意条件时效果将被移除：\n·贯影箭首次命中敌人5秒后；\n·4枚贯影箭命中敌人后。\n\n热砂炫影效果下的贯影箭首次命中敌人15秒后将重新获得热砂炫影效果。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "sethos.sand-king",
+          "condition": {
+            "fact": "sethos.desertShadow"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "sethos.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": 7
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "sethos.passive3",
@@ -871,13 +938,52 @@
       "rank": 1,
       "name": "封龛谒灵歌",
       "description": "贯影箭的暴击率提升15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sethos.c1-piercing-crit",
+          "appliesTo": {
+            "hitIds": [
+              "sethos.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "寂秘纸草经",
       "description": "满足以下任意一项条件时，赛索斯的雷元素伤害加成提升15%，持续10秒，至多叠加2层，每层独立计时：\n·通过瞄准射击消耗元素能量，此条件需要解锁突破天赋「黑鸢的密喻」；\n·通过古仪·鸣砂掣雷触发元素反应恢复元素能量；\n·施放秘仪·瞑光贯影。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sethos.c2-arcane-electro",
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "sethos.c2-electro",
+                "inputs": {
+                  "basis": {
+                    "fact": "sethos.c2ArcaneStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -894,7 +1000,25 @@
       "rank": 4,
       "name": "真念鸵羽集",
       "description": "贯影箭或瞑弦矢命中2名及以上的敌人时，队伍中附近的所有角色的元素精通提升80点，持续10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sethos.c4-piercing-em",
+          "recipient": "team",
+          "condition": {
+            "fact": "sethos.c4PiercedEnemies"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 80,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -911,7 +1035,46 @@
       "rank": 6,
       "name": "巡日塔门书",
       "description": "贯影箭命中敌人后，将返还因突破天赋「黑鸢的密喻」消耗的元素能量，此效果每15秒至多触发一次，需要解锁突破天赋「黑鸢的密喻」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "sethos.directEnergy.c6",
+          "recipient": "owner",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "sethos.shadowpiercingArrowHit"
+              },
+              "term1": {
+                "fact": "sethos.shadowpiercingRefundReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "fact": "sethos.shadowpiercingEnergySpent"
+              },
+              "condition": {
+                "call": "sethos.shadowpiercing-positive-spend",
+                "inputs": {
+                  "energy": {
+                    "fact": "sethos.shadowpiercingEnergySpent"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ],
+          "activation": {
+            "ascension": 1
+          }
+        }
+      ]
     }
   ],
   "support": {
@@ -936,6 +1099,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "瞑弦矢生效与退场解除使用显式状态。能量缩短蓄力、热砂炫影冷却与命中消耗、六命返还仍需资源和序列记录。"
         }
       ]
     },
@@ -964,6 +1132,86 @@
         "kind": "boolean"
       },
       "label": "处于寂想瞑影状态"
+    },
+    "sethos.desertShadow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次贯影箭命中时热砂炫影生效"
+    },
+    "sethos.c2ArcaneStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "寂秘纸草经雷伤加成层数"
+    },
+    "sethos.c4PiercedEnemies": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "贯影箭或瞑弦矢命中至少两名敌人后的十秒"
+    },
+    "sethos.directEnergy.t1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "古仪·鸣砂掣雷本次对敌触发合格的雷元素反应"
+    },
+    "sethos.shadowpiercingArrowHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本发贯影箭命中符合条件的敌人"
+    },
+    "sethos.shadowpiercingRefundReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次贯影箭命中时已满足十五秒返还间隔"
+    },
+    "sethos.shadowpiercingEnergySpent": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "energy"
+      },
+      "label": "本发贯影箭因黑鸢的密喻实际消耗的元素能量"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "sethos.c2-electro",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.15,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 2
+      }
+    },
+    {
+      "id": "sethos.shadowpiercing-positive-spend",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "energy",
+        "unit": "energy",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 20
+      }
+    }
+  ]
 }

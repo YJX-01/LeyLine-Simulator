@@ -698,7 +698,46 @@
           "support": "hit-complete"
         }
       ],
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "xingqiu.rain-sword-reduction",
+          "recipient": "team",
+          "condition": {
+            "fact": "xingqiu.rainSwordActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingDamageReduction",
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "value": {
+                "skill": "xingqiu.skill",
+                "parameter": "param3"
+              }
+            },
+            {
+              "target": "attribute.incomingDamageReduction",
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "value": {
+                "call": "xingqiu.rain-sword-hydro-conversion",
+                "inputs": {
+                  "basis": {
+                    "stat": "hydroBonus"
+                  },
+                  "rate": 0.2,
+                  "cap": 0.24
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xingqiu.burst",
@@ -872,7 +911,40 @@
       "rank": 2,
       "name": "天青现虹",
       "description": "古华剑·裁雨留虹的持续时间延长3秒；\n此外，受到剑雨攻击的敌人，水元素抗性降低15%，持续4秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xingqiu.c2.raincutter-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "xingqiu.burst.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 4000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -889,7 +961,29 @@
       "rank": 4,
       "name": "孤舟斩蛟",
       "description": "在古华剑·裁雨留虹效果持续期间，古华剑·画雨笼山造成的伤害提升50%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xingqiu.c4.evilsoother",
+          "appliesTo": {
+            "skillIds": [
+              "xingqiu.skill"
+            ]
+          },
+          "condition": {
+            "fact": "xingqiu.raincutterActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -906,7 +1000,25 @@
       "rank": 6,
       "name": "万文集此",
       "description": "古华剑·裁雨留虹每发动2次剑雨攻击，就大幅增强下一次剑雨攻击，并在命中敌人时为行秋恢复3点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xingqiu.directEnergy.c6",
+          "application": "explicit",
+          "condition": {
+            "fact": "xingqiu.directEnergy.c6"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -956,5 +1068,40 @@
       ]
     }
   },
-  "contextSupport": "context-complete"
+  "contextSupport": "context-complete",
+  "facts": {
+    "xingqiu.raincutterActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "古华剑·裁雨留虹效果持续中"
+    },
+    "xingqiu.rainSwordActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色仍有行秋的雨帘剑"
+    },
+    "xingqiu.directEnergy.c6": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "每三次剑雨中的增强剑雨本次命中敌人"
+    }
+  },
+  "formulas": [
+    {
+      "id": "xingqiu.rain-sword-hydro-conversion",
+      "template": {
+        "id": "capped-conversion",
+        "revision": "1",
+        "from": "scalar",
+        "to": "scalar",
+        "per": 1
+      }
+    }
+  ]
 }

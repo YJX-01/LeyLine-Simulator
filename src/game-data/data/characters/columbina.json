@@ -895,7 +895,32 @@
       "energyCapacity": {
         "parameter": "param5"
       },
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "buffs": [
+        {
+          "id": "columbina.lunar-domain",
+          "recipient": "team",
+          "condition": {
+            "fact": "columbina.moonDomain"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "skill": "columbina.burst",
+                "parameter": "param2"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -903,7 +928,25 @@
       "id": "columbina.passive1",
       "name": "月亮诱发的疯狂",
       "description": "触发**引力干涉**时，哥伦比娅将获得月诱效果，使自身的暴击率提升5%，持续10秒。该效果至多叠加3层。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "columbina.moon-temptation",
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "columbina.temptation-count",
+                "inputs": {
+                  "basis": {
+                    "fact": "columbina.moonTemptation"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "columbina.passive2",
@@ -956,13 +999,275 @@
       "rank": 1,
       "name": "遍照花海，隐入群山",
       "description": "施放元素战技万古潮汐时，还会立刻触发一次等同于**引力干涉**的效果，该效果每15秒至多触发一次。\n月兆·满辉 \n触发引力干涉时，若为哥伦比娅积攒最多引力值的月曜反应类型为：\n·月感电反应：为队伍中自己的当前场上角色恢复6点元素能量；\n·月绽放反应：提升队伍中自己的当前场上角色的抗打断能力，持续8秒；\n·月结晶反应：唤出雨海护盾，伤害吸收量受益于哥伦比娅生命值上限的12%，对水元素伤害有250%的吸收效果，持续8秒。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**1.5%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "columbina.c1-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.015
+            }
+          ]
+        },
+        {
+          "id": "columbina.directEnergy.c1",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "columbina.directEnergy.c1"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "fullMoonsign"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 6,
+                "unit": "energy"
+              }
+            }
+          ]
+        },
+        {
+          "id": "columbina.c1.lunar-bloom-poise",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "columbina.c1.lunarBloomProtectionWindow"
+                  },
+                  "term1": {
+                    "fact": "fullMoonsign"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "为夜增辉，与君遥伴",
       "description": "**引力值**的积攒速度提升34%。\n触发引力干涉时，哥伦比娅将获得皎辉效果，生命值上限提升40%，持续8秒。\n月兆·满辉 ：\n皎辉效果持续期间，若本次触发引力干涉时，为哥伦比娅积攒最多引力值的月曜反应类型为：\n·月感电反应：队伍中自己的当前场上角色攻击力提升，提升值相当于哥伦比娅生命值上限的1%；\n·月绽放反应：队伍中自己的当前场上角色元素精通提升，提升值相当于哥伦比娅生命值上限的0.35%；\n·月结晶反应：队伍中自己的当前场上角色防御力提升，提升值相当于哥伦比娅生命值上限的1%。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**7%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "columbina.c2-radiance",
+          "condition": {
+            "fact": "columbina.light"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "columbina.c2-radiance-lunar-charged",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "columbina.light"
+                  },
+                  "term1": {
+                    "fact": "fullMoonsign"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "columbina.c2Light.lunar-charged"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.flatAttack",
+              "value": {
+                "call": "columbina.radiance-attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "columbina.c2-radiance-lunar-bloom",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "columbina.light"
+                  },
+                  "term1": {
+                    "fact": "fullMoonsign"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "columbina.c2Light.lunar-bloom"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "columbina.radiance-elementalMastery",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "columbina.c2-radiance-lunar-crystallize",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "columbina.light"
+                  },
+                  "term1": {
+                    "fact": "fullMoonsign"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "columbina.c2Light.lunar-crystallize"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.flatDefense",
+              "value": {
+                "call": "columbina.radiance-defense",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "columbina.c2-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.07
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -973,13 +1278,136 @@
           "category": "skill",
           "levels": 3
         }
+      ],
+      "buffs": [
+        {
+          "id": "columbina.c3-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.015
+            }
+          ]
+        }
       ]
     },
     {
       "rank": 4,
       "name": "花岚云翳，山岩树影",
       "description": "触发**引力干涉**时，还会为哥伦比娅恢复4点元素能量；\n此外，依据为哥伦比娅积攒最多引力值的月曜反应类型，若为月感电/月绽放/月结晶反应，则本次引力干涉造成的月曜反应伤害提升，提升值分别相当于哥伦比娅生命值上限的12.5%/2.5%/12.5%。上述效果每15秒至多触发一次。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**1.5%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "columbina.c4-interference",
+          "condition": {
+            "fact": "columbina.interferenceC4"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "columbina.skill.param3",
+              "columbina.skill.param4",
+              "columbina.skill.param5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.125
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.025
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-bloom"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "hp-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "hp"
+                  },
+                  "ratio": 0.125
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-crystallize"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "columbina.c4-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.015
+            }
+          ]
+        },
+        {
+          "id": "columbina.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "columbina.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 4,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -990,13 +1418,123 @@
           "category": "burst",
           "levels": 3
         }
+      ],
+      "buffs": [
+        {
+          "id": "columbina.c5-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.015
+            }
+          ]
+        }
       ]
     },
     {
       "rank": 6,
       "name": "夜昏且暗，且随月光",
       "description": "处于**月之领域**中的所有角色触发月曜反应后的8秒内，依据参与反应的元素类型，使队伍中的所有角色造成的对应元素类型伤害的暴击伤害提升80%。同种元素类型的暴击伤害提升效果无法叠加。\n\n队伍中附近的所有角色造成的月曜反应伤害**擢升**7%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "columbina.c6-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-bloom",
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": 1.07
+            }
+          ]
+        },
+        {
+          "id": "columbina.c6-crit-hydro",
+          "recipient": "team",
+          "condition": {
+            "fact": "columbina.c6.hydro"
+          },
+          "appliesTo": {
+            "elements": [
+              "hydro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.8
+            }
+          ]
+        },
+        {
+          "id": "columbina.c6-crit-electro",
+          "recipient": "team",
+          "condition": {
+            "fact": "columbina.c6.electro"
+          },
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.8
+            }
+          ]
+        },
+        {
+          "id": "columbina.c6-crit-dendro",
+          "recipient": "team",
+          "condition": {
+            "fact": "columbina.c6.dendro"
+          },
+          "appliesTo": {
+            "elements": [
+              "dendro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.8
+            }
+          ]
+        },
+        {
+          "id": "columbina.c6-crit-geo",
+          "recipient": "team",
+          "condition": {
+            "fact": "columbina.c6.geo"
+          },
+          "appliesTo": {
+            "elements": [
+              "geo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.8
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1021,6 +1559,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "引力积累和分支、月诱逐层计时、一命引力干涉间隔及回能、雨海护盾、二命皎辉持续时间、四命回能与月之领域内的额外雷击和月笼攻击仍需事件记录。"
         }
       ]
     },
@@ -1060,6 +1603,164 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "columbina.moonDomain": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色处于月之领域"
+    },
+    "columbina.moonTemptation": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "月诱层数"
+    },
+    "columbina.light": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "引力干涉后获得皎辉"
+    },
+    "columbina.interferenceC4": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次引力干涉触发四命追加加成"
+    },
+    "columbina.c2Light.lunar-charged": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "皎辉由月感电分支的引力干涉触发"
+    },
+    "columbina.c2Light.lunar-bloom": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "皎辉由月绽放分支的引力干涉触发"
+    },
+    "columbina.c2Light.lunar-crystallize": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "皎辉由月结晶分支的引力干涉触发"
+    },
+    "columbina.c6.hydro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "月之领域触发相关月曜反应后的八秒（水）"
+    },
+    "columbina.c6.electro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "月之领域触发相关月曜反应后的八秒（雷）"
+    },
+    "columbina.c6.dendro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "月之领域触发相关月曜反应后的八秒（草）"
+    },
+    "columbina.c6.geo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "月之领域触发相关月曜反应后的八秒（岩）"
+    },
+    "columbina.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次引力干涉累计最多的是月感电引力"
+    },
+    "columbina.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次引力干涉可触发四命回复（间隔至少15秒）"
+    },
+    "columbina.c1.lunarBloomProtectionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "一命月绽放引力干涉触发的8秒抗打断状态持续中"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "columbina.temptation-count",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "columbina.radiance-attack",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "attack",
+        "rate": 0.01,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "columbina.radiance-elementalMastery",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "elementalMastery",
+        "rate": 0.0035,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "columbina.radiance-defense",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "defense",
+        "rate": 0.01,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

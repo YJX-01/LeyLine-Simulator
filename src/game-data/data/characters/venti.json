@@ -1215,7 +1215,71 @@
       "rank": 2,
       "name": "眷恋的泠风",
       "description": "高天之歌会使敌人的风元素抗性与物理抗性降低12%，持续10秒。\n被高天之歌击飞的敌人在落地前，风元素抗性与物理抗性额外降低12%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "venti.c2.skyward-sonnet-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "venti.skill.param1",
+                "venti.skill.param3"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.physical",
+              "value": {
+                "amount": -0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "venti.c2.airborne-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "venti.skywardEnemyAirborne"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.physical",
+              "value": {
+                "amount": -0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1232,7 +1296,24 @@
       "rank": 4,
       "name": "自由的凛风",
       "description": "温迪获取元素晶球或元素微粒后，获得25%风元素伤害加成，持续10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "venti.c4.hurricane-freedom",
+          "condition": {
+            "fact": "venti.particlePickupWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1249,7 +1330,155 @@
       "rank": 6,
       "name": "抗争的暴风",
       "description": "受风神之诗伤害的敌人，风元素抗性降低20%；\n若产生了元素转化，则使转换的元素抗性也降低20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "venti.c6.stormeye-anemo-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "permanent"
+          },
+          "lifetime": {
+            "kind": "permanent"
+          },
+          "condition": {
+            "fact": "venti.stormeyeShredWindow"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "venti.c6.stormeye-shred-pyro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "venti.stormeyeShredWindow"
+              },
+              "term1": {
+                "call": "venti.stormeye-absorbed-pyro",
+                "inputs": {
+                  "value": {
+                    "fact": "venti.stormeyeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "venti.c6.stormeye-shred-hydro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "venti.stormeyeShredWindow"
+              },
+              "term1": {
+                "call": "venti.stormeye-absorbed-hydro",
+                "inputs": {
+                  "value": {
+                    "fact": "venti.stormeyeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "venti.c6.stormeye-shred-cryo",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "venti.stormeyeShredWindow"
+              },
+              "term1": {
+                "call": "venti.stormeye-absorbed-cryo",
+                "inputs": {
+                  "value": {
+                    "fact": "venti.stormeyeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "venti.c6.stormeye-shred-electro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "venti.stormeyeShredWindow"
+              },
+              "term1": {
+                "call": "venti.stormeye-absorbed-electro",
+                "inputs": {
+                  "value": {
+                    "fact": "venti.stormeyeAbsorbed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1292,6 +1521,41 @@
         "kind": "boolean"
       }
     },
+    "venti.skywardEnemyAirborne": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标被高天之歌击飞且尚未落地"
+    },
+    "venti.particlePickupWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "取得元素晶球或元素微粒后十秒内"
+    },
+    "venti.stormeyeShredWindow": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标在风神之诗伤害导致的减抗窗口内"
+    },
+    "venti.stormeyeAbsorbed": {
+      "scope": "target",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ]
+      },
+      "label": "造成该目标减抗的风神之诗转化元素"
+    },
     "venti.c1SplitArrowHit": {
       "scope": "query",
       "type": {
@@ -1309,6 +1573,70 @@
         "operator": "all",
         "terms": 2,
         "negate": true
+      }
+    },
+    {
+      "id": "venti.stormeye-absorbed-pyro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "pyro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "venti.stormeye-absorbed-hydro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "hydro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "venti.stormeye-absorbed-cryo",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "cryo",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "venti.stormeye-absorbed-electro",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "electro",
+        "revision": "1"
       }
     }
   ]

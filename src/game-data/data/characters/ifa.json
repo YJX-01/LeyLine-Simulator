@@ -676,13 +676,141 @@
       "id": "ifa.passive1",
       "name": "场中医者视野",
       "description": "伊法处于夜魂加持状态下时，将基于队伍中所有角色当前夜魂值的总和，每1点夜魂值都将使伊法获得1点**「救援要义」**。救援要义可以提升队伍中附近的角色触发的扩散、星扩散、感电、月感电反应造成的伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "ifa.rescue-essentials",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "ifa.rescueNightsoulBlessing"
+              },
+              "term1": {
+                "fact": "ifa.rescueRecipient"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "group": "ifa.rescue-essentials",
+            "policy": "replace",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "call": "ifa.rescue-bonuses",
+                "inputs": {
+                  "points": {
+                    "call": "ifa.rescue-a1-points",
+                    "inputs": {
+                      "points": {
+                        "fact": "ifa.rescueTeamNightsoul"
+                      }
+                    }
+                  }
+                },
+                "output": "transformative"
+              },
+              "appliesTo": {
+                "families": [
+                  "transformative"
+                ],
+                "reactionIds": [
+                  "swirl",
+                  "electro-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "call": "ifa.rescue-bonuses",
+                "inputs": {
+                  "points": {
+                    "call": "ifa.rescue-a1-points",
+                    "inputs": {
+                      "points": {
+                        "fact": "ifa.rescueTeamNightsoul"
+                      }
+                    }
+                  }
+                },
+                "output": "lunar-charged"
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "call": "ifa.rescue-bonuses",
+                "inputs": {
+                  "points": {
+                    "call": "ifa.rescue-a1-points",
+                    "inputs": {
+                      "points": {
+                        "fact": "ifa.rescueTeamNightsoul"
+                      }
+                    }
+                  }
+                },
+                "output": "stellar-swirl"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ifa.passive2",
       "name": "互助救援协议",
       "description": "队伍中的附近的角色触发「夜魂迸发」时，伊法的元素精通提升80点，持续10秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "ifa.a1.nightsoul-burst-mastery",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "any",
+              "target": "any",
+              "observation": {
+                "key": "nightsoulBurst",
+                "test": "true"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 80,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ifa.passive3",
@@ -694,7 +822,86 @@
       "id": "ifa.passive4",
       "name": "温敷战术包扎",
       "description": "在纳塔存在燃素机制的区域时，队伍中自己的当前场上角色或受魂附的龙生命值低于40%时，伊法将消耗10点燃素为其恢复40%生命值。该效果每10秒至多触发一次，在秘境、征讨领域、深境螺旋中无效。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "ifa.saurian.field-medic",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "call": "condition.all",
+                        "inputs": {
+                          "term0": {
+                            "call": "condition.all",
+                            "inputs": {
+                              "term0": {
+                                "fact": "natlanPhlogistonArea"
+                              },
+                              "term1": {
+                                "fact": "natlan.worldOrRoom"
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "fact": "ifa.indweltSaurian"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "fact": "ifa.saurianHealReady"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "ifa.saurian-hp-below40",
+                    "inputs": {
+                      "value": {
+                        "fact": "ifa.saurianHpRatio"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "ifa.saurian-phlogiston-at-least10",
+                "inputs": {
+                  "value": {
+                    "fact": "ifa.saurianAvailablePhlogiston"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.saurianBaseHealing",
+              "value": {
+                "call": "ifa.saurian.field-medic-hp",
+                "inputs": {
+                  "maxHp": {
+                    "fact": "ifa.saurianMaxHp"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -702,13 +909,145 @@
       "rank": 1,
       "name": "藤典药剂的备制",
       "description": "**「援护射击」**命中敌人时，将为伊法恢复6点元素能量。每8秒至多通过这种方式恢复一次元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ifa.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "ifa.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 6,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "祈祷弹道的助灵",
       "description": "伊法处于夜魂加持状态下时，基于队伍中所有角色当前夜魂值的总和超过60点的部分，每1点夜魂值都将使伊法额外获得4点**「救援要义」**。\n此外，伊法持有「救援要义」的上限提升50点。\n需要解锁突破天赋**场中医者视野**。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ifa.c2.rescue-essentials",
+          "activation": {
+            "ascension": 1
+          },
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "ifa.rescueNightsoulBlessing"
+                  },
+                  "term1": {
+                    "fact": "ifa.rescueRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "ifa.rescue-excess",
+                "inputs": {
+                  "points": {
+                    "fact": "ifa.rescueTeamNightsoul"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "priority": 1,
+          "stacking": {
+            "group": "ifa.rescue-essentials",
+            "policy": "replace",
+            "retain": "highest-priority"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "call": "ifa.rescue-bonuses",
+                "inputs": {
+                  "points": {
+                    "call": "ifa.rescue-c2-points",
+                    "inputs": {
+                      "points": {
+                        "fact": "ifa.rescueTeamNightsoul"
+                      }
+                    }
+                  }
+                },
+                "output": "transformative"
+              },
+              "appliesTo": {
+                "families": [
+                  "transformative"
+                ],
+                "reactionIds": [
+                  "swirl",
+                  "electro-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "call": "ifa.rescue-bonuses",
+                "inputs": {
+                  "points": {
+                    "call": "ifa.rescue-c2-points",
+                    "inputs": {
+                      "points": {
+                        "fact": "ifa.rescueTeamNightsoul"
+                      }
+                    }
+                  }
+                },
+                "output": "lunar-charged"
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-charged"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "call": "ifa.rescue-bonuses",
+                "inputs": {
+                  "points": {
+                    "call": "ifa.rescue-c2-points",
+                    "inputs": {
+                      "points": {
+                        "fact": "ifa.rescueTeamNightsoul"
+                      }
+                    }
+                  }
+                },
+                "output": "stellar-swirl"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -725,7 +1064,39 @@
       "rank": 4,
       "name": "糜烂应体的置换",
       "description": "元素爆发**复合镇静域**产生的固缚风场的持续时间延长至3秒。\n此外，施放元素爆发复合镇静域后，伊法的元素精通提升100点，持续15秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ifa.c4.sedation-mastery",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "ifa.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 100,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -798,6 +1169,194 @@
         "kind": "boolean"
       },
       "label": "长按援护射击已触发额外秘药弹"
+    },
+    "ifa.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "援护射击命中敌人，本次可回复能量（间隔至少8秒）"
+    },
+    "ifa.rescueNightsoulBlessing": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次救援要义结算时，伊法处于夜魂加持状态"
+    },
+    "ifa.rescueTeamNightsoul": {
+      "scope": "team",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "本次救援要义结算所用的队伍当前夜魂值总和"
+    },
+    "ifa.rescueRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次伤害归属的队员是救援要义的有效受益者"
+    },
+    "natlanPhlogistonArea": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前区域位于纳塔且存在燃素机制"
+    },
+    "natlan.worldOrRoom": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次处于大世界或普通室内（秘境、征讨领域与深境螺旋无效）"
+    },
+    "ifa.indweltSaurian": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次受益者是当前由自己魂附的龙"
+    },
+    "ifa.saurianHealReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "温敷战术包扎的队伍共用限次已就绪（至少间隔10秒）"
+    },
+    "ifa.saurianHpRatio": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "本次受魂附的龙的当前生命值比例（40%填0.4）"
+    },
+    "ifa.saurianMaxHp": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "本次受魂附的龙的生命值上限"
+    },
+    "ifa.saurianAvailablePhlogiston": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次伊法治疗前的队伍燃素点数"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "ifa.rescue-excess",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "scalar",
+        "relation": "gt",
+        "threshold": 60
+      }
+    },
+    {
+      "id": "ifa.rescue-bonuses",
+      "template": {
+        "id": "bounded-stat-bonus",
+        "revision": "1",
+        "input": "points",
+        "stat": "scalar",
+        "threshold": 0,
+        "channels": [
+          {
+            "output": "transformative",
+            "rate": 0.015,
+            "cap": 3
+          },
+          {
+            "output": "lunar-charged",
+            "rate": 0.002,
+            "cap": 0.4
+          },
+          {
+            "output": "stellar-swirl",
+            "rate": 0.0024,
+            "cap": 0.48
+          }
+        ]
+      }
+    },
+    {
+      "id": "ifa.rescue-a1-points",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "points",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 150,
+        "output": "value"
+      }
+    },
+    {
+      "id": "ifa.rescue-c2-points",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "points",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 5,
+        "offset": 60,
+        "threshold": 60,
+        "cap": 200,
+        "output": "value"
+      }
+    },
+    {
+      "id": "ifa.saurian-hp-below40",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "value",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.4,
+        "maxInput": 1
+      }
+    },
+    {
+      "id": "ifa.saurian-phlogiston-at-least10",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 10
+      }
+    },
+    {
+      "id": "ifa.saurian.field-medic-hp",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "maxHp",
+        "inputUnit": "hp",
+        "outputUnit": "hp",
+        "rate": 0.4,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

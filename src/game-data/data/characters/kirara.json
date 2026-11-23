@@ -815,6 +815,67 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "kirara.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kirara.safeTransportShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "kirara.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "kirara.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.shieldAbsorptionCap",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param4",
+                    "skill": "kirara.skill"
+                  },
+                  "flat": {
+                    "parameter": "param5",
+                    "skill": "kirara.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -988,13 +1049,103 @@
       "id": "kirara.passive1",
       "name": "妖说歧尾之变",
       "description": "绮良良处于呜喵町飞足的猫箱急件状态下时，每次冲撞触及敌人，都将获得一层加固包装，此效果每0.5秒对每个敌人至多触发一次，至多叠加3层。猫箱急件状态结束时，每层加固包装都将为绮良良生成一个安全运输护盾，通过这种方式生成的护盾的伤害吸收量相当于呜喵町飞足生成的安全运输护盾的20%，若绮良良已处于呜喵町飞足的安全运输护盾的庇护下，剩余的伤害吸收量将叠加，并刷新持续时间。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "kirara.a1.reinforced-packaging",
+          "condition": {
+            "fact": "kirara.reinforcedPackagingExit"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorptionAdded",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": {
+                        "parameter": "param2",
+                        "skill": "kirara.skill"
+                      },
+                      "flat": {
+                        "parameter": "param3",
+                        "skill": "kirara.skill",
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "kirara.reinforced-packaging",
+                    "inputs": {
+                      "stacks": {
+                        "fact": "kirara.reinforcedPackagingStacks"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kirara.passive2",
       "name": "应时惑目之灵",
       "description": "基于绮良良的生命值上限，每1000点生命值上限将使呜喵町飞足造成的伤害提升0.4%，秘法·惊喜特派造成的伤害提升0.3%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kirara.a1.skill-hp-damage",
+          "appliesTo": {
+            "hitIds": [
+              "kirara.skill.param1",
+              "kirara.skill.param7",
+              "kirara.skill.param9"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "kirara.skill-hp-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "kirara.a1.burst-hp-damage",
+          "appliesTo": {
+            "hitIds": [
+              "kirara.burst.param1",
+              "kirara.burst.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "kirara.burst-hp-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kirara.passive3",
@@ -1014,7 +1165,137 @@
       "rank": 2,
       "name": "八尖裹术",
       "description": "绮良良处于呜喵町飞足的猫箱急件状态下时，将为冲撞触及的队伍中其他角色施加安全运输护盾·要件。\n安全运输护盾·要件的伤害吸收量相当于呜喵町飞足的安全运输护盾的吸收量上限的40%，且对草元素伤害有250%的吸收效果。\n安全运输护盾·要件持续12秒，此效果每10秒对每位角色至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kirara.c2-shield",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kirara.criticalTransportShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "excludeOwner": true,
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": {
+                        "parameter": "param4",
+                        "skill": "kirara.skill"
+                      },
+                      "flat": {
+                        "parameter": "param5",
+                        "skill": "kirara.skill",
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 0.4
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-scale",
+                    "inputs": {
+                      "basis": {
+                        "call": "shield.hp-base",
+                        "inputs": {
+                          "basis": {
+                            "stat": "hp"
+                          },
+                          "rate": {
+                            "parameter": "param4",
+                            "skill": "kirara.skill"
+                          },
+                          "flat": {
+                            "parameter": "param5",
+                            "skill": "kirara.skill",
+                            "unit": "hp"
+                          }
+                        }
+                      },
+                      "rate": 0.4
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "kirara.c2-shield.dendro",
+                "inputs": {
+                  "mode": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": {
+                        "parameter": "param4",
+                        "skill": "kirara.skill"
+                      },
+                      "flat": {
+                        "parameter": "param5",
+                        "skill": "kirara.skill",
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 0.4
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "kirara.c2-shield.dendro",
+                    "inputs": {
+                      "mode": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1067,7 +1348,86 @@
       "rank": 6,
       "name": "沿途百景会心",
       "description": "绮良良施放元素战技或元素爆发后的15秒内，附近的队伍中所有角色获得12%所有元素伤害加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kirara.c6.courier-elemental",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "kirara.skill",
+                "kirara.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "stacking": {
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1104,6 +1464,99 @@
         "kind": "boolean"
       },
       "label": "场上受护盾保护的角色命中且小豆蔻可触发"
+    },
+    "kirara.safeTransportShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由点按或长按产生的安全运输护盾庇护"
+    },
+    "kirara.criticalTransportShieldActive": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队友当前由冲撞授予的安全运输护盾·要件庇护"
+    },
+    "kirara.reinforcedPackagingExit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次猫箱急件结束且结算加固包装护盾"
+    },
+    "kirara.reinforcedPackagingStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "结算时的加固包装层数（最多3层）"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "kirara.skill-hp-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000004,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kirara.burst-hp-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000003,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kirara.c2-shield.dendro",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "physical",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "dendro",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "kirara.reinforced-packaging",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "stacks",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 0.6,
+        "output": "value"
+      }
+    }
+  ]
 }

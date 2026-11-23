@@ -1264,7 +1264,46 @@
       "id": "odette.passive2",
       "name": "赤忱者的悲歌",
       "description": "基于奥黛塔攻击力超过1000点的部分，每100点攻击力都将使奥黛塔造成的星烁反应伤害额外造成原本1.5%的伤害，至多通过这种方式额外造成原本30%的伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "odette.a1.overstreamed-attack",
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.baseBonus",
+              "value": {
+                "call": "odette.overstreamed-attack",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.baseBonus",
+              "value": {
+                "call": "odette.overstreamed-attack",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "odette.passive3",
@@ -1388,7 +1427,110 @@
       "rank": 2,
       "name": "「她想，我要见证雪鹄未见之梦」",
       "description": "突破天赋「获选者的春祭」获得强化：每层**华彩**还会使角色的攻击力提升7%。\n此外，**独舞倒影**在场时，若奥黛塔处于**辉映·星烁**状态，独舞倒影附近敌人的对应元素抗性还会降低20%：\n·辉映·星超导：冰元素、雷元素；\n·辉映·星扩散：冰元素、风元素。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "odette.c2.mirror-shred-electro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "odette.mirrorNearTarget"
+              },
+              "term1": {
+                "call": "odette.mirror-radiance-stellar-conduct",
+                "inputs": {
+                  "value": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "odette.c2.mirror-shred-anemo",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "odette.mirrorNearTarget"
+              },
+              "term1": {
+                "call": "odette.mirror-radiance-stellar-swirl",
+                "inputs": {
+                  "value": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "odette.c2.splendor-attack",
+          "condition": {
+            "call": "rank.at-least-1",
+            "inputs": {
+              "rank": {
+                "state": "ascension"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "odette.splendor-attack",
+                "inputs": {
+                  "input": {
+                    "fact": "odette.splendorStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1467,6 +1609,60 @@
           "support": "hit-unavailable",
           "family": "stellar-swirl"
         }
+      ],
+      "buffs": [
+        {
+          "id": "odette.c4.swan-dream-shared",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "odette.swanDream"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "odette.burst",
+                    "parameter": "param3"
+                  },
+                  "rate": {
+                    "amount": 0.5,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "odette.burst",
+                    "parameter": "param3"
+                  },
+                  "rate": {
+                    "amount": 0.5,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1484,7 +1680,75 @@
       "rank": 6,
       "name": "「伸出手，触及苍穹永恒的面容」",
       "description": "突破天赋「获选者的春祭」获得强化：奥黛塔赋予队伍中附近的所有角色**华彩**时，自己的华彩不再会减少。\n此外，处于华彩影响下的角色，对敌人造成的星烁反应伤害**擢升**25%，且奥黛塔对敌人造成的星烁反应伤害额外擢升20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "odette.c6-personal-elevation",
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.elevation",
+              "value": 0.2,
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.elevation",
+              "value": 0.2,
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ],
+          "stacking": {
+            "crossOwnerUnverified": true
+          }
+        },
+        {
+          "id": "odette.c6-splendor-elevation",
+          "recipient": "team",
+          "condition": {
+            "call": "odette.splendor-present",
+            "inputs": {
+              "stacks": {
+                "fact": "odette.splendorStacks",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.elevation",
+              "value": 0.25,
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.elevation",
+              "value": 0.25,
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ],
+          "activation": {
+            "ascension": 1
+          },
+          "stacking": {
+            "crossOwnerUnverified": true
+          }
+        }
+      ]
     }
   ],
   "support": {
@@ -1552,6 +1816,74 @@
         "equals": "stellar-swirl",
         "revision": "1"
       }
+    },
+    {
+      "id": "odette.mirror-radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "odette.mirror-radiance-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "odette.overstreamed-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.00015,
+        "offset": 0,
+        "threshold": 1000,
+        "output": "value",
+        "cap": 0.3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "odette.splendor-attack",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.07,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "odette.splendor-present",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "unit": "count",
+        "input": "stacks",
+        "relation": "gt",
+        "threshold": 0
+      }
     }
   ],
   "facts": {
@@ -1568,6 +1900,28 @@
         "kind": "boolean"
       },
       "label": "队伍造成星烁反应伤害且奥黛塔协同可触发"
+    },
+    "odette.mirrorNearTarget": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标在自己的独舞倒影附近"
+    },
+    "odette.swanDream": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "雪鹄之梦持续中"
+    },
+    "odette.splendorStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前持有的华彩层数"
     }
   }
 }

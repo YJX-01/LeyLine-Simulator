@@ -744,7 +744,144 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param10"
+      "cooldownParameter": "param10",
+      "buffs": [
+        {
+          "id": "xinyan.shield-absorption.level-1",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "xinyan.sweepingFervorShieldLevel.level-1",
+                "inputs": {
+                  "mode": {
+                    "fact": "xinyan.sweepingFervorShieldLevel"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.defense-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "xinyan.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "xinyan.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "xinyan.shield-absorption.level-2",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "xinyan.sweepingFervorShieldLevel.level-2",
+                "inputs": {
+                  "mode": {
+                    "fact": "xinyan.sweepingFervorShieldLevel"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.defense-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": {
+                    "parameter": "param4",
+                    "skill": "xinyan.skill"
+                  },
+                  "flat": {
+                    "parameter": "param5",
+                    "skill": "xinyan.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "xinyan.shield-absorption.level-3",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "xinyan.sweepingFervorShieldLevel.level-3",
+                "inputs": {
+                  "mode": {
+                    "fact": "xinyan.sweepingFervorShieldLevel"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.defense-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": {
+                    "parameter": "param6",
+                    "skill": "xinyan.skill"
+                  },
+                  "flat": {
+                    "parameter": "param7",
+                    "skill": "xinyan.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xinyan.burst",
@@ -924,7 +1061,26 @@
       "id": "xinyan.passive2",
       "name": "「…这才是摇滚！」",
       "description": "处于热情拂扫的护盾保护下的角色造成的物理伤害提高15%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "xinyan.a1.sweeping-fervor-physical",
+          "recipient": "team",
+          "condition": {
+            "fact": "xinyan.sweepingFervorShield",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.physicalBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xinyan.passive3",
@@ -938,13 +1094,60 @@
       "rank": 1,
       "name": "绝命的加速",
       "description": "辛焱造成暴击后的5秒内，普通攻击和重击的攻击速度提升12%。\n该效果每5秒只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xinyan.c1.fatal-acceleration",
+          "condition": {
+            "fact": "xinyan.fatalAccelerationWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": 0.12,
+              "appliesTo": {
+                "categories": [
+                  "normal"
+                ]
+              }
+            },
+            {
+              "target": "attribute.chargedAttackSpeed",
+              "value": 0.12,
+              "appliesTo": {
+                "categories": [
+                  "charged"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "开场即兴段",
       "description": "叛逆刮弦造成的物理伤害暴击率提升100%，并会在施放时形成三级护盾·舞遍节拍。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xinyan.c2.riff-physical-crit",
+          "appliesTo": {
+            "hitIds": [
+              "xinyan.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -961,7 +1164,40 @@
       "rank": 4,
       "name": "节奏的传染",
       "description": "热情拂扫的挥舞伤害，会使敌人的物理抗性降低15%，持续12秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xinyan.c4.sweeping-fervor-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "xinyan.skill.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.physical",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -978,7 +1214,30 @@
       "rank": 6,
       "name": "地狱里摇摆",
       "description": "辛焱的重击的体力消耗降低30%；此外，进行重击时，将基于防御力的50%获得攻击力加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xinyan.c6.charged-defence",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "call": "xinyan.charged-defence",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1050,5 +1309,95 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "xinyan.sweepingFervorShield": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "由热情拂扫的护盾保护"
+    },
+    "xinyan.sweepingFervorShieldLevel": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "level-1",
+          "level-2",
+          "level-3"
+        ]
+      },
+      "label": "当前场上角色的热情拂扫护盾等级（level-1 一级、level-2 二级、level-3 三级）"
+    },
+    "xinyan.fatalAccelerationWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前处于本次致命加速触发后的五秒内"
+    }
+  },
+  "formulas": [
+    {
+      "id": "xinyan.charged-defence",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "attack",
+        "rate": 0.5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xinyan.sweepingFervorShieldLevel.level-1",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "level-1",
+          "level-2",
+          "level-3"
+        ],
+        "equals": "level-1",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xinyan.sweepingFervorShieldLevel.level-2",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "level-1",
+          "level-2",
+          "level-3"
+        ],
+        "equals": "level-2",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xinyan.sweepingFervorShieldLevel.level-3",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "level-1",
+          "level-2",
+          "level-3"
+        ],
+        "equals": "level-3",
+        "revision": "1"
+      }
+    }
+  ]
 }

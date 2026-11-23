@@ -701,7 +701,47 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "yunjin.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yunjin.openingFlourishGuard"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "yunjin.skill"
+                  },
+                  "flat": {
+                    "parameter": "param2",
+                    "skill": "yunjin.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yunjin.burst",
@@ -953,7 +993,102 @@
       "id": "yunjin.passive2",
       "name": "莫从恒蹊",
       "description": "「飞云旗阵」提供的普通攻击伤害提高，当队伍中存在1/2/3/4种元素类型的角色时，数值上进一步追加云堇防御力的2.5%/5%/7.5%/11.5%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "yunjin.a1.flag-party",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "condition": {
+            "fact": "yunjin.flagFormation"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "yunjin.flag-defence",
+                    "inputs": {
+                      "input": {
+                        "stat": "defense"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "yunjin.flag-party-base",
+                    "inputs": {
+                      "input": {
+                        "teamCount": {
+                          "elements": [
+                            "anemo",
+                            "cryo",
+                            "dendro",
+                            "electro",
+                            "geo",
+                            "hydro",
+                            "pyro"
+                          ],
+                          "excludeOwner": false,
+                          "match": "include",
+                          "distinctElements": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "yunjin.flag-defence",
+                    "inputs": {
+                      "input": {
+                        "stat": "defense"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "amount": 0.015,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "condition": {
+                "call": "yunjin.flag-party-four",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "anemo",
+                        "cryo",
+                        "dendro",
+                        "electro",
+                        "geo",
+                        "hydro",
+                        "pyro"
+                      ],
+                      "excludeOwner": false,
+                      "match": "include",
+                      "distinctElements": true
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yunjin.passive3",
@@ -967,7 +1102,18 @@
       "rank": 1,
       "name": "飞身趟马",
       "description": "旋云开相的冷却时间减少18%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yunjin.c1.opening-flourish-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": 0.18
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1025,7 +1171,40 @@
       "rank": 4,
       "name": "昇堂吊云",
       "description": "云堇触发结晶、月结晶反应后，防御力提升20%，持续12秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yunjin.c4.flower-and-fighter",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "reactionIds": [
+                "crystallize",
+                "lunar-crystallize"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1042,7 +1221,30 @@
       "rank": 6,
       "name": "庄谐并举",
       "description": "处于「飞云旗阵」状态下的角色，普通攻击的攻击速度提升12%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yunjin.c6.flag-formation-speed",
+          "condition": {
+            "fact": "yunjin.flagFormation"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ],
+          "recipient": "team"
+        }
+      ]
     }
   ],
   "formulas": [
@@ -1056,6 +1258,46 @@
         "attribute": "def",
         "rate": "rate",
         "output": "bonus"
+      }
+    },
+    {
+      "id": "yunjin.flag-defence",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yunjin.flag-party-base",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.025,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yunjin.flag-party-four",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 4,
+        "maxInput": 4,
+        "revision": "1"
       }
     }
   ],
@@ -1091,5 +1333,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "yunjin.flagFormation": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于飞云旗阵且仍可获得普攻伤害提升"
+    },
+    "yunjin.openingFlourishGuard": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "云堇正在长按战技蓄力格挡"
+    }
+  }
 }

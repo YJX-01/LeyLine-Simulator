@@ -835,7 +835,88 @@
       "energyCapacity": {
         "parameter": "param8"
       },
-      "cooldownParameter": "param7"
+      "cooldownParameter": "param7",
+      "buffs": [
+        {
+          "id": "faruzan.wind-prayer",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "faruzan.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 4000,
+            "phase": "after"
+          },
+          "windowFact": "faruzan.prayer",
+          "appliesTo": {
+            "elements": [
+              "anemo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": {
+                "skill": "faruzan.burst",
+                "parameter": "param2"
+              }
+            }
+          ]
+        },
+        {
+          "id": "faruzan.wind-bane",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "faruzan.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 4000,
+            "phase": "after"
+          },
+          "windowFact": "faruzan.windBane",
+          "stacking": {
+            "group": "faruzan.wind-bane",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "faruzan.burst",
+                    "parameter": "param4"
+                  },
+                  "rate": -1
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -843,13 +924,141 @@
       "id": "faruzan.passive1",
       "name": "迅捷流风",
       "description": "珐露珊处于非想风天的「疾风示现」状态下时，瞄准射击所需的蓄力时间减少60%；并能对「风压坍陷」效果产生的风涡命中的敌人施加抟风秘道的「诡风之祸」效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "faruzan.collapse-bane",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "skillIds": [
+                "faruzan.skill"
+              ],
+              "hitIds": [
+                "faruzan.skill.param2"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 4000,
+            "phase": "after"
+          },
+          "windowFact": "faruzan.collapseBane",
+          "stacking": {
+            "group": "faruzan.wind-bane",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "faruzan.burst",
+                    "parameter": "param4"
+                  },
+                  "rate": -1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "faruzan.a1.hurricane-aim",
+          "trigger": {
+            "cast": "faruzan.skill"
+          },
+          "duration": {
+            "parameter": "param4"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "faruzan.skill.hurricane-arrow"
+            ]
+          },
+          "condition": {
+            "fact": "faruzan.hurricaneArrow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeTimeReductionRatio",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "faruzan.passive2",
       "name": "七窟遗智",
       "description": "处于抟风秘道的「祈风之赐」效果下的角色的普通攻击、重击、下落攻击、元素战技或元素爆发对敌人造成风元素伤害时，会产生烈风护持效果：基于珐露珊基础攻击力的32%，提高造成的伤害。每0.8秒至多产生一次烈风护持效果，该效果将在「祈风之赐」持续时间结束或生效1次后消失。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "faruzan.hurricane-guard",
+          "recipient": "team",
+          "appliesTo": {
+            "elements": [
+              "anemo"
+            ],
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "faruzan.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 4000,
+            "phase": "after"
+          },
+          "windowFact": "faruzan.prayer",
+          "condition": {
+            "fact": "faruzan.hurricaneGuard"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "whiteAttack"
+                  },
+                  "ratio": 0.32
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "faruzan.passive3",
@@ -886,7 +1095,45 @@
       "rank": 4,
       "name": "神机明悟",
       "description": "依据命中敌人的数量，风压坍陷产生的风涡可以为珐露珊恢复元素能量：命中一名敌人时，将为珐露珊恢复2点元素能量；每额外命中一名敌人，都将进一步为珐露珊恢复0.5点元素能量。\n一次风涡，至多通过这种方式为珐露珊恢复4点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "faruzan.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "faruzan.directEnergy.c4"
+              },
+              "term1": {
+                "call": "faruzan.directEnergy.vortex-hit",
+                "inputs": {
+                  "count": {
+                    "fact": "faruzan.energyVortexTargets"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "faruzan.directEnergy.c4.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "faruzan.energyVortexTargets"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -903,7 +1150,50 @@
       "rank": 6,
       "name": "妙道合真",
       "description": "处于抟风秘道的「祈风之赐」效果影响下的角色，造成风元素伤害时的暴击伤害提升40%；处于「祈风之赐」效果影响下的当前场上角色造成伤害时，将为该敌人施加「风压坍陷」。此效果3秒至多触发一次，队伍中所有角色共享冷却时间。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "faruzan.c6-wind-crit",
+          "recipient": "team",
+          "appliesTo": {
+            "elements": [
+              "anemo"
+            ],
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "faruzan.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 4000,
+            "phase": "after"
+          },
+          "windowFact": "faruzan.prayer",
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -928,6 +1218,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "蓄力缩短、烈风波随顶点重新施加、祈风之赐附加伤害的消费与间隔、四命回能和六命自动风压坍陷仍需事件跟踪。"
         }
       ]
     },
@@ -950,12 +1245,83 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "faruzan.prayer": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "祈风之赐持续中"
+    },
+    "faruzan.windBane": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "诡风之祸持续中"
+    },
+    "faruzan.collapseBane": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "风压坍陷命中后的诡风之祸持续中"
+    },
+    "faruzan.hurricaneGuard": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次风伤触发烈风护持"
+    },
     "faruzan.hurricaneArrow": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "这发飓烈箭消耗疾风示现的有效次数（一命每轮至多两发）"
+    },
+    "faruzan.energyVortexTargets": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次风涡命中的敌人数"
+    },
+    "faruzan.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次风涡由风压坍陷产生"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "faruzan.directEnergy.vortex-hit",
+      "template": {
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "faruzan.directEnergy.c4.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 0.5,
+        "offset": 2,
+        "threshold": 1,
+        "output": "energy",
+        "cap": 4,
+        "revision": "1"
+      }
+    }
+  ]
 }

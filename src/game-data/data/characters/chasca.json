@@ -824,7 +824,67 @@
       "id": "chasca.passive1",
       "name": "子弹的戏法",
       "description": "进行元素战技灵缰追影中的多重瞄准的蓄力时，若队伍中存在符合元素转化条件的元素类型的角色，则依据符合条件的不同元素的数量，获得以下效果：\n·每种元素有33.3%/66.7%/100%的几率触发「附灵转化」，使第三枚装入弹匣的追影弹随机转化为对应元素类型之一的焕光追影弹；\n·每种元素将为恰斯卡产生一层「焕影之灵」效果，使焕光追影弹造成的伤害提升15%/35%/65%，该效果持续至本次多重瞄准结束，至多叠加3层。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "chasca.a0.shining-spirit-bonus",
+          "appliesTo": {
+            "hitIds": [
+              "chasca.skill.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "chasca.shining-spirit-1",
+                "inputs": {
+                  "value": {
+                    "fact": "chasca.shiningSpiritStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.35,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "chasca.shining-spirit-2",
+                "inputs": {
+                  "value": {
+                    "fact": "chasca.shiningSpiritStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.65,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "chasca.shining-spirit-3",
+                "inputs": {
+                  "value": {
+                    "fact": "chasca.shiningSpiritStacks"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "chasca.passive2",
@@ -909,6 +969,42 @@
           "support": "hit-unavailable",
           "elementBy": "absorbedElement"
         }
+      ],
+      "buffs": [
+        {
+          "id": "chasca.a1.covering-fire-factor",
+          "appliesTo": {
+            "hitIds": [
+              "chasca.a1.covering-fire"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chasca.a1.covering-fire-converted-factor",
+          "appliesTo": {
+            "hitIds": [
+              "chasca.a1.covering-fire-converted"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -992,6 +1088,24 @@
           "support": "hit-unavailable",
           "elementBy": "absorbedElement"
         }
+      ],
+      "buffs": [
+        {
+          "id": "chasca.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "chasca.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1.5,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1009,7 +1123,40 @@
       "rank": 6,
       "name": "相决，斗争的荣光",
       "description": "恰斯卡进行多重瞄准所需的蓄力时间减少，且触发突破天赋「子弹的戏法」中的「附灵转化」后，恰斯卡将获得「命袭」状态，在接下来的3秒内，恰斯卡下一次施放元素战技灵缰追影中的多重瞄准时，会立即完成蓄力，并且本次多重瞄准中的追影弹和焕光追影弹的暴击伤害提升120%。每3秒至多获得一次「命袭」效果。\n\n上述效果需要解锁突破天赋「子弹的戏法」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chasca.c6.fatal-round-crit",
+          "activation": {
+            "ascension": 1
+          },
+          "appliesTo": {
+            "hitIds": [
+              "chasca.skill.param3",
+              "chasca.skill.param4"
+            ]
+          },
+          "condition": {
+            "fact": "chasca.fatalRounds"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 1.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.aimChargeInstant",
+              "value": {
+                "amount": 1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1060,6 +1207,28 @@
         "kind": "boolean"
       },
       "label": "溢光索魂弹命中且本次索魂命袭尚未触发追加伤害"
+    },
+    "chasca.shiningSpiritStacks": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次多重瞄准的焕影之灵层数（包含命座已授予的层数）"
+    },
+    "chasca.fatalRounds": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次是附灵转化触发命袭后3秒内第一次重击多重瞄准"
+    },
+    "chasca.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "一枚溢光索魂弹本次命中敌人"
     }
   },
   "formulas": [
@@ -1071,6 +1240,42 @@
         "input": "value",
         "relation": "gt",
         "threshold": 0,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "chasca.shining-spirit-1",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "chasca.shining-spirit-2",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "chasca.shining-spirit-3",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 3,
         "maxInput": 3,
         "revision": "1"
       }

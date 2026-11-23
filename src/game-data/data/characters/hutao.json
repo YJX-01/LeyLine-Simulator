@@ -708,7 +708,53 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "hutao.t1.paramita-attack",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "hutao.paramitaPapilio"
+              },
+              "term1": {
+                "fact": "onField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "call": "hutao.paramita-attack",
+                "inputs": {
+                  "basis": {
+                    "fact": "hutao.hpAtParamita"
+                  },
+                  "rate": {
+                    "skill": "hutao.skill",
+                    "parameter": "param2"
+                  },
+                  "cap": {
+                    "call": "product.attack",
+                    "inputs": {
+                      "basis": {
+                        "stat": "whiteAttack"
+                      },
+                      "rate": {
+                        "amount": 4,
+                        "unit": "scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hutao.burst",
@@ -1009,7 +1055,26 @@
       "id": "hutao.passive1",
       "name": "蝶隐之时",
       "description": "蝶引来生施加的彼岸蝶舞状态结束后，队伍中所有角色（不包括胡桃自己）的暴击率提高12%，持续8秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "hutao.a0.butterfly-retirement",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "hutao.butterflyRetirement"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hutao.passive2",
@@ -1053,7 +1118,30 @@
       "rank": 2,
       "name": "最不安神晴又复雨",
       "description": "血梅香造成的伤害提高，提高值相当于效果附加时胡桃生命值上限的10%。\n此外，安神秘法会为命中的敌人施加血梅香效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "hutao.c2.blood-blossom-hp",
+          "appliesTo": {
+            "hitIds": [
+              "hutao.skill.param3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "hutao.blood-blossom-hp",
+                "inputs": {
+                  "input": {
+                    "fact": "hutao.markingHp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1070,7 +1158,26 @@
       "rank": 4,
       "name": "伴君眠花房",
       "description": "处于胡桃自己施加的血梅香状态影响下的敌人被击败时，附近的队伍中所有角色（不包括胡桃自己）的暴击率提高12%，持续15秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "hutao.c4.blood-blossom-defeat",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "hutao.markedEnemyDefeated"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.12,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1087,7 +1194,84 @@
       "rank": 6,
       "name": "幽蝶能留一缕芳",
       "description": "胡桃的生命值降至25%以下，或承受足以使她倒下的伤害时触发：\n此次伤害不会使胡桃倒下，并在接下来的10秒内，胡桃的所有元素抗性和物理抗性提高200%，暴击率提高100%，并极大地提高抗打断能力。\n这个效果在胡桃生命值为1时会自动触发。\n该效果每60秒只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "hutao.c6.butterfly-embrace",
+          "condition": {
+            "fact": "hutao.butterflyEmbraceWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.anemo",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.physical",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.pyro",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0
+            }
+          ]
+        }
+      ]
     }
   ],
   "formulas": [
@@ -1102,6 +1286,30 @@
         "value": 0.33,
         "otherwise": 0,
         "output": "value"
+      }
+    },
+    {
+      "id": "hutao.blood-blossom-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "hutao.paramita-attack",
+      "template": {
+        "id": "capped-conversion",
+        "from": "hp",
+        "to": "attack",
+        "per": 1,
+        "revision": "1"
       }
     }
   ],
@@ -1137,5 +1345,51 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "hutao.butterflyRetirement": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "彼岸蝶舞结束后八秒内"
+    },
+    "hutao.markingHp": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "血梅香附加时胡桃的生命值上限"
+    },
+    "hutao.markedEnemyDefeated": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受血梅香影响的敌人被击败后十五秒内"
+    },
+    "hutao.butterflyEmbraceWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "已触发蝶隐之时且十秒持续窗口仍在"
+    },
+    "hutao.paramitaPapilio": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "彼岸蝶舞状态持续中"
+    },
+    "hutao.hpAtParamita": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "进入彼岸蝶舞时的生命值上限"
+    }
+  }
 }

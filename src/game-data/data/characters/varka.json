@@ -1729,13 +1729,835 @@
       "id": "varka.passive1",
       "name": "晓风的行军",
       "description": "队伍中存在火元素、水元素、雷元素或冰元素角色时，按照上述元素类型的优先级，基于法尔伽的攻击力，每1000点攻击力都将使法尔伽获得10%风元素伤害加成与对应元素伤害加成（上述元素类型中，至多有一种元素类型可以通过这种方式获得伤害加成），至多通过这种方式获得25%。\n\n此外，如果队伍中存在至少2名风元素角色，或存在至少2名元素类型相同的火元素、水元素、雷元素或冰元素角色，法尔伽在**狂飙突进**模式下进行的普通攻击、重击、特殊重击苍噬与施放的特殊元素战技**四风将起**将造成原本140%的伤害；若队伍中同时存在至少2名风元素角色与至少2名元素类型相同的火元素、水元素、雷元素或冰元素角色，则会使上述效果提升至220%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "varka.expedition-anemo",
+          "condition": {
+            "call": "condition.any",
+            "inputs": {
+              "term0": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "varka.party-pyro-1",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "pyro"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "varka.party-hydro-1",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "hydro"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "varka.party-electro-1",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "electro"
+                          ],
+                          "match": "include",
+                          "excludeOwner": false
+                        }
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "varka.party-cryo-1",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "anemo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": {
+                "call": "varka.attack-based-element",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "varka.expedition-pyro",
+          "condition": {
+            "call": "varka.party-pyro-1",
+            "inputs": {
+              "value": {
+                "teamCount": {
+                  "elements": [
+                    "pyro"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false
+                }
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "pyro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "varka.attack-based-element",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "varka.expedition-hydro",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "varka.party-hydro-1",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "hydro"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "varka.party-pyro-1",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "pyro"
+                          ],
+                          "match": "include",
+                          "excludeOwner": false
+                        }
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "hydro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "call": "varka.attack-based-element",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "varka.expedition-electro",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "varka.party-electro-1",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "electro"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "varka.party-pyro-1",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "pyro"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "varka.party-hydro-1",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "hydro"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "varka.attack-based-element",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "varka.expedition-cryo",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "varka.party-cryo-1",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "condition.any",
+                        "inputs": {
+                          "term0": {
+                            "call": "varka.party-pyro-1",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "pyro"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "call": "varka.party-hydro-1",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "hydro"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "varka.party-electro-1",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "electro"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "call": "varka.attack-based-element",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "varka.expedition-single-pair",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "varka.stance"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "varka.party-anemo-2",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "anemo"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "condition.any",
+                        "inputs": {
+                          "term0": {
+                            "call": "condition.any",
+                            "inputs": {
+                              "term0": {
+                                "call": "condition.any",
+                                "inputs": {
+                                  "term0": {
+                                    "call": "varka.party-pyro-2",
+                                    "inputs": {
+                                      "value": {
+                                        "teamCount": {
+                                          "elements": [
+                                            "pyro"
+                                          ],
+                                          "match": "include",
+                                          "excludeOwner": false
+                                        }
+                                      }
+                                    },
+                                    "output": "active"
+                                  },
+                                  "term1": {
+                                    "call": "varka.party-hydro-2",
+                                    "inputs": {
+                                      "value": {
+                                        "teamCount": {
+                                          "elements": [
+                                            "hydro"
+                                          ],
+                                          "match": "include",
+                                          "excludeOwner": false
+                                        }
+                                      }
+                                    },
+                                    "output": "active"
+                                  }
+                                },
+                                "output": "active"
+                              },
+                              "term1": {
+                                "call": "varka.party-electro-2",
+                                "inputs": {
+                                  "value": {
+                                    "teamCount": {
+                                      "elements": [
+                                        "electro"
+                                      ],
+                                      "match": "include",
+                                      "excludeOwner": false
+                                    }
+                                  }
+                                },
+                                "output": "active"
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "call": "varka.party-cryo-2",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "cryo"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "call": "condition.all",
+                        "inputs": {
+                          "term0": {
+                            "call": "varka.party-anemo-2",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "anemo"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "call": "condition.any",
+                            "inputs": {
+                              "term0": {
+                                "call": "condition.any",
+                                "inputs": {
+                                  "term0": {
+                                    "call": "condition.any",
+                                    "inputs": {
+                                      "term0": {
+                                        "call": "varka.party-pyro-2",
+                                        "inputs": {
+                                          "value": {
+                                            "teamCount": {
+                                              "elements": [
+                                                "pyro"
+                                              ],
+                                              "match": "include",
+                                              "excludeOwner": false
+                                            }
+                                          }
+                                        },
+                                        "output": "active"
+                                      },
+                                      "term1": {
+                                        "call": "varka.party-hydro-2",
+                                        "inputs": {
+                                          "value": {
+                                            "teamCount": {
+                                              "elements": [
+                                                "hydro"
+                                              ],
+                                              "match": "include",
+                                              "excludeOwner": false
+                                            }
+                                          }
+                                        },
+                                        "output": "active"
+                                      }
+                                    },
+                                    "output": "active"
+                                  },
+                                  "term1": {
+                                    "call": "varka.party-electro-2",
+                                    "inputs": {
+                                      "value": {
+                                        "teamCount": {
+                                          "elements": [
+                                            "electro"
+                                          ],
+                                          "match": "include",
+                                          "excludeOwner": false
+                                        }
+                                      }
+                                    },
+                                    "output": "active"
+                                  }
+                                },
+                                "output": "active"
+                              },
+                              "term1": {
+                                "call": "varka.party-cryo-2",
+                                "inputs": {
+                                  "value": {
+                                    "teamCount": {
+                                      "elements": [
+                                        "cryo"
+                                      ],
+                                      "match": "include",
+                                      "excludeOwner": false
+                                    }
+                                  }
+                                },
+                                "output": "active"
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "varka.skill.param3",
+              "varka.skill.param5",
+              "varka.skill.param4",
+              "varka.skill.param7",
+              "varka.skill.param6",
+              "varka.skill.param8",
+              "varka.skill.param9",
+              "varka.skill.param10",
+              "varka.skill.param11",
+              "varka.skill.param12",
+              "varka.skill.param13",
+              "varka.skill.param14",
+              "varka.skill.param15",
+              "varka.skill.param16",
+              "varka.skill.param17"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.4
+            }
+          ]
+        },
+        {
+          "id": "varka.expedition-dual-pair",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "varka.stance"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "varka.party-anemo-2",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "anemo"
+                          ],
+                          "match": "include",
+                          "excludeOwner": false
+                        }
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "condition.any",
+                        "inputs": {
+                          "term0": {
+                            "call": "condition.any",
+                            "inputs": {
+                              "term0": {
+                                "call": "varka.party-pyro-2",
+                                "inputs": {
+                                  "value": {
+                                    "teamCount": {
+                                      "elements": [
+                                        "pyro"
+                                      ],
+                                      "match": "include",
+                                      "excludeOwner": false
+                                    }
+                                  }
+                                },
+                                "output": "active"
+                              },
+                              "term1": {
+                                "call": "varka.party-hydro-2",
+                                "inputs": {
+                                  "value": {
+                                    "teamCount": {
+                                      "elements": [
+                                        "hydro"
+                                      ],
+                                      "match": "include",
+                                      "excludeOwner": false
+                                    }
+                                  }
+                                },
+                                "output": "active"
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "call": "varka.party-electro-2",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "electro"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "varka.party-cryo-2",
+                        "inputs": {
+                          "value": {
+                            "teamCount": {
+                              "elements": [
+                                "cryo"
+                              ],
+                              "match": "include",
+                              "excludeOwner": false
+                            }
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "varka.skill.param3",
+              "varka.skill.param5",
+              "varka.skill.param4",
+              "varka.skill.param7",
+              "varka.skill.param6",
+              "varka.skill.param8",
+              "varka.skill.param9",
+              "varka.skill.param10",
+              "varka.skill.param11",
+              "varka.skill.param12",
+              "varka.skill.param13",
+              "varka.skill.param14",
+              "varka.skill.param15",
+              "varka.skill.param16",
+              "varka.skill.param17"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 2.2
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "varka.passive2",
       "name": "风帜的先引",
       "description": "队伍中附近的角色触发扩散或星扩散反应时，法尔伽将获得一层「苍牙之誓」，使法尔伽的普通攻击、重击、特殊重击苍噬与施放的特殊元素战技**四风将起**造成的伤害提升7.5%。该效果持续8秒，至多叠加4层，每名角色每1秒至多通过这种方式使法尔伽获得一层「苍牙之誓」。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "varka.azure-oath",
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged"
+            ],
+            "skillIds": [
+              "varka.normal",
+              "varka.skill"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "varka.azure-oath-damage",
+                "inputs": {
+                  "basis": {
+                    "fact": "varka.azureOath"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "varka.azure-oath-special",
+          "appliesTo": {
+            "hitIds": [
+              "varka.skill.param14",
+              "varka.skill.param15"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "varka.azure-oath-special-scaling",
+                "inputs": {
+                  "basis": {
+                    "fact": "varka.azureOath"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "varka.passive3",
@@ -1749,7 +2571,29 @@
       "rank": 1,
       "name": "「来吧，朋友，让我们在月下共舞」",
       "description": "法尔伽切换至**狂飙突进**模式时，将额外获得一次特殊元素战技**四风将起**的可用次数。\n此外，切换至狂飙突进模式后，法尔伽将获得「歌中的佳酿」效果：施放特殊元素战技四风将起时，或进行特殊重击苍噬时，将消耗该效果，使四风将起或苍噬造成原本200%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "varka.c1-king-wine",
+          "condition": {
+            "fact": "varka.kingWine"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "varka.skill.param14",
+              "varka.skill.param15",
+              "varka.skill.param16",
+              "varka.skill.param17"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1862,7 +2706,99 @@
       "rank": 4,
       "name": "「因为无人能夺去我们歌唱的自由」",
       "description": "法尔伽触发扩散或星扩散反应时，依据参与反应的元素类型，使队伍中附近的所有角色分别获得20%风元素伤害加成与对应元素伤害加成，持续10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "varka.c4-gift-anemo",
+          "recipient": "team",
+          "condition": {
+            "fact": "varka.c4Gift"
+          },
+          "appliesTo": {
+            "elements": [
+              "anemo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "varka.c4-gift-pyro",
+          "recipient": "team",
+          "condition": {
+            "fact": "varka.c4Gift.pyro"
+          },
+          "appliesTo": {
+            "elements": [
+              "pyro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "varka.c4-gift-hydro",
+          "recipient": "team",
+          "condition": {
+            "fact": "varka.c4Gift.hydro"
+          },
+          "appliesTo": {
+            "elements": [
+              "hydro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "varka.c4-gift-electro",
+          "recipient": "team",
+          "condition": {
+            "fact": "varka.c4Gift.electro"
+          },
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "varka.c4-gift-cryo",
+          "recipient": "team",
+          "condition": {
+            "fact": "varka.c4Gift.cryo"
+          },
+          "appliesTo": {
+            "elements": [
+              "cryo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1879,7 +2815,28 @@
       "rank": 6,
       "name": "「我心爱的蒙德呀，依然屹立如初」",
       "description": "**狂飙突进**模式获得强化：\n·施放特殊元素战技**四风将起**后的短暂时间内，法尔伽可以点按元素战技或长按普通攻击，不消耗四风将起的可用次数，进行一次额外的特殊重击苍噬；\n·进行特殊重击苍噬后的短暂时间内，法尔伽可以点按元素战技，不消耗四风将起的可用次数，施放一次额外的四风将起。\n通过上述方式进行额外的特殊重击苍噬或施放额外的特殊元素战技四风将起时，无法触发上述效果。\n\n此外，突破天赋**「风帜的先引」**中「苍牙之誓」的效果获得强化：每层「苍牙之誓」还会使法尔伽的暴击伤害提升20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "varka.c6-azure-oath",
+          "activation": {
+            "ascension": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "varka.c6-azure-oath-crit",
+                "inputs": {
+                  "basis": {
+                    "fact": "varka.azureOath"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1904,6 +2861,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "苍牙之誓按触发者计时、长按战技在野外的冷却、狂飙突进的特殊战技次数和六命额外衔接仍需动作及资源事件。"
         }
       ]
     }
@@ -1958,6 +2920,174 @@
         ],
         "equals": "azure-fang"
       }
+    },
+    {
+      "id": "varka.party-pyro-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-pyro-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-hydro-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-hydro-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-electro-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-electro-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-cryo-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-cryo-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.party-anemo-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.attack-based-element",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.0001,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.25
+      }
+    },
+    {
+      "id": "varka.azure-oath-damage",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.075,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.azure-oath-special-scaling",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.075,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "varka.c6-azure-oath-crit",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4
+      }
     }
   ],
   "facts": {
@@ -1977,6 +3107,56 @@
           "azure-fang"
         ]
       }
+    },
+    "varka.azureOath": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "苍牙之誓层数"
+    },
+    "varka.kingWine": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次四风将起或苍噬消耗歌中的佳酿"
+    },
+    "varka.c4Gift": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "法尔伽触发扩散或星扩散后的十秒"
+    },
+    "varka.c4Gift.pyro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发对应扩散后的十秒（火）"
+    },
+    "varka.c4Gift.hydro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发对应扩散后的十秒（水）"
+    },
+    "varka.c4Gift.electro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发对应扩散后的十秒（雷）"
+    },
+    "varka.c4Gift.cryo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发对应扩散后的十秒（冰）"
     }
   }
 }

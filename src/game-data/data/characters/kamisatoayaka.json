@@ -740,7 +740,24 @@
       "id": "kamisatoayaka.passive2",
       "name": "寒天宣命祝词",
       "description": "神里流·霰步结束时释放的寒冰命中了敌人时，神里绫华将获得如下效果：\n·恢复10点体力；\n·获得18%冰元素伤害加成，持续10秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "kamisatoayaka.a1.senho-cryo",
+          "condition": {
+            "fact": "kamisatoayaka.senhoContact"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "amount": 0.18,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kamisatoayaka.passive3",
@@ -790,6 +807,42 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "kamisatoayaka.c2.smaller-frostflake-cut-factor",
+          "appliesTo": {
+            "hitIds": [
+              "kamisatoayaka.c2.smaller-frostflake-cut"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "kamisatoayaka.c2.smaller-frostflake-bloom-factor",
+          "appliesTo": {
+            "hitIds": [
+              "kamisatoayaka.c2.smaller-frostflake-bloom"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -807,7 +860,43 @@
       "rank": 4,
       "name": "盈缺流返",
       "description": "敌人受到神里流·霜灭的霜见雪关扉造成的伤害后，防御力降低30%，持续6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kamisatoayaka.c4.frostflake-defence",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "kamisatoayaka.burst.param1",
+                "kamisatoayaka.burst.param2",
+                "kamisatoayaka.c2.smaller-frostflake-cut",
+                "kamisatoayaka.c2.smaller-frostflake-bloom"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.defenseReduction",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -824,7 +913,29 @@
       "rank": 6,
       "name": "间水月",
       "description": "每过10秒，神里绫华会获得「薄冰舞踏」，使重击造成的伤害提高298%。薄冰舞踏效果将在重击命中敌人的0.5秒后清除，并重新开始计算时间。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "kamisatoayaka.c6.usurahi-butou",
+          "condition": {
+            "fact": "kamisatoayaka.usurahiButou"
+          },
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 2.98,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -853,5 +964,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kamisatoayaka.senhoContact": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "神里流·霰步结束时命中敌人后十秒内"
+    },
+    "kamisatoayaka.usurahiButou": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "薄冰舞踏尚未消耗或重击命中后未超过半秒"
+    }
+  }
 }

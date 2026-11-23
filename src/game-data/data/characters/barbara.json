@@ -763,13 +763,68 @@
       "rank": 1,
       "name": "彩色歌谣",
       "description": "芭芭拉每10秒恢复1点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "barbara.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "barbara.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "元气迸发",
       "description": "演唱，开始♪的冷却时间降低15%；\n技能持续期间，当前场上自己的角色获得15%水元素伤害加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "barbara.c2.melody-loop-hydro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "barbara.melodyLoop"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "barbara.c2.melody-loop-cooldown",
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReduction",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -786,7 +841,30 @@
       "rank": 4,
       "name": "努力即魔法",
       "description": "芭芭拉使用重击时，每命中一个敌人，就恢复1点元素能量。\n通过这种方式，一次至多回复5点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "barbara.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "barbara.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "barbara.directEnergy.c4.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "barbara.energyChargedTargets"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -865,5 +943,53 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "barbara.melodyLoop": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "歌声之环持续中"
+    },
+    "barbara.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "彩色歌谣本次到达10秒回复间隔"
+    },
+    "barbara.energyChargedTargets": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次重击命中的敌人数"
+    },
+    "barbara.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "芭芭拉本次使用重击"
+    }
+  },
+  "formulas": [
+    {
+      "id": "barbara.directEnergy.c4.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 5,
+        "revision": "1"
+      }
+    }
+  ]
 }

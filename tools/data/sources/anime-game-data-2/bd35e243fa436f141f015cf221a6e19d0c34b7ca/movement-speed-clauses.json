@@ -1,0 +1,1503 @@
+{
+  "source": {
+    "repository": "https://gitlab.com/Dimbreath/AnimeGameData2",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+    "capturedAt": "2026-11-22"
+  },
+  "entries": {
+    "diona": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Diona.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Diona_ElementalArt_Shield",
+            "modifiers": {
+              "UNIQUE_Diona_Elemental_Art_Shield": {
+                "duration": "IceShield_LifeTime",
+                "elementDurability": "IceShield_LifeTime",
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "GlobalMainShieldMixin",
+                    "childShieldModifierName": "UNIQUE_Diona_Elemental_Art_Shield_Child",
+                    "costShieldRatioName": "",
+                    "effectPattern": "Eff_Avatar_Loli_Bow_Diona_IceShield",
+                    "shieldAngle": 360,
+                    "shieldHP": [
+                      "SHieldHp_Const",
+                      "Shield_Enchanted_Ratio",
+                      "MUL",
+                      "Talent_Shield_Enchanted_Ratio",
+                      "MUL"
+                    ],
+                    "shieldHPRatio": [
+                      "SHield_Ratio",
+                      "Shield_Enchanted_Ratio",
+                      "MUL",
+                      "Talent_Shield_Enchanted_Ratio",
+                      "MUL"
+                    ],
+                    "shieldType": "Avatar_Ice",
+                    "showDamageText": "INFO_ELITE_DEFENCE"
+                  }
+                ],
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "FireEffect",
+                    "effectPattern": "Eff_Avatar_Loli_Bow_Diona_IceShield_Born",
+                    "effectTempleteID": -1,
+                    "scale": 1,
+                    "JHAGIJGAKMK": ""
+                  },
+                  {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_Diona_PermanentSkill_1_Handler",
+                    "predicates": [
+                      {
+                        "$type": "ByUnlockTalentParam",
+                        "talentParam": "Diona_PermanentSkill_1"
+                      }
+                    ],
+                    "target": "Team"
+                  }
+                ],
+                "onRemoved": [
+                  {
+                    "$type": "FireEffect",
+                    "effectPattern": "Eff_Avatar_Loli_Bow_Diona_IceShield_Die",
+                    "effectTempleteID": -1,
+                    "scale": 1,
+                    "JHAGIJGAKMK": ""
+                  }
+                ],
+                "stacking": "Unique",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Diona_Constellation_2_Shield": {
+                "duration": "Constellation_Shield_Duration",
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "GlobalMainShieldMixin",
+                    "childShieldModifierName": "UNIQUE_Diona_Constellation_2_Shield_Child",
+                    "costShieldRatioName": "",
+                    "effectPattern": "Eff_Avatar_Loli_Bow_Diona_IceShield",
+                    "shieldAngle": 360,
+                    "shieldHP": [
+                      "SHieldHp_Const",
+                      "Shield_Enchanted_Ratio",
+                      "MUL",
+                      "Talent_Shield_Enchanted_Ratio",
+                      "MUL",
+                      "Talent_Teammate_Shield_Ratio",
+                      "MUL"
+                    ],
+                    "shieldHPRatio": [
+                      "SHield_Ratio",
+                      "Shield_Enchanted_Ratio",
+                      "MUL",
+                      "Talent_Shield_Enchanted_Ratio",
+                      "MUL",
+                      "Talent_Teammate_Shield_Ratio",
+                      "MUL"
+                    ],
+                    "shieldType": "Avatar_Ice",
+                    "showDamageText": "INFO_ELITE_DEFENCE"
+                  }
+                ],
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "FireEffect",
+                    "effectPattern": "Eff_Avatar_Loli_Bow_Diona_IceShield_Born",
+                    "effectTempleteID": -1,
+                    "predicates": [
+                      {
+                        "$type": "ByEntityIsAlive",
+                        "target": "CurLocalAvatar"
+                      }
+                    ],
+                    "scale": 1,
+                    "JHAGIJGAKMK": ""
+                  },
+                  {
+                    "$type": "AttachModifier",
+                    "modifierName": "UNIQUE_Diona_PermanentSkill_1_Handler",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "forceByCaster": true,
+                        "key": "_ABILITY_Diona_PermanentSkill_1",
+                        "value": 1
+                      }
+                    ],
+                    "target": "Team"
+                  }
+                ],
+                "onRemoved": [
+                  {
+                    "$type": "FireEffect",
+                    "effectPattern": "Eff_Avatar_Loli_Bow_Diona_IceShield_Die",
+                    "effectTempleteID": -1,
+                    "predicates": [
+                      {
+                        "$type": "ByEntityIsAlive",
+                        "target": "CurLocalAvatar"
+                      }
+                    ],
+                    "scale": 1,
+                    "JHAGIJGAKMK": ""
+                  }
+                ],
+                "stacking": "Unique",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Diona_PermanentSkill_1_Handler": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "CurLocalAvatarMixinV2",
+                    "modifierName": "DionaPermanentSkill_SpeedUp"
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "DionaPermanentSkill_SpeedUp": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "modifierName": "",
+                "properties": {
+                  "Actor_CostStaminaRatio": "Diona_CostStaminaDelta",
+                  "Animator_MoveSpeedRatio": "Diona_Speed"
+                },
+                "state": "SpeedUp",
+                "IAKNCBDLFKJ": 0
+              }
+            }
+          }
+        ]
+      },
+      "passive": {
+        "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+        "record": {
+          "proudSkillId": 392101,
+          "openConfig": "Diona_PermanentSkill_1",
+          "breakLevel": 1,
+          "paramList": [
+            0.1,
+            -0.1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "dahlia": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dahlia.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Dahlia_PermanentSkill_3",
+            "modifiers": {
+              "Avatar_Dahlia_Talent_RunningInTheSun_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Mixin",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Mixin": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToDayNightMixin",
+                    "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Predicate",
+                    "ENNJNBNPGHG": true
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Predicate": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": 0.1
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Avatar_Dahlia_Talent_RunningInTheSun_Mixin",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Dahlia_Talent_RunningInTheSun_Handler"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dehya": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Dehya.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Dehya_Talent_RunningInTheSun",
+            "abilitySpecials": {
+              "Avatar_Dehya_Talent_RunningInTheSun_Speed": 0
+            },
+            "modifiers": {
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun_Mixin": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToDayNightMixin",
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun_Predicate",
+                    "ENNJNBNPGHG": true
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun_Predicate": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "Avatar_Dehya_Talent_RunningInTheSun_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun_Mixin",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": "Avatar_Dehya_Talent_RunningInTheSun_Speed"
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun_Mixin",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Dehya_Talent_RunningInTheSun_Handler"
+              }
+            ]
+          }
+        ]
+      },
+      "passive": {
+        "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+        "record": {
+          "proudSkillId": 792301,
+          "openConfig": "Dehya_Talent_RunningInTheSun",
+          "paramList": [
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "gaming": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Gaming.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Gaming_PermanentSkill_3",
+            "modifiers": {
+              "UNIQUE_Avatar_Gaming_Talent_RunningInTheSun_Mixin": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToDayNightMixin",
+                    "modifierName": "UNIQUE_Avatar_Gaming_Talent_RunningInTheSun_Predicate",
+                    "ENNJNBNPGHG": true
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Gaming_Talent_RunningInTheSun_Predicate": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "Avatar_Gaming_Talent_RunningInTheSun_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Gaming_Talent_RunningInTheSun_Mixin",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": 0.1
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Avatar_Gaming_Talent_RunningInTheSun_Mixin",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Gaming_Talent_RunningInTheSun_Handler"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "rosaria": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Rosaria.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Rosaria_Talent_RunningInTheNight",
+            "abilitySpecials": {
+              "Avatar_Rosaria_Talent_RunningInTheNight_Speed": 0
+            },
+            "modifiers": {
+              "UNIQUE_Avatar_Rosaria_Talent_RunningInTheNight_Mixin": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToDayNightMixin",
+                    "modifierName": "UNIQUE_Avatar_Rosaria_Talent_RunningInTheNight_Predicate",
+                    "time": "Night",
+                    "ENNJNBNPGHG": true
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Rosaria_Talent_RunningInTheNight_Predicate": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "Avatar_Rosaria_Talent_RunningInTheNight_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Rosaria_Talent_RunningInTheNight_Mixin",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": "Avatar_Rosaria_Talent_RunningInTheNight_Speed"
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Avatar_Rosaria_Talent_RunningInTheNight_Mixin",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Rosaria_Talent_RunningInTheNight_Handler"
+              }
+            ]
+          }
+        ]
+      },
+      "passive": {
+        "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+        "record": {
+          "proudSkillId": 452301,
+          "openConfig": "Rosaria_Talent_RunningInTheNight",
+          "paramList": [
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "illuga": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Illuga.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Illuga_Talent_RunningInTheNight",
+            "abilitySpecials": {
+              "Avatar_Illuga_Talent_RunningInTheNight_Speed": 0
+            },
+            "modifiers": {
+              "UNIQUE_Avatar_Illuga_Talent_RunningInTheNight_Mixin": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToDayNightMixin",
+                    "modifierName": "UNIQUE_Avatar_Illuga_Talent_RunningInTheNight_Predicate",
+                    "time": "Night",
+                    "ENNJNBNPGHG": true
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Illuga_Talent_RunningInTheNight_Predicate": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "Avatar_Illuga_Talent_RunningInTheNight_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Illuga_Talent_RunningInTheNight_Mixin",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": "Avatar_Illuga_Talent_RunningInTheNight_Speed"
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Avatar_Illuga_Talent_RunningInTheNight_Mixin",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Illuga_Talent_RunningInTheNight_Handler"
+              }
+            ]
+          }
+        ]
+      },
+      "passive": {
+        "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+        "record": {
+          "proudSkillId": 1272501,
+          "openConfig": "Illuga_PermanentSkill_3",
+          "paramList": [
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "chiori": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Chiori.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Chiori_PermanentSkill_3",
+            "modifiers": {
+              "Blank": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_CheckCoolGuys_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_CheckSelfIsCool_Avatar",
+                    "target": "CurTeamAvatars"
+                  },
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_CheckCoolGuys_Team_Handler",
+                    "target": "Team"
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_CheckSelfIsCool_Avatar",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 1,
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_CheckCoolGuys_Team_Handler": {
+                "elementDurability": 100,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachModifierToSelfGlobalValueMixin",
+                    "defaultGlobalValueOnCreate": 0,
+                    "globalValueKey": "_ABILITY_Chiori_HasAnyCostume",
+                    "modifierNameSteps": [
+                      "Blank",
+                      "Chiori_AddSpeed_Buff_Handler"
+                    ],
+                    "valueSteps": [
+                      -0.5,
+                      0.5,
+                      8.5
+                    ]
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_AddSpeed_Buff_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Avatar_Dehya_Talent_RunningInTheSun_Predicate",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Avatar_Dehya_Talent_RunningInTheSun_Predicate",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "Avatar_Dehya_Talent_RunningInTheSun_Predicate": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun",
+                    "predicates": [
+                      {
+                        "$type": "ByCurrentSceneTypes",
+                        "sceneTypes": [
+                          "SCENE_WORLD",
+                          "SCENE_ROOM"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Avatar_Dehya_Talent_RunningInTheSun": {
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": 0.1
+                },
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_CheckSelfIsCool_Avatar": {
+                "elementDurability": 100,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachModifierToCostumeTypeMixin",
+                    "modifierNames": [
+                      "Blank"
+                    ],
+                    "OMAIGDMCJBO": "Chiori_HasAnyCostume",
+                    "NIGDGLDFHDK": [
+                      0
+                    ]
+                  },
+                  {
+                    "$type": "AttachModifierToFlyCloakTypeMixin",
+                    "modifierNames": [
+                      "Blank"
+                    ],
+                    "OMAIGDMCJBO": "Chiori_HasAnyFlyCloak",
+                    "PBPKDAJOAAB": [
+                      140001
+                    ]
+                  }
+                ],
+                "modifierName": "",
+                "onReconnect": [
+                  {
+                    "$type": "RemoveModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_HasAnyCostume"
+                  },
+                  {
+                    "$type": "RemoveModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_CheckSelfIsCool_Avatar"
+                  }
+                ],
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_Costume_Count": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AddGlobalValue",
+                    "doOffStage": true,
+                    "key": "_ABILITY_Chiori_HasAnyCostume",
+                    "maxValue": 8,
+                    "minValue": 0,
+                    "useLimitRange": true,
+                    "value": 1
+                  }
+                ],
+                "onRemoved": [
+                  {
+                    "$type": "AddGlobalValue",
+                    "doOffStage": true,
+                    "key": "_ABILITY_Chiori_HasAnyCostume",
+                    "maxValue": 8,
+                    "minValue": 0,
+                    "useLimitRange": true,
+                    "value": -1
+                  }
+                ],
+                "stacking": "Multiple",
+                "stackingOption": {
+                  "abilitySpecialName": "",
+                  "maxModifierNumForMultipleType": 8
+                },
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_HasAnyCostume": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_Costume_Count",
+                    "target": "Team"
+                  }
+                ],
+                "IAKNCBDLFKJ": 0
+              },
+              "Chiori_HasAnyFlyCloak": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onAdded": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "Chiori_Costume_Count",
+                    "target": "Team"
+                  }
+                ],
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "SetGlobalValue",
+                "doOffStage": true,
+                "key": "_ABILITY_Chiori_HasAnyCostume",
+                "maxValue": 0,
+                "minValue": 0,
+                "target": "Team",
+                "value": 0
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Chiori_CheckCoolGuys_Handler"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "kinich": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Kinich.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Kinich_PermanentSkill_4_Collect",
+            "abilitySpecials": {
+              "Duration": 0,
+              "Speed": 0
+            },
+            "modifiers": {
+              "UNIQUE_Kinich_Gather_Handler": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "CurLocalAvatarMixinV2",
+                    "isUnique": true,
+                    "modifierName": "UNIQUE_Kinich_Gather"
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Kinich_Gather": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "DoActionByEventMixin",
+                    "actions": [
+                      {
+                        "$type": "ApplyModifier",
+                        "modifierName": "UNIQUE_Kinich_Speed_Up",
+                        "predicates": [
+                          {
+                            "$type": "ByTargetPositionToSelfPosition",
+                            "logic": "LesserOrEqual",
+                            "value": 40,
+                            "FPDDDGMBDKP": "",
+                            "GCDNHEEGIPE": ""
+                          }
+                        ],
+                        "target": "CurTeamAvatars"
+                      }
+                    ],
+                    "costEnergyDeltaName": "",
+                    "onEvent": "GatherItem",
+                    "predicates": [
+                      {
+                        "$type": "ByGatherType",
+                        "type": "SpecialGathering"
+                      },
+                      {
+                        "$type": "BMNDABJGDHD"
+                      }
+                    ]
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Kinich_Speed_Up": {
+                "duration": "Duration",
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "isUnique": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": "Speed"
+                },
+                "state": "SpeedUp",
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "modifierName": "UNIQUE_Kinich_Gather_Handler"
+              }
+            ]
+          },
+          {
+            "abilityName": "Avatar_Kinich_ElementalArt_HookMove",
+            "modifiers": {
+              "Kinich_Grapnel_DropEffect_Talent_1": {
+                "duration": 10,
+                "elementDurability": 100,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToStateIDMixin",
+                    "isCheckOnAttach": true,
+                    "modifierName": "Kinich_Talent_1_Applier",
+                    "stateIDs": [
+                      "Kinich_BigWorld_HookBS",
+                      "Kinich_BigWorld_HookRecoverNoRoot",
+                      "Kinich_BigWorld_HookMove_Drop",
+                      "Kinich_BigWorld_HookAirBS",
+                      "Kinich_BigWorld_HookAirDrop",
+                      "Kinich_BigWorld_HookAirAS",
+                      "Kinich_BigWorld_Hook_TargetPos_BS",
+                      "Kinich_BigWorld_Hook_TargetPos_Loop",
+                      "Kinich_BigWorld_Hook_TargetPos_AS",
+                      "Kinich_BigWorld_Hook_TargetPos_Drop",
+                      "Fall"
+                    ],
+                    "HLGPLGFCHND": ""
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "Kinich_Talent_1_Applier": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onRemoved": [
+                  {
+                    "$type": "TriggerAbility",
+                    "abilityName": "Avatar_Kinich_Talent_1",
+                    "doOffStage": true
+                  },
+                  {
+                    "$type": "RemoveModifier",
+                    "doOffStage": true,
+                    "modifierName": "Kinich_Grapnel_DropEffect_Talent_1"
+                  }
+                ],
+                "IAKNCBDLFKJ": 0
+              }
+            }
+          },
+          {
+            "abilityName": "Avatar_Kinich_Talent_1",
+            "abilitySpecials": {
+              "CritUp": 0,
+              "MovespeedRatio": 0,
+              "MovespeedDuration": 0
+            },
+            "modifiers": {
+              "Avatar_Kinich_Talent_1_MoveSpeed": {
+                "duration": "MovespeedDuration",
+                "elementDurability": 100,
+                "isLimitedProperties": true,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": "MovespeedRatio"
+                },
+                "state": "SpeedUp",
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAbilityStart": [
+              {
+                "$type": "ApplyModifier",
+                "modifierName": "Avatar_Kinich_Talent_1_MoveSpeed"
+              }
+            ]
+          }
+        ]
+      },
+      "passive": {
+        "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+        "record": {
+          "proudSkillId": 1012501,
+          "openConfig": "Kinich_PermanentSkill_4",
+          "effectiveForTeam": 1,
+          "paramList": [
+            0.15,
+            10,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "constellation": {
+        "path": "ExcelBinOutput/AvatarTalentExcelConfigData.json",
+        "record": {
+          "talentId": 1011,
+          "openConfig": "Kinich_Constellation_1",
+          "paramList": [
+            0.3,
+            6,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "neuvillette": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Neuvillette.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Neuvillette_DiveDashSpeedUp",
+            "modifiers": {
+              "DiveDashSpeedUp_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_DiveDashSpeedUp",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_DiveDashSpeedUp": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToMultiNormalizedTimeMixin",
+                    "modifierName": "DiveDashSpeedUp",
+                    "normalizedStateIDList": [
+                      {
+                        "stateID": "DiveDashBS"
+                      },
+                      {
+                        "stateID": "DiveDash"
+                      },
+                      {
+                        "stateID": "DiveDashB"
+                      },
+                      {
+                        "stateID": "DiveDashAS"
+                      }
+                    ],
+                    "HLGPLGFCHND": ""
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "DiveDashSpeedUp": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "properties": {
+                  "Animator_MoveSpeedRatio": 0.15
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_DiveDashSpeedUp",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "DiveDashSpeedUp_Handler"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "xianyun": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Liuyun.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Liuyun_PermanentSkill_3",
+            "modifiers": {
+              "Avatar_Avatar_Liuyun_PermanentSkill_3_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Fly_SpeedUp",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Fly_SpeedUp": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToStateIDMixin",
+                    "modifierName": "Fly_SpeedUp",
+                    "stateIDs": [
+                      "Fly"
+                    ],
+                    "HLGPLGFCHND": ""
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "Fly_SpeedUp": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "properties": {
+                  "Actor_FlyForwardSpeedMaxRatio": 0.15
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Fly_SpeedUp",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Avatar_Liuyun_PermanentSkill_3_Handler"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ororon": {
+      "ability": {
+        "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Olorun.json",
+        "records": [
+          {
+            "abilityName": "Avatar_Olorun_PermanentSkill_4",
+            "modifiers": {
+              "Avatar_Avatar_Olorun_PermanentSkill_4_Handler": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "onThinkInterval": [
+                  {
+                    "$type": "AttachModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_Fly_SpeedUp",
+                    "target": "CurTeamAvatars"
+                  }
+                ],
+                "thinkInterval": 5,
+                "IAKNCBDLFKJ": 0
+              },
+              "UNIQUE_Fly_SpeedUp": {
+                "elementDurability": 100,
+                "isUnique": true,
+                "modifierMixins": [
+                  {
+                    "$type": "AttachToStateIDMixin",
+                    "modifierName": "Fly_SpeedUp",
+                    "stateIDs": [
+                      "Fly"
+                    ],
+                    "HLGPLGFCHND": ""
+                  }
+                ],
+                "modifierName": "",
+                "IAKNCBDLFKJ": 0
+              },
+              "Fly_SpeedUp": {
+                "elementDurability": 100,
+                "modifierName": "",
+                "properties": {
+                  "Actor_FlyForwardSpeedMaxRatio": 0.15
+                },
+                "IAKNCBDLFKJ": 0
+              }
+            },
+            "onAdded": [
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "UNIQUE_Fly_SpeedUp",
+                "target": "CurTeamAvatars"
+              },
+              {
+                "$type": "AttachModifier",
+                "doOffStage": true,
+                "modifierName": "Avatar_Avatar_Olorun_PermanentSkill_4_Handler"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

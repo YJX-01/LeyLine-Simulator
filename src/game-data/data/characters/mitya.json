@@ -888,13 +888,53 @@
       "id": "mitya.passive1",
       "name": "基准承压测验",
       "description": "元素战技律定·变量侦测创造的**侦测炉心**获得强化。若创造的侦测炉心为：\n·稳态：每携带一枚**递变信标**，都会使队伍中附近的所有角色的元素精通提升30点；\n·过载：队伍中附近的所有角色触发星超导反应后，获得递变信标的数量提升：改为在6秒内，每1.5秒获得一枚递变信标。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "mitya.a0.steady-mastery",
+          "recipient": "team",
+          "condition": {
+            "fact": "mitya.stable"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "mitya.steady-mastery",
+                "inputs": {
+                  "input": {
+                    "fact": "mitya.heldBeacons"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mitya.passive2",
       "name": "超限易爆试剂",
       "description": "**递变信标**的持续时间提升至10秒。此外，创造递变信标后的15秒内，米提亚的暴击率提升5%，该效果至多叠加4层。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "mitya.a1.beacon-crit",
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "mitya.beacon-crit",
+                "inputs": {
+                  "input": {
+                    "fact": "mitya.createdBeaconStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mitya.passive3",
@@ -938,13 +978,124 @@
       "rank": 1,
       "name": "缺位寻踪的观察者",
       "description": "**递变信标**的可携带上限提升至5枚。施放元素战技律定·变量侦测时，还会额外创造一枚递变信标。\n**侦测炉心**存在期间，队伍中自己的当前场上角色的暴击伤害提升40%。\n此外，创造递变信标时，还会为米提亚自己恢复10点元素能量，该效果每8秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mitya.c1.core-crit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "mitya.detectionCorePresent"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mitya.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "mitya.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 10,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "惰性之外的沉寂物",
       "description": "**侦测炉心**存在期间，处于极星辉域内的所有敌人冰元素抗性与雷元素抗性降低20%。\n此外，若创造的侦测炉心为：\n·稳态：队伍中附近的所有角色的元素精通提升123点；\n·过载：队伍中自己的当前场上角色的元素精通提升234点。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mitya.c2.polar-field-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "mitya.polarFieldEnemy"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mitya.c2.steady-extra-em",
+          "recipient": "team",
+          "condition": {
+            "fact": "mitya.stable"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 123,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mitya.c2.overload-extra-em",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "mitya.overload"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 234,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -998,7 +1149,51 @@
       "rank": 6,
       "name": "元素阶跃的理之门",
       "description": "**侦测炉心**获得强化。若创造的侦测炉心为：\n·稳态：侦测炉心造成原本115%的伤害；\n·过载：消耗**递变信标**时，有34%的概率创造一枚新的递变信标。\n此外，队伍中附近的所有角色造成的星超导反应伤害**擢升**20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mitya.c6-conduct-elevation",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.elevation",
+              "value": 0.2
+            }
+          ],
+          "stacking": {
+            "crossOwnerUnverified": true
+          }
+        },
+        {
+          "id": "mitya.c6-steady-core-damage",
+          "condition": {
+            "fact": "mitya.stable"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "mitya.skill.param3",
+              "mitya.skill.param4",
+              "mitya.skill.param5",
+              "mitya.c4.beacon-consumption"
+            ],
+            "families": [
+              "ordinary",
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 1.15
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1060,6 +1255,81 @@
         "kind": "boolean"
       },
       "label": "侦测炉心在场时已消耗五枚递变信标"
+    },
+    "mitya.heldBeacons": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "稳态下持有的递变信标数量"
+    },
+    "mitya.createdBeaconStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "最近十五秒创造递变信标得到的有效层数"
+    },
+    "mitya.detectionCorePresent": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "侦测炉心在场"
+    },
+    "mitya.polarFieldEnemy": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于侦测炉心的极星辉域"
+    },
+    "mitya.overload": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于过载模式"
+    },
+    "mitya.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "创造递变信标，本次可回复能量（间隔至少8秒）"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "mitya.steady-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "elementalMastery",
+        "rate": 30,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "mitya.beacon-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    }
+  ]
 }

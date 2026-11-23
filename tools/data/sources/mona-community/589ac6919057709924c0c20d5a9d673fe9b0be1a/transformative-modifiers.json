@@ -1,0 +1,28 @@
+{
+  "source": {
+    "id": "mona.transformative-flat-crit",
+    "kind": "repo",
+    "repository": "TwiceDrop/genshin_artifact",
+    "commit": "589ac6919057709924c0c20d5a9d673fe9b0be1a",
+    "path": "mona_core/src/damage/transformative_damage.rs"
+  },
+  "lines": [
+    124,
+    167
+  ],
+  "reactions": [
+    "swirl",
+    "bloom",
+    "hyperbloom",
+    "burgeon"
+  ],
+  "base": "coefficient * levelMultiplier * (1 + masteryBonus + reactionBonus)",
+  "damage": "(base + flatBonus) * resistanceFactor * criticalFactor",
+  "criticalChance": "clamp(sum of applicable fixed chances, 0, 1)",
+  "criticalDamage": "maximum of the applicable fixed damage bonuses",
+  "characterFields": [
+    "nahida/constellations/1",
+    "lauma/passives/0",
+    "yumemizukimizuki/constellations/5"
+  ]
+}

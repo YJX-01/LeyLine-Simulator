@@ -925,7 +925,30 @@
       "id": "lumine-hydro.passive2",
       "name": "澄明的净水",
       "description": "长按施放水纹剑时如果通过充盈消耗了生命值，则在施放结束时的喷发激流造成的伤害提高，提高值为旅行者在此次施放期间通过充盈消耗的生命值总和的45%。\n通过这种方式，至多使伤害提高5000点。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "lumine-hydro.a1.clear-waters",
+          "appliesTo": {
+            "hitIds": [
+              "lumine-hydro.skill.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "lumine-hydro.clear-waters",
+                "inputs": {
+                  "input": {
+                    "fact": "lumine-hydro.suffusionHpConsumed"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -933,7 +956,28 @@
       "rank": 1,
       "name": "微澜的湖水",
       "description": "拾取源水之滴后，旅行者将恢复2点元素能量。\n需要解锁突破天赋「无染的澈水」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lumine-hydro.directEnergy.c1",
+          "application": "explicit",
+          "activation": {
+            "ascension": 1
+          },
+          "condition": {
+            "fact": "lumine-hydro.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -956,7 +1000,105 @@
       "rank": 4,
       "name": "倾落的迸水",
       "description": "施放水纹剑时，将生成一个伤害吸收量等于生命值上限10%的水纹护盾，对水元素伤害有250%的吸收效果，持续直到施放完成。\n每2秒一次，露滴命中敌人后，如果旅行者处于水纹护盾的庇护下，则将水纹护盾的伤害吸收量补充至旅行者生命值上限的10%；如果不处于水纹护盾的庇护下，则重新产生水纹护盾。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lumine-hydro.c4.torrent-surge-shield",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "lumine-hydro.torrentSurgeShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.1,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": 0.1,
+                      "flat": {
+                        "amount": 0,
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "lumine-hydro.torrent-surge-shield.hydro",
+                "inputs": {
+                  "mode": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.1,
+                  "flat": {
+                    "amount": 0,
+                    "unit": "hp"
+                  }
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "lumine-hydro.torrent-surge-shield.hydro",
+                    "inputs": {
+                      "mode": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1002,5 +1144,65 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lumine-hydro.suffusionHpConsumed": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "长按水纹剑时充盈消耗的生命值"
+    },
+    "lumine-hydro.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "水元素旅行者本次拾取一枚源水之滴"
+    },
+    "lumine-hydro.torrentSurgeShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前长按水纹剑且旅行者处于水纹护盾庇护下"
+    }
+  },
+  "formulas": [
+    {
+      "id": "lumine-hydro.clear-waters",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.45,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 5000,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "lumine-hydro.torrent-surge-shield.hydro",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "physical",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "hydro",
+        "revision": "1"
+      }
+    }
+  ]
 }

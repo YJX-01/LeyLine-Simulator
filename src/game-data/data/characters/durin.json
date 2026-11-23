@@ -639,7 +639,26 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "durin.directEnergy.t1",
+          "application": "explicit",
+          "condition": {
+            "fact": "durin.directEnergy.t1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "durin.skill",
+                "parameter": "param5",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "durin.burst",
@@ -1036,13 +1055,188 @@
       "id": "durin.passive1",
       "name": "光灵遵神数显现",
       "description": "依据杜林施放元素爆发显现的力量形态，分别产生不同的强化效果。若杜林的力量显现为：\n\n白焰之龙\n队伍中附近的角色对敌人触发燃烧、超载、火元素扩散、火元素结晶反应后，或对处于燃烧状态下的敌人造成火元素伤害或草元素伤害时，该敌人的火元素抗性与参与反应的对应元素抗性降低20%，持续6秒。\n\n黑蚀之龙\n杜林触发的蒸发反应造成的伤害提升40%，融化反应造成的伤害提升40%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "durin.a0.white-dragon-shred-pyro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "durin.whiteDragonActive"
+              },
+              "term1": {
+                "fact": "durin.whiteDragonShred-pyro"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.a0.white-dragon-shred-dendro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "durin.whiteDragonActive"
+              },
+              "term1": {
+                "fact": "durin.whiteDragonShred-dendro"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.dendro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.a0.white-dragon-shred-electro",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "durin.whiteDragonActive"
+              },
+              "term1": {
+                "fact": "durin.whiteDragonShred-electro"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.a0.white-dragon-shred-anemo",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "durin.whiteDragonActive"
+              },
+              "term1": {
+                "fact": "durin.whiteDragonShred-anemo"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.a0.white-dragon-shred-geo",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "durin.whiteDragonActive"
+              },
+              "term1": {
+                "fact": "durin.whiteDragonShred-geo"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.a0.black-dragon-amplifying",
+          "condition": {
+            "fact": "durin.blackDragonActive"
+          },
+          "appliesTo": {
+            "reactionIds": [
+              "melt",
+              "vaporize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.amplifyingReactionBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "durin.passive2",
       "name": "混沌如黑夜构成",
       "description": "施放元素爆发后的20秒内，杜林将获得「肇象熔炼」效果：持续期间，杜林将获得10层「肇象」，白焰之龙与黑蚀之龙的间歇性攻击造成伤害时，将消耗1层「肇象」，提升造成的伤害，每100点攻击力都将额外造成相当于原本3%的伤害，至多通过这种方式额外造成相当于原本75%的伤害。一次白焰之龙与黑蚀之龙同时命中多名敌人时，只会消耗一层「肇象」。\n再次施放元素爆发时，「肇象」的层数将会刷新。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "durin.a1.dragon-primordial",
+          "appliesTo": {
+            "hitIds": [
+              "durin.burst.param7",
+              "durin.burst.param8"
+            ]
+          },
+          "condition": {
+            "fact": "durin.primordialStackReady"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "call": "durin.dragon-primordial",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "durin.passive3",
@@ -1056,13 +1250,221 @@
       "rank": 1,
       "name": "红土之逆",
       "description": "施放元素爆发后，依据杜林施放的元素爆发，会分别造成不同的效果：\n·白化法·如光流变：队伍中附近的所有其他角色获得20层「轮变启迪」，持续20秒。拥有「轮变启迪」的当前场上角色的普通攻击、重击、下落攻击、元素战技或元素爆发造成伤害时，将消耗1层「轮变启迪」，提升造成的伤害，提升值相当于杜林攻击力的60%。队伍中拥有「轮变启迪」的角色，其生效次数单独计算。\n·黑度法·如星阴燃：杜林获得20层「轮变启迪」，持续20秒。杜林造成元素爆发伤害时，将消耗2层「轮变启迪」，提升造成的伤害，提升值相当于杜林攻击力的150%。\n\n施放元素爆发时，「轮变启迪」的层数将会刷新。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "durin.c1.white-whorl",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "durin.whiteDragonActive"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "durin.recipientWhiteWhorl"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "amount": 0.6,
+                    "unit": "scalar"
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c1.black-whorl",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "durin.blackDragonActive"
+              },
+              "term1": {
+                "fact": "durin.blackWhorlRemaining"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "amount": 1.5,
+                    "unit": "scalar"
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "无底之想",
       "description": "杜林施放元素爆发后的20秒内，队伍中附近的角色对敌人触发蒸发、融化、燃烧、超载、火元素扩散或火元素结晶反应后，或对处于燃烧状态下的敌人造成火元素伤害或草元素伤害时，队伍中附近的角色造成的火元素伤害与参与反应的对应元素伤害提升50%，持续6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "durin.c2.reactive-pyro",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-pyro"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c2.reactive-dendro",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-dendro"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c2.reactive-electro",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-electro"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c2.reactive-anemo",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-anemo"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c2.reactive-geo",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-geo"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c2.reactive-hydro",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-hydro"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c2.reactive-cryo",
+          "recipient": "team",
+          "condition": {
+            "fact": "durin.reactiveWindow-cryo"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1079,7 +1481,26 @@
       "rank": 4,
       "name": "流溢之原",
       "description": "杜林造成的元素爆发伤害提升40%。此外，触发命之座**「红土之逆」**中消耗「轮变启迪」的效果时，有30%几率不会消耗「轮变启迪」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "durin.c4.dragon-burst",
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1096,7 +1517,80 @@
       "rank": 6,
       "name": "双重诞生",
       "description": "杜林造成的元素爆发伤害将无视敌人30%的防御力。\n此外，杜林的元素爆发白化法·如光流变与黑度法·如星阴燃分别获得强化：\n·元素爆发白化法·如光流变与「白焰之龙」命中敌人时，该敌人的防御力降低30%，持续6秒；\n·元素爆发黑度法·如星阴燃与「黑蚀之龙」造成的伤害将额外无视敌人40%的防御力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "durin.c6.white-dragon-defence",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "durin.burst.param1",
+                "durin.burst.param2",
+                "durin.burst.param3",
+                "durin.burst.param7"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.defenseReduction",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c6.burst-defense-ignore",
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defenseIgnore",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "durin.c6.black-dragon-defense-ignore",
+          "appliesTo": {
+            "hitIds": [
+              "durin.burst.param4",
+              "durin.burst.param5",
+              "durin.burst.param6",
+              "durin.burst.param8"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defenseIgnore",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1125,5 +1619,150 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "durin.dragon-primordial",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.0003,
+        "offset": 1,
+        "threshold": 0,
+        "output": "value",
+        "cap": 1.75,
+        "revision": "1"
+      }
+    }
+  ],
+  "facts": {
+    "durin.primordialStackReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "肇象熔炼期间还有肇象层数"
+    },
+    "durin.whiteDragonActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白焰之龙在场"
+    },
+    "durin.blackDragonActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "黑蚀之龙在场"
+    },
+    "durin.whiteDragonShred-pyro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白焰之龙在场时，针对该目标的火元素减抗已触发且仍在六秒内"
+    },
+    "durin.whiteDragonShred-dendro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白焰之龙在场时，针对该目标的草元素减抗已触发且仍在六秒内"
+    },
+    "durin.whiteDragonShred-electro": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白焰之龙在场时，针对该目标的雷元素减抗已触发且仍在六秒内"
+    },
+    "durin.whiteDragonShred-anemo": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白焰之龙在场时，针对该目标的风元素减抗已触发且仍在六秒内"
+    },
+    "durin.whiteDragonShred-geo": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白焰之龙在场时，针对该目标的岩元素减抗已触发且仍在六秒内"
+    },
+    "durin.recipientWhiteWhorl": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白化法·如光流变赋予的轮变启迪仍有效，且当前角色有至少一层"
+    },
+    "durin.blackWhorlRemaining": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "黑度法·如星阴燃赋予的轮变启迪仍有效，且杜林有至少两层"
+    },
+    "durin.reactiveWindow-pyro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，火元素加成的六秒窗口仍在"
+    },
+    "durin.reactiveWindow-dendro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，草元素加成的六秒窗口仍在"
+    },
+    "durin.reactiveWindow-electro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，雷元素加成的六秒窗口仍在"
+    },
+    "durin.reactiveWindow-anemo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，风元素加成的六秒窗口仍在"
+    },
+    "durin.reactiveWindow-geo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，岩元素加成的六秒窗口仍在"
+    },
+    "durin.reactiveWindow-hydro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，水元素加成的六秒窗口仍在"
+    },
+    "durin.reactiveWindow-cryo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "元素爆发后二十秒内触发对应反应或对燃烧目标造成对应伤害，冰元素加成的六秒窗口仍在"
+    },
+    "durin.directEnergy.t1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "战斗中进入白化之是或黑度之否，本次可回复能量（间隔至少6秒）"
+    }
+  }
 }

@@ -820,6 +820,47 @@
           "flat": "param6",
           "recipient": "on-field"
         }
+      ],
+      "buffs": [
+        {
+          "id": "baizhu.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "baizhu.gossamerShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "baizhu.burst"
+                  },
+                  "flat": {
+                    "parameter": "param2",
+                    "skill": "baizhu.burst",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -828,13 +869,118 @@
       "id": "baizhu.passive1",
       "name": "五运终天",
       "description": "依据队伍中自己的当前场上角色的生命值，白术将获得不同的效果：\n·生命值低于50%时，白术获得20%治疗加成；\n·生命值高于或等于50%时，白术获得25%草元素伤害加成。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "baizhu.a0.five-fortunes",
+          "modifiers": [
+            {
+              "target": "attribute.healingBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "hp.below50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "hp.at-least50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "baizhu.passive2",
       "name": "在地为化",
       "description": "受到无郤气护盾治疗的角色，将获得「木运之岁」效果：基于白术生命值上限不超过50000点的部分，每1000点将使该角色触发的燃烧、绽放、超绽放、烈绽放反应造成的伤害提升2%，超激化、蔓激化反应带来的伤害提升提高0.8%，月绽放反应伤害提升0.7%，持续6秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "baizhu.a1.wood-favor",
+          "recipient": "team",
+          "condition": {
+            "fact": "baizhu.gossamerShieldTreated"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "call": "baizhu.wood-favor-bloom",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              },
+              "appliesTo": {
+                "reactionIds": [
+                  "burning",
+                  "bloom",
+                  "hyperbloom",
+                  "burgeon"
+                ]
+              }
+            },
+            {
+              "target": "attribute.additiveReactionBonus",
+              "value": {
+                "call": "baizhu.wood-favor-aggravate",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              },
+              "appliesTo": {
+                "reactionIds": [
+                  "aggravate",
+                  "spread"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "call": "baizhu.wood-favor-lunar",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "lunar-bloom"
+                ],
+                "reactionIds": [
+                  "lunar-bloom"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "baizhu.passive3",
@@ -941,7 +1087,30 @@
       "rank": 6,
       "name": "真邪合离",
       "description": "愈气全形论的灵气脉造成的伤害提高，提升值相当于白术生命值上限的8%。\n此外，游丝徵灵或游丝徵灵·切在命中敌人时，有100%概率产生愈气全形论的无郤气护盾，该效果每个游丝徵灵或游丝徵灵·切只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "baizhu.c6.spiritvein-hp",
+          "appliesTo": {
+            "hitIds": [
+              "baizhu.burst.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "baizhu.spiritvein-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -978,6 +1147,81 @@
         "kind": "boolean"
       },
       "label": "场上角色命中后游丝徵灵·切可触发"
+    },
+    "baizhu.gossamerShieldTreated": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "近六秒内受无郤气护盾治疗"
+    },
+    "baizhu.gossamerShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由无郤气护盾庇护"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "baizhu.wood-favor-bloom",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.00002,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 1,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "baizhu.wood-favor-aggravate",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000008,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.4,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "baizhu.wood-favor-lunar",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 0.000007,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.35,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "baizhu.spiritvein-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.08,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ]
 }

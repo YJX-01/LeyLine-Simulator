@@ -637,7 +637,11 @@
               "wanderer.normal.param1",
               "wanderer.normal.param2",
               "wanderer.normal.param3",
-              "wanderer.normal.param4"
+              "wanderer.normal.param4",
+              "wanderer.c6.kuugo-param1",
+              "wanderer.c6.kuugo-param2",
+              "wanderer.c6.kuugo-param3",
+              "wanderer.c6.kuugo-param4"
             ]
           },
           "condition": {
@@ -789,7 +793,73 @@
       "id": "wanderer.passive1",
       "name": "拾玉得花",
       "description": "施放羽画·风姿华歌时，若接触了水元素/火元素/冰元素/雷元素，则会依据触及的元素，在此次优风倾姿状态下获得对应的强化效果：\n·水元素：空居力上限提升20点；\n·火元素：攻击力提升30%；\n·冰元素：暴击率提升20%；\n·雷元素：普通攻击与重击命中敌人后，恢复0.8点元素能量，每0.2秒至多通过上述方式恢复一次元素能量。\n\n同时至多获得2种元素对应的强化效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "wanderer.a0.jade-claimed-pyro",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "wanderer.windfavored"
+              },
+              "term1": {
+                "fact": "wanderer.jadeClaimed-pyro"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wanderer.a0.jade-claimed-cryo",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "wanderer.windfavored"
+              },
+              "term1": {
+                "fact": "wanderer.jadeClaimed-cryo"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wanderer.directEnergy.p0",
+          "application": "explicit",
+          "condition": {
+            "fact": "wanderer.directEnergy.p0"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 0.8,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "wanderer.passive2",
@@ -839,13 +909,71 @@
       "rank": 1,
       "name": "初番·茂风流羽行",
       "description": "在优风倾姿状态下，流浪者进行空居·不生断与空居·刀风界的攻击速度提升10%。\n此外，突破天赋「梦迹一风」发射的风矢能额外造成25%攻击力的伤害，该效果需要解锁突破天赋「梦迹一风」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "wanderer.c1.descent-arrow-strength",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.a1.descent-arrow"
+            ]
+          },
+          "condition": {
+            "call": "rank.at-least-4",
+            "inputs": {
+              "rank": {
+                "state": "ascension"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "wanderer.descent-arrow-strength",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "二番·箙岛廓白浪",
       "description": "在优风倾姿状态下，狂言·式乐五番将依据空居力上限与当前的空居力的差值，每1点使此次狂言·式乐五番造成的伤害提升4%。\n通过这种方式，至多使狂言·式乐五番造成的伤害提升200%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "wanderer.c2.kugen-burst",
+          "appliesTo": {
+            "skillIds": [
+              "wanderer.burst"
+            ]
+          },
+          "condition": {
+            "fact": "wanderer.windfavored"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "wanderer.kugen-burst",
+                "inputs": {
+                  "input": {
+                    "fact": "wanderer.kugoryokuDepletion"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -953,6 +1081,76 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "wanderer.c6.kuugo-param1-factor",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.c6.kuugo-param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wanderer.c6.kuugo-param2-factor",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.c6.kuugo-param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wanderer.c6.kuugo-param3-factor",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.c6.kuugo-param3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wanderer.c6.kuugo-param4-factor",
+          "appliesTo": {
+            "hitIds": [
+              "wanderer.c6.kuugo-param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -997,12 +1195,41 @@
       },
       "label": "在优风倾姿中消耗倾落进行空中加速"
     },
+    "wanderer.kugoryokuDepletion": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "优风倾姿状态当前空居力与上限的差额"
+    },
+    "wanderer.jadeClaimed-pyro": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "火元素触发拾玉得花"
+    },
+    "wanderer.jadeClaimed-cryo": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "冰元素触发拾玉得花"
+    },
     "wanderer.extraKuugo": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "优风倾姿期间主动施放空居·不生断并命中"
+    },
+    "wanderer.directEnergy.p0": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "优风倾姿获得雷元素强化后，普攻或重击命中敌人，本次可回复能量（间隔至少0.2秒）"
     }
   },
   "formulas": [
@@ -1014,6 +1241,35 @@
         "operator": "all",
         "terms": 1,
         "negate": true
+      }
+    },
+    {
+      "id": "wanderer.descent-arrow-strength",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 0.25,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "wanderer.kugen-burst",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.04,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 2,
+        "revision": "1"
       }
     }
   ]

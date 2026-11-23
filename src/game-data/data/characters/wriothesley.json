@@ -848,13 +848,68 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "wriothesley.a0.gracious-rebuke",
+          "appliesTo": {
+            "hitIds": [
+              "wriothesley.a0.rebuke-vaulting-fist"
+            ]
+          },
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-1",
+                "inputs": {
+                  "rank": {
+                    "state": "constellation"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "id": "wriothesley.passive2",
       "name": "罪业终有报偿之时",
       "description": "莱欧斯利的当前生命值提升或降低时，若莱欧斯利处于冰牙突驰的寒烈的惩裁状态下，寒烈的惩裁将获得一层「检偿之敕」效果，该效果至多叠加至5层，每层使莱欧斯利的攻击力提升6%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "wriothesley.a1.prosecution-edict",
+          "condition": {
+            "fact": "wriothesley.chillingPenalty"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "wriothesley.prosecution-edict",
+                "inputs": {
+                  "input": {
+                    "fact": "wriothesley.prosecutionEdictStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "wriothesley.passive3",
@@ -868,13 +923,82 @@
       "rank": 1,
       "name": "予行恶者以惩惧",
       "description": "突破天赋「公理终有辩诉之日」的「恩典之诫」转变为：\n莱欧斯利的生命值低于60%，或在冰牙突驰的寒烈的惩裁状态持续期间，斥逐拳的第五段攻击命中时，将获得「恩典之诫」，每2.5秒至多获得一次「恩典之诫」效果。\n\n此外，惩戒·凌跃拳获得以下强化：\n·造成的伤害提升进一步提升至200%；\n·命中时，若处于寒烈的惩裁状态下，该状态的持续时间延长4秒，在一次寒烈的惩裁状态持续期间，至多通过这种方式延长一次。\n\n需要解锁突破天赋「公理终有辩诉之日」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "wriothesley.c1.gracious-rebuke-enhanced",
+          "appliesTo": {
+            "hitIds": [
+              "wriothesley.a0.rebuke-vaulting-fist"
+            ]
+          },
+          "condition": {
+            "call": "rank.at-least-1",
+            "inputs": {
+              "rank": {
+                "state": "ascension"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "予骄暴者以镣锁",
       "description": "施放黑金狼噬时，突破天赋「罪业终有报偿之时」的每层「检偿之敕」效果都将使造成的伤害提升40%。\n需要解锁突破天赋「罪业终有报偿之时」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "wriothesley.c2.prosecution-burst",
+          "appliesTo": {
+            "skillIds": [
+              "wriothesley.burst"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-4",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "wriothesley.chillingPenalty"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "wriothesley.prosecution-burst",
+                "inputs": {
+                  "input": {
+                    "fact": "wriothesley.prosecutionEdictStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -891,7 +1015,47 @@
       "rank": 4,
       "name": "予贞苦者以拯赎",
       "description": "惩戒·凌跃拳为莱欧斯利恢复生命值的回复量提升为50%生命值上限，需要解锁突破天赋「公理终有辩诉之日」。\n此外，莱欧斯利受到治疗时，若此次治疗回复量溢出，将根据莱欧斯利是否处于当前场上产生不同的效果：处于当前场上时，莱欧斯利的攻击速度提升20%，持续4秒；处于队伍后台时，队伍中所有自己的角色攻击速度提升10%，持续6秒。上述这两种攻击速度提升效果无法叠加。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "wriothesley.c4.overheal-on-field",
+          "recipient": "owner",
+          "condition": {
+            "call": "wriothesley.c4.overheal-on-field-active",
+            "inputs": {
+              "mode": {
+                "fact": "wriothesley.overhealAttackSpeedMode"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "wriothesley.c4.overheal-off-field",
+          "recipient": "team",
+          "condition": {
+            "call": "wriothesley.c4.overheal-off-field-active",
+            "inputs": {
+              "mode": {
+                "fact": "wriothesley.overhealAttackSpeedMode"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -936,6 +1100,53 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "wriothesley.c6.gracious-rebuke-crit",
+          "activation": {
+            "ascension": 1
+          },
+          "appliesTo": {
+            "hitIds": [
+              "wriothesley.a0.rebuke-vaulting-fist",
+              "wriothesley.c6.gracious-icicle"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.8,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "wriothesley.c6.gracious-icicle-enhanced",
+          "appliesTo": {
+            "hitIds": [
+              "wriothesley.c6.gracious-icicle"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -979,6 +1190,26 @@
         "kind": "boolean"
       },
       "label": "当前普攻天赋的重击消耗恩典之诫"
+    },
+    "wriothesley.prosecutionEdictStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "寒烈的惩裁期间累积的检偿之敕有效层数"
+    },
+    "wriothesley.overhealAttackSpeedMode": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "on-field",
+          "off-field"
+        ]
+      },
+      "label": "溢出治疗触发后当前生效的攻速效果（站场触发4秒／后台触发6秒）"
     }
   },
   "formulas": [
@@ -990,6 +1221,64 @@
         "operator": "all",
         "terms": 1,
         "negate": true
+      }
+    },
+    {
+      "id": "wriothesley.prosecution-edict",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 5,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "wriothesley.prosecution-burst",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.4,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 5,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "wriothesley.c4.overheal-on-field-active",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "on-field",
+          "off-field"
+        ],
+        "equals": "on-field",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "wriothesley.c4.overheal-off-field-active",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "none",
+          "on-field",
+          "off-field"
+        ],
+        "equals": "off-field",
+        "revision": "1"
       }
     }
   ]

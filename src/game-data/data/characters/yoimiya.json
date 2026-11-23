@@ -767,7 +767,12 @@
               "yoimiya.normal.param2.pyro",
               "yoimiya.normal.param3.pyro",
               "yoimiya.normal.param4.pyro",
-              "yoimiya.normal.param5.pyro"
+              "yoimiya.normal.param5.pyro",
+              "yoimiya.c6.kindling-arrow-1",
+              "yoimiya.c6.kindling-arrow-2",
+              "yoimiya.c6.kindling-arrow-3",
+              "yoimiya.c6.kindling-arrow-4",
+              "yoimiya.c6.kindling-arrow-5"
             ]
           },
           "modifiers": [
@@ -975,13 +980,74 @@
       "id": "yoimiya.passive1",
       "name": "袖火百景图",
       "description": "在焰硝庭火舞的持续期间内，宵宫的普通攻击命中后，将为宵宫提供2%火元素伤害加成。该效果持续3秒，至多叠加10次。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "yoimiya.a1.tricks-of-the-trouble-maker",
+          "appliesTo": {
+            "elements": [
+              "pyro"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "yoimiya.tricks-of-the-trouble-maker",
+                "inputs": {
+                  "stacks": {
+                    "fact": "yoimiya.tricksAtHit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yoimiya.passive2",
       "name": "炎昼风物诗",
       "description": "施放琉金云间草后的15秒内，附近的队伍中所有其他角色（不包括宵宫自己）攻击力提高10%。此外，依据宵宫自己施放琉金云间草时突破天赋「袖火百景图」的叠加层数，将额外提升上述的攻击力效果，每层提升1%攻击力。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "yoimiya.a1.summer-dawn",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "yoimiya.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "yoimiya.summer-dawn",
+                "inputs": {
+                  "input": {
+                    "fact": "yoimiya.tricksAtBurst"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yoimiya.passive3",
@@ -995,13 +1061,47 @@
       "rank": 1,
       "name": "赤玉琉金",
       "description": "琉金云间草的琉金火光持续时间延长4秒。\n此外，处于宵宫自己的琉金火光影响下的敌人在持续期间内被击败时，宵宫的攻击力提高20%，持续20秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yoimiya.c1.agate-ryuukin",
+          "condition": {
+            "fact": "yoimiya.markedEnemyDefeated"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "万灯送火",
       "description": "宵宫的火元素伤害造成暴击后的6秒内，宵宫获得25%火元素伤害加成。\n宵宫处于队伍后台时，同样能获得该效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yoimiya.c2.procession-pyro",
+          "condition": {
+            "fact": "yoimiya.pyroCritWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1018,7 +1118,25 @@
       "rank": 4,
       "name": "花火职人心得",
       "description": "宵宫自己的琉金火光发生爆炸时，焰硝庭火舞的冷却时间减少1.2秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yoimiya.c4.niwabi-cooldown",
+          "application": "explicit",
+          "condition": {
+            "fact": "yoimiya.c4.ownAurousBlazeExploded"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 1200,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1127,6 +1245,93 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "yoimiya.c6.kindling-arrow-1-factor",
+          "appliesTo": {
+            "hitIds": [
+              "yoimiya.c6.kindling-arrow-1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-2-factor",
+          "appliesTo": {
+            "hitIds": [
+              "yoimiya.c6.kindling-arrow-2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-3-factor",
+          "appliesTo": {
+            "hitIds": [
+              "yoimiya.c6.kindling-arrow-3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-4-factor",
+          "appliesTo": {
+            "hitIds": [
+              "yoimiya.c6.kindling-arrow-4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-5-factor",
+          "appliesTo": {
+            "hitIds": [
+              "yoimiya.c6.kindling-arrow-5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -1164,12 +1369,49 @@
         "kind": "boolean"
       }
     },
+    "yoimiya.tricksAtBurst": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "施放琉金云间草时捕获的袖火百景图层数"
+    },
+    "yoimiya.markedEnemyDefeated": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "带有琉金火光的敌人被击败后二十秒内"
+    },
+    "yoimiya.pyroCritWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "火元素伤害造成暴击后六秒内"
+    },
     "yoimiya.extraKindlingArrow": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "焰硝庭火舞期间主动普通攻击触发额外炽焰箭"
+    },
+    "yoimiya.tricksAtHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次命中前仍有效的袖火百景图层数（最多10层）"
+    },
+    "yoimiya.c4.ownAurousBlazeExploded": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "宵宫自己的琉金火光本次发生爆炸"
     }
   },
   "formulas": [
@@ -1181,6 +1423,36 @@
         "operator": "all",
         "terms": 1,
         "negate": true
+      }
+    },
+    {
+      "id": "yoimiya.summer-dawn",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.01,
+        "offset": 0.1,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 10,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "yoimiya.tricks-of-the-trouble-maker",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "stacks",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.02,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 0.2,
+        "output": "value"
       }
     }
   ]

@@ -867,6 +867,32 @@
           "flat": "param3",
           "recipient": "party"
         }
+      ],
+      "buffs": [
+        {
+          "id": "yaoyao.burst.adeptal-legacy-dendro-resistance",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yaoyao.adeptalLegacy"
+              },
+              "term1": {
+                "fact": "onField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.dendro",
+              "value": {
+                "skill": "yaoyao.burst",
+                "parameter": "param5"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -895,13 +921,59 @@
       "rank": 1,
       "name": "妙受琼阁",
       "description": "白玉萝卜炸裂时，处在其影响范围内的当前场上角色获得15%草元素伤害加成，持续8秒，并恢复15点体力。每5秒只能通过这种方式恢复1次体力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yaoyao.c1.jade-radish-dendro",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "yaoyao.radishBurstArea"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "正思无邪",
       "description": "处于玉颗珊珊月中落的桂子仙机状态下时，若白玉萝卜的炸裂伤害命中敌人，瑶瑶将恢复3点元素能量。每0.8秒至多通过这种方式恢复一次元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yaoyao.directEnergy.c2",
+          "application": "explicit",
+          "condition": {
+            "fact": "yaoyao.directEnergy.c2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -918,7 +990,44 @@
       "rank": 4,
       "name": "爰爰可亲",
       "description": "施放云台团团降芦菔或玉颗珊珊月中落后，基于瑶瑶生命值上限的0.3%，提升瑶瑶的元素精通，持续8秒。通过这种方式，至多提升120点元素精通。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yaoyao.c4.experiential-mastery",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "yaoyao.skill",
+                "yaoyao.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "yaoyao.experiential-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -996,12 +1105,50 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "yaoyao.radishBurstArea": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于白玉萝卜炸裂范围后八秒内"
+    },
     "yaoyao.c6MegaRadishReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "本次月桂·抛掷型额外投出的超厉害·大萝卜炸裂"
+    },
+    "yaoyao.adeptalLegacy": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "桂子仙机状态持续中"
+    },
+    "yaoyao.directEnergy.c2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "桂子仙机时白玉萝卜炸裂命中敌人，本次可回复能量（间隔至少0.8秒）"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "yaoyao.experiential-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "elementalMastery",
+        "rate": 0.003,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 120,
+        "revision": "1"
+      }
+    }
+  ]
 }

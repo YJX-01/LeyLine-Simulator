@@ -1292,6 +1292,122 @@
           "max": 200,
           "integer": false
         }
+      ],
+      "buffs": [
+        {
+          "id": "mavuika.fighting-spirit-slash",
+          "appliesTo": {
+            "hitIds": [
+              "mavuika.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "fact": "mavuika.fightingSpirit"
+                      },
+                      "rate": {
+                        "skill": "mavuika.burst",
+                        "parameter": "param3"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mavuika.fighting-spirit-rider-normal",
+          "appliesTo": {
+            "hitIds": [
+              "mavuika.skill.param4",
+              "mavuika.skill.param5",
+              "mavuika.skill.param6",
+              "mavuika.skill.param7",
+              "mavuika.skill.param8",
+              "mavuika.skill.param9"
+            ]
+          },
+          "condition": {
+            "fact": "mavuika.ancientName"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "fact": "mavuika.fightingSpirit"
+                      },
+                      "rate": {
+                        "skill": "mavuika.burst",
+                        "parameter": "param4"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mavuika.fighting-spirit-rider-charged",
+          "appliesTo": {
+            "hitIds": [
+              "mavuika.skill.param10",
+              "mavuika.skill.param11"
+            ]
+          },
+          "condition": {
+            "fact": "mavuika.ancientName"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "fact": "mavuika.fightingSpirit"
+                      },
+                      "rate": {
+                        "skill": "mavuika.burst",
+                        "parameter": "param5"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -1300,13 +1416,97 @@
       "id": "mavuika.passive1",
       "name": "炎花献礼",
       "description": "队伍中的附近的角色触发「夜魂迸发」时，玛薇卡的攻击力提升30%，持续10秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "mavuika.nightsoul-burst",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "any",
+              "target": "any",
+              "observation": {
+                "key": "nightsoulBurst",
+                "test": "true"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "windowFact": "mavuika.nightsoulBurstWindow",
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mavuika.passive2",
       "name": "「基扬戈兹」",
       "description": "施放元素爆发燔天之时后，依据施放时的战意，每点战意都将使当前场上角色造成的伤害提升0.2%，通过这种方式至多使队伍中的当前场上角色造成的伤害提升40%，该效果持续20秒，并会在持续时间内逐渐降低为0。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "mavuika.kiongozi-damage",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "mavuika.kiongozi"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-4",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "mavuika.kiongozi-decayed",
+                "inputs": {
+                  "basis": {
+                    "fact": "mavuika.remainingSpiritBonus"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mavuika.passive3",
@@ -1318,7 +1518,26 @@
       "id": "mavuika.passive4",
       "name": "破夜的焰光",
       "description": "队伍触发夜魂传递的冷却时间减少20%。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "mavuika.utility.nightsoul-transmission-cooldown",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "fact": "mavuika.utility.nightsoulTransmissionTriggered"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.nightsoulTransmissionCooldownReduction",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1326,13 +1545,174 @@
       "rank": 1,
       "name": "夜主的授记",
       "description": "玛薇卡的夜魂值上限提升为120点，且战意的获取效率提升25%。\n此外，获取战意后，玛薇卡的攻击力提升40%，持续8秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mavuika.c1-fighting-spirit-attack",
+          "condition": {
+            "fact": "mavuika.c1Fuel"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "灰烬的代价",
       "description": "处于夜魂加持状态下时，玛薇卡的基础攻击力提升200点，并根据诸火武装的形态，获得对应效果：\n·焚曜之环：附近的敌人的防御力降低20%；\n·驰轮车：玛薇卡的普通攻击、重击、元素爆发燔天之时中的坠日斩造成的伤害提升，提升值相当于玛薇卡攻击力的60%/90%/120%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mavuika.c2-base-attack",
+          "condition": {
+            "call": "condition.any",
+            "inputs": {
+              "term0": {
+                "fact": "mavuika.nightsoulActive"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "fact": "mavuika.ringActive"
+                  },
+                  "term1": {
+                    "fact": "mavuika.flamestrider"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.whiteAttack",
+              "value": {
+                "amount": 200,
+                "unit": "attack"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mavuika.c2-ring-defense",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.any",
+            "inputs": {
+              "term0": {
+                "fact": "mavuika.ringActive"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "mavuika.flamestrider"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.defenseReduction",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "mavuika.c2-rider-normal",
+          "appliesTo": {
+            "hitIds": [
+              "mavuika.skill.param4",
+              "mavuika.skill.param5",
+              "mavuika.skill.param6",
+              "mavuika.skill.param7",
+              "mavuika.skill.param8",
+              "mavuika.skill.param9"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 0.6
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mavuika.c2-rider-charged",
+          "appliesTo": {
+            "hitIds": [
+              "mavuika.skill.param10",
+              "mavuika.skill.param11"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 0.9
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mavuika.c2-rider-slash",
+          "appliesTo": {
+            "hitIds": [
+              "mavuika.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 1.2
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1349,7 +1729,42 @@
       "rank": 4,
       "name": "「领袖」的觉悟",
       "description": "突破天赋「基扬戈兹」的效果获得提升：\n施放元素爆发燔天之时后的伤害提升效果不再随时间降低，并额外获得10%伤害加成。\n需要解锁突破天赋「基扬戈兹」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mavuika.c4-kiongozi",
+          "activation": {
+            "ascension": 4
+          },
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "mavuika.kiongozi"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "mavuika.kiongozi-fixed",
+                "inputs": {
+                  "basis": {
+                    "fact": "mavuika.initialKiongoziSpirit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1433,6 +1848,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "夜魂值与战意的获取、基扬戈兹从施放时战意到当前值的时序及六命附加攻击的自动调度尚待验证，已知输入可按单击提供。"
         }
       ]
     }
@@ -1445,6 +1865,13 @@
         "kind": "boolean"
       }
     },
+    "mavuika.ancientName": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "古名解放持续期间"
+    },
     "mavuika.fightingSpirit": {
       "scope": "query",
       "type": {
@@ -1453,12 +1880,56 @@
       },
       "label": "施放时消耗的战意"
     },
+    "mavuika.remainingSpiritBonus": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "当前基扬戈兹有效战意"
+    },
+    "mavuika.initialKiongoziSpirit": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "施放时的战意（四命基扬戈兹不衰减）"
+    },
+    "mavuika.nightsoulActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于夜魂加持状态"
+    },
     "mavuika.ringActive": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "焚曜之环存在且目标在附近"
+    },
+    "mavuika.c1Fuel": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "获取战意后的八秒"
+    },
+    "mavuika.kiongozi": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "基扬戈兹伤害加成持续期间"
+    },
+    "mavuika.nightsoulBurstWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍触发夜魂迸发后的十秒"
     },
     "mavuika.c6CrashReady": {
       "scope": "query",
@@ -1473,6 +1944,13 @@
         "kind": "boolean"
       },
       "label": "本次骑乘期间焚曜之环·灼象命中"
+    },
+    "mavuika.utility.nightsoulTransmissionTriggered": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次在纳塔燃素区域触发队伍夜魂传递"
     }
   },
   "formulas": [
@@ -1484,6 +1962,38 @@
         "operator": "all",
         "terms": 1,
         "negate": true
+      }
+    },
+    {
+      "id": "mavuika.kiongozi-decayed",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.002,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 200,
+        "cap": 0.4
+      }
+    },
+    {
+      "id": "mavuika.kiongozi-fixed",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.002,
+        "offset": 0.1,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 200,
+        "cap": 0.5
       }
     }
   ]

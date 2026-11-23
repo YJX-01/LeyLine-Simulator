@@ -646,7 +646,48 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param7"
+      "cooldownParameter": "param7",
+      "buffs": [
+        {
+          "id": "ineffa.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "ineffa.flowingLightBarrierActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.attack-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "ineffa.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "ineffa.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ineffa.burst",
@@ -783,7 +824,61 @@
       "id": "ineffa.passive2",
       "name": "全相重构协议",
       "description": "施放元素爆发**至高律令·全域扫灭**时，将为队伍中自己的所有角色赋予「参数重构」效果：基于伊涅芙攻击力的6%，提升伊涅芙与队伍中自己当前场上角色的元素精通，持续20秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "ineffa.a1.parameter-reconstruction",
+          "recipient": "team",
+          "excludeOwner": true,
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "ineffa.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 20000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "ineffa.parameter-reconstruction",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              },
+              "recipient": "owner"
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "ineffa.parameter-reconstruction",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              },
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ineffa.passive3",
@@ -828,7 +923,34 @@
       "rank": 1,
       "name": "循环整流引擎",
       "description": "伊涅芙展开光流屏障护盾时，将为队伍中附近的所有角色赋予持续20秒的「载流复合」效果，使月感电反应造成的伤害提升，提升值基于伊涅芙的攻击力：每100点攻击力都将提升2.5%伤害，至多通过这种方式提升50%伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ineffa.c1.carrier-composite",
+          "recipient": "team",
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "condition": {
+            "fact": "ineffa.carrierCompositeWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": {
+                "call": "ineffa.carrier-composite",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -871,7 +993,35 @@
       "rank": 4,
       "name": "敕谕未至之路",
       "description": "队伍中自己的角色触发月感电反应时，将恢复5点元素能量，该效果每4秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ineffa.directEnergy.c4",
+          "recipient": "team",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "ineffa.lunarChargedEnergyTrigger"
+              },
+              "term1": {
+                "fact": "ineffa.lunarChargedEnergyCooldownReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 5,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -939,6 +1089,20 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "ineffa.lunarChargedEnergyTrigger": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益者为本次月感电反应的触发者"
+    },
+    "ineffa.lunarChargedEnergyCooldownReady": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "伊涅芙四命本次满足队伍共享的四秒回能限制"
+    },
     "ineffa.birgittaNearThundercloud": {
       "scope": "query",
       "type": {
@@ -959,6 +1123,51 @@
         "kind": "boolean"
       },
       "label": "载流复合期间雷暴云雷击已触发追加伤害"
+    },
+    "ineffa.carrierCompositeWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "光流屏障展开后二十秒内"
+    },
+    "ineffa.flowingLightBarrierActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由光流屏障护盾庇护"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "ineffa.parameter-reconstruction",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "elementalMastery",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "ineffa.carrier-composite",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.00025,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.5,
+        "revision": "1"
+      }
+    }
+  ]
 }

@@ -571,7 +571,88 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "gorou.banner-domain",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "gorou.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "windowFact": "gorou.bannerDomain",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "gorou.burstDomain"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.flatDefense",
+              "value": {
+                "skill": "gorou.skill",
+                "parameter": "param2",
+                "unit": "defense"
+              }
+            },
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "skill": "gorou.skill",
+                "parameter": "param3"
+              },
+              "condition": {
+                "call": "gorou.geo-count-three",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "geo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                },
+                "output": "active"
+              },
+              "appliesTo": {
+                "elements": [
+                  "geo"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "gorou.burst",
@@ -736,7 +817,73 @@
       "energyCapacity": {
         "parameter": "param5"
       },
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "buffs": [
+        {
+          "id": "gorou.burst-domain",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "gorou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 9000,
+            "phase": "after"
+          },
+          "windowFact": "gorou.burstDomain",
+          "recipient": "team",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.flatDefense",
+              "value": {
+                "skill": "gorou.skill",
+                "parameter": "param2",
+                "unit": "defense"
+              }
+            },
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "skill": "gorou.skill",
+                "parameter": "param3"
+              },
+              "condition": {
+                "call": "gorou.geo-count-three",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "geo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false
+                    }
+                  }
+                },
+                "output": "active"
+              },
+              "appliesTo": {
+                "elements": [
+                  "geo"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -780,7 +927,53 @@
       "id": "gorou.passive2",
       "name": "报恩之守",
       "description": "基于防御力，五郎的以下攻击造成的伤害提高：\n·犬坂吠吠方圆阵的技能伤害提高值：防御力的156%；\n·兽牙逐突形胜战法的技能伤害与岩晶崩破伤害提高值：防御力的15.6%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "gorou.favored-skill",
+          "appliesTo": {
+            "skillIds": [
+              "gorou.skill"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "gorou.favor-def-skill",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": 1.56
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "gorou.favored-burst",
+          "appliesTo": {
+            "skillIds": [
+              "gorou.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "gorou.favor-def-burst",
+                "inputs": {
+                  "basis": {
+                    "stat": "defense"
+                  },
+                  "rate": 0.156
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "gorou.passive3",
@@ -794,7 +987,43 @@
       "rank": 1,
       "name": "犬奔·疾如风",
       "description": "处于五郎自己的大将旗指物或大将威仪领域中的当前场上角色（除了五郎自己）对敌人造成岩元素伤害后，五郎自己的犬坂吠吠方圆阵冷却时间减少2秒。\n该效果每10秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "gorou.c1.inuzaka-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "gorou.c1.otherActiveGeoDamage"
+                  },
+                  "term1": {
+                    "fact": "gorou.c1.attackerInGeneralArea"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "gorou.c1.cooldownIntervalReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 2000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -834,7 +1063,156 @@
       "rank": 6,
       "name": "犬勇·忠如山",
       "description": "施放犬坂吠吠方圆阵或兽牙逐突形胜战法后的12秒内，依据施放时的领域等级，提高附近的队伍中所有角色岩元素伤害的暴击伤害：\n·「坚牢」：提高10%；\n·「难破」：提高20%；\n·「摧碎」：提高40%。\n\n该效果无法叠加，以后生效的为准。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "gorou.banner-c6-1",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "gorou.skill",
+                "gorou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "recipient": "team",
+          "condition": {
+            "call": "gorou.banner-level-1",
+            "inputs": {
+              "value": {
+                "teamCount": {
+                  "elements": [
+                    "geo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false
+                }
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "geo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "gorou.banner-c6-2",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "gorou.skill",
+                "gorou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "recipient": "team",
+          "condition": {
+            "call": "gorou.banner-level-2",
+            "inputs": {
+              "value": {
+                "teamCount": {
+                  "elements": [
+                    "geo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false
+                }
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "geo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "gorou.banner-c6-3",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "gorou.skill",
+                "gorou.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "recipient": "team",
+          "condition": {
+            "call": "gorou.banner-level-3",
+            "inputs": {
+              "value": {
+                "teamCount": {
+                  "elements": [
+                    "geo"
+                  ],
+                  "match": "include",
+                  "excludeOwner": false
+                }
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "geo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -859,9 +1237,125 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "旗指物离开后的两秒余效、大将威仪互斥与二命延长、一命冷却变化与四命治疗仍需角色位置、结晶或月结晶及治疗事件。"
         }
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "gorou.bannerDomain": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前大将旗指物或大将威仪领域生效"
+    },
+    "gorou.burstDomain": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前大将威仪领域生效"
+    },
+    "gorou.c1.otherActiveGeoDamage": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "五郎以外的当前站场队员本次对敌人造成岩元素伤害"
+    },
+    "gorou.c1.attackerInGeneralArea": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该站场队员位于五郎自己的大将旗指物或大将威仪领域内"
+    },
+    "gorou.c1.cooldownIntervalReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "首次触发，或距上次触发此冷却缩减至少10秒"
+    }
+  },
+  "formulas": [
+    {
+      "id": "gorou.geo-count-three",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 3,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "gorou.favor-def-skill",
+      "template": {
+        "revision": "1",
+        "id": "attribute-conversion",
+        "stat": "defense",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    },
+    {
+      "id": "gorou.favor-def-burst",
+      "template": {
+        "revision": "1",
+        "id": "attribute-conversion",
+        "stat": "defense",
+        "target": "damage",
+        "attribute": "basis",
+        "rate": "rate",
+        "output": "value"
+      }
+    },
+    {
+      "id": "gorou.banner-level-1",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "gorou.banner-level-2",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 4
+      }
+    },
+    {
+      "id": "gorou.banner-level-3",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 3,
+        "maxInput": 4
+      }
+    }
+  ]
 }

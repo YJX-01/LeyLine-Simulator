@@ -991,6 +991,52 @@
             "offField": true
           },
           "modifiers": []
+        },
+        {
+          "id": "kamisatoayato.directEnergy.p1",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kamisatoayato.directEnergy.p1"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "kamisatoayato.directEnergy.below-40",
+                    "inputs": {
+                      "energy": {
+                        "fact": "currentEnergy"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              }
+            }
+          ]
         }
       ]
     },
@@ -1024,7 +1070,8 @@
               "kamisatoayato.skill.param1",
               "kamisatoayato.skill.param2",
               "kamisatoayato.skill.param3",
-              "kamisatoayato.c6.shunsuiken"
+              "kamisatoayato.c6.shunsuiken",
+              "kamisatoayato.c6.shunsuiken-second"
             ]
           },
           "modifiers": [
@@ -1184,6 +1231,18 @@
         "output": "base",
         "revision": "1"
       }
+    },
+    {
+      "id": "kamisatoayato.directEnergy.below-40",
+      "template": {
+        "id": "quantity-condition",
+        "input": "energy",
+        "unit": "energy",
+        "relation": "lt",
+        "threshold": 40,
+        "maxInput": 80,
+        "revision": "1"
+      }
     }
   ],
   "support": {
@@ -1239,6 +1298,13 @@
         "kind": "boolean"
       },
       "label": "本次镜花后的首次瞬水剑命中，触发滥觞无底"
+    },
+    "kamisatoayato.directEnergy.p1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "破月渐盈本次到达1秒回复间隔"
     }
   }
 }

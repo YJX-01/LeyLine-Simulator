@@ -832,6 +832,26 @@
           "flat": "param3",
           "recipient": "on-field"
         }
+      ],
+      "buffs": [
+        {
+          "id": "dori.directEnergy.t2",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "fact": "dori.directEnergy.t2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "dori.burst",
+                "parameter": "param4",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -840,13 +860,72 @@
       "id": "dori.passive1",
       "name": "披沙沥金",
       "description": "与灯中幽精相连的角色在触发感电、月感电、超导、星超导、超载、原激化、超激化、超绽放、雷元素扩散或雷元素结晶反应后，镇灵之灯·烦恼解决炮的冷却时间缩短1秒。\n该效果每3秒至多触发一次。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "dori.a1.spiritwarding-lamp-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "dori.a1.jinniLinkedReactor"
+                  },
+                  "term1": {
+                    "fact": "dori.a1.qualifyingElectroReaction"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "dori.a1.cooldownIntervalReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 1000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dori.passive2",
       "name": "利上加利",
       "description": "镇灵之灯·烦恼解决炮的断除烦恼炮或售后服务弹命中敌人时，基于多莉的元素充能效率，每100%为多莉恢复5点元素能量。\n每次施放镇灵之灯·烦恼解决炮只能通过这种方式恢复一次元素能量，并至多恢复15点元素能量。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "dori.directEnergy.p1",
+          "application": "explicit",
+          "condition": {
+            "fact": "dori.directEnergy.p1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "dori.directEnergy.p1.amount",
+                "inputs": {
+                  "basis": {
+                    "stat": "energyRecharge"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dori.passive3",
@@ -903,7 +982,55 @@
       "rank": 4,
       "name": "酌盈剂虚",
       "description": "与灯中幽精相连的角色，依据当前的生命值与元素能量，获得以下提升：\n·生命值低于50%时，提升50%受治疗加成；\n·元素能量低于50%时，提升30%元素充能效率。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "dori.c4.jinni-link",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "dori.jinniLinked"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingHealingBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "hp.below50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.energyRecharge",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              },
+              "condition": {
+                "fact": "dori.recipientEnergyBelowHalf"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -951,6 +1078,20 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "dori.recipientEnergyBelowHalf": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前元素能量低于一半"
+    },
+    "dori.jinniLinked": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "与灯中幽精相连"
+    },
     "dori.c2JinniToopReady": {
       "scope": "query",
       "type": {
@@ -958,12 +1099,64 @@
       },
       "label": "战斗中本次灯中幽精治疗连接角色并发射镇灵炮"
     },
+    "dori.directEnergy.t2": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益角色本次收到相连的灯中幽精定期回复"
+    },
+    "dori.directEnergy.p1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "断除烦恼炮或售后服务弹命中敌人，本次施放尚未回复过能量"
+    },
     "dori.c6ElectroInfusion": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "本次命中由战技后三秒内的多莉六命雷附魔作用"
+    },
+    "dori.a1.jinniLinkedReactor": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次触发反应的角色与多莉的灯中幽精相连"
+    },
+    "dori.a1.qualifyingElectroReaction": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次是感电、月感电、超导、星超导、超载、原激化、超激化、超绽放、雷扩散或雷结晶"
+    },
+    "dori.a1.cooldownIntervalReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "首次触发，或距上次触发此冷却缩减至少3秒"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "dori.directEnergy.p1.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "scalar",
+        "outputUnit": "energy",
+        "rate": 5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 15,
+        "revision": "1"
+      }
+    }
+  ]
 }

@@ -731,6 +731,47 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "zhongli.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "zhongli.jadeShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param6",
+                    "skill": "zhongli.skill"
+                  },
+                  "flat": {
+                    "parameter": "param5",
+                    "skill": "zhongli.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -868,13 +909,114 @@
       "id": "zhongli.passive1",
       "name": "悬岩宸断",
       "description": "玉璋护盾受到伤害时，会产生坚璧效果：\n·处于玉璋护盾庇护下的角色，护盾强效提升5%；\n·该效果至多叠加5次，持续直到玉璋护盾消失。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "zhongli.a1.jade-shield-fortification",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "zhongli.jadeShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldStrength",
+              "value": {
+                "call": "zhongli.jade-shield-fortification",
+                "inputs": {
+                  "stacks": {
+                    "fact": "zhongli.jadeShieldFortificationStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "zhongli.passive2",
       "name": "炊金馔玉",
       "description": "基于生命值上限，钟离的以下攻击造成的伤害提高：\n·普通攻击、重击与下落攻击伤害提高值：生命值上限的1.39%\n·地心的岩脊、共鸣伤害与长按伤害提高值：生命值上限的1.9%\n·天星伤害提高值：生命值上限的33%",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "zhongli.a1.dominance-normal-hp",
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "zhongli.dominance-normal-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "zhongli.a1.dominance-skill-hp",
+          "appliesTo": {
+            "hitIds": [
+              "zhongli.skill.param1",
+              "zhongli.skill.param2",
+              "zhongli.skill.param4"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "zhongli.dominance-skill-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "zhongli.a1.dominance-burst-hp",
+          "appliesTo": {
+            "skillIds": [
+              "zhongli.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "zhongli.dominance-burst-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "zhongli.passive3",
@@ -911,7 +1053,23 @@
       "rank": 4,
       "name": "黄琮，破而不夺其坚",
       "description": "天星的影响范围扩大20%。\n此外，天星的石化效果持续时间延长2秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "zhongli.c4.planet-befall-range",
+          "appliesTo": {
+            "hitIds": [
+              "zhongli.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.impactRangeBonus",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -957,5 +1115,81 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "zhongli.dominance-normal-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.0139,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "zhongli.dominance-skill-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.019,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "zhongli.dominance-burst-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.33,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "zhongli.jade-shield-fortification",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "stacks",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 0.25,
+        "output": "value"
+      }
+    }
+  ],
+  "facts": {
+    "zhongli.jadeShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由玉璋护盾庇护"
+    },
+    "zhongli.jadeShieldFortificationStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前玉璋护盾实例在本次受击前确认的坚璧层数（最多5层）"
+    }
+  }
 }

@@ -1270,11 +1270,31 @@
                         "skill": "lohen.skill"
                       },
                       "rate": {
-                        "fact": "lohen.will"
+                        "call": "lohen.capped-will",
+                        "inputs": {
+                          "points": {
+                            "fact": "lohen.will"
+                          },
+                          "limit": {
+                            "stat": "lohenWillLimit"
+                          }
+                        }
                       }
                     }
                   }
                 }
+              }
+            }
+          ]
+        },
+        {
+          "id": "lohen.skill.will-limit",
+          "modifiers": [
+            {
+              "target": "attribute.lohenWillLimit",
+              "value": {
+                "amount": 100,
+                "unit": "scalar"
               }
             }
           ]
@@ -1449,14 +1469,46 @@
                         "skill": "lohen.burst"
                       },
                       "rate": {
-                        "fact": "lohen.will"
+                        "call": "lohen.capped-will",
+                        "inputs": {
+                          "points": {
+                            "fact": "lohen.will"
+                          },
+                          "limit": {
+                            "stat": "lohenWillLimit"
+                          }
+                        }
                       }
                     }
                   }
                 }
               }
             }
-          ]
+          ],
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "lohen.masterstroke"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-4",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
         }
       ],
       "energyCapacity": {
@@ -1470,13 +1522,106 @@
       "id": "lohen.passive1",
       "name": "禁问的训诫",
       "description": "在**奇谋**状态下，队伍中附近的其他角色通过造成伤害为洛恩积攒**争胜**时，若本次伤害不低于洛恩基础攻击力的3000%，则还会为洛恩额外积攒60点争胜。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "lohen.a1.will-bonus-gain",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "lohen.masterstroke"
+                  },
+                  "term1": {
+                    "fact": "lohen.nearbyTeammateWillHit"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "lohen.will-hit-threshold",
+                "inputs": {
+                  "damage": {
+                    "fact": "lohen.teammateWillHitDamage"
+                  },
+                  "minimum": {
+                    "call": "attack-damage-base",
+                    "inputs": {
+                      "attribute": {
+                        "stat": "whiteAttack"
+                      },
+                      "ratio": 30
+                    },
+                    "output": "base"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.lohenWillBonusGain",
+              "value": {
+                "call": "product.count",
+                "inputs": {
+                  "basis": {
+                    "amount": 60,
+                    "unit": "count"
+                  },
+                  "rate": {
+                    "stat": "lohenWillGainMultiplier"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lohen.passive2",
       "name": "戏言的杰作",
       "description": "在**奇谋**状态下，队伍中附近的其他角色对敌人触发冰元素相关反应后的8秒内，该角色的攻击力提升15%，洛恩的攻击力提升15%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "lohen.a1.cryo-reaction-owner",
+          "condition": {
+            "fact": "lohen.cryoReactionAttackWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "lohen.a1.cryo-reaction-teammate",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "lohen.cryoReactionTriggerer"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lohen.passive3",
@@ -1490,13 +1635,67 @@
       "rank": 1,
       "name": "往昔微风，载满悲歌",
       "description": "洛恩的**争胜**上限提升至原来的300%。\n此外，处于**奇谋**状态下时，队伍中附近的其他角色通过造成伤害为洛恩积攒的争胜提升至原来的500%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lohen.c1.will-limit",
+          "modifiers": [
+            {
+              "target": "attribute.lohenWillLimit",
+              "value": {
+                "amount": 200,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "lohen.c1.will-gain-multiplier",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "lohen.masterstroke"
+              },
+              "term1": {
+                "fact": "lohen.nearbyTeammateWillHit"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.lohenWillGainMultiplier",
+              "value": 5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "凡飞翔者，皆为靶标",
       "description": "处于**奇谋**状态下时，特殊元素战技**镂骨彻心**命中敌人或施放元素爆发裁罚遂成后的4秒内，洛恩将获得「破邪之刃」效果：在奇谋状态下，洛恩的下一次普通攻击或重击命中敌人时，将会额外追加进行一次攻击，造成相当于洛恩攻击力500%的冰元素范围伤害，并使队伍中附近的其他角色的元素精通提升200点，持续8秒，每4秒至多获得一次「破邪之刃」效果。",
       "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lohen.c2.baneblade-mastery",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "lohen.banebladeAttackWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 200,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ],
       "hits": [
         {
           "id": "lohen.c2.evilsbane-blade",
@@ -1534,7 +1733,58 @@
       "rank": 4,
       "name": "爱若流光，逝如欢歌",
       "description": "洛恩在**奇谋**状态下施放元素爆发裁罚遂成时，还会将洛恩的**争胜**积攒至上限，从而使本次元素爆发获得最高的伤害提升效果。\n\n此外，洛恩切换至奇谋状态时，若元素能量：\n·未充满：为洛恩恢复15点元素能量；\n·已充满：接下来的15秒内，施放元素爆发裁罚遂成后，为洛恩恢复15点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lohen.c4.burst-will-cap",
+          "appliesTo": {
+            "hitIds": [
+              "lohen.burst.param1"
+            ]
+          },
+          "condition": {
+            "fact": "lohen.masterstroke"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "call": "lohen.will-factor",
+                "inputs": {
+                  "input": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "parameter": "param2",
+                        "skill": "lohen.burst"
+                      },
+                      "rate": {
+                        "stat": "lohenWillLimit"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "lohen.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "lohen.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 15,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1551,7 +1801,41 @@
       "rank": 6,
       "name": "身沦魂销，唯余欢悦",
       "description": "施放特殊元素战技**镂骨彻心**命中敌人或在**奇谋**状态下施放元素爆发裁罚遂成不会消耗**争胜**，并会使洛恩的**欢悦**恢复至上限，且在下一次施放特殊元素战技镂骨彻心命中敌人时，使本次奇谋状态的持续时间延长1.25秒，该效果每7秒至多触发一次。\n此外，上述所有伤害的暴击伤害都将提升175%，且本次奇谋期间，洛恩施放镂骨彻心的最大次数增加2次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lohen.c6.special-crit",
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 1.75,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "hitIds": [
+                  "lohen.skill.param17"
+                ]
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 1.75,
+                "unit": "scalar"
+              },
+              "appliesTo": {
+                "skillIds": [
+                  "lohen.burst"
+                ]
+              },
+              "condition": {
+                "fact": "lohen.masterstroke"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1596,12 +1880,55 @@
         "unit": "scalar"
       }
     },
+    "lohen.banebladeAttackWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "破邪之刃追加攻击后的八秒内"
+    },
+    "lohen.cryoReactionAttackWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "奇谋中，附近队友触发冰相关反应后八秒内"
+    },
+    "lohen.cryoReactionTriggerer": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "此角色在洛恩奇谋期间触发冰相关反应后八秒内"
+    },
     "lohen.c2EvilsbaneBladeReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "本次普通攻击或重击命中并触发破邪之刃"
+    },
+    "lohen.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次未充满时切入奇谋，或充满时切入奇谋后15秒内施放裁罚遂成"
+    },
+    "lohen.nearbyTeammateWillHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍中另一名附近角色的本次伤害符合争胜积攒条件"
+    },
+    "lohen.teammateWillHitDamage": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "damage"
+      },
+      "label": "该队友此次单次伤害"
     }
   },
   "formulas": [
@@ -1627,6 +1954,32 @@
         "offset": 1,
         "threshold": 0,
         "output": "value"
+      }
+    },
+    {
+      "id": "lohen.will-hit-threshold",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "damage",
+        "unit": "damage",
+        "relation": "gte",
+        "thresholdInput": "minimum"
+      }
+    },
+    {
+      "id": "lohen.capped-will",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "points",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "capInput": "limit"
       }
     }
   ]

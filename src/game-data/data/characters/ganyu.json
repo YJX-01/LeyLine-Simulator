@@ -695,7 +695,32 @@
         }
       ],
       "cooldownParameter": "param4",
-      "skillCharges": 1
+      "skillCharges": 1,
+      "buffs": [
+        {
+          "id": "ganyu.summon-initial-hp",
+          "condition": {
+            "fact": "ganyu.iceLotusCreated"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.summonInitialHp",
+              "value": {
+                "call": "product.hp",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "ganyu.skill"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ganyu.burst",
@@ -832,13 +857,64 @@
       "id": "ganyu.passive1",
       "name": "唯此一心",
       "description": "霜华矢发射后的5秒内，会使接下来的发射的霜华矢与这些霜华矢引发的霜华绽发的暴击率提高20%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "ganyu.a0.frostflake-crit",
+          "appliesTo": {
+            "hitIds": [
+              "ganyu.normal.param9",
+              "ganyu.normal.param10"
+            ]
+          },
+          "condition": {
+            "fact": "ganyu.undividedHeartWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ganyu.passive2",
       "name": "天地交泰",
       "description": "降众天华领域内的队伍中当前场上角色获得20%冰元素伤害加成。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "ganyu.a1.celestial-shower-cryo",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "ganyu.celestialShowerArea"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ganyu.passive3",
@@ -852,7 +928,57 @@
       "rank": 1,
       "name": "饮露",
       "description": "二段蓄力重击的霜华矢或霜华绽发命中敌人时，会使敌人的冰元素抗性降低15%，持续6秒；\n此外，命中时会为甘雨恢复2点元素能量。每次二段蓄力重击只能触发一次元素能量恢复效果，无论霜华矢或霜华绽发是否都命中目标。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ganyu.c1.frostflake-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "ganyu.normal.param9",
+                "ganyu.normal.param10"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ganyu.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "ganyu.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -876,7 +1002,29 @@
       "rank": 4,
       "name": "西狩",
       "description": "在降众天华的领域内，敌人受到的伤害会增加，这个效果会随时间逐步加强。\n受伤害加成初始为5%，每3秒提升5%，至多提升至25%。\n离开领域后，效果至多持续3秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ganyu.c4.celestial-shower-vulnerability",
+          "recipient": "target",
+          "condition": {
+            "fact": "ganyu.celestialShowerVulnerable"
+          },
+          "modifiers": [
+            {
+              "target": "target.ordinaryDamageReduction",
+              "value": {
+                "call": "ganyu.celestial-shower-vulnerability",
+                "inputs": {
+                  "input": {
+                    "fact": "ganyu.vulnerabilitySteps"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -893,7 +1041,47 @@
       "rank": 6,
       "name": "履虫",
       "description": "施放山泽麟迹后30秒内的第一次霜华矢，无需蓄力即可施放。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ganyu.c6.frostflake-aim",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "ganyu.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 30000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "ganyu.normal.param9"
+            ]
+          },
+          "condition": {
+            "fact": "ganyu.c6FirstFrostflakeArrow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.aimChargeInstant",
+              "value": {
+                "amount": 1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -922,5 +1110,74 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "ganyu.undividedHeartWindow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "非本次的上一枚霜华矢发射后五秒内"
+    },
+    "ganyu.celestialShowerArea": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于降众天华的领域"
+    },
+    "ganyu.vulnerabilitySteps": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "降众天华令目标承伤提升的有效阶段（含初始一层）"
+    },
+    "ganyu.celestialShowerVulnerable": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于降众天华易伤范围或离开后三秒内"
+    },
+    "ganyu.iceLotusCreated": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次留下冰莲"
+    },
+    "ganyu.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次二段蓄力重击中，霜华矢或霜华绽发命中敌人（每次重击仅回复一次）"
+    },
+    "ganyu.c6FirstFrostflakeArrow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "这发霜华矢是最近一次山泽麟迹后的第一发"
+    }
+  },
+  "formulas": [
+    {
+      "id": "ganyu.celestial-shower-vulnerability",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": -0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 5,
+        "revision": "1"
+      }
+    }
+  ]
 }

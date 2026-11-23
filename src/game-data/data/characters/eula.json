@@ -871,6 +871,74 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "eula.t1.grimheart-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "eula.grimheartShredApplied"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.physical",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "eula.skill",
+                    "parameter": "param4"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "eula.skill",
+                    "parameter": "param5"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "eula.t1.grimheart-defense",
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "eula.grimheart-count",
+                    "inputs": {
+                      "input": {
+                        "fact": "eula.grimheartStacks"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "skill": "eula.skill",
+                    "parameter": "param9"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -1107,13 +1175,69 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "eula.a0.shattered-lightfall-factor",
+          "appliesTo": {
+            "hitIds": [
+              "eula.a0.shattered-lightfall"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "id": "eula.passive2",
       "name": "战欲涌现",
       "description": "施放凝浪之光剑时，重置冰潮的涡旋的冷却时间，并为优菈赋予一层冷酷之心效果。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "eula.skillReset",
+          "application": "explicit",
+          "appliesTo": {
+            "hitIds": [
+              "eula.burst.param1"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "eula.skillReset.confirmed"
+              },
+              "term1": {
+                "call": "skill.cooldown-positive",
+                "inputs": {
+                  "duration": {
+                    "fact": "skillCooldownBeforeResetMs"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillCooldownResetMs",
+              "value": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "eula.passive3",
@@ -1127,13 +1251,60 @@
       "rank": 1,
       "name": "光潮的幻象",
       "description": "消耗冰潮的涡旋的冷酷之心效果后，优菈的物理伤害加成提高30%，持续6秒，\n每消耗一层冷酷之心，都会使这个效果的持续时间延长6秒，最多不会超过18秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "eula.c1.grimheart-physical",
+          "condition": {
+            "fact": "eula.grimheartSpentWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.physicalBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "海沫的少女",
       "description": "缩短冰潮的涡旋长按的冷却时间，使其降低至与点按的冷却时间相同。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "eula.c2.hold-cooldown",
+          "application": "explicit",
+          "appliesTo": {
+            "skillIds": [
+              "eula.skill"
+            ],
+            "hitIds": [
+              "eula.skill.param2",
+              "eula.skill.param3"
+            ],
+            "origins": [
+              "talent"
+            ]
+          },
+          "condition": {
+            "fact": "eula.c2.heldSkillCast"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.currentCastSkillCooldownReductionMs",
+              "value": {
+                "amount": 6000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1150,7 +1321,35 @@
       "rank": 4,
       "name": "自卑者的逞强",
       "description": "对生命值低于50%的敌人，光降之剑造成的伤害提高25%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "eula.c4.lightfall-execution",
+          "appliesTo": {
+            "hitIds": [
+              "eula.burst.param2"
+            ]
+          },
+          "condition": {
+            "call": "hp.below50",
+            "inputs": {
+              "ratio": {
+                "fact": "targetHpRatio"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1198,12 +1397,65 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "eula.grimheartSpentWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "冷酷之心消耗后的物伤窗口仍有效（1层12秒，2层18秒）"
+    },
     "eula.spentTwoGrimheart": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "长按冰潮的涡旋时一次性消耗两层冷酷之心"
+    },
+    "eula.grimheartShredApplied": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "长按冰潮的涡旋消耗冷酷之心后，目标处于抗性削减窗口"
+    },
+    "eula.grimheartStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前持有的冷酷之心层数（零至两层）"
+    },
+    "eula.c2.heldSkillCast": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次长按冰潮的涡旋"
+    },
+    "eula.skillReset.confirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次已施放凝浪之光剑"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "eula.grimheart-count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 2,
+        "revision": "1"
+      }
+    }
+  ]
 }

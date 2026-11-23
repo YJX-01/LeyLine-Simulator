@@ -794,7 +794,40 @@
       "id": "lisa.passive2",
       "name": "静电场力",
       "description": "敌人受到蔷薇的雷光攻击后，降低15%防御力，持续10秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "lisa.a1.lightning-rose-defence",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "lisa.burst.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.defenseReduction",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lisa.passive3",
@@ -808,13 +841,57 @@
       "rank": 1,
       "name": "无限的电回路",
       "description": "苍雷长按时，每个命中的敌人都会为丽莎恢复2点元素能量。\n通过这种方式，一次至多回复10点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lisa.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "lisa.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "lisa.directEnergy.c1.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "lisa.energyHoldTargets"
+                  }
+                },
+                "output": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "空间电势结界",
       "description": "苍雷长按时，具有如下效果：\n·防御力提升25%；\n·提高丽莎的抗打断能力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "lisa.c2.violet-arc-defence",
+          "condition": {
+            "fact": "lisa.holdingVioletArc"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -877,5 +954,46 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lisa.holdingVioletArc": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "正在长按苍雷"
+    },
+    "lisa.energyHoldTargets": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次长按苍雷命中的敌人数"
+    },
+    "lisa.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "丽莎本次长按施放苍雷"
+    }
+  },
+  "formulas": [
+    {
+      "id": "lisa.directEnergy.c1.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 10,
+        "revision": "1"
+      }
+    }
+  ]
 }

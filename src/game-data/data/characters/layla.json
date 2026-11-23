@@ -587,7 +587,157 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "layla.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "layla.curtainOfSlumberActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": {
+                        "parameter": "param3",
+                        "skill": "layla.skill"
+                      },
+                      "flat": {
+                        "parameter": "param4",
+                        "skill": "layla.skill",
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "layla.shield-constellation-rate",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-scale",
+                    "inputs": {
+                      "basis": {
+                        "call": "shield.hp-base",
+                        "inputs": {
+                          "basis": {
+                            "stat": "hp"
+                          },
+                          "rate": {
+                            "parameter": "param3",
+                            "skill": "layla.skill"
+                          },
+                          "flat": {
+                            "parameter": "param4",
+                            "skill": "layla.skill",
+                            "unit": "hp"
+                          }
+                        }
+                      },
+                      "rate": {
+                        "call": "layla.shield-constellation-rate",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "layla.curtain-of-slumber.cryo",
+                "inputs": {
+                  "element": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-base",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      },
+                      "rate": {
+                        "parameter": "param3",
+                        "skill": "layla.skill"
+                      },
+                      "flat": {
+                        "parameter": "param4",
+                        "skill": "layla.skill",
+                        "unit": "hp"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "layla.shield-constellation-rate",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    }
+                  }
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "layla.curtain-of-slumber.cryo",
+                    "inputs": {
+                      "element": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "layla.burst",
@@ -724,13 +874,68 @@
       "id": "layla.passive1",
       "name": "如光骤现",
       "description": "安眠帷幕护盾在存在期间，每获得一枚晚星时，将产生深眠效果：\n·处于安眠帷幕护盾庇护下的角色，护盾强效提升6%；\n·该效果至多叠加4次，持续直到安眠帷幕护盾消失。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "layla.a1.curtain-of-slumber-strength",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "layla.curtainOfSlumberActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldStrength",
+              "value": {
+                "call": "layla.deep-sleep-strength",
+                "inputs": {
+                  "stacks": {
+                    "fact": "layla.deepSleepStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "layla.passive2",
       "name": "勿扰沉眠",
       "description": "垂裳端凝之夜发射的飞星造成的伤害提高，提高值相当于莱依拉生命值上限的1.5%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "layla.a1.shooting-star-hp",
+          "appliesTo": {
+            "hitIds": [
+              "layla.skill.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "layla.shooting-star-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "layla.passive3",
@@ -744,13 +949,215 @@
       "rank": 1,
       "name": "寐领围垣",
       "description": "垂裳端凝之夜的安眠帷幕护盾的伤害吸收量提高20%。\n此外，施放垂裳端凝之夜时，将为队伍中附近不处于安眠帷幕护盾庇护下的所有角色生成伤害吸收量为安眠帷幕护盾35%的护盾，该护盾持续12秒，对冰元素伤害有250%的吸收效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "layla.c1.curtain-of-slumber-coop",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "layla.curtainOfSlumberCoopShield"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "layla.curtainOfSlumberActive"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-scale",
+                    "inputs": {
+                      "basis": {
+                        "call": "shield.hp-base",
+                        "inputs": {
+                          "basis": {
+                            "stat": "hp"
+                          },
+                          "rate": {
+                            "parameter": "param3",
+                            "skill": "layla.skill"
+                          },
+                          "flat": {
+                            "parameter": "param4",
+                            "skill": "layla.skill",
+                            "unit": "hp"
+                          }
+                        }
+                      },
+                      "rate": {
+                        "call": "layla.shield-constellation-rate",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "rate": 0.35
+                }
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-scale",
+                    "inputs": {
+                      "basis": {
+                        "call": "shield.hp-scale",
+                        "inputs": {
+                          "basis": {
+                            "call": "shield.hp-base",
+                            "inputs": {
+                              "basis": {
+                                "stat": "hp"
+                              },
+                              "rate": {
+                                "parameter": "param3",
+                                "skill": "layla.skill"
+                              },
+                              "flat": {
+                                "parameter": "param4",
+                                "skill": "layla.skill",
+                                "unit": "hp"
+                              }
+                            }
+                          },
+                          "rate": {
+                            "call": "layla.shield-constellation-rate",
+                            "inputs": {
+                              "rank": {
+                                "state": "constellation"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "rate": 0.35
+                    }
+                  },
+                  "rate": 2.5
+                }
+              },
+              "condition": {
+                "call": "layla.curtain-of-slumber.cryo",
+                "inputs": {
+                  "element": {
+                    "fact": "incomingShieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.effectiveShieldAbsorption",
+              "value": {
+                "call": "shield.hp-scale",
+                "inputs": {
+                  "basis": {
+                    "call": "shield.hp-scale",
+                    "inputs": {
+                      "basis": {
+                        "call": "shield.hp-base",
+                        "inputs": {
+                          "basis": {
+                            "stat": "hp"
+                          },
+                          "rate": {
+                            "parameter": "param3",
+                            "skill": "layla.skill"
+                          },
+                          "flat": {
+                            "parameter": "param4",
+                            "skill": "layla.skill",
+                            "unit": "hp"
+                          }
+                        }
+                      },
+                      "rate": {
+                        "call": "layla.shield-constellation-rate",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "rate": 0.35
+                }
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "layla.curtain-of-slumber.cryo",
+                    "inputs": {
+                      "element": {
+                        "fact": "incomingShieldElement"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "归芒携信",
       "description": "垂裳端凝之夜发射的飞星命中敌人时，为莱依拉恢复1点能量。每枚飞星至多通过这种方式为莱依拉恢复一次能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "layla.directEnergy.c2",
+          "application": "explicit",
+          "condition": {
+            "fact": "layla.directEnergy.c2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -767,7 +1174,35 @@
       "rank": 4,
       "name": "星示昭明",
       "description": "垂裳端凝之夜开始发射一轮飞星时，将为附近的队伍中所有角色赋予「启明」效果，使普通攻击与重击造成的伤害提升，提升值相当于莱依拉生命值上限的5%。\n「启明」效果至多持续3秒，将在造成普通攻击或重击伤害后的0.05秒后移除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "layla.c4.dawn-star",
+          "recipient": "team",
+          "condition": {
+            "fact": "layla.dawnStarRecipient"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "layla.dawn-star-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -784,7 +1219,27 @@
       "rank": 6,
       "name": "曜光灵炬",
       "description": "垂裳端凝之夜的飞星造成的伤害提升40%，星流摇床之梦的星光弹造成的伤害提升40%。\n此外，垂裳端凝之夜产生晚星的间隔时间减少20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "layla.c6.stellar-stars",
+          "appliesTo": {
+            "hitIds": [
+              "layla.skill.param2",
+              "layla.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -813,5 +1268,123 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "layla.shooting-star-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.015,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "layla.dawn-star-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "layla.shield-constellation-rate",
+      "template": {
+        "id": "linear-bonus",
+        "input": "rank",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 1,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1",
+        "maxInput": 6,
+        "cap": 1.2
+      }
+    },
+    {
+      "id": "layla.deep-sleep-strength",
+      "template": {
+        "id": "linear-bonus",
+        "input": "stacks",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1",
+        "cap": 0.24
+      }
+    },
+    {
+      "id": "layla.curtain-of-slumber.cryo",
+      "template": {
+        "id": "enum-condition",
+        "input": "element",
+        "values": [
+          "physical",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "cryo",
+        "revision": "1"
+      }
+    }
+  ],
+  "facts": {
+    "layla.dawnStarRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "飞星开始发射后三秒内且启明未消耗"
+    },
+    "layla.curtainOfSlumberActive": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前受益角色受安眠帷幕主护盾庇护"
+    },
+    "layla.directEnergy.c2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "垂裳端凝之夜的一枚飞星首次命中敌人"
+    },
+    "layla.deepSleepStacks": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前主护盾有效的深眠层数"
+    },
+    "layla.curtainOfSlumberCoopShield": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队友因寐领围垣获得的联机护盾仍有效"
+    }
+  }
 }

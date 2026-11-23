@@ -621,6 +621,46 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "candace.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "candace.sacredRiteGuard"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.hp-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param1",
+                    "skill": "candace.skill"
+                  },
+                  "flat": {
+                    "parameter": "param2",
+                    "skill": "candace.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -837,7 +877,133 @@
       "energyCapacity": {
         "parameter": "param7"
       },
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "candace.scarlet-crown",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ],
+            "elements": [
+              "pyro",
+              "hydro",
+              "cryo",
+              "electro",
+              "anemo",
+              "geo",
+              "dendro"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-1",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "candace.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 9000,
+            "phase": "after"
+          },
+          "windowFact": "candace.prayer",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "candace.burst",
+                "parameter": "param3"
+              }
+            }
+          ]
+        },
+        {
+          "id": "candace.scarlet-crown-c1",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ],
+            "elements": [
+              "pyro",
+              "hydro",
+              "cryo",
+              "electro",
+              "anemo",
+              "geo",
+              "dendro"
+            ]
+          },
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "candace.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "windowFact": "candace.prayer",
+          "activation": {
+            "constellation": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "candace.burst",
+                "parameter": "param3"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -851,7 +1017,153 @@
       "id": "candace.passive2",
       "name": "漫沙陨穹",
       "description": "处于圣仪·灰鸰衒潮的赤冕祝祷状态下的角色，普通攻击对敌人造成元素伤害时，坎蒂丝每1000点生命值上限会使这次伤害提高0.5%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "candace.celestial-dome",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ],
+            "elements": [
+              "pyro",
+              "hydro",
+              "cryo",
+              "electro",
+              "anemo",
+              "geo",
+              "dendro"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-1",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "candace.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 9000,
+            "phase": "after"
+          },
+          "windowFact": "candace.prayer",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "candace.dome-conversion.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      }
+                    }
+                  },
+                  "rate": 0.000005
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "candace.celestial-dome-c1",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ],
+            "elements": [
+              "pyro",
+              "hydro",
+              "cryo",
+              "electro",
+              "anemo",
+              "geo",
+              "dendro"
+            ]
+          },
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "candace.burst"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "windowFact": "candace.prayer",
+          "activation": {
+            "constellation": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "candace.dome-conversion.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "hp"
+                      }
+                    }
+                  },
+                  "rate": 0.000005
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "candace.passive3",
@@ -889,7 +1201,37 @@
       "rank": 2,
       "name": "贯月的耀锋",
       "description": "圣仪·苍鹭庇卫命中敌人时，坎蒂丝的生命值上限提升20%，持续15秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "candace.heron-c2-health",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "skillIds": [
+                "candace.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "windowFact": "candace.c2Guard",
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -906,7 +1248,33 @@
       "rank": 4,
       "name": "守戍的誓命",
       "description": "缩短圣仪·苍鹭庇卫长按的冷却时间，使其降低至与点按的冷却时间相同。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "candace.c4.hold-cooldown",
+          "application": "explicit",
+          "appliesTo": {
+            "skillIds": [
+              "candace.skill"
+            ],
+            "origins": [
+              "talent"
+            ]
+          },
+          "condition": {
+            "fact": "candace.c4.heldSkillCast"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.currentCastSkillCooldownReductionMs",
+              "value": {
+                "amount": 3000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -967,6 +1335,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "蓄力受击即时完成、长按冷却分支、登场水波次数仍需事件绑定。六命的符合条件命中可显式选择，每2.3秒触发一次尚需事件追踪。"
         }
       ]
     },
@@ -989,12 +1362,56 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "candace.prayer": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于赤冕祝祷持续期间"
+    },
+    "candace.c2Guard": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "苍鹭庇卫命中后的十五秒"
+    },
     "candace.c6Wave": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "符合条件的在场其他角色触发衍潮冲击"
+    },
+    "candace.sacredRiteGuard": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "坎蒂丝正在长按战技格挡"
+    },
+    "candace.c4.heldSkillCast": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次长按圣仪·苍鹭庇卫"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "candace.dome-conversion.scalar",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

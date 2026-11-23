@@ -1,0 +1,40 @@
+{
+  "entity": "nicole",
+  "field": "/talents/1/details/4",
+  "capturedAt": "2026-11-22",
+  "sources": {
+    "skillCast": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Nicole.json#L1759-1842",
+    "skillModifiers": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Nicole.json#L507-535",
+    "theosisModifier": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Nicole.json#L754-756",
+    "constellationModifier": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Nicole.json#L1224-1234",
+    "bennett": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Bennett.json#L1425-1440",
+    "kujouSara": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Sara.json#L3164-3220",
+    "iansan": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Iansan.json#L6574-6585",
+    "pruneSelf": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Prune.json#L5063-5077",
+    "pruneTeam": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Prune.json#L5163-5172",
+    "foodModifier": "https://gitlab.com/Dimbreath/animegamedata2/-/blob/bd35e243fa436f141f015cf221a6e19d0c34b7ca/BinOutput/Ability/Temp/ItemAbilities.json#L1991-2002",
+    "pyroResonance": "https://library.keqingmains.com/combat-mechanics/elemental-effects/elemental-resonance#list-of-elemental-resonances"
+  },
+  "castOrder": [
+    "RemoveUniqueModifier: UNIQUE_Avatar_Nicole_AttackUp_Handler",
+    "RemoveUniqueModifier: UNIQUE_Avatar_Nicole_AttackUp_Constellation_1",
+    "SetGlobalValue: _ABILITY_Nicole_ElementalArt_AttackUp = clamp(FIGHT_PROP_NONEXTRA_ATTACK × AttackUp_AttackTranferRatio, 0, AttackUp_Max)",
+    "AttachModifier: UNIQUE_Avatar_Nicole_AttackUp_Handler",
+    "AttachModifier: UNIQUE_Avatar_Nicole_AttackUp_Constellation_1"
+  ],
+  "attackProperties": {
+    "UNIQUE_Avatar_Nicole_AttackUp_Lv1": { "Actor_AttackExtraDelta": "_ABILITY_Nicole_ElementalArt_AttackUp" },
+    "UNIQUE_Avatar_Nicole_AttackUp_Lv2": { "Actor_AttackExtraDelta": "_ABILITY_Nicole_ElementalArt_AttackUp" },
+    "UNIQUE_Avatar_Nicole_AttackUp_Lv2_Add": { "Actor_AttackDelta": "PermanentSkill_1_AttackUp" },
+    "UNIQUE_Avatar_Nicole_AttackUp_Constellation_1": { "Actor_AttackDelta": "Constellation_1_AttackUp" },
+    "UNIQUE_WarmField_AttackUp": { "Actor_AttackExtraDelta": ["AttackUpRatio", "Bennett_WarmField_BaseAttack", "MUL"] },
+    "UNIQUE_Sara_AttackUp": { "Actor_AttackExtraDelta": ["Avatar_Sara_BaseAttack", "Sara_AttackUp_Ratio", "MUL"] },
+    "UNIQUE_Avatar_Iansan_ElementalBurst_AttackUpBuff_OnLocalAvatar": { "Actor_AttackExtraDelta": "_IansanAttackUpValue" },
+    "UNIQUE_Prune_C6_Buff_OnPrune": { "Actor_AttackDelta": "C6_Attack_Add" },
+    "UNIQUE_Prune_C6_Buff_OnCurLocalAvatar": { "Actor_AttackDelta": "C6_Attack_Add" },
+    "SERVER_Atk_Team_Modifier_lv5_3": { "Actor_AttackDelta": 372 }
+  },
+  "setting": "尼可90级，精炼5阶90级尘世之锁，角斗士的终幕礼和追忆之注连各2件，圣遗物仅启用理论套装件数。钟离提供护盾，砂糖以精炼5阶讨龙英杰谭切换至尼可，班尼特施放爆发触发4件宗室，双火共鸣及美味仙跳墙有效。由4次或5次相隔至少0.3秒的攻击命中提供尘世之锁层数。重施放距离首次16秒，旧的虚己之赐仍在，初次的讨龙、宗室及尘世之锁层数已结束。重施放之前由钟离的元素伤害触发尼可自身的升变，随后切回尼可。",
+  "expectation": "先移除自身上一轮虚己之赐、对应升变和二命加攻，再读取非额外攻击力，乘天赋比例，按天赋上限截断，保存至下一次施放或到期。二命发放独立的固定300点。",
+  "tolerance": 0.00000001
+}

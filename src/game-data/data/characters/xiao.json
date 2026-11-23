@@ -848,13 +848,57 @@
       "id": "xiao.passive1",
       "name": "降魔·平妖大圣",
       "description": "在靖妖傩舞状态下，魈造成的所有伤害提高5%。此后，在技能持续时间内，每经过3秒，造成的伤害再额外提高5%。\n至多获得25%伤害加成。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "xiao.a0.bane-of-all-evil-damage",
+          "condition": {
+            "fact": "xiao.baneActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "xiao.bane-of-all-evil-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "xiao.baneDamageSteps"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xiao.passive2",
       "name": "坏劫·国土碾尘",
       "description": "施放风轮两立会使之后7秒内的风轮两立造成的伤害提高15%。\n该效果持续7秒，最多叠加3次，叠加时刷新持续时间。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "xiao.a1.lemniscatic-wind-cycling",
+          "appliesTo": {
+            "skillIds": [
+              "xiao.skill"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "xiao.wind-cycling-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "xiao.windCyclingStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xiao.passive3",
@@ -1003,6 +1047,61 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "xiao.baneDamageSteps": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "靖妖傩舞当前伤害档位，含初始第一档"
+    },
+    "xiao.baneActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于靖妖傩舞状态"
+    },
+    "xiao.windCyclingStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "施放风轮两立造成的有效叠层"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "xiao.bane-of-all-evil-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 5,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xiao.wind-cycling-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.15,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }

@@ -659,7 +659,47 @@
       "id": "ororon.passive2",
       "name": "灵相的触媒",
       "description": "元素战技暝色缒索中的宿灵球命中敌人后，欧洛伦将获得「灵相之印」效果，持续15秒。\n\n灵相之印\n队伍中附近的当前场上角色普攻、重击或下落攻击命中敌人后，将为该角色恢复3点元素能量；若欧洛伦处于队伍后台，还会为欧洛伦恢复3点元素能量。该效果每1秒至多触发一次，在持续期间内至多触发3次。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "ororon.directEnergy.p1",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "fact": "ororon.directEnergy.p1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              },
+              "condition": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 3,
+                "unit": "energy"
+              },
+              "recipient": "owner",
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ororon.passive3",
@@ -671,7 +711,37 @@
       "id": "ororon.passive4",
       "name": "皮行的巧技",
       "description": "队伍中自己的角色滑翔时移动速度提高15%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "ororon.glide-speed",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.glide-speed",
+            "scope": "recipient",
+            "policy": "max",
+            "maxStacks": 10000
+          },
+          "condition": {
+            "call": "movement.gliding",
+            "inputs": {
+              "mode": {
+                "fact": "movement.mode"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.glideSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -679,13 +749,54 @@
       "rank": 1,
       "name": "林雾间的行迹",
       "description": "元素战技暝色缒索中的宿灵球能额外弹跳2次。\n此外，宿灵球命中敌人后，将为该敌人施加「夜暝」效果，持续12秒；对处于「夜暝」效果的影响下的敌人，突破天赋「夜翳的通感」触发的「显象超感」造成的伤害提升50%，该效果需要解锁突破天赋「夜翳的通感」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ororon.c1.nighttide",
+          "condition": {
+            "fact": "ororon.nighttide"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "ororon.a0.hypersense",
+              "ororon.c6.hypersense"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "藏蜜酒的王蜂",
       "description": "施放元素爆发黯声回响后，欧洛伦将获得「灵式超感」效果，持续9秒。\n\n灵式超感\n获得8%雷元素伤害加成；\n此外，持续期间，元素爆发黯声回响或超音灵眼每额外命中一名敌人，都将进一步使欧洛伦获得8%雷元素伤害加成，至多通过这种方式获得32%雷元素伤害加成。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ororon.c2.supersense-electro",
+          "condition": {
+            "fact": "ororon.burstElectroWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "ororon.supersense-electro",
+                "inputs": {
+                  "input": {
+                    "fact": "ororon.burstEnemies"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -702,7 +813,25 @@
       "rank": 4,
       "name": "如夜风的谜烟",
       "description": "元素爆发黯声回响召唤的超音灵眼的旋转速度提升25%。\n此外，施放黯声回响后，为欧洛伦自己恢复8点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ororon.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "ororon.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 8,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -720,6 +849,32 @@
       "name": "致深泉的颂赞",
       "description": "触发突破天赋「夜翳的通感」的「显象超感」后，会使队伍中自己的当前场上角色的攻击力提升10%，持续9秒。该效果至多叠加3层，每层独立计算持续时间。\n此外，施放元素爆发黯声回响时，将触发一次等同于「显象超感」的效果，造成原本200%的伤害。\n该效果需要解锁突破天赋「夜翳的通感」。",
       "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "ororon.c6.supersense-attack",
+          "activation": {
+            "ascension": 1
+          },
+          "recipient": "team",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "ororon.supersense-attack",
+                "inputs": {
+                  "input": {
+                    "fact": "ororon.supersenseAttackStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
       "hits": [
         {
           "id": "ororon.c6.hypersense",
@@ -779,6 +934,29 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "ororon.burstEnemies": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次施放后技能累计额外命中的不同敌人数量"
+    },
+    "ororon.burstElectroWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "黯声回响施放后九秒内"
+    },
+    "ororon.supersenseAttackStacks": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "该角色受近期显象超感影响的有效层数"
+    },
     "ororon.a1HypersenseReady": {
       "scope": "query",
       "type": {
@@ -786,12 +964,77 @@
       },
       "label": "本次满足反应或夜魂命中、夜魂值及间隔并触发显象超感"
     },
+    "ororon.nighttide": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前目标处于宿灵球施加的夜暝效果下"
+    },
     "ororon.c6HypersenseReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "本次施放黯声回响触发六命显象超感"
+    },
+    "ororon.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "欧洛伦本次施放黯声回响"
+    },
+    "ororon.directEnergy.p1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "灵相之印期间，场上角色普攻、重击或下落攻击命中，且本次未达3次上限（间隔至少1秒）"
+    },
+    "movement.mode": {
+      "scope": "recipient",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "other-movement",
+          "gliding",
+          "underwater-sprint"
+        ]
+      },
+      "label": "受益角色当前移动状态"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "ororon.supersense-electro",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.08,
+        "offset": 0.08,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.32,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "ororon.supersense-attack",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }

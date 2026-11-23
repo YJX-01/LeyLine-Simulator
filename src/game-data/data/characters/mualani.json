@@ -720,7 +720,43 @@
       "id": "mualani.passive2",
       "name": "纳塔最好的向导",
       "description": "队伍中的附近的角色触发「夜魂迸发」后，玛拉妮将获得一层持续20秒、至多叠加3层的逐浪心得。施放爆瀑飞弹时，玛拉妮将清除所有逐浪心得，并基于清除的层数，基于生命值上限的15%/30%/45%提高本次爆瀑飞弹造成的伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "mualani.a1.wavechaser-hp",
+          "appliesTo": {
+            "hitIds": [
+              "mualani.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "mualani.wavechaser-hp",
+                    "inputs": {
+                      "input": {
+                        "stat": "hp"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "mualani.wavechaser-count",
+                    "inputs": {
+                      "input": {
+                        "fact": "mualani.wavechaserSpent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mualani.passive3",
@@ -740,7 +776,63 @@
       "rank": 1,
       "name": "悠闲的「梅兹特利」…",
       "description": "进入夜魂加持状态后的第一次巨浪鲨鲨撕咬及它所触发的鲨鲨飞弹造成的伤害提升，提升值相当于玛拉妮生命值上限的66%。此次伤害提升遵循踏鲨破浪的伤害衰减规则。\n此外，不处于战斗状态下时，玛拉妮的夜魂加持状态消耗的夜魂值与燃素降低30%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mualani.c1.first-surging-bite",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "mualani.maximum-momentum",
+                "inputs": {
+                  "count": {
+                    "fact": "mualani.waveMomentum"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "mualani.firstSurgingBite"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "mualani.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "mualani.surging-bite-hp",
+                "inputs": {
+                  "input": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -763,7 +855,45 @@
       "rank": 4,
       "name": "鲨鲨主食是豚豚。",
       "description": "获得豚豚球时，玛拉妮恢复8点元素能量；该效果需要解锁突破天赋「耐热型淡水豚豚」。\n此外，爆瀑飞弹造成的伤害提升75%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "mualani.c4.stormburst-bonus",
+          "appliesTo": {
+            "skillIds": [
+              "mualani.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.75,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "mualani.directEnergy.c4",
+          "application": "explicit",
+          "activation": {
+            "ascension": 1
+          },
+          "condition": {
+            "fact": "mualani.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 8,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -817,6 +947,28 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "mualani.wavechaserSpent": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "爆瀑飞弹清除的逐浪心得层数"
+    },
+    "mualani.firstSurgingBite": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次夜魂加持的首次巨浪鲨鲨撕咬"
+    },
+    "mualani.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "玛拉妮本次获得豚豚球"
     }
   },
   "formulas": [
@@ -830,6 +982,49 @@
         "relation": "eq",
         "threshold": 3,
         "maxInput": 3
+      }
+    },
+    {
+      "id": "mualani.wavechaser-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.15,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "mualani.wavechaser-count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "mualani.surging-bite-hp",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "damage",
+        "rate": 0.66,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
       }
     }
   ]

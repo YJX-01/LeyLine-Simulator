@@ -935,13 +935,67 @@
       "id": "emilie.passive2",
       "name": "精馏",
       "description": "基于艾梅莉埃的攻击力，提升艾梅莉埃对处于燃烧状态下的敌人造成的伤害：每1000点攻击力都将提升15%伤害，至多通过这种方式提升36%伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "emilie.a1.burning-enemy",
+          "condition": {
+            "fact": "emilie.targetBurning"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "emilie.burning-enemy",
+                "inputs": {
+                  "input": {
+                    "stat": "attack"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "emilie.passive3",
       "name": "顶空集香",
       "description": "场上存在艾梅莉埃自己创造的柔灯之匣时，队伍中附近的所有角色对燃烧伤害的火元素抗性提升85%。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "emilie.passive.burning-pyro-resistance",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "emilie.incomingBurningDamage"
+                  },
+                  "term1": {
+                    "fact": "emilie.ownLumidouceCaseActive"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "emilie.nearLumidouceCase"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.pyro",
+              "value": 0.85
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -949,13 +1003,72 @@
       "rank": 1,
       "name": "淡香浸析",
       "description": "撷萃调香与突破天赋「余薰」的清露香氛造成的伤害提升20%，后者需要解锁突破天赋「余薰」。\n此外，队伍中附近的角色对敌人触发燃烧反应或对处于燃烧状态下的敌人造成草元素伤害时，会额外生成一枚香韵。此效果每2.9秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "emilie.c1.perfume-bonus",
+          "appliesTo": {
+            "hitIds": [
+              "emilie.skill.param1",
+              "emilie.skill.param2",
+              "emilie.skill.param3",
+              "emilie.a0.clear-dew"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "湖光顶调",
       "description": "撷萃调香、香氛演绎或突破天赋「余薰」的清露香氛（需解锁该突破天赋）命中敌人时，该敌人的草元素抗性降低30%，持续10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "emilie.c2.perfume-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "emilie.skill.param1",
+                "emilie.skill.param2",
+                "emilie.skill.param3",
+                "emilie.a0.clear-dew",
+                "emilie.burst.param1"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.dendro",
+              "value": {
+                "amount": -0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1081,6 +1194,38 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "emilie.c6.abiding-fragrance",
+          "appliesTo": {
+            "hitIds": [
+              "emilie.normal.c6-fragrance-1",
+              "emilie.normal.c6-fragrance-2",
+              "emilie.normal.c6-fragrance-3",
+              "emilie.normal.c6-fragrance-4",
+              "emilie.normal.c6-fragrance-5"
+            ]
+          },
+          "condition": {
+            "fact": "emilie.abidingFragrance"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 3
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
       ]
     }
   ],
@@ -1119,12 +1264,57 @@
       },
       "label": "二阶柔灯之匣已萃集两枚香韵"
     },
+    "emilie.targetBurning": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标处于燃烧状态"
+    },
     "emilie.abidingFragrance": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "本击处于香迹留驻的五秒内且此前尚未产生四枚香韵"
+    },
+    "emilie.ownLumidouceCaseActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "艾梅莉埃自己创造的柔灯之匣在场"
+    },
+    "emilie.nearLumidouceCase": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前受击角色为附近的队员"
+    },
+    "emilie.incomingBurningDamage": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前角色承受燃烧反应的火元素伤害"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "emilie.burning-enemy",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "scalar",
+        "rate": 0.00015,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.36,
+        "revision": "1"
+      }
+    }
+  ]
 }

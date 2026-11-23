@@ -819,7 +819,69 @@
       "id": "neuvillette.passive1",
       "name": "古海孑遗的权柄",
       "description": "队伍中的角色对敌人触发蒸发、冻结、感电、月感电、绽放、月绽放、水元素扩散、水元素结晶或月结晶反应时，将为那维莱特产生持续30秒，至多叠加3层的「遗龙之荣」效果，使重击·衡平推裁造成原本110%/125%/160%的伤害。\n每种元素反应产生的「遗龙之荣」分别独立存在。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "neuvillette.a0.dragon-glory",
+          "appliesTo": {
+            "hitIds": [
+              "neuvillette.normal.param5",
+              "neuvillette.c6.current-1",
+              "neuvillette.c6.current-2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.1,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "neuvillette.dragon-glory-1",
+                "inputs": {
+                  "value": {
+                    "fact": "neuvillette.dragonGloryStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.25,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "neuvillette.dragon-glory-2",
+                "inputs": {
+                  "value": {
+                    "fact": "neuvillette.dragonGloryStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.6,
+                "unit": "scalar"
+              },
+              "condition": {
+                "call": "neuvillette.dragon-glory-3",
+                "inputs": {
+                  "value": {
+                    "fact": "neuvillette.dragonGloryStacks"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "neuvillette.passive2",
@@ -850,7 +912,37 @@
       "id": "neuvillette.passive3",
       "name": "汇聚如浪潮一般",
       "description": "队伍中自己的角色进行水下冲刺时，移动速度提升15%。\n无法与效果完全相同的固有天赋叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "neuvillette.underwater-sprint-speed",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.underwater-sprint-speed",
+            "scope": "recipient",
+            "policy": "max",
+            "maxStacks": 10000
+          },
+          "condition": {
+            "call": "movement.underwater-sprint",
+            "inputs": {
+              "mode": {
+                "fact": "movement.mode"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.movementSpeed",
+              "value": {
+                "amount": 0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -858,13 +950,61 @@
       "rank": 1,
       "name": "尊荣的创定",
       "description": "那维莱特登场时，获得一层突破天赋「古海孑遗的权柄」的「遗龙之荣」。需要解锁突破天赋「古海孑遗的权柄」。\n此外，进行重击蓄力·诉论心证与重击·衡平推裁时，提高那维莱特的抗打断能力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "neuvillette.c1.equitable-judgment-poise",
+          "condition": {
+            "fact": "neuvillette.legalEvaluationOrEquitableJudgment"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "律法的命诫",
       "description": "突破天赋「古海孑遗的权柄」获得强化：每存在一层「遗龙之荣」，就使重击·衡平推裁的暴击伤害提升14%，至多通过这种方式提升42%。\n需要解锁突破天赋「古海孑遗的权柄」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "neuvillette.c2.dragon-glory-crit",
+          "appliesTo": {
+            "hitIds": [
+              "neuvillette.normal.param5",
+              "neuvillette.c6.current-1",
+              "neuvillette.c6.current-2"
+            ]
+          },
+          "condition": {
+            "call": "rank.at-least-1",
+            "inputs": {
+              "rank": {
+                "state": "ascension"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "neuvillette.dragon-glory-crit",
+                "inputs": {
+                  "input": {
+                    "fact": "neuvillette.dragonGloryStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -954,6 +1094,57 @@
           }
         ]
       }
+    },
+    {
+      "id": "neuvillette.dragon-glory-1",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "neuvillette.dragon-glory-2",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "neuvillette.dragon-glory-3",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "neuvillette.dragon-glory-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.14,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
     }
   ],
   "support": {
@@ -996,6 +1187,33 @@
         "kind": "boolean"
       },
       "label": "衡平推裁已命中且额外洪流可触发"
+    },
+    "neuvillette.dragonGloryStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前有效的不同遗龙之荣层数"
+    },
+    "movement.mode": {
+      "scope": "recipient",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "other-movement",
+          "gliding",
+          "underwater-sprint"
+        ]
+      },
+      "label": "受益角色当前移动状态"
+    },
+    "neuvillette.legalEvaluationOrEquitableJudgment": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "正在进行重击蓄力·诉论心证或重击·衡平推裁"
     }
   }
 }

@@ -790,13 +790,113 @@
       "id": "linnea.passive1",
       "name": "野外观察手记",
       "description": "露米在场上时，露米附近敌人的岩元素抗性会降低15%。\n\n月兆·满辉：莉奈娅的元素战技**对策·露米呀吼吼！**和元素爆发**备忘·绝境生存指南**获得强化，呼唤露米上场后，露米附近敌人的岩元素抗性还会进一步降低15%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "linnea.a0.lumi-geo-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "linnea.lumiNearTarget"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "linnea.a0.lumi-full-moonsign-shred",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "linnea.lumiNearTarget"
+              },
+              "term1": {
+                "fact": "fullMoonsign"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linnea.passive2",
       "name": "万类博物图鉴",
       "description": "依据队伍中自己的当前场上角色，莉奈娅会提升队伍中特定角色的元素精通，提升值基于莉奈娅防御力的5%。若队伍中自己的当前场上角色：\n·为月兆角色：提升该角色的元素精通；\n·不为月兆角色：提升莉奈娅自己的元素精通。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "linnea.a1.other-moonsign",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "linnea.recipientMoonsign"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "linnea.defence-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "linnea.a1.no-moonsign",
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "linnea.moonsignOnField"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "linnea.defence-mastery",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linnea.passive3",
@@ -853,6 +953,22 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "linnea.a3.ultra-convenient-quick-arrow-factor",
+          "appliesTo": {
+            "hitIds": [
+              "linnea.normal.ultra-convenient-quick-arrow"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": 0.2
+            }
+          ]
+        }
       ]
     }
   ],
@@ -861,13 +977,182 @@
       "rank": 1,
       "name": "未完成的分类",
       "description": "施放元素战技**对策·露米呀吼吼！**时，或触发月笼谐奏时，莉奈娅将获得6层「历览编录」效果，该效果持续10秒，至多叠加18层。队伍中附近的角色造成月结晶反应伤害时，将消耗一层「历览编录」，提升造成的伤害，提升值相当于莉奈娅防御力的75%。\n此外，露米在**究极厉害形态**下使用百万吨重锤时，莉奈娅可以消耗至多5层「历览编录」，每层都会使造成的伤害提升，提升值相当于莉奈娅防御力的150%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "linnea.c1.catalogue-ordinary",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "linnea.catalogueConsumeReady"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "linnea.c1-catalogue-allies",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "linnea.c1.catalogue-megaton",
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-6",
+                "inputs": {
+                  "rank": {
+                    "state": "constellation"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "linnea.skill.param3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "linnea.c1-catalogue-megaton",
+                    "inputs": {
+                      "input": {
+                        "stat": "defense"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "linnea.megaton-count-turns",
+                    "inputs": {
+                      "input": {
+                        "fact": "linnea.megatonCatalogueSpent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "喜或悲的谕告",
       "description": "触发月笼谐奏后的8秒内，队伍中所有元素类型为水元素与岩元素的角色的暴击伤害提升40%，且露米在**究极厉害形态**下使用百万吨重锤的暴击伤害额外提升150%。\n\n月兆·满辉：露米在**超厉害形态**下使用加力重锤时，或在究极厉害形态下使用百万吨重锤时，会触发一次月笼谐奏，且本次月笼谐奏视为队伍中所有元素类型为水元素与岩元素的角色均在反应中施加了元素。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "linnea.c2.moondrift-team-crit",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "enemy",
+              "reactionIds": [
+                "lunar-crystallize"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              },
+              "recipientElements": [
+                "geo",
+                "hydro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "linnea.c2.megaton-crit",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "enemy",
+              "reactionIds": [
+                "lunar-crystallize"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "linnea.skill.param3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 1.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -884,7 +1169,74 @@
       "rank": 4,
       "name": "专家的直感觉",
       "description": "触发月笼谐奏后的5秒内，莉奈娅与队伍中自己的当前场上角色的防御力分别提升25%。莉奈娅在场上时，上述防御力提升效果可叠加。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "linnea.c4.moondrift-self-defence",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "enemy",
+              "reactionIds": [
+                "lunar-crystallize"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "linnea.c4.moondrift-active-defence",
+          "recipient": "team",
+          "condition": {
+            "fact": "onField",
+            "of": "recipient"
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "enemy",
+              "reactionIds": [
+                "lunar-crystallize"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "amount": 0.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -901,7 +1253,113 @@
       "rank": 6,
       "name": "黄金猎犬之梦",
       "description": "命之座「未完成的分类」的效果获得强化：施放元素战技**对策·露米呀吼吼！**时，或触发月笼谐奏时，莉奈娅将直接获得最大层数的「历览编录」效果；消耗「历览编录」时，将消耗原本2倍的层数，并使伤害提升效果提高至原本的150%。\n\n月兆·满辉：队伍中附近的角色造成的月结晶反应伤害**擢升**25%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "linnea.c6.catalogue-ordinary",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "linnea.catalogueConsumeReady"
+              },
+              "term1": {
+                "call": "rank.at-least-6",
+                "inputs": {
+                  "rank": {
+                    "state": "constellation"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "linnea.c6-catalogue-allies",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "linnea.c6.catalogue-megaton",
+          "condition": {
+            "call": "rank.at-least-6",
+            "inputs": {
+              "rank": {
+                "state": "constellation"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "linnea.skill.param3"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.flatBaseBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "linnea.c6-catalogue-megaton",
+                    "inputs": {
+                      "input": {
+                        "stat": "defense"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "linnea.megaton-count-turns",
+                    "inputs": {
+                      "input": {
+                        "fact": "linnea.megatonCatalogueSpent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "linnea.c6.moonsign-elevation",
+          "recipient": "team",
+          "condition": {
+            "fact": "fullMoonsign"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-crystallize"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.elevationFactor",
+              "value": {
+                "amount": 1.25,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -944,6 +1402,42 @@
         "kind": "boolean"
       }
     },
+    "linnea.lumiNearTarget": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标在场上露米附近"
+    },
+    "linnea.moonsignOnField": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍中当前场上角色为月兆角色"
+    },
+    "linnea.recipientMoonsign": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队伍成员为月兆角色"
+    },
+    "linnea.catalogueConsumeReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "此次月结晶伤害可消耗有效历览编录"
+    },
+    "linnea.megatonCatalogueSpent": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "此次百万吨重锤用于强化的历览编录层数"
+    },
     "linnea.ultraConvenientQuickArrow": {
       "scope": "query",
       "type": {
@@ -951,5 +1445,92 @@
       },
       "label": "本击为脱战时射出的超便利快捷矢"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "linnea.defence-mastery",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "elementalMastery",
+        "rate": 0.05,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "linnea.megaton-count-turns",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 5,
+        "output": "value"
+      }
+    },
+    {
+      "id": "linnea.c1-catalogue-allies",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 0.75,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "linnea.c1-catalogue-megaton",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 1.5,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "linnea.c6-catalogue-allies",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 1.125,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "linnea.c6-catalogue-megaton",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 2.25,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

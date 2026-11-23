@@ -626,7 +626,52 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param3"
+      "cooldownParameter": "param3",
+      "buffs": [
+        {
+          "id": "alyosha.t1.hunter-precision-attack",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "alyosha.hunterPrecision"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "skill": "alyosha.skill",
+                "parameter": "param5"
+              }
+            },
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "skill": "alyosha.skill",
+                "parameter": "param5"
+              },
+              "constellation": 6,
+              "condition": {
+                "call": "alyosha.hunted-precision-2",
+                "inputs": {
+                  "value": {
+                    "fact": "alyosha.hunterPrecisionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "alyosha.burst",
@@ -805,13 +850,85 @@
       "id": "alyosha.passive2",
       "name": "告别冬麦与残叶",
       "description": "基于阿罗夏的元素充能效率，提升阿罗夏的元素战技与元素爆发造成的伤害：每1%元素充能效率都会使上述伤害提升0.35%，至多提升至70%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "alyosha.a1.recharge-damage",
+          "appliesTo": {
+            "categories": [
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "alyosha.recharge-damage",
+                "inputs": {
+                  "input": {
+                    "stat": "energyRecharge"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "alyosha.passive3",
       "name": "星赴险域",
       "description": "处于**极星辉域**中时，阿罗夏将会进入辉映·星超导状态。\n辉映·星超导：激活**弋猎印记**时获得的猎者之准效果还会使角色处于场上时造成的星超导反应伤害提升20%。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "alyosha.a2.stellar-conduct",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "alyosha.hunterPrecision"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "alyosha.conduct-radiance",
+                "inputs": {
+                  "value": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "alyosha.passive4",
@@ -825,7 +942,25 @@
       "rank": 1,
       "name": "寒谷轰雷",
       "description": "队伍中附近的角色对敌人触发雷元素相关反应后，将为阿罗夏恢复15点元素能量，该效果每18秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "alyosha.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "alyosha.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 15,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -865,7 +1000,50 @@
       "rank": 6,
       "name": "复夺旌幡",
       "description": "激活**弋猎印记**时获得的猎者之准效果可以叠加。该效果至多叠加2层，叠加至2层时，还会使处于该效果影响下的当前场上角色的元素精通提升100点。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "alyosha.c6.hunter-precision-mastery",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "alyosha.hunterPrecision"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "alyosha.hunted-precision-2",
+                "inputs": {
+                  "value": {
+                    "fact": "alyosha.hunterPrecisionStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 100,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -894,5 +1072,72 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "alyosha.recharge-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.35,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 0.7,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "alyosha.conduct-radiance",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
+    {
+      "id": "alyosha.hunted-precision-2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "value",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 2
+      }
+    }
+  ],
+  "facts": {
+    "alyosha.hunterPrecision": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色处于弋猎印记激活后的猎者之准"
+    },
+    "alyosha.hunterPrecisionStacks": {
+      "scope": "recipient",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "该角色猎者之准的当前有效层数"
+    },
+    "alyosha.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近队员对敌人触发雷元素相关反应，本次可回复能量（间隔至少18秒）"
+    }
+  }
 }

@@ -558,7 +558,83 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param3"
+      "cooldownParameter": "param3",
+      "buffs": [
+        {
+          "id": "yumemizukimizuki.dreamdrifter-reactions",
+          "recipient": "team",
+          "condition": {
+            "fact": "yumemizukimizuki.dreamdrifter"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "yumemizukimizuki.swirl.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "skill": "yumemizukimizuki.skill",
+                        "parameter": "param2"
+                      },
+                      "rate": 0.01
+                    }
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "transformative"
+                ],
+                "reactionIds": [
+                  "swirl"
+                ]
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "yumemizukimizuki.stellar.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "product.scalar",
+                    "inputs": {
+                      "basis": {
+                        "skill": "yumemizukimizuki.skill",
+                        "parameter": "param6"
+                      },
+                      "rate": 0.01
+                    }
+                  }
+                }
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yumemizukimizuki.burst",
@@ -839,7 +915,33 @@
       "id": "yumemizukimizuki.passive2",
       "name": "昼想夜梦",
       "description": "梦见月瑞希处于梦浮状态下时，队伍中附近的其他角色的元素类型为火元素、水元素、冰元素或雷元素的攻击命中敌人时，梦见月瑞希的元素精通提升100点，持续4秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "yumemizukimizuki.dream-element-hit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yumemizukimizuki.dreamdrifter"
+              },
+              "term1": {
+                "fact": "yumemizukimizuki.a4Mastery"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 100,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "yumemizukimizuki.passive3",
@@ -853,13 +955,172 @@
       "rank": 1,
       "name": "宿雾若水遥",
       "description": "梦见月瑞希处于梦浮状态下时，每3.5秒将对附近的敌人施加持续3秒的「二十三夜待」效果。处于二十三夜待状态下的敌人受到风元素伤害而触发扩散或星扩散反应时，将移除该效果，使此次扩散/星扩散反应对该敌人造成的伤害提升，提升值分别相当于梦见月瑞希元素精通的1100%/550%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yumemizukimizuki.c1-stellar-night",
+          "recipient": "team",
+          "condition": {
+            "fact": "yumemizukimizuki.c1Night"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.flatBaseBonus",
+              "value": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": 5.5
+                },
+                "output": "base"
+              }
+            }
+          ]
+        },
+        {
+          "id": "yumemizukimizuki.c1-swirl-night",
+          "recipient": "team",
+          "condition": {
+            "fact": "yumemizukimizuki.c1Night"
+          },
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.flatBaseBonus",
+              "value": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": 11
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "缠忆君影梦相见",
       "description": "进入梦浮状态时，梦见月瑞希的每点元素精通，会为附近的队伍中所有其他角色提供0.04%火元素、水元素、冰元素与雷元素伤害加成，效果持续至梦浮状态结束。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yumemizukimizuki.c2-element-bonuses",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "yumemizukimizuki.dreamdrifter"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "yumemizukimizuki.c2-dream-elements.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  },
+                  "rate": 0.0004
+                }
+              },
+              "appliesTo": {
+                "elements": [
+                  "pyro"
+                ]
+              }
+            },
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "yumemizukimizuki.c2-dream-elements.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  },
+                  "rate": 0.0004
+                }
+              },
+              "appliesTo": {
+                "elements": [
+                  "hydro"
+                ]
+              }
+            },
+            {
+              "target": "attribute.cryoBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "yumemizukimizuki.c2-dream-elements.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  },
+                  "rate": 0.0004
+                }
+              },
+              "appliesTo": {
+                "elements": [
+                  "cryo"
+                ]
+              }
+            },
+            {
+              "target": "attribute.electroBonus",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "call": "yumemizukimizuki.c2-dream-elements.scalar",
+                    "inputs": {
+                      "basis": {
+                        "stat": "elementalMastery"
+                      }
+                    }
+                  },
+                  "rate": 0.0004
+                }
+              },
+              "appliesTo": {
+                "elements": [
+                  "electro"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -876,7 +1137,25 @@
       "rank": 4,
       "name": "泉轻流花暖",
       "description": "拾取元素爆发安乐秘汤疗法中的梦见风名物点心时，将同时造成伤害与治疗，并为梦见月瑞希恢复5点元素能量。一次安乐秘汤疗法持续期间，至多通过这种方式恢复4次元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yumemizukimizuki.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "yumemizukimizuki.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 5,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -893,7 +1172,56 @@
       "rank": 6,
       "name": "慕念萦心间",
       "description": "梦见月瑞希处于梦浮状态下时，队伍中附近的角色触发的扩散反应造成的伤害能够造成暴击，暴击率固定为30%，暴击伤害固定为100%，并使这些角色造成的星扩散反应伤害暴击率提升10%，暴击伤害提升20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "yumemizukimizuki.c6-stellar-critical",
+          "recipient": "team",
+          "condition": {
+            "fact": "yumemizukimizuki.dreamdrifter"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.1
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "yumemizukimizuki.c6-swirl-critical",
+          "recipient": "team",
+          "condition": {
+            "fact": "yumemizukimizuki.dreamdrifter"
+          },
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.critRate",
+              "value": 0.3
+            },
+            {
+              "target": "attribute.reaction.transformative.critDamage",
+              "value": 1
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -918,18 +1246,44 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "梦浮延时、点心的实际掉落与治疗、四命回能和二十三夜待的周期消耗仍需事件状态。"
         }
       ]
     }
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "yumemizukimizuki.dreamdrifter": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于梦浮状态"
+    },
+    "yumemizukimizuki.a4Mastery": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "梦浮时队友对应元素命中后的四秒"
+    },
     "yumemizukimizuki.snackExpires": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "梦见风名物点心未拾取自动爆炸"
+    },
+    "yumemizukimizuki.c1Night": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标的二十三夜待本次被消耗"
     },
     "yumemizukimizuki.snackCollected": {
       "scope": "query",
@@ -945,6 +1299,57 @@
         "unit": "scalar"
       },
       "label": "点心拾取者生命比例"
+    },
+    "yumemizukimizuki.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次拾取一个梦见风名物点心，且未达每次爆发4次上限"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "yumemizukimizuki.swirl.scalar",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "yumemizukimizuki.stellar.scalar",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "yumemizukimizuki.c2-dream-elements.scalar",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    }
+  ]
 }

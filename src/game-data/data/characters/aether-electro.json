@@ -652,7 +652,43 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "aether-electro.skill.abundance-amulet",
+          "recipient": "team",
+          "condition": {
+            "fact": "aether-electro.abundanceAmuletWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.particleEnergyRecharge",
+              "value": {
+                "skill": "aether-electro.skill",
+                "parameter": "param4"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-electro.directEnergy.t1",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "fact": "aether-electro.directEnergy.t1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "aether-electro.skill",
+                "parameter": "param2",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aether-electro.burst",
@@ -842,7 +878,37 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "aether-electro.directEnergy.t2",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-electro.directEnergy.t2"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "aether-electro.burst",
+                "parameter": "param3",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -850,13 +916,54 @@
       "id": "aether-electro.passive1",
       "name": "转瞬的迅雷",
       "description": "队伍中附近的其他角色获取雷影剑产生的丰穰勾玉时，雷影剑的冷却时间减少1.5秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "aether-electro.a1.lightning-blade-cooldown",
+          "application": "explicit",
+          "condition": {
+            "fact": "aether-electro.a1.abundanceAmuletTeammatePickup"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 1500,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aether-electro.passive2",
       "name": "回响的轰雷",
       "description": "基于旅行者自己元素充能效率的10%，提升雷影剑的丰穰勾玉提供的元素充能效率。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "aether-electro.a1.resounding-roar",
+          "recipient": "team",
+          "condition": {
+            "fact": "aether-electro.abundanceAmuletWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.particleEnergyRecharge",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "stat": "energyRecharge"
+                  },
+                  "rate": 0.1
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -870,7 +977,40 @@
       "rank": 2,
       "name": "震怒的苍雷",
       "description": "雷轰电转的威光落雷命中敌人后，会使敌人的雷元素抗性降低15%，持续8秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-electro.c2.falling-thunder-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "aether-electro.burst.param2"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "amount": -0.15,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -887,7 +1027,36 @@
       "rank": 4,
       "name": "难测的云雷",
       "description": "角色获取雷影剑产生的丰穰勾玉时，若该角色的当前元素能量低于35%，丰穰勾玉恢复的元素能量提高100%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-electro.directEnergy.c4",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-electro.directEnergy.c4"
+              },
+              "term1": {
+                "fact": "aether-electro.directEnergy.t1"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "skill": "aether-electro.skill",
+                "parameter": "param2",
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -904,7 +1073,65 @@
       "rank": 6,
       "name": "撼世的神雷",
       "description": "雷轰电转每引发2次威光落雷，则大幅增强下一次威光落雷，造成原本200%的伤害，并为当前角色额外恢复1点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aether-electro.c6.falling-thunder-multiplier",
+          "condition": {
+            "fact": "aether-electro.c6EnhancedFallingThunder"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "aether-electro.burst.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "aether-electro.directEnergy.c6",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-electro.directEnergy.c6"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "aether-electro.directEnergy.t2"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -933,5 +1160,56 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "aether-electro.abundanceAmuletWindow": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色拾取此旅行者的丰穰勾玉后仍在六秒有效期内"
+    },
+    "aether-electro.c6EnhancedFallingThunder": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次威光落雷为六命强化击"
+    },
+    "aether-electro.directEnergy.t1": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益角色本次拾取一枚丰穰勾玉"
+    },
+    "aether-electro.directEnergy.c4": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "拾取同一枚丰穰勾玉时，受益者元素能量低于35%（本条为额外回复）"
+    },
+    "aether-electro.directEnergy.t2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "威光落雷本次命中敌人，回复触发落雷的场上角色"
+    },
+    "aether-electro.directEnergy.c6": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为每三次威光落雷中的增强落雷，且命中敌人（本条为额外回复）"
+    },
+    "aether-electro.a1.abundanceAmuletTeammatePickup": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近的其他队员本次拾取该旅行者的丰穰勾玉"
+    }
+  }
 }

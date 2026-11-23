@@ -850,13 +850,78 @@
       "id": "chiori.passive2",
       "name": "锦上添花",
       "description": "队伍中附近的角色创造岩元素创造物时，千织获得20%岩元素伤害加成，持续20秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "chiori.a1.construct-geo",
+          "condition": {
+            "fact": "chiori.geoConstructMade"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "chiori.passive3",
       "name": "衣香襟影",
       "description": "队伍中任意自己的角色装备了默认衣装以外的衣装，或初始之翼以外的风之翼时，队伍中自己的角色获得迅行效果：移动速度提升10%。\n该效果在秘境、征讨领域、深境螺旋中无效，迅行效果无法叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "chiori.swift-stride",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.swift-stride",
+            "scope": "recipient",
+            "policy": "max",
+            "maxStacks": 10000
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "movement.swift-stride-scene",
+                "inputs": {
+                  "scene": {
+                    "fact": "world.locationType"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "fact": "chiori.teamAlternateOutfit"
+                  },
+                  "term1": {
+                    "fact": "chiori.teamAlternateGlider"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.movementSpeed",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -864,7 +929,23 @@
       "rank": 1,
       "name": "正绢六通",
       "description": "羽袖一触的自动制御人形「袖」的攻击范围提升50%。\n此外，如果队伍中存在千织以外的岩元素角色，羽袖一触的突进结束时，还将触发以下效果：\n·额外唤出一名袖。通过这种方式唤出的千织自己的袖，与通过岩元素创造物额外唤出的千织自己的袖至多同时存在一名；\n·触发突破天赋「锦上添花」，此效果需要解锁突破天赋「锦上添花」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chiori.c1.tamoto-range",
+          "appliesTo": {
+            "hitIds": [
+              "chiori.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackRangeBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -892,6 +973,25 @@
             "chiori.kinuAttack"
           ],
           "support": "hit-unavailable"
+        }
+      ],
+      "buffs": [
+        {
+          "id": "chiori.c2.kinu-factor",
+          "appliesTo": {
+            "hitIds": [
+              "chiori.c2.kinu"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseMultiplier",
+              "value": {
+                "amount": 1.7,
+                "unit": "scalar"
+              }
+            }
+          ]
         }
       ]
     },
@@ -927,7 +1027,49 @@
       "rank": 6,
       "name": "万理一空",
       "description": "触发突破天赋「量体裁衣」的后续效果后，千织自己的羽袖一触的冷却时间减少12秒。需要解锁突破天赋「量体裁衣」。\n此外，千织自己的普通攻击造成的伤害提升，提升值相当于千织自己的防御力的235%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "chiori.c6.normal-defence",
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "chiori.normal-defence",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "chiori.c6.flutter-cooldown",
+          "application": "explicit",
+          "condition": {
+            "fact": "chiori.c6.tailorMadeFollowUp"
+          },
+          "activation": {
+            "ascension": 1
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalSkillCooldownReductionMs",
+              "value": {
+                "amount": 12000,
+                "unit": "milliseconds"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -971,6 +1113,64 @@
         "kind": "boolean"
       },
       "label": "落染五色期间绢已发起攻击"
+    },
+    "chiori.geoConstructMade": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍角色创造岩元素创造物后二十秒内"
+    },
+    "world.locationType": {
+      "scope": "team",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "world-or-room",
+          "domain",
+          "trounce-domain",
+          "spiral-abyss",
+          "other-scene"
+        ]
+      },
+      "label": "当前场景类型"
+    },
+    "chiori.teamAlternateOutfit": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "自己的队伍中有人装备非默认衣装"
+    },
+    "chiori.teamAlternateGlider": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "自己的队伍中有人装备初始之翼以外的风之翼"
+    },
+    "chiori.c6.tailorMadeFollowUp": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "千织本次触发量体裁衣的织锦或裁锦"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "chiori.normal-defence",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 2.35,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ]
 }

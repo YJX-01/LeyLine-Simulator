@@ -693,7 +693,32 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "aratakiitto.summon-initial-hp",
+          "condition": {
+            "fact": "aratakiitto.ushiCreated"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.summonInitialHp",
+              "value": {
+                "call": "product.hp",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "aratakiitto.skill"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aratakiitto.burst",
@@ -857,7 +882,100 @@
       "energyCapacity": {
         "parameter": "param6"
       },
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "aratakiitto.t2.oni-king",
+          "condition": {
+            "fact": "aratakiitto.oniKingActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attack",
+              "value": {
+                "call": "product.attack",
+                "inputs": {
+                  "basis": {
+                    "call": "aratakiitto.oni-king-defence",
+                    "inputs": {
+                      "input": {
+                        "fact": "aratakiitto.defenseAtOniKing"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "skill": "aratakiitto.burst",
+                    "parameter": "param2"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.normalAttackSpeed",
+              "value": {
+                "skill": "aratakiitto.burst",
+                "parameter": "param1"
+              }
+            },
+            {
+              "target": "attribute.resistance.physical",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.anemo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.geo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.electro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.hydro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.cryo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.resistance.dendro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -865,7 +983,38 @@
       "id": "aratakiitto.passive1",
       "name": "荒泷第一",
       "description": "荒泷一斗施展连续的「荒泷逆袈裟」时，获得以下效果：\n·每次斩击都将使接下来的斩击攻击速度提升10%，通过这种方法至多提升30%；\n·提升抗打断能力。\n\n这些效果将在连续施展结束时消失。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "aratakiitto.a0.kesagiri-speed",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ],
+            "hitIds": [
+              "aratakiitto.normal.param6",
+              "aratakiitto.normal.param7"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.chargedAttackSpeed",
+              "value": {
+                "call": "aratakiitto.kesagiri-speed",
+                "inputs": {
+                  "count": {
+                    "fact": "aratakiitto.priorKesagiriSlashes"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aratakiitto.passive2",
@@ -917,7 +1066,55 @@
       "rank": 2,
       "name": "纠集众人，斗倒御岳",
       "description": "施放最恶鬼王·一斗轰临！！后，队伍中每个元素类型为岩元素的角色，都将使其冷却时间减少1.5秒，使荒泷一斗的元素能量恢复6点。\n通过这种方式，至多减少4.5秒冷却时间，恢复18点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aratakiitto.directEnergy.c2",
+          "application": "explicit",
+          "condition": {
+            "fact": "aratakiitto.directEnergy.c2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "aratakiitto.directEnergy.c2.amount",
+                "inputs": {
+                  "basis": {
+                    "teamCount": {
+                      "elements": [
+                        "geo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false,
+                      "cap": 3
+                    }
+                  }
+                },
+                "output": "energy"
+              }
+            },
+            {
+              "target": "attribute.elementalBurstCooldownReductionMs",
+              "value": {
+                "call": "aratakiitto.c2.royal-descent-cooldown-amount",
+                "inputs": {
+                  "basis": {
+                    "teamCount": {
+                      "elements": [
+                        "geo"
+                      ],
+                      "match": "include",
+                      "excludeOwner": false,
+                      "cap": 3
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -934,7 +1131,32 @@
       "rank": 4,
       "name": "奉行牢狱，茶饭之所",
       "description": "最恶鬼王·一斗轰临！！施加的「怒目鬼王」状态结束后，附近的队伍中所有角色的防御力提升20%，攻击力提升20%，持续10秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aratakiitto.c4.oni-retirement",
+          "recipient": "team",
+          "condition": {
+            "fact": "aratakiitto.oniKingEnded"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -951,7 +1173,26 @@
       "rank": 6,
       "name": "在下荒泷一斗是也",
       "description": "荒泷一斗的重击的暴击伤害提高70%；此外，施展「荒泷逆袈裟」时，有50%的几率不消耗「乱神之怪力」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "aratakiitto.c6.charged-crit",
+          "appliesTo": {
+            "categories": [
+              "charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.7,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -982,12 +1223,110 @@
   },
   "contextSupport": "context-unavailable",
   "facts": {
+    "aratakiitto.oniKingEnded": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "怒目鬼王状态结束后十秒内"
+    },
+    "aratakiitto.defenseAtOniKing": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "defense"
+      },
+      "label": "施放最恶鬼王时捕获的防御力"
+    },
     "aratakiitto.oniKingActive": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "处于怒目鬼王状态"
+    },
+    "aratakiitto.ushiCreated": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次投出并生成阿丑"
+    },
+    "aratakiitto.directEnergy.c2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "荒泷一斗本次施放最恶鬼王·一斗轰临"
+    },
+    "aratakiitto.priorKesagiriSlashes": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "同一轮荒泷逆袈裟中此前已施展的斩击次数"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "aratakiitto.oni-king-defence",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "attack",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "aratakiitto.directEnergy.c2.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 6,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 18,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aratakiitto.kesagiri-speed",
+      "template": {
+        "id": "linear-bonus",
+        "input": "count",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 0.3,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "aratakiitto.c2.royal-descent-cooldown-amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "milliseconds",
+        "rate": 1500,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 4500,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ]
 }

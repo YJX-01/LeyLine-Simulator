@@ -531,6 +531,105 @@
             }
           ]
         }
+      ],
+      "buffs": [
+        {
+          "id": "valeriy.assault-order",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "valeriy.assaultOrderWindow"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "valeriy.assaultOrder"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "skill": "valeriy.normal",
+                    "parameter": "param7"
+                  }
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "elements": [
+                  "electro"
+                ],
+                "families": [
+                  "ordinary"
+                ]
+              },
+              "condition": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "valeriy.stellar-radiance",
+                    "inputs": {
+                      "value": {
+                        "fact": "radiance"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "attribute.reaction.stellar-conduct.flatBaseBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "skill": "valeriy.normal",
+                    "parameter": "param8"
+                  }
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              },
+              "condition": {
+                "call": "valeriy.stellar-radiance",
+                "inputs": {
+                  "value": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -677,7 +776,48 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "buffs": [
+        {
+          "id": "valeriy.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "valeriy.stormShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.attack-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "attack"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "valeriy.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "valeriy.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "valeriy.burst",
@@ -855,7 +995,154 @@
       "id": "valeriy.passive2",
       "name": "向防线缺口突击",
       "description": "**攻斥指令**获得强化：依据进行特殊重击**臼炮直射·抵近轰击**时消耗的**冲击势能**，每消耗一点冲击势能，都会使攻斥指令的伤害加成效果进一步提升。若瓦列里：\n·处于辉映·星超导状态：每点消耗的冲击势能都会使攻斥指令的伤害加成效果提升，提升值相当于瓦列里攻击力的0.9%；\n·不处于辉映·星超导状态：每点消耗的冲击势能都会使攻斥指令的伤害加成效果提升，提升值相当于瓦列里攻击力的0.3%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "valeriy.cannon-potency",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "valeriy.assaultOrderWindow"
+                      },
+                      "term1": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "valeriy.assaultOrder"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "valeriy.stellar-radiance",
+                    "inputs": {
+                      "value": {
+                        "fact": "radiance"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "valeriy.ordinary-potency",
+                    "inputs": {
+                      "basis": {
+                        "fact": "valeriy.spentImpactPotential"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "elements": [
+                  "electro"
+                ],
+                "families": [
+                  "ordinary"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "valeriy.cannon-potency-stellar",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "valeriy.assaultOrderWindow"
+                      },
+                      "term1": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "valeriy.assaultOrder"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "valeriy.stellar-radiance",
+                "inputs": {
+                  "value": {
+                    "fact": "radiance"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.flatBaseBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": {
+                    "call": "valeriy.stellar-potency",
+                    "inputs": {
+                      "basis": {
+                        "fact": "valeriy.spentImpactPotential"
+                      }
+                    }
+                  }
+                },
+                "output": "base"
+              },
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "valeriy.passive3",
@@ -875,13 +1162,119 @@
       "rank": 1,
       "name": "持续压制的时序",
       "description": "进行特殊重击**臼炮直射·抵近轰击**后，会为瓦列里恢复6点元素能量。依据进行特殊重击时消耗的**冲击势能**，超过40点的部分，每消耗10点，都会使瓦列里额外恢复1.5点元素能量。每次进行特殊重击臼炮直射·抵近轰击，至多通过这种方式为瓦列里恢复15点元素能量。该效果每15秒至多触发一次。\n此外，每次进入战斗状态时，瓦列里首次施放元素战技**攻势防御·堡垒骤进**时，还会额外获得相当于原本150%的冲击势能。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "valeriy.directEnergy.c1",
+          "recipient": "owner",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "valeriy.impactEnergyTrigger"
+              },
+              "term1": {
+                "fact": "valeriy.impactEnergyCooldownReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "valeriy.impact-momentum-energy",
+                "inputs": {
+                  "spent": {
+                    "fact": "valeriy.spentImpactPotential"
+                  }
+                },
+                "output": "energy"
+              },
+              "condition": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "valeriy.ready",
+                    "inputs": {
+                      "count": {
+                        "fact": "valeriy.spentImpactPotential"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "valeriy.impact-cap-upgraded",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "valeriy.impact-base-limit",
+                        "inputs": {
+                          "count": {
+                            "fact": "valeriy.spentImpactPotential"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "伴随冲阵的队型",
       "description": "施放元素战技**攻势防御·堡垒骤进**后的18秒内，队伍中附近的所有角色的元素精通提升100点。\n此外，处于蓄雷护盾庇护下时，若瓦列里的**冲击势能**已达到上限，触发获取冲击势能的效果时，将转为提升蓄雷护盾的伤害吸收量，每1点溢出的冲击势能都会使蓄雷护盾的伤害吸收量提升瓦列里攻击力的8%，至多通过这种方式转化20点溢出的冲击势能。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "valeriy.c2-bastion-em",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "valeriy.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 18000,
+            "phase": "after"
+          },
+          "windowFact": "valeriy.c2Bastion",
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 100,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -915,7 +1308,54 @@
       "rank": 6,
       "name": "穿透敌阵的威能",
       "description": "特殊重击**臼炮直射·抵近轰击**与元素爆发**火力焦点·雷霰急袭**中的雷霰重弹获得强化：造成的伤害提升100%，并且在命中敌人后的7秒内，使其受到的雷元素伤害的暴击率提升10%；若受到的雷元素伤害为星超导反应伤害，则该伤害的暴击伤害也会提升40%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "valeriy.c6-cannon-damage",
+          "appliesTo": {
+            "hitIds": [
+              "valeriy.normal.param5",
+              "valeriy.burst.param2"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "valeriy.c6-suppression-crit",
+          "recipient": "team",
+          "condition": {
+            "fact": "valeriy.c6Suppressed"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.1,
+              "appliesTo": {
+                "elements": [
+                  "electro"
+                ]
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": 0.4,
+              "appliesTo": {
+                "families": [
+                  "stellar-conduct"
+                ],
+                "elements": [
+                  "electro"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -940,6 +1380,11 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "攻斥指令与一命回能使用明确条件。指令层数得失、冲击势能自动变化、一命回能的十五秒时序及中间档位、二命盾量溢出转化仍待表达或核验。"
         }
       ]
     }
@@ -952,6 +1397,63 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "valeriy.assaultOrder": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "攻斥指令本次生效"
+    },
+    "valeriy.assaultOrderWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "攻斥指令仍有层数且在持续时间内"
+    },
+    "valeriy.spentImpactPotential": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "抵近轰击已消耗的冲击势能"
+    },
+    "valeriy.c2Bastion": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "堡垒骤进施放后的十八秒"
+    },
+    "valeriy.c6Suppressed": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标被抵近轰击或雷霰重弹命中后的七秒"
+    },
+    "valeriy.stormShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由蓄雷护盾庇护"
+    },
+    "valeriy.impactEnergyTrigger": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次完成特殊重击臼炮直射·抵近轰击"
+    },
+    "valeriy.impactEnergyCooldownReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次抵近轰击时已满足十五秒回能间隔"
     }
   },
   "formulas": [
@@ -975,6 +1477,90 @@
         "unit": "count",
         "relation": "lt",
         "threshold": 40
+      }
+    },
+    {
+      "id": "valeriy.stellar-radiance",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct"
+      }
+    },
+    {
+      "id": "valeriy.ordinary-potency",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.003,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 130
+      }
+    },
+    {
+      "id": "valeriy.stellar-potency",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.009,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 130
+      }
+    },
+    {
+      "id": "valeriy.impact-momentum-energy",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "spent",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 0.15,
+        "offset": 6,
+        "threshold": 40,
+        "confirmedStep": 10,
+        "cap": 15,
+        "maxInput": 130,
+        "output": "energy"
+      }
+    },
+    {
+      "id": "valeriy.impact-cap-upgraded",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "rank",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 4
+      }
+    },
+    {
+      "id": "valeriy.impact-base-limit",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "count",
+        "unit": "count",
+        "relation": "lte",
+        "threshold": 100,
+        "maxInput": 100
       }
     }
   ]

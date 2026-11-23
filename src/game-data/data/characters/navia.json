@@ -885,13 +885,65 @@
       "id": "navia.passive1",
       "name": "不明流通渠道",
       "description": "施放典仪式晶火后的4秒内，娜维娅的普通攻击、重击与下落攻击造成的伤害转为无法被附魔覆盖的岩元素伤害，且娜维娅的普通攻击、重击与下落攻击造成的伤害提升40%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "navia.a0.undisclosed-distribution",
+          "condition": {
+            "fact": "navia.crystallineInfusion"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.4,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "navia.passive2",
       "name": "互助关系网",
       "description": "队伍中每存在一位火元素/雷元素/冰元素/水元素角色，娜维娅的攻击力提升20%，此效果至多叠加2层。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "navia.a1.mutual-assistance",
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "navia.mutual-assistance",
+                "inputs": {
+                  "input": {
+                    "teamCount": {
+                      "elements": [
+                        "pyro",
+                        "hydro",
+                        "cryo",
+                        "electro"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include",
+                      "cap": 2
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "navia.passive3",
@@ -905,7 +957,41 @@
       "rank": 1,
       "name": "淑女的距离感守则",
       "description": "施放典仪式晶火时，每消耗1枚「裂晶弹片」，都将为娜维娅恢复3点元素能量，并使如霰澄天的鸣礼的冷却时间减少1秒。至多通过这种方式恢复9点元素能量，使「如霰澄天的鸣礼」的冷却时间减少3秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "navia.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "navia.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "call": "navia.directEnergy.c1.amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "navia.energyShardsConsumed"
+                  }
+                },
+                "output": "energy"
+              }
+            },
+            {
+              "target": "attribute.elementalBurstCooldownReductionMs",
+              "value": {
+                "call": "navia.c1.ceremonial-salute-cooldown-amount",
+                "inputs": {
+                  "basis": {
+                    "fact": "navia.energyShardsConsumed"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -930,6 +1016,29 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "navia.c2.shrapnel-crit",
+          "appliesTo": {
+            "hitIds": [
+              "navia.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "navia.shrapnel-crit",
+                "inputs": {
+                  "input": {
+                    "fact": "navia.crystalShrapnelSpent"
+                  }
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -947,7 +1056,42 @@
       "rank": 4,
       "name": "铭誓者的绝不姑息",
       "description": "如霰澄天的鸣礼命中敌人时，将使该敌人的岩元素抗性降低20%，持续8秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "navia.c4.barrage-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "hitIds": [
+                "navia.burst.param1",
+                "navia.burst.param2",
+                "navia.c2.supporting-fire"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 8000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -964,7 +1108,39 @@
       "rank": 6,
       "name": "刺玫会长的灵活手腕",
       "description": "施放典仪式晶火时，若消耗的「裂晶弹片」超过3枚，超过3枚的每枚「裂晶弹片」都将使本次典仪式晶火的暴击伤害提升45%，且消耗的超过3枚的部分将在施放后返还。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "navia.c6.shrapnel-crit-damage",
+          "condition": {
+            "call": "rank.at-least-4",
+            "inputs": {
+              "rank": {
+                "fact": "navia.crystalShrapnelSpent"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "navia.skill.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "navia.shrapnel-crit-damage",
+                "inputs": {
+                  "input": {
+                    "fact": "navia.crystalShrapnelSpent"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1008,6 +1184,107 @@
         "kind": "boolean"
       },
       "label": "典仪式晶火施放后四秒内的岩元素转化"
+    },
+    "navia.crystalShrapnelSpent": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "典仪式晶火消耗的裂晶弹片数量"
+    },
+    "navia.energyShardsConsumed": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次消耗的裂晶弹片数"
+    },
+    "navia.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "娜维娅本次施放典仪式晶火"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "navia.mutual-assistance",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 2,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "navia.shrapnel-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.12,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 6,
+        "cap": 0.36,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "navia.shrapnel-crit-damage",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.45,
+        "offset": 0,
+        "threshold": 3,
+        "output": "value",
+        "maxInput": 6,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "navia.directEnergy.c1.amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "energy",
+        "rate": 3,
+        "offset": 0,
+        "threshold": 0,
+        "output": "energy",
+        "cap": 9,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "navia.c1.ceremonial-salute-cooldown-amount",
+      "template": {
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "milliseconds",
+        "rate": 1000,
+        "offset": 0,
+        "threshold": 0,
+        "cap": 3000,
+        "output": "value",
+        "revision": "1"
+      }
+    }
+  ]
 }

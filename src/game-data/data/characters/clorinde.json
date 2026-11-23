@@ -950,7 +950,55 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param13"
+      "cooldownParameter": "param13",
+      "buffs": [
+        {
+          "id": "clorinde.bond-of-life-from-healing",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "clorinde.nightVigil"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField"
+                  },
+                  "term1": {
+                    "fact": "clorinde.nonImpaleHealingConfirmed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.bondOfLifeFromHealing",
+              "value": {
+                "call": "product.hp",
+                "inputs": {
+                  "basis": {
+                    "call": "clorinde.eligible-healing-amount",
+                    "inputs": {
+                      "input": {
+                        "fact": "clorinde.convertibleHealingHp"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "parameter": "param9",
+                    "skill": "clorinde.skill"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clorinde.burst",
@@ -1090,13 +1138,138 @@
       "id": "clorinde.passive1",
       "name": "破夜的明焰",
       "description": "队伍中附近的角色对敌人触发雷元素相关反应后，将基于克洛琳德攻击力的20%，提升克洛琳德的普通攻击与残光将终造成的雷元素伤害。此效果持续15秒，至多叠加3层，每层独立计时。通过这种方式至多使克洛琳德的上述攻击造成的伤害提升1800。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "clorinde.a0.flame-a1",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-2",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "clorinde.flame-has-layers",
+                "inputs": {
+                  "value": {
+                    "fact": "clorinde.brightFlameStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ],
+            "categories": [
+              "normal",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "clorinde.flame-cap-a1",
+                    "inputs": {
+                      "input": {
+                        "stat": "attack"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "clorinde.flame-stacks",
+                    "inputs": {
+                      "input": {
+                        "fact": "clorinde.brightFlameStacks"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clorinde.passive2",
       "name": "契令的酬偿",
       "description": "如果克洛琳德的生命之契大于或等于生命值上限的100%，生命之契的数值提升或降低时，克洛琳德的暴击率提升10%，此效果持续15秒，至多叠加2层，每层独立计时。\n此外，狩夜之巡的夜巡状态获得强化：持续期间，治疗回复量转化为生命之契的比例提升至100%。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "clorinde.a1.pact-crit",
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "call": "clorinde.pact-crit",
+                "inputs": {
+                  "input": {
+                    "fact": "clorinde.pactCritStacks"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "clorinde.bond-of-life-from-healing-a4",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "clorinde.nightVigil"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField"
+                  },
+                  "term1": {
+                    "fact": "clorinde.nonImpaleHealingConfirmed"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.bondOfLifeFromHealing",
+              "value": {
+                "call": "clorinde.eligible-healing-amount",
+                "inputs": {
+                  "input": {
+                    "fact": "clorinde.convertibleHealingHp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clorinde.passive3",
@@ -1152,7 +1325,104 @@
       "rank": 2,
       "name": "「自此，直面长夜之危」",
       "description": "突破天赋「破夜的明焰」的效果获得强化：队伍中附近的角色对敌人触发雷元素相关反应后，将基于克洛琳德攻击力的30%，提升克洛琳德的普通攻击与残光将终造成的雷元素伤害。此效果持续15秒，至多叠加3层，每层独立计时。处于3层状态下时，克洛琳德的抗打断能力提升。通过这种方式至多使克洛琳德的上述攻击造成的伤害提升2700。\n需要解锁突破天赋「破夜的明焰」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "clorinde.c2.flame-c2",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-1",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "clorinde.flame-has-layers",
+                "inputs": {
+                  "value": {
+                    "fact": "clorinde.brightFlameStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "electro"
+            ],
+            "categories": [
+              "normal",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "clorinde.flame-cap-c2",
+                    "inputs": {
+                      "input": {
+                        "stat": "attack"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "clorinde.flame-stacks",
+                    "inputs": {
+                      "input": {
+                        "fact": "clorinde.brightFlameStacks"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "clorinde.c2.flame-poise",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-1",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "clorinde.flame-has-three-layers",
+                "inputs": {
+                  "value": {
+                    "fact": "clorinde.brightFlameStacks"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1169,7 +1439,30 @@
       "rank": 4,
       "name": "「铭记泪，生命与仁爱」",
       "description": "残光将终对敌人造成伤害时，将根据克洛琳德的当前生命之契百分比提升此次伤害，每1%生命之契都将使此次残光将终造成的伤害提升2%；通过这种方式，至多使残光将终造成的伤害提升200%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "clorinde.c4.last-light-pact",
+          "appliesTo": {
+            "skillIds": [
+              "clorinde.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "clorinde.last-light-pact",
+                "inputs": {
+                  "input": {
+                    "fact": "clorinde.bondOfLifeRatio"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1204,6 +1497,66 @@
             "clorinde.candleShadow"
           ],
           "support": "hit-unavailable"
+        }
+      ],
+      "buffs": [
+        {
+          "id": "clorinde.c6.night-vigil-crit",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "action"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "skillIds": [
+                "clorinde.skill"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.7,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "clorinde.c6.night-vigil-poise",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "clorinde.nightVigil"
+              },
+              "term1": {
+                "fact": "clorinde.c6.shadeProtectionWindow"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0
+            }
+          ]
         }
       ]
     }
@@ -1249,6 +1602,174 @@
         "kind": "boolean"
       },
       "label": "夜巡状态中受攻击或贯夜·契令触发明烛之影"
+    },
+    "clorinde.nightVigil": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于狩夜之巡的夜巡状态"
+    },
+    "clorinde.brightFlameStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "队伍触发雷元素相关反应后仍有效的破夜明焰层数"
+    },
+    "clorinde.pactCritStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "生命之契达到百分之百后变动产生的有效暴击层数"
+    },
+    "clorinde.bondOfLifeRatio": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "残光将终命中时生命之契占生命上限的比例"
+    },
+    "clorinde.nonImpaleHealingConfirmed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次确认克洛琳德受到贯夜以外的治疗"
+    },
+    "clorinde.convertibleHealingHp": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "本次进入转化前的非贯夜治疗量"
+    },
+    "clorinde.c6.shadeProtectionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次夜巡尚未唤出第六次明烛之影，或距第六次不足1秒"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "clorinde.flame-has-layers",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "clorinde.flame-cap-a1",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 600,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "clorinde.flame-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "clorinde.flame-cap-c2",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "attack",
+        "outputUnit": "damage",
+        "rate": 0.3,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 900,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "clorinde.pact-crit",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 2,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "clorinde.last-light-pact",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "cap": 2,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "clorinde.eligible-healing-amount",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "input",
+        "inputUnit": "hp",
+        "outputUnit": "hp",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "clorinde.flame-has-three-layers",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }

@@ -717,7 +717,53 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param8"
+      "cooldownParameter": "param8",
+      "buffs": [
+        {
+          "id": "dehya.t1.fiery-sanctum-mitigation",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "dehya.fierySanctumActive"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField",
+                        "of": "recipient"
+                      },
+                      "term1": {
+                        "fact": "dehya.insideFierySanctum"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "dehya.redmaneBloodCanTakeHit"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingDamageReduction",
+              "value": {
+                "skill": "dehya.skill",
+                "parameter": "param5"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dehya.burst",
@@ -940,7 +986,71 @@
       "id": "dehya.passive1",
       "name": "不吝佑助",
       "description": "迪希雅通过熔铁流狱·剑域炽焰或炎啸狮子咬回收净焰剑狱后的6秒内，迪希雅承担来自赤鬃之血的伤害时，受到的伤害降低60%。该效果每2秒至多触发一次。\n此外，迪希雅施放熔铁流狱·净焰昂藏后的9秒内，将为队伍中所有角色赋予「熔金铸躯」状态。处于熔金铸躯状态下的角色处于净焰剑狱领域中时，将获得额外的抗打断能力。每18秒至多产生一次熔金铸躯状态。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "dehya.a1.redmane-blood-mitigation",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "dehya.incomingRedmaneBlood"
+              },
+              "term1": {
+                "fact": "dehya.redmaneBloodMitigationReady"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingDamageReduction",
+              "value": 0.6
+            }
+          ]
+        },
+        {
+          "id": "dehya.a1.golden-forged-poise",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "dehya.a1.goldenForgedWindow"
+                      },
+                      "term1": {
+                        "fact": "dehya.fierySanctumActive"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "dehya.insideFierySanctum"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dehya.passive2",
@@ -952,7 +1062,67 @@
       "id": "dehya.passive3",
       "name": "日照的正途",
       "description": "在白天（6时至18时），队伍中自己的角色获得迅行效果：移动速度提高10%。\n该效果在秘境、征讨领域、深境螺旋中无效，迅行效果无法叠加。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "buffs": [
+        {
+          "id": "dehya.swift-stride",
+          "recipient": "team",
+          "stacking": {
+            "group": "party.swift-stride",
+            "scope": "recipient",
+            "policy": "max",
+            "maxStacks": 10000
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "movement.swift-stride-scene",
+                "inputs": {
+                  "scene": {
+                    "fact": "world.locationType"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "movement.day-start",
+                    "inputs": {
+                      "minutes": {
+                        "fact": "world.timeMinutes"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "movement.day-end",
+                    "inputs": {
+                      "minutes": {
+                        "fact": "world.timeMinutes"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.movementSpeed",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "constellations": [
@@ -1016,7 +1186,29 @@
       "rank": 2,
       "name": "净沙利刃明映万乘",
       "description": "施放熔铁流狱·剑域炽焰时，重新产生的净焰剑狱领域持续时间将延长6秒。\n此外，场上存在净焰剑狱领域时，领域内的当前场上角色受到攻击时，将使净焰剑狱下次协同攻击造成的伤害提升50%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "dehya.c2.fiery-sanctum-retaliation",
+          "appliesTo": {
+            "hitIds": [
+              "dehya.skill.param3"
+            ]
+          },
+          "condition": {
+            "fact": "dehya.sanctumRetaliation"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1033,7 +1225,25 @@
       "rank": 4,
       "name": "服膺誓禁恪守无失",
       "description": "炎啸狮子咬的炽鬃拳与焚落踢命中敌人时，将为迪希雅恢复1.5点元素能量，并基于生命值上限的2.5%，为迪希雅恢复生命值。该效果每0.2秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "dehya.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "dehya.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1.5,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1050,7 +1260,37 @@
       "rank": 6,
       "name": "燎燃利爪裂帛斫金",
       "description": "炎啸狮子咬的暴击率提升10%。\n此外，在一次炽炎狮子的持续期间，炽鬃拳命中敌人并造成暴击后，将使持续期间内炎啸狮子咬的暴击伤害提升15%，炽炎狮子的持续时间延长0.5秒。该效果每0.2秒至多触发一次，至多通过这种方式使持续时间延长2秒，暴击伤害提升60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "dehya.c6.lioness-crit",
+          "appliesTo": {
+            "skillIds": [
+              "dehya.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": {
+                "amount": 0.1,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "call": "dehya.lioness-crit-stacks",
+                "inputs": {
+                  "input": {
+                    "fact": "dehya.lionessCriticalFists"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1079,5 +1319,110 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "dehya.sanctumRetaliation": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "净焰剑狱内角色受攻击后，强化尚未用于协同攻击"
+    },
+    "dehya.lionessCriticalFists": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次炽炎狮子期间有效的炽鬃拳暴击层数"
+    },
+    "dehya.fierySanctumActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "净焰剑狱领域持续中"
+    },
+    "dehya.insideFierySanctum": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前受击角色位于净焰剑狱领域中"
+    },
+    "dehya.redmaneBloodCanTakeHit": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前伤害可转入赤鬃之血且赤鬃之血尚未达上限"
+    },
+    "dehya.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "炽鬃拳或焚落踢命中敌人，本次可回复能量（间隔至少0.2秒）"
+    },
+    "dehya.incomingRedmaneBlood": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次受击为赤鬃之血转由迪希雅承担的伤害"
+    },
+    "dehya.redmaneBloodMitigationReady": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "迪希雅回收净焰剑狱后的6秒减伤有效且距离上次触发至少2秒"
+    },
+    "world.locationType": {
+      "scope": "team",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "world-or-room",
+          "domain",
+          "trounce-domain",
+          "spiral-abyss",
+          "other-scene"
+        ]
+      },
+      "label": "当前场景类型"
+    },
+    "world.timeMinutes": {
+      "scope": "team",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "游戏时间（午夜起的分钟数，0–1439）"
+    },
+    "dehya.a1.goldenForgedWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次净焰昂藏赋予的9秒熔金铸躯状态持续中"
+    }
+  },
+  "formulas": [
+    {
+      "id": "dehya.lioness-crit-stacks",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.15,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    }
+  ]
 }

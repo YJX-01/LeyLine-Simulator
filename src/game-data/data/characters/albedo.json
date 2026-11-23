@@ -838,13 +838,67 @@
       "rank": 1,
       "name": "伊甸之花",
       "description": "阿贝多的创生法·拟造阳华生成的刹那之花绽放时，为阿贝多自己回复1.2点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "albedo.directEnergy.c1",
+          "application": "explicit",
+          "condition": {
+            "fact": "albedo.directEnergy.c1"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 1.2,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "显生之宙",
       "description": "创生法·拟造阳华的刹那之花绽放时，会为阿贝多赋予生灭计数效果，持续30秒：\n·施放诞生式·大地之潮时，清除所有生灭计数效果，并根据清除的层数，提高诞生式·大地之潮的爆发伤害与生灭之花造成的伤害；\n·每层生灭计数，会提高等同于阿贝多防御力的30%的伤害；\n·该效果至多叠加4次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "albedo.c2.fatal-reckoning",
+          "appliesTo": {
+            "skillIds": [
+              "albedo.burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "product.damage",
+                "inputs": {
+                  "basis": {
+                    "call": "albedo.fatal-reckoning-flat",
+                    "inputs": {
+                      "input": {
+                        "stat": "defense"
+                      }
+                    }
+                  },
+                  "rate": {
+                    "call": "albedo.fatal-reckoning-count",
+                    "inputs": {
+                      "input": {
+                        "fact": "albedo.fatalReckoningSpent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -861,7 +915,40 @@
       "rank": 4,
       "name": "神性之陨",
       "description": "处于阳华的领域中的队伍中当前场上角色，造成的下落攻击伤害提高30%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "albedo.c4.isotoma-plunge",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "albedo.isotomaArea"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -878,7 +965,53 @@
       "rank": 6,
       "name": "无垢之土",
       "description": "处在阳华的领域中的队伍中当前场上角色，若处于结晶反应产生的护盾庇护下，或阳华的领域中存在月笼时，造成的伤害提高17%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "albedo.c6.isotoma-crystal",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "albedo.isotomaArea"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "fact": "albedo.crystallizeShield"
+                  },
+                  "term1": {
+                    "fact": "albedo.isotomaMoondrift"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.17,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -907,5 +1040,74 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "albedo.fatal-reckoning-flat",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 0.3,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "albedo.fatal-reckoning-count",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 1,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 4,
+        "revision": "1"
+      }
+    }
+  ],
+  "facts": {
+    "albedo.fatalReckoningSpent": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "诞生式·大地之潮清除的生灭计数"
+    },
+    "albedo.isotomaArea": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于阳华领域"
+    },
+    "albedo.crystallizeShield": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于结晶反应产生的护盾庇护下"
+    },
+    "albedo.isotomaMoondrift": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "阳华领域内存在月笼"
+    },
+    "albedo.directEnergy.c1": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "阿贝多的拟造阳华生成的刹那之花本次绽放"
+    }
+  }
 }

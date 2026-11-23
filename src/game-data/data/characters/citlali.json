@@ -629,7 +629,48 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param8"
+      "cooldownParameter": "param8",
+      "buffs": [
+        {
+          "id": "citlali.shield-absorption",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "citlali.opalShieldActive"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.shieldAbsorption",
+              "value": {
+                "call": "shield.elemental-mastery-base",
+                "inputs": {
+                  "basis": {
+                    "stat": "elementalMastery"
+                  },
+                  "rate": {
+                    "parameter": "param2",
+                    "skill": "citlali.skill"
+                  },
+                  "flat": {
+                    "parameter": "param3",
+                    "skill": "citlali.skill",
+                    "unit": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "citlali.burst",
@@ -827,13 +868,101 @@
       "id": "citlali.passive1",
       "name": "五重天的寒雨",
       "description": "伊兹帕帕存在期间，队伍中附近的角色触发冻结反应或融化反应后，受本次反应影响的敌人的火元素与水元素抗性还会降低20%，持续12秒；此外，茜特菈莉还会恢复16点夜魂值，每8秒至多通过这种方式恢复一次夜魂值。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "citlali.a0.reaction-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "query",
+              "reactionIds": [
+                "melt",
+                "freeze"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "condition": {
+            "fact": "citlali.itzpapaPresent"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "citlali.passive2",
       "name": "白燧蝶的星衣",
       "description": "元素战技霜昼黑星中，伊兹帕帕的霜陨风暴造成的伤害提升，提升值相当于茜特菈莉的元素精通的90%；元素爆发诸曜饬令中，冰风暴造成的伤害提升，提升值相当于茜特菈莉的元素精通的1200%。\n此外，队伍中的附近的角色触发「夜魂迸发」时，茜特菈莉还会恢复4点夜魂值。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "citlali.a1.frostfall-em",
+          "appliesTo": {
+            "hitIds": [
+              "citlali.skill.param5"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "citlali.frostfall-em",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "citlali.a1.ice-storm-em",
+          "appliesTo": {
+            "hitIds": [
+              "citlali.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "citlali.ice-storm-em",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "citlali.passive3",
@@ -853,13 +982,143 @@
       "rank": 1,
       "name": "四百星的芒刃",
       "description": "施放元素战技霜昼黑星时，茜特菈莉将获得「白星之裙」效果，持续至伊兹帕帕退场：持续期间，茜特菈莉获得10层「星刃」，除茜特菈莉外的附近的当前场上角色的普通攻击、重击、下落攻击、元素战技或元素爆发造成伤害时，将消耗1层「星刃」，提升造成的伤害，提升值相当于茜特菈莉元素精通的200%。\n队伍中附近的角色触发冻结反应或融化反应后，茜特菈莉将额外获得3层「星刃」，该效果每8秒至多触发一次。\n\n施放元素战技霜昼黑星时，「星刃」的层数将会刷新。\n此外，茜特菈莉进行腾跃、或是在空中进行瞄准或重击时，消耗的燃素降低45%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "citlali.c1.starblade",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField",
+                "of": "recipient"
+              },
+              "term1": {
+                "fact": "citlali.starbladeRemaining"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge",
+              "skill",
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "citlali.starblade",
+                "inputs": {
+                  "input": {
+                    "stat": "elementalMastery"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "吞心者的巡行",
       "description": "茜特菈莉的元素精通提升125点，处于白曜护盾的庇护下或是伊兹帕帕跟随的其他角色的元素精通提升250点。\n此外，施放元素战技霜昼黑星时，也会为附近的当前场上角色赋予白曜护盾；\n\n此外，突破天赋「五重天的寒雨」的效果获得提升：\n伊兹帕帕存在期间，队伍中附近的角色触发冻结反应或融化反应后，受本次反应影响的敌人的火元素与水元素抗性还会额外降低20%，持续12秒，该效果需要解锁突破天赋「五重天的寒雨」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "citlali.c2.reaction-extra-shred",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "any",
+              "target": "query",
+              "reactionIds": [
+                "melt",
+                "freeze"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 12000,
+            "phase": "after"
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "rank.at-least-1",
+                "inputs": {
+                  "rank": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "citlali.itzpapaPresent"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            },
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "amount": -0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        },
+        {
+          "id": "citlali.c2.mastery",
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 125,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        },
+        {
+          "id": "citlali.c2.shield-mastery",
+          "recipient": "team",
+          "excludeOwner": true,
+          "condition": {
+            "fact": "citlali.whiteShieldOrItzpapa"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 250,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -896,6 +1155,24 @@
           "origin": "triggered",
           "support": "hit-unavailable"
         }
+      ],
+      "buffs": [
+        {
+          "id": "citlali.directEnergy.c4",
+          "application": "explicit",
+          "condition": {
+            "fact": "citlali.directEnergy.c4"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 8,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -913,7 +1190,53 @@
       "rank": 6,
       "name": "原动天的密契",
       "description": "元素战技霜昼黑星中召唤的伊兹帕帕将始终为白燧状态，夜魂值耗尽时，伊兹帕帕的白燧状态也不会结束。\n此外，施放元素战技霜昼黑星时，伊兹帕帕将消耗所有夜魂值，并在存在期间内持续消耗夜魂值；每通过上述方式消耗1点夜魂值，茜特菈莉就会获得1点「秘律之数」。\n「秘律之数」上限为40点，基于茜特菈莉持有的「秘律之数」，每1点「秘律之数」会使附近的队伍中所有角色获得1.5%火元素与水元素伤害加成，并使茜特菈莉造成的伤害提升2.5%。\n伊兹帕帕退场时，或再次施放元素战技时，茜特菈莉持有的「秘律之数」将被移除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "citlali.c6.mystery-team",
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": {
+                "call": "citlali.mystery-team",
+                "inputs": {
+                  "input": {
+                    "fact": "citlali.mysteryCount"
+                  }
+                }
+              }
+            },
+            {
+              "target": "attribute.hydroBonus",
+              "value": {
+                "call": "citlali.mystery-team",
+                "inputs": {
+                  "input": {
+                    "fact": "citlali.mysteryCount"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "citlali.c6.mystery-owner",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "citlali.mystery-owner",
+                "inputs": {
+                  "input": {
+                    "fact": "citlali.mysteryCount"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -943,13 +1266,130 @@
     }
   },
   "contextSupport": "context-unavailable",
+  "formulas": [
+    {
+      "id": "citlali.frostfall-em",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "damage",
+        "rate": 0.9,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "citlali.ice-storm-em",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "damage",
+        "rate": 12,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "citlali.starblade",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "elementalMastery",
+        "outputUnit": "damage",
+        "rate": 2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "citlali.mystery-team",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.015,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 40,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "citlali.mystery-owner",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.025,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 40,
+        "revision": "1"
+      }
+    }
+  ],
   "facts": {
+    "citlali.itzpapaPresent": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "伊兹帕帕在场"
+    },
+    "citlali.whiteShieldOrItzpapa": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于白曜护盾庇护下或伊兹帕帕跟随"
+    },
+    "citlali.starbladeRemaining": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "伊兹帕帕在场且星刃仍有剩余"
+    },
+    "citlali.mysteryCount": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前持有的秘律之数"
+    },
     "citlali.c4SkullReady": {
       "scope": "query",
       "type": {
         "kind": "boolean"
       },
       "label": "本次霜陨风暴命中触发额外黑曜灵骷爆炸"
+    },
+    "citlali.opalShieldActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前场上角色由白曜护盾庇护"
+    },
+    "citlali.directEnergy.c4": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "霜陨风暴命中后额外召唤的宿灵之髑已爆炸，本次可回复能量（间隔至少8秒）"
     }
   }
 }

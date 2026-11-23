@@ -698,6 +698,43 @@
           "flat": "param5",
           "recipient": "on-field"
         }
+      ],
+      "buffs": [
+        {
+          "id": "vodyanitsa.horn-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "vodyanitsa.hornShred"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "vodyanitsa.skill",
+                    "parameter": "param8"
+                  },
+                  "rate": -1
+                }
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "vodyanitsa.skill",
+                    "parameter": "param8"
+                  },
+                  "rate": -1
+                }
+              }
+            }
+          ]
+        }
       ]
     },
     {
@@ -826,7 +863,29 @@
       "energyCapacity": {
         "parameter": "param4"
       },
-      "cooldownParameter": "param3"
+      "cooldownParameter": "param3",
+      "buffs": [
+        {
+          "id": "vodyanitsa.long-song-damage",
+          "condition": {
+            "fact": "vodyanitsa.longSong"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "vodyanitsa.burst.param1"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "skill": "vodyanitsa.burst",
+                "parameter": "param2"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -834,7 +893,22 @@
       "id": "vodyanitsa.passive1",
       "name": "最后的塑诗者",
       "description": "施放元素战技宣叙·晨声纷流时，将使当前场上的星辉风旋转化为「流荡风旋」，且队伍中附近的角色在**遥久之歌**效果持续期间触发星扩散反应时，将取代星辉风旋创造流荡风旋。\n创造或引爆流荡风旋时，还会使附近敌人的风元素抗性降低35%，持续6秒。\n此外，遥久之歌持续期间，队伍中附近的角色进入辉映·星扩散状态时，辉映·星扩散的持续时间延长4秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "vodyanitsa.wandering-vortex-shred",
+          "recipient": "target",
+          "condition": {
+            "fact": "vodyanitsa.wanderingVortex"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.anemo",
+              "value": -0.35
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "vodyanitsa.passive2",
@@ -860,13 +934,174 @@
       "rank": 1,
       "name": "聚光灯下的水华",
       "description": "沃雅妮莎触发**遥久之歌**的治疗效果时，还会使队伍中附近的所有角色攻击力提升，提升值相当于沃雅妮莎生命值上限的0.8%，持续5秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "vodyanitsa.c1-song-attack",
+          "recipient": "team",
+          "condition": {
+            "fact": "vodyanitsa.c1Healed"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.flatAttack",
+              "value": {
+                "call": "vodyanitsa.song-attack",
+                "inputs": {
+                  "basis": {
+                    "stat": "hp"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "穿彻风雪的余响",
       "description": "元素战技宣叙·晨声纷流中的唤春角笛攻击敌人时，沃雅妮莎将获得「黑与白的双音」效果，使队伍中自己的当前场上角色造成的水元素伤害与冰元素伤害的暴击伤害提升50%，持续5秒。\n若当前场上存在流荡风旋，或处于流荡风旋引爆后的5秒内，则改为使队伍中自己的当前场上角色造成的星扩散反应伤害的暴击伤害提升60%，持续5秒。\n此外，元素战技宣叙·晨声纷流获得强化：**遥久之歌**效果的持续时间延长9秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "vodyanitsa.c2-duet-hydro-cryo",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "skillIds": [
+                "vodyanitsa.skill"
+              ],
+              "hitIds": [
+                "vodyanitsa.skill.param4"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "windowFact": "vodyanitsa.c2Duet",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "vodyanitsa.c2VortexDuet"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "elements": [
+              "hydro",
+              "cryo"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "id": "vodyanitsa.c2-duet-vortex",
+          "recipient": "team",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "skillIds": [
+                "vodyanitsa.skill"
+              ],
+              "hitIds": [
+                "vodyanitsa.skill.param4"
+              ]
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "windowFact": "vodyanitsa.c2Duet",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "rank.at-least-6",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "onField",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "vodyanitsa.c2VortexDuet"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": 0.6
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -883,7 +1118,25 @@
       "rank": 4,
       "name": "柔波摇漾的低诉",
       "description": "沃雅妮莎触发**遥久之歌**的治疗效果时，将基于受治疗角色的生命值，触发不同效果。若受治疗角色的生命值：\n·低于40%：本次治疗量提升50%；\n·不低于40%：沃雅妮莎的生命值上限提升20%，持续6秒，该效果至多叠加3层，每层独立计算持续时间。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "vodyanitsa.c4-health-stacks",
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "call": "vodyanitsa.c4-health",
+                "inputs": {
+                  "basis": {
+                    "fact": "vodyanitsa.c4HealthStacks"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -900,7 +1153,37 @@
       "rank": 6,
       "name": "永不落幕的盛歌",
       "description": "命之座「穿彻风雪的余响」的效果获得强化：「黑与白的双音」改为对队伍中附近的所有角色生效。\n此外，**遥久之歌**效果持续期间，队伍中附近的角色造成的星扩散反应伤害**擢升**25%，造成的水元素伤害与冰元素伤害提升60%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "vodyanitsa.c6-song-bonus",
+          "recipient": "team",
+          "condition": {
+            "fact": "vodyanitsa.longSong"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.elevation",
+              "value": 0.25,
+              "appliesTo": {
+                "families": [
+                  "stellar-swirl"
+                ]
+              }
+            },
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.6,
+              "appliesTo": {
+                "elements": [
+                  "hydro",
+                  "cryo"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -925,9 +1208,97 @@
         {
           "id": "explicit-output-scope",
           "resolution": "unavailable"
+        },
+        {
+          "id": "remaining-talent-context",
+          "resolution": "unavailable",
+          "reason": "遥久之歌的自动间歇治疗、四命生命层数的自动授予与独立到期、低血量治疗倍率与治疗加成的叠加、领唱与重唱的资源变化、流荡风旋实体及动态区域、二命区域延长仍待核验。"
         }
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "vodyanitsa.longSong": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "遥久之歌持续期间"
+    },
+    "vodyanitsa.hornShred": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标受唤春角笛或战技命中后的六秒减抗"
+    },
+    "vodyanitsa.wanderingVortex": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "流荡风旋生成或爆发后的六秒"
+    },
+    "vodyanitsa.c1Healed": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发遥久之歌治疗后的五秒"
+    },
+    "vodyanitsa.c2Duet": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "唤春角笛命中后产生的黑与白的双音"
+    },
+    "vodyanitsa.c2VortexDuet": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "黑与白的双音为流荡风旋分支"
+    },
+    "vodyanitsa.c4HealthStacks": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次治疗前的四命生命加成层数"
+    }
+  },
+  "formulas": [
+    {
+      "id": "vodyanitsa.song-attack",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "hp",
+        "outputUnit": "attack",
+        "rate": 0.008,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "vodyanitsa.c4-health",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 3
+      }
+    }
+  ]
 }

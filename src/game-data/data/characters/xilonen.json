@@ -791,7 +791,323 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "buffs": [
+        {
+          "id": "xilonen.t1.geo-sample-resistance",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "xilonen.sourceSamplesActive"
+                      },
+                      "term1": {
+                        "call": "condition.all",
+                        "inputs": {
+                          "term0": {
+                            "call": "rank.at-least-1",
+                            "inputs": {
+                              "rank": {
+                                "state": "ascension"
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "call": "condition.not",
+                            "inputs": {
+                              "term0": {
+                                "call": "xilonen.sample-count",
+                                "inputs": {
+                                  "value": {
+                                    "teamCount": {
+                                      "elements": [
+                                        "pyro",
+                                        "hydro",
+                                        "cryo",
+                                        "electro"
+                                      ],
+                                      "excludeOwner": true,
+                                      "match": "include"
+                                    }
+                                  }
+                                },
+                                "output": "active"
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "fact": "xilonen.nightsoul"
+                      },
+                      "term1": {
+                        "call": "rank.at-least-2",
+                        "inputs": {
+                          "rank": {
+                            "state": "constellation"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "xilonen.has-geo-sample",
+                    "inputs": {
+                      "value": {
+                        "teamCount": {
+                          "elements": [
+                            "pyro",
+                            "hydro",
+                            "cryo",
+                            "electro"
+                          ],
+                          "excludeOwner": true,
+                          "match": "include"
+                        }
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "xilonen.targetInSamplerRange"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.geo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "xilonen.skill",
+                    "parameter": "param2"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "xilonen.t1.converted-samples-resistance",
+          "recipient": "target",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "xilonen.sourceSamplesActive"
+                  },
+                  "term1": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "call": "rank.at-least-1",
+                        "inputs": {
+                          "rank": {
+                            "state": "ascension"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "condition.not",
+                        "inputs": {
+                          "term0": {
+                            "call": "xilonen.sample-count",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "pyro",
+                                    "hydro",
+                                    "cryo",
+                                    "electro"
+                                  ],
+                                  "excludeOwner": true,
+                                  "match": "include"
+                                }
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "xilonen.targetInSamplerRange"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "xilonen.skill",
+                    "parameter": "param2"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "condition": {
+                "call": "xilonen.has-element-sample",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "pyro"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include"
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "target.resistance.hydro",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "xilonen.skill",
+                    "parameter": "param2"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "condition": {
+                "call": "xilonen.has-element-sample",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "hydro"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include"
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "target.resistance.cryo",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "xilonen.skill",
+                    "parameter": "param2"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "condition": {
+                "call": "xilonen.has-element-sample",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "cryo"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include"
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            {
+              "target": "target.resistance.electro",
+              "value": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "skill": "xilonen.skill",
+                    "parameter": "param2"
+                  },
+                  "rate": {
+                    "amount": -1,
+                    "unit": "scalar"
+                  }
+                }
+              },
+              "condition": {
+                "call": "xilonen.has-element-sample",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "electro"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include"
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xilonen.burst",
@@ -1020,13 +1336,98 @@
       "id": "xilonen.passive1",
       "name": "四境四象回声",
       "description": "在夜魂加持状态下：\n·若希诺宁拥有至少两枚经过元素转化的「源音采样」，在普通攻击与下落攻击命中敌人时，将获得35点夜魂值，该效果每0.1秒至多触发一次；\n·若希诺宁拥有少于两枚经过元素转化的「源音采样」，普通攻击与下落攻击造成的伤害提升30%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "buffs": [
+        {
+          "id": "xilonen.a0.unconverted-samples",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "xilonen.nightsoul"
+              },
+              "term1": {
+                "call": "xilonen.sample-count",
+                "inputs": {
+                  "value": {
+                    "teamCount": {
+                      "elements": [
+                        "pyro",
+                        "hydro",
+                        "cryo",
+                        "electro"
+                      ],
+                      "excludeOwner": true,
+                      "match": "include"
+                    }
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "hitIds": [
+              "xilonen.normal.roller10",
+              "xilonen.normal.roller11",
+              "xilonen.normal.roller12",
+              "xilonen.normal.roller13",
+              "xilonen.normal.roller7",
+              "xilonen.normal.roller8",
+              "xilonen.normal.roller9"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.3,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xilonen.passive2",
       "name": "便携铠装护层",
       "description": "在夜魂加持状态下，希诺宁的夜魂值达到上限时，将触发一次等同于「夜魂迸发」的效果，该效果每14秒至多触发一次。\n此外，队伍中的附近的角色触发「夜魂迸发」时，希诺宁的防御力提升20%，持续15秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "buffs": [
+        {
+          "id": "xilonen.a1.nightsoul-burst-defense",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "any",
+              "target": "any",
+              "observation": {
+                "key": "nightsoulBurst",
+                "test": "true"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 15000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "amount": 0.2,
+                "unit": "scalar"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "xilonen.passive3",
@@ -1046,13 +1447,189 @@
       "rank": 1,
       "name": "献予慵眠的休假日",
       "description": "希诺宁的夜魂加持状态消耗的夜魂值与燃素降低30%，且夜魂值的时间限制延长45%。\n此外，希诺宁的「源音采样」激活时，还将提升队伍中附近的当前场上角色的抗打断能力。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xilonen.c1.active-samples-poise",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "xilonen.sourceSamplesActive"
+                  },
+                  "term1": {
+                    "fact": "xilonen.c1.nearbySampleRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "onField",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.incomingPoiseDamageMultiplier",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
       "name": "献予灼原的五重奏",
       "description": "希诺宁携带的岩元素「源音采样」将始终保持激活状态。此外，希诺宁的「源音采样」激活时，将根据「源音采样」的元素类型，使队伍中附近所有元素类型相同的角色获得对应效果：\n·岩元素：造成的伤害提升50%；\n·火元素：攻击力提升45%；\n·水元素：生命值上限提升45%；\n·冰元素：暴击伤害提升60%；\n·雷元素：恢复25点元素能量，且元素爆发的冷却时间缩短6秒。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xilonen.c2.chiucue-geo",
+          "recipient": "team",
+          "condition": {
+            "call": "xilonen.has-geo-sample",
+            "inputs": {
+              "value": {
+                "teamCount": {
+                  "elements": [
+                    "pyro",
+                    "hydro",
+                    "cryo",
+                    "electro"
+                  ],
+                  "excludeOwner": true,
+                  "match": "include"
+                }
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "amount": 0.5,
+                "unit": "scalar"
+              },
+              "recipientElements": [
+                "geo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xilonen.c2.chiucue-pyro",
+          "recipient": "team",
+          "condition": {
+            "fact": "xilonen.sourceSamplesActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "amount": 0.45,
+                "unit": "scalar"
+              },
+              "recipientElements": [
+                "pyro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xilonen.c2.chiucue-hydro",
+          "recipient": "team",
+          "condition": {
+            "fact": "xilonen.sourceSamplesActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hpPercent",
+              "value": {
+                "amount": 0.45,
+                "unit": "scalar"
+              },
+              "recipientElements": [
+                "hydro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xilonen.c2.chiucue-cryo",
+          "recipient": "team",
+          "condition": {
+            "fact": "xilonen.sourceSamplesActive"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critDamage",
+              "value": {
+                "amount": 0.6,
+                "unit": "scalar"
+              },
+              "recipientElements": [
+                "cryo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xilonen.directEnergy.c2",
+          "application": "explicit",
+          "recipient": "team",
+          "condition": {
+            "fact": "xilonen.directEnergy.c2"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 25,
+                "unit": "energy"
+              },
+              "recipientElements": [
+                "electro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xilonen.c2.electro-cooldown",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "xilonen.directEnergy.c2"
+              },
+              "term1": {
+                "fact": "xilonen.c2.nearbyElectroCooldownTeammate"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "modifiers": [
+            {
+              "target": "attribute.elementalBurstCooldownReductionMs",
+              "value": {
+                "amount": 6000,
+                "unit": "milliseconds"
+              },
+              "recipientElements": [
+                "electro"
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1069,7 +1646,36 @@
       "rank": 4,
       "name": "献予午后的花之梦",
       "description": "希诺宁施放音火锻淬后，将为队伍中附近的所有角色施加「荣花之赐」效果，持续15秒。\n拥有「荣花之赐」的角色的普通攻击、重击与下落攻击造成的伤害提升，提升值相当于希诺宁的防御力的65%。该效果将在生效6次或持续时间结束时解除。\n同时命中多名敌人时，会依据命中敌人的数量消耗生效次数；队伍中具有「荣花之赐」的角色，其生效次数单独计算。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xilonen.c4.blooming-blessing",
+          "recipient": "team",
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "condition": {
+            "fact": "xilonen.bloomingBlessingReady"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "xilonen.blooming-blessing",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1086,7 +1692,48 @@
       "rank": 6,
       "name": "献予永夜的狂欢舞",
       "description": "处于夜魂加持状态下时，希诺宁进行冲刺、腾跃、普通攻击、下落攻击时，将获得「永夜的祝福」，无视夜魂加持状态下的限制，并提升普通攻击与下落攻击造成的伤害，持续5秒。\n持续期间：\n·暂停希诺宁的夜魂值时间限制计时，希诺宁的夜魂值、燃素、体力将不再下降，且夜魂值达到上限时，希诺宁的夜魂加持也不会结束；\n·希诺宁在夜魂加持状态下的普通攻击与下落攻击造成的伤害提升，提升值相当于希诺宁的防御力的300%。\n·每1.5秒为附近的队伍中所有角色恢复生命值，回复量相当于希诺宁的防御力的120%。\n每15秒至多获得一次「永夜的祝福」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "buffs": [
+        {
+          "id": "xilonen.c6.imperishable-blessing",
+          "appliesTo": {
+            "hitIds": [
+              "xilonen.normal.roller10",
+              "xilonen.normal.roller11",
+              "xilonen.normal.roller12",
+              "xilonen.normal.roller13",
+              "xilonen.normal.roller7",
+              "xilonen.normal.roller8",
+              "xilonen.normal.roller9"
+            ]
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "xilonen.nightsoul"
+              },
+              "term1": {
+                "fact": "xilonen.imperishableBlessing"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "xilonen.imperishable-blessing",
+                "inputs": {
+                  "input": {
+                    "stat": "defense"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1122,6 +1769,121 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "xilonen.sourceSamplesActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "夜魂值达到上限后激活全部源音采样，十五秒窗口内"
+    },
+    "xilonen.bloomingBlessingReady": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色处于荣花之赐有效窗口且尚有次数"
+    },
+    "xilonen.imperishableBlessing": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "永夜的祝福持续中"
+    },
+    "xilonen.targetInSamplerRange": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该目标位于希诺宁的源音采样有效范围内"
+    },
+    "xilonen.directEnergy.c2": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "希诺宁本次激活雷元素源音采样"
+    },
+    "xilonen.c2.nearbyElectroCooldownTeammate": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益队员在希诺宁附近"
+    },
+    "xilonen.c1.nearbySampleRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色处于希诺宁源音采样的队伍增益范围内"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "xilonen.sample-count",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "lt",
+        "threshold": 2,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xilonen.blooming-blessing",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 0.65,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xilonen.imperishable-blessing",
+      "template": {
+        "id": "linear-bonus",
+        "input": "input",
+        "inputUnit": "defense",
+        "outputUnit": "damage",
+        "rate": 3,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xilonen.has-element-sample",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    },
+    {
+      "id": "xilonen.has-geo-sample",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "lt",
+        "threshold": 3,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }
