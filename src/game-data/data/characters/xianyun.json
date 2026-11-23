@@ -551,7 +551,10 @@
         },
         {
           "id": "xianyun.skill.param2",
-          "name": "闲云冲击波伤害（第1击）",
+          "name": "闲云冲击波伤害（施放1次步天梯）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "plunge",
           "base": [
             {
@@ -563,7 +566,10 @@
         },
         {
           "id": "xianyun.skill.param3",
-          "name": "闲云冲击波伤害（第2击）",
+          "name": "闲云冲击波伤害（施放2次步天梯）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "plunge",
           "base": [
             {
@@ -575,7 +581,10 @@
         },
         {
           "id": "xianyun.skill.param4",
-          "name": "闲云冲击波伤害（第3击）",
+          "name": "闲云冲击波伤害（施放3次步天梯）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "plunge",
           "base": [
             {

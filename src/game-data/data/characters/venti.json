@@ -393,6 +393,9 @@
         {
           "id": "venti.normal.param1",
           "name": "一段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -468,6 +471,9 @@
         {
           "id": "venti.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -1141,7 +1147,69 @@
       "rank": 1,
       "name": "弦发的苍风",
       "description": "瞄准射击会额外发射两枚分裂箭，分别造成原本33%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "venti.c1.split-arrow-aimed",
+          "skill": "venti.normal",
+          "name": "弦发的苍风·瞄准射击单枚分裂箭",
+          "element": "physical",
+          "category": "charged",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param7",
+                    "skill": "venti.normal"
+                  },
+                  "rate": 0.33
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.c1SplitArrowHit"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "venti.c1.split-arrow-fully-charged",
+          "skill": "venti.normal",
+          "name": "弦发的苍风·满蓄力瞄准射击单枚分裂箭",
+          "element": "anemo",
+          "category": "charged",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param8",
+                    "skill": "venti.normal"
+                  },
+                  "rate": 0.33
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "venti.c1SplitArrowHit"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1223,6 +1291,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "venti.c1SplitArrowHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "分裂箭已命中目标"
     }
   },
   "formulas": [

@@ -365,6 +365,9 @@
         {
           "id": "qiqi.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -376,6 +379,9 @@
         {
           "id": "qiqi.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -398,6 +404,9 @@
         {
           "id": "qiqi.normal.param6",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "category": "charged",
           "base": [
             {

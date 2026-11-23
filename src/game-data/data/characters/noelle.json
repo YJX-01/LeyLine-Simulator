@@ -374,7 +374,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param2",
@@ -385,7 +389,11 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param3",
@@ -396,7 +404,11 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param4",
@@ -407,7 +419,11 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param5",
@@ -419,7 +435,11 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param6",
@@ -431,7 +451,11 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param9",
@@ -443,7 +467,11 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param10",
@@ -455,7 +483,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         },
         {
           "id": "noelle.normal.param11",
@@ -467,7 +499,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "noelle.sweepingTime",
+            "element": "geo"
+          }
         }
       ]
     },
@@ -938,7 +974,26 @@
       "rank": 4,
       "name": "之后会扫干净的",
       "description": "护心铠在效果结束时，或因伤害破碎时，会对周围的敌人造成400%攻击力的岩元素伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "noelle.c4.breastplate-break",
+          "skill": "noelle.skill",
+          "name": "之后会扫干净的·护盾爆炸",
+          "element": "geo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 4
+            }
+          ],
+          "when": [
+            "noelle.breastplateEnded"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1027,5 +1082,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "noelle.sweepingTime": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "大扫除的武器岩元素转化持续中"
+    },
+    "noelle.breastplateEnded": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "护心铠到期或受伤破碎"
+    }
+  }
 }

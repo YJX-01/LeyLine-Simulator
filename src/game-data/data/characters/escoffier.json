@@ -851,7 +851,26 @@
       "rank": 6,
       "name": "虹彩缤纷的甜点茶话",
       "description": "**厨艺机关·低温冷藏模式**获得强化：\n·队伍中自己的当前场上角色的普通攻击、重击或下落攻击命中敌人时，厨艺机关·低温冷藏模式将发射一枚额外的特级冻霜芭菲，造成爱可菲500%攻击力的冰元素范围伤害。该伤害视为元素战技伤害。\n该效果每0.5秒至多触发一次，一次厨艺机关·低温冷藏模式持续期间，该效果至多触发6次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "escoffier.c6.frosty-parfait",
+          "skill": "escoffier.skill",
+          "name": "特级冻霜芭菲",
+          "element": "cryo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 5
+            }
+          ],
+          "when": [
+            "escoffier.parfaitReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -880,5 +899,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "escoffier.parfaitReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "低温冷藏模式中场上角色的攻击触发特级冻霜芭菲"
+    }
+  }
 }

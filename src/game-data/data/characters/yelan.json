@@ -376,6 +376,9 @@
         {
           "id": "yelan.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -734,6 +737,9 @@
         {
           "id": "yelan.burst.param2",
           "name": "玄掷玲珑伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "hp",
@@ -781,7 +787,26 @@
       "rank": 2,
       "name": "入彀者，多多益善",
       "description": "「玄掷玲珑」协同攻击时，会发射一枚额外的水箭，造成相当于夜兰生命值上限14%的水元素伤害。\n该效果每1.8秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "yelan.c2.exquisite-arrow",
+          "skill": "yelan.burst",
+          "name": "玄掷玲珑·额外水箭",
+          "element": "hydro",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "hp",
+              "ratio": 0.14
+            }
+          ],
+          "when": [
+            "yelan.exquisiteArrowReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -815,7 +840,26 @@
       "rank": 6,
       "name": "取胜者，大小通吃",
       "description": "施放渊图玲珑骰后，夜兰将进入「运筹帷幄」状态：\n夜兰的普通攻击将转为发射特殊的「破局矢」。这种箭矢具有与破局矢近似的特性，造成的伤害视为重击伤害，能造成破局矢156%的伤害。\n\n「运筹帷幄」状态至多持续20秒，将在夜兰发射5枚箭矢后移除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "yelan.c6.mastermind-barb",
+          "skill": "yelan.normal",
+          "name": "运筹帷幄·特殊破局矢",
+          "element": "hydro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "hp",
+              "parameter": "param7"
+            }
+          ],
+          "when": [
+            "yelan.mastermind"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -844,5 +888,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "yelan.exquisiteArrowReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "玄掷玲珑协同攻击时额外水箭可触发"
+    },
+    "yelan.mastermind": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "运筹帷幄可用"
+    }
+  }
 }

@@ -390,6 +390,9 @@
         {
           "id": "tighnari.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -890,7 +893,26 @@
       "rank": 6,
       "name": "由硕实品论应果",
       "description": "花筥箭所需的蓄力时间减少0.9秒，并在命中后能产生1枚额外的藏蕴花矢，能造成提纳里攻击力150%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "tighnari.c6.clusterbloom-arrow",
+          "skill": "tighnari.normal",
+          "name": "六命额外藏蕴花矢",
+          "element": "dendro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.5
+            }
+          ],
+          "when": [
+            "tighnari.c6ClusterbloomReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -919,5 +941,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "tighnari.c6ClusterbloomReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "花筥箭命中并产生额外藏蕴花矢"
+    }
+  }
 }

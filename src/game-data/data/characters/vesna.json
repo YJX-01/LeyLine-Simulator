@@ -414,6 +414,9 @@
         {
           "id": "vesna.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -638,6 +641,9 @@
         {
           "id": "vesna.normal.param3.anemo",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "element": "anemo",
           "base": [
             {
@@ -1204,6 +1210,9 @@
         {
           "id": "vesna.skill.param6",
           "name": "翔风剑三阶灵剑伤害",
+          "selection": {
+            "repetitions": 4
+          },
           "base": [
             {
               "stat": "attack",
@@ -1330,6 +1339,9 @@
         {
           "id": "vesna.skill.param7",
           "name": "翔风剑三阶灵剑星扩散伤害",
+          "selection": {
+            "repetitions": 4
+          },
           "base": [
             {
               "stat": "attack",

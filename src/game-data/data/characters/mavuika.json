@@ -340,6 +340,9 @@
         {
           "id": "mavuika.normal.param2",
           "name": "二段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -362,6 +365,9 @@
         {
           "id": "mavuika.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -1018,7 +1024,19 @@
           ]
         }
       ],
-      "cooldownParameter": "param14"
+      "cooldownParameter": "param14",
+      "inputs": [
+        {
+          "id": "mavuika.fightingSpirit",
+          "type": {
+            "kind": "quantity",
+            "unit": "scalar"
+          },
+          "min": 50,
+          "max": 200,
+          "integer": false
+        }
+      ]
     },
     {
       "id": "mavuika.burst",
@@ -1262,7 +1280,19 @@
         }
       ],
       "energyCapacity": 0,
-      "cooldownParameter": "param8"
+      "cooldownParameter": "param8",
+      "inputs": [
+        {
+          "id": "mavuika.fightingSpirit",
+          "type": {
+            "kind": "quantity",
+            "unit": "scalar"
+          },
+          "min": 50,
+          "max": 200,
+          "integer": false
+        }
+      ]
     }
   ],
   "passives": [
@@ -1336,7 +1366,49 @@
       "rank": 6,
       "name": "「人之名」解放",
       "description": "元素战技称名之刻中的诸火武装获得完全强化：\n·焚曜之环：焚曜之环的攻击命中敌人时，将会有一辆驰轮车撞向被命中的敌人，造成200%攻击力的具有夜魂性质的火元素范围伤害；\n·驰轮车：玛薇卡驾驶驰轮车时，还会召唤出持续跟随玛薇卡的「焚曜之环·灼象」，使附近的敌人的防御力降低20%，并且每3秒对周围的敌人造成一次500%攻击力的具有夜魂性质的火元素范围伤害，且玛薇卡通过各种地形的能力也会进一步提升。\n\n此外，玛薇卡驾驶驰轮车且不处于战斗状态下时，当玛薇卡的夜魂值降低至5点时，将获得80点夜魂值，该效果每15秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "mavuika.c6.flamestrider-crash",
+          "skill": "mavuika.skill",
+          "name": "六命·驰轮车撞击",
+          "element": "pyro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "when": [
+            "mavuika.c6CrashReady",
+            "mavuika.ringActive"
+          ],
+          "reactions": false,
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "mavuika.c6.scorching-ring",
+          "skill": "mavuika.skill",
+          "name": "六命·焚曜之环·灼象",
+          "element": "pyro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 5
+            }
+          ],
+          "when": [
+            "mavuika.c6RidingRingReady",
+            "mavuika.flamestrider"
+          ],
+          "reactions": false,
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -1372,6 +1444,35 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "mavuika.fightingSpirit": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "施放时消耗的战意"
+    },
+    "mavuika.ringActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "焚曜之环存在且目标在附近"
+    },
+    "mavuika.c6CrashReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次焚曜之环命中触发驰轮车撞击"
+    },
+    "mavuika.c6RidingRingReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次骑乘期间焚曜之环·灼象命中"
     }
   },
   "formulas": [

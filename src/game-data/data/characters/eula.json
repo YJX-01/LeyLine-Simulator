@@ -415,6 +415,9 @@
         {
           "id": "eula.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -437,6 +440,9 @@
         {
           "id": "eula.normal.param5",
           "name": "五段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -1081,7 +1087,27 @@
       "id": "eula.passive1",
       "name": "潮卷冰削",
       "description": "长按施放冰潮的涡旋时，若一次性消耗了2层冷酷之心效果，则创造会立即爆发的残缺光降之剑，造成相当于凝浪之光剑的光降之剑基础伤害50%的物理伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "eula.a0.shattered-lightfall",
+          "skill": "eula.skill",
+          "name": "残缺光降之剑",
+          "element": "physical",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "skill": "eula.burst",
+              "parameter": "param2"
+            }
+          ],
+          "when": [
+            "eula.spentTwoGrimheart"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "eula.passive2",
@@ -1170,5 +1196,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "eula.spentTwoGrimheart": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "长按冰潮的涡旋时一次性消耗两层冷酷之心"
+    }
+  }
 }

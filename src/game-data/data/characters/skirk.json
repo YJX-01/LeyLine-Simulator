@@ -370,7 +370,18 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param2",
@@ -381,7 +392,18 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param3",
@@ -392,7 +414,18 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param4",
@@ -403,7 +436,18 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param5",
@@ -414,7 +458,18 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param6",
@@ -425,11 +480,25 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param7",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "category": "charged",
           "base": [
             {
@@ -437,7 +506,18 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param9",
@@ -449,7 +529,18 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param10",
@@ -461,7 +552,18 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.normal.param11",
@@ -473,7 +575,18 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ]
     },
@@ -861,7 +974,10 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param2",
@@ -873,7 +989,10 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param3",
@@ -885,7 +1004,10 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param4",
@@ -897,7 +1019,10 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param5",
@@ -909,7 +1034,10 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param6",
@@ -921,7 +1049,10 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param7",
@@ -933,11 +1064,17 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param8",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "category": "charged",
           "base": [
             {
@@ -945,7 +1082,10 @@
               "parameter": "param8"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param10",
@@ -957,7 +1097,10 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param11",
@@ -969,7 +1112,10 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         },
         {
           "id": "skirk.skill.param12",
@@ -981,10 +1127,25 @@
               "parameter": "param12"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            "skirk.sevenfold"
+          ]
         }
       ],
-      "cooldownParameter": "param15"
+      "cooldownParameter": "param15",
+      "inputs": [
+        {
+          "id": "skirk.consumedRifts",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 3,
+          "integer": true
+        }
+      ]
     },
     {
       "id": "skirk.burst",
@@ -1188,13 +1349,27 @@
         {
           "id": "skirk.burst.param1",
           "name": "斩击伤害",
+          "selection": {
+            "repetitions": 5
+          },
           "base": [
             {
               "stat": "attack",
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "skirk.burst.param2",
@@ -1205,11 +1380,44 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ],
       "energyCapacity": 0,
-      "cooldownParameter": "param8"
+      "cooldownParameter": "param8",
+      "inputs": [
+        {
+          "id": "skirk.serpentGuile",
+          "type": {
+            "kind": "quantity",
+            "unit": "scalar"
+          },
+          "min": 50,
+          "max": 100,
+          "integer": true
+        },
+        {
+          "id": "skirk.c6SlashStacks",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 3,
+          "integer": true
+        }
+      ]
     }
   ],
   "passives": [
@@ -1248,7 +1456,35 @@
       "rank": 1,
       "name": "湮远",
       "description": "突破天赋**理外之理**的效果获得强化：每汲取一枚虚境裂隙，就将召唤一枚晶刃攻击附近的敌人，造成相当于丝柯克攻击力500%的冰元素伤害，该伤害视为重击伤害。\n需要解锁突破天赋「理外之理」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "skirk.skill.c1-crystal-blade",
+          "name": "汲取裂隙·晶刃",
+          "element": "cryo",
+          "category": "charged",
+          "skill": "skirk.skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 5
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "skirk.c1Rift",
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1288,7 +1524,98 @@
       "rank": 6,
       "name": "至源",
       "description": "丝柯克每通过突破天赋**理外之理**的效果汲取一枚虚境裂隙，就会获得一层极恶技·斩效果，丝柯克可以消耗该效果进行协同攻击，并降低在**七相一闪**模式下受到的伤害，该效果持续15秒，至多叠加3层，每层独立计算持续时间。\n需要解锁突破天赋「理外之理」。\n\n极恶技·斩\n·施放元素爆发极恶技·灭时，将消耗所有的极恶技·斩层数进行协同攻击，每层极恶技·斩会造成相当于丝柯克攻击力750%的冰元素伤害，该伤害视为元素爆发伤害；\n·丝柯克在七相一闪模式下进行的普通攻击，第三段攻击或第五段攻击命中敌人时，将消耗一层极恶技·斩，进行3次协同攻击，每次协同攻击造成相当于丝柯克攻击力180%的冰元素伤害，该伤害视为普通攻击伤害；\n·丝柯克在七相一闪模式下受到伤害时，将消耗一层极恶技·斩，使本次受到的伤害降低80%，并对附近的敌人进行3次攻击，每次攻击造成相当于丝柯克攻击力180%的冰元素伤害，该伤害视为重击伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "skirk.burst.c6-slash",
+          "name": "极恶技·灭协同攻击",
+          "element": "cryo",
+          "category": "burst",
+          "skill": "skirk.burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 7.5,
+              "count": "skirk.c6SlashStacks"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            },
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "skirk.sevenfold"
+                }
+              },
+              "output": "active"
+            }
+          ]
+        },
+        {
+          "id": "skirk.skill.c6-slash",
+          "name": "七相一闪普攻协同攻击",
+          "element": "cryo",
+          "category": "normal",
+          "skill": "skirk.skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.8
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            },
+            "skirk.sevenfold",
+            "skirk.c6NormalSlash"
+          ]
+        },
+        {
+          "id": "skirk.skill.c6-retaliation",
+          "name": "七相一闪受伤协同攻击",
+          "element": "cryo",
+          "category": "charged",
+          "skill": "skirk.skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.8
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            },
+            "skirk.sevenfold",
+            "skirk.c6Retaliation"
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1315,7 +1642,77 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "skirk.sevenfold": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于七相一闪模式"
+    },
+    "skirk.c1Rift": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "汲取虚境裂隙触发晶刃"
+    },
+    "skirk.consumedRifts": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "施放极恶技·尽汲取的虚境裂隙数"
+    },
+    "skirk.serpentGuile": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "本次极恶技·灭消耗的蛇之狡谋"
+    },
+    "skirk.c6SlashStacks": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次极恶技·灭消耗的极恶技·斩层数"
+    },
+    "skirk.c6NormalSlash": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "七相一闪第三或第五段普攻触发极恶技·斩"
+    },
+    "skirk.c6Retaliation": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "七相一闪受伤触发极恶技·斩"
+    }
+  }
 }

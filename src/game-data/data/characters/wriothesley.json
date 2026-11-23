@@ -795,6 +795,9 @@
         {
           "id": "wriothesley.burst.param1",
           "name": "技能伤害",
+          "selection": {
+            "repetitions": 5
+          },
           "base": [
             {
               "stat": "attack",
@@ -826,7 +829,26 @@
       "id": "wriothesley.passive1",
       "name": "公理终有辩诉之日",
       "description": "莱欧斯利的生命值低于60%时，将获得「恩典之诫」，使下次普通攻击·迅烈倾霜拳的重击强化为惩戒·凌跃拳：不消耗体力，造成的伤害提升50%，并在命中后为莱欧斯利恢复生命值，回复量相当于莱欧斯利生命值上限的30%。\n每5秒至多通过这种方式获得一次「恩典之诫」效果。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "wriothesley.a0.rebuke-vaulting-fist",
+          "skill": "wriothesley.normal",
+          "name": "惩戒·凌跃拳",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "when": [
+            "wriothesley.graciousRebuke"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "wriothesley.passive2",
@@ -886,7 +908,35 @@
       "rank": 6,
       "name": "予无罪者以念抚",
       "description": "惩戒·凌跃拳的暴击率提升10%，暴击伤害提升80%，并能够额外生成冰锥，造成原本100%的冰元素伤害，通过这种方式造成的伤害视为重击伤害。\n需要解锁突破天赋「公理终有辩诉之日」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "wriothesley.c6.gracious-icicle",
+          "skill": "wriothesley.normal",
+          "name": "惩戒·凌跃拳·额外冰锥",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "when": [
+            "wriothesley.graciousRebuke",
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -922,6 +972,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "wriothesley.graciousRebuke": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前普攻天赋的重击消耗恩典之诫"
     }
   },
   "formulas": [

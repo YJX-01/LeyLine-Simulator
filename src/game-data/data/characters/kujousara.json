@@ -756,7 +756,49 @@
       "rank": 2,
       "name": "鸦羽",
       "description": "施放鸦羽天狗霆雷召咒时，会在九条裟罗原本的位置留下能引发一次较弱的天狗咒雷·伏的「乌羽」，造成原本30%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kujousara.c2.weaker-crowfeather",
+          "skill": "kujousara.skill",
+          "name": "较弱的天狗咒雷·伏",
+          "element": "electro",
+          "category": "skill",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param1",
+                    "skill": "kujousara.skill"
+                  },
+                  "rate": 0.3
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "kujousara.c2WeakerCrowfeatherHit"
+          ],
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "kujousara.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "damageBonus",
+              "electroBonus"
+            ]
+          }
+        }
+      ]
     },
     {
       "rank": 3,
@@ -819,5 +861,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kujousara.c2WeakerCrowfeatherHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "施放战技留下的较弱乌羽已命中"
+    }
+  }
 }

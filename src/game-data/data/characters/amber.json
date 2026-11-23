@@ -778,7 +778,37 @@
       "rank": 1,
       "name": "一箭双丘丘！",
       "description": "瞄准射击时，会连续射出2支箭。第二支箭能造成原本20%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "amber.normal.c1-aimed",
+          "name": "第二支未蓄满的瞄准箭",
+          "element": "physical",
+          "category": "charged",
+          "skill": "amber.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6"
+            }
+          ],
+          "support": "conditional-branch"
+        },
+        {
+          "id": "amber.normal.c1-full",
+          "name": "第二支满蓄力瞄准箭",
+          "element": "pyro",
+          "category": "charged",
+          "skill": "amber.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "support": "conditional-branch"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -876,6 +906,22 @@
       "mechanisms": [
         {
           "id": "explicit-output-scope",
+          "resolution": "unavailable"
+        }
+      ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
           "resolution": "unavailable"
         }
       ]

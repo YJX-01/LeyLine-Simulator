@@ -345,7 +345,18 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "aloy.rushingIce"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "aloy.normal.param2",
@@ -356,7 +367,18 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "aloy.rushingIce"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "aloy.normal.param3",
@@ -367,7 +389,18 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "aloy.rushingIce"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "aloy.normal.param4",
@@ -378,7 +411,18 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "aloy.rushingIce"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "aloy.normal.param5",
@@ -389,7 +433,18 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "aloy.rushingIce"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "aloy.normal.param6",
@@ -451,6 +506,108 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "aloy.normal.ice-1",
+          "name": "一段伤害（第1击）（冰驰）",
+          "element": "cryo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "aloy.rushingIce"
+          ]
+        },
+        {
+          "id": "aloy.normal.ice-2",
+          "name": "一段伤害（第2击）（冰驰）",
+          "element": "cryo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "aloy.rushingIce"
+          ]
+        },
+        {
+          "id": "aloy.normal.ice-3",
+          "name": "二段伤害（冰驰）",
+          "element": "cryo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "aloy.rushingIce"
+          ]
+        },
+        {
+          "id": "aloy.normal.ice-4",
+          "name": "三段伤害（冰驰）",
+          "element": "cryo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "aloy.rushingIce"
+          ]
+        },
+        {
+          "id": "aloy.normal.ice-5",
+          "name": "四段伤害（冰驰）",
+          "element": "cryo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "aloy.rushingIce"
+          ]
+        }
+      ],
+      "inputs": [
+        {
+          "id": "aloy.coilStacks",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 3,
+          "integer": true
+        },
+        {
+          "id": "aloy.iceSeconds",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 10,
+          "integer": true
         }
       ]
     },
@@ -920,7 +1077,48 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "aloy.coilStacks": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "线圈层数"
+    },
+    "aloy.rushingIce": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于冰驰状态"
+    },
+    "aloy.iceSeconds": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "冰驰每秒获得的冰伤层数"
+    }
+  }
 }

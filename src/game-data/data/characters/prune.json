@@ -658,7 +658,27 @@
       "id": "prune.passive1",
       "name": "裁断追惩",
       "description": "元素爆发**铃鸣·狩魔之刻**中，处于「寻猎」模式下的「诱巫饵铃」对敌人造成伤害后，若该次伤害对敌人触发了扩散或星扩散反应，则还会在敌人面前召唤出一柄依据本次扩散或星扩散反应进行元素转化的**「狩灾誓锤」**向其砸下，造成布伦妮攻击力150%的对应类型的元素伤害，该伤害视为元素爆发伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "prune.a0.absorbed-hammer",
+          "skill": "prune.burst",
+          "name": "裁断追惩·转化狩灾誓锤",
+          "element": "anemo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.5
+            }
+          ],
+          "when": [
+            "prune.hunterChimeSwirl"
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "id": "prune.passive2",
@@ -701,7 +721,27 @@
       "rank": 4,
       "name": "循风同行回头看，影子还缺一半",
       "description": "经过元素转化的**「狩灾誓锤」**在命中敌人后，会再次弹起并于附近敌人处落下，对命中的敌人造成80%攻击力的对应元素类型的元素伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "prune.c4.oathhammer-ricochet",
+          "skill": "prune.skill",
+          "name": "四命·狩灾誓锤弹跳",
+          "category": "other",
+          "elementBy": "absorbedElement",
+          "reactions": false,
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.8
+            }
+          ],
+          "when": [
+            "prune.c4OathhammerRicochetReady"
+          ],
+          "support": "c4-oathhammer-ricochet"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -745,6 +785,24 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "c4-oathhammer-ricochet": {
+      "maxConstellation": 6,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "按能力配置的独立弹跳标签计入80%攻击力和转化元素。四种转化的弹跳均无元素附着。",
+      "mechanisms": [
+        {
+          "id": "oathhammer-ricochet",
+          "resolution": "implemented",
+          "reason": "按能力配置的独立弹跳标签计入80%攻击力和转化元素。四种转化的弹跳均无元素附着。"
+        },
+        {
+          "id": "oathhammer-ricochet-context",
+          "resolution": "unavailable",
+          "reason": "两个母段分别是元素战技和元素爆发。弹跳独立标签是否继承对应类别增伤，以及面板的取值时点，仍待实测区分。"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -754,6 +812,20 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "prune.hunterChimeSwirl": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "寻猎模式的诱巫饵铃已触发扩散或星扩散"
+    },
+    "prune.c4OathhammerRicochetReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "战技或爆发产生的已转化狩灾誓锤命中后，本次弹跳已命中当前目标"
     }
   }
 }

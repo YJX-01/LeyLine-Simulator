@@ -728,6 +728,18 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "inputs": [
+        {
+          "id": "shenhe.frostStacks",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 50,
+          "integer": true
+        }
       ]
     },
     {
@@ -1015,5 +1027,15 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "shenhe.frostStacks": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次消耗的霜霄诀层数"
+    }
+  }
 }

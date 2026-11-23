@@ -935,7 +935,37 @@
       "rank": 6,
       "name": "慈惠仁心",
       "description": "月桂·抛掷型每投掷2次白玉萝卜，就会在下次投掷时额外投掷1枚超厉害·大萝卜。相比白玉萝卜，超厉害·大萝卜炸裂时的影响范围更大，炸裂时产生如下效果：\n·基于瑶瑶攻击力的75%，造成草元素范围伤害；\n·基于瑶瑶生命值上限的7.5%，为其中的当前场上角色恢复生命值。\n\n每个月桂·抛掷型至多投掷2次超厉害·大萝卜。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "yaoyao.c6.mega-radish",
+          "skill": "yaoyao.skill",
+          "name": "六命·超厉害·大萝卜",
+          "element": "dendro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.75
+            }
+          ],
+          "when": [
+            "yaoyao.c6MegaRadishReady"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "yaoyao.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "dendroBonus",
+              "damageBonus"
+            ]
+          }
+        }
+      ]
     }
   ],
   "support": {
@@ -964,5 +994,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "yaoyao.c6MegaRadishReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次月桂·抛掷型额外投出的超厉害·大萝卜炸裂"
+    }
+  }
 }

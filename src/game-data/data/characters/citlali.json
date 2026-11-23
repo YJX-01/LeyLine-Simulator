@@ -876,7 +876,27 @@
       "rank": 4,
       "name": "拒亡者的灵髑",
       "description": "元素战技霜昼黑星中，伊兹帕帕的霜陨风暴命中敌人时，会额外召唤一个宿灵之髑·黑星，通过这种方式召唤的宿灵之髑发生爆炸时，会造成相当于茜特菈莉元素精通1800%的具有夜魂性质的冰元素范围伤害，并为茜特菈莉恢复16点夜魂值和8点元素能量，该效果每8秒至多触发一次。该伤害不被视为元素爆发伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "citlali.c4.obsidian-skull",
+          "skill": "citlali.skill",
+          "name": "四命·黑曜灵骷",
+          "element": "cryo",
+          "category": "other",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 18
+            }
+          ],
+          "when": [
+            "citlali.c4SkullReady"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -922,5 +942,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "citlali.c4SkullReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次霜陨风暴命中触发额外黑曜灵骷爆炸"
+    }
+  }
 }

@@ -374,7 +374,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param2",
@@ -385,18 +389,29 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param4",
@@ -407,7 +422,11 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param5",
@@ -419,7 +438,11 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param6",
@@ -431,7 +454,11 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param9",
@@ -443,7 +470,11 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param10",
@@ -455,7 +486,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         },
         {
           "id": "navia.normal.param11",
@@ -467,7 +502,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "navia.crystallineInfusion",
+            "element": "geo"
+          }
         }
       ]
     },
@@ -872,7 +911,26 @@
       "rank": 2,
       "name": "总指挥的乘胜追击",
       "description": "施放典仪式晶火时，每消耗1枚「裂晶弹片」，都将使本次典仪式晶火的暴击率提升12%，至多通过这种方式使其暴击率提高36%。\n此外，典仪式晶火的射击命中敌人时，将在命中的敌人附近降下一次如霰澄天的鸣礼的「支援炮击」。每次施放典仪式晶火至多降下一次支援炮击，通过这种方式触发的支援炮击的伤害视为元素爆发伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "navia.c2.supporting-fire",
+          "skill": "navia.burst",
+          "name": "总指挥的乘胜追击·支援炮击",
+          "element": "geo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "when": [
+            "navia.barrageReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -935,5 +993,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "navia.barrageReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "典仪式晶火射击命中且支援炮击可触发"
+    },
+    "navia.crystallineInfusion": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "典仪式晶火施放后四秒内的岩元素转化"
+    }
+  }
 }

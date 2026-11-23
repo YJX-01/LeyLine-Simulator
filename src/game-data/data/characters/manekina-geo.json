@@ -582,6 +582,9 @@
         {
           "id": "manekina-geo.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -1674,7 +1677,8 @@
           "when": [
             "manekin.zoneExit"
           ],
-          "support": "hit-complete"
+          "support": "hit-complete",
+          "category": "other"
         }
       ]
     },

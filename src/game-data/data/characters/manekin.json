@@ -575,6 +575,9 @@
         {
           "id": "manekin.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",

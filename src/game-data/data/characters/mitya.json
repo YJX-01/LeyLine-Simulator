@@ -961,7 +961,27 @@
       "rank": 4,
       "name": "衰变相生的同位素",
       "description": "场上存在米提亚自己创造的**侦测炉心**时，每消耗5枚**递变信标**，侦测炉心都会对周围的敌人造成一次相当于米提亚元素精通300%的、视为星超导反应伤害的雷元素范围伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "mitya.c4.beacon-consumption",
+          "skill": "mitya.skill",
+          "name": "侦测炉心·递变信标耗用",
+          "element": "electro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 3
+            }
+          ],
+          "when": [
+            "mitya.fiveBeaconsConsumed"
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1033,6 +1053,13 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "mitya.fiveBeaconsConsumed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "侦测炉心在场时已消耗五枚递变信标"
     }
   }
 }

@@ -376,6 +376,9 @@
         {
           "id": "kamisatoayaka.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -398,6 +401,9 @@
         {
           "id": "kamisatoayaka.normal.param8",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "category": "charged",
           "base": [
             {
@@ -754,7 +760,37 @@
       "rank": 2,
       "name": "三重雪关扉",
       "description": "施放神里流·霜灭时，会额外释放两股规模较小的霜见雪关扉，各自能造成原本20%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kamisatoayaka.c2.smaller-frostflake-cut",
+          "skill": "kamisatoayaka.burst",
+          "name": "小型霜见雪关扉·切割",
+          "element": "cryo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "kamisatoayaka.c2.smaller-frostflake-bloom",
+          "skill": "kamisatoayaka.burst",
+          "name": "小型霜见雪关扉·绽放",
+          "element": "cryo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,

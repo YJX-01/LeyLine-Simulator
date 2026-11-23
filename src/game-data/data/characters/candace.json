@@ -627,6 +627,7 @@
       "id": "candace.burst",
       "name": "圣仪·灰鸰衒潮",
       "description": "高举武器，召请神佑，基于坎蒂丝的生命值上限，造成水元素范围伤害，并持续为当前场上自己的角色赋予「赤冕祝祷」状态。\n\n赤冕祝祷\n具有如下特性：\n·角色的普通攻击对敌人造成元素伤害时，提高造成的伤害；\n·角色登场时，会发动水波冲击，对周围的敌人造成水元素伤害。该效果在持续时间内触发的次数有限；\n·处于这种状态下的单手剑、双手剑、长柄武器角色会获得水元素附魔。",
+      "partyInfusion": "hydro",
       "flavorText": "坎蒂丝家族世代传承的秘仪。尽管古老的信仰早已消逝在千年的岁月中，沙海依然庇护着古国的后人。",
       "category": "burst",
       "element": "hydro",
@@ -922,7 +923,26 @@
       "rank": 6,
       "name": "衍溢的汐潮",
       "description": "处于圣仪·灰鸰衒潮的赤冕祝祷状态下的当前场上角色（不包括坎蒂丝自己），在普通攻击对敌人造成元素伤害时，将释放衍潮冲击，造成相当于坎蒂丝生命值上限15%水元素范围伤害。\n该效果每2.3秒至多触发一次，造成的伤害视为元素爆发伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "candace.burst.c6-wave",
+          "name": "衍潮冲击",
+          "element": "hydro",
+          "category": "burst",
+          "skill": "candace.burst",
+          "base": [
+            {
+              "stat": "hp",
+              "ratio": 0.15
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "candace.c6Wave"
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -949,7 +969,32 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "candace.c6Wave": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "符合条件的在场其他角色触发衍潮冲击"
+    }
+  }
 }

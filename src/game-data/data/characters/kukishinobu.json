@@ -925,7 +925,26 @@
       "rank": 4,
       "name": "割舍封闭之心",
       "description": "处于久岐忍自己的越祓草轮状态下的角色，在普通攻击、重击或下落攻击命中敌人时，雷草标将落在敌人所在的位置，基于久岐忍生命值上限的9.7%，造成雷元素范围伤害。\n该效果每5秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kukishinobu.skill.c4-mark",
+          "name": "雷草标伤害",
+          "element": "electro",
+          "category": "skill",
+          "skill": "kukishinobu.skill",
+          "base": [
+            {
+              "stat": "hp",
+              "ratio": 0.097
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "kukishinobu.c4GrassMark"
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -969,7 +988,32 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kukishinobu.c4GrassMark": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "越祓草轮携带者命中触发雷草标"
+    }
+  }
 }

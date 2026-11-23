@@ -1,0 +1,152 @@
+{
+  "source": {
+    "repository": "https://github.com/DimbreathBot/AnimeGameData",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca",
+    "capturedAt": "2026-11-22"
+  },
+  "gadgetId": {
+    "path": "ExcelBinOutput/GadgetExcelConfigData.json",
+    "pointer": "/83",
+    "record": {
+      "id": 41005004,
+      "jsonName": "Hogyoku_Barrier"
+    }
+  },
+  "gadget": {
+    "path": "BinOutput/Gadget/ConfigGadget_SkillObj.json",
+    "pointer": "/Hogyoku_Barrier",
+    "record": {
+      "abilities": [
+        {
+          "abilityID": "Barrier_Ability",
+          "abilityName": "Avatar_Player_Hogyoku_Barrier",
+          "abilityOverride": ""
+        },
+        {
+          "abilityID": "Barrier_Material",
+          "abilityName": "Avatar_Player_Hogyoku_Barrier_Material",
+          "abilityOverride": ""
+        }
+      ],
+      "combat": {
+        "property": {
+          "useCreatorProperty": true,
+          "weight": 150
+        }
+      }
+    }
+  },
+  "generation": {
+    "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+    "pointer": "/6/Default/modifiers/Hogyoku_Base_Appear/onRemoved/0",
+    "record": {
+      "$type": "CreateGadget",
+      "born": {
+        "$type": "ConfigBornByTarget",
+        "alongGround": true,
+        "offset": {
+          "x": 1,
+          "y": 0,
+          "z": 0
+        },
+        "onGround": true,
+        "onGroundIgnoreWater": true,
+        "onGroundRaycastUpDist": 4
+      },
+      "campID": 1001,
+      "campTargetType": "Enemy",
+      "gadgetID": 41005004
+    }
+  },
+  "unlock": {
+    "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Player_Rock.json",
+    "pointer": "/Player_Rock_Constellation_2",
+    "record": [
+      {
+        "$type": "UnlockTalentParam",
+        "abilityName": "Avatar_Player_Hogyoku_Barrier_Material",
+        "talentParam": "Player_Rock_UnstablePrime"
+      },
+      {
+        "$type": "UnlockTalentParam",
+        "abilityName": "Avatar_Player_Hogyoku_Barrier",
+        "talentParam": "Player_Rock_UnstablePrime"
+      }
+    ]
+  },
+  "enableExplosion": {
+    "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+    "pointer": "/7/Default/modifiers/Hogyoku_Barrier_Explode_Timer/onRemoved/1",
+    "record": {
+      "$type": "ApplyModifier",
+      "modifierName": "Hogyoku_Barrier_Explode",
+      "predicates": [
+        {
+          "$type": "ByUnlockTalentParam",
+          "talentParam": "Player_Rock_UnstablePrime"
+        }
+      ]
+    }
+  },
+  "destruction": {
+    "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Player_Rock.json",
+    "pointer": "/7/Default/modifiers/Hogyoku_Barrier_Explode/onKill/0",
+    "record": {
+      "$type": "TriggerAttackEvent",
+      "attackEvent": {
+        "attackInfo": {
+          "attackProperty": {
+            "damagePercentage": "Damage_Explode",
+            "damagePercentageRatio": 0,
+            "elementDurability": 25,
+            "elementRank": 1.5,
+            "elementType": "Rock",
+            "enBreak": 133.2,
+            "strikeType": "Blunt",
+            "DIEKDGNBHLH": 0
+          },
+          "attackTag": "Elemental_Art",
+          "canBeModifiedBy": "OriginOwner"
+        }
+      }
+    }
+  },
+  "skillParameters": {
+    "path": "BinOutput/Talent/AvatarTalents/ConfigTalent_Player_Rock.json",
+    "pointer": "/Player_Rock_SkillUpgrade_1",
+    "record": [
+      {
+        "$type": "ModifyAbility",
+        "abilityName": "Avatar_Player_Hogyoku_Barrier",
+        "paramDelta": "%1",
+        "paramRatio": 0,
+        "paramSpecial": "Damage_Explode"
+      },
+      {
+        "$type": "ModifyAbility",
+        "abilityName": "Avatar_Player_Hogyoku_Barrier_EndBoom",
+        "paramDelta": "%1",
+        "paramRatio": 0,
+        "paramSpecial": "Damage_Explode"
+      }
+    ]
+  },
+  "skillRankOne": {
+    "path": "ExcelBinOutput/ProudSkillExcelConfigData.json",
+    "pointer": "/277",
+    "record": {
+      "openConfig": "Player_Rock_SkillUpgrade_1",
+      "proudSkillId": 93201,
+      "paramList": [
+        2.48,
+        30,
+        8
+      ]
+    }
+  },
+  "placement": {
+    "url": "https://keqingmains.com/geo-traveler/#Constellations",
+    "section": "Constellation 2, Rockcore Meltdown",
+    "finding": "荒星摧毁爆炸沿用放置时的角色面板，暴击单独判定。受敌人状态影响的增伤与抗性仍以命中条件结算。元素战技段列举了班尼特攻击加成在荒星摧毁前到期的情形。"
+  }
+}

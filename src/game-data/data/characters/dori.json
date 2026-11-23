@@ -370,7 +370,12 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param2",
@@ -381,7 +386,12 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param3",
@@ -392,7 +402,12 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param4",
@@ -403,7 +418,12 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param5",
@@ -415,7 +435,12 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param6",
@@ -427,7 +452,12 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param9",
@@ -439,7 +469,12 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param10",
@@ -451,7 +486,12 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         },
         {
           "id": "dori.normal.param11",
@@ -463,7 +503,12 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "dori.c6ElectroInfusion",
+            "element": "electro",
+            "minConstellation": 6
+          }
         }
       ]
     },
@@ -821,7 +866,27 @@
       "rank": 2,
       "name": "特许经营",
       "description": "在战斗状态中，当灯中幽精为相连的角色进行治疗时，将从该角色处发射一枚镇灵炮，造成相当于多莉攻击力50%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "dori.c2.jinni-toop",
+          "skill": "dori.burst",
+          "name": "二命·镇灵炮",
+          "element": "electro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.5
+            }
+          ],
+          "when": [
+            "dori.c2JinniToopReady"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -884,5 +949,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "dori.c2JinniToopReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "战斗中本次灯中幽精治疗连接角色并发射镇灵炮"
+    },
+    "dori.c6ElectroInfusion": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次命中由战技后三秒内的多莉六命雷附魔作用"
+    }
+  }
 }

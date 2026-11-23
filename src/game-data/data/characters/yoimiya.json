@@ -368,6 +368,9 @@
         {
           "id": "yoimiya.normal.param1",
           "name": "一段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -434,6 +437,9 @@
         {
           "id": "yoimiya.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -563,6 +569,9 @@
         {
           "id": "yoimiya.normal.param1.pyro",
           "name": "一段伤害·炽焰箭",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -608,6 +617,9 @@
         {
           "id": "yoimiya.normal.param4.pyro",
           "name": "四段伤害·炽焰箭",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -1023,7 +1035,99 @@
       "rank": 6,
       "name": "长野原龙势流星群",
       "description": "在焰硝庭火舞的持续期间内，宵宫主动进行普通攻击时，有50%几率发射一枚额外的炽焰箭，造成原本60%的伤害。该伤害视为普通攻击伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "yoimiya.c6.kindling-arrow-1",
+          "skill": "yoimiya.normal",
+          "name": "长野原龙势流星群·第1段额外箭",
+          "element": "pyro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "yoimiya.niwabi",
+            "yoimiya.extraKindlingArrow"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-2",
+          "skill": "yoimiya.normal",
+          "name": "长野原龙势流星群·第2段额外箭",
+          "element": "pyro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "when": [
+            "yoimiya.niwabi",
+            "yoimiya.extraKindlingArrow"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-3",
+          "skill": "yoimiya.normal",
+          "name": "长野原龙势流星群·第3段额外箭",
+          "element": "pyro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "when": [
+            "yoimiya.niwabi",
+            "yoimiya.extraKindlingArrow"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-4",
+          "skill": "yoimiya.normal",
+          "name": "长野原龙势流星群·第4段额外箭",
+          "element": "pyro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "when": [
+            "yoimiya.niwabi",
+            "yoimiya.extraKindlingArrow"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "yoimiya.c6.kindling-arrow-5",
+          "skill": "yoimiya.normal",
+          "name": "长野原龙势流星群·第5段额外箭",
+          "element": "pyro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "when": [
+            "yoimiya.niwabi",
+            "yoimiya.extraKindlingArrow"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -1059,6 +1163,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "yoimiya.extraKindlingArrow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "焰硝庭火舞期间主动普通攻击触发额外炽焰箭"
     }
   },
   "formulas": [

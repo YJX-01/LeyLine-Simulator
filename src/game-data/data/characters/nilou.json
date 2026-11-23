@@ -694,7 +694,10 @@
         },
         {
           "id": "nilou.skill.param6",
-          "name": "剑舞步/旋舞步一段伤害（第1击）",
+          "name": "剑舞步一段伤害",
+          "selection": {
+            "kind": "variant"
+          },
           "base": [
             {
               "stat": "hp",
@@ -705,7 +708,10 @@
         },
         {
           "id": "nilou.skill.param2",
-          "name": "剑舞步/旋舞步一段伤害（第2击）",
+          "name": "旋舞步一段伤害",
+          "selection": {
+            "kind": "variant"
+          },
           "base": [
             {
               "stat": "hp",
@@ -716,7 +722,10 @@
         },
         {
           "id": "nilou.skill.param7",
-          "name": "剑舞步/旋舞步二段伤害（第1击）",
+          "name": "剑舞步二段伤害",
+          "selection": {
+            "kind": "variant"
+          },
           "base": [
             {
               "stat": "hp",
@@ -727,7 +736,10 @@
         },
         {
           "id": "nilou.skill.param3",
-          "name": "剑舞步/旋舞步二段伤害（第2击）",
+          "name": "旋舞步二段伤害",
+          "selection": {
+            "kind": "variant"
+          },
           "base": [
             {
               "stat": "hp",
@@ -738,7 +750,10 @@
         },
         {
           "id": "nilou.skill.param4",
-          "name": "水月/水轮伤害（第1击）",
+          "name": "剑舞步·水月伤害",
+          "selection": {
+            "kind": "variant"
+          },
           "base": [
             {
               "stat": "hp",
@@ -749,7 +764,10 @@
         },
         {
           "id": "nilou.skill.param5",
-          "name": "水月/水轮伤害（第2击）",
+          "name": "旋舞步·涤空水轮伤害",
+          "selection": {
+            "kind": "variant"
+          },
           "base": [
             {
               "stat": "hp",

@@ -1265,7 +1265,7 @@
           ],
           "support": "hit-unavailable",
           "category": "normal",
-          "element": "anemo",
+          "element": "physical",
           "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
@@ -1273,7 +1273,7 @@
         },
         {
           "id": "varka.skill.param5",
-          "name": "狂飙突进·二段伤害（右手单击）",
+          "name": "狂飙突进·二段伤害（左手单击）",
           "base": [
             {
               "stat": "attack",
@@ -1283,14 +1283,13 @@
           "support": "hit-unavailable",
           "category": "normal",
           "element": "anemo",
-          "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
           ]
         },
         {
           "id": "varka.skill.param4",
-          "name": "狂飙突进·二段伤害（左手单击）",
+          "name": "狂飙突进·二段伤害（右手单击）",
           "base": [
             {
               "stat": "attack",
@@ -1299,14 +1298,15 @@
           ],
           "support": "hit-unavailable",
           "category": "normal",
-          "element": "anemo",
+          "element": "physical",
+          "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
           ]
         },
         {
           "id": "varka.skill.param7",
-          "name": "狂飙突进·三段伤害（右手单击）",
+          "name": "狂飙突进·三段伤害（左手单击）",
           "base": [
             {
               "stat": "attack",
@@ -1316,14 +1316,13 @@
           "support": "hit-unavailable",
           "category": "normal",
           "element": "anemo",
-          "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
           ]
         },
         {
           "id": "varka.skill.param6",
-          "name": "狂飙突进·三段伤害（左手单击）",
+          "name": "狂飙突进·三段伤害（右手单击）",
           "base": [
             {
               "stat": "attack",
@@ -1332,7 +1331,8 @@
           ],
           "support": "hit-unavailable",
           "category": "normal",
-          "element": "anemo",
+          "element": "physical",
+          "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
           ]
@@ -1348,7 +1348,7 @@
           ],
           "support": "hit-unavailable",
           "category": "normal",
-          "element": "anemo",
+          "element": "physical",
           "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
@@ -1381,7 +1381,7 @@
           ],
           "support": "hit-unavailable",
           "category": "normal",
-          "element": "anemo",
+          "element": "physical",
           "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
@@ -1405,7 +1405,7 @@
         },
         {
           "id": "varka.skill.param12",
-          "name": "狂飙突进·重击伤害（第一段倍率）",
+          "name": "狂飙突进·重击伤害（右手单击）",
           "base": [
             {
               "stat": "attack",
@@ -1414,15 +1414,15 @@
           ],
           "support": "hit-unavailable",
           "category": "charged",
-          "element": "anemo",
-          "elementBy": "strikingHand",
+          "element": "physical",
+          "elementBy": "partyPriorityElement",
           "when": [
             "varka.stance"
           ]
         },
         {
           "id": "varka.skill.param13",
-          "name": "狂飙突进·重击伤害（第二段倍率）",
+          "name": "狂飙突进·重击伤害（左手单击）",
           "base": [
             {
               "stat": "attack",
@@ -1434,8 +1434,7 @@
           "element": "anemo",
           "when": [
             "varka.stance"
-          ],
-          "elementBy": "strikingHand"
+          ]
         },
         {
           "id": "varka.skill.param14",
@@ -1509,6 +1508,9 @@
         {
           "id": "varka.skill.param16",
           "name": "苍噬伤害（右手单击）",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -1544,6 +1546,9 @@
         {
           "id": "varka.skill.param17",
           "name": "苍噬伤害（左手单击）",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",

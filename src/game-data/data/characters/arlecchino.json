@@ -466,7 +466,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param2",
@@ -477,7 +481,11 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param3",
@@ -488,18 +496,29 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param5",
@@ -510,7 +529,11 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param6",
@@ -521,7 +544,11 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param7",
@@ -533,7 +560,11 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param9",
@@ -545,7 +576,11 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param10",
@@ -557,7 +592,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         },
         {
           "id": "arlecchino.normal.param11",
@@ -569,7 +608,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "arlecchino.masqueRedDeath",
+            "element": "pyro"
+          }
         }
       ]
     },
@@ -987,7 +1030,36 @@
       "rank": 2,
       "name": "「所有的赏与罚皆自我出…」",
       "description": "血偿勒令施加时即为血偿勒令·结。\n阿蕾奇诺回收血偿勒令·结时，将在前方唤出厄月血火，造成相当于她的攻击力900%的火元素范围伤害，并使她的所有元素抗性与物理抗性提升20%，持续15秒。此效果每10秒至多触发一次。\n需要解锁突破天赋「唯苦痛可偿还」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "arlecchino.c2.balemoon-bloodfire",
+          "skill": "arlecchino.skill",
+          "name": "二命·厄月血火",
+          "element": "pyro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 9
+            }
+          ],
+          "when": [
+            "arlecchino.c2BloodfireReady",
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1050,5 +1122,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "arlecchino.masqueRedDeath": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当前生命之契至少达到生命值上限的百分之三十"
+    },
+    "arlecchino.c2BloodfireReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次回收血偿勒令·结触发厄月血火"
+    }
+  }
 }

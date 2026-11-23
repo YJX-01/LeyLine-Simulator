@@ -346,7 +346,18 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "linnea.ultraConvenientQuickArrow"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "linnea.normal.param6",
@@ -526,6 +537,9 @@
         {
           "id": "linnea.skill.param1",
           "name": "露米捶捶乱打伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "defense",
@@ -819,7 +833,27 @@
       "id": "linnea.passive4",
       "name": "大师级的冒险者",
       "description": "不处于战斗状态下时，莉奈娅进行瞄准射击所需的蓄力时间大幅减少，并会转为射出特制的超便利快捷矢，依据命中的目标，产生不同的效果。若命中的目标为：\n·特定动物：超便利快捷矢会转化为特殊的「网」，可以拘出小动物的神形，并以其为媒介，再次化出小动物的形体；每周可使用的「网」数量有限。\n·锻造用矿石的矿脉：莉奈娅会派出露米，快速破坏被超便利快捷矢标记的矿体，并收集掉落的矿石。若露米不在场上，则会短暂呼唤出露米，帮助莉奈娅获取矿石。\n\n超便利快捷矢对敌人造成的伤害降低为原本的20%。此外，短时间内发射一定数量的超便利快捷矢后，莉奈娅需要进行短暂的休息，才能继续发射。",
-      "unlockAscension": null
+      "unlockAscension": null,
+      "hits": [
+        {
+          "id": "linnea.normal.ultra-convenient-quick-arrow",
+          "name": "超便利快捷矢",
+          "element": "geo",
+          "category": "charged",
+          "skill": "linnea.normal",
+          "origin": "talent",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "when": [
+            "linnea.ultraConvenientQuickArrow"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "constellations": [
@@ -909,6 +943,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "linnea.ultraConvenientQuickArrow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本击为脱战时射出的超便利快捷矢"
     }
   }
 }

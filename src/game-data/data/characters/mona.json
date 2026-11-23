@@ -407,6 +407,18 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "inputs": [
+        {
+          "id": "mona.c6SlideSeconds",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 3,
+          "integer": true
+        }
       ]
     },
     {
@@ -727,7 +739,26 @@
       "id": "mona.passive1",
       "name": "「老太婆来抓我啊！」",
       "description": "进入虚实流动状态2秒后，如果周围存在敌人，则自动凝聚一个虚影。\n通过这种方式产生的虚影持续2秒，造成的破裂伤害相当于水中幻愿伤害的50%。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "mona.skill.illusory-torrent",
+          "name": "虚实流动虚影破裂",
+          "element": "hydro",
+          "category": "skill",
+          "skill": "mona.skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "mona.illusoryTorrent"
+          ]
+        }
+      ]
     },
     {
       "id": "mona.passive2",
@@ -772,7 +803,26 @@
       "rank": 2,
       "name": "星月的连珠",
       "description": "普通攻击命中时，有20%的几率自动施放一次重击。\n该效果每5秒只能触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "mona.normal.c2-charged",
+          "name": "星月连珠重击",
+          "element": "hydro",
+          "category": "charged",
+          "skill": "mona.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "mona.c2Charged"
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -833,7 +883,47 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "mona.illusoryTorrent": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "虚实流动生成的虚影破裂"
+    },
+    "mona.c2Charged": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普通攻击命中触发星月的连珠"
+    },
+    "mona.c6SlideSeconds": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "虚实流动用于厄运的修辞的秒数"
+    }
+  }
 }

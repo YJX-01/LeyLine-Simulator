@@ -864,7 +864,10 @@
       "hits": [
         {
           "id": "clorinde.skill.param1",
-          "name": "驰猎伤害（第1击）",
+          "name": "驰猎伤害（生命之契≥100%）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "normal",
           "base": [
             {
@@ -876,7 +879,10 @@
         },
         {
           "id": "clorinde.skill.param2",
-          "name": "驰猎伤害（第2击）",
+          "name": "驰猎伤害（生命之契<100%）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "normal",
           "base": [
             {
@@ -888,7 +894,10 @@
         },
         {
           "id": "clorinde.skill.param4",
-          "name": "贯夜伤害（第1击）",
+          "name": "贯夜伤害（生命之契为0%）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "normal",
           "base": [
             {
@@ -900,7 +909,10 @@
         },
         {
           "id": "clorinde.skill.param5",
-          "name": "贯夜伤害（第2击）",
+          "name": "贯夜伤害（生命之契大于0%且小于100%）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "normal",
           "base": [
             {
@@ -912,7 +924,11 @@
         },
         {
           "id": "clorinde.skill.param7",
-          "name": "贯夜伤害（第3击）",
+          "name": "贯夜·契令伤害（生命之契≥100%）",
+          "selection": {
+            "kind": "variant",
+            "repetitions": 3
+          },
           "category": "normal",
           "base": [
             {
@@ -1051,6 +1067,9 @@
         {
           "id": "clorinde.burst.param1",
           "name": "技能伤害",
+          "selection": {
+            "repetitions": 5
+          },
           "base": [
             {
               "stat": "attack",
@@ -1091,7 +1110,43 @@
       "rank": 1,
       "name": "「自此，行过烛影之帷」",
       "description": "狩夜之巡的夜巡状态持续期间，克洛琳德的普通攻击造成的雷元素伤害命中敌人时，将在敌人附近唤出夜巡之影进行两次协同攻击，各自造成克洛琳德30%攻击力的雷元素伤害。\n此效果每1.2秒至多触发一次，通过这种方式造成的伤害视为普通攻击伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "clorinde.c1.nightwatch-shadow-1",
+          "skill": "clorinde.skill",
+          "name": "夜巡之影·第一段",
+          "element": "electro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.3
+            }
+          ],
+          "when": [
+            "clorinde.nightwatchShadow"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "clorinde.c1.nightwatch-shadow-2",
+          "skill": "clorinde.skill",
+          "name": "夜巡之影·第二段",
+          "element": "electro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.3
+            }
+          ],
+          "when": [
+            "clorinde.nightwatchShadow"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1131,7 +1186,26 @@
       "rank": 6,
       "name": "「为此，勿将希望弃扬」",
       "description": "施放狩夜之巡后的12秒内，克洛琳德的暴击率提升10%，暴击伤害提升70%。\n此外，夜巡状态持续期间，明烛之影会在特定条件下出现，进行追击，造成克洛琳德200%攻击力的雷元素伤害，通过这种方式造成的伤害视为普通攻击伤害。\n明烛之影会在如下情况下出现：\n·克洛琳德即将被攻击命中时；\n·克洛琳德进行贯夜·契令时。\n每1秒至多通过上述方式唤出1次明烛之影，一次夜巡状态持续期间，至多唤出6次明烛之影。\n此外，夜巡状态持续期间，克洛琳德受到的伤害降低80%，抗打断能力提高，该效果将在夜巡状态结束或唤出6次明烛之影的1秒后移除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "clorinde.c6.candle-shadow",
+          "skill": "clorinde.skill",
+          "name": "明烛之影·追击",
+          "element": "electro",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "when": [
+            "clorinde.candleShadow"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -1160,5 +1234,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "clorinde.nightwatchShadow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "夜巡状态中雷元素普攻命中且夜巡之影可触发"
+    },
+    "clorinde.candleShadow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "夜巡状态中受攻击或贯夜·契令触发明烛之影"
+    }
+  }
 }

@@ -399,7 +399,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param2",
@@ -410,7 +414,11 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param3",
@@ -421,7 +429,11 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param4",
@@ -432,7 +444,11 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param6",
@@ -444,7 +460,11 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param7",
@@ -456,7 +476,11 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param5",
@@ -468,7 +492,11 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param9",
@@ -480,7 +508,11 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param10",
@@ -492,7 +524,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         },
         {
           "id": "aratakiitto.normal.param11",
@@ -504,7 +540,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aratakiitto.oniKingActive",
+            "element": "geo"
+          }
         }
       ]
     },
@@ -940,5 +980,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "aratakiitto.oniKingActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于怒目鬼王状态"
+    }
+  }
 }

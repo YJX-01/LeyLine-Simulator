@@ -366,7 +366,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param2",
@@ -377,7 +381,11 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param3",
@@ -388,7 +396,11 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param4",
@@ -399,7 +411,11 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param5",
@@ -410,7 +426,11 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param6",
@@ -422,7 +442,11 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param7",
@@ -434,7 +458,11 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param9",
@@ -446,7 +474,11 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param10",
@@ -458,7 +490,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "lynette.normal.param11",
@@ -470,7 +506,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "lynette.enigmaInfusion",
+            "element": "anemo"
+          }
         }
       ]
     },
@@ -951,7 +991,25 @@
       "rank": 2,
       "name": "层见叠出的谜象",
       "description": "魔术·运变惊奇召唤的惊奇猫猫盒发射彩练术弹时，将额外发射一枚彩练术弹。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "lynette.c2.second-vivid-shot",
+          "skill": "lynette.burst",
+          "name": "二命·额外彩练术弹",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "when": [
+            "lynette.vividShotFired"
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1015,5 +1073,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lynette.vividShotFired": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "惊奇猫猫盒本次发射彩练术弹"
+    },
+    "lynette.enigmaInfusion": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "六命谜影突刺产生的风元素附魔持续中"
+    }
+  }
 }

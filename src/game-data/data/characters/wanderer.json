@@ -766,6 +766,9 @@
         {
           "id": "wanderer.burst.param1",
           "name": "技能伤害",
+          "selection": {
+            "repetitions": 5
+          },
           "base": [
             {
               "stat": "attack",
@@ -792,7 +795,37 @@
       "id": "wanderer.passive2",
       "name": "梦迹一风",
       "description": "在优风倾姿状态下，流浪者的空居·不生断或空居·刀风界命中敌人时，有16%几率获得「倾落」效果：流浪者在本次优风倾姿的状态下进行空中加速时，将移除倾落效果，使此次空中加速不消耗空居力，并发射4枚风矢，分别造成35%攻击力的风元素伤害。\n空居·不生断与空居·刀风界未产生倾落效果时，会使下次产生概率提升12%；0.1秒内至多判定1次是否产生倾落效果。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "hits": [
+        {
+          "id": "wanderer.a1.descent-arrow",
+          "skill": "wanderer.skill",
+          "name": "梦迹一风·单枚风矢",
+          "element": "anemo",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.35
+            }
+          ],
+          "when": [
+            "wanderer.windfavored",
+            "wanderer.descentDash"
+          ],
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "wanderer.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "damageBonus",
+              "anemoBonus"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "wanderer.passive3",
@@ -846,7 +879,81 @@
       "rank": 6,
       "name": "祝言·霞幕倾松风",
       "description": "在优风倾姿状态下，流浪者主动施放的空居·不生断命中敌人时，将产生如下效果：\n·在命中的位置额外进行一次空居·不生断，造成原本40%的伤害，该伤害视为普通攻击伤害；\n·当流浪者的空居力低于40点时，为流浪者恢复4点空居力。每0.2秒至多通过这种方式恢复1次空居力，在一次优风倾姿的持续期间，至多触发5次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "wanderer.c6.kuugo-param1",
+          "skill": "wanderer.normal",
+          "name": "空居·不生断·追加命中1",
+          "element": "anemo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "wanderer.windfavored",
+            "wanderer.extraKuugo"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wanderer.c6.kuugo-param2",
+          "skill": "wanderer.normal",
+          "name": "空居·不生断·追加命中2",
+          "element": "anemo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "when": [
+            "wanderer.windfavored",
+            "wanderer.extraKuugo"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wanderer.c6.kuugo-param3",
+          "skill": "wanderer.normal",
+          "name": "空居·不生断·追加命中3",
+          "element": "anemo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "when": [
+            "wanderer.windfavored",
+            "wanderer.extraKuugo"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "wanderer.c6.kuugo-param4",
+          "skill": "wanderer.normal",
+          "name": "空居·不生断·追加命中4",
+          "element": "anemo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "when": [
+            "wanderer.windfavored",
+            "wanderer.extraKuugo"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -882,6 +989,20 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "wanderer.descentDash": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "在优风倾姿中消耗倾落进行空中加速"
+    },
+    "wanderer.extraKuugo": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "优风倾姿期间主动施放空居·不生断并命中"
     }
   },
   "formulas": [

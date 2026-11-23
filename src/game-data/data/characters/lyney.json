@@ -1123,7 +1123,26 @@
       "rank": 6,
       "name": "违心的笑",
       "description": "林尼发射隐具魔术箭时，将发射一枚礼花术弹·重奏，造成礼花术弹80%的伤害。该伤害视为重击伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "lyney.c6.reprised-strike",
+          "skill": "lyney.normal",
+          "name": "礼花术弹·重奏",
+          "element": "pyro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param15"
+            }
+          ],
+          "when": [
+            "lyney.propArrowFired"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -1172,6 +1191,13 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "lyney.propArrowFired": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "已发射隐具魔术箭"
     }
   }
 }

@@ -340,6 +340,9 @@
         {
           "id": "chasca.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -351,6 +354,9 @@
         {
           "id": "chasca.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -824,7 +830,86 @@
       "id": "chasca.passive2",
       "name": "掩护的心意",
       "description": "队伍中的附近的角色触发「夜魂迸发」时，恰斯卡会对附近的敌人发射「流焰追影弹」，造成具有夜魂性质的风元素伤害，该伤害相当于元素战技灵缰追影中的追影弹的150%；若队伍中存在火元素、水元素、冰元素或雷元素角色，则流焰追影弹会发生元素转化，造成具有夜魂性质的对应元素伤害，该伤害相当于元素战技灵缰追影中的焕光追影弹的150%。\n通过上述方式造成的伤害视为重击伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "hits": [
+        {
+          "id": "chasca.a1.covering-fire",
+          "skill": "chasca.skill",
+          "name": "流焰追影弹·风元素",
+          "element": "anemo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "when": [
+            "chasca.nightsoulBurst",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "chasca.convertible-party",
+                  "inputs": {
+                    "value": {
+                      "teamCount": {
+                        "elements": [
+                          "pyro",
+                          "hydro",
+                          "cryo",
+                          "electro"
+                        ],
+                        "excludeOwner": true,
+                        "match": "include"
+                      }
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "chasca.a1.covering-fire-converted",
+          "skill": "chasca.skill",
+          "name": "流焰追影弹·元素转化",
+          "element": "anemo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "when": [
+            "chasca.nightsoulBurst",
+            {
+              "call": "chasca.convertible-party",
+              "inputs": {
+                "value": {
+                  "teamCount": {
+                    "elements": [
+                      "pyro",
+                      "hydro",
+                      "cryo",
+                      "electro"
+                    ],
+                    "excludeOwner": true,
+                    "match": "include"
+                  }
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "id": "chasca.passive3",
@@ -850,7 +935,27 @@
       "rank": 2,
       "name": "枪口，灼烧的轻烟",
       "description": "恰斯卡登场时，获得一层突破天赋「子弹的戏法」的「焕影之灵」。该效果需要解锁突破天赋「子弹的戏法」。\n此外，施放元素战技灵缰追影中的多重瞄准时，恰斯卡的焕光追影弹命中敌人时，会根据焕光追影弹的元素类型，造成相当于恰斯卡攻击力400%的对应元素范围伤害，该伤害视为重击伤害。每次施放多重瞄准至多触发一次该效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "chasca.c2.converted-explosion",
+          "skill": "chasca.skill",
+          "name": "元素转化·命中爆炸",
+          "element": "anemo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 4
+            }
+          ],
+          "when": [
+            "chasca.radiantRoundHit"
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -867,7 +972,27 @@
       "rank": 4,
       "name": "星火，瞬息的击发",
       "description": "元素爆发索魂命袭中的溢光索魂弹命中敌人时，将为恰斯卡恢复1.5点元素能量，并会根据溢光索魂弹的元素类型，造成相当于恰斯卡攻击力400%的对应元素范围伤害，该伤害视为重击伤害。\n上述造成对应元素范围伤害的效果，每次施放索魂命袭至多触发1次该效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "chasca.c4.converted-explosion",
+          "skill": "chasca.burst",
+          "name": "元素转化·命中爆炸",
+          "element": "anemo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 4
+            }
+          ],
+          "when": [
+            "chasca.soulseekerHit"
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -913,5 +1038,42 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "chasca.nightsoulBurst": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍中附近的角色已触发夜魂迸发"
+    },
+    "chasca.radiantRoundHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "焕光追影弹命中且本次多重瞄准尚未触发追加伤害"
+    },
+    "chasca.soulseekerHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "溢光索魂弹命中且本次索魂命袭尚未触发追加伤害"
+    }
+  },
+  "formulas": [
+    {
+      "id": "chasca.convertible-party",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "count",
+        "input": "value",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 3,
+        "revision": "1"
+      }
+    }
+  ]
 }

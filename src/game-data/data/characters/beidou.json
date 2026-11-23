@@ -867,7 +867,34 @@
       "id": "beidou.passive1",
       "name": "遍宇灵光",
       "description": "在被攻击瞬间施放的捉浪反击，拥有最高伤害加成。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "beidou.skill.perfect-counter",
+          "name": "受击瞬间反击",
+          "element": "electro",
+          "category": "skill",
+          "skill": "beidou.skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "beidou.instantCounter"
+          ]
+        }
+      ]
     },
     {
       "id": "beidou.passive2",
@@ -928,7 +955,26 @@
       "rank": 4,
       "name": "牵星觅乡岸",
       "description": "受到攻击后的10秒内，北斗的普通攻击附带20%额外雷元素伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "beidou.normal.c4-retaliation",
+          "name": "牵星觅乡岸附加雷伤",
+          "element": "electro",
+          "category": "other",
+          "skill": "beidou.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.2
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "beidou.c4RetaliationWindow"
+          ]
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1000,7 +1046,39 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "beidou.instantCounter": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受击瞬间的捉浪反击"
+    },
+    "beidou.c4RetaliationWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "北斗受击后的十秒"
+    }
+  }
 }

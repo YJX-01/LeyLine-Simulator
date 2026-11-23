@@ -324,7 +324,33 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "emilie.abidingFragrance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "emilie.normal.param2",
@@ -335,7 +361,33 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "emilie.abidingFragrance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "emilie.normal.param3",
@@ -346,7 +398,33 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "emilie.abidingFragrance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "emilie.normal.param4",
@@ -357,7 +435,33 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "emilie.abidingFragrance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "emilie.normal.param5",
@@ -369,7 +473,33 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "emilie.abidingFragrance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "emilie.normal.param7",
@@ -621,6 +751,9 @@
         {
           "id": "emilie.skill.param3",
           "name": "柔灯之匣·二阶攻击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -777,7 +910,26 @@
       "id": "emilie.passive1",
       "name": "余薰",
       "description": "每萃集两枚香韵，柔灯之匣·二阶将消耗香韵，并浸析出「清露香氛」，对敌人造成相当于艾梅莉埃攻击力600%的草元素范围伤害。该伤害不被视为元素战技伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "emilie.a0.clear-dew",
+          "skill": "emilie.skill",
+          "name": "清露香氛",
+          "element": "dendro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 6
+            }
+          ],
+          "when": [
+            "emilie.twoScentsRefined"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "emilie.passive2",
@@ -837,7 +989,99 @@
       "rank": 6,
       "name": "茉洁香迹",
       "description": "施放撷萃调香或香氛演绎时，艾梅莉埃将获得「香迹留驻」，持续5秒。\n持续期间，艾梅莉埃进行普通攻击或重击后，将会产生一枚香韵，且艾梅莉埃的普通攻击与重击将转为无法被附魔覆盖的草元素伤害，并提升造成的伤害，提升值相当于艾梅莉埃攻击力的300%。\n\n「香迹留驻」效果将在通过这种方式产生4枚香韵或持续时间结束时解除。每12秒至多获得一次「香迹留驻」效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "emilie.normal.c6-fragrance-1",
+          "name": "香迹留驻·一段伤害",
+          "element": "dendro",
+          "category": "normal",
+          "skill": "emilie.normal",
+          "origin": "talent",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "emilie.abidingFragrance"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "emilie.normal.c6-fragrance-2",
+          "name": "香迹留驻·二段伤害",
+          "element": "dendro",
+          "category": "normal",
+          "skill": "emilie.normal",
+          "origin": "talent",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "when": [
+            "emilie.abidingFragrance"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "emilie.normal.c6-fragrance-3",
+          "name": "香迹留驻·三段伤害",
+          "element": "dendro",
+          "category": "normal",
+          "skill": "emilie.normal",
+          "origin": "talent",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "when": [
+            "emilie.abidingFragrance"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "emilie.normal.c6-fragrance-4",
+          "name": "香迹留驻·四段伤害",
+          "element": "dendro",
+          "category": "normal",
+          "skill": "emilie.normal",
+          "origin": "talent",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "when": [
+            "emilie.abidingFragrance"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "emilie.normal.c6-fragrance-5",
+          "name": "香迹留驻·重击伤害",
+          "element": "dendro",
+          "category": "charged",
+          "skill": "emilie.normal",
+          "origin": "talent",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "when": [
+            "emilie.abidingFragrance"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -866,5 +1110,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "emilie.twoScentsRefined": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "二阶柔灯之匣已萃集两枚香韵"
+    },
+    "emilie.abidingFragrance": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本击处于香迹留驻的五秒内且此前尚未产生四枚香韵"
+    }
+  }
 }

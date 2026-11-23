@@ -1,0 +1,21 @@
+{
+  "source": {
+    "repository": "KQM-git/TCL",
+    "commit": "7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5",
+    "mechanics": "docs/combat-mechanics/elemental-effects/weapon-infusion.md",
+    "overlapEvidence": "docs/evidence/characters/hydro/candace.md#synergiesinteractions"
+  },
+  "eligibleWeaponTypes": ["WEAPON_SWORD_ONE_HAND", "WEAPON_CLAYMORE", "WEAPON_POLE"],
+  "eligibleAttacks": ["normal", "charged", "plunge"],
+  "grants": [
+    { "character": "bennett", "talent": "bennett.burst", "constellation": 6, "element": "pyro", "inGameText": "ChineseSimplified/constellations/bennett.json#c6" },
+    { "character": "candace", "talent": "candace.burst", "element": "hydro", "inGameText": "ChineseSimplified/talents/candace.json#combat3" },
+    { "character": "chongyun", "talent": "chongyun.skill", "element": "cryo", "inGameText": "ChineseSimplified/talents/chongyun.json#combat2" }
+  ],
+  "protectedExample": { "character": "noelle", "talent": "noelle.burst", "element": "geo" },
+  "overlapExamples": [
+    { "characters": ["bennett", "candace"], "element": "hydro", "video": "https://www.youtube.com/watch?v=xXE9ZbcmfIo" },
+    { "characters": ["candace", "chongyun"], "element": "cryo", "video": "https://youtu.be/N-ThOhYi6X8" }
+  ],
+  "modelScope": "命中条件只录入已确认生效的武器附魔元素，与两个附魔重叠时观察到的当次伤害颜色一致。刷新、武器元素附着和冲突顺序由游戏过程决定。"
+}

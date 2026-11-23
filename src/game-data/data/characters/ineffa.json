@@ -757,7 +757,27 @@
       "id": "ineffa.passive1",
       "name": "频率超限回路",
       "description": "若**「薇尔琪塔」**附近存在月感电反应产生的雷暴云，薇尔琪塔进行放电攻击时，将额外进行一次攻击，造成相当于伊涅芙攻击力65%的雷元素范围伤害，该伤害视为月感电反应造成的伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "ineffa.a0.thundercloud-discharge",
+          "skill": "ineffa.skill",
+          "name": "频率超限·额外放电",
+          "element": "electro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.65
+            }
+          ],
+          "when": [
+            "ineffa.birgittaNearThundercloud"
+          ],
+          "support": "hit-unavailable",
+          "family": "lunar-charged"
+        }
+      ]
     },
     {
       "id": "ineffa.passive2",
@@ -814,7 +834,27 @@
       "rank": 2,
       "name": "辅助清理模块",
       "description": "元素爆发**至高律令·全域扫灭**命中敌人后，将为其中一名敌人施加「惩戒敕谕」状态：短暂间隔后，或该敌人被击败时，将对其周围的敌人造成相当于伊涅芙攻击力300%的雷元素范围伤害，该伤害视为月感电反应造成的伤害。\n此外，施放元素爆发至高律令·全域扫灭时，也会为附近的当前场上角色赋予光流屏障护盾。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "ineffa.c2.edict-burst",
+          "skill": "ineffa.burst",
+          "name": "惩戒敕谕·爆发",
+          "element": "electro",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 3
+            }
+          ],
+          "when": [
+            "ineffa.edictBurstReady"
+          ],
+          "support": "hit-unavailable",
+          "family": "lunar-charged"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -848,7 +888,27 @@
       "rank": 6,
       "name": "献予你的明晨",
       "description": "伊涅芙处于「载流复合」效果影响下时，附近的雷暴云对敌人进行雷击后，伊涅芙将对当前场上自己的角色周围的敌人造成相当于伊涅芙攻击力135%的雷元素范围伤害，该伤害视为月感电反应造成的伤害，上述效果每3.5秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "ineffa.c6.thundercloud-followup",
+          "skill": "ineffa.skill",
+          "name": "献予你的明晨·雷云追击",
+          "element": "electro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.35
+            }
+          ],
+          "when": [
+            "ineffa.thundercloudFollowup"
+          ],
+          "support": "hit-unavailable",
+          "family": "lunar-charged"
+        }
+      ]
     }
   ],
   "support": {
@@ -877,5 +937,28 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "ineffa.birgittaNearThundercloud": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "薇尔琪塔放电时附近存在月感电雷暴云"
+    },
+    "ineffa.edictBurstReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "惩戒敕谕已到期或被标记敌人被击败"
+    },
+    "ineffa.thundercloudFollowup": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "载流复合期间雷暴云雷击已触发追加伤害"
+    }
+  }
 }

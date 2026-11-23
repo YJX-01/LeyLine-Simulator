@@ -894,7 +894,31 @@
       "rank": 2,
       "name": "噬枝之麋",
       "description": "元素爆发**鉴照无影**中的「魇夜的莺歌」效果持续期间，每消耗7层**「夜莺之歌」**，叶洛亚都将唤出阿咚，对周围一名敌人造成一次岩元素伤害，伤害值基于叶洛亚元素精通的400%与防御力的200%，该伤害视为元素爆发伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "illuga.burst.c2-adong",
+          "name": "阿咚协同攻击",
+          "element": "geo",
+          "category": "burst",
+          "skill": "illuga.burst",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 4
+            },
+            {
+              "stat": "defense",
+              "ratio": 2
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "illuga.nightingaleSong",
+            "illuga.adongs"
+          ]
+        }
+      ]
     },
     {
       "rank": 3,
@@ -955,7 +979,39 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "illuga.nightingaleSong": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "魇夜的莺歌持续期间"
+    },
+    "illuga.adongs": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次累计消耗七层夜莺之歌召唤阿咚"
+    }
+  }
 }

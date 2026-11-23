@@ -585,7 +585,10 @@
         },
         {
           "id": "yanfei.normal.param4",
-          "name": "重击伤害（第1击）",
+          "name": "重击伤害（消耗0枚丹火印）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "charged",
           "base": [
             {
@@ -597,7 +600,10 @@
         },
         {
           "id": "yanfei.normal.param5",
-          "name": "重击伤害（第2击）",
+          "name": "重击伤害（消耗1枚丹火印）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "charged",
           "base": [
             {
@@ -609,7 +615,10 @@
         },
         {
           "id": "yanfei.normal.param6",
-          "name": "重击伤害（第3击）",
+          "name": "重击伤害（消耗2枚丹火印）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "charged",
           "base": [
             {
@@ -621,7 +630,10 @@
         },
         {
           "id": "yanfei.normal.param7",
-          "name": "重击伤害（第4击）",
+          "name": "重击伤害（消耗3枚丹火印）",
+          "selection": {
+            "kind": "variant"
+          },
           "category": "charged",
           "base": [
             {
@@ -633,7 +645,11 @@
         },
         {
           "id": "yanfei.normal.param8",
-          "name": "重击伤害（第5击）",
+          "name": "重击伤害（消耗4枚丹火印）",
+          "selection": {
+            "kind": "variant",
+            "minConstellation": 6
+          },
           "category": "charged",
           "base": [
             {
@@ -976,7 +992,26 @@
       "id": "yanfei.passive2",
       "name": "法兽灼眼",
       "description": "烟绯主动施放的重击对敌人造成暴击时，会额外造成一次80%攻击力的火元素范围伤害。该伤害视为重击伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "hits": [
+        {
+          "id": "yanfei.a1.blazing-eye",
+          "skill": "yanfei.normal",
+          "name": "法兽灼眼",
+          "element": "pyro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.8
+            }
+          ],
+          "when": [
+            "yanfei.chargedCritical"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "yanfei.passive3",
@@ -1091,6 +1126,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "yanfei.chargedCritical": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "主动重击命中并造成暴击"
     }
   }
 }

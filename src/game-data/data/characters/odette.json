@@ -1199,6 +1199,9 @@
         {
           "id": "odette.burst.param1",
           "name": "斩击伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -1317,7 +1320,69 @@
       "rank": 1,
       "name": "「不曾起舞的清晨，她望向倒影」",
       "description": "施放特殊元素战技**柔板·破晓终奏**后，在共舞结束时，奥黛塔将对附近的敌人造成一次额外的冰元素范围伤害，该伤害视为：\n·辉映·星超导或不处于辉映状态：相当于奥黛塔攻击力300%的星超导反应伤害；\n·辉映·星扩散：相当于奥黛塔攻击力450%的星扩散反应伤害。\n\n此外，突破天赋「获选者的春祭」获得强化：召唤**独舞倒影**时，奥黛塔将额外获得2层**华彩**，且奥黛塔处于队伍后台时，清除华彩的速度提升至每秒2层。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "odette.c1.finale-conduct",
+          "skill": "odette.skill",
+          "name": "共舞终了·星超导",
+          "element": "cryo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 3
+            }
+          ],
+          "when": [
+            "odette.finaleReady",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "odette.swirl-radiance",
+                  "inputs": {
+                    "value": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct"
+        },
+        {
+          "id": "odette.c1.finale-swirl",
+          "skill": "odette.skill",
+          "name": "共舞终了·星扩散",
+          "element": "cryo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 4.5
+            }
+          ],
+          "when": [
+            "odette.finaleReady",
+            {
+              "call": "odette.swirl-radiance",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-swirl"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1340,7 +1405,69 @@
       "rank": 4,
       "name": "「向上，坠往恍惚、燃烧的蓝空」",
       "description": "元素爆发疾板·苍羽一梦获得强化：奥黛塔获得雪鹄之梦时，还会使队伍中附近的其他角色造成的星烁反应伤害提升，提升值相当于雪鹄之梦效果的50%。\n\n此外，队伍中的角色对敌人造成星烁反应伤害时，奥黛塔还会对敌人进行一次协同攻击，造成一次冰元素范围伤害，每3.5秒至多触发一次，该伤害视为：\n·辉映·星超导或不处于辉映状态：相当于奥黛塔攻击力66%的星超导反应伤害；\n·辉映·星扩散：相当于奥黛塔攻击力99%的星扩散反应伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "odette.c4.coordinated-conduct",
+          "skill": "odette.burst",
+          "name": "星烁协同·星超导",
+          "element": "cryo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.66
+            }
+          ],
+          "when": [
+            "odette.coordinatedReady",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "odette.swirl-radiance",
+                  "inputs": {
+                    "value": {
+                      "fact": "radiance"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct"
+        },
+        {
+          "id": "odette.c4.coordinated-swirl",
+          "skill": "odette.burst",
+          "name": "星烁协同·星扩散",
+          "element": "cryo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.99
+            }
+          ],
+          "when": [
+            "odette.coordinatedReady",
+            {
+              "call": "odette.swirl-radiance",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-swirl"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1411,6 +1538,36 @@
         "terms": 1,
         "negate": true
       }
+    },
+    {
+      "id": "odette.swirl-radiance",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl",
+        "revision": "1"
+      }
     }
-  ]
+  ],
+  "facts": {
+    "odette.finaleReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "施放柔板·破晓终奏后共舞结束"
+    },
+    "odette.coordinatedReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍造成星烁反应伤害且奥黛塔协同可触发"
+    }
+  }
 }

@@ -805,7 +805,36 @@
       "rank": 6,
       "name": "轮旋的冰凌",
       "description": "凛冽轮舞会产生一个额外的寒冰之棱，并在施放时返还15点元素能量。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kaeya.c6.fourth-icicle",
+          "skill": "kaeya.burst",
+          "name": "轮旋的冰凌·额外冰棱",
+          "category": "burst",
+          "element": "cryo",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "kaeya.fourthIcicleContact"
+          ],
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "kaeya.burst",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "cryoBonus",
+              "damageBonus"
+            ]
+          }
+        }
+      ]
     }
   ],
   "support": {
@@ -908,7 +937,29 @@
           "resolution": "irrelevant"
         }
       ]
+    },
+    "hit-unavailable": {
+      "maxConstellation": 6,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "额外冰棱沿用凛冽轮舞的单击倍率与施放捕获；冰棱接触与能量返还须分别记录。",
+      "mechanisms": [
+        {
+          "id": "ice-contact",
+          "resolution": "unavailable",
+          "reason": "当次冰棱的接触需由事件事实提供。"
+        }
+      ]
     }
   },
-  "contextSupport": "context-complete"
+  "contextSupport": "context-complete",
+  "facts": {
+    "kaeya.fourthIcicleContact": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "凛冽轮舞中轮旋冰凌的额外冰棱接触目标"
+    }
+  }
 }

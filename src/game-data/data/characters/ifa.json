@@ -742,7 +742,26 @@
       "rank": 6,
       "name": "羽结所庇的诺言",
       "description": "伊法长按进行**「援护射击」**时，有50%几率发射一枚额外的秘药弹，造成相当于伊法攻击力120%的风元素伤害。该伤害视为普通攻击伤害。\n此外，不处于战斗状态下时，伊法的夜魂加持状态消耗的夜魂值与燃素降低20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "ifa.c6.tonicshot",
+          "skill": "ifa.skill",
+          "name": "羽结所庇·额外秘药弹",
+          "element": "anemo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.2
+            }
+          ],
+          "when": [
+            "ifa.extraTonicshot"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -771,5 +790,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "ifa.extraTonicshot": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "长按援护射击已触发额外秘药弹"
+    }
+  }
 }

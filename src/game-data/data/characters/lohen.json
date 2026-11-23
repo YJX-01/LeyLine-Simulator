@@ -408,6 +408,9 @@
         {
           "id": "lohen.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -496,6 +499,9 @@
         {
           "id": "lohen.normal.param7",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "category": "charged",
           "base": [
             {
@@ -1083,6 +1089,9 @@
         {
           "id": "lohen.skill.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "category": "normal",
           "base": [
             {
@@ -1143,6 +1152,9 @@
         {
           "id": "lohen.skill.param7",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "category": "charged",
           "base": [
             {
@@ -1203,6 +1215,9 @@
         {
           "id": "lohen.skill.param17",
           "name": "镂骨彻心（单击）",
+          "selection": {
+            "repetitions": 4
+          },
           "base": [
             {
               "stat": "attack",
@@ -1382,6 +1397,9 @@
         {
           "id": "lohen.burst.param1",
           "name": "技能伤害",
+          "selection": {
+            "repetitions": 6
+          },
           "base": [
             {
               "stat": "attack",
@@ -1478,7 +1496,28 @@
       "rank": 2,
       "name": "凡飞翔者，皆为靶标",
       "description": "处于**奇谋**状态下时，特殊元素战技**镂骨彻心**命中敌人或施放元素爆发裁罚遂成后的4秒内，洛恩将获得「破邪之刃」效果：在奇谋状态下，洛恩的下一次普通攻击或重击命中敌人时，将会额外追加进行一次攻击，造成相当于洛恩攻击力500%的冰元素范围伤害，并使队伍中附近的其他角色的元素精通提升200点，持续8秒，每4秒至多获得一次「破邪之刃」效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "lohen.c2.evilsbane-blade",
+          "skill": "lohen.normal",
+          "name": "二命·破邪之刃",
+          "element": "cryo",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 5
+            }
+          ],
+          "when": [
+            "lohen.c2EvilsbaneBladeReady",
+            "lohen.masterstroke"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -1547,7 +1586,8 @@
       "scope": "owner",
       "type": {
         "kind": "boolean"
-      }
+      },
+      "label": "洛恩处于奇谋状态"
     },
     "lohen.will": {
       "scope": "query",
@@ -1555,6 +1595,13 @@
         "kind": "quantity",
         "unit": "scalar"
       }
+    },
+    "lohen.c2EvilsbaneBladeReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普通攻击或重击命中并触发破邪之刃"
     }
   },
   "formulas": [

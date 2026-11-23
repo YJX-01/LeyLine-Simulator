@@ -376,6 +376,9 @@
         {
           "id": "kamisatoayato.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -1125,7 +1128,24 @@
       "hits": [
         {
           "id": "kamisatoayato.c6.shunsuiken",
-          "name": "滥觞无底·追加瞬水剑（单击）",
+          "name": "滥觞无底·第一段追加瞬水剑",
+          "skill": "kamisatoayato.skill",
+          "category": "normal",
+          "element": "hydro",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 4.5
+            }
+          ],
+          "when": [
+            "kamisatoayato.extraSlash"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "kamisatoayato.c6.shunsuiken-second",
+          "name": "滥觞无底·第二段追加瞬水剑",
           "skill": "kamisatoayato.skill",
           "category": "normal",
           "element": "hydro",
@@ -1217,7 +1237,8 @@
       "scope": "query",
       "type": {
         "kind": "boolean"
-      }
+      },
+      "label": "本次镜花后的首次瞬水剑命中，触发滥觞无底"
     }
   }
 }

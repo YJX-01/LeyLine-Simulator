@@ -1161,7 +1161,39 @@
       "rank": 4,
       "name": "热情不灭",
       "description": "施放一段蓄力的热情过载时，在技能第二段攻击中进行普通攻击，可以施放额外的追击。\n追击的伤害等同于第二段攻击的135%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "bennett.c4.passionate-followup",
+          "skill": "bennett.skill",
+          "name": "热情不灭·一段蓄力追击",
+          "element": "pyro",
+          "category": "skill",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param3",
+                    "skill": "bennett.skill"
+                  },
+                  "rate": 1.35
+                }
+              }
+            },
+            "output": "base"
+          },
+          "when": [
+            "bennett.c4FollowupReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1178,6 +1210,7 @@
       "rank": 6,
       "name": "烈火与勇气",
       "description": "处在美妙旅程领域内的队伍中当前场上单手剑、双手剑、长柄武器角色获得15%火元素伤害加成，并获得火元素附魔。",
+      "partyInfusion": "pyro",
       "talentBonuses": []
     }
   ],
@@ -1214,6 +1247,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "bennett.c4FollowupReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "已在一段蓄力的第二击中接续普攻"
     }
   }
 }

@@ -647,6 +647,9 @@
         {
           "id": "keqing.skill.param3",
           "name": "雷暴连斩伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -809,6 +812,9 @@
         {
           "id": "keqing.burst.param2",
           "name": "连斩伤害",
+          "selection": {
+            "repetitions": 8
+          },
           "base": [
             {
               "stat": "attack",
@@ -893,7 +899,43 @@
       "rank": 1,
       "name": "雷厉",
       "description": "雷楔存在期间再次施放星斗归位时，在刻晴消失与出现的位置造成50%攻击力的雷元素范围伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "keqing.c1.thundering-might-departure",
+          "skill": "keqing.skill",
+          "name": "雷厉·消失位置",
+          "element": "electro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.5
+            }
+          ],
+          "when": [
+            "keqing.stilettoRecast"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "keqing.c1.thundering-might-arrival",
+          "skill": "keqing.skill",
+          "name": "雷厉·出现位置",
+          "element": "electro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.5
+            }
+          ],
+          "when": [
+            "keqing.stilettoRecast"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -962,5 +1004,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "keqing.stilettoRecast": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "雷楔存在期间再次施放星斗归位"
+    }
+  }
 }

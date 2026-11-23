@@ -862,6 +862,9 @@
         {
           "id": "sandrone.burst.param1",
           "name": "轰炸伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -1084,7 +1087,63 @@
       "rank": 4,
       "name": "世事皆数，昼来夜往",
       "description": "桑多涅的星超导/星扩散反应伤害命中敌人时，还会额外召唤一台棱晶谐振炮进行协同攻击，对敌人造成一次相当于桑多涅攻击力125%/187.5%的冰元素伤害，该伤害视为对应星烁反应造成的伤害。该效果每4秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "sandrone.c4.resonator-stellar-conduct",
+          "skill": "sandrone.normal",
+          "name": "棱晶谐振炮·星超导",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.25
+            }
+          ],
+          "when": [
+            "sandrone.resonatorReady",
+            {
+              "call": "sandrone.resonator-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "sandrone.resonatorReaction"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct"
+        },
+        {
+          "id": "sandrone.c4.resonator-stellar-swirl",
+          "skill": "sandrone.normal",
+          "name": "棱晶谐振炮·星扩散",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.875
+            }
+          ],
+          "when": [
+            "sandrone.resonatorReady",
+            {
+              "call": "sandrone.resonator-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "sandrone.resonatorReaction"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-swirl"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1101,7 +1160,90 @@
       "rank": 6,
       "name": "水仙梦醒，且望晨光",
       "description": "**解算**模式下，法洁欧第三次发射冷凝射线时，将转为持续发射威力更强的集束型冷凝射线，在原本后续发射的冷凝射线基础上，至多额外造成4段相当于桑多涅攻击力100%的冰元素范围伤害。\n辉映·星烁：集束型冷凝射线转为至多额外造成4段视为对应星烁反应伤害的冰元素范围伤害，该伤害相当于桑多涅攻击力的：\n辉映·星超导：80%；\n辉映·星扩散：120%。\n此外，桑多涅造成的所有星烁反应伤害**擢升**20%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "sandrone.c6.cluster-laser-ordinary",
+          "skill": "sandrone.normal",
+          "name": "集束型冷凝射线·普通直伤单段",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1
+            }
+          ],
+          "when": [
+            "sandrone.clusterLaserReady",
+            {
+              "call": "sandrone.radiance-none",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "ordinary"
+        },
+        {
+          "id": "sandrone.c6.cluster-laser-stellar-conduct",
+          "skill": "sandrone.normal",
+          "name": "集束型冷凝射线·星超导单段",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.8
+            }
+          ],
+          "when": [
+            "sandrone.clusterLaserReady",
+            {
+              "call": "sandrone.radiance-stellar-conduct",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-conduct"
+        },
+        {
+          "id": "sandrone.c6.cluster-laser-stellar-swirl",
+          "skill": "sandrone.normal",
+          "name": "集束型冷凝射线·星扩散单段",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.2
+            }
+          ],
+          "when": [
+            "sandrone.clusterLaserReady",
+            {
+              "call": "sandrone.radiance-stellar-swirl",
+              "inputs": {
+                "value": {
+                  "fact": "radiance"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "family": "stellar-swirl"
+        }
+      ]
     }
   ],
   "support": {
@@ -1150,6 +1292,31 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "sandrone.resonatorReaction": {
+      "scope": "query",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "stellar-conduct",
+          "stellar-swirl"
+        ]
+      },
+      "label": "触发棱晶谐振炮的星烁类型"
+    },
+    "sandrone.resonatorReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "星烁反应伤害命中且棱晶谐振炮可触发"
+    },
+    "sandrone.clusterLaserReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "解算模式下第三次冷凝射线触发集束型追加段"
     }
   },
   "formulas": [
@@ -1175,6 +1342,74 @@
         "threshold": 0,
         "maxInput": 10,
         "output": "value",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.resonator-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.resonator-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.radiance-none",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "none",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.radiance-stellar-conduct",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-conduct",
+        "revision": "1"
+      }
+    },
+    {
+      "id": "sandrone.radiance-stellar-swirl",
+      "template": {
+        "id": "enum-condition",
+        "input": "value",
+        "values": [
+          "none",
+          "stellar-conduct",
+          "stellar-swirl"
+        ],
+        "equals": "stellar-swirl",
         "revision": "1"
       }
     }

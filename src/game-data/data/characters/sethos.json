@@ -366,7 +366,18 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param2",
@@ -377,7 +388,18 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param3",
@@ -388,7 +410,18 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param4",
@@ -399,7 +432,18 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param5",
@@ -411,7 +455,18 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param6",
@@ -424,7 +479,18 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param7",
@@ -441,7 +507,18 @@
               "parameter": "param8"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "sethos.twilightMeditation"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "sethos.normal.param9",
@@ -607,7 +684,6 @@
           "template": "{param4:I}"
         }
       ],
-      "noIndependentDamage": true,
       "parameters": [
         {
           "id": "param1",
@@ -694,7 +770,76 @@
           ]
         }
       ],
-      "hits": [],
+      "hits": [
+        {
+          "id": "sethos.burst.dusk-bolt-1",
+          "name": "瞑弦矢第一段",
+          "element": "electro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1",
+              "skill": "sethos.normal"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param1"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "sethos.twilightMeditation"
+          ]
+        },
+        {
+          "id": "sethos.burst.dusk-bolt-2",
+          "name": "瞑弦矢第二段",
+          "element": "electro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2",
+              "skill": "sethos.normal"
+            },
+            {
+              "stat": "attack",
+              "parameter": "param3",
+              "skill": "sethos.normal"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param1"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "sethos.twilightMeditation"
+          ]
+        },
+        {
+          "id": "sethos.burst.dusk-bolt-3",
+          "name": "瞑弦矢第三段",
+          "element": "electro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4",
+              "skill": "sethos.normal"
+            },
+            {
+              "stat": "elementalMastery",
+              "parameter": "param1"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "sethos.twilightMeditation"
+          ]
+        }
+      ],
       "energyCapacity": {
         "parameter": "param4"
       },
@@ -793,7 +938,32 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "sethos.twilightMeditation": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于寂想瞑影状态"
+    }
+  }
 }

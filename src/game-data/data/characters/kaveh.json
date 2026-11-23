@@ -865,7 +865,27 @@
       "rank": 6,
       "name": "天园的理想",
       "description": "在繁绘隅穹持续期间，卡维的普通攻击、重击或下落攻击命中敌人时，将在敌人的位置释放天园之光，造成卡维攻击力61.8%的草元素范围伤害，并使影响范围内的所有草原核迸发。该效果每3秒最多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kaveh.c6.pairidaezas-light",
+          "skill": "kaveh.burst",
+          "name": "六命·天园之光",
+          "element": "dendro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.618
+            }
+          ],
+          "when": [
+            "kaveh.paintedDome",
+            "kaveh.c6PairidaezasLightReady"
+          ],
+          "support": "c6-pairidaezas-light"
+        }
+      ]
     }
   ],
   "support": {
@@ -892,6 +912,24 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "c6-pairidaezas-light": {
+      "maxConstellation": 6,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "繁绘隅穹中触发的天园之光按独立草元素伤害计算，倍率为卡维攻击力的61.8%。",
+      "mechanisms": [
+        {
+          "id": "pairidaezas-light",
+          "resolution": "implemented",
+          "reason": "繁绘隅穹中触发的天园之光按独立草元素伤害计算，倍率为卡维攻击力的61.8%。"
+        },
+        {
+          "id": "pairidaezas-light-context",
+          "resolution": "unavailable",
+          "reason": "同时强制引爆的草原核由各草原核归属对应的反应计算，本击未代计该伤害。"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -900,7 +938,22 @@
       "scope": "owner",
       "type": {
         "kind": "boolean"
-      }
+      },
+      "label": "繁绘隅穹持续中"
+    },
+    "kaveh.paintedDome": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "繁绘隅穹持续中"
+    },
+    "kaveh.c6PairidaezasLightReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普攻、重击或下落攻击命中并触发天园之光，距此前触发至少3秒"
     }
   }
 }

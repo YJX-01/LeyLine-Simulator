@@ -399,6 +399,9 @@
         {
           "id": "columbina.normal.param6",
           "name": "月露涤荡伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "element": "dendro",
           "category": "charged",
           "base": [
@@ -706,6 +709,9 @@
         {
           "id": "columbina.skill.param4",
           "name": "引力干涉·月绽放（单次）",
+          "selection": {
+            "repetitions": 5
+          },
           "element": "dendro",
           "base": [
             {

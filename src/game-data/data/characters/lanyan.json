@@ -426,6 +426,9 @@
         {
           "id": "lanyan.normal.param7",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "category": "charged",
           "base": [
             {
@@ -711,6 +714,9 @@
         {
           "id": "lanyan.burst.param1",
           "name": "技能伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -731,7 +737,24 @@
       "id": "lanyan.passive1",
       "name": "四戈封刀灵卜",
       "description": "元素战技凤缕随翦舞的突进命中目标时，如果接触了水元素/火元素/冰元素/雷元素，则会使凤缕护盾发生元素转化，转化后的护盾对于对应元素伤害有250%的吸收效果。\n此外，如果这次元素战技凤缕随翦舞使凤缕护盾发生了元素转化，蓝砚向敌人抛出的翦月环将附加原本50%对应元素伤害，该伤害视为元素战技伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "lanyan.a0.absorbed-ring",
+          "skill": "lanyan.skill",
+          "name": "翦月环·附加元素伤害",
+          "element": "anemo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "id": "lanyan.passive2",

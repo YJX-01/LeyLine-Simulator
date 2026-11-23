@@ -365,6 +365,9 @@
         {
           "id": "xiangling.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -376,6 +379,9 @@
         {
           "id": "xiangling.normal.param4",
           "name": "四段伤害",
+          "selection": {
+            "repetitions": 4
+          },
           "base": [
             {
               "stat": "attack",
@@ -790,7 +796,26 @@
       "rank": 2,
       "name": "大火宽油",
       "description": "普通攻击的最后一击会对敌人施加持续2秒的内爆效果，持续时间结束时会发生爆炸，造成75%攻击力的火元素范围伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "xiangling.c2.implosion",
+          "skill": "xiangling.normal",
+          "name": "大火宽油·内爆",
+          "element": "pyro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.75
+            }
+          ],
+          "when": [
+            "xiangling.implosionExpired"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -853,5 +878,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "xiangling.implosionExpired": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "末段普通攻击留下的内爆标记已满两秒"
+    }
+  }
 }

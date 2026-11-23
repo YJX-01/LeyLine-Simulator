@@ -1102,7 +1102,26 @@
       "rank": 6,
       "name": "天狼",
       "description": "每10秒，雷泽的大剑将自动充能，使下一次普通攻击引发落雷，造成100%攻击力的雷元素伤害。\n不处于雷牙状态下时，若落雷击中敌人，会为雷泽积攒一个利爪与苍雷的雷之印。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "razor.c6.lupus-fulgur",
+          "skill": "razor.normal",
+          "name": "天狼·大剑落雷",
+          "element": "electro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1
+            }
+          ],
+          "when": [
+            "razor.lupusFulgurReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -1166,6 +1185,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "razor.lupusFulgurReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "大剑充能完成后首次普攻触发落雷"
     }
   }
 }

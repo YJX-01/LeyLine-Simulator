@@ -399,7 +399,33 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "lauma.c6PaleHymn"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lauma.normal.param2",
@@ -410,7 +436,33 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "lauma.c6PaleHymn"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lauma.normal.param3",
@@ -421,7 +473,33 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "lauma.c6PaleHymn"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "lauma.normal.param9",
@@ -1106,7 +1184,45 @@
       "rank": 6,
       "name": "「我愿将这血与泪奉予月明」",
       "description": "**霜林圣域**攻击敌人时，会额外造成一次视为月绽放反应伤害的草元素范围伤害。该伤害基于菈乌玛元素精通的185%，不会消耗**「苍色祷歌」**，而是会使菈乌玛获得2层「苍色祷歌」，并刷新通过这种方式获得的「苍色祷歌」的持续时间。\n一次霜林圣域持续期间，该效果至多触发8次；施放元素战技**圣言述咏·终宵永眠**时，将清除通过这种方式获得的「苍色祷歌」。\n\n此外，菈乌玛在拥有「苍色祷歌」的情况下进行普通攻击时，会消耗一层「苍色祷歌」，转为造成相当于菈乌玛元素精通150%的草元素伤害，该伤害视为月绽放反应造成的伤害。\n\n月兆·满辉：队伍中附近的所有角色造成的月绽放反应伤害**擢升**25%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "lauma.normal.c6-lunar",
+          "name": "苍色祷歌普通攻击",
+          "element": "dendro",
+          "category": "normal",
+          "skill": "lauma.normal",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 1.5
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "lauma.c6PaleHymn"
+          ],
+          "family": "lunar-bloom"
+        },
+        {
+          "id": "lauma.skill.c6-frostgrove",
+          "name": "霜林圣域额外月绽放",
+          "element": "dendro",
+          "category": "skill",
+          "skill": "lauma.skill",
+          "base": [
+            {
+              "stat": "elementalMastery",
+              "ratio": 1.85
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "lauma.frostgrove"
+          ],
+          "family": "lunar-bloom"
+        }
+      ]
     }
   ],
   "support": {
@@ -1133,6 +1249,22 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -1143,6 +1275,20 @@
         "kind": "quantity",
         "unit": "count"
       }
+    },
+    "lauma.frostgrove": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "霜林圣域存续中"
+    },
+    "lauma.c6PaleHymn": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普攻消耗苍色祷歌改为月绽放伤害"
     }
   },
   "formulas": [

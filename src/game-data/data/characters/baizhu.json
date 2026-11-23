@@ -340,6 +340,9 @@
         {
           "id": "baizhu.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -852,7 +855,26 @@
       "rank": 2,
       "name": "动静精明",
       "description": "队伍中自己的当前场上角色在攻击命中附近的敌人时，白术将释放游丝徵灵·切。\n游丝徵灵·切将在进行至多1次攻击后返回，造成白术攻击力250%的草元素伤害与太素诊要游丝徵灵的20%回复量。\n通过这种方式造成的伤害视为元素战技伤害。\n每5秒至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "baizhu.c2.gossamer-sprite",
+          "skill": "baizhu.skill",
+          "name": "游丝徵灵·切",
+          "element": "dendro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2.5
+            }
+          ],
+          "when": [
+            "baizhu.gossamerSpriteReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -948,5 +970,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "baizhu.gossamerSpriteReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "场上角色命中后游丝徵灵·切可触发"
+    }
+  }
 }

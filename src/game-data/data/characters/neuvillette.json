@@ -898,7 +898,43 @@
       "rank": 6,
       "name": "忿怒的报偿",
       "description": "施放重击·衡平推裁时，那维莱特可以吸收附近一定范围内的源水之滴，每吸收一枚源水之滴，都将使重击·衡平推裁的持续时间延长1秒。\n此外，重击·衡平推裁命中敌人时，每2秒，将额外释放两道洪流，每道洪流造成相当于那维莱特生命值上限10%的水元素伤害。通过这种方式造成的伤害视为重击·衡平推裁造成的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "neuvillette.c6.current-1",
+          "skill": "neuvillette.normal",
+          "name": "衡平推裁·第一道洪流",
+          "element": "hydro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "hp",
+              "ratio": 0.1
+            }
+          ],
+          "when": [
+            "neuvillette.extraCurrents"
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "neuvillette.c6.current-2",
+          "skill": "neuvillette.normal",
+          "name": "衡平推裁·第二道洪流",
+          "element": "hydro",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "hp",
+              "ratio": 0.1
+            }
+          ],
+          "when": [
+            "neuvillette.extraCurrents"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "formulas": [
@@ -952,5 +988,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "neuvillette.extraCurrents": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "衡平推裁已命中且额外洪流可触发"
+    }
+  }
 }

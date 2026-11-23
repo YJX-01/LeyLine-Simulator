@@ -570,6 +570,9 @@
         {
           "id": "tartaglia.normal.param9",
           "name": "断流·闪（单段）",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
@@ -1388,7 +1391,56 @@
       "rank": 4,
       "name": "深渊之灾·凝水盛放",
       "description": "每4秒，场上存在达达利亚自身施加的断流效果时，若达达利亚当前处于魔王武装·狂澜的近战状态，则触发断流·斩；否则，触发断流·闪。\n通过此命之座触发的断流·斩与断流·闪不受这两种断流各自的触发间隔限制，也不会影响其触发间隔。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "tartaglia.c4.riptide-flash",
+          "skill": "tartaglia.normal",
+          "name": "凝水盛放·断流闪（单段）",
+          "selection": {
+            "repetitions": 3
+          },
+          "category": "normal",
+          "element": "hydro",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "when": [
+            "tartaglia.c4RiptideTick",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "tartaglia.ragingTideMelee"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable"
+        },
+        {
+          "id": "tartaglia.c4.riptide-slash",
+          "skill": "tartaglia.skill",
+          "name": "凝水盛放·断流斩",
+          "category": "normal",
+          "element": "hydro",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param11"
+            }
+          ],
+          "when": [
+            "tartaglia.c4RiptideTick",
+            "tartaglia.ragingTideMelee"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1447,6 +1499,20 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "tartaglia.c4RiptideTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标有达达利亚施加的断流，且本次为四命的四秒触发"
+    },
+    "tartaglia.ragingTideMelee": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "魔王武装·狂澜处于近战状态"
     }
   }
 }

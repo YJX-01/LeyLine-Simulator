@@ -949,7 +949,29 @@
       "rank": 1,
       "name": "决水于溪",
       "description": "处于海人化羽的仪来羽衣状态下时，珊瑚宫心海普通攻击的最后一击会额外释放一只游鱼，造成相当于珊瑚宫心海生命值上限30%的水元素伤害。\n该伤害不被视为普通攻击伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "sangonomiyakokomi.normal.c1-fish",
+          "name": "决水于溪·游鱼",
+          "element": "hydro",
+          "category": "other",
+          "skill": "sangonomiyakokomi.normal",
+          "base": [
+            {
+              "stat": "hp",
+              "ratio": 0.3
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            {
+              "fact": "sangonomiyakokomi.garment"
+            },
+            "sangonomiyakokomi.c1FinalAttack"
+          ]
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1016,6 +1038,22 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -1025,6 +1063,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "sangonomiyakokomi.c1FinalAttack": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "仪来羽衣下普通攻击最后一击"
     }
   },
   "formulas": [

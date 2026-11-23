@@ -633,7 +633,27 @@
       "id": "ororon.passive1",
       "name": "夜翳的通感",
       "description": "队伍中的附近的角色触发「夜魂迸发」后，欧洛伦将获得40点夜魂值。施放元素战技后的15秒内，队伍中其他角色的元素类型为水元素或雷元素的攻击命中敌人时，欧洛伦将获得5点夜魂值，该效果每0.3秒至多触发一次，在持续期间内至多触发10次。\n欧洛伦的夜魂值上限为80点。\n\n此外，附近的敌人受到感电或月感电反应的伤害或队伍中附近的其他角色造成的具有夜魂性质的伤害时，若欧洛伦拥有至少10点夜魂值，欧洛伦将消耗10点夜魂值，进入夜魂加持状态，并触发「显象超感」效果：基于欧洛伦攻击力的160%，对周围至多4名敌人造成具有夜魂性质的雷元素伤害。上述效果每1.8秒至多触发一次。\n\n夜魂加持·欧洛伦\n欧洛伦的夜魂加持状态持续至多6秒。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "ororon.a0.hypersense",
+          "skill": "ororon.skill",
+          "name": "显象超感",
+          "element": "electro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.6
+            }
+          ],
+          "when": [
+            "ororon.a1HypersenseReady"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "ororon.passive2",
@@ -699,7 +719,36 @@
       "rank": 6,
       "name": "致深泉的颂赞",
       "description": "触发突破天赋「夜翳的通感」的「显象超感」后，会使队伍中自己的当前场上角色的攻击力提升10%，持续9秒。该效果至多叠加3层，每层独立计算持续时间。\n此外，施放元素爆发黯声回响时，将触发一次等同于「显象超感」的效果，造成原本200%的伤害。\n该效果需要解锁突破天赋「夜翳的通感」。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "ororon.c6.hypersense",
+          "skill": "ororon.burst",
+          "name": "六命·显象超感",
+          "element": "electro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 3.2
+            }
+          ],
+          "when": [
+            "ororon.c6HypersenseReady",
+            {
+              "call": "rank.at-least-1",
+              "inputs": {
+                "rank": {
+                  "state": "ascension"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -728,5 +777,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "ororon.a1HypersenseReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次满足反应或夜魂命中、夜魂值及间隔并触发显象超感"
+    },
+    "ororon.c6HypersenseReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次施放黯声回响触发六命显象超感"
+    }
+  }
 }

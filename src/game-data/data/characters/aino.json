@@ -365,6 +365,9 @@
         {
           "id": "aino.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -738,7 +741,30 @@
       "rank": 2,
       "name": "齿轮差分的进位原理",
       "description": "元素爆发**精密水冷仪**中的对点水冷域持续期间，若爱诺处于队伍后台，队伍中自己的当前场上角色的攻击命中附近的敌人时，「冷静一下鸭」将对该敌人发射一枚额外的水弹，基于爱诺攻击力的25%与元素精通的100%，造成水元素范围伤害。该效果每5秒至多触发一次，且造成的伤害视为元素爆发伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "aino.c2.water-shot",
+          "skill": "aino.burst",
+          "name": "齿轮差分·额外水弹",
+          "element": "hydro",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.25
+            },
+            {
+              "stat": "elementalMastery",
+              "ratio": 1
+            }
+          ],
+          "when": [
+            "aino.coolingFieldAllyHit"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -815,5 +841,14 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "facts": {
+    "aino.coolingFieldAllyHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "对点水冷域内，后台爱诺的额外水弹可触发"
+    }
+  }
 }

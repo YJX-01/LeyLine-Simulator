@@ -821,7 +821,30 @@
       "id": "chiori.passive1",
       "name": "量体裁衣",
       "description": "施放羽袖一触的上挑攻击后的短暂时间内，依据不同的后续操作，产生不同的效果：点按元素战技将触发「织锦」；点按普通攻击则触发「裁锦」。\n\n织锦\n·切换角色，使队伍中下一名自己的角色登场；\n·为队伍中所有自己的角色施加「当意即妙」：队伍中自己的当前场上角色的普通攻击、重击和下落攻击命中附近的敌人时，袖将进行协同攻击，在敌人的位置造成相当于羽袖一触的上挑攻击伤害100%的岩元素范围伤害，通过这种方式造成的伤害视为元素战技伤害；\n·「当意即妙」持续8秒，每2秒至多触发一次袖的协同攻击，一次「当意即妙」持续期间，至多触发2次协同攻击。\n\n裁锦\n·千织获得岩元素附魔，持续5秒。\n\n千织在场上时，如果施放羽袖一触的上挑攻击后的短暂时间内没有再次点按元素战技或点按普通攻击，将触发后续效果「裁锦」。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "chiori.a0.tamoto-coordinated",
+          "skill": "chiori.skill",
+          "name": "当意即妙·袖协同攻击",
+          "element": "geo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            },
+            {
+              "stat": "defense",
+              "parameter": "param2"
+            }
+          ],
+          "when": [
+            "chiori.tapestryHit"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "chiori.passive2",
@@ -847,7 +870,30 @@
       "rank": 2,
       "name": "落染五色",
       "description": "施放二刀之形·比翼后的10秒内，每3秒都将在当前场上自己的角色身边唤出一名简易自动制御人形「绢」。绢将对附近的敌人发起攻击，造成相当于袖170%的岩元素范围伤害，通过这种方式造成的伤害视为元素战技伤害。\n绢将在进行一次攻击或存在3秒后退场。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "chiori.c2.kinu",
+          "skill": "chiori.skill",
+          "name": "绢的协同攻击",
+          "element": "geo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            },
+            {
+              "stat": "defense",
+              "parameter": "param6"
+            }
+          ],
+          "when": [
+            "chiori.kinuAttack"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 3,
@@ -910,5 +956,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "chiori.tapestryHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "当意即妙期间场上角色的攻击触发了袖的协同攻击"
+    },
+    "chiori.kinuAttack": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "落染五色期间绢已发起攻击"
+    }
+  }
 }

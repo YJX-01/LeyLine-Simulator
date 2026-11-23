@@ -475,6 +475,7 @@
       "id": "chongyun.skill",
       "name": "灵刃·重华叠霜",
       "description": "重云挥动巨剑猛击地面，在前方圆形范围内引发冰爆，并对敌人造成冰元素伤害。\n短暂延迟后，冰爆引发的寒气汇聚成重华叠霜领域，其中的单手剑、大剑、长柄武器角色获得冰元素附魔。",
+      "partyInfusion": "cryo",
       "flavorText": "「琳琅振响，十方静默。江河不动，重云凝霜。如法开坛，诸邪退散。」",
       "category": "skill",
       "element": "cryo",
@@ -713,7 +714,36 @@
       "id": "chongyun.passive2",
       "name": "追冰剑诀",
       "description": "灵刃·重华叠霜领域消失时，会唤出一柄灵刃自动攻击附近的敌人，造成相当于灵刃·重华叠霜技能伤害100%的冰元素范围伤害。被击中的敌人冰元素抗性降低10%，持续8秒。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "hits": [
+        {
+          "id": "chongyun.a1.rimechaser",
+          "skill": "chongyun.skill",
+          "name": "追冰剑诀·灵刃",
+          "element": "cryo",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "chongyun.frostFieldEnded"
+          ],
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "chongyun.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "damageBonus",
+              "cryoBonus"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "chongyun.passive3",
@@ -727,7 +757,26 @@
       "rank": 1,
       "name": "释凌咏冰",
       "description": "普通攻击的最后一击会向前方释放三道冰之刃，每道冰之刃对沿途的敌人造成重云50%攻击力的冰元素伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "chongyun.c1.ice-unleashed",
+          "skill": "chongyun.normal",
+          "name": "释凌咏冰·单道冰之刃",
+          "element": "cryo",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.5
+            }
+          ],
+          "when": [
+            "chongyun.c1IceBladeReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -767,7 +816,23 @@
       "rank": 6,
       "name": "四灵捧圣",
       "description": "灵刃·云开星落对生命值百分比低于重云的敌人造成伤害时，伤害提升15%；\n此外，施放时，会召唤一柄额外的灵刃。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "chongyun.c6.fourth-spirit-blade",
+          "skill": "chongyun.burst",
+          "name": "四灵捧圣·额外灵刃",
+          "element": "cryo",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -796,5 +861,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "chongyun.frostFieldEnded": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "灵刃·重华叠霜领域消失触发灵刃"
+    },
+    "chongyun.c1IceBladeReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "已打出四段普通攻击末击"
+    }
+  }
 }

@@ -420,6 +420,24 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "charlotte.normal.param9",
+          "name": "灵息之刺伤害",
+          "element": "cryo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "when": [
+            "charlotte.spiritbreathReady"
+          ],
+          "reactions": false,
+          "origin": "triggered",
+          "support": "hit-unavailable"
         }
       ]
     },
@@ -1073,7 +1091,26 @@
       "rank": 6,
       "name": "以有趣相关为要义",
       "description": "当前场上角色的普通攻击与重击命中附有取景·冰点构图法的「聚焦印象」的敌人后，「温亨廷先生」将进行协同攻击，造成相当于夏洛蒂攻击力180%的冰元素范围伤害，并为攻击范围内的当前场上角色恢复生命值，回复量相当于夏洛蒂攻击力的42%。该效果每6秒至多触发一次，通过这种方式造成的伤害与治疗效果视为夏洛蒂的元素爆发造成的伤害与治疗效果。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "charlotte.burst.c6-coordinated",
+          "name": "聚焦印象·温亨廷先生协同攻击",
+          "element": "cryo",
+          "category": "burst",
+          "skill": "charlotte.burst",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1.8
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "charlotte.c6-focus"
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1100,7 +1137,39 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "charlotte.c6-focus": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "场上角色普攻或重击命中聚焦印象目标"
+    },
+    "charlotte.spiritbreathReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次重击触发灵息之刺"
+    }
+  }
 }

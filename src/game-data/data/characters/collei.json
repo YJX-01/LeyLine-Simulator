@@ -669,7 +669,54 @@
       "id": "collei.passive1",
       "name": "飞叶迴斜",
       "description": "在飞叶轮返回前，如果队伍中自己的角色触发了燃烧、原激化、超激化、蔓激化、绽放、超绽放、烈绽放或月绽放反应，则会在返回时为角色赋予「新叶」状态，持续对身边的敌人造成相当于柯莱攻击力40%的草元素伤害，持续3秒。\n新叶效果持续期间再次产生新叶效果时，将移除原有的效果。新叶效果造成的伤害视为元素战技伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "collei.a0.sprout",
+          "skill": "collei.skill",
+          "name": "新叶·单次伤害",
+          "element": "dendro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.4
+            }
+          ],
+          "when": [
+            "collei.sproutWindow",
+            {
+              "call": "condition.any",
+              "inputs": {
+                "term0": {
+                  "call": "rank.at-least-2",
+                  "inputs": {
+                    "rank": {
+                      "state": "constellation"
+                    }
+                  },
+                  "output": "active"
+                },
+                "term1": {
+                  "fact": "collei.reactionBeforeRingReturn"
+                }
+              },
+              "output": "active"
+            }
+          ],
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "collei.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "dendroBonus",
+              "damageBonus"
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "collei.passive2",
@@ -801,7 +848,26 @@
       "rank": 6,
       "name": "坠镞为林",
       "description": "飞叶轮命中时，会产生一个迷你柯里安巴，造成相当于柯莱攻击力200%的草元素伤害。\n每次施放拂花偈叶至多产生1次迷你柯里安巴。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "collei.c6.mini-cuilein-anbar",
+          "skill": "collei.skill",
+          "name": "迷你柯里安巴",
+          "element": "dendro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "when": [
+            "collei.miniCuileinAnbarReady"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -830,5 +896,28 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "collei.sproutWindow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "飞叶轮已返回且新叶状态持续中"
+    },
+    "collei.reactionBeforeRingReturn": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "飞叶轮返回前队伍触发了指定草元素反应"
+    },
+    "collei.miniCuileinAnbarReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "飞叶轮命中且本次施放尚未产生迷你柯里安巴"
+    }
+  }
 }

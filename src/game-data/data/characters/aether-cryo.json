@@ -370,7 +370,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param2",
@@ -381,7 +385,11 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param3",
@@ -392,7 +400,11 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param4",
@@ -403,7 +415,11 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param5",
@@ -414,7 +430,11 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param6",
@@ -426,7 +446,11 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param7",
@@ -438,7 +462,11 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param9",
@@ -450,7 +478,11 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param10",
@@ -462,7 +494,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         },
         {
           "id": "aether-cryo.normal.param11",
@@ -474,7 +510,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "aether-cryo.cryoFroststarInfusion",
+            "element": "cryo"
+          }
         }
       ]
     },
@@ -1127,5 +1167,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "aether-cryo.cryoFroststarInfusion": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "辉映·星超导且栗烈寒星存在时的冰元素转化"
+    }
+  }
 }

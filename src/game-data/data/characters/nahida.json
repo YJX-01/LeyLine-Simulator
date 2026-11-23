@@ -1050,7 +1050,30 @@
       "rank": 6,
       "name": "大辨圆成之实",
       "description": "施放心景幻成后，纳西妲的普通攻击或重击命中处于所闻遍计的蕴种印状态下的敌人时，将对该敌人及其所处连结中的所有敌人释放灭净三业·业障除，基于纳西妲攻击力的200%与元素精通的400%，造成草元素伤害。\n灭净三业·业障除造成的伤害视为元素战技伤害，每0.2秒至多触发一次。\n该效果至多持续10秒，将在纳西妲释放6次灭净三业·业障除后移除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "nahida.skill.c6-remedy",
+          "name": "灭净三业·业障除",
+          "element": "dendro",
+          "category": "skill",
+          "skill": "nahida.skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            },
+            {
+              "stat": "elementalMastery",
+              "ratio": 4
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "nahida.c6Remedy"
+          ]
+        }
+      ]
     }
   ],
   "formulas": [
@@ -1144,6 +1167,22 @@
           ]
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -1153,6 +1192,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "nahida.c6Remedy": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普攻或重击触发业障除"
     }
   }
 }

@@ -729,7 +729,26 @@
       "rank": 1,
       "name": "连环轰隆",
       "description": "攻击与施放技能时，有几率召唤火花轰击敌人，造成相当于轰轰火花攻击伤害120%的伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "klee.c1.chained-reactions",
+          "skill": "klee.burst",
+          "name": "连环轰隆·火花",
+          "element": "pyro",
+          "category": "burst",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "klee.chainedSpark"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -752,7 +771,26 @@
       "rank": 4,
       "name": "一触即发",
       "description": "如果在轰轰火花持续期间内退场，会引发爆炸，造成555%攻击力的火元素范围伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "klee.c4.departure-explosion",
+          "skill": "klee.burst",
+          "name": "一触即发·退场爆炸",
+          "element": "pyro",
+          "category": "other",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 5.55
+            }
+          ],
+          "when": [
+            "klee.sparksDeparture"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -798,5 +836,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "klee.chainedSpark": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "攻击或施放技能已触发连环轰隆火花"
+    },
+    "klee.sparksDeparture": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "轰轰火花持续期间可莉退场"
+    }
+  }
 }

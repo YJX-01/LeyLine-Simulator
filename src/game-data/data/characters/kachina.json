@@ -805,7 +805,27 @@
       "rank": 6,
       "name": "这一次，我一定要赢",
       "description": "队伍中自己的当前场上角色的护盾因任何原因被替换或摧毁时，卡齐娜将造成相当于她的防御力200%的岩元素范围伤害，该效果5秒内至多触发一次。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kachina.c6.shield-shockwave",
+          "skill": "kachina.skill",
+          "name": "六命·护盾冲击波",
+          "element": "geo",
+          "category": "other",
+          "base": [
+            {
+              "stat": "defense",
+              "ratio": 2
+            }
+          ],
+          "when": [
+            "kachina.c6ShieldShockwaveReady"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "support": {
@@ -848,5 +868,14 @@
         "revision": "1"
       }
     }
-  ]
+  ],
+  "facts": {
+    "kachina.c6ShieldShockwaveReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次场上角色护盾被替换或摧毁并触发冲击波"
+    }
+  }
 }

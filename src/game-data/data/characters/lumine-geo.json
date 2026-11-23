@@ -720,7 +720,26 @@
       "id": "lumine-geo.passive2",
       "name": "狂乱的崩岩",
       "description": "普通攻击的最后一击会附带崩毁，对范围内的敌人造成60%攻击力的岩元素伤害。",
-      "unlockAscension": 4
+      "unlockAscension": 4,
+      "hits": [
+        {
+          "id": "lumine-geo.a1.collapse",
+          "skill": "lumine-geo.normal",
+          "name": "狂乱的崩岩·末段崩毁",
+          "element": "geo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.6
+            }
+          ],
+          "when": [
+            "lumine-geo.lastNormalSlash"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     }
   ],
   "constellations": [
@@ -734,7 +753,33 @@
       "rank": 2,
       "name": "不稳的熔岩",
       "description": "星陨剑的荒星被摧毁时会再度发生爆炸，造成等同于星陨剑伤害的额外岩元素范围伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "lumine-geo.c2.rockcore-meltdown",
+          "skill": "lumine-geo.skill",
+          "name": "二命·荒星摧毁爆炸",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "when": [
+            "lumine-geo.rockcoreDestroyed"
+          ],
+          "support": "hit-unavailable",
+          "snapshot": {
+            "sourceSkillId": "lumine-geo.skill",
+            "attributes": [
+              "attack",
+              "critRate",
+              "critDamage",
+              "geoBonus"
+            ]
+          }
+        }
+      ]
     },
     {
       "rank": 3,
@@ -797,5 +842,21 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lumine-geo.rockcoreDestroyed": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "荒星完整生成后被摧毁"
+    },
+    "lumine-geo.lastNormalSlash": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普通攻击已触发末段崩毁"
+    }
+  }
 }

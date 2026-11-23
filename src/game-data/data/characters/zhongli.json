@@ -412,6 +412,9 @@
         {
           "id": "zhongli.normal.param5",
           "name": "五段伤害",
+          "selection": {
+            "repetitions": 4
+          },
           "base": [
             {
               "stat": "attack",
@@ -691,7 +694,10 @@
       "hits": [
         {
           "id": "zhongli.skill.param1",
-          "name": "岩脊伤害/共鸣伤害（第1击）",
+          "name": "岩脊生成伤害",
+          "selection": {
+            "kind": "source-event"
+          },
           "base": [
             {
               "stat": "attack",
@@ -702,7 +708,10 @@
         },
         {
           "id": "zhongli.skill.param2",
-          "name": "岩脊伤害/共鸣伤害（第2击）",
+          "name": "原岩共鸣伤害",
+          "selection": {
+            "kind": "source-event"
+          },
           "base": [
             {
               "stat": "attack",

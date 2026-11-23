@@ -395,7 +395,33 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param2",
@@ -406,7 +432,33 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param3",
@@ -417,7 +469,33 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param4",
@@ -428,7 +506,33 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param5",
@@ -440,7 +544,33 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param7",
@@ -452,7 +582,33 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param8",
@@ -464,7 +620,33 @@
               "parameter": "param8"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.param9",
@@ -476,7 +658,33 @@
               "parameter": "param9"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-6",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "furina.c6Center"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "furina.normal.arkhe",
@@ -830,6 +1038,18 @@
           "rate": "param9",
           "flat": "param10",
           "recipient": "on-field"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "furina.salonAllies",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 4,
+          "integer": true
         }
       ]
     },
@@ -1205,7 +1425,145 @@
       "rank": 6,
       "name": "「诸君听我颂，共举爱之杯！」",
       "description": "施放孤心沙龙时，芙宁娜将获得「万众瞩目」，持续10秒。\n持续期间，芙宁娜的普通攻击、重击与下落攻击将转为无法被附魔覆盖的水元素伤害，且造成的伤害提升，提升值相当于芙宁娜生命值上限的18%。\n持续期间，每0.1秒，芙宁娜的普通攻击（不包括「始基力：圣俗杂座」的攻击）、重击与下落攻击坠地冲击命中敌人后，将根据芙宁娜当前的始基力属性产生不同的效果：\n\n始基力：荒性\n每1秒，基于芙宁娜生命值上限的4%，为附近的队伍中所有角色恢复生命值，持续2.9秒，重复触发将延长持续时间。\n始基力：芒性\n本次普通攻击（不包括「始基力：圣俗杂座」的攻击）、重击与下落攻击坠地冲击造成的伤害进一步提高，提升值相当于芙宁娜生命值上限的25%，上述攻击命中敌人时，附近的队伍中所有角色将消耗相当于当前生命值1%的生命值。\n\n一次「万众瞩目」持续期间，上述效果至多触发6次，该效果将在触发次数达到6次或持续时间结束时解除。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "furina.normal.c6-param1",
+          "name": "一段伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "normal",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param1"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param2",
+          "name": "二段伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "normal",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param2"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param3",
+          "name": "三段伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "normal",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param3"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param4",
+          "name": "四段伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "normal",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param4"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param5",
+          "name": "重击伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "charged",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param7",
+          "name": "下坠期间伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "plunge",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param7"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param8",
+          "name": "低空坠地冲击伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "plunge",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param8"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        },
+        {
+          "id": "furina.normal.c6-param9",
+          "name": "高空坠地冲击伤害（万众瞩目）",
+          "element": "hydro",
+          "category": "plunge",
+          "skill": "furina.normal",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param9"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "furina.c6Center"
+          ]
+        }
+      ]
     }
   ],
   "support": {
@@ -1232,6 +1590,22 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -1249,6 +1623,21 @@
         "kind": "quantity",
         "unit": "scalar"
       }
+    },
+    "furina.salonAllies": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "生命值高于50%的沙龙成员援助角色数"
+    },
+    "furina.c6Center": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "万众瞩目状态生效"
     }
   },
   "formulas": [

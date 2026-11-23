@@ -763,13 +763,69 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.any",
+              "inputs": {
+                "term0": {
+                  "fact": "yumemizukimizuki.snackExpires"
+                },
+                "term1": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "fact": "yumemizukimizuki.snackCollected"
+                    },
+                    "term1": {
+                      "call": "condition.any",
+                      "inputs": {
+                        "term0": {
+                          "call": "rank.at-least-4",
+                          "inputs": {
+                            "rank": {
+                              "state": "constellation"
+                            }
+                          },
+                          "output": "active"
+                        },
+                        "term1": {
+                          "call": "hp.above70",
+                          "inputs": {
+                            "ratio": {
+                              "fact": "yumemizukimizuki.snackCollectorHp"
+                            }
+                          },
+                          "output": "active"
+                        }
+                      },
+                      "output": "active"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         }
       ],
       "energyCapacity": {
         "parameter": "param5"
       },
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "inputs": [
+        {
+          "id": "yumemizukimizuki.snackCollectorHp",
+          "type": {
+            "kind": "quantity",
+            "unit": "scalar"
+          },
+          "min": 0,
+          "max": 1,
+          "integer": false
+        }
+      ]
     }
   ],
   "passives": [
@@ -866,5 +922,29 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "yumemizukimizuki.snackExpires": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "梦见风名物点心未拾取自动爆炸"
+    },
+    "yumemizukimizuki.snackCollected": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "梦见风名物点心由角色拾取"
+    },
+    "yumemizukimizuki.snackCollectorHp": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "点心拾取者生命比例"
+    }
+  }
 }

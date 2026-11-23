@@ -390,6 +390,9 @@
         {
           "id": "nefer.normal.param3",
           "name": "三段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -419,7 +422,18 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "nefer.phantasm"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "nefer.normal.param8",
@@ -809,11 +823,164 @@
           ],
           "support": "hit-unavailable",
           "when": [
-            "nefer.phantasm"
+            "nefer.phantasm",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "rank.at-least-6",
+                  "inputs": {
+                    "rank": {
+                      "state": "constellation"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
           ]
+        },
+        {
+          "id": "nefer.skill.phantasm-shadow-1",
+          "name": "幻戏虚影第一段",
+          "element": "dendro",
+          "category": "charged",
+          "base": {
+            "template": "product.damage",
+            "inputs": {
+              "basis": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": {
+                    "skill": "nefer.skill",
+                    "parameter": "param9"
+                  }
+                },
+                "output": "base"
+              },
+              "rate": {
+                "call": "nefer.phantasm-veil-multiplier",
+                "inputs": {
+                  "basis": {
+                    "fact": "nefer.phantasmVeil"
+                  }
+                }
+              }
+            }
+          },
+          "support": "conditional-branch",
+          "when": [
+            {
+              "fact": "nefer.phantasm"
+            }
+          ],
+          "family": "lunar-bloom",
+          "origin": "triggered"
+        },
+        {
+          "id": "nefer.skill.phantasm-shadow-2",
+          "name": "幻戏虚影第二段",
+          "element": "dendro",
+          "category": "charged",
+          "base": {
+            "template": "product.damage",
+            "inputs": {
+              "basis": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": {
+                    "skill": "nefer.skill",
+                    "parameter": "param10"
+                  }
+                },
+                "output": "base"
+              },
+              "rate": {
+                "call": "nefer.phantasm-veil-multiplier",
+                "inputs": {
+                  "basis": {
+                    "fact": "nefer.phantasmVeil"
+                  }
+                }
+              }
+            }
+          },
+          "support": "conditional-branch",
+          "when": [
+            {
+              "fact": "nefer.phantasm"
+            }
+          ],
+          "family": "lunar-bloom",
+          "origin": "triggered"
+        },
+        {
+          "id": "nefer.skill.phantasm-shadow-3",
+          "name": "幻戏虚影第三段",
+          "element": "dendro",
+          "category": "charged",
+          "base": {
+            "template": "product.damage",
+            "inputs": {
+              "basis": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": {
+                    "skill": "nefer.skill",
+                    "parameter": "param11"
+                  }
+                },
+                "output": "base"
+              },
+              "rate": {
+                "call": "nefer.phantasm-veil-multiplier",
+                "inputs": {
+                  "basis": {
+                    "fact": "nefer.phantasmVeil"
+                  }
+                }
+              }
+            }
+          },
+          "support": "conditional-branch",
+          "when": [
+            {
+              "fact": "nefer.phantasm"
+            }
+          ],
+          "family": "lunar-bloom",
+          "origin": "triggered"
         }
       ],
-      "cooldownParameter": "param12"
+      "cooldownParameter": "param12",
+      "inputs": [
+        {
+          "id": "nefer.phantasmVeil",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 3,
+          "integer": true,
+          "constellationLimits": [
+            {
+              "rank": 2,
+              "max": 5
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "nefer.burst",
@@ -1028,7 +1195,25 @@
       "energyCapacity": {
         "parameter": "param7"
       },
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "inputs": [
+        {
+          "id": "nefer.consumedVeil",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 3,
+          "integer": true,
+          "constellationLimits": [
+            {
+              "rank": 2,
+              "max": 5
+            }
+          ]
+        }
+      ]
     }
   ],
   "passives": [
@@ -1127,7 +1312,83 @@
       "rank": 6,
       "name": "决胜于逆转之时",
       "description": "奈芙尔施放**幻戏**时，自身的第二段伤害将转为造成相当于奈芙尔元素精通85%的草元素范围伤害；此外，幻戏的攻击结束时，还会造成一次相当于奈芙尔元素精通120%的草元素范围伤害。上述伤害均视为由幻戏造成的月绽放反应伤害。\n\n月兆·满辉 \n奈芙尔造成的月绽放反应伤害**擢升**15%。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "nefer.skill.c6-phantasm-finish",
+          "name": "幻戏终段",
+          "element": "dendro",
+          "category": "charged",
+          "skill": "nefer.skill",
+          "base": {
+            "template": "product.damage",
+            "inputs": {
+              "basis": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": 1.2
+                },
+                "output": "base"
+              },
+              "rate": {
+                "call": "nefer.phantasm-veil-multiplier",
+                "inputs": {
+                  "basis": {
+                    "fact": "nefer.phantasmVeil"
+                  }
+                }
+              }
+            }
+          },
+          "support": "conditional-branch",
+          "when": [
+            {
+              "fact": "nefer.phantasm"
+            }
+          ],
+          "family": "lunar-bloom"
+        },
+        {
+          "id": "nefer.skill.c6-phantasm-second",
+          "name": "幻戏自身第二段（六命）",
+          "element": "dendro",
+          "category": "charged",
+          "skill": "nefer.skill",
+          "base": {
+            "template": "product.damage",
+            "inputs": {
+              "basis": {
+                "call": "elementalMastery-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "elementalMastery"
+                  },
+                  "ratio": 0.85
+                },
+                "output": "base"
+              },
+              "rate": {
+                "call": "nefer.phantasm-veil-multiplier",
+                "inputs": {
+                  "basis": {
+                    "fact": "nefer.phantasmVeil"
+                  }
+                }
+              }
+            }
+          },
+          "support": "conditional-branch",
+          "when": [
+            {
+              "fact": "nefer.phantasm"
+            }
+          ],
+          "family": "lunar-bloom"
+        }
+      ]
     }
   ],
   "support": {
@@ -1154,6 +1415,22 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -1163,6 +1440,39 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "nefer.consumedVeil": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次元素爆发消耗的伪秘之帷层数"
+    },
+    "nefer.phantasmVeil": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次幻戏的伪秘之帷层数"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "nefer.phantasm-veil-multiplier",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "basis",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.08,
+        "offset": 1,
+        "threshold": 0,
+        "output": "value",
+        "maxInput": 5
+      }
+    }
+  ]
 }

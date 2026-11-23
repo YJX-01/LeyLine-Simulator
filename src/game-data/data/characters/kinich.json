@@ -351,6 +351,9 @@
         {
           "id": "kinich.normal.param4",
           "name": "重击伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "category": "charged",
           "base": [
             {
@@ -527,6 +530,9 @@
         {
           "id": "kinich.skill.param1",
           "name": "环绕射击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -786,7 +792,26 @@
       "rank": 6,
       "name": "瑞兽之形",
       "description": "迴猎贯鳞炮在命中敌人后，将在敌人间弹跳一次，造成基尼奇的攻击力700%的草元素伤害。\n如果本次迴猎贯鳞炮触发了突破天赋「焰灵的契约」或命之座「星虎之掌」对迴猎贯鳞炮的增强效果，它所引发的弹跳攻击也会获得上述效果的增强。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "kinich.c6.scalespiker-bounce",
+          "skill": "kinich.skill",
+          "name": "六命·迴猎贯鳞炮弹跳",
+          "element": "dendro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 7
+            }
+          ],
+          "when": [
+            "kinich.c6CannonBounceReady"
+          ],
+          "support": "c6-cannon-bounce"
+        }
+      ]
     }
   ],
   "support": {
@@ -813,6 +838,24 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "c6-cannon-bounce": {
+      "maxConstellation": 6,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "弹跳为700%攻击力草元素战技伤害，沿用本次原炮的猎人心得、首次贯鳞炮及暴击伤害条件。",
+      "mechanisms": [
+        {
+          "id": "cannon-bounce",
+          "resolution": "implemented",
+          "reason": "弹跳为700%攻击力草元素战技伤害，沿用本次原炮的猎人心得、首次贯鳞炮及暴击伤害条件。"
+        },
+        {
+          "id": "cannon-bounce-context",
+          "resolution": "unavailable",
+          "reason": "弹跳目标选择及原炮发射和弹跳之间的面板变化时序仍待战斗观测。"
+        }
+      ]
     }
   },
   "contextSupport": "context-unavailable",
@@ -822,6 +865,13 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "kinich.c6CannonBounceReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次迴猎贯鳞炮命中后，弹跳已命中当前目标"
     }
   }
 }

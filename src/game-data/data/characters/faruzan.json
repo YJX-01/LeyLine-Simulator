@@ -382,7 +382,18 @@
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "when": [
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "fact": "faruzan.hurricaneArrow"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "faruzan.normal.param7",
@@ -576,6 +587,23 @@
             }
           ],
           "support": "hit-unavailable"
+        },
+        {
+          "id": "faruzan.skill.hurricane-arrow",
+          "name": "飓烈箭",
+          "element": "anemo",
+          "category": "charged",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param6",
+              "skill": "faruzan.normal"
+            }
+          ],
+          "support": "conditional-branch",
+          "when": [
+            "faruzan.hurricaneArrow"
+          ]
         }
       ],
       "cooldownParameter": "param5"
@@ -902,7 +930,32 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "conditional-branch": {
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "单次命中的倍率与明确条件已采用，自动触发与全部相关机制仍待逐项核验。",
+      "maxConstellation": 6,
+      "mechanisms": [
+        {
+          "id": "declared-hit",
+          "resolution": "implemented"
+        },
+        {
+          "id": "encounter-context",
+          "resolution": "unavailable"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "faruzan.hurricaneArrow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "这发飓烈箭消耗疾风示现的有效次数（一命每轮至多两发）"
+    }
+  }
 }

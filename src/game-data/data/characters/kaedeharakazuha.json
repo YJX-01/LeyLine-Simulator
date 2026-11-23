@@ -391,7 +391,11 @@
               "parameter": "param1"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param2",
@@ -402,7 +406,11 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param3",
@@ -413,7 +421,11 @@
               "parameter": "param3"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param4",
@@ -424,7 +436,11 @@
               "parameter": "param4"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param5",
@@ -435,18 +451,29 @@
               "parameter": "param5"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param6",
           "name": "五段伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
               "parameter": "param6"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param7",
@@ -458,7 +485,11 @@
               "parameter": "param7"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param8",
@@ -470,7 +501,11 @@
               "parameter": "param8"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param10",
@@ -482,7 +517,11 @@
               "parameter": "param10"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param11",
@@ -494,7 +533,11 @@
               "parameter": "param11"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         },
         {
           "id": "kaedeharakazuha.normal.param12",
@@ -506,7 +549,11 @@
               "parameter": "param12"
             }
           ],
-          "support": "hit-unavailable"
+          "support": "hit-unavailable",
+          "infusion": {
+            "fact": "kaedeharakazuha.crimsonMomijiInfusion",
+            "element": "anemo"
+          }
         }
       ]
     },
@@ -854,7 +901,24 @@
       "id": "kaedeharakazuha.passive1",
       "name": "相闻之剑法",
       "description": "千早振在施放时，如果接触了水元素/火元素/冰元素/雷元素，则会使这次千早振的下落攻击·乱岚拨止，发生元素转化，将附加200%攻击力的对应元素伤害，该伤害视为下落攻击伤害。每次千早振的技能效果中，元素转化仅会发生一次。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "kaedeharakazuha.a0.absorbed-plunge",
+          "skill": "kaedeharakazuha.skill",
+          "name": "乱岚拨止·相闻之剑法",
+          "element": "anemo",
+          "category": "plunge",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 2
+            }
+          ],
+          "support": "hit-unavailable",
+          "elementBy": "absorbedElement"
+        }
+      ]
     },
     {
       "id": "kaedeharakazuha.passive2",
@@ -961,5 +1025,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "kaedeharakazuha.crimsonMomijiInfusion": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "六命血赤叶红风元素附魔持续中"
+    }
+  }
 }

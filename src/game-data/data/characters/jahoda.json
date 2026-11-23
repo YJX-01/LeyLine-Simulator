@@ -304,6 +304,9 @@
         {
           "id": "jahoda.normal.param2",
           "name": "二段伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -974,10 +977,34 @@
               "parameter": "param2"
             }
           ],
-          "support": "hit-unavailable",
+          "support": "a1-coordinator-damage",
           "elementBy": "absorbedElement",
           "when": [
-            "fullMoonsign"
+            "fullMoonsign",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-1",
+                      "inputs": {
+                        "rank": {
+                          "state": "ascension"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "jahoda.coordinatorPyroBoost"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
           ]
         }
       ],
@@ -992,7 +1019,42 @@
       "id": "jahoda.passive1",
       "name": "索酬的巧计",
       "description": "当队伍中存在至少1名元素类型为火元素、水元素、雷元素或冰元素的角色时，将依据对应元素类型的角色数量，使元素爆发秘器·猎人的七道具中的**猫型家用互助协调器**获得强化。\n雅珂达会偷偷记录队伍中上述元素类型的角色。在这些角色中，若角色数量最多的元素类型为：\n·火元素：猫型家用互助协调器造成原本130%的伤害；\n·水元素：猫型家用互助协调器造成原本120%的治疗量；\n·雷元素：猫型家用互助协调器的数量增加一个；\n·冰元素：猫型家用互助协调器的攻击间隔减少10%。\n\n若上述元素类型的角色数量相同，则按照火元素、水元素、雷元素、冰元素的顺序进行记录。初始至多只有一种元素类型对应的效果生效。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "jahoda.a1.coordinator-pyro-boost",
+          "name": "协调器伤害（记录火元素）",
+          "base": {
+            "template": "attack-damage-base",
+            "inputs": {
+              "attribute": {
+                "stat": "attack"
+              },
+              "ratio": {
+                "call": "product.scalar",
+                "inputs": {
+                  "basis": {
+                    "parameter": "param2",
+                    "skill": "jahoda.burst"
+                  },
+                  "rate": {
+                    "amount": 1.3,
+                    "unit": "scalar"
+                  }
+                }
+              }
+            },
+            "output": "base"
+          },
+          "support": "a1-coordinator-damage",
+          "elementBy": "absorbedElement",
+          "when": [
+            "fullMoonsign",
+            "jahoda.coordinatorPyroBoost"
+          ],
+          "skill": "jahoda.burst"
+        }
+      ]
     },
     {
       "id": "jahoda.passive2",
@@ -1019,7 +1081,29 @@
       "rank": 1,
       "name": "再来一瓶！",
       "description": "元素战技奇策·财富分配方案中，**呼噜噜秘藏瓶**发射的软绒绒猫猫球命中敌人时，有50%的概率进行一次弹跳，对附近的敌人造成对应元素伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "jahoda.c1.meowball-bounce",
+          "skill": "jahoda.skill",
+          "name": "一命·猫猫球弹跳",
+          "element": "anemo",
+          "category": "skill",
+          "elementBy": "absorbedElement",
+          "base": [
+            {
+              "stat": "attack",
+              "parameter": "param5"
+            }
+          ],
+          "when": [
+            "jahoda.c1MeowballBounceReady",
+            "fullMoonsign"
+          ],
+          "origin": "triggered",
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "rank": 2,
@@ -1086,7 +1170,41 @@
           "resolution": "unavailable"
         }
       ]
+    },
+    "a1-coordinator-damage": {
+      "maxConstellation": 6,
+      "resolution": "unavailable",
+      "evidence": "adopted",
+      "reason": "记录火元素时，满辉下任意有效元素转化的协调器追加段使用原本130%倍率，爆发的初始风伤保持原倍率。",
+      "mechanisms": [
+        {
+          "id": "coordinator-pyro-damage",
+          "resolution": "implemented",
+          "reason": "记录火元素时，满辉下任意有效元素转化的协调器追加段使用原本130%倍率，爆发的初始风伤保持原倍率。"
+        },
+        {
+          "id": "coordinator-pyro-damage-context",
+          "resolution": "unavailable",
+          "reason": "队伍元素记录由当次事实提供。协调器数量与攻击间隔属于时序范围。"
+        }
+      ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "jahoda.c1MeowballBounceReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次猫猫球命中后成功触发弹跳"
+    },
+    "jahoda.coordinatorPyroBoost": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "按队伍元素数量及火、水、雷、冰的同数优先顺序，索酬的巧计已记录火元素（初始记录或二命的额外记录）"
+    }
+  }
 }

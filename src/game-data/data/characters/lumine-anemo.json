@@ -858,7 +858,26 @@
       "id": "lumine-anemo.passive1",
       "name": "裂空之风",
       "description": "普通攻击的最后一击会打出一道风刃，对沿途敌人造成60%攻击力的风元素伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "lumine-anemo.a0.gale",
+          "skill": "lumine-anemo.normal",
+          "name": "裂空之风·末段风刃",
+          "element": "anemo",
+          "category": "normal",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 0.6
+            }
+          ],
+          "when": [
+            "lumine-anemo.lastNormalSlash"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "lumine-anemo.passive2",
@@ -952,5 +971,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "lumine-anemo.lastNormalSlash": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普通攻击已打出末段风刃"
+    }
+  }
 }

@@ -872,7 +872,35 @@
             }
           ],
           "family": "lunar-crystallize",
-          "support": "lunar-hit-unavailable"
+          "support": "lunar-hit-unavailable",
+          "when": [
+            "zibai.lunarPhase",
+            "fullMoonsign",
+            {
+              "call": "condition.not",
+              "inputs": {
+                "term0": {
+                  "call": "condition.all",
+                  "inputs": {
+                    "term0": {
+                      "call": "rank.at-least-4",
+                      "inputs": {
+                        "rank": {
+                          "state": "constellation"
+                        }
+                      },
+                      "output": "active"
+                    },
+                    "term1": {
+                      "fact": "zibai.lunarFlourish"
+                    }
+                  },
+                  "output": "active"
+                }
+              },
+              "output": "active"
+            }
+          ]
         },
         {
           "id": "zibai.skill.param1",
@@ -1126,7 +1154,39 @@
       "rank": 4,
       "name": "魂魄往而身从之",
       "description": "处于**「月转时隙」**模式下时，兹白的普通攻击连击段数不会重置，且灵驹飞踏命中敌人时，兹白将获得「月涣华」效果：下一次进行普通攻击时，第四段额外攻击将造成相当于原本250%的月结晶反应伤害。",
-      "talentBonuses": []
+      "talentBonuses": [],
+      "hits": [
+        {
+          "id": "zibai.c4.lunar-flourish",
+          "name": "月涣华·第四段额外伤害",
+          "category": "normal",
+          "base": {
+            "template": "zibai.lunar-flourish-base",
+            "inputs": {
+              "attribute": {
+                "stat": "defense"
+              },
+              "ratio": {
+                "skill": "zibai.skill",
+                "parameter": "param3"
+              },
+              "count": {
+                "amount": 2.5,
+                "unit": "scalar"
+              }
+            },
+            "output": "base"
+          },
+          "family": "lunar-crystallize",
+          "support": "lunar-hit-unavailable",
+          "when": [
+            "zibai.lunarPhase",
+            "fullMoonsign",
+            "zibai.lunarFlourish"
+          ],
+          "skill": "zibai.skill"
+        }
+      ]
     },
     {
       "rank": 5,
@@ -1195,6 +1255,39 @@
       "type": {
         "kind": "boolean"
       }
+    },
+    "zibai.lunarPhase": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "处于月转时隙模式"
+    },
+    "zibai.lunarFlourish": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "灵驹飞踏命中产生的月涣华尚未消耗"
     }
-  }
+  },
+  "formulas": [
+    {
+      "id": "zibai.lunar-flourish-base",
+      "template": {
+        "id": "scaled-damage",
+        "revision": "1",
+        "terms": [
+          {
+            "stat": "defense",
+            "attribute": "attribute",
+            "ratio": "ratio",
+            "count": "count",
+            "countUnit": "scalar"
+          }
+        ],
+        "output": "base"
+      }
+    }
+  ]
 }

@@ -1114,7 +1114,26 @@
       "id": "cyno.passive1",
       "name": "落羽的裁择",
       "description": "在圣仪·煟煌随狼行的启途誓使状态下时，赛诺将间歇性处于「末途真眼」状态下。在该状态期间施放秘仪·律渊渡魂时，将触发「裁定」效果，使此次秘仪·律渊渡魂造成的伤害提升35%，并向前方发射3道渡荒之雷，造成等同于赛诺攻击力100%的雷元素伤害。\n渡荒之雷造成的伤害视为元素战技伤害。",
-      "unlockAscension": 1
+      "unlockAscension": 1,
+      "hits": [
+        {
+          "id": "cyno.a0.duststalker-bolt",
+          "skill": "cyno.skill",
+          "name": "渡荒之雷·单道",
+          "element": "electro",
+          "category": "skill",
+          "base": [
+            {
+              "stat": "attack",
+              "ratio": 1
+            }
+          ],
+          "when": [
+            "cyno.endseer"
+          ],
+          "support": "hit-unavailable"
+        }
+      ]
     },
     {
       "id": "cyno.passive2",
@@ -1203,5 +1222,14 @@
       ]
     }
   },
-  "contextSupport": "context-unavailable"
+  "contextSupport": "context-unavailable",
+  "facts": {
+    "cyno.endseer": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "启途誓使期间在末途真眼内施放了秘仪·律渊渡魂"
+    }
+  }
 }

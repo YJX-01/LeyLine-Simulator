@@ -814,6 +814,9 @@
         {
           "id": "alhaitham.skill.param6",
           "name": "2枚光幕攻击伤害",
+          "selection": {
+            "repetitions": 2
+          },
           "base": [
             {
               "stat": "attack",
@@ -829,6 +832,9 @@
         {
           "id": "alhaitham.skill.param8",
           "name": "3枚光幕攻击伤害",
+          "selection": {
+            "repetitions": 3
+          },
           "base": [
             {
               "stat": "attack",
