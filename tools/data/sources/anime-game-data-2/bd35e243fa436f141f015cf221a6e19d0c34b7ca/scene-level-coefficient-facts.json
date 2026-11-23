@@ -1,0 +1,1614 @@
+{
+  "source": {
+    "repository": "https://gitlab.com/Dimbreath/AnimeGameData2",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca"
+  },
+  "acquired": "2026-11-22",
+  "excerpts": {
+    "ExcelBinOutput/DungeonExcelConfigData.json": [
+      {
+        "id": 5001,
+        "sceneId": 40501,
+        "levelConfigMap": {
+          "1101": 100
+        },
+        "levelRevise": 33,
+        "showLevel": 34,
+        "previewMonsterList": [
+          20010801,
+          20010904,
+          20011101,
+          21010301,
+          22010201
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5002,
+        "sceneId": 40502,
+        "levelConfigMap": {
+          "1102": 100
+        },
+        "levelRevise": 46,
+        "showLevel": 47,
+        "previewMonsterList": [
+          20010501,
+          20010604,
+          20010702,
+          23030102
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5003,
+        "sceneId": 40503,
+        "levelConfigMap": {
+          "1103": 100
+        },
+        "levelRevise": 58,
+        "showLevel": 59,
+        "previewMonsterList": [
+          20010801,
+          20010901,
+          22010203
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5004,
+        "sceneId": 40504,
+        "levelConfigMap": {
+          "1104": 100
+        },
+        "levelRevise": 68,
+        "showLevel": 69,
+        "previewMonsterList": [
+          20011001,
+          20011101,
+          21030103,
+          22010302
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5005,
+        "sceneId": 40505,
+        "levelConfigMap": {
+          "1105": 100
+        },
+        "levelRevise": 79,
+        "showLevel": 80,
+        "previewMonsterList": [
+          20010904,
+          22010202
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5006,
+        "sceneId": 40506,
+        "levelConfigMap": {
+          "1106": 100
+        },
+        "levelRevise": 89,
+        "showLevel": 90,
+        "previewMonsterList": [
+          20010604,
+          20010702,
+          23030101
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5014,
+        "sceneId": 40514,
+        "levelConfigMap": {
+          "1377": 100
+        },
+        "levelRevise": 58,
+        "showLevel": 59,
+        "previewMonsterList": [
+          20011201,
+          20011301,
+          21010701
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5015,
+        "sceneId": 40515,
+        "levelConfigMap": {
+          "1377": 100
+        },
+        "levelRevise": 68,
+        "showLevel": 69,
+        "previewMonsterList": [
+          20011301,
+          21010701,
+          21020201
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5016,
+        "sceneId": 40516,
+        "levelConfigMap": {
+          "1378": 100
+        },
+        "levelRevise": 79,
+        "showLevel": 80,
+        "previewMonsterList": [
+          20011301,
+          21020201,
+          21020301
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5017,
+        "sceneId": 40517,
+        "levelConfigMap": {
+          "1379": 100
+        },
+        "levelRevise": 89,
+        "showLevel": 90,
+        "previewMonsterList": [
+          26040101
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5101,
+        "sceneId": 40601,
+        "levelConfigMap": {
+          "1115": 100
+        },
+        "levelRevise": 46,
+        "showLevel": 47,
+        "previewMonsterList": [
+          20011201,
+          20011301
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5102,
+        "sceneId": 40602,
+        "levelConfigMap": {
+          "1116": 100
+        },
+        "levelRevise": 58,
+        "showLevel": 59,
+        "previewMonsterList": [
+          20010801,
+          20010901,
+          21020201
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5104,
+        "sceneId": 40604,
+        "levelConfigMap": {
+          "1115": 100
+        },
+        "levelRevise": 79,
+        "showLevel": 80,
+        "previewMonsterList": [
+          24010101
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      },
+      {
+        "id": 5105,
+        "sceneId": 40605,
+        "levelConfigMap": {
+          "1116": 100
+        },
+        "levelRevise": 89,
+        "showLevel": 90,
+        "previewMonsterList": [
+          23010201,
+          23010301,
+          24010101
+        ],
+        "stateType": "DUNGEON_STATE_RELEASE"
+      }
+    ],
+    "ExcelBinOutput/DungeonLevelEntityConfigData.json": [
+      {
+        "clientId": 10132,
+        "descTextMapHash": 1015758474,
+        "id": 1101,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Melt",
+        "show": true,
+        "switchTitleTextMapHash": 4147568473
+      },
+      {
+        "clientId": 10133,
+        "descTextMapHash": 800232370,
+        "id": 1102,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Explode",
+        "show": true,
+        "switchTitleTextMapHash": 384032633
+      },
+      {
+        "clientId": 10134,
+        "descTextMapHash": 1167520402,
+        "id": 1102,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor",
+        "show": true,
+        "switchTitleTextMapHash": 3336224505
+      },
+      {
+        "clientId": 10135,
+        "descTextMapHash": 4147305226,
+        "id": 1103,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Melt",
+        "show": true,
+        "switchTitleTextMapHash": 4072282009
+      },
+      {
+        "clientId": 10136,
+        "descTextMapHash": 2640963306,
+        "id": 1103,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor",
+        "show": true,
+        "switchTitleTextMapHash": 2231586785
+      },
+      {
+        "clientId": 10137,
+        "descTextMapHash": 1405884146,
+        "id": 1104,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Stream",
+        "show": true,
+        "switchTitleTextMapHash": 3518415505
+      },
+      {
+        "clientId": 10138,
+        "descTextMapHash": 2345998954,
+        "id": 1104,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionHurt_Shock",
+        "show": true,
+        "switchTitleTextMapHash": 2720258625
+      },
+      {
+        "clientId": 10139,
+        "descTextMapHash": 935129786,
+        "id": 1105,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Melt",
+        "show": true,
+        "switchTitleTextMapHash": 2264194809
+      },
+      {
+        "clientId": 10140,
+        "descTextMapHash": 991294394,
+        "id": 1105,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor",
+        "show": true,
+        "switchTitleTextMapHash": 695343097
+      },
+      {
+        "clientId": 10141,
+        "descTextMapHash": 2609564434,
+        "id": 1106,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Explode",
+        "show": true,
+        "switchTitleTextMapHash": 2321816329
+      },
+      {
+        "clientId": 10142,
+        "descTextMapHash": 1450993594,
+        "id": 1106,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor",
+        "show": true,
+        "switchTitleTextMapHash": 2135100057
+      },
+      {
+        "clientId": 10151,
+        "descTextMapHash": 1518089146,
+        "id": 1115,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Explode",
+        "show": true,
+        "switchTitleTextMapHash": 890987137
+      },
+      {
+        "clientId": 10152,
+        "descTextMapHash": 3655999154,
+        "id": 1116,
+        "levelConfigName": "LevelEntity_TowerBuff_ElementReactionAttack_Superconductor",
+        "show": true,
+        "switchTitleTextMapHash": 869516033
+      },
+      {
+        "clientId": 10442,
+        "descTextMapHash": 2458610474,
+        "id": 1377,
+        "levelConfigName": "LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15",
+        "show": true,
+        "switchTitleTextMapHash": 396443217
+      },
+      {
+        "clientId": 10443,
+        "descTextMapHash": 3172277034,
+        "id": 1378,
+        "levelConfigName": "LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15",
+        "show": true,
+        "switchTitleTextMapHash": 3593693993
+      },
+      {
+        "clientId": 10444,
+        "descTextMapHash": 2137092786,
+        "id": 1378,
+        "levelConfigName": "LevelEntity_HpUp_20p",
+        "switchTitleTextMapHash": 2169007929
+      },
+      {
+        "clientId": 10445,
+        "descTextMapHash": 1265049562,
+        "id": 1379,
+        "levelConfigName": "LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15",
+        "show": true,
+        "switchTitleTextMapHash": 1616498665
+      },
+      {
+        "clientId": 10446,
+        "descTextMapHash": 1217815330,
+        "id": 1379,
+        "levelConfigName": "LevelEntity_Monster_HpUp_Lv2",
+        "switchTitleTextMapHash": 3946448729
+      }
+    ],
+    "BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json": [
+      {
+        "abilityName": "LevelEntity_TowerBuff_ElementReactionAttack_Explode",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_CD_P1": 3,
+          "LevelEntity_TowerBuff_Damage_P2": 4
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Explode": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElementReaction_Attack",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "compareType": "LessAndEqual",
+                        "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                        "target": "Team",
+                        "value": 0
+                      }
+                    ],
+                    "target": "Other"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Explode_CD",
+                    "target": "Team"
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "reactionTypes": [
+                  "Explode"
+                ]
+              }
+            ],
+            "modifierName": "",
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElementReaction_Attack": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "doOffStage": true,
+                "effectPattern": "Eff_Stages_GainWave_01",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              },
+              {
+                "$type": "TriggerAttackEvent",
+                "attackEvent": {
+                  "attackInfo": {
+                    "attackProperty": {
+                      "damageExtra": [
+                        "LevelEntity_TowerBuff_Damage_P2",
+                        "LevelEntity_AvatarDot_SystemValue",
+                        "MUL"
+                      ],
+                      "damagePercentage": 0,
+                      "damagePercentageRatio": 0,
+                      "elementDurability": 25,
+                      "enBreak": 0,
+                      "ignoreAttackerProperty": true,
+                      "DIEKDGNBHLH": 0
+                    },
+                    "attackTag": "",
+                    "attenuationGroup": "default",
+                    "attenuationTag": "",
+                    "cameraShake": {
+                      "OFGBHFBAEKK": ""
+                    },
+                    "canBeModifiedBy": "OriginOwner",
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV2",
+                      "onHitEffectName": "",
+                      "MALCHCIBBBC": ""
+                    }
+                  },
+                  "attackPattern": {
+                    "$type": "ConfigAttackSphere",
+                    "born": {
+                      "$type": "ConfigBornBySelf"
+                    },
+                    "radius": 4,
+                    "triggerType": "TriggerNoRepeat"
+                  }
+                },
+                "doOffStage": true,
+                "target": "Caster",
+                "targetType": "Enemy"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Explode_CD": {
+            "duration": "LevelEntity_TowerBuff_CD_P1",
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "useLimitRange": true,
+                "value": 1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "useLimitRange": true,
+                "value": 0
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "AddGlobalValue",
+            "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+            "maxValue": 0,
+            "minValue": 0,
+            "target": "Team",
+            "useLimitRange": true,
+            "value": 0
+          },
+          {
+            "$type": "SetSystemValueToOverrideMap",
+            "key": "LevelEntity_AvatarDot_SystemValue",
+            "type": "ElementLevelCo",
+            "KKFCNNHEPEL": -1
+          },
+          {
+            "$type": "AttachModifier",
+            "doOffStage": true,
+            "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Explode"
+          }
+        ]
+      },
+      {
+        "abilityName": "LevelEntity_TowerBuff_ElementReactionAttack_Superconductor",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_CD_P1": 3,
+          "LevelEntity_TowerBuff_Damage_P2": 4
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Superconductor": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElementReaction_Attack",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "compareType": "LessAndEqual",
+                        "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                        "target": "Team",
+                        "value": 0
+                      }
+                    ],
+                    "target": "Other"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Superconductor_CD",
+                    "target": "Team"
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "reactionTypes": [
+                  "Superconductor",
+                  "StarSuperconductor"
+                ]
+              }
+            ],
+            "modifierName": "",
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElementReaction_Attack": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "doOffStage": true,
+                "effectPattern": "Eff_Stages_GainWave_01",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              },
+              {
+                "$type": "TriggerAttackEvent",
+                "attackEvent": {
+                  "attackInfo": {
+                    "attackProperty": {
+                      "damageExtra": [
+                        "LevelEntity_TowerBuff_Damage_P2",
+                        "LevelEntity_AvatarDot_SystemValue",
+                        "MUL"
+                      ],
+                      "damagePercentage": 0,
+                      "damagePercentageRatio": 0,
+                      "elementDurability": 25,
+                      "enBreak": 0,
+                      "ignoreAttackerProperty": true,
+                      "DIEKDGNBHLH": 0
+                    },
+                    "attackTag": "",
+                    "attenuationGroup": "default",
+                    "attenuationTag": "",
+                    "cameraShake": {
+                      "OFGBHFBAEKK": ""
+                    },
+                    "canBeModifiedBy": "OriginOwner",
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV2",
+                      "onHitEffectName": "",
+                      "MALCHCIBBBC": ""
+                    }
+                  },
+                  "attackPattern": {
+                    "$type": "ConfigAttackSphere",
+                    "born": {
+                      "$type": "ConfigBornBySelf"
+                    },
+                    "radius": 4,
+                    "triggerType": "TriggerNoRepeat"
+                  }
+                },
+                "doOffStage": true,
+                "target": "Caster",
+                "targetType": "Enemy"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Superconductor_CD": {
+            "duration": "LevelEntity_TowerBuff_CD_P1",
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "useLimitRange": true,
+                "value": 1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "useLimitRange": true,
+                "value": 0
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "AddGlobalValue",
+            "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+            "maxValue": 0,
+            "minValue": 0,
+            "target": "Team",
+            "useLimitRange": true,
+            "value": 0
+          },
+          {
+            "$type": "SetSystemValueToOverrideMap",
+            "key": "LevelEntity_AvatarDot_SystemValue",
+            "type": "ElementLevelCo",
+            "KKFCNNHEPEL": -1
+          },
+          {
+            "$type": "AttachModifier",
+            "doOffStage": true,
+            "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Superconductor"
+          }
+        ]
+      },
+      {
+        "abilityName": "LevelEntity_TowerBuff_ElementReactionAttack_Melt",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_CD_P1": 3,
+          "LevelEntity_TowerBuff_Damage_P2": 4
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Melt": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElementReaction_Attack",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "compareType": "LessAndEqual",
+                        "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                        "target": "Team",
+                        "value": 0
+                      }
+                    ],
+                    "target": "Other"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Melt_CD",
+                    "target": "Team"
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "reactionTypes": [
+                  "Melt"
+                ]
+              }
+            ],
+            "modifierName": "",
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElementReaction_Attack": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "doOffStage": true,
+                "effectPattern": "Eff_Stages_GainWave_01",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              },
+              {
+                "$type": "TriggerAttackEvent",
+                "attackEvent": {
+                  "attackInfo": {
+                    "attackProperty": {
+                      "damageExtra": [
+                        "LevelEntity_TowerBuff_Damage_P2",
+                        "LevelEntity_AvatarDot_SystemValue",
+                        "MUL"
+                      ],
+                      "damagePercentage": 0,
+                      "damagePercentageRatio": 0,
+                      "elementDurability": 25,
+                      "enBreak": 0,
+                      "ignoreAttackerProperty": true,
+                      "DIEKDGNBHLH": 0
+                    },
+                    "attackTag": "",
+                    "attenuationGroup": "default",
+                    "attenuationTag": "",
+                    "cameraShake": {
+                      "OFGBHFBAEKK": ""
+                    },
+                    "canBeModifiedBy": "OriginOwner",
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV2",
+                      "onHitEffectName": "",
+                      "MALCHCIBBBC": ""
+                    }
+                  },
+                  "attackPattern": {
+                    "$type": "ConfigAttackSphere",
+                    "born": {
+                      "$type": "ConfigBornBySelf"
+                    },
+                    "radius": 4,
+                    "triggerType": "TriggerNoRepeat"
+                  }
+                },
+                "doOffStage": true,
+                "target": "Caster",
+                "targetType": "Enemy"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Melt_CD": {
+            "duration": "LevelEntity_TowerBuff_CD_P1",
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "useLimitRange": true,
+                "value": 1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "useLimitRange": true,
+                "value": 0
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "AddGlobalValue",
+            "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+            "maxValue": 0,
+            "minValue": 0,
+            "target": "Team",
+            "useLimitRange": true,
+            "value": 0
+          },
+          {
+            "$type": "SetSystemValueToOverrideMap",
+            "key": "LevelEntity_AvatarDot_SystemValue",
+            "type": "ElementLevelCo",
+            "KKFCNNHEPEL": -1
+          },
+          {
+            "$type": "AttachModifier",
+            "doOffStage": true,
+            "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Melt"
+          }
+        ]
+      },
+      {
+        "abilityName": "LevelEntity_TowerBuff_ElementReactionAttack_Stream",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_CD_P1": 3,
+          "LevelEntity_TowerBuff_Damage_P2": 4
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Stream": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElementReaction_Attack",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "compareType": "LessAndEqual",
+                        "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                        "target": "Team",
+                        "value": 0
+                      }
+                    ],
+                    "target": "Other"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Stream_CD",
+                    "target": "Team"
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "reactionTypes": [
+                  "Stream"
+                ]
+              }
+            ],
+            "modifierName": "",
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElementReaction_Attack": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "doOffStage": true,
+                "effectPattern": "Eff_Stages_GainWave_01",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              },
+              {
+                "$type": "TriggerAttackEvent",
+                "attackEvent": {
+                  "attackInfo": {
+                    "attackProperty": {
+                      "damageExtra": [
+                        "LevelEntity_TowerBuff_Damage_P2",
+                        "LevelEntity_AvatarDot_SystemValue",
+                        "MUL"
+                      ],
+                      "damagePercentage": 0,
+                      "damagePercentageRatio": 0,
+                      "elementDurability": 25,
+                      "enBreak": 0,
+                      "ignoreAttackerProperty": true,
+                      "DIEKDGNBHLH": 0
+                    },
+                    "attackTag": "",
+                    "attenuationGroup": "default",
+                    "attenuationTag": "",
+                    "cameraShake": {
+                      "OFGBHFBAEKK": ""
+                    },
+                    "canBeModifiedBy": "OriginOwner",
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV2",
+                      "onHitEffectName": "",
+                      "MALCHCIBBBC": ""
+                    }
+                  },
+                  "attackPattern": {
+                    "$type": "ConfigAttackSphere",
+                    "born": {
+                      "$type": "ConfigBornBySelf"
+                    },
+                    "radius": 4,
+                    "triggerType": "TriggerNoRepeat"
+                  }
+                },
+                "doOffStage": true,
+                "target": "Caster",
+                "targetType": "Enemy"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_LevelEntity_TowerBuff_ElemMasteryBuff_Stream_CD": {
+            "duration": "LevelEntity_TowerBuff_CD_P1",
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "useLimitRange": true,
+                "value": 1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "AddGlobalValue",
+                "doOffStage": true,
+                "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "useLimitRange": true,
+                "value": 0
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "AddGlobalValue",
+            "key": "_IS_TOWERBUFF_REACTION_ATTACK_CD",
+            "maxValue": 0,
+            "minValue": 0,
+            "target": "Team",
+            "useLimitRange": true,
+            "value": 0
+          },
+          {
+            "$type": "SetSystemValueToOverrideMap",
+            "key": "LevelEntity_AvatarDot_SystemValue",
+            "type": "ElementLevelCo",
+            "KKFCNNHEPEL": -1
+          },
+          {
+            "$type": "AttachModifier",
+            "doOffStage": true,
+            "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElementReactionAttack_Stream"
+          }
+        ]
+      },
+      {
+        "abilityMixins": [
+          {
+            "$type": "CurLocalAvatarMixin",
+            "modifierName": "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor"
+          }
+        ],
+        "abilityName": "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_CD_P1": 3,
+          "LevelEntity_TowerBuff_Damage_P2": 4,
+          "LevelEntity_AvatarDot_SystemValue": 0
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "LevelEntity_TowerBuff_ElementReactionHurt_Superconductor": {
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "ApplyModifier",
+                "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElementReactionHurt_Superconductor"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_LevelEntity_TowerBuff_ElementReactionHurt_Superconductor": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElementReaction_Attack",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "compareType": "LessAndEqual",
+                        "forceByCaster": true,
+                        "key": "_IS_TOWERBUFF_REACTION_HURT_SUPERCONDUCTOR_CD",
+                        "value": 0
+                      }
+                    ],
+                    "target": "CurLocalAvatar"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElemMasteryBuff_CD",
+                    "target": "Caster"
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "reactionTypes": [
+                  "Superconductor",
+                  "StarSuperconductor"
+                ]
+              }
+            ],
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "ApplyModifier",
+                "modifierName": "Init_LevelEntity_TowerBuff_ElemMasteryBuff_CD",
+                "target": "Caster"
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElementReaction_Attack": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "effectPattern": "Eff_Stages_DebuffRay_01",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "DamageByAttackValue",
+                "attackInfo": {
+                  "attackProperty": {
+                    "damageExtra": [
+                      "LevelEntity_TowerBuff_Damage_P2",
+                      "LevelEntity_AvatarDot_SystemValue",
+                      "MUL"
+                    ],
+                    "damagePercentage": 0,
+                    "damagePercentageRatio": 0,
+                    "elementDurability": 25,
+                    "enBreak": 0,
+                    "ignoreAttackerProperty": true,
+                    "DIEKDGNBHLH": 0
+                  },
+                  "attackTag": "",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV0",
+                    "onHitEffectName": "",
+                    "retreatType": "ByHitDirection",
+                    "MALCHCIBBBC": ""
+                  }
+                },
+                "born": {
+                  "$type": "ConfigBornBySelf",
+                  "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                  }
+                }
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "Init_LevelEntity_TowerBuff_ElemMasteryBuff_CD": {
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_IS_TOWERBUFF_REACTION_HURT_SUPERCONDUCTOR_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "target": "Caster",
+                "useLimitRange": true,
+                "value": 0
+              },
+              {
+                "$type": "SetSystemValueToOverrideMap",
+                "key": "LevelEntity_AvatarDot_SystemValue",
+                "type": "ElementLevelCo",
+                "KKFCNNHEPEL": -1
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElemMasteryBuff_CD": {
+            "duration": "LevelEntity_TowerBuff_CD_P1",
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_IS_TOWERBUFF_REACTION_HURT_SUPERCONDUCTOR_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "target": "Caster",
+                "useLimitRange": true,
+                "value": 2
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_IS_TOWERBUFF_REACTION_HURT_SUPERCONDUCTOR_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "target": "Caster",
+                "useLimitRange": true,
+                "value": 0
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        }
+      },
+      {
+        "abilityMixins": [
+          {
+            "$type": "CurLocalAvatarMixin",
+            "modifierName": "LevelEntity_TowerBuff_ElementReactionHurt_Shock"
+          }
+        ],
+        "abilityName": "LevelEntity_TowerBuff_ElementReactionHurt_Shock",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_CD_P1": 3,
+          "LevelEntity_TowerBuff_Damage_P2": 4,
+          "LevelEntity_AvatarDot_SystemValue": 0
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "LevelEntity_TowerBuff_ElementReactionHurt_Shock": {
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "ApplyModifier",
+                "modifierName": "UNIQUE_LevelEntity_TowerBuff_ElementReactionHurt_Shock"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_LevelEntity_TowerBuff_ElementReactionHurt_Shock": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierMixins": [
+              {
+                "$type": "DoActionByElementReactionMixin",
+                "actions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElementReaction_Attack",
+                    "predicates": [
+                      {
+                        "$type": "ByTargetGlobalValue",
+                        "compareType": "LessAndEqual",
+                        "forceByCaster": true,
+                        "key": "_IS_TOWERBUFF_REACTION_HURT_SHOCK_CD",
+                        "value": 0
+                      }
+                    ],
+                    "target": "CurLocalAvatar"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "doOffStage": true,
+                    "modifierName": "LevelEntity_TowerBuff_ElemMasteryBuff_CD",
+                    "target": "Caster"
+                  }
+                ],
+                "entityTypes": [
+                  "Monster"
+                ],
+                "reactionTypes": [
+                  "Shock"
+                ]
+              }
+            ],
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "ApplyModifier",
+                "modifierName": "Init_LevelEntity_TowerBuff_ElemMasteryBuff_CD",
+                "target": "Caster"
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElementReaction_Attack": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "effectPattern": "Eff_Stages_DebuffRay_01",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "DamageByAttackValue",
+                "attackInfo": {
+                  "attackProperty": {
+                    "damageExtra": [
+                      "LevelEntity_TowerBuff_Damage_P2",
+                      "LevelEntity_AvatarDot_SystemValue",
+                      "MUL"
+                    ],
+                    "damagePercentage": 0,
+                    "damagePercentageRatio": 0,
+                    "elementDurability": 25,
+                    "enBreak": 0,
+                    "ignoreAttackerProperty": true,
+                    "DIEKDGNBHLH": 0
+                  },
+                  "attackTag": "",
+                  "attenuationGroup": "default",
+                  "attenuationTag": "",
+                  "hitPattern": {
+                    "hitHaltTimeScale": 0.05,
+                    "hitImpulseType": "LV0",
+                    "onHitEffectName": "",
+                    "retreatType": "ByHitDirection",
+                    "MALCHCIBBBC": ""
+                  }
+                },
+                "born": {
+                  "$type": "ConfigBornBySelf",
+                  "offset": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                  }
+                }
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "Init_LevelEntity_TowerBuff_ElemMasteryBuff_CD": {
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_IS_TOWERBUFF_REACTION_HURT_SHOCK_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "target": "Caster",
+                "useLimitRange": true,
+                "value": 0
+              },
+              {
+                "$type": "SetSystemValueToOverrideMap",
+                "key": "LevelEntity_AvatarDot_SystemValue",
+                "type": "ElementLevelCo",
+                "KKFCNNHEPEL": -1
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          },
+          "LevelEntity_TowerBuff_ElemMasteryBuff_CD": {
+            "duration": "LevelEntity_TowerBuff_CD_P1",
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_IS_TOWERBUFF_REACTION_HURT_SHOCK_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "target": "Caster",
+                "useLimitRange": true,
+                "value": 1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_IS_TOWERBUFF_REACTION_HURT_SHOCK_CD",
+                "maxValue": 0,
+                "minValue": 0,
+                "target": "Caster",
+                "useLimitRange": true,
+                "value": 0
+              }
+            ],
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        }
+      },
+      {
+        "abilityName": "LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15",
+        "abilitySpecials": {
+          "LevelEntity_TowerBuff_Damage": 10,
+          "LevelEntity_TowerBuff_Damage_CD": 2,
+          "LevelEntity_SystemValue": 0
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "UNIQUE_ShieldOnBeingHitDoDamage_Ver_1_15": {
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onBeingHit": [
+              {
+                "$type": "Predicated",
+                "failActions": [
+                  {
+                    "$type": "Predicated",
+                    "successActions": [
+                      {
+                        "$type": "ApplyModifier",
+                        "modifierName": "TowerBuff_ShieldOnBeingHitDoDamage",
+                        "target": "TargetOriginOwner"
+                      },
+                      {
+                        "$type": "ApplyModifier",
+                        "modifierName": "UNIQUE_ShieldOnBeingHitDoDamage_Ver_1_15_CD",
+                        "target": "Team"
+                      }
+                    ],
+                    "target": "Target",
+                    "targetPredicates": [
+                      {
+                        "$type": "ByEntityTypes",
+                        "entityTypes": [
+                          "Bullet"
+                        ]
+                      },
+                      {
+                        "$type": "ByHitDamage",
+                        "damage": 0,
+                        "useOriginDamage": true
+                      }
+                    ]
+                  }
+                ],
+                "predicates": [
+                  {
+                    "$type": "ByTargetGlobalValue",
+                    "compareType": "NoneOrEqual",
+                    "key": "_Is_ShieldOnBeingHitDoDamage_Ver_1_15_CD",
+                    "target": "Team",
+                    "value": 0
+                  },
+                  {
+                    "$type": "ByHasShield",
+                    "target": "Self",
+                    "type": "All"
+                  }
+                ],
+                "successActions": [
+                  {
+                    "$type": "ApplyModifier",
+                    "modifierName": "TowerBuff_ShieldOnBeingHitDoDamage",
+                    "target": "Other"
+                  },
+                  {
+                    "$type": "ApplyModifier",
+                    "modifierName": "UNIQUE_ShieldOnBeingHitDoDamage_Ver_1_15_CD",
+                    "target": "Team"
+                  }
+                ],
+                "target": "Other",
+                "targetPredicates": [
+                  {
+                    "$type": "ByEntityTypes",
+                    "entityTypes": [
+                      "Monster",
+                      "Gadget"
+                    ]
+                  },
+                  {
+                    "$type": "ByHitDamage",
+                    "damage": 0,
+                    "useOriginDamage": true
+                  }
+                ]
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "TowerBuff_ShieldOnBeingHitDoDamage": {
+            "duration": 0.1,
+            "elementDurability": 100,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "FireEffect",
+                "born": {
+                  "$type": "ConfigBornByTarget"
+                },
+                "effectPattern": "Eff_Stages_ShieldOnBeingHit",
+                "effectTempleteID": -1,
+                "scale": 1,
+                "JHAGIJGAKMK": ""
+              },
+              {
+                "$type": "TriggerAttackEvent",
+                "attackEvent": {
+                  "attackInfo": {
+                    "attackProperty": {
+                      "damageExtra": [
+                        "LevelEntity_TowerBuff_Damage",
+                        "LevelEntity_SystemValue",
+                        "MUL"
+                      ],
+                      "damagePercentageRatio": 0,
+                      "elementDurability": 0,
+                      "enBreak": 0,
+                      "ignoreAttackerProperty": true,
+                      "strikeType": "Default",
+                      "DIEKDGNBHLH": 0
+                    },
+                    "attackTag": "",
+                    "attenuationGroup": "default",
+                    "attenuationTag": "",
+                    "cameraShake": {
+                      "OFGBHFBAEKK": ""
+                    },
+                    "hitPattern": {
+                      "hitHaltTimeScale": 0.05,
+                      "hitImpulseType": "LV2",
+                      "onHitEffectName": "",
+                      "MALCHCIBBBC": ""
+                    }
+                  },
+                  "attackPattern": {
+                    "$type": "ConfigAttackSphere",
+                    "born": {
+                      "$type": "ConfigBornBySelf"
+                    },
+                    "radius": 10,
+                    "triggerType": "TriggerNoRepeat"
+                  }
+                },
+                "target": "Applier",
+                "targetType": "Enemy"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          },
+          "UNIQUE_ShieldOnBeingHitDoDamage_Ver_1_15_CD": {
+            "duration": "LevelEntity_TowerBuff_Damage_CD",
+            "elementDurability": 100,
+            "isUnique": true,
+            "modifierName": "",
+            "onAdded": [
+              {
+                "$type": "AddGlobalValue",
+                "key": "_Is_ShieldOnBeingHitDoDamage_Ver_1_15_CD",
+                "maxValue": 1,
+                "minValue": 1,
+                "useLimitRange": true,
+                "value": 1
+              }
+            ],
+            "onRemoved": [
+              {
+                "$type": "ClearGlobalValue",
+                "key": "_Is_ShieldOnBeingHitDoDamage_Ver_1_15_CD"
+              }
+            ],
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "SetSystemValueToOverrideMap",
+            "key": "LevelEntity_SystemValue",
+            "type": "ElementLevelCo",
+            "KKFCNNHEPEL": -1
+          },
+          {
+            "$type": "AttachModifier",
+            "modifierName": "UNIQUE_ShieldOnBeingHitDoDamage_Ver_1_15"
+          }
+        ]
+      },
+      {
+        "abilityName": "LevelEntity_HpUp_20p",
+        "abilitySpecials": {
+          "LevelEntity_HpDelta_P1": 0.2
+        },
+        "isDynamicAbility": true,
+        "modifiers": {
+          "UNIQUE_LevelEntity_HpUp_20p": {
+            "elementDurability": 100,
+            "isLimitedProperties": true,
+            "isUnique": true,
+            "modifierName": "",
+            "properties": {
+              "Actor_MaxHPRatio": "LevelEntity_HpDelta_P1"
+            },
+            "stacking": "Unique",
+            "IAKNCBDLFKJ": 0
+          }
+        },
+        "onAdded": [
+          {
+            "$type": "AttachModifier",
+            "modifierName": "UNIQUE_LevelEntity_HpUp_20p"
+          }
+        ]
+      }
+    ]
+  }
+}

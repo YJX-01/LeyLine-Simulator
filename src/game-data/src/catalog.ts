@@ -41,6 +41,16 @@ export async function getCharacterActions(character: DefinitionRef): Promise<Cha
 }
 
 export async function loadBattleScenes() {
-  const [{ default: definitions }, { sceneDefinitionSchema }] = await Promise.all([import('../data/calculation/battle-scenes.json'), import('@leyline/schema')]);
-  return definitions.map(definition => sceneDefinitionSchema.parse(definition));
+  const [{ default: definitions }, { definitionKey, sceneAttributeReferences, sceneDefinitionSchema }] = await Promise.all([
+    import('../data/calculation/battle-scenes.json'), import('@leyline/schema'),
+  ]);
+  return definitions.map(definition => {
+    const refs = sceneAttributeReferences(definition.buffs);
+    if (!refs.length) return sceneDefinitionSchema.parse(definition);
+    const keys = new Set(refs.map(definitionKey));
+    const attributes = common.attributes.filter(attribute => keys.has(definitionKey(attribute.identity)));
+    const sourceIds = new Set(attributes.flatMap(attribute => attribute.sources));
+    const sources = common.sources.filter(source => sourceIds.has(source.id));
+    return sceneDefinitionSchema.parse({ ...definition, dependencies: { attributes, sources } });
+  });
 }

@@ -9187,7 +9187,7 @@
     "revision": "1",
     "name": "烈火精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.flamingessentialoil.active",
@@ -9207,7 +9207,7 @@
     "revision": "1",
     "name": "狂风精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.gushingessentialoil.active",
@@ -9227,7 +9227,7 @@
     "revision": "1",
     "name": "霜劫精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.frostingessentialoil.active",
@@ -9247,7 +9247,7 @@
     "revision": "1",
     "name": "磐石精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.unmovingessentialoil.active",
@@ -9267,7 +9267,7 @@
     "revision": "1",
     "name": "激流精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.streamingessentialoil.active",
@@ -9287,7 +9287,7 @@
     "revision": "1",
     "name": "惊雷精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.shockingessentialoil.active",
@@ -9307,7 +9307,7 @@
     "revision": "1",
     "name": "丛林精油",
     "group": "potion",
-    "durationMs": null,
+    "durationMs": 300000,
     "buffs": [
       {
         "id": "scene.potion.forestessentialoil.active",
@@ -14508,6 +14508,10 @@
           {
             "target": "attribute.reaction.transformative.damageBonus",
             "value": 1.5
+          },
+          {
+            "target": "attribute.reaction.electro-charged.rangeBonus",
+            "value": 1
           }
         ]
       }
@@ -14536,7 +14540,5424 @@
           {
             "target": "attribute.reaction.transformative.damageBonus",
             "value": 1.5
+          },
+          {
+            "target": "attribute.reaction.electro-charged.rangeBonus",
+            "value": 1
           }
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingcrumblingassemblyi.0",
+    "revision": "1",
+    "name": "祝圣秘境：朽废的集所 I · 晶体赋能",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyi.0.layers",
+        "recipient": "team",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "modifiers": [
+          {
+            "target": "attribute.attackPercent",
+            "value": {
+              "call": "scene.field.domainofblessingcrumblingassemblyi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingcrumblingassemblyi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingcrumblingassemblyi.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒仍有效的晶体赋能层数（结晶晶片提供，最多3层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.2,
+          "threshold": 0,
+          "maxInput": 3,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片",
+        "sourceRefs": [
+          "scene.field.domainofblessingcrumblingassemblyi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingcrumblingassemblyii.0",
+    "revision": "1",
+    "name": "祝圣秘境：朽废的集所 II · 晶体赋能",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyii.0.layers",
+        "recipient": "team",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "modifiers": [
+          {
+            "target": "attribute.attackPercent",
+            "value": {
+              "call": "scene.field.domainofblessingcrumblingassemblyii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingcrumblingassemblyii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingcrumblingassemblyii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒仍有效的晶体赋能层数（结晶晶片提供，最多3层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.2,
+          "threshold": 0,
+          "maxInput": 3,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片",
+        "sourceRefs": [
+          "scene.field.domainofblessingcrumblingassemblyii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingcrumblingassemblyiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：朽废的集所 III · 晶体赋能",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyiii.0.layers",
+        "recipient": "team",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "modifiers": [
+          {
+            "target": "attribute.attackPercent",
+            "value": {
+              "call": "scene.field.domainofblessingcrumblingassemblyiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingcrumblingassemblyiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingcrumblingassemblyiii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒仍有效的晶体赋能层数（结晶晶片提供，最多3层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.2,
+          "threshold": 0,
+          "maxInput": 3,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片",
+        "sourceRefs": [
+          "scene.field.domainofblessingcrumblingassemblyiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingcrumblingassemblyiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：朽废的集所 IV · 晶体赋能",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyiv.0.layers",
+        "recipient": "team",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "modifiers": [
+          {
+            "target": "attribute.attackPercent",
+            "value": {
+              "call": "scene.field.domainofblessingcrumblingassemblyiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingcrumblingassemblyiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingcrumblingassemblyiv.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒仍有效的晶体赋能层数（结晶晶片提供，最多3层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingcrumblingassemblyiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.2,
+          "threshold": 0,
+          "maxInput": 3,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片",
+        "sourceRefs": [
+          "scene.field.domainofblessingcrumblingassemblyiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingflowerfeasti.0",
+    "revision": "1",
+    "name": "祝圣秘境：花筵 I · 命中增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingflowerfeasti.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "charged",
+            "skill"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofblessingflowerfeasti.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingflowerfeasti.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingflowerfeasti.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近5秒同一场上角色的普攻或重击命中层数（退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingflowerfeasti.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.15,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingflowerfeastii.0",
+    "revision": "1",
+    "name": "祝圣秘境：花筵 II · 命中增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingflowerfeastii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "charged",
+            "skill"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofblessingflowerfeastii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingflowerfeastii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingflowerfeastii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近5秒同一场上角色的普攻或重击命中层数（退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingflowerfeastii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.15,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingflowerfeastiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：花筵 III · 命中增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingflowerfeastiii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "charged",
+            "skill"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofblessingflowerfeastiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingflowerfeastiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingflowerfeastiii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近5秒同一场上角色的普攻或重击命中层数（退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingflowerfeastiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.15,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingflowerfeastiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：花筵 IV · 命中增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingflowerfeastiv.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "charged",
+            "skill"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofblessingflowerfeastiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofblessingflowerfeastiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingflowerfeastiv.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近5秒同一场上角色的普攻或重击命中层数（退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingflowerfeastiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.15,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingsevensensesi.0",
+    "revision": "1",
+    "name": "祝圣秘境：七识 I · 元素精通",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingsevensensesi.0.mastery",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.elementalMastery",
+            "value": {
+              "call": "scene.field.domainofblessingsevensensesi.0.masteryRate",
+              "inputs": {
+                "basis": {
+                  "fact": "scene.field.domainofblessingsevensensesi.0.masterySumAtRefresh"
+                },
+                "rate": 0.1
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingsevensensesi.0.masterySumAtRefresh": {
+        "scope": "team",
+        "type": {
+          "kind": "quantity",
+          "unit": "elementalMastery"
+        },
+        "label": "最近一次20秒刷新重算时的全队元素精通之和（已扣除本场地增益）"
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingsevensensesi.0.masteryRate",
+        "template": {
+          "id": "stat-product",
+          "revision": "1",
+          "unit": "elementalMastery"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingsevensensesii.0",
+    "revision": "1",
+    "name": "祝圣秘境：七识 II · 元素精通",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingsevensensesii.0.mastery",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.elementalMastery",
+            "value": {
+              "call": "scene.field.domainofblessingsevensensesii.0.masteryRate",
+              "inputs": {
+                "basis": {
+                  "fact": "scene.field.domainofblessingsevensensesii.0.masterySumAtRefresh"
+                },
+                "rate": 0.1
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingsevensensesii.0.masterySumAtRefresh": {
+        "scope": "team",
+        "type": {
+          "kind": "quantity",
+          "unit": "elementalMastery"
+        },
+        "label": "最近一次20秒刷新重算时的全队元素精通之和（已扣除本场地增益）"
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingsevensensesii.0.masteryRate",
+        "template": {
+          "id": "stat-product",
+          "revision": "1",
+          "unit": "elementalMastery"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingsevensensesiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：七识 III · 元素精通",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingsevensensesiii.0.mastery",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.elementalMastery",
+            "value": {
+              "call": "scene.field.domainofblessingsevensensesiii.0.masteryRate",
+              "inputs": {
+                "basis": {
+                  "fact": "scene.field.domainofblessingsevensensesiii.0.masterySumAtRefresh"
+                },
+                "rate": 0.1
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingsevensensesiii.0.masterySumAtRefresh": {
+        "scope": "team",
+        "type": {
+          "kind": "quantity",
+          "unit": "elementalMastery"
+        },
+        "label": "最近一次20秒刷新重算时的全队元素精通之和（已扣除本场地增益）"
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingsevensensesiii.0.masteryRate",
+        "template": {
+          "id": "stat-product",
+          "revision": "1",
+          "unit": "elementalMastery"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingsevensensesiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：七识 IV · 元素精通",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofblessingsevensensesiv.0.mastery",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.elementalMastery",
+            "value": {
+              "call": "scene.field.domainofblessingsevensensesiv.0.masteryRate",
+              "inputs": {
+                "basis": {
+                  "fact": "scene.field.domainofblessingsevensensesiv.0.masterySumAtRefresh"
+                },
+                "rate": 0.1
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofblessingsevensensesiv.0.masterySumAtRefresh": {
+        "scope": "team",
+        "type": {
+          "kind": "quantity",
+          "unit": "elementalMastery"
+        },
+        "label": "最近一次20秒刷新重算时的全队元素精通之和（已扣除本场地增益）"
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofblessingsevensensesiv.0.masteryRate",
+        "template": {
+          "id": "stat-product",
+          "revision": "1",
+          "unit": "elementalMastery"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryartisanshipi.0",
+    "revision": "1",
+    "name": "炼武秘境：匠理 I · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipi.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryartisanshipi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryartisanshipi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipi.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryartisanshipi.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryartisanshipi.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryartisanshipi.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipi.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryartisanshipii.0",
+    "revision": "1",
+    "name": "炼武秘境：匠理 II · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryartisanshipii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryartisanshipii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipii.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryartisanshipii.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryartisanshipii.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryartisanshipii.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipii.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryartisanshipiii.0",
+    "revision": "1",
+    "name": "炼武秘境：匠理 III · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipiii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryartisanshipiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryartisanshipiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipiii.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryartisanshipiii.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryartisanshipiii.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryartisanshipiii.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipiii.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryartisanshipiv.0",
+    "revision": "1",
+    "name": "炼武秘境：匠理 IV · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipiv.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryartisanshipiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryartisanshipiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipiv.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryartisanshipiv.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryartisanshipiv.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryartisanshipiv.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryartisanshipiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryartisanshipiv.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerycuriouscontraptionsi.0",
+    "revision": "1",
+    "name": "炼武秘境：奇械 I · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsi.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgerycuriouscontraptionsi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgerycuriouscontraptionsi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsi.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgerycuriouscontraptionsi.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgerycuriouscontraptionsi.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerycuriouscontraptionsi.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsi.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerycuriouscontraptionsii.0",
+    "revision": "1",
+    "name": "炼武秘境：奇械 II · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgerycuriouscontraptionsii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgerycuriouscontraptionsii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsii.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgerycuriouscontraptionsii.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgerycuriouscontraptionsii.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerycuriouscontraptionsii.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsii.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerycuriouscontraptionsiii.0",
+    "revision": "1",
+    "name": "炼武秘境：奇械 III · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgerycuriouscontraptionsiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgerycuriouscontraptionsiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiii.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgerycuriouscontraptionsiii.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgerycuriouscontraptionsiii.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerycuriouscontraptionsiii.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiii.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerycuriouscontraptionsiv.0",
+    "revision": "1",
+    "name": "炼武秘境：奇械 IV · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiv.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgerycuriouscontraptionsiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgerycuriouscontraptionsiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiv.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgerycuriouscontraptionsiv.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgerycuriouscontraptionsiv.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerycuriouscontraptionsiv.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgerycuriouscontraptionsiv.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryleadingkarmai.0",
+    "revision": "1",
+    "name": "炼武秘境：引业 I · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryleadingkarmai.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryleadingkarmai.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryleadingkarmai.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryleadingkarmaii.0",
+    "revision": "1",
+    "name": "炼武秘境：引业 II · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryleadingkarmaii.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryleadingkarmaii.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryleadingkarmaii.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryleadingkarmaiii.0",
+    "revision": "1",
+    "name": "炼武秘境：引业 III · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryleadingkarmaiii.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryleadingkarmaiii.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryleadingkarmaiii.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryleadingkarmaiv.0",
+    "revision": "1",
+    "name": "炼武秘境：引业 IV · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryleadingkarmaiv.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryleadingkarmaiv.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryleadingkarmaiv.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryobsessioni.0",
+    "revision": "1",
+    "name": "炼武秘境：思惑 I · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryobsessioni.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryobsessioni.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryobsessioni.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryobsessionii.0",
+    "revision": "1",
+    "name": "炼武秘境：思惑 II · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryobsessionii.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryobsessionii.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryobsessionii.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryobsessioniii.0",
+    "revision": "1",
+    "name": "炼武秘境：思惑 III · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryobsessioniii.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryobsessioniii.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryobsessioniii.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryobsessioniv.0",
+    "revision": "1",
+    "name": "炼武秘境：思惑 IV · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryobsessioniv.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgeryobsessioniv.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryobsessioniv.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryroboticrusei.0",
+    "revision": "1",
+    "name": "炼武秘境：机思 I · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryroboticrusei.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryroboticrusei.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryroboticrusei.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticrusei.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryroboticrusei.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryroboticrusei.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryroboticrusei.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryroboticrusei.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticrusei.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryroboticruseii.0",
+    "revision": "1",
+    "name": "炼武秘境：机思 II · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryroboticruseii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryroboticruseii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryroboticruseii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticruseii.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryroboticruseii.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryroboticruseii.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryroboticruseii.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryroboticruseii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticruseii.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryroboticruseiii.0",
+    "revision": "1",
+    "name": "炼武秘境：机思 III · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryroboticruseiii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryroboticruseiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryroboticruseiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticruseiii.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryroboticruseiii.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryroboticruseiii.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryroboticruseiii.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryroboticruseiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticruseiii.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryroboticruseiv.0",
+    "revision": "1",
+    "name": "炼武秘境：机思 IV · 水元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgeryroboticruseiv.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.hydroBonus",
+            "value": {
+              "call": "scene.field.domainofforgeryroboticruseiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofforgeryroboticruseiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticruseiv.0.endurance",
+        "recipient": "team",
+        "condition": {
+          "call": "scene.field.domainofforgeryroboticruseiv.0.atMaxLayers",
+          "output": "active",
+          "inputs": {
+            "layers": {
+              "fact": "scene.field.domainofforgeryroboticruseiv.0.activeLayers"
+            }
+          }
+        },
+        "modifiers": [
+          {
+            "target": "attribute.actorEndureDelta",
+            "value": 0.3
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgeryroboticruseiv.0.activeLayers": {
+        "scope": "team",
+        "label": "水元素相关反应后的当前水伤层数（10秒，每2秒至多1层）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofforgeryroboticruseiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 5,
+          "offset": 0,
+          "output": "value"
+        }
+      },
+      {
+        "id": "scene.field.domainofforgeryroboticruseiv.0.atMaxLayers",
+        "template": {
+          "id": "quantity-condition",
+          "revision": "1",
+          "input": "layers",
+          "unit": "count",
+          "relation": "gte",
+          "threshold": 5,
+          "maxInput": 5
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerytaintedcloudsi.0",
+    "revision": "1",
+    "name": "炼武秘境：云垢 I · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerytaintedcloudsi.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgerytaintedcloudsi.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerytaintedcloudsi.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerytaintedcloudsii.0",
+    "revision": "1",
+    "name": "炼武秘境：云垢 II · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerytaintedcloudsii.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgerytaintedcloudsii.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerytaintedcloudsii.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerytaintedcloudsiii.0",
+    "revision": "1",
+    "name": "炼武秘境：云垢 III · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerytaintedcloudsiii.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgerytaintedcloudsiii.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerytaintedcloudsiii.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerytaintedcloudsiv.0",
+    "revision": "1",
+    "name": "炼武秘境：云垢 IV · 原激化减抗",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofforgerytaintedcloudsiv.0.quicken",
+        "recipient": "target",
+        "condition": {
+          "fact": "scene.field.domainofforgerytaintedcloudsiv.0.quickenShredActive"
+        },
+        "modifiers": [
+          {
+            "target": "target.resistance.anemo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.geo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.electro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.hydro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.pyro",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.cryo",
+            "value": -0.2
+          },
+          {
+            "target": "target.resistance.dendro",
+            "value": -0.2
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofforgerytaintedcloudsiv.0.quickenShredActive": {
+        "scope": "target",
+        "type": {
+          "kind": "boolean"
+        },
+        "label": "本目标原激化减抗仍有效（原激化期间或离开后5秒有效期内）"
+      }
+    }
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryadmonishingengravingi.0",
+    "revision": "1",
+    "name": "精通秘境：箴铭 I · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingi.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryadmonishingengravingi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryadmonishingengravingi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryadmonishingengravingi.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryadmonishingengravingii.0",
+    "revision": "1",
+    "name": "精通秘境：箴铭 II · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryadmonishingengravingii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryadmonishingengravingii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryadmonishingengravingii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryadmonishingengravingiii.0",
+    "revision": "1",
+    "name": "精通秘境：箴铭 III · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingiii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryadmonishingengravingiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryadmonishingengravingiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryadmonishingengravingiii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryadmonishingengravingiv.0",
+    "revision": "1",
+    "name": "精通秘境：箴铭 IV · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingiv.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryadmonishingengravingiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryadmonishingengravingiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryadmonishingengravingiv.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryadmonishingengravingiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterybasketofdisciplinei.0",
+    "revision": "1",
+    "name": "精通秘境：律藏 I · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplinei.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterybasketofdisciplinei.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterybasketofdisciplinei.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterybasketofdisciplinei.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplinei.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterybasketofdisciplineii.0",
+    "revision": "1",
+    "name": "精通秘境：律藏 II · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplineii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterybasketofdisciplineii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterybasketofdisciplineii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterybasketofdisciplineii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplineii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterybasketofdisciplineiii.0",
+    "revision": "1",
+    "name": "精通秘境：律藏 III · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplineiii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterybasketofdisciplineiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterybasketofdisciplineiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterybasketofdisciplineiii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplineiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterybasketofdisciplineiv.0",
+    "revision": "1",
+    "name": "精通秘境：律藏 IV · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplineiv.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterybasketofdisciplineiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterybasketofdisciplineiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterybasketofdisciplineiv.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterybasketofdisciplineiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterychimingrecitationi.0",
+    "revision": "1",
+    "name": "精通秘境：琅诵 I · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationi.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterychimingrecitationi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterychimingrecitationi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterychimingrecitationi.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterychimingrecitationii.0",
+    "revision": "1",
+    "name": "精通秘境：琅诵 II · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterychimingrecitationii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterychimingrecitationii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterychimingrecitationii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterychimingrecitationiii.0",
+    "revision": "1",
+    "name": "精通秘境：琅诵 III · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationiii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterychimingrecitationiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterychimingrecitationiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterychimingrecitationiii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterychimingrecitationiv.0",
+    "revision": "1",
+    "name": "精通秘境：琅诵 IV · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationiv.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterychimingrecitationiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterychimingrecitationiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterychimingrecitationiv.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterychimingrecitationiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfullmooni.0",
+    "revision": "1",
+    "name": "精通秘境：圆镜 I · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryfullmooni.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryfullmooni.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryfullmooni.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryfullmooni.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryfullmooni.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfullmoonii.0",
+    "revision": "1",
+    "name": "精通秘境：圆镜 II · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryfullmoonii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryfullmoonii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryfullmoonii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryfullmoonii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryfullmoonii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfullmooniii.0",
+    "revision": "1",
+    "name": "精通秘境：圆镜 III · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryfullmooniii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryfullmooniii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryfullmooniii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryfullmooniii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryfullmooniii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfullmooniv.0",
+    "revision": "1",
+    "name": "精通秘境：圆镜 IV · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryfullmooniv.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryfullmooniv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryfullmooniv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryfullmooniv.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryfullmooniv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryrhymingrhythmi.0",
+    "revision": "1",
+    "name": "精通秘境：旋韵 I · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmi.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryrhymingrhythmi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryrhymingrhythmi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryrhymingrhythmi.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryrhymingrhythmii.0",
+    "revision": "1",
+    "name": "精通秘境：旋韵 II · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryrhymingrhythmii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryrhymingrhythmii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryrhymingrhythmii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryrhymingrhythmiii.0",
+    "revision": "1",
+    "name": "精通秘境：旋韵 III · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmiii.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryrhymingrhythmiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryrhymingrhythmiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryrhymingrhythmiii.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryrhymingrhythmiv.0",
+    "revision": "1",
+    "name": "精通秘境：旋韵 IV · 生命变化增伤",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmiv.0.layers",
+        "recipient": "owner",
+        "condition": {
+          "fact": "onField",
+          "of": "recipient"
+        },
+        "appliesTo": {
+          "categories": [
+            "normal",
+            "charged",
+            "plunge"
+          ]
+        },
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasteryrhymingrhythmiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasteryrhymingrhythmiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasteryrhymingrhythmiv.0.activeLayers": {
+        "scope": "recipient",
+        "label": "最近10秒当前场上角色的生命变化层数（每0.1秒至多1层，退场清除）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasteryrhymingrhythmiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 7,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterywitticismi.0",
+    "revision": "1",
+    "name": "精通秘境：妙语 I · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterywitticismi.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterywitticismi.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterywitticismi.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterywitticismi.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterywitticismi.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterywitticismii.0",
+    "revision": "1",
+    "name": "精通秘境：妙语 II · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterywitticismii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterywitticismii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterywitticismii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterywitticismii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterywitticismii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterywitticismiii.0",
+    "revision": "1",
+    "name": "精通秘境：妙语 III · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterywitticismiii.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterywitticismiii.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterywitticismiii.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterywitticismiii.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterywitticismiii.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterywitticismiv.0",
+    "revision": "1",
+    "name": "精通秘境：妙语 IV · 元素伤害",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [
+      {
+        "id": "scene.field.domainofmasterywitticismiv.0.layers",
+        "recipient": "team",
+        "modifiers": [
+          {
+            "target": "attribute.damageBonus",
+            "value": {
+              "call": "scene.field.domainofmasterywitticismiv.0.perLayer",
+              "inputs": {
+                "layers": {
+                  "fact": "scene.field.domainofmasterywitticismiv.0.activeLayers"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "facts": {
+      "scene.field.domainofmasterywitticismiv.0.activeLayers": {
+        "scope": "team",
+        "label": "最近10秒触发增益的不同元素伤害种类数（最多4种）",
+        "type": {
+          "kind": "quantity",
+          "unit": "count"
+        }
+      }
+    },
+    "formulas": [
+      {
+        "id": "scene.field.domainofmasterywitticismiv.0.perLayer",
+        "template": {
+          "id": "linear-bonus",
+          "revision": "1",
+          "input": "layers",
+          "inputUnit": "count",
+          "outputUnit": "scalar",
+          "rate": 0.1,
+          "threshold": 0,
+          "maxInput": 4,
+          "offset": 0,
+          "output": "value"
+        }
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingmachinenesti.0",
+    "revision": "1",
+    "name": "祝圣秘境：机巢 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "trigger": "施放元素战技",
+        "sourceRefs": [
+          "scene.field.domainofblessingmachinenesti.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingmachinenestii.0",
+    "revision": "1",
+    "name": "祝圣秘境：机巢 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "trigger": "施放元素战技",
+        "sourceRefs": [
+          "scene.field.domainofblessingmachinenestii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingmachinenestiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：机巢 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "trigger": "施放元素战技",
+        "sourceRefs": [
+          "scene.field.domainofblessingmachinenestiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingmachinenestiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：机巢 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "trigger": "施放元素战技",
+        "sourceRefs": [
+          "scene.field.domainofblessingmachinenestiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingnecropolisi.1",
+    "revision": "1",
+    "name": "祝圣秘境：骸馆 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电",
+        "sourceRefs": [
+          "scene.field.domainofblessingnecropolisi.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingnecropolisii.1",
+    "revision": "1",
+    "name": "祝圣秘境：骸馆 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电",
+        "sourceRefs": [
+          "scene.field.domainofblessingnecropolisii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingnecropolisiii.1",
+    "revision": "1",
+    "name": "祝圣秘境：骸馆 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电",
+        "sourceRefs": [
+          "scene.field.domainofblessingnecropolisiii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingnecropolisiv.1",
+    "revision": "1",
+    "name": "祝圣秘境：骸馆 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电",
+        "sourceRefs": [
+          "scene.field.domainofblessingnecropolisiv.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingtheburninggauntleti.0",
+    "revision": "1",
+    "name": "祝圣秘境：茹焰的炼场 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载",
+        "sourceRefs": [
+          "scene.field.domainofblessingtheburninggauntleti.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingtheburninggauntletii.0",
+    "revision": "1",
+    "name": "祝圣秘境：茹焰的炼场 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载",
+        "sourceRefs": [
+          "scene.field.domainofblessingtheburninggauntletii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingtheburninggauntletiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：茹焰的炼场 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载",
+        "sourceRefs": [
+          "scene.field.domainofblessingtheburninggauntletiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingtheburninggauntletiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：茹焰的炼场 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载",
+        "sourceRefs": [
+          "scene.field.domainofblessingtheburninggauntletiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryaltarofsandsi.1",
+    "revision": "1",
+    "name": "炼武秘境：砂之祭场 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgeryaltarofsandsi.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryaltarofsandsii.1",
+    "revision": "1",
+    "name": "炼武秘境：砂之祭场 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgeryaltarofsandsii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryaltarofsandsiii.1",
+    "revision": "1",
+    "name": "炼武秘境：砂之祭场 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgeryaltarofsandsiii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgeryaltarofsandsiv.1",
+    "revision": "1",
+    "name": "炼武秘境：砂之祭场 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgeryaltarofsandsiv.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysandburiali.1",
+    "revision": "1",
+    "name": "炼武秘境：流沙之葬 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysandburiali.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysandburialii.1",
+    "revision": "1",
+    "name": "炼武秘境：流沙之葬 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysandburialii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysandburialiii.1",
+    "revision": "1",
+    "name": "炼武秘境：流沙之葬 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysandburialiii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysandburialiv.1",
+    "revision": "1",
+    "name": "炼武秘境：流沙之葬 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysandburialiv.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysunkensandsi.1",
+    "revision": "1",
+    "name": "炼武秘境：沉沙之渊 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysunkensandsi.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysunkensandsii.1",
+    "revision": "1",
+    "name": "炼武秘境：沉沙之渊 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysunkensandsii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysunkensandsiii.1",
+    "revision": "1",
+    "name": "炼武秘境：沉沙之渊 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysunkensandsiii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofforgerysunkensandsiv.1",
+    "revision": "1",
+    "name": "炼武秘境：沉沙之渊 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片",
+        "sourceRefs": [
+          "scene.field.domainofforgerysunkensandsiv.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterycontemplationi.0",
+    "revision": "1",
+    "name": "精通秘境：默想 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterycontemplationi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterycontemplationii.0",
+    "revision": "1",
+    "name": "精通秘境：默想 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterycontemplationii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterycontemplationiii.0",
+    "revision": "1",
+    "name": "精通秘境：默想 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterycontemplationiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterycontemplationiv.0",
+    "revision": "1",
+    "name": "精通秘境：默想 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterycontemplationiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfallencityi.0",
+    "revision": "1",
+    "name": "精通秘境：墟都 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryfallencityi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfallencityii.0",
+    "revision": "1",
+    "name": "精通秘境：墟都 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryfallencityii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfallencityiii.0",
+    "revision": "1",
+    "name": "精通秘境：墟都 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryfallencityiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryfallencityiv.0",
+    "revision": "1",
+    "name": "精通秘境：墟都 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryfallencityiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryhermitagei.0",
+    "revision": "1",
+    "name": "精通秘境：隐修 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasteryhermitagei.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryhermitageii.0",
+    "revision": "1",
+    "name": "精通秘境：隐修 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasteryhermitageii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryhermitageiii.0",
+    "revision": "1",
+    "name": "精通秘境：隐修 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasteryhermitageiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryhermitageiv.0",
+    "revision": "1",
+    "name": "精通秘境：隐修 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasteryhermitageiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryoverturnedroosti.0",
+    "revision": "1",
+    "name": "精通秘境：覆巢 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryoverturnedroosti.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryoverturnedroostii.0",
+    "revision": "1",
+    "name": "精通秘境：覆巢 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryoverturnedroostii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryoverturnedroostiii.0",
+    "revision": "1",
+    "name": "精通秘境：覆巢 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryoverturnedroostiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryoverturnedroostiv.0",
+    "revision": "1",
+    "name": "精通秘境：覆巢 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryoverturnedroostiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryshadowedlegacyi.0",
+    "revision": "1",
+    "name": "精通秘境：遗荫 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryshadowedlegacyi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryshadowedlegacyii.0",
+    "revision": "1",
+    "name": "精通秘境：遗荫 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryshadowedlegacyii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryshadowedlegacyiii.0",
+    "revision": "1",
+    "name": "精通秘境：遗荫 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryshadowedlegacyiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasteryshadowedlegacyiv.0",
+    "revision": "1",
+    "name": "精通秘境：遗荫 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电",
+        "sourceRefs": [
+          "scene.field.domainofmasteryshadowedlegacyiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterysharedvisioni.0",
+    "revision": "1",
+    "name": "精通秘境：共观 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterysharedvisioni.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterysharedvisionii.0",
+    "revision": "1",
+    "name": "精通秘境：共观 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterysharedvisionii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterysharedvisioniii.0",
+    "revision": "1",
+    "name": "精通秘境：共观 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterysharedvisioniii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofmasterysharedvisioniv.0",
+    "revision": "1",
+    "name": "精通秘境：共观 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "trigger": "触发超导、星超导，或造成星超导伤害",
+        "sourceRefs": [
+          "scene.field.domainofmasterysharedvisioniv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationi.0",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "融化",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationii.0",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationii.1",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 II · 高能打击",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100,
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "融化",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationiii.1",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 III · 高能打击",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100,
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationiii.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "蒸发",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationiv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationiv.1",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 IV · 高能打击",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "感电",
+        "delayMs": 100,
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationiv.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationv.0",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 V · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "融化",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationv.1",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 V · 高能打击",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100,
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationv.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationvi.0",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 VI · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationvi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingfiresofpurificationvi.1",
+    "revision": "1",
+    "name": "祝圣秘境：净化之炎 VI · 高能打击",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100,
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingfiresofpurificationvi.1/disorder/1"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingspringii.0",
+    "revision": "1",
+    "name": "祝圣秘境：惊蛰 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingspringii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingspringiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：惊蛰 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingspringiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingspringv.0",
+    "revision": "1",
+    "name": "祝圣秘境：惊蛰 V · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingspringv.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingspringvi.0",
+    "revision": "1",
+    "name": "祝圣秘境：惊蛰 VI · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingspringvi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingunyieldingi.0",
+    "revision": "1",
+    "name": "祝圣秘境：不移 I · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingunyieldingi.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingunyieldingii.0",
+    "revision": "1",
+    "name": "祝圣秘境：不移 II · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingunyieldingii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingunyieldingiii.0",
+    "revision": "1",
+    "name": "祝圣秘境：不移 III · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingunyieldingiii.0/disorder/0"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "builtin",
+    "id": "scene.field.domainofblessingunyieldingiv.0",
+    "revision": "1",
+    "name": "祝圣秘境：不移 IV · 冲击波",
+    "group": "field",
+    "durationMs": null,
+    "buffs": [],
+    "hits": [
+      {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色",
+        "settlement": "unverified",
+        "sourceRefs": [
+          "scene.field.domainofblessingunyieldingiv.0/disorder/0"
         ]
       }
     ]

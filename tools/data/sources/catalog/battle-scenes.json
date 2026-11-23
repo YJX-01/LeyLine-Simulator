@@ -2432,72 +2432,100 @@
   {
     "entity": "scene.potion.flamingessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "pyro Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135101",
+    "text": "火元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14008",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111013",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Fire"
+      ]
+    }
   },
   {
     "entity": "scene.potion.gushingessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "anemo Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135104",
+    "text": "风元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14011",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111016",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Wind"
+      ]
+    }
   },
   {
     "entity": "scene.potion.frostingessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "cryo Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135103",
+    "text": "冰元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14010",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111015",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Ice"
+      ]
+    }
   },
   {
     "entity": "scene.potion.unmovingessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "geo Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135106",
+    "text": "岩元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14013",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111018",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Rock"
+      ]
+    }
   },
   {
     "entity": "scene.potion.streamingessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "hydro Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135102",
+    "text": "水元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14009",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111014",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Water"
+      ]
+    }
   },
   {
     "entity": "scene.potion.shockingessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "electro Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135105",
+    "text": "雷元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14012",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111017",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Elec"
+      ]
+    }
   },
   {
     "entity": "scene.potion.forestessentialoil",
     "field": "/durationMs",
-    "source": "GenshinTools/src/domain/combat/environmentBuffs.ts",
-    "text": "dendro Bonus 0.25",
-    "issue": "当前采用表只给增益，使用者明确设置有效区间。",
-    "missingFields": [
-      "/durationMs"
-    ]
+    "source": "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/BuffExcelConfigData.json#135107",
+    "text": "草元素伤害提升25%，持续300秒",
+    "evidence": {
+      "status": "duration-verified",
+      "sourceRefs": [
+        "anime-game-data@a311cd77d7dafbd2bedc7d3cac4e986c6125b586:ExcelBinOutput/CombineExcelConfigData.json#14014",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/MaterialExcelConfigData.json#111019",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ItemAbilities.json#SERVER_Element_Atk_Grass"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofblessingautumnhunti.0",
@@ -2508,7 +2536,17 @@
     "missingFields": [
       "/disorder/0 · 初始平台状态",
       "/disorder/0 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5200",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10580"
+      ],
+      "dungeonId": 5200,
+      "levelConfigId": 1606,
+      "clientId": 10580
+    }
   },
   {
     "entity": "scene.field.domainofblessingautumnhunti.1",
@@ -2531,7 +2569,17 @@
     "missingFields": [
       "/disorder/0 · 初始平台状态",
       "/disorder/0 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5201",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10580"
+      ],
+      "dungeonId": 5201,
+      "levelConfigId": 1606,
+      "clientId": 10580
+    }
   },
   {
     "entity": "scene.field.domainofblessingautumnhuntii.1",
@@ -2554,7 +2602,17 @@
     "missingFields": [
       "/disorder/0 · 初始平台状态",
       "/disorder/0 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5202",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10580"
+      ],
+      "dungeonId": 5202,
+      "levelConfigId": 1606,
+      "clientId": 10580
+    }
   },
   {
     "entity": "scene.field.domainofblessingautumnhuntiii.1",
@@ -2577,7 +2635,17 @@
     "missingFields": [
       "/disorder/0 · 初始平台状态",
       "/disorder/0 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5203",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10580"
+      ],
+      "dungeonId": 5203,
+      "levelConfigId": 1606,
+      "clientId": 10580
+    }
   },
   {
     "entity": "scene.field.domainofblessingautumnhuntiv.1",
@@ -2596,40 +2664,124 @@
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyi.json",
     "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "issue": "固定快照确认独立命中为 20 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4484",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11007",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_TowerBuff_GainCrystalSeedTriggerBuff"
+      ],
+      "dungeonId": 4484,
+      "levelConfigId": 1931,
+      "clientId": 11007,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingcrumblingassemblyii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyii.json",
     "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "issue": "固定快照确认独立命中为 20 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4485",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11007",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_TowerBuff_GainCrystalSeedTriggerBuff"
+      ],
+      "dungeonId": 4485,
+      "levelConfigId": 1931,
+      "clientId": 11007,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingcrumblingassemblyiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyiii.json",
     "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "issue": "固定快照确认独立命中为 20 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4486",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11007",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_TowerBuff_GainCrystalSeedTriggerBuff"
+      ],
+      "dungeonId": 4486,
+      "levelConfigId": 1931,
+      "clientId": 11007,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingcrumblingassemblyiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingcrumblingassemblyiv.json",
     "text": "角色获取结晶反应产生的晶片后，将产生「晶体赋能」状态。处于该状态下的当前场上角色的攻击力提升20%。该状态持续10秒，至多叠加3层，每层效果独立计时；叠加至3层后再次重复获取晶片时，将释放岩元素冲击波，对附近的敌人造成岩元素真实伤害，每10秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地条款给出20%攻击、独立层时和冲击波间隔，未提供冲击波伤害数值。攻击叠层仍待实现。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "issue": "固定快照确认独立命中为 20 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4487",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11007",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_TowerBuff_GainCrystalSeedTriggerBuff"
+      ],
+      "dungeonId": 4487,
+      "levelConfigId": 1931,
+      "clientId": 11007,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 20,
+        "radius": 10,
+        "cooldownMs": 10000,
+        "trueDamage": true,
+        "element": "geo",
+        "trigger": "场上角色在已拥有三层时拾取结晶晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingdanceofsteeli.0",
@@ -2743,7 +2895,17 @@
       "/disorder/0 · 严寒上限",
       "/disorder/0 · 严寒累积速度",
       "/disorder/0 · 满额后每次生命损失及间隔"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5120",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10390"
+      ],
+      "dungeonId": 5120,
+      "levelConfigId": 1344,
+      "clientId": 10390
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimei.1",
@@ -2754,7 +2916,17 @@
     "missingFields": [
       "/disorder/1 · 初始平台状态",
       "/disorder/1 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5120",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10391"
+      ],
+      "dungeonId": 5120,
+      "levelConfigId": 1344,
+      "clientId": 10391
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimei.2",
@@ -2765,7 +2937,17 @@
     "missingFields": [
       "/disorder/2 · 温暖地面严寒衰减速度",
       "/disorder/2 · 极寒地面严寒累积速度"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5120",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10392"
+      ],
+      "dungeonId": 5120,
+      "levelConfigId": 1344,
+      "clientId": 10392
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeii.0",
@@ -2777,7 +2959,17 @@
       "/disorder/0 · 严寒上限",
       "/disorder/0 · 严寒累积速度",
       "/disorder/0 · 满额后每次生命损失及间隔"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5121",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10390"
+      ],
+      "dungeonId": 5121,
+      "levelConfigId": 1344,
+      "clientId": 10390
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeii.1",
@@ -2788,7 +2980,17 @@
     "missingFields": [
       "/disorder/1 · 初始平台状态",
       "/disorder/1 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5121",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10391"
+      ],
+      "dungeonId": 5121,
+      "levelConfigId": 1344,
+      "clientId": 10391
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeii.2",
@@ -2799,7 +3001,17 @@
     "missingFields": [
       "/disorder/2 · 温暖地面严寒衰减速度",
       "/disorder/2 · 极寒地面严寒累积速度"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5121",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10392"
+      ],
+      "dungeonId": 5121,
+      "levelConfigId": 1344,
+      "clientId": 10392
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeiii.0",
@@ -2811,7 +3023,17 @@
       "/disorder/0 · 严寒上限",
       "/disorder/0 · 严寒累积速度",
       "/disorder/0 · 满额后每次生命损失及间隔"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5122",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10390"
+      ],
+      "dungeonId": 5122,
+      "levelConfigId": 1344,
+      "clientId": 10390
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeiii.1",
@@ -2822,7 +3044,17 @@
     "missingFields": [
       "/disorder/1 · 初始平台状态",
       "/disorder/1 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5122",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10391"
+      ],
+      "dungeonId": 5122,
+      "levelConfigId": 1344,
+      "clientId": 10391
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeiii.2",
@@ -2833,7 +3065,17 @@
     "missingFields": [
       "/disorder/2 · 温暖地面严寒衰减速度",
       "/disorder/2 · 极寒地面严寒累积速度"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5122",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10392"
+      ],
+      "dungeonId": 5122,
+      "levelConfigId": 1344,
+      "clientId": 10392
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeiv.0",
@@ -2845,7 +3087,17 @@
       "/disorder/0 · 严寒上限",
       "/disorder/0 · 严寒累积速度",
       "/disorder/0 · 满额后每次生命损失及间隔"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5123",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10390"
+      ],
+      "dungeonId": 5123,
+      "levelConfigId": 1344,
+      "clientId": 10390
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeiv.1",
@@ -2856,7 +3108,17 @@
     "missingFields": [
       "/disorder/1 · 初始平台状态",
       "/disorder/1 · 平台切换时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5123",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10391"
+      ],
+      "dungeonId": 5123,
+      "levelConfigId": 1344,
+      "clientId": 10391
+    }
   },
   {
     "entity": "scene.field.domainofblessingelegiacrimeiv.2",
@@ -2867,156 +3129,371 @@
     "missingFields": [
       "/disorder/2 · 温暖地面严寒衰减速度",
       "/disorder/2 · 极寒地面严寒累积速度"
-    ]
+    ],
+    "evidence": {
+      "status": "timing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5123",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10392"
+      ],
+      "dungeonId": 5123,
+      "levelConfigId": 1344,
+      "clientId": 10392
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationi.json",
     "text": "引发融化反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5001",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10132",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Melt"
+      ],
+      "dungeonId": 5001,
+      "levelConfigId": 1101,
+      "clientId": 10132,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "融化"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationii.json",
     "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5002",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10133",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Explode"
+      ],
+      "dungeonId": 5002,
+      "levelConfigId": 1102,
+      "clientId": 10133,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationii.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationii.json",
     "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/1 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5002",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10134",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionHurt_Superconductor"
+      ],
+      "dungeonId": 5002,
+      "levelConfigId": 1102,
+      "clientId": 10134,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiii.json",
     "text": "引发融化反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5003",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10135",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Melt"
+      ],
+      "dungeonId": 5003,
+      "levelConfigId": 1103,
+      "clientId": 10135,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "融化"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationiii.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiii.json",
     "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/1 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5003",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10136",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionHurt_Superconductor"
+      ],
+      "dungeonId": 5003,
+      "levelConfigId": 1103,
+      "clientId": 10136,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiv.json",
     "text": "引发蒸发反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5004",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10137",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Stream"
+      ],
+      "dungeonId": 5004,
+      "levelConfigId": 1104,
+      "clientId": 10137,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "蒸发"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationiv.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationiv.json",
     "text": "引发感电反应时，会受到高能打击，承受伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/1 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5004",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10138",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionHurt_Shock"
+      ],
+      "dungeonId": 5004,
+      "levelConfigId": 1104,
+      "clientId": 10138,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "感电",
+        "delayMs": 100
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationv.json",
     "text": "引发融化反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5005",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10139",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Melt"
+      ],
+      "dungeonId": 5005,
+      "levelConfigId": 1105,
+      "clientId": 10139,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "融化"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationv.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationv.json",
     "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/1 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5005",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10140",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionHurt_Superconductor"
+      ],
+      "dungeonId": 5005,
+      "levelConfigId": 1105,
+      "clientId": 10140,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationvi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationvi.json",
     "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5006",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10141",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Explode"
+      ],
+      "dungeonId": 5006,
+      "levelConfigId": 1106,
+      "clientId": 10141,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingfiresofpurificationvi.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingfiresofpurificationvi.json",
     "text": "引发超导或星超导反应时，会受到高能打击，承受伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/1 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5006",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10142",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionHurt_Superconductor"
+      ],
+      "dungeonId": 5006,
+      "levelConfigId": 1106,
+      "clientId": 10142,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "character",
+        "multiplier": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导",
+        "delayMs": 100
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingflowerfeasti.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingflowerfeasti.json",
-    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。"
   },
   {
     "entity": "scene.field.domainofblessingflowerfeastii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingflowerfeastii.json",
-    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。"
   },
   {
     "entity": "scene.field.domainofblessingflowerfeastiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingflowerfeastiii.json",
-    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。"
   },
   {
     "entity": "scene.field.domainofblessingflowerfeastiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingflowerfeastiv.json",
-    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "当前场上角色的普通攻击或重击命中敌人后，其进行重击或施放元素战技造成的伤害提升15%，该效果持续5秒，至多叠加5层，每层独立计算持续时间，且会在角色退场时解除。"
   },
   {
     "entity": "scene.field.domainofblessingforsakenramparti.0",
@@ -3095,40 +3572,128 @@
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingmachinenesti.json",
     "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5125",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10724",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopDungeon_UseSkill_GenerateBlastWave",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100193"
+      ],
+      "dungeonId": 5125,
+      "levelConfigId": 1700,
+      "clientId": 10724,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "overrideId": 100193,
+        "trigger": "施放元素战技"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingmachinenestii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingmachinenestii.json",
     "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5126",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10724",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopDungeon_UseSkill_GenerateBlastWave",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100193"
+      ],
+      "dungeonId": 5126,
+      "levelConfigId": 1700,
+      "clientId": 10724,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "overrideId": 100193,
+        "trigger": "施放元素战技"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingmachinenestiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingmachinenestiii.json",
     "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5127",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10724",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopDungeon_UseSkill_GenerateBlastWave",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100193"
+      ],
+      "dungeonId": 5127,
+      "levelConfigId": 1700,
+      "clientId": 10724,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "overrideId": 100193,
+        "trigger": "施放元素战技"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingmachinenestiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingmachinenestiv.json",
     "text": "角色施放元素战技时，将释放冲击波，造成真实伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5128",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10724",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopDungeon_UseSkill_GenerateBlastWave",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100193"
+      ],
+      "dungeonId": 5128,
+      "levelConfigId": 1700,
+      "clientId": 10724,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 5.2,
+        "delayMs": 50,
+        "trueDamage": true,
+        "overrideId": 100193,
+        "trigger": "施放元素战技"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingnecropolisi.0",
@@ -3141,10 +3706,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingnecropolisi.json",
     "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4.22 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5204",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10682",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_LoopDungeon_ElementReactionAttack_Shock"
+      ],
+      "dungeonId": 5204,
+      "levelConfigId": 1677,
+      "clientId": 10682,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingnecropolisii.0",
@@ -3157,10 +3742,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingnecropolisii.json",
     "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4.22 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5205",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10682",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_LoopDungeon_ElementReactionAttack_Shock"
+      ],
+      "dungeonId": 5205,
+      "levelConfigId": 1677,
+      "clientId": 10682,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingnecropolisiii.0",
@@ -3173,10 +3778,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingnecropolisiii.json",
     "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4.22 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5206",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10682",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_LoopDungeon_ElementReactionAttack_Shock"
+      ],
+      "dungeonId": 5206,
+      "levelConfigId": 1677,
+      "clientId": 10682,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingnecropolisiv.0",
@@ -3189,10 +3814,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingnecropolisiv.json",
     "text": "当前场上角色使敌人触发感电反应时，会释放冲击波，对敌人造成真实伤害。每3秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 4.22 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5207",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10682",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_LoopDungeon_ElementReactionAttack_Shock"
+      ],
+      "dungeonId": 5207,
+      "levelConfigId": 1677,
+      "clientId": 10682,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4.22,
+        "radius": 5,
+        "cooldownMs": 3000,
+        "trueDamage": true,
+        "trigger": "场上角色对敌人触发感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingroaringfirei.0",
@@ -3246,115 +3891,303 @@
     "entity": "scene.field.domainofblessingsevensensesi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesi.json",
-    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。"
   },
   {
     "entity": "scene.field.domainofblessingsevensensesi.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesi.json",
     "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "evidence": {
+      "status": "duplicate-verified",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5050",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10762",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery_Sum",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100304"
+      ],
+      "dungeonId": 5050,
+      "levelConfigId": 1727,
+      "clientId": 10762,
+      "equivalentTo": "scene.field.domainofblessingsevensensesi.0",
+      "sample": {
+        "input": "FIGHT_PROP_NONEXTRA_ELEMENT_MASTERY",
+        "output": "MASTERY_SUM",
+        "recipient": "team",
+        "rate": 0.1,
+        "refreshMs": 20000,
+        "firstMeasurementDelayMs": 3000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingsevensensesii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesii.json",
-    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。"
   },
   {
     "entity": "scene.field.domainofblessingsevensensesii.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesii.json",
     "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "evidence": {
+      "status": "duplicate-verified",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5051",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10762",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery_Sum",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100304"
+      ],
+      "dungeonId": 5051,
+      "levelConfigId": 1727,
+      "clientId": 10762,
+      "equivalentTo": "scene.field.domainofblessingsevensensesii.0",
+      "sample": {
+        "input": "FIGHT_PROP_NONEXTRA_ELEMENT_MASTERY",
+        "output": "MASTERY_SUM",
+        "recipient": "team",
+        "rate": 0.1,
+        "refreshMs": 20000,
+        "firstMeasurementDelayMs": 3000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingsevensensesiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesiii.json",
-    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。"
   },
   {
     "entity": "scene.field.domainofblessingsevensensesiii.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesiii.json",
     "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "evidence": {
+      "status": "duplicate-verified",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5052",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10762",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery_Sum",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100304"
+      ],
+      "dungeonId": 5052,
+      "levelConfigId": 1727,
+      "clientId": 10762,
+      "equivalentTo": "scene.field.domainofblessingsevensensesiii.0",
+      "sample": {
+        "input": "FIGHT_PROP_NONEXTRA_ELEMENT_MASTERY",
+        "output": "MASTERY_SUM",
+        "recipient": "team",
+        "rate": 0.1,
+        "refreshMs": 20000,
+        "firstMeasurementDelayMs": 3000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingsevensensesiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesiv.json",
-    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。"
   },
   {
     "entity": "scene.field.domainofblessingsevensensesiv.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingsevensensesiv.json",
     "text": "队伍中所有角色的元素精通提高，提高值相当于队伍中所有角色的元素精通总和的10%。每20秒，会移除通过这种方式提高的元素精通，并重新计算。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "evidence": {
+      "status": "duplicate-verified",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5053",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10762",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery_Sum",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelBuff_LoopDungeon_MasteryUp_ByAllCharacterMastery",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#100304"
+      ],
+      "dungeonId": 5053,
+      "levelConfigId": 1727,
+      "clientId": 10762,
+      "equivalentTo": "scene.field.domainofblessingsevensensesiv.0",
+      "sample": {
+        "input": "FIGHT_PROP_NONEXTRA_ELEMENT_MASTERY",
+        "output": "MASTERY_SUM",
+        "recipient": "team",
+        "rate": 0.1,
+        "refreshMs": 20000,
+        "firstMeasurementDelayMs": 3000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingspringi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingspringi.json",
     "text": "感电反应造成的伤害提高150%，影响范围扩大100%。",
-    "issue": "已采用感电伤害提高150%。影响范围扩大100%的多目标命中仍待接入。"
+    "issue": "场景采用150%感电伤害加成和2倍感电影响范围。传播结算仍需原始距离规则及目标位置。",
+    "evidence": {
+      "status": "geometry",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5100",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10150"
+      ],
+      "dungeonId": 5100,
+      "levelConfigId": 1114,
+      "clientId": 10150,
+      "rangeBonus": 1,
+      "damageBonus": 1.5,
+      "reaction": "electro-charged"
+    },
+    "missingFields": [
+      "/disorder/0 · 感电传播的距离规则和目标位置"
+    ]
   },
   {
     "entity": "scene.field.domainofblessingspringii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingspringii.json",
     "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5101",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10151",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Explode"
+      ],
+      "dungeonId": 5101,
+      "levelConfigId": 1115,
+      "clientId": 10151,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingspringiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingspringiii.json",
     "text": "引发超导或星超导反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5102",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10152",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Superconductor"
+      ],
+      "dungeonId": 5102,
+      "levelConfigId": 1116,
+      "clientId": 10152,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingspringiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingspringiv.json",
     "text": "感电反应造成的伤害提高150%，影响范围扩大100%。",
-    "issue": "已采用感电伤害提高150%。影响范围扩大100%的多目标命中仍待接入。"
+    "issue": "场景采用150%感电伤害加成和2倍感电影响范围。传播结算仍需原始距离规则及目标位置。",
+    "evidence": {
+      "status": "geometry",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5103",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10153"
+      ],
+      "dungeonId": 5103,
+      "levelConfigId": 1117,
+      "clientId": 10153,
+      "rangeBonus": 1,
+      "damageBonus": 1.5,
+      "reaction": "electro-charged"
+    },
+    "missingFields": [
+      "/disorder/0 · 感电传播的距离规则和目标位置"
+    ]
   },
   {
     "entity": "scene.field.domainofblessingspringv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingspringv.json",
     "text": "引发超载反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5104",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10151",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Explode"
+      ],
+      "dungeonId": 5104,
+      "levelConfigId": 1115,
+      "clientId": 10151,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingspringvi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingspringvi.json",
     "text": "引发超导或星超导反应时，会释放能量冲击，对周围的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5105",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10152",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_TowerBuff_ElementReactionAttack_Superconductor"
+      ],
+      "dungeonId": 5105,
+      "levelConfigId": 1116,
+      "clientId": 10152,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 4,
+        "radius": 4,
+        "cooldownMs": 3000,
+        "trigger": "超导或星超导"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingstonechamberi.0",
@@ -3379,106 +4212,285 @@
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingtheburninggauntleti.json",
     "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5018",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11128",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_ElementReactionAttack_Fire"
+      ],
+      "dungeonId": 5018,
+      "levelConfigId": 2017,
+      "clientId": 11128,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingtheburninggauntletii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingtheburninggauntletii.json",
     "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5019",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11128",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_ElementReactionAttack_Fire"
+      ],
+      "dungeonId": 5019,
+      "levelConfigId": 2017,
+      "clientId": 11128,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingtheburninggauntletiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingtheburninggauntletiii.json",
     "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5020",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11128",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_ElementReactionAttack_Fire"
+      ],
+      "dungeonId": 5020,
+      "levelConfigId": 2017,
+      "clientId": 11128,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingtheburninggauntletiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingtheburninggauntletiv.json",
     "text": "角色对敌人触发火元素相关反应时，会在敌人的位置处释放冲击波，造成真实伤害。每5秒至多通过这种方式释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5021",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11128",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_ElementReactionAttack_Fire"
+      ],
+      "dungeonId": 5021,
+      "levelConfigId": 2017,
+      "clientId": 11128,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "对敌人触发蒸发、火扩散、燃烧、火结晶、融化或超载"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingunyieldingi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingunyieldingi.json",
     "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5014",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10442",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15"
+      ],
+      "dungeonId": 5014,
+      "levelConfigId": 1377,
+      "clientId": 10442,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingunyieldingii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingunyieldingii.json",
     "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5015",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10442",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15"
+      ],
+      "dungeonId": 5015,
+      "levelConfigId": 1377,
+      "clientId": 10442,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingunyieldingiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingunyieldingiii.json",
     "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5016",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10443",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15"
+      ],
+      "dungeonId": 5016,
+      "levelConfigId": 1378,
+      "clientId": 10443,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingunyieldingiii.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingunyieldingiii.json",
     "text": "（test)血量+20%",
-    "issue": "本地条目标为测试值，未指明受益对象或实际启用范围。",
+    "issue": "正式关卡配置引用该组，能力确认 Actor_MaxHPRatio 增加20%。仍需关卡装配的受益对象。",
     "missingFields": [
-      "/disorder/1 · 生命加成受益对象",
-      "/disorder/1 · 正式挑战是否启用"
-    ]
+      "/disorder/1 · 关卡装配的受益对象及生命值基表"
+    ],
+    "evidence": {
+      "status": "target-stat",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5016",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10444",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_HpUp_20p"
+      ],
+      "dungeonId": 5016,
+      "levelConfigId": 1378,
+      "clientId": 10444,
+      "hpRatio": 0.2,
+      "property": "Actor_MaxHPRatio"
+    }
   },
   {
     "entity": "scene.field.domainofblessingunyieldingiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofblessingunyieldingiv.json",
     "text": "敌人的攻击命中处于护盾庇护下的角色时，会进行反噬：在攻击的敌人位置处释放冲击波，造成范围伤害。该效果每2秒只能触发一次。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "可填写 ElementLevelCo，按已确认的倍率、触发及受击对象计算减伤前基数。仍需核实各难度的系统系数及最终伤害的元素、防御和抗性结算。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数",
+      "/disorder/0 · 未声明元素的攻击默认值和防御、抗性参与方式"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5017",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10445",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_Avatar_ShieldOnBeingHitDoDamage_Ver_1_15"
+      ],
+      "dungeonId": 5017,
+      "levelConfigId": 1379,
+      "clientId": 10445,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 10,
+        "radius": 10,
+        "cooldownMs": 2000,
+        "trigger": "敌人的攻击命中受护盾保护的场上角色"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofblessingunyieldingiv.1",
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofblessingunyieldingiv.json",
     "text": "（test)血量+50%",
-    "issue": "本地条目标为测试值，未指明受益对象或实际启用范围。",
+    "issue": "正式关卡配置引用 LevelEntity_Monster_HpUp_Lv2，原文和能力名称指向怪物生命增加50%。仍需受影响怪物与其基础生命表。",
     "missingFields": [
-      "/disorder/1 · 生命加成受益对象",
-      "/disorder/1 · 正式挑战是否启用"
-    ]
+      "/disorder/1 · 关卡装配的受益对象及生命值基表"
+    ],
+    "evidence": {
+      "status": "target-stat",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5017",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10446"
+      ],
+      "dungeonId": 5017,
+      "levelConfigId": 1379,
+      "clientId": 10446,
+      "hpRatio": 0.5,
+      "property": "MaxHP"
+    }
   },
   {
     "entity": "scene.field.domainofblessingvariationi.0",
@@ -3515,11 +4527,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsi.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4350",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4350,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgeryaltarofsandsii.0",
@@ -3532,11 +4563,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsii.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4351",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4351,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgeryaltarofsandsiii.0",
@@ -3549,11 +4599,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsiii.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4352",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4352,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgeryaltarofsandsiv.0",
@@ -3566,55 +4635,206 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgeryaltarofsandsiv.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4353",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4353,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgeryartisanshipi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryartisanshipi.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4500",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4500,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryartisanshipii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryartisanshipii.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4501",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4501,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryartisanshipiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryartisanshipiii.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4502",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4502,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryartisanshipiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryartisanshipiv.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4503",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4503,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryattentiveobservationi.0",
@@ -3717,44 +4937,176 @@
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsi.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4504",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4504,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgerycuriouscontraptionsii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsii.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4505",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4505,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgerycuriouscontraptionsiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsiii.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4506",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4506,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgerycuriouscontraptionsiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerycuriouscontraptionsiv.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4507",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4507,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryestimationi.0",
@@ -3784,29 +5136,25 @@
     "entity": "scene.field.domainofforgeryleadingkarmai.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryleadingkarmai.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryleadingkarmaii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryleadingkarmaii.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryleadingkarmaiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryleadingkarmaiii.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryleadingkarmaiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryleadingkarmaiv.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgerylunaroblationi.0",
@@ -3836,29 +5184,25 @@
     "entity": "scene.field.domainofforgeryobsessioni.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryobsessioni.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryobsessionii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryobsessionii.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryobsessioniii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryobsessioniii.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryobsessioniv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryobsessioniv.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgeryprayerssungi.0",
@@ -3913,44 +5257,176 @@
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryroboticrusei.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4470",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4470,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryroboticruseii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryroboticruseii.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4471",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4471,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryroboticruseiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryroboticruseiii.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4472",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4472,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryroboticruseiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgeryroboticruseiv.json",
     "text": "角色对敌人触发水元素相关反应后，队伍中所有角色将获得10%水元素伤害加成，此效果持续10秒，每2秒至多触发一次，至多叠加5层。叠加至最高层数时，将提高角色的抗打断能力。",
-    "issue": "本地条款给出水伤10%、持续10秒、间隔2秒和上限5层，未载明抗打断系数及各层到期方式。已知的水伤条款仍待接入。",
     "missingFields": [
-      "/disorder/0 · 满层抗打断系数",
-      "/disorder/0 · 重复获得层数时的刷新方式"
-    ]
+      "/disorder/0 · 水元素相关反应的时序及刷新",
+      "/disorder/0 · 命中硬直与抗打断结算"
+    ],
+    "issue": "场景按当前层数计算全队水伤，五层时 Actor_EndureDelta 增加0.3。固定快照确认成功触发会刷新所有层，反应时序与硬直结算仍待支持。",
+    "evidence": {
+      "status": "control",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4473",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10965",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ElementAddHurt_Water"
+      ],
+      "dungeonId": 4473,
+      "levelConfigId": 1896,
+      "clientId": 10965,
+      "endurance": {
+        "modifier": "Actor_EndureDelta",
+        "value": 0.3,
+        "atLayers": 5
+      },
+      "stacking": {
+        "windowMs": 10000,
+        "cooldownMs": 2000,
+        "max": 5,
+        "refresh": "all"
+      },
+      "reactions": [
+        "vaporize",
+        "bloom",
+        "lunar-bloom",
+        "freeze",
+        "electro-charged",
+        "lunar-charged",
+        "hydro-swirl",
+        "hydro-crystallize",
+        "lunar-crystallize"
+      ]
+    }
   },
   {
     "entity": "scene.field.domainofforgeryruinsofthirstingcapitali.0",
@@ -3987,11 +5463,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysandburiali.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4360",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4360,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerysandburialii.0",
@@ -4004,11 +5499,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysandburialii.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4361",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4361,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerysandburialiii.0",
@@ -4021,11 +5535,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysandburialiii.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4362",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4362,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerysandburialiv.0",
@@ -4038,11 +5571,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysandburialiv.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4363",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4363,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgeryscryingshadowsi.0",
@@ -4127,11 +5679,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysunkensandsi.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4340",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4340,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerysunkensandsii.0",
@@ -4144,11 +5715,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysunkensandsii.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4341",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4341,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerysunkensandsiii.0",
@@ -4161,11 +5751,30 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysunkensandsiii.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4342",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4342,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerysunkensandsiv.0",
@@ -4178,39 +5787,54 @@
     "field": "/disorder/1",
     "source": "ChineseSimplified/domains/domainofforgerysunkensandsiv.json",
     "text": "角色获取岩元素反应产生的晶片时，会释放冲击波，对附近的敌人造成伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 2.5 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/1 · 独立伤害基数或倍率",
-      "/disorder/1 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/1 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4343",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10579",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json#LevelEntity_LoopBuff_GainCrystalTriggerAoe"
+      ],
+      "dungeonId": 4343,
+      "levelConfigId": 1605,
+      "clientId": 10579,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 2.5,
+        "radius": 5,
+        "cooldownMs": 1000,
+        "trueDamage": true,
+        "trigger": "拾取岩元素反应生成的晶片"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofforgerytaintedcloudsi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsi.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgerytaintedcloudsii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsii.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgerytaintedcloudsiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsiii.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgerytaintedcloudsiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofforgerytaintedcloudsiv.json",
-    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "敌人处于原激化状态下时，所有元素抗性降低20%。脱离原激化状态后，该效果会在5秒内消失。"
   },
   {
     "entity": "scene.field.domainofforgerythundercloudaltari.0",
@@ -4288,265 +5912,549 @@
     "entity": "scene.field.domainofmasteryadmonishingengravingi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingi.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryadmonishingengravingii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingii.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryadmonishingengravingiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingiii.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryadmonishingengravingiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryadmonishingengravingiv.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryaltarofflamesi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesi.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5254",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5254,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryaltarofflamesii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesii.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5255",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5255,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryaltarofflamesiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesiii.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5256",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5256,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryaltarofflamesiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryaltarofflamesiv.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5257",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5257,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterybasketofdisciplinei.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplinei.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterybasketofdisciplineii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplineii.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterybasketofdisciplineiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplineiii.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterybasketofdisciplineiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterybasketofdisciplineiv.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterychimingrecitationi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterychimingrecitationi.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasterychimingrecitationii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterychimingrecitationii.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasterychimingrecitationiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterychimingrecitationiii.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasterychimingrecitationiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterychimingrecitationiv.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasterycircleofembersi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycircleofembersi.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5262",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5262,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycircleofembersii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycircleofembersii.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5263",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5263,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycircleofembersiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycircleofembersiii.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5264",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5264,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycircleofembersiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycircleofembersiv.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5265",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5265,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycontemplationi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycontemplationi.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4691",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4691,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycontemplationii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycontemplationii.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4692",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4692,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycontemplationiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycontemplationiii.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4693",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4693,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterycontemplationiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterycontemplationiv.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4694",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4694,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryfallencityi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfallencityi.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4651",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4651,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryfallencityii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfallencityii.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4652",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4652,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryfallencityiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfallencityiii.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4653",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4653,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryfallencityiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfallencityiv.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4654",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4654,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryfrostedaltari.0",
@@ -4600,117 +6508,269 @@
     "entity": "scene.field.domainofmasteryfullmooni.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfullmooni.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasteryfullmoonii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfullmoonii.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasteryfullmooniii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfullmooniii.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasteryfullmooniv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryfullmooniv.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasteryheartoftheflamesi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesi.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5258",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5258,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryheartoftheflamesii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesii.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5259",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5259,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryheartoftheflamesiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesiii.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5260",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5260,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryheartoftheflamesiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryheartoftheflamesiv.json",
     "text": "周期性为角色施加「阴燃之火」：在附着的火元素消除之前，持续受到火元素伤害。",
-    "issue": "本地条款确认火附着和清除条件，未给出周期与每跳数值。",
+    "issue": "关卡条目只指向空能力。2021-06-03 实测的首次附着为开战后3秒，之后每30秒；仍缺当前版本每阶的伤害公式、跳伤间隔及附着时序复核。",
     "missingFields": [
-      "/disorder/0 · 附着周期",
-      "/disorder/0 · 持续伤害间隔",
-      "/disorder/0 · 每跳伤害基数"
-    ]
+      "/disorder/0 · 当前版本附着周期与持续伤害间隔",
+      "/disorder/0 · 每阶每跳火元素伤害基数或倍率"
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#5261",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10311",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+        "kqm-tcl@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/combat-mechanics/spiral-domains/ley-line-disorders.md#pyro-smoldering-flames"
+      ],
+      "dungeonId": 5261,
+      "levelConfigId": 1300,
+      "clientId": 10311,
+      "observed": {
+        "date": "2021-06-03",
+        "firstApplicationMs": 3000,
+        "periodMs": 30000
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryhermitagei.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryhermitagei.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4695",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4695,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryhermitageii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryhermitageii.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4696",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4696,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryhermitageiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryhermitageiii.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4697",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4697,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryhermitageiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryhermitageiv.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4698",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4698,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterymyriadillusionsi.0",
@@ -4741,44 +6801,120 @@
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryoverturnedroosti.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4659",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4659,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryoverturnedroostii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryoverturnedroostii.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4660",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4660,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryoverturnedroostiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryoverturnedroostiii.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4661",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4661,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryoverturnedroostiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryoverturnedroostiv.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4662",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4662,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryrealmofslumberi.0",
@@ -4819,7 +6955,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4400",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4400,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryreignofvioletii.0",
@@ -4836,7 +6982,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4401",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4401,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryreignofvioletiii.0",
@@ -4853,7 +7009,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4402",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4402,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryreignofvioletiv.0",
@@ -4870,7 +7036,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4403",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4403,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryreturni.0",
@@ -4900,113 +7076,277 @@
     "entity": "scene.field.domainofmasteryrhymingrhythmi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmi.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryrhymingrhythmii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmii.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryrhymingrhythmiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmiii.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryrhymingrhythmiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryrhymingrhythmiv.json",
-    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "角色的当前生命值提升或降低时，当前场上角色的普通攻击、重击和下落攻击造成的伤害提升10%，此效果持续10秒，每0.1秒至多触发一次，至多叠加7层，每层独立计算持续时间。角色退场时，将移除该效果。"
   },
   {
     "entity": "scene.field.domainofmasteryshadowedlegacyi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyi.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4655",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4655,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryshadowedlegacyii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyii.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4656",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4656,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryshadowedlegacyiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyiii.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4657",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4657,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasteryshadowedlegacyiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasteryshadowedlegacyiv.json",
     "text": "角色触发感电、月感电反应时，将会释放冲击波，造成范围伤害，每5秒至多释放一次冲击波。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 25 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率",
-      "/disorder/0 · 独立伤害元素及结算类别"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4658",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11266",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_ShockReactionTriggerImpact"
+      ],
+      "dungeonId": 4658,
+      "levelConfigId": 2114,
+      "clientId": 11266,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 25,
+        "radius": 6,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "trigger": "感电或月感电"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterysharedvisioni.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterysharedvisioni.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4699",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4699,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterysharedvisionii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterysharedvisionii.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4700",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4700,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterysharedvisioniii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterysharedvisioniii.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4701",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4701,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterysharedvisioniv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterysharedvisioniv.json",
     "text": "角色触发超导、星超导反应后，或是造成星超导伤害时，在目标敌人位置释放冲击波，造成雷元素伤害。",
-    "issue": "本地场地条款给出触发情形，未载明足以计算独立伤害的数值。",
+    "issue": "固定快照确认独立命中为 40 × ElementLevelCo。仍需确认系统基数的取值归属和各难度数值。能力明确标记为真实伤害。",
     "missingFields": [
-      "/disorder/0 · 独立伤害基数或倍率"
-    ]
+      "/disorder/0 · 当前秘境该难度的 ElementLevelCo 取值归属及系数"
+    ],
+    "evidence": {
+      "status": "damage-formula",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4702",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#11379",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/ConfigAbility_LevelBuff_V2.json#LevelBuff_LoopDungeon_StarSuperconductor_7_0",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/AbilityOverrideExcelConfigData.json#101002"
+      ],
+      "dungeonId": 4702,
+      "levelConfigId": 2192,
+      "clientId": 11379,
+      "hit": {
+        "systemValue": "ElementLevelCo",
+        "recipient": "enemy",
+        "multiplier": 40,
+        "radius": 5,
+        "cooldownMs": 5000,
+        "trueDamage": true,
+        "element": "electro",
+        "overrideId": 101002,
+        "trigger": "触发超导、星超导，或造成星超导伤害"
+      }
+    }
   },
   {
     "entity": "scene.field.domainofmasterysublimeturningi.0",
@@ -5047,7 +7387,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4410",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4410,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasterythunderingvalleyii.0",
@@ -5064,7 +7414,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4411",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4411,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasterythunderingvalleyiii.0",
@@ -5081,7 +7441,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4412",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4412,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasterythunderingvalleyiv.0",
@@ -5098,7 +7468,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4413",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4413,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryvineinfestedruinsi.0",
@@ -5115,7 +7495,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4420",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4420,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryvineinfestedruinsii.0",
@@ -5132,7 +7522,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4421",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4421,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryvineinfestedruinsiii.0",
@@ -5149,7 +7549,17 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4422",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4422,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasteryvineinfestedruinsiv.0",
@@ -5166,34 +7576,40 @@
     "missingFields": [
       "/disorder/1 · 独立伤害基数或倍率",
       "/disorder/1 · 稚雷珠出现与落雷的时刻"
-    ]
+    ],
+    "evidence": {
+      "status": "damage-amount-missing",
+      "sourceRefs": [
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonExcelConfigData.json#4423",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:ExcelBinOutput/DungeonLevelEntityConfigData.json#10577"
+      ],
+      "dungeonId": 4423,
+      "levelConfigId": 1604,
+      "clientId": 10577
+    }
   },
   {
     "entity": "scene.field.domainofmasterywitticismi.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterywitticismi.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterywitticismii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterywitticismii.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterywitticismiii.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterywitticismiii.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   },
   {
     "entity": "scene.field.domainofmasterywitticismiv.0",
     "field": "/disorder/0",
     "source": "ChineseSimplified/domains/domainofmasterywitticismiv.json",
-    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。",
-    "issue": "场地触发、目标或事件机制尚未采用。"
+    "text": "造成元素伤害后的10秒内，队伍中所有角色造成的伤害提高10%。不同类型的元素伤害分别触发的该效果独立计时。至多叠加4次这种伤害提高效果。"
   }
 ]

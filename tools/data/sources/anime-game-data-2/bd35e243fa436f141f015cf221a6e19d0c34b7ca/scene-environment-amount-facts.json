@@ -1,0 +1,454 @@
+{
+  "source": {
+    "repository": "https://gitlab.com/Dimbreath/AnimeGameData2",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca"
+  },
+  "acquired": "2026-11-22",
+  "excerpts": {
+    "ExcelBinOutput/DungeonExcelConfigData.json": [
+      {
+        "id": 4400,
+        "sceneId": 40950,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 37,
+        "showLevel": 38
+      },
+      {
+        "id": 4401,
+        "sceneId": 40951,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 53,
+        "showLevel": 54
+      },
+      {
+        "id": 4402,
+        "sceneId": 40952,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 70,
+        "showLevel": 71
+      },
+      {
+        "id": 4403,
+        "sceneId": 40953,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 87,
+        "showLevel": 88
+      },
+      {
+        "id": 4410,
+        "sceneId": 40950,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 37,
+        "showLevel": 38
+      },
+      {
+        "id": 4411,
+        "sceneId": 40951,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 53,
+        "showLevel": 54
+      },
+      {
+        "id": 4412,
+        "sceneId": 40952,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 70,
+        "showLevel": 71
+      },
+      {
+        "id": 4413,
+        "sceneId": 40953,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 87,
+        "showLevel": 88
+      },
+      {
+        "id": 4420,
+        "sceneId": 40950,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 37,
+        "showLevel": 38
+      },
+      {
+        "id": 4421,
+        "sceneId": 40951,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 53,
+        "showLevel": 54
+      },
+      {
+        "id": 4422,
+        "sceneId": 40952,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 70,
+        "showLevel": 71
+      },
+      {
+        "id": 4423,
+        "sceneId": 40953,
+        "levelConfigMap": {
+          "1604": 100
+        },
+        "levelRevise": 87,
+        "showLevel": 88
+      },
+      {
+        "id": 5120,
+        "sceneId": 40404,
+        "levelConfigMap": {
+          "1344": 100
+        },
+        "levelRevise": 58,
+        "showLevel": 59
+      },
+      {
+        "id": 5121,
+        "sceneId": 40408,
+        "levelConfigMap": {
+          "1344": 100
+        },
+        "levelRevise": 68,
+        "showLevel": 69
+      },
+      {
+        "id": 5122,
+        "sceneId": 40409,
+        "levelConfigMap": {
+          "1344": 100
+        },
+        "levelRevise": 79,
+        "showLevel": 80
+      },
+      {
+        "id": 5123,
+        "sceneId": 40410,
+        "levelConfigMap": {
+          "1344": 100
+        },
+        "levelRevise": 89,
+        "showLevel": 90
+      },
+      {
+        "id": 5254,
+        "sceneId": 40100,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 37,
+        "showLevel": 38
+      },
+      {
+        "id": 5255,
+        "sceneId": 40101,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 53,
+        "showLevel": 54
+      },
+      {
+        "id": 5256,
+        "sceneId": 40102,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 70,
+        "showLevel": 71
+      },
+      {
+        "id": 5257,
+        "sceneId": 40105,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 87,
+        "showLevel": 88
+      },
+      {
+        "id": 5258,
+        "sceneId": 40100,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 37,
+        "showLevel": 38
+      },
+      {
+        "id": 5259,
+        "sceneId": 40101,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 53,
+        "showLevel": 54
+      },
+      {
+        "id": 5260,
+        "sceneId": 40102,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 70,
+        "showLevel": 71
+      },
+      {
+        "id": 5261,
+        "sceneId": 40105,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 87,
+        "showLevel": 88
+      },
+      {
+        "id": 5262,
+        "sceneId": 40100,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 37,
+        "showLevel": 38
+      },
+      {
+        "id": 5263,
+        "sceneId": 40101,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 53,
+        "showLevel": 54
+      },
+      {
+        "id": 5264,
+        "sceneId": 40102,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 70,
+        "showLevel": 71
+      },
+      {
+        "id": 5265,
+        "sceneId": 40105,
+        "levelConfigMap": {
+          "1300": 100
+        },
+        "levelRevise": 87,
+        "showLevel": 88
+      }
+    ],
+    "ExcelBinOutput/DungeonLevelEntityConfigData.json": [
+      {
+        "clientId": 10311,
+        "id": 1300,
+        "levelConfigName": "Level_Spiral_Abyss_Charge_Empty",
+        "descTextMapHash": 1363989242
+      },
+      {
+        "clientId": 10390,
+        "id": 1344,
+        "levelConfigName": "Level_Spiral_Abyss_Charge_Empty",
+        "descTextMapHash": 1075570370
+      },
+      {
+        "clientId": 10392,
+        "id": 1344,
+        "levelConfigName": "Level_Spiral_Abyss_Charge_Empty",
+        "descTextMapHash": 2451588826
+      },
+      {
+        "clientId": 10577,
+        "id": 1604,
+        "levelConfigName": "Level_Spiral_Abyss_Charge_Empty",
+        "descTextMapHash": 2565591002
+      }
+    ],
+    "BinOutput/LevelEntity/ConfigLevelEntity_Spiral_Abyss.json": {
+      "Level_Spiral_Abyss_Charge_Empty": {
+        "GAKBFMMJCNM": [],
+        "KNNDIKNGIJP": []
+      }
+    },
+    "BinOutput/Climate/ConfigClimate.json": {
+      "common": {
+        "length": 100,
+        "thresholdRatio": 1
+      },
+      "templates": {
+        "Full_Params_Example_Cold": {
+          "climateType": "Cold",
+          "temperatureOptions": {
+            "speed": 1
+          }
+        }
+      }
+    },
+    "BinOutput/Ability/Temp/LevelAbilities/ConfigAbility_Climate.json": {
+      "ClimateAbility_Cold": {
+        "SERVER_ClimateAbility_Cold_Lv2": {
+          "thinkInterval": 1,
+          "onThinkInterval": [
+            {
+              "$type": "LoseHP",
+              "amount": 150,
+              "amountByTargetMaxHPRatio": 0.01,
+              "configIdArray": [
+                70000000
+              ],
+              "disableWhenLoading": true,
+              "enableInvincible": true,
+              "enableLockHP": true,
+              "predicates": [
+                {
+                  "$type": "ByGameTimeIsLocked"
+                }
+              ],
+              "target": "CurLocalAvatar",
+              "LEFIACDNIHL": "",
+              "PIDJPPFOCFP": ""
+            }
+          ]
+        },
+        "UNIQUE_WarmBuff": {
+          "duration": 1,
+          "thinkInterval": 0.2,
+          "onThinkInterval": [
+            {
+              "$type": "AddClimateMeter",
+              "climateType": "Cold",
+              "value": -5
+            }
+          ],
+          "modifierMixins": [
+            {
+              "$type": "ResistClimateMixin",
+              "climateTypes": [
+                "Cold"
+              ],
+              "ratio": -999,
+              "trend": "Rise",
+              "type": "Current"
+            }
+          ]
+        },
+        "ClimateAbility_Cold_Lv1_Accelerator": {
+          "modifierMixins": [
+            {
+              "$type": "ResistClimateMixin",
+              "climateTypes": [
+                "Cold"
+              ],
+              "ratio": 0.5,
+              "source": "Climate",
+              "trend": "Rise",
+              "type": "Current"
+            }
+          ]
+        }
+      }
+    },
+    "BinOutput/Ability/Temp/ConfigAbility_LevelBuff.json": {
+      "LevelEntity_AvatarDot_Fire": {
+        "abilitySpecials": {
+          "LevelEntity_AvatarDot_Fire_P1_Interval": 6,
+          "LevelEntity_AvatarDot_Fire_P1_Damage": 0.7,
+          "LevelEntity_AvatarDot_SystemValue": 0
+        },
+        "systemValue": {
+          "$type": "SetSystemValueToOverrideMap",
+          "key": "LevelEntity_AvatarDot_SystemValue",
+          "type": "ElementLevelCo",
+          "KKFCNNHEPEL": -1
+        },
+        "UNIQUE_LevelEntity_AvatarDot_Fire": {
+          "thinkInterval": "LevelEntity_AvatarDot_Fire_P1_Interval",
+          "onThinkInterval": [
+            {
+              "$type": "DamageByAttackValue",
+              "attackInfo": {
+                "attackProperty": {
+                  "damageExtra": [
+                    "LevelEntity_AvatarDot_Fire_P1_Damage",
+                    "LevelEntity_AvatarDot_SystemValue",
+                    "MUL"
+                  ],
+                  "elementType": "Fire",
+                  "ignoreAttackerProperty": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "independentRecords": {
+    "violetCourt": [
+      {
+        "reference": "https://www.9game.cn/yuanshen/5402293.html",
+        "frame": "https://media.9game.cn/gamebase/2021/8/9/228132912.jpg",
+        "author": "Matsutsuki",
+        "publicationDate": "2021-08-09",
+        "version": "2.0",
+        "versionSource": "https://genshin.hoyoverse.com/m/en/news/detail/103985",
+        "domain": "菫色之庭",
+        "difficulty": 4,
+        "character": "凯亚",
+        "characterLevel": 50,
+        "encounterLevel": 88,
+        "clockRemainingMs": 316000,
+        "damage": 74208,
+        "trigger": "作者记录为拾取稚雷珠后命中敌人。截图可区分冰伤 183 和雷伤 74208。",
+        "targetIdentity": null,
+        "schedule": null
+      },
+      {
+        "reference": "https://wotpack.ru/fialkovyj-zal-v-genshin-impact-kak-otkryt-i-projti-podzemele/",
+        "frame": "https://wotpack.ru/wp-content/uploads/2022/07/word-image-132996-6.jpeg",
+        "author": "Wotpack",
+        "publicationDate": "2022-07-05",
+        "version": null,
+        "versionSource": null,
+        "domain": "菫色之庭",
+        "difficulty": 4,
+        "character": "班尼特",
+        "characterLevel": 80,
+        "encounterLevel": 88,
+        "clockRemainingMs": 215000,
+        "damage": 74208,
+        "trigger": "作者记录为班尼特拾取稚雷珠后普通攻击。截图中可辨认两处紫色 74208，另有普通攻击及超载数字。",
+        "targetIdentity": null,
+        "schedule": null
+      }
+    ],
+    "taishanMansion": {
+      "source": "https://github.com/KQM-git/TCL/blob/7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5/docs/evidence/combat-mechanics/spiral-domains/ley-line-disorders.md#ley-line-aura-duration",
+      "tested": "2021-06-03",
+      "version": "1.5",
+      "firstApplicationMs": 3000,
+      "applicationIntervalMs": 30000
+    }
+  }
+}
