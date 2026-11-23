@@ -54,17 +54,69 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "unfinishedreverie.burning-context",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "unfinishedreverie.burning-context",
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": {
+                "call": "unfinishedreverie.damage-per-layer",
+                "inputs": {
+                  "layers": {
+                    "fact": "unfinishedreverie.burningLayers"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "unfinishedreverie.burningLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前增伤的10%层数（脱战3秒满层，战斗中按附近燃烧更新）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "unfinishedreverie.damage-per-layer",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 5,
+        "output": "value"
       }
     }
   ]

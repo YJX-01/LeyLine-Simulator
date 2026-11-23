@@ -54,18 +54,130 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "silkenmoonsserenade.moonlight-first",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "silkenmoonsserenade.moonlight-full",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "silkenmoonsserenade.moonlight-lunar",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "silkenmoonsserenade.moonlight-first",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "silkenmoonsserenade.moonlightWindow"
+              },
+              "term1": {
+                "fact": "firstMoonsign"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 60,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        },
+        {
+          "id": "silkenmoonsserenade.moonlight-full",
+          "recipient": "team",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "silkenmoonsserenade.moonlightWindow"
+              },
+              "term1": {
+                "fact": "fullMoonsign"
+              }
+            },
+            "output": "active"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "amount": 60,
+                "unit": "elementalMastery"
+              }
+            }
+          ]
+        },
+        {
+          "id": "silkenmoonsserenade.moonlight-lunar",
+          "recipient": "team",
+          "condition": {
+            "fact": "silkenmoonsserenade.moonlightWindow"
+          },
+          "appliesTo": {
+            "families": [
+              "lunar-charged",
+              "lunar-crystallize",
+              "lunar-bloom"
+            ]
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": 0.1
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "silkenmoonsserenade.moonlightWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "月辉明光·崇信已生效（装备者造成元素伤害后的8秒内）"
+    }
+  }
 }

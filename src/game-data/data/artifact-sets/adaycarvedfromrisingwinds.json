@@ -54,18 +54,78 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "adaycarvedfromrisingwinds.pastoral-favor",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "adaycarvedfromrisingwinds.pastoral-favor.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "adaycarvedfromrisingwinds.pastoral-favor",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "hit"
+              ],
+              "actor": "owner",
+              "target": "enemy",
+              "categories": [
+                "normal",
+                "charged",
+                "skill",
+                "burst"
+              ],
+              "allowZeroDamage": true
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 6000,
+            "phase": "after"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.25
+            },
+            {
+              "target": "attribute.critRate",
+              "value": 0.2,
+              "condition": {
+                "fact": "adaycarvedfromrisingwinds.lessonComplete"
+              }
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "adaycarvedfromrisingwinds.lessonComplete": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者已完成魔女的课业"
+    }
+  }
 }

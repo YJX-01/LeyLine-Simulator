@@ -54,18 +54,61 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "echoesofanoffering.valley-rite",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "echoesofanoffering.valley-rite",
+          "condition": {
+            "fact": "echoesofanoffering.valley-riteActive"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.baseDamageBonus",
+              "value": {
+                "call": "attack-damage-base",
+                "inputs": {
+                  "attribute": {
+                    "stat": "attack"
+                  },
+                  "ratio": 0.7
+                },
+                "output": "base"
+              }
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "echoesofanoffering.valley-riteActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次普攻触发幽谷祝祀（按概率与触发间隔判定后填写）"
+    }
+  }
 }

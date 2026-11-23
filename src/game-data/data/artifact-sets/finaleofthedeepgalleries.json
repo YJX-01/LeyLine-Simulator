@@ -54,18 +54,124 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "finaleofthedeepgalleries.normal",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "finaleofthedeepgalleries.burst",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "finaleofthedeepgalleries.normal",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "finaleofthedeepgalleries.normalAvailable"
+              },
+              "term1": {
+                "call": "finaleofthedeepgalleries.empty-energy",
+                "inputs": {
+                  "points": {
+                    "fact": "currentEnergy"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.6
+            }
+          ]
+        },
+        {
+          "id": "finaleofthedeepgalleries.burst",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "finaleofthedeepgalleries.burstAvailable"
+              },
+              "term1": {
+                "call": "finaleofthedeepgalleries.empty-energy",
+                "inputs": {
+                  "points": {
+                    "fact": "currentEnergy"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "burst"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.6
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "formulas": [
+    {
+      "id": "finaleofthedeepgalleries.empty-energy",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "energy",
+        "relation": "eq",
+        "threshold": 0
       }
     }
-  ]
+  ],
+  "facts": {
+    "finaleofthedeepgalleries.normalAvailable": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "爆发伤害造成后的6秒失效期已结束"
+    },
+    "finaleofthedeepgalleries.burstAvailable": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "普攻伤害造成后的6秒失效期已结束"
+    }
+  }
 }

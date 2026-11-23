@@ -54,17 +54,218 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "archaicpetra.crystal-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "archaicpetra.crystal-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "archaicpetra.crystal-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "archaicpetra.crystal-electro",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "archaicpetra.crystal-pyro",
+          "condition": {
+            "call": "archaicpetra.is-pyro",
+            "inputs": {
+              "element": {
+                "fact": "archaicpetra.currentElement"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.35
+            }
+          ]
+        },
+        {
+          "id": "archaicpetra.crystal-hydro",
+          "condition": {
+            "call": "archaicpetra.is-hydro",
+            "inputs": {
+              "element": {
+                "fact": "archaicpetra.currentElement"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.35
+            }
+          ]
+        },
+        {
+          "id": "archaicpetra.crystal-cryo",
+          "condition": {
+            "call": "archaicpetra.is-cryo",
+            "inputs": {
+              "element": {
+                "fact": "archaicpetra.currentElement"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.35
+            }
+          ]
+        },
+        {
+          "id": "archaicpetra.crystal-electro",
+          "condition": {
+            "call": "archaicpetra.is-electro",
+            "inputs": {
+              "element": {
+                "fact": "archaicpetra.currentElement"
+              }
+            },
+            "output": "active"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.35
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "archaicpetra.currentElement": {
+      "scope": "team",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ]
+      },
+      "label": "磐岩当前生效的元素（结晶晶片拾取或月结晶触发后10秒，最多一种）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "archaicpetra.is-pyro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "pyro"
+      }
+    },
+    {
+      "id": "archaicpetra.is-hydro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "hydro"
+      }
+    },
+    {
+      "id": "archaicpetra.is-cryo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "cryo"
+      }
+    },
+    {
+      "id": "archaicpetra.is-electro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "pyro",
+          "hydro",
+          "cryo",
+          "electro"
+        ],
+        "equals": "electro"
       }
     }
   ]

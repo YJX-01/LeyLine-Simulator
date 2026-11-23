@@ -1,0 +1,109 @@
+{
+  "source": {
+    "repository": "Dimbreath/animegamedata2",
+    "commit": "bd35e243fa436f141f015cf221a6e19d0c34b7ca"
+  },
+  "adventurer": {
+    "set": {
+      "path": "ExcelBinOutput/ReliquarySetExcelConfigData.json",
+      "record": {
+        "bagSortValue": 1,
+        "containsList": [
+          60140,
+          60120,
+          60150,
+          60110,
+          60130
+        ],
+        "equipAffixId": 210010,
+        "setIcon": "UI_RelicIcon_10010_4",
+        "setId": 10010,
+        "setNeedNum": [
+          2,
+          4
+        ],
+        "textList": [
+          1817050974,
+          575390611
+        ],
+        "DMGCKAOCJLD": 3
+      }
+    },
+    "affix": {
+      "path": "ExcelBinOutput/EquipAffixExcelConfigData.json",
+      "record": {
+        "addProps": [
+          {},
+          {},
+          {}
+        ],
+        "affixId": 2100101,
+        "descTextMapHash": 437091689,
+        "id": 210010,
+        "level": 1,
+        "nameTextMapHash": 2191797475,
+        "openConfig": "Relic_ChestHealSelf",
+        "paramList": [
+          5,
+          1,
+          0.06,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "ability": {
+      "path": "BinOutput/Ability/Temp/EquipAbilities/ConfigAbility_Relic.json",
+      "record": {
+        "Default": {
+          "abilityMixins": [
+            {
+              "$type": "DoActionByEventMixin",
+              "actions": [
+                {
+                  "$type": "ApplyModifier",
+                  "modifierName": "UNIQUE_Relic_ChestHealSelf"
+                }
+              ],
+              "costEnergyDeltaName": "",
+              "onEvent": "ChestOpen",
+              "type": "Current"
+            }
+          ],
+          "abilityName": "Relic_ChestHealSelf",
+          "abilitySpecials": {
+            "HealDuration": 0,
+            "HealInterval": 0,
+            "HealRatio": 0,
+            "Dura_Delay": 0.5
+          },
+          "isDynamicAbility": true,
+          "modifiers": {
+            "UNIQUE_Relic_ChestHealSelf": {
+              "duration": [
+                "HealDuration",
+                "Dura_Delay",
+                "ADD"
+              ],
+              "elementDurability": 100,
+              "isUnique": true,
+              "modifierName": "",
+              "onThinkInterval": [
+                {
+                  "$type": "HealHP",
+                  "amountByTargetMaxHPRatio": "HealRatio",
+                  "AMAHJLOKEIE": ""
+                }
+              ],
+              "thinkInterval": "HealInterval",
+              "IAKNCBDLFKJ": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

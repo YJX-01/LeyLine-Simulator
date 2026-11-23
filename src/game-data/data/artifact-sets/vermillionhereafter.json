@@ -54,17 +54,88 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "vermillionhereafter.nascent-light",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "vermillionhereafter.nascent-light.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "vermillionhereafter.nascent-light",
+          "condition": {
+            "fact": "vermillionhereafter.nascentLight"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.08
+            },
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "vermillionhereafter.attack-per-layer",
+                "inputs": {
+                  "layers": {
+                    "fact": "vermillionhereafter.hpLossLayers"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "vermillionhereafter.nascentLight": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "潜光已生效（爆发后16秒，退场清除）"
+    },
+    "vermillionhereafter.hpLossLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本轮潜光中的生命降低强化层数（至多4层，0.8秒至多1层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "vermillionhereafter.attack-per-layer",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 4,
+        "output": "value"
       }
     }
   ]

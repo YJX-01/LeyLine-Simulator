@@ -60,15 +60,137 @@
       "support": {
         "resolution": "unavailable",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "分别计算已确认的完整5秒基础回复总量和每秒一次的基础回复量。探索事件自动触发、重复互动、治疗加成和实际到账量待处理。",
         "mechanisms": [
           {
-            "id": "explicit-output-scope",
+            "id": "confirmed-full-recovery",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "adventurer.full-recovery",
+                "revision": "1"
+              }
+            ],
+            "reason": "一次完整5秒回复过程的基础总量为持有者生命值上限的30%。"
+          },
+          {
+            "id": "confirmed-recovery-tick",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "adventurer.recovery-tick",
+                "revision": "1"
+              }
+            ],
+            "reason": "回复期间每隔1秒结算一次，单次基础回复量为持有者生命值上限的6%。"
+          },
+          {
+            "id": "automatic-recovery-events-and-hp",
             "resolution": "unavailable",
             "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "reason": "探索事件自动触发、重复互动、治疗加成和实际到账量待处理。",
+            "impact": {
+              "recipient": "owner",
+              "attributes": [
+                "attribute.equipmentHealing"
+              ]
+            }
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "adventurer.full-recovery",
+          "application": "explicit",
+          "condition": {
+            "fact": "adventurer.fullRecovery"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.equipmentBaseHealingTotal",
+              "value": {
+                "call": "adventurer.base-recovery-total",
+                "inputs": {
+                  "maxHp": {
+                    "stat": "hp",
+                    "actor": "recipient"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        },
+        {
+          "id": "adventurer.recovery-tick",
+          "application": "explicit",
+          "condition": {
+            "fact": "adventurer.recoveryTick"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.equipmentBaseHealingTick",
+              "value": {
+                "call": "adventurer.base-recovery-tick",
+                "inputs": {
+                  "maxHp": {
+                    "stat": "hp",
+                    "actor": "recipient"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "adventurer.fullRecovery": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "持有者已通过探索互动触发并完成5秒回复"
+    },
+    "adventurer.recoveryTick": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "持有者本次已触发1秒间隔的一次回复"
+    }
+  },
+  "formulas": [
+    {
+      "id": "adventurer.base-recovery-total",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "maxHp",
+        "inputUnit": "hp",
+        "outputUnit": "hp",
+        "rate": 0.3,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
+      }
+    },
+    {
+      "id": "adventurer.base-recovery-tick",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "maxHp",
+        "inputUnit": "hp",
+        "outputUnit": "hp",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "output": "value"
       }
     }
   ]

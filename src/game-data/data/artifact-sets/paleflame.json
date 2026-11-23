@@ -54,17 +54,104 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "paleflame.skill-atk",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "paleflame.full-physical",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "paleflame.skill-atk",
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "paleflame.attack-per-layer",
+                "inputs": {
+                  "layers": {
+                    "fact": "paleflame.skillLayers"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        },
+        {
+          "id": "paleflame.full-physical",
+          "condition": {
+            "call": "paleflame.full-layer",
+            "inputs": {
+              "points": {
+                "fact": "paleflame.skillLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.physicalBonus",
+              "value": 0.25
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "paleflame.skillLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "当前苍白之火层数（战技命中后7秒，每0.3秒至多1层）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "paleflame.attack-per-layer",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.09,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 2,
+        "output": "value"
+      }
+    },
+    {
+      "id": "paleflame.full-layer",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 2
       }
     }
   ]

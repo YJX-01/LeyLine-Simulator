@@ -54,26 +54,89 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "按施放战技时的能量门槛及当次有效窗口计算普通攻击、重击和下落攻击增伤。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "impact": {
-              "recipient": "owner",
-              "families": [
-                "ordinary"
-              ],
-              "attributes": [
-                "attribute.damageBonus"
-              ]
-            },
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "shimenawasreminiscence.energy-spent",
+                "revision": "1"
+              }
+            ],
+            "reason": "施放战技时至少有15点能量，且消耗后10秒窗口内，普通攻击、重击和下落攻击伤害提高50%。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "shimenawasreminiscence.energy-spent",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "shimenawasreminiscence.energy-spentActive"
+              },
+              "term1": {
+                "call": "shimenawasreminiscence.energy-threshold",
+                "inputs": {
+                  "energy": {
+                    "fact": "shimenawasreminiscence.energyAtCast"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "appliesTo": {
+            "categories": [
+              "normal",
+              "charged",
+              "plunge"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.damageBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "shimenawasreminiscence.energy-spentActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "已消耗15点元素能量，且处于施放战技后的10秒内"
+    },
+    "shimenawasreminiscence.energyAtCast": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "energy"
+      },
+      "label": "触发追忆四件时，施放战技前的元素能量"
+    }
+  },
+  "formulas": [
+    {
+      "id": "shimenawasreminiscence.energy-threshold",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "energy",
+        "unit": "energy",
+        "relation": "gte",
+        "threshold": 15
       }
     }
   ]

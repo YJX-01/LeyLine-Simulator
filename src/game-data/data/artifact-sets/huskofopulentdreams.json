@@ -54,17 +54,101 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "huskofopulentdreams.curiosity",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "huskofopulentdreams.curiosity.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "huskofopulentdreams.curiosity",
+          "modifiers": [
+            {
+              "target": "attribute.defensePercent",
+              "value": {
+                "call": "huskofopulentdreams.defense-per-layer",
+                "inputs": {
+                  "layers": {
+                    "fact": "huskofopulentdreams.curiosityLayers"
+                  }
+                },
+                "output": "value"
+              }
+            },
+            {
+              "target": "attribute.geoBonus",
+              "value": {
+                "call": "huskofopulentdreams.geo-per-layer",
+                "inputs": {
+                  "layers": {
+                    "fact": "huskofopulentdreams.curiosityLayers"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "huskofopulentdreams.curiosityLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "问答当前层数（岩命中/后台积累，6秒未获得时减少）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "huskofopulentdreams.defense-per-layer",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 4,
+        "output": "value"
+      }
+    },
+    {
+      "id": "huskofopulentdreams.geo-per-layer",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.06,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 4,
+        "output": "value"
       }
     }
   ]

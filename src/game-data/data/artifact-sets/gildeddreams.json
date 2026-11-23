@@ -57,17 +57,119 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "gildeddreams.gilded",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "gildeddreams.gilded.1",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "gildeddreams.gilded",
+          "condition": {
+            "fact": "gildeddreams.reactionWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": {
+                "call": "gildeddreams.attack-per-member",
+                "inputs": {
+                  "layers": {
+                    "fact": "gildeddreams.sameElements"
+                  }
+                },
+                "output": "value"
+              }
+            },
+            {
+              "target": "attribute.elementalMastery",
+              "value": {
+                "call": "gildeddreams.mastery-per-member",
+                "inputs": {
+                  "layers": {
+                    "fact": "gildeddreams.differentElements"
+                  }
+                },
+                "output": "value"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "gildeddreams.reactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发元素反应后的8秒内"
+    },
+    "gildeddreams.sameElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "其他队员中与装备者同元素的人数"
+    },
+    "gildeddreams.differentElements": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "其他队员中与装备者不同元素的人数"
+    }
+  },
+  "formulas": [
+    {
+      "id": "gildeddreams.attack-per-member",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.14,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 3,
+        "output": "value"
+      }
+    },
+    {
+      "id": "gildeddreams.mastery-per-member",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "layers",
+        "inputUnit": "count",
+        "outputUnit": "elementalMastery",
+        "rate": 50,
+        "offset": 0,
+        "threshold": 0,
+        "maxInput": 3,
+        "output": "value"
       }
     }
   ]

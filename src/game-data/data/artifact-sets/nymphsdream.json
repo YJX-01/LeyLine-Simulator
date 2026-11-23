@@ -54,17 +54,242 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "nymphsdream.nymph-attack-1",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "nymphsdream.nymph-attack-2",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "nymphsdream.nymph-attack-3",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "nymphsdream.nymph-hydro-1",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "nymphsdream.nymph-hydro-2",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "nymphsdream.nymph-hydro-3",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "nymphsdream.nymph-attack-1",
+          "condition": {
+            "call": "nymphsdream.nymph-attack-.is1",
+            "inputs": {
+              "points": {
+                "fact": "nymphsdream.nymphLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.07
+            }
+          ]
+        },
+        {
+          "id": "nymphsdream.nymph-attack-2",
+          "condition": {
+            "call": "nymphsdream.nymph-attack-.is2",
+            "inputs": {
+              "points": {
+                "fact": "nymphsdream.nymphLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.16
+            }
+          ]
+        },
+        {
+          "id": "nymphsdream.nymph-attack-3",
+          "condition": {
+            "call": "nymphsdream.nymph-attack-.is3",
+            "inputs": {
+              "points": {
+                "fact": "nymphsdream.nymphLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.25
+            }
+          ]
+        },
+        {
+          "id": "nymphsdream.nymph-hydro-1",
+          "condition": {
+            "call": "nymphsdream.nymph-hydro-.is1",
+            "inputs": {
+              "points": {
+                "fact": "nymphsdream.nymphLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "id": "nymphsdream.nymph-hydro-2",
+          "condition": {
+            "call": "nymphsdream.nymph-hydro-.is2",
+            "inputs": {
+              "points": {
+                "fact": "nymphsdream.nymphLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.09
+            }
+          ]
+        },
+        {
+          "id": "nymphsdream.nymph-hydro-3",
+          "condition": {
+            "call": "nymphsdream.nymph-hydro-.is3",
+            "inputs": {
+              "points": {
+                "fact": "nymphsdream.nymphLayers"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "nymphsdream.nymphLayers": {
+      "scope": "owner",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "镜中水仙当前层数（普攻、重击、下落、战技、爆发各计8秒）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "nymphsdream.nymph-attack-.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "nymphsdream.nymph-attack-.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "nymphsdream.nymph-attack-.is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "nymphsdream.nymph-hydro-.is1",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 1,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "nymphsdream.nymph-hydro-.is2",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 2,
+        "maxInput": 3
+      }
+    },
+    {
+      "id": "nymphsdream.nymph-hydro-.is3",
+      "template": {
+        "id": "quantity-condition",
+        "revision": "1",
+        "input": "points",
+        "unit": "count",
+        "relation": "eq",
+        "threshold": 3,
+        "maxInput": 3
       }
     }
   ]

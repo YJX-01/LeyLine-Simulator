@@ -1,7 +1,7 @@
 {
   "repository": "theBowja/genshin-db",
   "commit": "8e5badd60b5d894284ccc927a56c9683529d2592",
-  "fields": "Character identity, talent/passive/constellation text, numerical talent parameters. Rules/hit bindings are the existing verified scope.",
+  "fields": "Character identity, talent/passive/constellation text, numerical talent parameters, and Adventurer set effect text. Rules/hit bindings are the existing verified scope.",
   "files": [
     "ChineseSimplified/characters/aether.json",
     "ChineseSimplified/characters/aino.json",
@@ -395,7 +395,10 @@
     "ChineseSimplified/weapons/oldmercspal.json",
     "ChineseSimplified/weapons/pocketgrimoire.json",
     "ChineseSimplified/weapons/seasonedhuntersbow.json",
-    "ChineseSimplified/weapons/wastergreatsword.json"
+    "ChineseSimplified/weapons/wastergreatsword.json",
+    "English/artifacts/adventurer.json",
+    "English/talents/ifa.json",
+    "English/talents/varesa.json"
   ],
   "verifiedHits": [
     {

@@ -61,16 +61,100 @@
       "support": {
         "resolution": "unavailable",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已确认穿戴者击败敌人且满足15秒间隔，只有一次战技正在恢复时，计算本次冷却重置。多次战技在恢复时的重置范围和实际触发顺序仍待验证。",
         "mechanisms": [
           {
-            "id": "explicit-output-scope",
+            "id": "gambler.confirmed-reset",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "gambler.confirmed-reset",
+                "revision": "1"
+              }
+            ],
+            "reason": "已确认穿戴者击败敌人且满足15秒间隔，只有一次战技正在恢复时，计算本次冷却重置。"
+          },
+          {
+            "id": "gambler.reset-sequence",
             "resolution": "unavailable",
             "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "reason": "多次战技在恢复时的重置范围和实际触发顺序仍待验证。",
+            "impact": {
+              "recipient": "owner",
+              "attributes": [
+                "attribute.confirmedSkillCooldownResetMs"
+              ]
+            }
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "gambler.confirmed-reset",
+          "application": "explicit",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "enemyDefeated"
+                      },
+                      "term1": {
+                        "fact": "gambler.resetReady"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "gambler.oneSkillChargeRecovering"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "skill.cooldown-positive",
+                "inputs": {
+                  "duration": {
+                    "fact": "skillCooldownBeforeResetMs"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.confirmedSkillCooldownResetMs",
+              "value": {
+                "fact": "skillCooldownBeforeResetMs"
+              }
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "gambler.resetReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "赌徒四件套的15秒间隔已结束"
+    },
+    "gambler.oneSkillChargeRecovering": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "此时只有一次元素战技正在恢复"
+    }
+  }
 }

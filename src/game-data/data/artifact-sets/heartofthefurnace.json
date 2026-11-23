@@ -54,18 +54,103 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "heartofthefurnace.stellar-attack",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "heartofthefurnace.stellar-conduct",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "heartofthefurnace.stellar-swirl",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "heartofthefurnace.stellar-attack",
+          "condition": {
+            "fact": "heartofthefurnace.stellarWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.attackPercent",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "heartofthefurnace.stellar-conduct",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "condition": {
+            "fact": "heartofthefurnace.stellarWindow"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": 0.5
+            }
+          ]
+        },
+        {
+          "id": "heartofthefurnace.stellar-swirl",
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "condition": {
+            "fact": "heartofthefurnace.stellarWindow"
+          },
+          "recipient": "team",
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": 0.5
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "heartofthefurnace.stellarWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发星烁反应或造成星烁反应伤害后的12秒内"
+    }
+  }
 }

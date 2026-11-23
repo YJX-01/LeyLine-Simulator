@@ -57,16 +57,66 @@
       "support": {
         "resolution": "unavailable",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "四件套在持有者施放元素爆发时，按其生命值上限的20%和治疗相关加成计算一次回复。由爆发记录自动产生治疗及其实际到账量待接入。",
         "mechanisms": [
           {
-            "id": "explicit-output-scope",
+            "id": "confirmed-burst-healing",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "travelingdoctor.burst-healing",
+                "revision": "1"
+              }
+            ],
+            "reason": "四件套在持有者施放元素爆发时，按其生命值上限的20%和治疗相关加成计算一次回复。"
+          },
+          {
+            "id": "automatic-healing-trigger",
             "resolution": "unavailable",
             "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "reason": "由爆发记录自动产生治疗及其实际到账量待接入。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "travelingdoctor.burst-healing",
+          "application": "explicit",
+          "condition": {
+            "fact": "travelingdoctor.burstHealing"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.equipmentHealing",
+              "value": {
+                "call": "healing.max-hp",
+                "inputs": {
+                  "maxHp": {
+                    "stat": "hp"
+                  },
+                  "rate": 0.2,
+                  "outgoing": {
+                    "stat": "healingBonus"
+                  },
+                  "incoming": {
+                    "stat": "incomingHealingBonus"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "travelingdoctor.burstHealing": {
+      "label": "持有者本次施放元素爆发",
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
       }
     }
-  ]
+  }
 }

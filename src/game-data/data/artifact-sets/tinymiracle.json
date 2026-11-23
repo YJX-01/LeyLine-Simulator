@@ -108,17 +108,335 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-anemo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "tinymiracle.protect-dendro",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "tinymiracle.protect-anemo",
+          "condition": {
+            "call": "tinymiracle.received-anemo",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.anemo",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "tinymiracle.protect-geo",
+          "condition": {
+            "call": "tinymiracle.received-geo",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.geo",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "tinymiracle.protect-electro",
+          "condition": {
+            "call": "tinymiracle.received-electro",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.electro",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "tinymiracle.protect-hydro",
+          "condition": {
+            "call": "tinymiracle.received-hydro",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.hydro",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "tinymiracle.protect-pyro",
+          "condition": {
+            "call": "tinymiracle.received-pyro",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.pyro",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "tinymiracle.protect-cryo",
+          "condition": {
+            "call": "tinymiracle.received-cryo",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.cryo",
+              "value": 0.3
+            }
+          ]
+        },
+        {
+          "id": "tinymiracle.protect-dendro",
+          "condition": {
+            "call": "tinymiracle.received-dendro",
+            "inputs": {
+              "element": {
+                "fact": "tinymiracle.receivedDamageElement"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.resistance.dendro",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "tinymiracle.receivedDamageElement": {
+      "scope": "owner",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "label": "触发过奇迹4件的承伤元素（持续和触发间隔均10秒）"
+    }
+  },
+  "formulas": [
+    {
+      "id": "tinymiracle.received-anemo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "anemo"
+      }
+    },
+    {
+      "id": "tinymiracle.received-geo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "geo"
+      }
+    },
+    {
+      "id": "tinymiracle.received-electro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "electro"
+      }
+    },
+    {
+      "id": "tinymiracle.received-hydro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "hydro"
+      }
+    },
+    {
+      "id": "tinymiracle.received-pyro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "pyro"
+      }
+    },
+    {
+      "id": "tinymiracle.received-cryo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "cryo"
+      }
+    },
+    {
+      "id": "tinymiracle.received-dendro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "dendro"
       }
     }
   ]

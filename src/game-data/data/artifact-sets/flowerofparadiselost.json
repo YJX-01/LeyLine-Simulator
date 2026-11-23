@@ -57,18 +57,157 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "flowerofparadiselost.bloom",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "flowerofparadiselost.lunar-bloom",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "flowerofparadiselost.bloom-stacks",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "flowerofparadiselost.lunar-stacks",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "flowerofparadiselost.bloom",
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "bloom",
+              "hyperbloom",
+              "burgeon"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "flowerofparadiselost.lunar-bloom",
+          "appliesTo": {
+            "families": [
+              "lunar-bloom"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "flowerofparadiselost.bloom-stacks",
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "bloom",
+              "hyperbloom",
+              "burgeon"
+            ]
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "reactionIds": [
+                "bloom",
+                "hyperbloom",
+                "burgeon",
+                "lunar-bloom"
+              ]
+            },
+            "cooldownMs": 1000
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "stacking": {
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "id": "flowerofparadiselost.lunar-stacks",
+          "appliesTo": {
+            "families": [
+              "lunar-bloom"
+            ]
+          },
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "reactionIds": [
+                "bloom",
+                "hyperbloom",
+                "burgeon",
+                "lunar-bloom"
+              ]
+            },
+            "cooldownMs": 1000
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "stacking": {
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": 0.025
+            }
+          ]
+        }
+      ]
     }
   ]
 }

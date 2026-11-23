@@ -60,18 +60,57 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "marechausseehunter.hp-change",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "marechausseehunter.hp-change",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "state-change"
+              ],
+              "actor": "owner",
+              "target": "any",
+              "observation": {
+                "key": "hpRatioChange",
+                "test": "change"
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 5000,
+            "phase": "after"
+          },
+          "stacking": {
+            "maxStacks": 3
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.12
+            }
+          ]
+        }
+      ]
     }
   ]
 }

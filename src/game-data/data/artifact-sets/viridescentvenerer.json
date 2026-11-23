@@ -54,18 +54,231 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "viridescentvenerer.swirl",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "viridescentvenerer.stellar-swirl",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "viridescentvenerer.shred-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "viridescentvenerer.shred-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "viridescentvenerer.shred-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "viridescentvenerer.shred-cryo",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "viridescentvenerer.swirl",
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.6
+            }
+          ]
+        },
+        {
+          "id": "viridescentvenerer.stellar-swirl",
+          "appliesTo": {
+            "families": [
+              "stellar-swirl"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-swirl.damageBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "viridescentvenerer.shred-pyro",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "reactionIds": [
+                "swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "pyro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.pyro",
+              "value": -0.4
+            }
+          ]
+        },
+        {
+          "id": "viridescentvenerer.shred-electro",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "reactionIds": [
+                "swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "electro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.electro",
+              "value": -0.4
+            }
+          ]
+        },
+        {
+          "id": "viridescentvenerer.shred-hydro",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "reactionIds": [
+                "swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "hydro"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.hydro",
+              "value": -0.4
+            }
+          ]
+        },
+        {
+          "id": "viridescentvenerer.shred-cryo",
+          "recipient": "target",
+          "trigger": {
+            "kind": "event",
+            "selector": {
+              "kinds": [
+                "reaction"
+              ],
+              "actor": "owner",
+              "target": "query",
+              "reactionIds": [
+                "swirl",
+                "stellar-swirl"
+              ],
+              "reactionElements": {
+                "swirl": [
+                  "cryo"
+                ]
+              }
+            }
+          },
+          "lifetime": {
+            "kind": "interval",
+            "durationMs": 10000,
+            "phase": "after"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "replace"
+          },
+          "modifiers": [
+            {
+              "target": "target.resistance.cryo",
+              "value": -0.4
+            }
+          ]
+        }
+      ]
     }
   ]
 }

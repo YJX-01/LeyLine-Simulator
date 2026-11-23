@@ -56,16 +56,110 @@
       "support": {
         "resolution": "unavailable",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "超载、感电、超导、超绽放、超激化、月感电和星超导伤害加成已采用。元素战技冷却变化待接入。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "thunderingfury.transformative",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "thunderingfury.aggravate",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "thunderingfury.lunar-charged",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "thunderingfury.stellar-conduct",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
+          },
+          {
+            "id": "pending-output-scope",
             "resolution": "unavailable",
             "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "reason": "超载、感电、超导、超绽放、超激化、月感电和星超导伤害加成已采用。元素战技冷却变化待接入。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "thunderingfury.transformative",
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "overloaded",
+              "electro-charged",
+              "superconduct",
+              "hyperbloom"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "thunderingfury.aggravate",
+          "appliesTo": {
+            "families": [
+              "ordinary"
+            ],
+            "reactionIds": [
+              "aggravate"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.additiveReactionBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "thunderingfury.lunar-charged",
+          "appliesTo": {
+            "families": [
+              "lunar-charged"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.lunar.damageBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "thunderingfury.stellar-conduct",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": 0.2
+            }
+          ]
+        }
+      ]
     }
   ]
 }

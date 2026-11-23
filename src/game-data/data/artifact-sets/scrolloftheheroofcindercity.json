@@ -23,32 +23,494 @@
       "support": {
         "resolution": "unavailable",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。",
         "mechanisms": [
           {
-            "id": "explicit-output-scope",
+            "id": "confirmed-direct-energy",
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.directEnergy",
+                "revision": "1"
+              }
+            ],
+            "reason": "按当次触发、装备件数或精炼档位、实际受益者和已确认的触发条件计算。"
+          },
+          {
+            "id": "direct-energy-timeline",
             "resolution": "unavailable",
             "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "reason": "按已确认的本次触发计算固定元素能量。跨事件的自动触发、冷却、排程和实际到账量待接入。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "scrolloftheheroofcindercity.directEnergy",
+          "application": "explicit",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.directEnergyTriggered"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.directEnergyRestored",
+              "value": {
+                "amount": 6,
+                "unit": "energy"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-anemo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-anemo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.base-dendro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "scrolloftheheroofcindercity.nightsoul-dendro",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "scrolloftheheroofcindercity.base-anemo",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.anemoReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-anemo",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.anemoNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": 0.28
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.base-geo",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.geoReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-geo",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.geoNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.28
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.base-electro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.electroReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-electro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.electroNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.28
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.base-hydro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.hydroReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-hydro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.hydroNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.28
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.base-pyro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.pyroReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-pyro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.pyroNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.28
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.base-cryo",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.cryoReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-cryo",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.cryoNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.28
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.base-dendro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.dendroReactionWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": 0.12
+            }
+          ]
+        },
+        {
+          "id": "scrolloftheheroofcindercity.nightsoul-dendro",
+          "recipient": "team",
+          "condition": {
+            "fact": "scrolloftheheroofcindercity.dendroNightsoulWindow"
+          },
+          "stacking": {
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 4
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": 0.28
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "scrolloftheheroofcindercity.anemoReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及风元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.anemoNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及风元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.geoReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及岩元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.geoNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及岩元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.electroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及雷元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.electroNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及雷元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.hydroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及水元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.hydroNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及水元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.pyroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及火元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.pyroNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及火元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.cryoReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及冰元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.cryoNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及冰元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.dendroReactionWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "装备者触发与自身元素相关且涉及草元素的反应，12%增益仍有效（15秒）"
+    },
+    "scrolloftheheroofcindercity.dendroNightsoulWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发涉及草元素的对应反应时装备者处于夜魂加持，28%增益仍有效（20秒）"
+    },
+    "scrolloftheheroofcindercity.directEnergyTriggered": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次队伍中附近角色已触发夜魂迸发"
+    }
+  }
 }

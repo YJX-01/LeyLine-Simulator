@@ -54,18 +54,88 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "disenchantmentindeepshadow.superconduct",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "disenchantmentindeepshadow.stellar-conduct",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "disenchantmentindeepshadow.conditioned-crit",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "disenchantmentindeepshadow.superconduct",
+          "appliesTo": {
+            "families": [
+              "transformative"
+            ],
+            "reactionIds": [
+              "superconduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.transformative.damageBonus",
+              "value": 0.8
+            }
+          ]
+        },
+        {
+          "id": "disenchantmentindeepshadow.stellar-conduct",
+          "appliesTo": {
+            "families": [
+              "stellar-conduct"
+            ]
+          },
+          "modifiers": [
+            {
+              "target": "attribute.reaction.stellar-conduct.damageBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "disenchantmentindeepshadow.conditioned-crit",
+          "condition": {
+            "fact": "disenchantmentindeepshadow.conductAffected"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.critRate",
+              "value": 0.16
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "disenchantmentindeepshadow.conductAffected": {
+      "scope": "target",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "目标受超导或星超导反应影响"
+    }
+  }
 }

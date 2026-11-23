@@ -54,18 +54,80 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "nighttimewhispersintheechoingwoods.skill-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "nighttimewhispersintheechoingwoods.crystallize-geo",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
-      }
+      },
+      "buffs": [
+        {
+          "id": "nighttimewhispersintheechoingwoods.skill-geo",
+          "condition": {
+            "fact": "nighttimewhispersintheechoingwoods.skillWindow"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.2
+            }
+          ]
+        },
+        {
+          "id": "nighttimewhispersintheechoingwoods.crystallize-geo",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "nighttimewhispersintheechoingwoods.skillWindow"
+              },
+              "term1": {
+                "fact": "nighttimewhispersintheechoingwoods.crystallizeWindow"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.3
+            }
+          ]
+        }
+      ]
     }
-  ]
+  ],
+  "facts": {
+    "nighttimewhispersintheechoingwoods.skillWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "施放元素战技后的10秒内"
+    },
+    "nighttimewhispersintheechoingwoods.crystallizeWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "结晶护盾或月笼仍存在，或条件消失后未满1秒"
+    }
+  }
 }

@@ -54,17 +54,1070 @@
     {
       "pieces": 4,
       "support": {
-        "resolution": "unavailable",
+        "resolution": "complete",
         "evidence": "adopted",
-        "reason": "该件数全部相关机制尚未闭合。",
+        "reason": "已采用当次条件、装备件数及输出适用范围。",
         "mechanisms": [
           {
             "id": "explicit-output-scope",
-            "resolution": "unavailable",
-            "ruleIds": [],
-            "reason": "该件数全部相关机制尚未闭合。"
+            "resolution": "implemented",
+            "ruleIds": [
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-anemo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-anemo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-anemo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-geo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-electro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-hydro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-pyro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-cryo",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.light-dendro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-owner-dendro",
+                "revision": "1"
+              },
+              {
+                "namespace": "builtin",
+                "id": "celestialgift.hymn-field-dendro",
+                "revision": "1"
+              }
+            ],
+            "reason": "已采用当次条件、装备件数及输出适用范围。"
           }
         ]
+      },
+      "buffs": [
+        {
+          "id": "celestialgift.light-anemo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.anemo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "anemo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-anemo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.anemo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "anemo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-anemo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.anemo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-anemo",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.anemoBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.light-geo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.geo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "geo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-geo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.geo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "geo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-geo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.geo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-geo",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.geoBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.light-electro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.electro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "electro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-electro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.electro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "electro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-electro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.electro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-electro",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.electroBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.light-hydro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.hydro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "hydro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-hydro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.hydro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "hydro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-hydro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.hydro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-hydro",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.hydroBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.light-pyro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.pyro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "pyro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-pyro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.pyro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "pyro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-pyro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.pyro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-pyro",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.pyroBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.light-cryo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.cryo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "cryo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-cryo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.cryo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "cryo"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-cryo",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.cryo",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-cryo",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.cryoBonus",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.light-dendro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.dendro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": 0.2,
+              "ownerElements": [
+                "dendro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-owner-dendro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.dendro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "celestialgift.songWindow"
+              },
+              "term1": {
+                "fact": "celestialgift.hexerei"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": 0.4,
+              "ownerElements": [
+                "dendro"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "celestialgift.hymn-field-dendro",
+          "recipient": "team",
+          "stacking": {
+            "group": "celestialgift.dendro",
+            "scope": "team",
+            "policy": "max",
+            "maxStacks": 8
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "celestialgift.songWindow"
+                  },
+                  "term1": {
+                    "fact": "celestialgift.hexerei"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "celestialgift.field-is-dendro",
+                "inputs": {
+                  "element": {
+                    "fact": "celestialgift.onFieldElement"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "modifiers": [
+            {
+              "target": "attribute.dendroBonus",
+              "value": 0.4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "facts": {
+    "celestialgift.songWindow": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "天光之引或凡世颂歌有效（完成魔女课业并施放战技后20秒）"
+    },
+    "celestialgift.hexerei": {
+      "scope": "team",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "队伍已激活魔导·秘仪"
+    },
+    "celestialgift.onFieldElement": {
+      "scope": "team",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ]
+      },
+      "label": "己方当前场上角色的元素"
+    }
+  },
+  "formulas": [
+    {
+      "id": "celestialgift.field-is-anemo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "anemo"
+      }
+    },
+    {
+      "id": "celestialgift.field-is-geo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "geo"
+      }
+    },
+    {
+      "id": "celestialgift.field-is-electro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "electro"
+      }
+    },
+    {
+      "id": "celestialgift.field-is-hydro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "hydro"
+      }
+    },
+    {
+      "id": "celestialgift.field-is-pyro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "pyro"
+      }
+    },
+    {
+      "id": "celestialgift.field-is-cryo",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "cryo"
+      }
+    },
+    {
+      "id": "celestialgift.field-is-dendro",
+      "template": {
+        "id": "enum-condition",
+        "revision": "1",
+        "input": "element",
+        "values": [
+          "none",
+          "anemo",
+          "geo",
+          "electro",
+          "hydro",
+          "pyro",
+          "cryo",
+          "dendro"
+        ],
+        "equals": "dendro"
       }
     }
   ]
