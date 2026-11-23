@@ -78,6 +78,7 @@ import { auditLastCharacterModifierCases } from '../../lib/last-character-modifi
 import { auditRemainingTriggeredStrikes } from '../../lib/remaining-triggered-strikes.mjs';
 import { loadContentSchema } from '../../lib/load-content-schema.mjs';
 import { createRuntimeCatalog } from '../../lib/runtime-catalog.mjs';
+import { auditSingleHitModifiers } from '../../lib/single-hit-modifier-matrix.mjs';
 
 import { writeFileSync } from 'node:fs';
 import { readContentSource } from '../../lib/content-source.mjs';
@@ -104,6 +105,7 @@ const report = calculationCoverage(catalog.inventory, entities.characters, entit
   validate: (kind, entity) => kind === 'character' ? engine.compileStructuredCharacter(entity) : engine.compileCalculation(entity.calculation.bundle),
 });
 const actual = rosterEvaluation(entities, engine);
+const singleHitModifiers = auditSingleHitModifiers(entities, engine);
 const { combatObservationUnits } = await loadContentSchema('/src/schema/src/calculation/event.ts');
 const currentEquipment = auditEquipmentCurrentFacts(entities, engine);
 const additionalEquipment = auditAdditionalEquipment(entities, engine);
@@ -226,6 +228,7 @@ const verifiedClauses = new Set([...characterBuffs.verified, ...castTiming.verif
 const characterClauses = auditCharacterClauses(entities, engine, verifiedForms, verifiedClauses);
 const { publicGaps, publicChecks, interpretations } = readContentSource(new URL('../../data/sources/catalog/combat-lifecycle.json', import.meta.url));
 const auditFailures = [
+  ...singleHitModifiers.failures.map(row => ({ entity: row.recipient, field: row.hit ?? row.category, issue: row.reason ?? row.status, rule: row.rule })),
   ...sceneEnvironmentAmounts.gaps,
   ...actual.gaps, ...equipment.rows.filter(r=>r.issue), ...equipment.rows.flatMap(r=>(r.modifiers??[]).filter(m=>m.issue).map(m=>({entity:r.entity,field:r.field,pieces:r.pieces,issue:m.issue}))),
   ...[equipmentContexts,manekin,setConditions,setHealing,talentHealing,characterBuffs,castTiming,auraDurations,partyParticles,gleam,
@@ -284,6 +287,9 @@ summary.recoveryDetailsPending = recoveryGaps.length;
 const results = { summary, settings: actual.settings, evaluatedHits: actual.rows, talentDetails: actual.talentDetails, talentHealing, recoveryGaps,
   contextualDetails: actual.otherDetails, gaps: actual.gaps, auditFailures, equipment, equipmentContexts, weaponTriggers, manekin, setConditions, setHealing, scenes, resonances, reactionBlessings, characterBuffs, castTiming, auraDurations, partyParticles, gleam, characterClauses, publicGaps, publicChecks, interpretations, lifecycleGaps: report.lifecycleGaps, uncovered };
 results.sceneEnvironmentAmounts = { ...sceneEnvironmentAmounts, verified: [...sceneEnvironmentAmounts.verified], baseVerified: [...sceneEnvironmentAmounts.baseVerified] };
+results.singleHitModifiers = singleHitModifiers;
+summary.singleHitModifierCases = singleHitModifiers.rows.length;
+summary.singleHitModifierFailures = singleHitModifiers.failures.length;
 Object.assign(summary, sceneEnvironmentAmounts.summary);
 for (const [name, audit] of Object.entries(singleHitAudits)) {
   results[name] = { ...audit, verified: [...audit.verified], ...(audit.baseVerified ? { baseVerified: [...audit.baseVerified] } : {}) };
@@ -384,7 +390,7 @@ if (gapFile) writeFileSync(gapFile, rosterGapReport(results, entities));
 console.log(JSON.stringify(flags.has('--json') ? { ...report, ...results } : { material: report.material, ...summary }));
 const checkFullMechanisms = flags.has('--check') && (!flags.has('--require-current') || flags.has('--require-complete'));
 if ((flags.has('--require-complete') || flags.has('--require-current')) && !summary.currentCalculationComplete
-  || summary.sceneEnvironmentAmountCheckFailures || summary.calculatorEntryFailures || summary.singleHitAuditFailures || summary.characterClauseGrantFailures || summary.currentEquipmentMismatches || summary.currentTalentFailures ||
+  || summary.singleHitModifierFailures || summary.sceneEnvironmentAmountCheckFailures || summary.calculatorEntryFailures || summary.singleHitAuditFailures || summary.characterClauseGrantFailures || summary.currentEquipmentMismatches || summary.currentTalentFailures ||
   summary.manekinFailures || summary.weaponTriggerFailures || summary.setConditionFailures || summary.blessingMismatches || summary.publicResonanceMismatches || summary.countFailures || summary.clauseGateFailures || summary.conditionFailures || summary.publicSceneChecksFailed || summary.equipmentMismatches || summary.modifierMismatches || summary.invalidDefinitions || summary.mismatches || summary.duplicate || checkFullMechanisms && (report.lifecycleGaps.some(gap => gap.area !== 'observation') || summary.positiveHits !== summary.evaluated || summary.equipmentMissingValues || summary.missingBindings || summary.missingValues || summary.detailCandidates || summary.unresolvedHitInterpretations || summary.contextualContributionsPending || summary.numericModifierContributions !== summary.modifierScenarios || summary.publicCombatClauseGaps || summary.publicSceneSourceGaps || summary.characterCombatClausesPending)
   || checkFullMechanisms && (summary.weaponClausesPending || summary.setClausesPending || summary.recoveryDetailsPending)
   || summary.equipmentContextFailures || summary.setHealingFailures || summary.talentHealingFailures || summary.characterBuffFailures || summary.castTimingFailures || summary.auraDurationFailures || summary.resonanceParticleFailures || summary.gleamFailures || flags.has('--require-complete') && (summary.unavailable || summary.compared !== summary.evaluated || actual.gaps.length)) {

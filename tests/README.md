@@ -7,6 +7,7 @@
 | `pnpm test` | Vitest 单元及 TypeScript 集成检查 |
 | `pnpm exec vitest run tests/unit/web/domain/calculator-catalog-defaults.test.ts` | 遍历正式目录的命中与增益，检查默认值、命座限制和计算页文案 |
 | `pnpm test:content` | Node 内容、目录及文件工具检查 |
+| `node --test tests/integration/single-hit-modifier-matrix.test.mjs` | 离线核验五类直伤与套装、武器、队友增益的交叉组合，以及生命阈值和层数边界 |
 | `pnpm test:ui` | Chromium 真实库存流程 |
 | `pnpm test:ui:contracts` | Chromium 真实样式、焦点与窄屏 |
 | `pnpm test:e2e` | 完整 Chromium 开发回归 |

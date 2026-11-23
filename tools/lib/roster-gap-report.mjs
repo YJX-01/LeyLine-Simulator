@@ -1,11 +1,46 @@
 const cell = value => String(value ?? '').replaceAll('|', '｜').replaceAll('\n', ' ');
 const code = value => '`' + cell(value) + '`';
 
+function modifierMatrixReport({ rows, unsampled, failures }) {
+  const names = {
+    'gladiator-normal': '角斗士件数与普攻武器限制', 'gladiator-exclusion': '角斗士对其余伤害段的排除',
+    'ordinary-profiles': '五类直伤与通用套装组合', 'ordinary-equivalent-sets': '同文两件套在各类伤害上的对照',
+    'ordinary-weapons': '武器被动、副属性与套装叠加', 'ordinary-party': '班尼特领域与持有者套装叠加',
+    'attack-times-bonus': '攻击与增伤相乘', 'additive-bonuses': '两项增伤相加',
+    'crit-selection': '暴击模式和上限', 'crit-and-resistance': '五类命中的暴击和抗性',
+    'resistance-and-recipient': '减抗来源与套装受益人', 'party-attack': '领域施放者与攻击加成受益人',
+  };
+  const lines = ['## 单次直伤与加成', '', '| 规则 | 数值通过 | 数值不符 | 缺输入或结果 | 缺独立期望 |',
+    '| --- | ---: | ---: | ---: | ---: |'];
+  for (const [rule, label] of Object.entries(names)) {
+    const group = rows.filter(row => row.rule === rule);
+    const count = (...states) => group.filter(row => states.includes(row.status)).length;
+    lines.push('| ' + [label, count('passed'), count('mismatch'), count('missing-input', 'missing-result'), count('missing-evidence')].join(' | ') + ' |');
+  }
+  const general = rows.filter(r => r.rule === 'ordinary-profiles');
+  lines.push('', '通用矩阵覆盖 ' + new Set(general.map(r => r.recipient)).size + ' 个角色与形态、' + new Set(general.map(r => r.hit)).size
+    + ' 个命中，各自核验 ' + new Set(general.map(r => r.conditions.profile)).size + ' 种配装。另有 ' + unsampled.filter(r => r.rule === 'ordinary-profiles').length
+    + ' 个命中未纳入通用矩阵，具体原因见 JSON 的 singleHitModifiers.unsampled。rows 保留每项的输入、基线、期望和实际伤害。', '');
+  lines.push('| 伤害类型 | 独立命中数 | 单套装对照次数 | 双套装对照次数 | 武器对照次数 | 队友领域对照次数 |',
+    '| --- | ---: | ---: | ---: | ---: | ---: |');
+  for (const [category, label] of Object.entries({ normal: '普攻', charged: '重击', plunge: '下落', skill: '战技', burst: '爆发' })) {
+    const hits = general.filter(r => r.category === category);
+    const singles = hits.filter(r => r.conditions.profile !== 'baseline' && !r.conditions.profile.includes('+'));
+    const pairs = hits.filter(r => r.conditions.profile.includes('+'));
+    const count = rule => rows.filter(r => r.category === category && r.rule === rule).length;
+    lines.push('| ' + [label, new Set(hits.map(r => r.hit)).size, singles.length, pairs.length, count('ordinary-weapons'), count('ordinary-party')].join(' | ') + ' |');
+  }
+  for (const row of failures) lines.push('- ' + [names[row.rule] ?? row.reason, row.recipient, row.hit ?? row.category,
+    JSON.stringify(row.conditions ?? {}), row.status ?? '缺样本', '期望 ' + (row.expected ?? '—'), '实际 ' + (row.actual ?? '—')].map(cell).join(' · '));
+  return lines;
+}
+
 export function rosterGapReport(result, entities) {
   const { summary: n, characterClauses, equipment, scenes, publicGaps, uncovered } = result;
   const names = new Map([...entities.characters, ...entities.weapons, ...entities.sets].map(entity => [entity.id, entity.identity?.name ?? entity.name]));
   const subjects = { 'character-clause': '被动与命座原文', 'talent-description': '技能说明原文', 'equipment-clause': '武器与套装原文', modifier: '修饰项' };
   const lines = ['# 正式目录计算验收缺口', '',
+    ...modifierMatrixReport(result.singleHitModifiers), '',
     '## 当次条件下的计算器覆盖', '',
     `角色与形态的正式命中有 ${n.calculatorSelectableHits}/${n.calculatorCharacterHits} 项可从菜单选中。装备追加命中有 ${n.calculatorSelectableEquipmentHits}/${n.calculatorEquipmentHits} 项可按武器或套装件数选择，其中 ${n.calculatorEquipmentHitComparisons} 项取得了与独立算式一致的正值。数值、解锁条件和输入保存在 JSON 的 calculator.hits 与 calculator.equipmentHits。`,
     '', `在满足授予与受益门槛的配装中，计算器列出了 ${n.calculatorListedBuffModifiers}/${n.calculatorBuffModifiers} 个角色与装备修饰项。其中 ${n.calculatorProvenBuffModifiers} 项已有明确对应到该修饰项的独立数值对照，${n.calculatorPendingBuffModifiers} 项待对照。当次条件专项共验算 ${n.singleHitAuditCases} 个用例，${n.singleHitAuditFailures} 个不符。按原文指针去重后，${n.singleHitProvenFields} 个字段通过所属专项的验算。`,

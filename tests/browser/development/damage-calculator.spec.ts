@@ -43,6 +43,39 @@ async function selectHit(calculator: Locator, skill: string, index = 0) {
   await dialog.locator('button[data-skill-id="' + skill + '"][data-hit-id]').nth(index).click();
 }
 
+test('Xinyan’s two burst hits keep their own crit rules through the buff picker and Worker replay', async ({ page }, info) => {
+  const build: Build = { ...await catalogSnapshotFields('xinyan', 'blackcliffslasher'), level: 1, ascension: 0, constellation: 2,
+    weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const { calc, open } = await openSingleBuild(page, build);
+  const burst = build.character.metadata.talents.find(talent => talent.id === 'xinyan.burst')!;
+  const crit = calc.getByRole('combobox', { name: '暴击', exact: true });
+  const check = (parameter: string, rate: number) => {
+    const talentRatio = burst.parameters.find(p => p.id === parameter)!.values[0];
+    const attack = build.character.attributes.base.attack + build.weapon!.baseAttack;
+    const expected = attack * talentRatio * (101 / 291) * .9 * (1 + rate * .62);
+    return expect.poll(async () => Number((await calc.getByTestId('calculator-value').innerText()).replaceAll(',', ''))).toBeCloseTo(expected, 5);
+  };
+  await selectHit(calc, 'xinyan.burst');
+  await crit.selectOption('expected');
+  for (const enabled of [false, true]) {
+    await calc.getByRole('button', { name: '选择增益', exact: true }).click();
+    const picker = page.getByRole('dialog', { name: '选择增益' });
+    await picker.getByRole('checkbox', { name: /开场即兴段/ }).setChecked(enabled);
+    await picker.getByRole('button', { name: '应用增益' }).click();
+    await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
+    await check('param1', enabled ? 1 : .05);
+  }
+  const downloading = page.waitForEvent('download');
+  await calc.getByRole('button', { name: '导出计算文件', exact: true }).click();
+  const file = info.outputPath('xinyan-crit.json');
+  await (await downloading).saveAs(file);
+  await open.setInputFiles(file);
+  await expect(crit).toHaveValue('expected');
+  await check('param1', 1);
+  await selectHit(calc, 'xinyan.burst', 1);
+  await check('param2', .05);
+});
+
 test('calculator shares the team and character pickers and retains a four-member selection in its own file', async ({ page }, info) => {
   test.skip(!existsSync(vesnaRecording), 'Requires the authorized original showcase.');
   test.setTimeout(90000);
@@ -808,7 +841,7 @@ test('Blackcliff layers keep distinct expiry times in the calculator Worker afte
   const calc=page.getByRole('region',{name:'伤害计算',exact:true}),open=calc.getByLabel('打开伤害计算文件',{exact:true});
   await open.setInputFiles({name:'黑岩试配.json',mimeType:'application/json',buffer:Buffer.from(original)});
   const base=(build.character.attributes.base.attack+build.weapon!.baseAttack)*.5375*.45;
-  const check=(layers:number)=>expect.poll(async()=>Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',',''))).toBeCloseTo(base*(1+.12*layers),5);
+  const check=(layers:number, critFactor = 1)=>expect.poll(async()=>Number((await calc.getByTestId('calculator-value').textContent())?.replaceAll(',',''))).toBeCloseTo(base*(1+.12*layers)*critFactor,5);
   await check(0);
   await calc.getByRole('button',{name:'选择增益',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'选择增益'});
@@ -818,15 +851,21 @@ test('Blackcliff layers keep distinct expiry times in the calculator Worker afte
   await dialog.getByLabel('第2层剩余时间（秒）').fill('4');
   await dialog.getByRole('button',{name:'应用增益'}).click();
   await check(2);
+  const mode = calc.getByRole('combobox', { name: '暴击', exact: true });
+  await mode.selectOption('expected');
+  await calc.getByRole('button', { name: '计算伤害', exact: true }).click();
+  const expectedCrit = 1 + .05 * (.5 + .08);
+  await check(2, expectedCrit);
   const downloading=page.waitForEvent('download');
   await calc.getByRole('button',{name:'导出计算文件',exact:true}).click();
   const file=info.outputPath('黑岩剩余时间.json');await (await downloading).saveAs(file);
   await open.setInputFiles(file);
-  await check(2);
+  await expect(mode).toHaveValue('expected');
+  await check(2, expectedCrit);
   for(const [time,layers] of [[2,1],[4,0]]) {
     await calc.getByLabel('命中时刻（秒）',{exact:true}).fill(String(time));
     await calc.getByRole('button',{name:'计算伤害',exact:true}).click();
-    await check(layers);
+    await check(layers, expectedCrit);
   }
 });
 

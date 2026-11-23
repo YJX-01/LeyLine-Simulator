@@ -631,44 +631,6 @@ test('two recorded equipment selections give Nahida a real team maximum of 800 a
   }
 });
 
-test('stacked talent bases include each consumed count and the full-charge term once', async () => {
-  for (const [id,weapon,key,baseId,stepId,max,stat] of [
-    ['lyney','huntersbow','lyney.propSurplus',1,2,5,'attack'],
-    ['beidou','wastergreatsword','counterCharge',3,4,2,'attack'],
-    ['shikanoinheizou','apprenticesnotes','shikanoinheizou.declension',1,2,4,'attack'],
-    ['mualani','apprenticesnotes','mualani.waveMomentum',1,2,3,'hp'],
-  ]) {
-    const b = auditBuild(await catalog.get('characters',id),await catalog.get('weapons',weapon));
-    const t = b.character.talents.find(t => t.category === 'skill'), h = t.hits.find(h => h.id === t.id+'.param'+baseId);
-    const team = prepare([{ id:'actor',build:b }]), raw = b.character.attributes.base[stat] + (stat === 'attack' ? b.weapon.baseAttack : 0);
-    const rate = n => t.parameters.find(p => p.id === 'param'+n).values[0];
-    for (let count = 0; count <= max; count++) {
-      const { setup,request } = auditHit(b.character,t,h);
-      request.frame.facts[key] = number('count',count);
-      const value = engine.evaluateStructuredHit(team,setup,request).totals.all.value?.value;
-      const full = count === max && ['mualani','shikanoinheizou'].includes(id) ? rate(3) : 0;
-      near(value,raw*(rate(baseId)+count*rate(stepId)+full)*.45);
-    }
-  }
-});
-
-test('Hydro Traveler applies Suffusion to Dewdrops only above half HP on both forms', async () => {
-  for (const id of ['aether-hydro', 'lumine-hydro']) {
-    const b = auditBuild(await catalog.get('characters', id), await catalog.get('weapons', 'dullblade'));
-    const t = b.character.talents[1], team = prepare([{ id: 'actor', build: b }]);
-    const attack = b.character.attributes.base.attack + b.weapon.baseAttack;
-    for (const [index, ratio] of [[1, .328], [2, 1.8928], [3, .328]]) {
-      const hit = t.hits.find(h => h.id === t.id + '.param' + index);
-      for (const health of [.49, .5, .50001, 1]) {
-        const { setup, request } = auditHit(b.character, t, hit);
-        request.frame.factOverrides[0].facts.hpRatio = number('scalar', health);
-        const bonus = index === 1 && health > .5 ? b.character.attributes.base.hp * .0064 : 0;
-        near(engine.evaluateStructuredHit(team, setup, request).totals.all.value?.value, (attack * ratio + bonus) * .45);
-      }
-    }
-  }
-});
-
 test('Ayato grants normal attack damage to recipients in his garden through the last millisecond', async () => {
   const recipient = auditBuild(await catalog.get('characters', 'kaeya'), await catalog.get('weapons', 'dullblade'));
   const support = await build('kamisatoayato', 'dullblade');

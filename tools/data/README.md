@@ -156,6 +156,10 @@ addPropLevels为5/9/13/17/21，按物品maxLevel截断。appendPropNum含非玩�
 
 ## 计算支持与验证资料
 
+全目录报告的 `singleHitModifiers` 遍历普攻、重击、下落、战技与爆发的各个直伤段。每段都按相同的配装表核对攻击、生命、防御、暴击、元素和伤害类型加成，并对照同区相加和跨区相乘。相同两件套原文的其他套装，在每种实际存在的伤害类型、元素与倍率属性组合上各取样核验。武器按可用类型加入，班尼特领域与持有者套装分别开关。期望取自本地倍率和效果原文。[套装效果](sources/catalog/genshin-db/sets.json) · [武器精炼效果](sources/catalog/genshin-db/weapons.json)
+
+通用矩阵使用一级零命、无反应和明确的当次条件。水主的生命阈值、消耗层数、满层项和玛薇卡战意有逐档输入。未纳入的命中会在 `unsampled` 逐项给出原因，包括锁面板、可变元素及历史事件依赖。角斗士另保留全形态普攻首段，以及两件和四件在其他伤害段的差分对照。数值不符或缺必要输入会使验收失败。
+
 ### 计算支持与内容绑定
 
 `pnpm data:coverage --report artifacts/round-after.json --gaps artifacts/round-after.md` 遍历正式角色、武器、套装的伤害菜单、解锁门槛、受益对象和条件控件。JSON 的 `calculator` 保存逐项入口，`evaluatedHits` 保存实际值、独立期望、关闭增益后的基础对照和排除情形。各专项的 `rows` 保存具体设定与结果，`verified` 按实体和字段记录已经核验的条款。武器、套装、场景与共鸣使用各自的来源表。运行 `--check --require-complete` 另外检查完整机制与证据缺口。
