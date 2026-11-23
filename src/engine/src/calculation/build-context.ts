@@ -1,10 +1,10 @@
-import { authoredHit, ordinaryHitInvocation, resolveHitElement } from '@leyline/schema/hit-bindings';
+import { authoredHit, ordinaryHitInvocation } from '@leyline/schema/hit-bindings';
 import { combatFactDeclaration, grantBuffs } from '@leyline/schema/buffs';
 import { buildSetCounts, findBuildHit, hitEventFactIssues, sceneSelectionsSchema, weaponRefinementLimit, type CombatFrame, type SceneSelection } from '@leyline/schema';
 import { evaluateCombatBindings } from './context';
 import { grantedBuildEffects, grantedGleamEffects, grantedResonances, suppliesMoonsign, type Grant } from './grants';
 import { APP_VERSION } from '@leyline/schema/version';
-import { artifactSubstatLimits, calculationBundleSchema, calculationJsonPointer, combatContextSchema, definitionKey, inspectCalculationStructure, inventoryAllocationsSchema, statKeys, structuredBuildActorsSchema, structuredCombatSetupSchema, structuredHitRequestSchema, valueMatchesType,
+import { artifactSubstatLimits, calculationBundleSchema, calculationJsonPointer, calculationLibraryValueLimit, combatContextSchema, definitionKey, inspectCalculationStructure, inventoryAllocationsSchema, statKeys, structuredBuildActorsSchema, structuredCombatSetupSchema, structuredHitRequestSchema, valueMatchesType,
   talentInputIssues, createTalentRankReader, type CalculationBundle, type CalculationDiagnostic, type CalculationFact, type CombatActor, type CombatContext, type EvaluatedValue,
   type DamageOccurrence, type DefinitionRef, type InventoryAllocation, type StructuredBuild, type StructuredDamageEvaluation, type Value, type ValueType } from '@leyline/schema';
 import { calculationBudgets, compileCalculation, compiledData, type CompiledCalculation, type CompiledData } from './compile';
@@ -12,6 +12,7 @@ import { validateCharacterBindings } from './character';
 import { evaluateDamageQuery } from './queries';
 import type { BoundAttributeReader } from './context';
 import { checkInventoryFeasibility } from './feasibility';
+import { resolveCombatHitElement } from './party-infusion';
 
 declare const teamBrand: unique symbol;
 export interface PreparedStructuredTeam { readonly [teamBrand]: true; readonly program: CompiledCalculation; readonly actorCount: number; readonly talentRank: ReturnType<typeof createTalentRankReader> }
@@ -32,7 +33,7 @@ const allowedMain: Record<StructuredBuild['artifacts'][number]['slot'], readonly
 
 /** Current build snapshots only. Growth and equipment inputs never execute static or combat modifiers. */
 export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unknown, scenesInput: unknown = []): PreparedTeamResult {
-  const diagnostics: CalculationDiagnostic[] = [input, ...dependenciesInput === undefined ? [] : [dependenciesInput]].flatMap(value => inspectCalculationStructure(value));
+  const diagnostics: CalculationDiagnostic[] = [...inspectCalculationStructure(input), ...dependenciesInput === undefined ? [] : inspectCalculationStructure(dependenciesInput, calculationLibraryValueLimit)];
   const report = (code: CalculationDiagnostic['code'], pointer: string, message: string) => diagnostics.push({ code, severity: 'error', jsonPointer: pointer, message, affectedOutputIds: [] });
   if (diagnostics.length) return { ok: false, diagnostics };
   const parsed = structuredBuildActorsSchema.safeParse(input);
@@ -139,7 +140,8 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
         }) };
       }) };
     });
-    data.actors.push({ id, identity: { element: character.identity.element, region:character.identity.region, weaponType: character.identity.weaponType, sourceRefs: character.sources }, inputs, facts: {}, actorFacts: {}, ascension: build.ascension, constellation: build.constellation, refinement: build.refinement, setCounts, effects, talents }); data.inventory.push(allocation);
+    data.actors.push({ id, identity: { element: character.identity.element, region:character.identity.region, weaponType: character.identity.weaponType,
+      gameId: character.identity.gameId, sourceRefs: character.sources }, inputs, facts: {}, actorFacts: {}, ascension: build.ascension, constellation: build.constellation, refinement: build.refinement, setCounts, effects, talents }); data.inventory.push(allocation);
   }
   if (diagnostics.length) return { ok: false, diagnostics };
   const resonance = grantedResonances(parsed.data);
@@ -147,18 +149,26 @@ export function prepareStructuredBuilds(input: unknown, dependenciesInput?: unkn
   for(const [id,grants] of grantedGleamEffects(parsed.data)) data.actors.find(actor=>actor.id===id)!.effects.push(...grants.map(g=>g.effect.identity));
   const owner = data.actors.find(actor => data.builds.has(actor.id));
   const selectedScenes = new Map<string, string>();
-  for (const { definition } of data.scenes) {
+  for (const { definition: { dependencies, ...definition } } of data.scenes) {
     const prior = selectedScenes.get(definition.id), normalized = canonical(definition);
     if (prior && prior !== normalized) report('conflicting-definition', '/sceneEffects', '同一场景定义有相互冲突的版本。');
-    if (prior || !owner) continue;
+    if (!owner) continue;
+    if (dependencies) {
+      merged.attributes.push(...dependencies.attributes);
+      merged.sources.push(...dependencies.sources);
+    }
+    if (prior) continue;
     selectedScenes.set(definition.id, normalized);
     for (const buff of definition.buffs) for (const family of buff.appliesTo?.families ?? []) families.add(family);
     merged.sources.push({ id: definition.id, kind: 'definition' });
+    for (const { id, template } of definition.formulas ?? []) merged.formulas.push({ schemaVersion: APP_VERSION,
+      identity: { namespace: definition.namespace, id, revision: '1' }, sources: [definition.id], template });
+    const sceneFacts = { ...definition.facts, [definition.id]: { scope: 'team', type: { kind: 'boolean' } } };
     const inScene = { fact:definition.id };
     for (const buff of definition.buffs) {
       const condition = buff.condition ? {call:'condition.all',output:'active',inputs:{term0:inScene,term1:buff.condition}} : inScene;
       const grant = { ...buff, condition, ...(buff.trigger ? {trigger:{...buff.trigger,duringTeamInterval:definition.id}} : {}) };
-      const references = grantBuffs({ buffs:[grant] },merged.effects,[definition.id],{ [definition.id]: {scope:'team',type:{kind:'boolean'}} });
+      const references = grantBuffs({ buffs:[grant] }, merged.effects, [definition.id], sceneFacts);
       const holders = buff.recipient === 'owner' ? data.actors.filter(actor => data.builds.has(actor.id)) : [owner];
       const effects = merged.effects.slice(-references.length);
       for (const holder of holders) {
@@ -256,6 +266,7 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
   catch { return evaluateDamageQuery(team.program, {}, {}); }
   const reserved = Object.hasOwn(query.frame.facts, 'critMode') || Object.hasOwn(query.frame.facts, 'reactionMode');
   const inputIssues = found && build ? hitEventFactIssues(found.entity, talent, query.frame.facts, build.constellation, data.builds.values()) : [];
+  if (hit?.reactions === false && query.reactionMode && query.reactionMode !== 'none') inputIssues.push('此命中不能触发元素反应。');
   if (reserved || inputIssues.length) {
     const invalid = evaluateDamageQuery(team.program, context, { kind: 'hit', output: null });
     for (const message of [...inputIssues, ...reserved ? ['伤害模式事实重复定义。'] : []]) invalid.diagnostics.push({ code: reserved ? 'conflicting-definition' : 'invalid-range', severity: 'error', jsonPointer: '/frame/facts', affectedOutputIds: [], message });
@@ -265,13 +276,7 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
   const family = declaration?.family;
   let selectedFamily = typeof family === 'string' ? family : hit && !talent ? Object.keys(hit.damage)[0] : 'ordinary';
   let missingBranch: string | undefined;
-  let infused: boolean | undefined;
-  if (hit?.infusion) {
-    const read = evaluateCombatBindings(team.program, context, { infused:{kind:'fact',scope:'owner',key:hit.infusion.fact,type:{kind:'boolean'}} },
-      { ...query.frame,ownerId:query.actorId,recipientId:query.actorId,contributorId:null,hit:null }).outputs.infused;
-    if (read?.state === 'known' && read.value.kind === 'boolean') infused=read.value.value;
-    else missingBranch=hit.infusion.fact;
-  }
+  const observedFrame = { ...query.frame, ownerId: query.actorId, recipientId: query.actorId, contributorId: null, hit: null };
   const dealer = hit?.coordinated ? onFieldActor(team, context, query.frame) : undefined;
   if (hit?.coordinated && !dealer?.identity) {
     const ready = (query.frame.facts[hit.coordinated.readyFact] ?? context.events.find(event => event.id === query.frame.eventId)?.facts[hit.coordinated.readyFact])?.value;
@@ -292,9 +297,8 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
       else missingBranch = family.by;
     }
   }
-  const teamElements = context.actors.map(actor => actor.identity?.element);
-  const elementInput = hit?.elementBy && (query.frame.facts[hit.elementBy] ?? context.events.find(event => event.id === query.frame.eventId)?.facts[hit.elementBy]);
-  const selection = hit && resolveHitElement(hit, elementInput?.value, teamElements, infused);
+  const selection = hit && resolveCombatHitElement(team.program, context, observedFrame, hit, selectedFamily, talent?.category === 'normal', build, data.builds.values());
+  missingBranch ??= selection?.missingInfusion;
   if (hit && selection?.missing) {
     const predicate = hit.damage.ordinary?.predicate;
     const gate = predicate && evaluateCombatBindings(team.program, context, { gate: predicate }, { ...query.frame, ownerId: query.actorId, recipientId: query.actorId, contributorId: null, hit: null }).outputs.gate;
@@ -318,14 +322,15 @@ export function evaluateStructuredHit(team: PreparedStructuredTeam, setup: unkno
     result.execution = state === 'unknown' ? 'partial' : 'invalid'; result.totals = { all: value, objective: value }; result.events.forEach(event => { event.total = value; }); return result;
   }
   const element = dealer?.identity?.element ?? selection!.element;
-  const invocation = hit.elementBy || hit.coordinated || infused ? ordinaryHitInvocation({ ...hit, element }, output.predicate) : output;
+  const invocation = selectedFamily === 'ordinary' && element !== hit.element ? ordinaryHitInvocation({ ...hit, element }, output.predicate) : output;
   const dealingActor = dealer?.id ?? query.actorId;
   if (hit.coordinated && dealer && dealer.id !== query.actorId) {
     context = { ...context, events: context.events.map(event => event.id === query.frame.eventId && event.actorId === query.actorId
       ? { ...event, actorId: dealer.id } : event) };
   }
   const frame = { ...query.frame, ownerId: dealingActor, recipientId: dealingActor, contributorId: hit.coordinated ? query.actorId : null,
-    facts: { ...query.frame.facts, critMode: { value: query.critMode === null ? null : { kind: 'enum' as const, value: query.critMode }, provenance: 'explicit' as const, sourceRefs: [] },
+    facts: { ...query.frame.facts, critMode: hit.critical === 'always' ? derived({kind:'enum', value:'critical'},hit.sources)
+      : { value: query.critMode === null ? null : { kind: 'enum' as const, value: query.critMode }, provenance: 'explicit' as const, sourceRefs: [] },
       reactionMode: { value: query.reactionMode === null ? null : { kind: 'enum' as const, value: query.reactionMode }, provenance: 'explicit' as const, sourceRefs: [] } },
     hit: { skillId: talent?.id ?? null, hitId: hit.id, element, category: hit.category, family: selectedFamily, origin: hit.origin,
       reactionId: query.reactionMode && query.reactionMode !== 'none' ? query.reactionMode : null } };

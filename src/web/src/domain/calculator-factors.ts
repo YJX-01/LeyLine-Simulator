@@ -1,6 +1,6 @@
 import { definitionKey, type CalculationTraceNode, type DamageRequest, type DamageResult, type EvaluatedValue } from '@leyline/schema';
 import { realStatLabel } from './workbench-labels';
-import type { CalculatorBuff } from './calculator-buffs';
+import { buffTargetLabel, type CalculatorBuff } from './calculator-buffs';
 
 export const damageNumber = (value?: number | null) => value == null || !Number.isFinite(value) ? '待确认' : value.toLocaleString('zh-CN', { maximumFractionDigits: 6 });
 export const critNames = { noncritical: '非暴击', critical: '暴击', expected: '期望' };
@@ -10,9 +10,34 @@ const numeric = (entry?: EvaluatedValue | CalculationTraceNode) => entry?.state 
 type Row = [string, string];
 export interface CalculatorFactor { label: string; value: number | null; multiplier: boolean; rows: Row[] }
 
+function buffRow(source: CalculatorBuff | undefined, modifierId: string, value: number | null, unit?: string): Row | undefined {
+  const modifier = source?.modifiers.find(entry => entry.id === modifierId);
+  if (!source || !modifier) return;
+  const name = (source.source === source.name ? source.name : source.source + ' / ' + source.name) + ' · ' + buffTargetLabel(modifier.target);
+  const target = modifier.target.replace(/^attribute\./, '');
+  const isMultiplier = target.endsWith('baseMultiplier') || target.endsWith('elevationFactor')
+    || target === 'lohenWillGainMultiplier' || target === 'incomingPoiseDamageMultiplier';
+  if (target === 'aimChargeInstant' && value === 1) return [name, '本次免蓄力'];
+  if (target === 'aimChargeTimeReductionPerEnergy' && value != null) return [name, damageNumber(value / 1000) + ' 秒/点'];
+  if (target === 'confirmedSkillCooldownResetMs' && value != null) return [name, damageNumber(value / 1000) + ' 秒（重置后 0 秒）'];
+  if (target === 'confirmedSkillChargesRestored' && value != null) return [name, damageNumber(value) + ' 次'];
+  if (unit === 'milliseconds' && value != null) return [name, damageNumber(value / 1000) + ' 秒'];
+  const formatted = isMultiplier && value != null ? '× ' + damageNumber(value)
+    : unit === 'scalar' && !['actorEndureDelta', 'lohenWillLimit'].includes(target) ? percent(value) : damageNumber(value);
+  return [name, formatted];
+}
+
+export function calculatorBuffValues(real: DamageResult, buffs: readonly CalculatorBuff[]): Row[] {
+  const sources = new Map(buffs.map(buff => [buff.id, buff]));
+  return (real.panel.effectValues ?? []).flatMap(entry => {
+    const row = buffRow(sources.get(entry.instanceId), entry.modifierId, entry.value, entry.unit);
+    return row ? [row] : [];
+  });
+}
+
 /** Read the stages and dependencies of this output, including the inputs actually evaluated at the hit or capture. */
 export function calculatorFactors(real: DamageResult, damage: DamageRequest, buffs: readonly CalculatorBuff[]): CalculatorFactor[] {
-  const result = real.structured, output = result?.outputs.find(entry => entry.outputId === damage.hit.hitId);
+  const result = real.structured, output = damage.hit.hitId ? result?.outputs.find(entry => entry.outputId === damage.hit.hitId) : result?.outputs[0];
   if (!result || !output) return [];
   const trace = new Map(result.trace.map(node => [node.id, node]));
   const stages = new Map(output.stages.map(stage => [stage.id, stage.value]));
@@ -46,13 +71,11 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
     const rows = new Map<string, Row>();
     for (const node of dependencies(traceId)) {
       const instance = node.context?.effectInstanceId;
-      if (node.kind !== 'effect' || !instance || rows.has(instance)) continue;
-      const source = sources.get(instance);
-      if (!source) continue;
-      const value = numeric(node);
-      const formatted = node.value?.kind === 'quantity' && node.value.unit === 'scalar'
-        ? source.target.endsWith('baseMultiplier') && value != null ? '× ' + damageNumber(value) : percent(value) : damageNumber(value);
-      rows.set(instance, [source.source === source.name ? source.name : source.source + ' / ' + source.name, formatted]);
+      if (node.kind !== 'effect' || !instance) continue;
+      const key = JSON.stringify([instance, node.nodeId]);
+      if (rows.has(key)) continue;
+      const row = buffRow(sources.get(instance), node.nodeId, numeric(node), node.value?.kind === 'quantity' ? node.value.unit : undefined);
+      if (row) rows.set(key, row);
     }
     return [...rows.values()];
   }
@@ -81,5 +104,6 @@ export function calculatorFactors(real: DamageResult, damage: DamageRequest, buf
   add('amplification','增幅反应区', [['反应', damage.reaction ? reactionNames[damage.reaction === 'none' ? 'none' : damage.reaction.type] : '待确认'],
     ...(real.reaction?.family === 'amplifying' ? [['反应系数',damageNumber(real.reaction.coefficient)],['元素精通',damageNumber(real.reaction.elementalMastery)],['反应加成',percent(real.reaction.bonus)]] as Row[] : [])]);
   add('elevation','反应提升区', inputs('elevation',[['elevation','反应伤害提升',true],['elevationFactor','提升倍率']]));
+  if (numeric(stages.get('ordinary-elevation')) !== 1) add('ordinary-elevation', '擢升区', inputs('ordinary-elevation', [['elevationFactor', '擢升倍率']]));
   return cards;
 }

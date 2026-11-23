@@ -5,7 +5,7 @@ export type { CompileResult, CompiledCalculation } from './calculation/compile';
 export { evaluateFormula } from './calculation/interpret';
 export type { FormulaEvaluationOptions } from './calculation/interpret';
 export { evaluateBoundFormula, evaluateCombatBindings } from './calculation/context';
-export { buffEndMs, calculationEffectInstanceId, effectUnlocked, eventMatches, hitMatches, instanceActive, stackExpiryUncertain } from './calculation/effects';
+export { buffEndMs, calculationEffectInstanceId, effectRecipientMatches, effectUnlocked, eventMatches, hitMatches, instanceActive, stackExpiryUncertain } from './calculation/effects';
 export { projectCalculationEvent } from './calculation/project';
 export { evaluateDamageQuery, selectCalculationValue } from './calculation/queries';
 export { checkInventoryFeasibility } from './calculation/feasibility';

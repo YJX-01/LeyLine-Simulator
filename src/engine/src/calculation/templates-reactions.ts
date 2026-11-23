@@ -53,6 +53,8 @@ export function additive(recipe: FormulaDefinition): FormulaGraph {
 
 export function transformative(recipe: FormulaDefinition): FormulaGraph {
   const b = new TemplateBuilder(recipe);
+  b.input('flatBaseBonus', q('damage'), { required: false, default: { kind: 'quantity', unit: 'damage', value: 0 } });
+  b.input('critFactor', q('scalar'), { required: false, min: 0, default: { kind: 'quantity', unit: 'scalar', value: 1 } });
   b.input('resistanceFactor', q('scalar'), {'required':true,'min':0});
   b.input('em', q('elementalMastery'), {'required':true,'min':0});
   b.input('reactionBonus', q('scalar'), {'required':true});
@@ -67,11 +69,15 @@ export function transformative(recipe: FormulaDefinition): FormulaGraph {
   b.add('bonus', 'emBonus', 'reactionBonus');
   b.add('factor', 'one', 'bonus');
   b.multiply('reactionFactor', 'factor', 'reactionCoefficient');
-  b.multiply('beforeResistance', 'levelMultiplier', 'reactionFactor');
+  b.multiply('reactionBase', 'levelMultiplier', 'reactionFactor');
+  b.add('withFlat', 'reactionBase', 'flatBaseBonus');
+  b.multiply('beforeResistance', 'withFlat', 'critFactor');
   b.multiply('value', 'beforeResistance', 'resistanceFactor');
   b.output('value', 'value', q('damage'));
   b.stage('reaction-em', 'emBonus', 'damage.reaction-em');
   b.stage('reaction-factor', 'reactionFactor', 'damage.reaction-factor');
+  b.stage('reaction-flat', 'flatBaseBonus', 'damage.reaction-flat');
+  b.stage('crit', 'critFactor', 'damage.crit');
   b.stage('resistance', 'resistanceFactor', 'damage.resistance');
   return b.finish();
 }
@@ -291,7 +297,9 @@ export function coefficientReactionHit(recipe: FormulaDefinition, mastery: Defin
   b.input('critFactor', q('scalar'), {'required':true,'min':0});
   b.input('resistanceFactor', q('scalar'), {'required':true,'min':0});
   b.input('elevationFactor', q('scalar'), {'required':true,'min':0});
-  const scaledBase = baseMultiplier ? b.multiply('scaledSkillBase', baseInput, b.input('baseMultiplier', q('scalar'), { min: 0 })) : baseInput;
+  const scaledBase = baseMultiplier ? b.multiply('scaledSkillBase', baseInput, b.input('baseMultiplier', q('scalar'), {
+    required: false, default: { kind: 'quantity', unit: 'scalar', value: 1 }, min: 0,
+  })) : baseInput;
   b.quantity('one', 'scalar', 1);
   b.call('emBonus', mastery, { em: 'em' }, 'value');
   b.add('baseFactor', 'one', 'reactionBaseBonus');

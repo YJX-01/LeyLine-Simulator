@@ -21,7 +21,8 @@ export function assembleEquipment(metadata) {
     if (!owner.hits) return {};
     return { hits: owner.hits.map(({ family, when = [], ...hit }) => {
       families.add(family);
-      return assembleHit({ ...hit, origin: 'triggered', coverageRefs, sources }, undefined, [{ family, condition: all(when.map(key => expression({ fact: key }, facts))) }], facts);
+      const condition = all(when.map(entry => expression(typeof entry === 'string' ? { fact: entry } : entry, facts)));
+      return assembleHit({ ...hit, origin: 'triggered', coverageRefs, sources }, undefined, [{ family, condition }], facts);
     }) };
   }
   const weaponCoverage = weapon ? certify(support) : [];

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { finiteSchema, idSchema } from '../common/values';
 import { elements } from '../content/stats';
+import { attackTypeSchema } from '../content/effects';
 import { calculationBindingSchema } from './binding';
 import { buffEventSelectorSchema } from './event';
 import { calculationValueTypeSchema, definitionRefSchema, valueMatchesType } from './values';
@@ -13,8 +14,9 @@ export const teamHealthCounterSchema = z.object({
 }).strict();
 export const calculationHitSelectorSchema = z.object({
   skillIds: z.array(idSchema).min(1).max(1000).optional(), hitIds: z.array(idSchema).min(1).max(1000).optional(),
+  excludeHitIds: z.array(idSchema).min(1).max(1000).optional(),
   elements: z.array(z.enum(elements)).min(1).max(8).optional(),
-  categories: z.array(z.enum(['normal', 'charged', 'plunge', 'skill', 'burst'])).min(1).max(5).optional(),
+  categories: z.array(attackTypeSchema).min(1).max(attackTypeSchema.options.length).optional(),
   families: z.array(idSchema).min(1).max(1000).optional(), origins: z.array(z.enum(['talent', 'reaction', 'triggered'])).min(1).max(3).optional(),
   reactionIds: z.array(idSchema).min(1).max(1000).optional(),
 }).strict();
@@ -35,10 +37,12 @@ export const attributeDefinitionSchema = z.object({
 
 export const effectDefinitionSchema = z.object({
   identity: definitionRefSchema, buff: definitionRefSchema.optional(), sources: z.array(idSchema).min(1).max(1000),
-  activation: z.object({ elements:z.array(z.enum(elements)).min(1).max(8).optional(), weaponTypes: z.array(idSchema).min(1).max(5).optional(), ascension: z.number().int().min(0).max(6).optional(), constellation: z.number().int().min(0).max(6).optional(),
+  activation: z.object({ elements:z.array(z.enum(elements)).min(1).max(8).optional(), weaponTypes: z.array(idSchema).min(1).max(5).optional(),
+    characterGameIds: z.array(z.number().int().positive()).min(1).max(32).optional(), ascension: z.number().int().min(0).max(6).optional(), constellation: z.number().int().min(0).max(6).optional(),
     refinement: z.number().int().min(1).max(5).optional(), set: z.object({ id: idSchema, pieces: z.number().int().min(1).max(5) }).strict().optional() }).strict(),
   recipient: z.discriminatedUnion('role', [
-    z.object({ role: z.literal('owner') }).strict(), z.object({ role: z.literal('team'), excludeOwner: z.boolean() }).strict(),
+    z.object({ role: z.literal('owner') }).strict(), z.object({ role: z.literal('team'), excludeOwner: z.boolean(),
+      elements: z.array(z.enum(elements)).min(1).max(8).optional(), weaponTypes: z.array(idSchema).min(1).max(5).optional() }).strict(),
     z.object({ role: z.literal('fact-actor'), input: idSchema }).strict(), z.object({ role: z.literal('target') }).strict(),
   ]),
   trigger: z.discriminatedUnion('kind', [z.object({ kind: z.literal('permanent') }).strict(), z.object({ kind: z.literal('event'), selector: buffEventSelectorSchema,
@@ -48,7 +52,7 @@ export const effectDefinitionSchema = z.object({
   counter: teamHealthCounterSchema.optional(),
   windowFact: idSchema.optional(),
   charges: z.object({ perRecipient: z.number().int().positive().max(1000), categories: calculationHitSelectorSchema.shape.categories.unwrap() }).strict().optional(),
-  predicate: calculationBindingSchema.optional(), value: calculationBindingSchema,
+  predicate: calculationBindingSchema.optional(), value: calculationBindingSchema, extraAttack: z.literal(true).optional(),
   target: z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('attribute'), attribute: definitionRefSchema }).strict(),
     z.object({ kind: z.literal('port'), formula: definitionRefSchema, port: idSchema }).strict(),
@@ -57,9 +61,13 @@ export const effectDefinitionSchema = z.object({
   application: z.enum(['always', 'explicit', 'observed']), priority: z.number().int().safe(),
   stacking: z.object({ group: idSchema, scope: z.enum(['owner', 'recipient', 'team']), policy: z.enum(['add', 'replace', 'max']),
     maxStacks: z.number().int().min(1).max(10000), retain: z.enum(['earliest', 'latest', 'highest-priority']),
+    crossOwnerUnverified: z.literal(true).optional(),
     refreshUnverified: z.literal(true).optional(),
     endOnNewTrigger: z.literal(true).optional() }).strict(),
 }).strict().superRefine((effect, context) => {
+  if (effect.extraAttack && (effect.target.kind !== 'attribute' || effect.target.attribute.id !== 'attribute.attack')) {
+    context.addIssue({ code: 'custom', path: ['extraAttack'], message: '额外攻击力贡献须指向攻击力。' });
+  }
   if (effect.windowFact && effect.trigger.kind !== 'event') context.addIssue({ code: 'custom', path: ['windowFact'], message: '已确认的窗口须对应限时增益。' });
   if ((effect.trigger.kind === 'permanent') !== (effect.lifetime.kind === 'permanent')) context.addIssue({ code: 'custom', path: ['lifetime'], message: '常驻与事件区间的触发/时效必须一致。' });
   if (effect.stacking.policy === 'replace' && effect.stacking.maxStacks !== 1) context.addIssue({ code: 'custom', path: ['stacking'], message: '替换规则只能保留一个实例。' });

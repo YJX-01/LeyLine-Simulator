@@ -52,6 +52,30 @@
     {
       "id": "content.artifact-main",
       "kind": "definition"
+    },
+    {
+      "id": "content.shield-absorption",
+      "kind": "definition"
+    },
+    {
+      "id": "content.current-talent-values",
+      "kind": "definition"
+    },
+    {
+      "id": "genshin-db.escoffier-pairing",
+      "kind": "definition"
+    },
+    {
+      "id": "content.battle-scenes",
+      "kind": "definition"
+    },
+    {
+      "id": "content.character-interruption-resistance",
+      "kind": "definition"
+    },
+    {
+      "id": "kqm.healing",
+      "kind": "definition"
     }
   ],
   "formulas": [
@@ -519,6 +543,21 @@
       "schemaVersion": "0.2.0",
       "identity": {
         "namespace": "builtin",
+        "id": "stamina.discounted-cost",
+        "revision": "1"
+      },
+      "template": {
+        "id": "discounted-stamina-cost",
+        "revision": "1"
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
         "id": "binding.milliseconds",
         "revision": "1"
       },
@@ -564,6 +603,38 @@
       },
       "sources": [
         "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "product.hp",
+        "revision": "1"
+      },
+      "template": {
+        "id": "stat-product",
+        "unit": "hp",
+        "revision": "1"
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "product.count",
+        "revision": "1"
+      },
+      "template": {
+        "id": "stat-product",
+        "unit": "count",
+        "revision": "1"
+      },
+      "sources": [
+        "content.current-talent-values"
       ]
     },
     {
@@ -632,6 +703,46 @@
         "relation": "gt",
         "threshold": 0.7,
         "maxInput": 1,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "bond.above-zero",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "gt",
+        "threshold": 0,
+        "maxInput": 2,
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "bond.at-least-one",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 2,
         "revision": "1"
       },
       "sources": [
@@ -1157,9 +1268,291 @@
       "sources": [
         "leyline.binding-read"
       ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "shield.hp-base",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "shield-absorption",
+        "revision": "1",
+        "basis": "hp"
+      },
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "shield.attack-base",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "shield-absorption",
+        "revision": "1",
+        "basis": "attack"
+      },
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "shield.defense-base",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "shield-absorption",
+        "revision": "1",
+        "basis": "defense"
+      },
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "shield.elemental-mastery-base",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "shield-absorption",
+        "revision": "1",
+        "basis": "elementalMastery"
+      },
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "shield.hp-scale",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "stat-product",
+        "revision": "1",
+        "unit": "hp"
+      },
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "healing.max-hp",
+        "revision": "1"
+      },
+      "template": {
+        "id": "healing-amount",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.healing"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "healing.attack",
+        "revision": "1"
+      },
+      "template": {
+        "id": "healing-amount",
+        "basis": "attack",
+        "revision": "1"
+      },
+      "sources": [
+        "kqm.healing"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "movement.day-start",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "input": "minutes",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 360,
+        "maxInput": 1439,
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "movement.day-end",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "quantity-condition",
+        "input": "minutes",
+        "unit": "count",
+        "relation": "lt",
+        "threshold": 1080,
+        "maxInput": 1439,
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "movement.swift-stride-scene",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "enum-condition",
+        "input": "scene",
+        "values": [
+          "world-or-room",
+          "domain",
+          "trounce-domain",
+          "spiral-abyss",
+          "other-scene"
+        ],
+        "equals": "world-or-room",
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "movement.gliding",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "other-movement",
+          "gliding",
+          "underwater-sprint"
+        ],
+        "equals": "gliding",
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "movement.underwater-sprint",
+        "revision": "1"
+      },
+      "schemaVersion": "0.2.0",
+      "template": {
+        "id": "enum-condition",
+        "input": "mode",
+        "values": [
+          "other-movement",
+          "gliding",
+          "underwater-sprint"
+        ],
+        "equals": "underwater-sprint",
+        "revision": "1"
+      },
+      "sources": [
+        "leyline.binding-read"
+      ]
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "identity": {
+        "namespace": "builtin",
+        "id": "skill.cooldown-positive",
+        "revision": "1"
+      },
+      "template": {
+        "id": "quantity-condition",
+        "input": "duration",
+        "unit": "milliseconds",
+        "relation": "gt",
+        "threshold": 0,
+        "revision": "1"
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
     }
   ],
-  "tables": [],
+  "tables": [
+    {
+      "kind": "integer",
+      "identity": {
+        "namespace": "builtin",
+        "id": "escoffier.pairing-resistance",
+        "revision": "1"
+      },
+      "start": 0,
+      "valueType": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "values": [
+        {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        },
+        {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": -0.05
+        },
+        {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": -0.1
+        },
+        {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": -0.15
+        },
+        {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": -0.55
+        }
+      ],
+      "sources": [
+        "genshin-db.escoffier-pairing"
+      ]
+    }
+  ],
   "attributes": [
     {
       "identity": {
@@ -2152,6 +2545,30 @@
     {
       "identity": {
         "namespace": "builtin",
+        "id": "attribute.elevationFactor",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 1
+        }
+      },
+      "combine": "product",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
         "id": "attribute.amplifyingReactionBonus",
         "revision": "1"
       },
@@ -2240,6 +2657,654 @@
     {
       "identity": {
         "namespace": "builtin",
+        "id": "attribute.shieldAbsorption",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.shieldAbsorptionCap",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.summonInitialHp",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.talentHealingChance",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.paleHymnFromMoonsong",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "count",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.bondOfLifeFromHealing",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.equipmentBaseHealingTick",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.equipmentBaseHealingTotal",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.equipmentHealing",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.healing"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.staminaRestored",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "stamina"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "stamina",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.directEnergyRestored",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "energy"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "energy",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.directEnergyChange",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "energy"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "energy",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.chargedAttackSpeed",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.aimChargeTimeReductionRatio",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.aimChargeTimeReductionMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.aimChargeInstant",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.aimChargeTimeReductionPerEnergy",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.effectiveShieldAbsorption",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.shieldAbsorptionAdded",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.shield-absorption"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.incomingDamageReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.fallDamageReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.attackRangeBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.impactRangeBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.flameReachBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.reaction.electro-charged.rangeBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.battle-scenes"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.actorEndureDelta",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.battle-scenes"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.incomingPoiseDamageMultiplier",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 1
+        }
+      },
+      "combine": "product",
+      "sources": [
+        "content.character-interruption-resistance"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
         "id": "attribute.energyCapacity",
         "revision": "1"
       },
@@ -2279,6 +3344,30 @@
       "combine": "sum",
       "sources": [
         "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.glideSpeed",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "leyline.binding-read"
       ]
     },
     {
@@ -2327,6 +3416,309 @@
       "combine": "sum",
       "sources": [
         "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.elementalSkillCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.elementalSkillCooldownReductionMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.elementalBurstCooldownReductionMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.currentCastSkillCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.currentCastBurstCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.currentCastSkillCooldownReductionMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.passionOverloadCooldownAfterPassivesMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "replace",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.northernSpearArrayBaseCooldownOverrideMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "replace",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.forwardGrappleCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.spiritEnvoyFormCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.xenochromaticFontemerAbilityCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.nightsoulTransmissionCooldownReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
       ]
     },
     {
@@ -2660,6 +4052,68 @@
     {
       "identity": {
         "namespace": "builtin",
+        "id": "attribute.staminaCostReduction.charged",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "attribute",
+        "key": {
+          "namespace": "builtin",
+          "id": "attribute.staminaCostReduction",
+          "revision": "1"
+        },
+        "actor": {
+          "role": "owner"
+        },
+        "at": {
+          "kind": "current",
+          "phase": "same"
+        },
+        "excludeOwnerBuffs": [
+          {
+            "namespace": "builtin",
+            "id": "yanfei.scarlet-seals-held-stamina",
+            "revision": "1"
+          }
+        ]
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.chargedAttackStaminaCost",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "stamina"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "stamina",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
         "id": "attribute.staminaCostReduction.sprint",
         "revision": "1"
       },
@@ -2779,6 +4233,324 @@
       "combine": "sum",
       "sources": [
         "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.particleEnergyRecharge",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "target.attackReduction",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "target",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "kqm.ordinary"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.saurianBaseHealing",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "hp",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.foodPhlogistonRestored",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "count",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.sprintStartStaminaCostAdded",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "stamina"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "stamina",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.sprintSustainStaminaCostAdded",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "staminaPerSecond"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "staminaPerSecond",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.lohenWillLimit",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.lohenWillGainMultiplier",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 1
+        }
+      },
+      "combine": "product",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.lohenWillBonusGain",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "count",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.neferSlitherDewBonus",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "scalar",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.kinichDesolationNightsoul",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "actor",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "count",
+          "value": 0
+        }
+      },
+      "combine": "sum",
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.confirmedSkillCooldownResetMs",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "milliseconds"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "milliseconds",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
+      ]
+    },
+    {
+      "identity": {
+        "namespace": "builtin",
+        "id": "attribute.confirmedSkillChargesRestored",
+        "revision": "1"
+      },
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "scope": "hit",
+      "base": {
+        "kind": "constant",
+        "value": {
+          "kind": "quantity",
+          "unit": "count",
+          "value": 0
+        }
+      },
+      "combine": "max",
+      "bounds": {
+        "min": 0
+      },
+      "sources": [
+        "content.current-talent-values"
       ]
     }
   ],

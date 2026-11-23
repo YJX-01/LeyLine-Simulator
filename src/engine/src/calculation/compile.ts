@@ -1,5 +1,5 @@
 import { APP_VERSION } from '@leyline/schema/version';
-import { calculationBundleSchema, calculationJsonPointer, calculationRuntimeFeatures, calculationTemplateIds, definitionKey, inspectCalculationStructure, sameValueType, valueTypeAssignable,
+import { calculationBundleSchema, calculationJsonPointer, calculationLibraryValueLimit, calculationRuntimeFeatures, calculationTemplateIds, definitionKey, inspectCalculationStructure, sameValueType, valueTypeAssignable,
   type AggregateDefinition, type AttributeDefinition, type EffectDefinition, type SourceRecord, type CalculationBundle, type CalculationCoverageRecord, type CalculationDiagnostic, type CalculationDiagnosticCode, type DefinitionRef, type FormulaDefinition, type StateMachineDefinition, type StateValueSource, type TableDefinition, type ValueType } from '@leyline/schema';
 import { validateBinding, validateBoundFormula } from './binding-validation';
 import { formulaNodeReferences, type FormulaGraph, type FormulaNode } from './formula-ir';
@@ -64,7 +64,8 @@ function freeze(value: unknown): void {
 }
 
 export function compileCalculation(input: unknown): CompileResult {
-  const diagnostics: CalculationDiagnostic[] = inspectCalculationStructure(input);
+  // The compiler also accepts the offline union of all catalog dependency closures.
+  const diagnostics: CalculationDiagnostic[] = inspectCalculationStructure(input, calculationLibraryValueLimit);
   if (diagnostics.length) return { ok: false, diagnostics };
   const report = (code: CalculationDiagnosticCode, jsonPointer: string, message: string, nodeId?: string) => {
     if (!diagnostics.some(item => item.code === code && item.jsonPointer === jsonPointer && item.message === message)) {
@@ -204,6 +205,9 @@ export function compileCalculation(input: unknown): CompileResult {
       } else if (node.op === 'condition-group') {
         if (node.conditions.some(id => types.get(id)?.kind !== 'boolean')) wrong('组合条件必须全部为布尔值。');
         else type = { kind: 'boolean' };
+      } else if (node.op === 'confirmed-multiple') {
+        type = types.get(node.basis);
+        if (type && (type.kind !== 'quantity' || type.unit !== 'scalar')) wrong('已核实档位需要无量纲数量。');
       } else if (node.op === 'select') {
         const condition = types.get(node.condition), yes = types.get(node.yes), no = types.get(node.no);
         if (condition && condition.kind !== 'boolean') wrong('条件分支必须读取布尔值。');
@@ -307,8 +311,9 @@ export function compileCalculation(input: unknown): CompileResult {
     if (effect.predicate) validateBinding(data, effect.predicate, pointer + '/predicate', report, { kind: 'boolean' });
     let type: ValueType | undefined;
     if (effect.target.kind === 'attribute') {
-      const attribute = attributes.get(definitionKey(effect.target.attribute));
-      if (!attribute) report('missing-dependency', pointer + '/target', '效果缺少属性的精确版本。');
+      const reference = effect.target.attribute;
+      const attribute = attributes.get(definitionKey(reference));
+      if (!attribute) report('missing-dependency', pointer + '/target', `效果缺少属性的精确版本（${reference.namespace}/${reference.id}，修订 ${reference.revision}）。`);
       else {
         type = attribute.type;
         if ((effect.recipient.role === 'target') !== (attribute.scope === 'target')) report('unit-mismatch', pointer + '/recipient', '效果接收者与属性作用域不匹配。');

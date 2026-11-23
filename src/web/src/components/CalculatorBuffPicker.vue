@@ -20,7 +20,11 @@ const draft = ref<DamageRequest>(JSON.parse(JSON.stringify(props.damage)));
 const current = computed(() => withCurrentConditions(draft.value, props.intervals, props.actorId));
 const query = ref('');
 const visible = computed(() => props.choices.filter(item => [item.name,item.description,item.source].some(text => text.includes(query.value.trim()))));
-const enumLabels: Record<string, string> = { none: '无', left: '左手', right: '右手', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散' };
+const enumLabels: Record<string, string> = { none: '无', left: '左手', right: '右手', 'stellar-conduct': '星超导', 'stellar-swirl': '星扩散',
+  burning: '燃烧', burgeon: '烈绽放', other: '其他',
+  'world-or-room': '大世界或普通室内', domain: '秘境', 'trounce-domain': '征讨领域', 'spiral-abyss': '深境螺旋', 'other-scene': '其他场景',
+  'other-movement': '其他移动状态', gliding: '滑翔', 'underwater-sprint': '水下冲刺' };
+const factMaximums: Record<string, number> = { 'vesna.disciplineStacks': 6, 'world.timeMinutes': 1439 };
 function factInput(key: string, selected?: FactSubject) {
   const subject = selected ?? { kind: 'actor', id: props.actorId };
   const value = subjectFacts(draft.value.facts, subject)?.[key]?.value;
@@ -85,8 +89,8 @@ function apply() {
             <GameIcon :kind="item.icon.kind" :id="item.icon.id" :monochrome="item.icon.kind === 'constellations'" :size="44" />
             <span><strong>{{ item.name }}</strong><small>{{ item.source }} / {{ item.description }}</small>
               <small v-if="item.requirements.length && !item.toggleFact">{{ item.requirements.map(requirementLabel).join('、') }}</small>
-              <small v-if="item.stacks">{{ buffFactNames[item.stacks.key] ?? item.stacks.key }} {{ Number(calculatorFactValue(draft, item.stacks.key, actorId)) > 0 ? calculatorFactValue(draft, item.stacks.key, actorId) : '勾选取满层 ' + item.stacks.max }}</small>
-              <small v-if="item.hp">生命比例 {{ { gt:'>', gte:'≥', lt:'<', lte:'≤', eq:'=' }[item.hp.relation] }} {{ item.hp.threshold * 100 }}%<template v-if="!hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', actorId))">，勾选取 {{ item.hp.preset * 100 }}%</template></small>
+              <small v-if="item.stacks">{{ item.fields.find(field => field.key === item.stacks?.key)?.label ?? buffFactNames[item.stacks.key] ?? item.stacks.key }} {{ Number(calculatorFactValue(draft, item.stacks.key, item.ownerId)) > 0 ? calculatorFactValue(draft, item.stacks.key, item.ownerId) : '勾选取满层 ' + item.stacks.max }}</small>
+              <small v-if="item.hp">生命比例 {{ { gt:'>', gte:'≥', lt:'<', lte:'≤', eq:'=' }[item.hp.relation] }} {{ item.hp.threshold * 100 }}%<template v-if="!hpMatches(item.hp, calculatorFactValue(current, 'hpRatio', item.ownerId))">，勾选取 {{ item.hp.preset * 100 }}%</template></small>
               <small v-if="item.triggerSkill && !times.get(item.id)?.some(Boolean)">在命中时刻 {{ time }} 秒施放</small></span>
             <input type="checkbox" :aria-label="item.source + ' / ' + item.name + ' / ' + item.description" :checked="checked(item)"
               @change="toggle(item,($event.target as HTMLInputElement).checked)">
@@ -111,7 +115,7 @@ function apply() {
             <option value="">待确认</option><template v-if="field.type.kind === 'boolean'"><option value="true">是</option><option value="false">否</option></template>
             <template v-else><option v-for="value in field.type.values" :key="value" :value="value">{{ enumLabels[value] ?? value }}</option></template>
           </select>
-          <input v-else type="number" min="0" :max="field.key === 'vesna.disciplineStacks' ? 6 : undefined" :step="field.type.unit === 'count' ? 1 : 'any'"
+          <input v-else type="number" min="0" :max="factMaximums[field.key]" :step="field.type.unit === 'count' ? 1 : 'any'"
             :value="factInput(field.key, field.subject)" placeholder="待确认" @input="setFact(field.key, field.type, $event, field.subject)">
         </label>
         <label>生命比例（%）<input type="number" min="0" max="100" step="any" :value="calculatorFactValue(current, 'hpRatio', actorId) == null ? '' : Number(calculatorFactValue(current, 'hpRatio', actorId)) * 100" placeholder="待确认" @input="setCondition('hpRatio',$event)"></label>

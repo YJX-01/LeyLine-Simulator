@@ -5,6 +5,8 @@ import { hitReactionSchema } from '../content/reactions';
 import { hitFactsSchema } from './hit-facts';
 
 export const damageRequestSchema = z.object({ hit: hitRefSchema, crit: z.enum(['critical', 'noncritical', 'expected']).nullable(), reaction: z.union([z.literal('none'), hitReactionSchema]).nullable(), facts: hitFactsSchema.optional(),
+  // Records which occurrence of the same single-hit multiplier was selected.
+  hitOrdinal: z.number().int().min(1).max(100).optional(),
   capture: z.object({ recordId: idSchema.nullable(), phase: z.enum(['before', 'after']).nullable() }).strict().optional(),
   effectApplications: z.array(z.object({ instanceId: z.string().min(1).max(2000), active: z.boolean().nullable() }).strict()).max(1000)
     .refine(applications => new Set(applications.map(application => application.instanceId)).size === applications.length, '同一命中不能重复声明相同效果实例。').optional(),

@@ -1,4 +1,4 @@
-import { calculationBundleSchema, calculationJsonPointer, characterActionsDefinitionSchema, definitionKey, inspectCalculationStructure,
+import { calculationBundleSchema, calculationJsonPointer, calculationLibraryValueLimit, characterActionsDefinitionSchema, definitionKey, inspectCalculationStructure,
   type CalculationBundle, type CalculationDiagnostic, type CharacterActionsDefinition, type StructuredCharacterDefinition } from '@leyline/schema';
 import { compileStructuredCharacter } from './character';
 import { compiledData, deduplicateCalculationBundle, type CompiledCalculation } from './compile';
@@ -9,7 +9,7 @@ export type CompiledCharacterActions = { ok: true; actions: CharacterActionsDefi
 
 /** All dependencies come from these two supplied snapshots. An action file cannot replace its character. */
 export function compileCharacterActions(input: unknown, characterInput: unknown, dependenciesInput?: unknown): CompiledCharacterActions {
-  const diagnostics = [input, dependenciesInput].flatMap(value => value === undefined ? [] : inspectCalculationStructure(value));
+  const diagnostics = [...inspectCalculationStructure(input), ...dependenciesInput === undefined ? [] : inspectCalculationStructure(dependenciesInput, calculationLibraryValueLimit)];
   if (diagnostics.length) return { ok: false, diagnostics };
   const parsed = characterActionsDefinitionSchema.safeParse(input);
   if (!parsed.success) return { ok: false, diagnostics: parsed.error.issues.map(issue => ({ code: issue.path[0] === 'schemaVersion' ? 'unsupported-version' : 'invalid-range', severity: 'error',

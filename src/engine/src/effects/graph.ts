@@ -31,7 +31,7 @@ export function evaluateDependencyGraph(input: Project, options: GraphOptions = 
   const healing = resolveTalentHealing(summons.project);
   const coordinated = resolveCoordinatedHits(accumulateHealingHits(healing.project));
   const project = coordinated.project;
-  const preparedRuntime = project.candidate.actors.some(actor => actor.build) || project.timeline.some(record => record.reactionEvent) ? prepareProjectRuntime(project) : undefined;
+  const preparedRuntime = project.candidate.actors.some(actor => actor.build) || project.timeline.some(record => record.reactionEvent || record.sceneHit) ? prepareProjectRuntime(project) : undefined;
   const runtime = preparedRuntime?.ok ? preparedRuntime.runtime : undefined;
   const talentRank = runtime?.team.talentRank ?? createTalentRankReader(project.candidate.actors);
   const diagnostics: Diagnostic[] = [...summons.diagnostics, ...coordinated.diagnostics];

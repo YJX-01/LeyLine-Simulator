@@ -135,6 +135,16 @@ export function interpretFormula(program: CompiledCalculation, reference: Defini
       }
       result = decisive === undefined ? inherit(current, id, values) ?? known(current, id, { kind: 'boolean', value: node.operator === 'all' }, values.map(value => value.traceId))
         : known(current, id, { kind: 'boolean', value: decisive }, values.map(value => value.traceId));
+    } else if (node.op === 'confirmed-multiple') {
+      const basis = read(node.basis);
+      if (basis.state !== 'known') result = inherit(current, id, [basis])!;
+      else {
+        const count = Number(basis.value.value) / node.step;
+        const nearest = Math.round(count);
+        const matches = Number.isSafeInteger(nearest) && Math.abs(count - nearest) <= Number.EPSILON * Math.max(1, Math.abs(count));
+        result = matches ? known(current, id, basis.value, [basis.traceId])
+          : emit(current, id, [basis.traceId], null, 'unknown', [report('unreviewed-mechanism', location, '输入位于已核实档位之间，中间值的计算规则尚未确认。', id)]);
+      }
     } else if (node.op === 'call') {
       const callee = data!.formulas.get(definitionKey(node.formula))!;
       const supplied = new Map<string, EvaluatedValue>();

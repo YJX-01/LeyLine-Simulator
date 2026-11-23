@@ -27,6 +27,8 @@ export const calculationTemplateSchema = z.discriminatedUnion('id', [
   z.object({ ...template('ordinary-hit'), baseFlat: z.enum(['attribute', 'effect-port']) }).strict(), z.object(template('ordinary-bonus')).strict(),
   z.object(template('defense')).strict(), z.object(template('resistance')).strict(), z.object(template('crit')).strict(),
   z.object(template('read-milliseconds')).strict(),
+  z.object(template('discounted-stamina-cost')).strict(),
+  z.object({ ...template('restore-skill-charges'), capacity: z.number().int().min(1).max(10) }).strict(),
   z.object({ ...template('crit-selected'), calculation: definitionRefSchema }).strict(),
   z.object({ ...template('reaction-em-bonus'), family: z.enum(['lunar', 'stellar']) }).strict(),
   z.object({ ...template('standard-reaction'), family: z.enum(['amplifying', 'additive', 'transformative']) }).strict(),
@@ -38,17 +40,23 @@ export const calculationTemplateSchema = z.discriminatedUnion('id', [
   z.object({ ...template('radiance-ratio') }).strict(),
   z.object({ ...template('conditional-bonus'), input: idSchema, relation, threshold: finiteSchema, value: finiteSchema, otherwise: finiteSchema, output: idSchema }).strict(),
   z.object({ ...template('threshold-condition'), input: idSchema, relation, threshold: finiteSchema }).strict(),
-  z.object({ ...template('quantity-condition'), input: idSchema, unit: linearUnit.or(z.literal('energy')), relation, threshold: finiteSchema, maxInput: finiteSchema.nonnegative().optional() }).strict(),
+  z.object({ ...template('quantity-condition'), input: idSchema, unit: linearUnit.or(z.enum(['energy', 'damage', 'milliseconds'])), relation,
+    threshold: finiteSchema.optional(), thresholdInput: idSchema.optional(), maxInput: finiteSchema.nonnegative().optional() }).strict(),
   z.object({ ...template('enum-condition'), input: idSchema, values: z.array(idSchema).min(1).max(16), equals: idSchema }).strict(),
   z.object({ ...template('condition-group'), operator: z.enum(['all', 'any']), terms: z.number().int().min(1).max(16), negate: z.boolean() }).strict(),
-  z.object({ ...template('linear-bonus'), input: idSchema, inputUnit: linearUnit, outputUnit: z.enum(['scalar', 'attack', 'hp', 'defense', 'elementalMastery', 'damage']),
-    rate: finiteSchema, offset: finiteSchema, threshold: finiteSchema.nonnegative(), output: idSchema, maxInput: finiteSchema.nonnegative().optional(), cap: finiteSchema.nonnegative().optional() }).strict(),
+  z.object({ ...template('linear-bonus'), input: idSchema, inputUnit: linearUnit.or(z.enum(['stamina', 'energy'])), outputUnit: z.enum(['scalar', 'attack', 'hp', 'defense', 'elementalMastery', 'damage', 'energy', 'stamina', 'milliseconds']),
+    rate: finiteSchema, offset: finiteSchema, threshold: finiteSchema.nonnegative(), output: idSchema, maxInput: finiteSchema.nonnegative().optional(),
+    confirmedStep: finiteSchema.positive().optional(),
+    cap: finiteSchema.nonnegative().optional(), capInput: idSchema.optional(),
+    capIncreases: z.array(z.object({ input: idSchema, amount: finiteSchema.positive() }).strict()).min(1).max(6).optional() }).strict(),
   z.object({ ...template('bounded-stat-bonus'), input: idSchema, stat: z.enum(['scalar', 'elementalMastery']), threshold: finiteSchema, channels }).strict(),
   z.object({ ...template('attribute-conversion'), stat: z.enum(['hp', 'defense', 'energy', 'elementalMastery']), target: z.enum(['attack', 'damage', 'scalar']), attribute: idSchema, rate: idSchema, output: idSchema,
     conditionalRate: z.object({ input: idSchema, relation, threshold: finiteSchema, rate: idSchema }).strict().optional() }).strict(),
-  z.object({ ...template('stat-product'), unit: z.enum(['scalar', 'attack', 'hp', 'defense', 'elementalMastery', 'damage']) }).strict(),
+  z.object({ ...template('stat-product'), unit: z.enum(['scalar', 'attack', 'hp', 'defense', 'elementalMastery', 'damage', 'count', 'energy']) }).strict(),
+  z.object({ ...template('healing-amount'), basis: z.literal('attack').optional() }).strict(),
+  z.object({ ...template('shield-absorption'), basis: z.enum(['hp','attack','defense','elementalMastery']) }).strict(),
   z.object({ ...template('energy-full') }).strict(),
-  z.object({ ...template('capped-conversion'), from: z.enum(['hp', 'attack', 'energy', 'count', 'defense', 'elementalMastery', 'scalar']), to: z.enum(['scalar', 'attack']),
+  z.object({ ...template('capped-conversion'), from: z.enum(['hp', 'attack', 'energy', 'count', 'defense', 'elementalMastery', 'scalar']), to: z.enum(['scalar', 'attack', 'elementalMastery']),
     per: finiteSchema.positive(), threshold: finiteSchema.nonnegative().optional() }).strict(),
   z.object({ ...template('constant-bonus'), value: calculationValueSchema, output: idSchema }).strict(),
 ]).superRefine((selected, context) => {
@@ -60,9 +68,24 @@ export const calculationTemplateSchema = z.discriminatedUnion('id', [
   if (selected.id === 'reaction-hit' && selected.origin !== 'direct' && selected.baseMultiplier) context.addIssue({ code: 'custom', path: ['baseMultiplier'], message: '技能基数倍率只适用于直接反应伤害。' });
   if (selected.id === 'bounded-stat-bonus' && new Set(selected.channels.map(channel => channel.output)).size !== selected.channels.length) context.addIssue({ code: 'custom', path: ['channels'], message: '输出通道重复。' });
   if (selected.id === 'enum-condition' && (new Set(selected.values).size !== selected.values.length || !selected.values.includes(selected.equals))) context.addIssue({ code: 'custom', path: ['values'], message: '枚举条件须使用唯一值及已声明的匹配项。' });
+  if (selected.id === 'quantity-condition' && ((selected.threshold === undefined) === (selected.thresholdInput === undefined)
+    || selected.input === selected.thresholdInput)) {
+    context.addIssue({ code: 'custom', path: ['threshold'], message: '数量比较须声明一个独立的门槛来源。' });
+  }
   if (selected.id === 'scaled-damage') {
     const names = selected.terms.flatMap(term => [term.attribute, term.ratio, ...term.count ? [term.count] : []]);
     if (new Set(names).size !== names.length) context.addIssue({ code: 'custom', path: ['terms'], message: '缩放输入身份重复。' });
+  }
+  if (selected.id === 'linear-bonus' && selected.capIncreases) {
+    const names = [selected.input, ...selected.capIncreases.map(increase => increase.input)];
+    if (selected.cap === undefined || new Set(names).size !== names.length) context.addIssue({ code: 'custom', path: ['capIncreases'], message: '上限增量须使用基础上限和独立条件。' });
+  }
+  if (selected.id === 'linear-bonus' && selected.capInput !== undefined
+    && (selected.input === selected.capInput || selected.cap !== undefined || selected.confirmedStep !== undefined)) {
+    context.addIssue({ code: 'custom', path: ['capInput'], message: '动态上限须为独立输入。' });
+  }
+  if (selected.id === 'linear-bonus' && selected.confirmedStep !== undefined && (selected.rate <= 0 || selected.capIncreases)) {
+    context.addIssue({ code: 'custom', path: ['confirmedStep'], message: '已核实档位需要正比例和固定上限。' });
   }
 });
 /** Data-only template selection. Operations, signatures, stages and ports belong to TS. */

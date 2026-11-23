@@ -12,7 +12,7 @@ export interface CalculationTraceNode {
   value: Value | null;
   state: EvaluatedValue['state'];
   sourceRefs: string[];
-  context?: { eventId: string; phase: 'before' | 'after'; actorId?: string; effectInstanceId?: string; captureSlot?: string };
+  context?: { eventId: string; phase: 'before' | 'after'; actorId?: string; recipientId?: string; effectInstanceId?: string; captureSlot?: string };
 }
 export interface RequiredInput {
   key: string;

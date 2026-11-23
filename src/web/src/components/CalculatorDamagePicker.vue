@@ -2,15 +2,18 @@
 import { computed, ref } from 'vue';
 import { hitSearchText, type CalculatorHitChoice } from '../domain/calculator-hits';
 import { realElementLabel } from '../domain/workbench-labels';
-import { damageFamilyLabel } from '../domain/workbench-labels';
-import { transformativeFamilies, transformativeElements, type TransformativeFamily } from '@leyline/schema';
+import { damageFamilyLabel, sceneHitLabel } from '../domain/workbench-labels';
+import { definitionKey, transformativeFamilies, transformativeElements, type SceneDefinition, type TransformativeFamily } from '@leyline/schema';
 import GameIcon from './GameIcon.vue';
 import LibraryToolbar from './LibraryToolbar.vue';
 import WorkbenchDialog from './WorkbenchDialog.vue';
 
-const props = defineProps<{ choices: CalculatorHitChoice[]; selected?: string }>();
-const emit = defineEmits<{ select: [choice: CalculatorHitChoice]; reaction:[family:TransformativeFamily,element:typeof transformativeElements.swirl[number]]; close: [] }>();
+const props = defineProps<{ choices: CalculatorHitChoice[]; selected?: string; scenes: SceneDefinition[]; selectedScene?: string }>();
+const emit = defineEmits<{ select: [choice: CalculatorHitChoice]; reaction:[family:TransformativeFamily,element:typeof transformativeElements.swirl[number]];
+  scene: [definition: SceneDefinition]; close: [] }>();
 const query = ref('');
+const scenes = computed(() => props.scenes.filter(scene => (sceneHitLabel(scene) + ' 场景 ' + scene.hits?.[0]?.trigger)
+  .toLowerCase().includes(query.value.trim().toLowerCase())));
 const reactions = computed(() => transformativeFamilies.flatMap(family =>
   transformativeElements[family].map(element => ({family,element,label:damageFamilyLabel(family)+(family==='swirl'?' · '+realElementLabel(element):'')})))
   .filter(row => ('剧变反应 '+row.label+' '+row.family).toLowerCase().includes(query.value.trim().toLowerCase())));
@@ -34,14 +37,18 @@ const groups = computed(() => {
         <div class="hit-options">
           <button v-for="row in rows" :key="row.hitId" type="button" data-card-action="select" :disabled="!row.available"
             :data-hit-id="row.hitId" :data-skill-id="row.skillId" :aria-pressed="!!row.available && selected === row.hitId" @click="emit('select',row)">
-            <strong>{{ row.alias }}</strong><span>{{ row.name }}</span><small>{{ row.available ? realElementLabel(row.element) : '尚未支持' }}</small>
+            <strong>{{ row.alias }}</strong><span>{{ row.name }}</span><small>{{ row.requirement ?? (row.available ? realElementLabel(row.element) : '尚未支持') }}</small>
           </button>
         </div>
       </section>
       <section v-if="reactions.length" aria-label="剧变反应"><h3>剧变反应</h3><div class="hit-options">
         <button v-for="r in reactions" :key="r.family+r.element" type="button" :data-reaction="r.family" :data-element="r.element" @click="emit('reaction',r.family,r.element)">{{ r.label }}</button>
       </div></section>
-      <p v-if="!groups.size && !reactions.length" class="empty">没有符合条件的伤害</p>
+      <section v-if="scenes.length" aria-label="场景冲击"><h3>场景冲击</h3><div class="hit-options">
+        <button v-for="scene in scenes" :key="definitionKey(scene)" type="button" :data-scene-hit="scene.id"
+          :aria-pressed="selectedScene === definitionKey(scene)" @click="emit('scene', scene)">{{ sceneHitLabel(scene) }}</button>
+      </div></section>
+      <p v-if="!groups.size && !reactions.length && !scenes.length" class="empty">没有符合条件的伤害</p>
     </div>
   </WorkbenchDialog>
 </template>

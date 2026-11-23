@@ -34,8 +34,9 @@ export function findCharacterHit(character?: StructuredCharacterDefinition, ref?
 export function hitEventFactIssues(entity: Pick<StructuredCharacterDefinition, 'metadata'> | NonNullable<StructuredBuild['weapon']> | StructuredBuild['sets'][number], talent: StructuredCharacterDefinition['talents'][number] | undefined,
   facts: Record<string, CalculationFact>, constellation: number, builds: Iterable<StructuredBuild> = []): string[] {
   const counts: Record<string, number | null> = {}, issues: string[] = [];
+  const party = [...builds];
   for (const [key, fact] of Object.entries(facts)) {
-    const input = talent?.inputs?.find(input => input.id === key);
+    const input = talent?.inputs?.find(input => input.id === key && input.usage !== 'healing');
     if (['targetsDamaged','criticalTargets'].includes(key) && fact.value?.kind === 'quantity'
       && (!Number.isSafeInteger(fact.value.value) || fact.value.value < 0 || fact.value.value > 1000)) issues.push('伤害目标数须为 0 到 1000 的整数。');
     if (key === 'triggerRoll' && fact.value?.kind === 'quantity' && (fact.value.value < 0 || fact.value.value >= 1)) issues.push('触发抽样值须在 [0,1) 内。');
@@ -46,7 +47,7 @@ export function hitEventFactIssues(entity: Pick<StructuredCharacterDefinition, '
       issues.push('所选命中不使用此技能计数：' + key); continue;
     }
     if (key === 'stellarAttachments' && fact.value?.kind === 'quantity' && (!Number.isInteger(fact.value.value) || fact.value.value < 0 || fact.value.value > 12)) issues.push('极星辉域附着次数须为 0 到 12 的整数。');
-    if (!declaration && !input) for (const build of builds) {
+    if (!declaration && !input) for (const build of party) {
       for (const source of [build.character, build.weapon, ...build.sets]) {
         const field = source?.metadata.facts?.[key];
         if (field?.scope === 'query') declaration = field;

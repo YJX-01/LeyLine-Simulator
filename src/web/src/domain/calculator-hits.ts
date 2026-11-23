@@ -1,4 +1,5 @@
 import { equipmentHits, type Build, characterHitRef, type HitRef, type CharacterDefinition } from '@leyline/schema';
+import { authoredHitEntries } from '@leyline/schema/hit-bindings';
 import { damageFamilyLabel, realElementLabel } from './workbench-labels';
 
 export interface CalculatorHitChoice {
@@ -6,6 +7,7 @@ export interface CalculatorHitChoice {
   hitId: string;
   ref: HitRef;
   available: boolean;
+  requirement?: string;
   group: string;
   alias: string;
   name: string;
@@ -15,8 +17,8 @@ export interface CalculatorHitChoice {
   iconKind?: 'weapons' | 'artifacts';
 }
 
-const categoryNames = { normal: '普通攻击', charged: '重击', plunge: '下落攻击', skill: '元素战技', burst: '元素爆发' };
-const aliasPrefix = { normal: 'a', charged: 'z', plunge: '下落', skill: 'E', burst: 'Q' };
+const categoryNames = { normal: '普通攻击', charged: '重击', plunge: '下落攻击', skill: '元素战技', burst: '元素爆发', other: '独立伤害' };
+const aliasPrefix = { normal: 'a', charged: 'z', plunge: '下落', skill: 'E', burst: 'Q', other: '追加' };
 const ordinals = '一二三四五六七八九';
 // These burst variants have separate energy costs and names in their own talent tables.
 const alternateBursts: Record<string, string> = { 'varesa.burst': '大火山崩落', 'flins.burst': '雷霆交响' };
@@ -27,17 +29,26 @@ export function calculatorHitChoices(character: CharacterDefinition, build?: Bui
     const icon = (character.derivedFrom?.id ?? character.id) + '-combat' + ({ normal: 1, skill: 2, burst: 3 }[talent.category]);
     const variant = alternateBursts[talent.id];
     const counts = new Map<string, number>();
+    const grants = new Map(authoredHitEntries(character.metadata, talent.id).map(entry => [entry.hit.id, entry.unlock]));
     for (const hit of talent.hits) {
-      const category = talent.category === 'normal' ? hit.category : talent.category;
+      const category = talent.category === 'normal' || hit.category === 'other' ? hit.category : talent.category;
       const stage = (counts.get(category) ?? 0) + 1;
       counts.set(category, stage);
       const name = hit.name;
       const ordinal = category === 'normal' && name.match(/([一二三四五六七八九])段/)?.[1];
-      const alias = variant ? (name.includes(variant) ? '小q' : '大Q') : aliasPrefix[category] + (ordinal ? ordinals.indexOf(ordinal) + 1 : stage);
+      const prefix = aliasPrefix[category];
+      const alias = variant ? (name.includes(variant) ? '小q' : '大Q')
+        : hit.selection?.kind || category === 'plunge' ? prefix : prefix + (ordinal ? ordinals.indexOf(ordinal) + 1 : stage);
       const base = { skillId: talent.id, hitId: hit.id, group: categoryNames[category], alias, skillName: talent.name, element: hit.element, icon };
       const families = Object.keys(hit.damage), family = families.length === 1 ? families[0] : undefined;
       const suffix = family && family !== 'ordinary' && !name.includes(damageFamilyLabel(family)) ? '（' + damageFamilyLabel(family) + '）' : '';
-      choices.push({ ...base, ref: characterHitRef(character, hit.id), available: families.length > 0, name: name + suffix });
+      const unlock = grants.get(hit.id);
+      const requirement = build && unlock && build[unlock.state] < unlock.rank
+        ? (unlock.state === 'constellation' ? '需要命座 ' : '需要突破 ') + unlock.rank : undefined;
+      const count = hit.selection?.repetitions;
+      const repeatLabel = count ? '（' + (/单[击段次]/.test(name) ? '' : '单击，') + '共' + count + '击）' : '';
+      choices.push({ ...base, ref: characterHitRef(character, hit.id), available: !requirement && families.length > 0, requirement,
+        name: name + repeatLabel + suffix });
     }
 
   }

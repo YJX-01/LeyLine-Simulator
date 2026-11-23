@@ -56,7 +56,7 @@ export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend(
   for (const [index, talent] of character.talents.entries()) {
     const inputs = new Map(talent.inputs?.map(input => [input.id, input]));
     if (inputs.size !== (talent.inputs?.length ?? 0)) validation.addIssue({ code: 'custom', path: ['talents', index, 'inputs'], message: '技能输入身份重复。' });
-    if (talent.noIndependentDamage && talent.hits.length) validation.addIssue({ code: 'custom', path: ['talents', index], message: '无独立伤害技能不得声明伤害命中。' });
+    if (talent.noIndependentDamage && talent.hits.some(hit => hit.origin === 'talent')) validation.addIssue({ code: 'custom', path: ['talents', index], message: '无独立伤害技能不得声明自身的伤害命中。' });
     if (new Set(talent.parameters.map(parameter => parameter.id)).size !== talent.parameters.length || new Set(talent.hits.map(hit => hit.id)).size !== talent.hits.length) validation.addIssue({ code: 'custom', path: ['talents', index], message: '技能参数或命中身份重复。' });
     function visit(binding: CalculationBinding): void {
       if (binding.kind === 'talent-parameter' && binding.actor.role === 'owner') {
@@ -72,7 +72,7 @@ export const structuredCharacterDefinitionSchema = characterFieldsSchema.extend(
         validation.addIssue({ code: 'custom', path: ['talents', index, 'hits'], message: '命中捕获来源或展示属性与绑定不一致。' });
       }
       function validateBaseInput(binding: CalculationBinding): void {
-        if (binding.kind === 'fact' && binding.scope === 'query' && (binding.type.kind !== 'quantity' || inputs.get(binding.key)?.type.unit !== binding.type.unit)) {
+        if (binding.kind === 'fact' && binding.scope === 'query' && (binding.type.kind !== 'quantity' || inputs.get(binding.key)?.usage === 'healing' || inputs.get(binding.key)?.type.unit !== binding.type.unit)) {
           validation.addIssue({ code: 'custom', path: ['talents', index, 'hits'], message: '伤害基数引用了未声明或单位不一致的技能输入。' });
         }
         if (binding.kind === 'formula') Object.values(binding.inputs).forEach(validateBaseInput);

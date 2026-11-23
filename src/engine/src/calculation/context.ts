@@ -3,7 +3,7 @@ import { subjectFacts, boundFormulaSchema, calculationBindingSchema, calculation
   type CalculationReadTime, type CombatContext, type CombatFrame, type DefinitionRef, type EvaluatedValue, type FormulaEvaluation, type Value, type ValueType } from '@leyline/schema';
 import { compiledData, type CompiledCalculation, type CompiledData } from './compile';
 import { validateBinding, validateBoundFormula } from './binding-validation';
-import { collectEffectInstances, eventOrder, hasRecipientCharges, teamHealthCounter, hitMatches, instanceActive, stackExpiryUncertain, type EffectInstance } from './effects';
+import { collectEffectInstances, effectRecipientMatches, eventOrder, hasRecipientCharges, teamHealthCounter, hitMatches, instanceActive, stackExpiryUncertain, type EffectInstance } from './effects';
 import { interpretFormula, type FormulaEvaluationOptions } from './interpret';
 import { CalculationSession, type TraceOrigin } from './session';
 import { factsHaveSources, validateContextDefinitions } from './context-validation';
@@ -133,17 +133,21 @@ class BoundEvaluator {
       let count = 0;
       let unknownElement: string | undefined;
       const sources = new Set<string>();
+      const distinct = new Set<string>();
       for (const actor of this.context.actors) {
+        if (binding.excludeOwner && actor.id === frame.ownerId) continue;
         if (binding.kind==='team-region') {
           if (actor.identity?.region === undefined) return this.missing(origin,actor.id+'.region',{kind:'enum',values:[binding.region,'other']},'team-composition');
           actor.identity.sourceRefs.forEach(source=>sources.add(source));
-          if (actor.identity.region===binding.region) count++;
+          if ((actor.identity.region === binding.region) !== (binding.match === 'exclude')) count++;
           continue;
         }
-        if (binding.excludeOwner && actor.id === frame.ownerId) continue;
         if (!actor.identity) { unknownElement ??= actor.id; continue; }
         actor.identity.sourceRefs.forEach(source => sources.add(source));
-        if (binding.elements.includes(actor.identity.element) === (binding.match === 'include')) count++;
+        if (binding.elements.includes(actor.identity.element) === (binding.match === 'include')) {
+          distinct.add(actor.identity.element);
+          count = binding.distinctElements ? distinct.size : count + 1;
+        }
         if (count === binding.cap) { unknownElement = undefined; break; }
       }
       if (unknownElement) return this.missing(origin, unknownElement + '.element', { kind: 'enum', values: ['physical', 'anemo', 'geo', 'electro', 'hydro', 'pyro', 'cryo', 'dendro'] }, 'team-composition');
@@ -211,8 +215,17 @@ class BoundEvaluator {
     if (typeof actorId !== 'string') return actorId;
     const at = this.time(binding.at, frame, origin, binding.key, actorId);
     if ('state' in at) return at;
-    const excluded = binding.kind === 'attribute' && binding.excludeCurrentEffect && frame.instance
-        ? new Set([...frame.excluded, ...this.instances.filter(i => i.owner.id === frame.instance!.owner.id && i.definition === frame.instance!.definition).map(i => i.id)]) : frame.excluded;
+    let excluded = frame.excluded;
+    if (binding.kind === 'attribute' && (binding.excludeCurrentEffect || binding.excludeExtraAttack || binding.excludeOwnerBuffs)) {
+      const selected = new Set(frame.excluded);
+      const ownerBuffs = new Set(binding.excludeOwnerBuffs?.map(definitionKey));
+      for (const instance of this.instances) {
+        const sameEffect = instance.owner.id === frame.instance?.owner.id && instance.definition === frame.instance.definition;
+        const ownBuff = instance.owner.id === actorId && ownerBuffs.has(definitionKey(instance.definition.buff ?? instance.definition.identity));
+        if (ownBuff || binding.excludeCurrentEffect && sameEffect || binding.excludeExtraAttack && instance.definition.extraAttack) selected.add(instance.id);
+      }
+      excluded = selected;
+    }
     const value = this.attribute(binding.key, actorId, { ...at, excluded }, depth + 1);
     return binding.at.kind === 'capture' ? this.session.emit(origin, binding.at.slot, [value.traceId], value.state === 'known' ? value.value : null,
       value.state, value.state === 'known' ? [] : value.reasons, 'capture', { eventId: at.eventId, phase: at.phase, actorId, captureSlot: binding.at.slot }) : value;
@@ -274,9 +287,7 @@ class BoundEvaluator {
       if (revision?.disabled) continue;
       const effect = instance.definition, recipient = effect.recipient;
       const recipientActor = recipient.role === 'fact-actor' ? firstOwn(instance.owner.actorFacts, frame.actorFacts, recipient.input) : undefined;
-      const recipientMatches: boolean | null = recipient.role === 'owner' ? instance.owner.id === frame.recipientId
-        : recipient.role === 'target' ? true : recipient.role === 'team' ? !recipient.excludeOwner || instance.owner.id !== frame.recipientId
-          : recipientActor == null ? null : recipientActor === frame.recipientId;
+      const recipientMatches = effectRecipientMatches(recipient, instance.owner.id, frame.recipientId, this.actors.get(frame.recipientId)?.identity, recipientActor);
       const hit = hitMatches(effect.appliesTo, frame.hit);
       const observed = effect.windowFact && this.scopedFact({ kind: 'actor', id: instance.owner.id }, effect.windowFact, frame);
       if (effect.windowFact && (instance.source ? observed !== undefined : !observed)) continue;
@@ -305,7 +316,8 @@ class BoundEvaluator {
         value = this.session.known(effectOrigin, 'revision', revision.value, [], type);
       } else value = this.binding(effect.value, effectFrame, effectOrigin, depth + 1);
       value = this.session.emit(effectOrigin, effect.identity.id, [value.traceId, ...predicate ? [predicate.traceId] : []], value.state === 'known' ? value.value : null,
-        value.state, value.state === 'known' ? [] : value.reasons, 'effect', { eventId: frame.eventId, phase: frame.phase, actorId: instance.owner.id, effectInstanceId: instance.id });
+        value.state, value.state === 'known' ? [] : value.reasons, 'effect', { eventId: frame.eventId, phase: frame.phase, actorId: instance.owner.id,
+          recipientId: frame.recipientId, effectInstanceId: instance.id });
       const scope = effect.stacking.scope === 'owner' ? instance.owner.id : effect.stacking.scope === 'recipient' ? frame.recipientId : 'team';
       const key = JSON.stringify([effect.stacking.group, scope]);
       const group = groups.get(key) ?? []; group.push({ instance, value }); groups.set(key, group);
@@ -349,6 +361,14 @@ class BoundEvaluator {
     const known = [base, ...values] as Extract<EvaluatedValue, { state: 'known' }>[];
     if (known.some(value => value.value.kind !== 'quantity')) return this.session.invalid(origin, id, origin.pointer, '数值合并要求数量。', 'unit-mismatch');
     const numeric = known.map(value => (value.value as Extract<Value, { kind: 'quantity' }>).value);
+    if ((policy === 'sum' || policy === 'product') && contributions.some(({ instance }) => instance.definition.stacking.crossOwnerUnverified)) {
+      const active = contributions.filter((_, index) => numeric[index + 1] !== (policy === 'sum' ? 0 : 1));
+      if (active.some(({ instance }) => instance.definition.stacking.crossOwnerUnverified)
+        && new Set(active.map(({ instance }) => instance.owner.id)).size > 1) {
+        const reason = this.session.report('unreviewed-mechanism', origin.pointer, '此项有效增益由多位队员提供，其叠加规则尚未核验。', id);
+        return this.session.emit(origin, id, known.map(value => value.traceId), null, 'unknown', [reason]);
+      }
+    }
     const value = policy === 'sum' ? numeric.reduce((a, b) => a + b, 0) : policy === 'product' ? numeric.reduce((a, b) => a * b, 1) : Math.max(...numeric);
     return this.session.known(origin, id, { ...(known[0].value as Extract<Value, { kind: 'quantity' }>), value }, known.map(value => value.traceId), type);
   }
@@ -358,16 +378,18 @@ function validateRuntimeFrame(evaluator: BoundEvaluator, frame: CombatFrame): st
   if (frame.factOverrides.some(override => override.subject.kind !== 'team' && !(override.subject.kind === 'actor' ? evaluator.actors : evaluator.targets).has(override.subject.id))) return '状态覆盖引用已失效。';
   if (evaluator.context.effectRevisions?.some(revision => !evaluator.instances.some(instance => instance.id === revision.instanceId))) return '效果修订引用已失效。';
   for (const application of frame.applications) {
-    const instance = evaluator.instances.find(instance => instance.id === application.instanceId);
-    if (!instance) return '效果适用事实引用已失效。';
-    const effect = instance.definition, recipient = effect.recipient;
-    if (effect.application === 'always' && !stackExpiryUncertain(instance, evaluator.events.get(frame.eventId)!.timeMs) || hitMatches(effect.appliesTo, frame.hit) === false
-      || recipient.role === 'owner' && instance.owner.id !== frame.recipientId
-      || recipient.role === 'team' && recipient.excludeOwner && instance.owner.id === frame.recipientId
-      || recipient.role === 'fact-actor' && firstOwn(instance.owner.actorFacts, frame.actorFacts, recipient.input) != null
-        && firstOwn(instance.owner.actorFacts, frame.actorFacts, recipient.input) !== frame.recipientId
-      || instance.source && eventOrder(instance.source, evaluator.events.get(frame.eventId)!) === null
-      || instanceActive(instance, evaluator.events.get(frame.eventId)!, frame.phase) === false) return '效果适用事实的对象、命中类型、顺序或时效不符合声明。';
+    const modifiers = evaluator.instances.filter(instance => instance.id === application.instanceId);
+    if (!modifiers.length) return '效果适用事实引用已失效。';
+    const event = evaluator.events.get(frame.eventId)!;
+    const applicable = modifiers.some(instance => {
+      const { definition: effect, source } = instance, { recipient } = effect;
+      return (effect.application !== 'always' || stackExpiryUncertain(instance, event.timeMs))
+        && hitMatches(effect.appliesTo, frame.hit) !== false
+        && effectRecipientMatches(recipient, instance.owner.id, frame.recipientId, evaluator.actors.get(frame.recipientId)?.identity,
+          recipient.role === 'fact-actor' ? firstOwn(instance.owner.actorFacts, frame.actorFacts, recipient.input) : undefined) !== false
+        && (!source || eventOrder(source, event) !== null) && instanceActive(instance, event, frame.phase) !== false;
+    });
+    if (!applicable) return '效果适用事实的对象、命中类型、顺序或时效不符合声明。';
   }
   return null;
 }

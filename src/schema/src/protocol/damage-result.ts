@@ -4,6 +4,7 @@ import type { DamageScalingStat } from '../content/talent';
 import type { ContentSource } from '../common/values';
 import type { Element } from '../content/stats';
 import type { HitReactionType } from '../content/reactions';
+import type { CalculationUnit } from '../calculation/values';
 export type CalculationStatus = 'complete' | 'partial' | 'invalid';
 export interface CalculationIssue { code: 'unknown' | 'unsupported' | 'invalid-input'; message: string; affects?: { stat: StatKey; category?: AttackType }[] }
 export interface Contribution { source: string; stat: StatKey; value: number; category?: AttackType }
@@ -11,6 +12,7 @@ export interface AttributePanel {
   status: CalculationStatus;
   stats: Record<StatKey, number | null>;
   attributes?: Record<string, number | null>;
+  effectValues?: { instanceId: string; modifierId: string; value: number | null; unit?: CalculationUnit }[];
   contributions: Contribution[];
   categoryModifiers: Contribution[];
   baseStats?: { hp: number; attack: number; defense: number };
@@ -26,7 +28,8 @@ export interface DamageResult {
   baseDamage: number | null;
   baseDamageBonus?: number | null;
   scaling: { stat: DamageScalingStat; parameter: string; attribute: number | null; multiplier: number | null; contribution: number | null; count?: { input: string; value: number | null } }[];
-  capture?: { recordId: string | null; phase: 'before' | 'after' | null; attributes: StatKey[]; source?: ContentSource };
+  capture?: { recordId: string | null; phase: 'before' | 'after' | null; attributes: (StatKey | 'damageBonus')[]; source?: ContentSource };
+  sceneHit?: { multiplier: number; elementLevelCo: number | null; sourceRefs: string[] };
   reaction?: {
     type: HitReactionType; family: 'amplifying' | 'additive'; trigger: 'record-owner' | null; element: Element;
     elementalMastery: number | null; bonus: number | null; coefficient: number | null; levelMultiplier: number | null;

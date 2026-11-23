@@ -1,4 +1,4 @@
-import { definitionKey, subjectFacts, talentParameterAt, type CalculationFact, type CombatChange, type Project } from '@leyline/schema';
+import { definitionKey, healingGrant, subjectFacts, talentParameterAt, type CalculationFact, type CombatChange, type Project } from '@leyline/schema';
 import { expression } from '@leyline/schema/buffs';
 import { actorIsOnField } from './build-context';
 import { evaluateCombatBindings } from './context';
@@ -8,12 +8,13 @@ import { prepareProjectRuntime, readRuntimePanel, type ProjectRuntime } from './
 type Entry = Project['timeline'][number];
 type Heal = NonNullable<Entry['talentHeal']>;
 
-function healingAt(runtime: ProjectRuntime, record: Entry, healing: Heal): Pick<CombatChange, 'status' | 'healing' | 'missing'> {
+function healingAt(runtime: ProjectRuntime, record: Entry, healing: Heal): Pick<CombatChange, 'status' | 'healing' | 'baseHealing' | 'missing'> {
   const build = runtime.builds.get(record.actor);
   if (!build || definitionKey(healing.definition) !== definitionKey(build.character)) return { status: 'unknown', missing: ['配装角色及修订'] };
   const talent = build.character.talents.find(t => t.heals?.some(h => h.id === healing.healId));
   const heal = talent?.heals?.find(h => h.id === healing.healId);
   if (!talent || !heal) return { status: 'unknown', missing: ['治疗条目'] };
+  if (!healingGrant(build, heal.origin).unlocked) return { status: 'excluded', healing: 0 };
   const recipient = healing.recipientId;
   if ((heal.recipient === 'self' && recipient !== record.actor) || (heal.recipient === 'other' && recipient === record.actor)) return { status: 'excluded', healing: 0 };
   const missing: string[] = [];
@@ -30,29 +31,78 @@ function healingAt(runtime: ProjectRuntime, record: Entry, healing: Heal): Pick<
     if (field === false) return { status: 'excluded', healing: 0 };
     if (field === undefined) missing.push('受治疗队员是否站场');
   }
-  if (heal.condition !== undefined) {
-    const clause = expression(heal.condition, build.character.metadata.facts);
-    const reading = evaluateCombatBindings(runtime.team.program, runtime.context, { applies: clause }, {
+  let basisFactor = 1;
+  let recordedBasis: number | undefined;
+  let multiplier = typeof heal.multiplier === 'number' ? heal.multiplier : 1;
+  let multiplierBonusUnverified = false;
+  const multiplierGrant = typeof heal.multiplier === 'object' && healingGrant(build, heal.multiplier.origin).unlocked ? heal.multiplier : undefined;
+  const multiplierMissing: string[] = [];
+  if (heal.condition !== undefined || heal.basisFactor !== undefined || heal.basisAmount !== undefined || multiplierGrant) {
+    const facts = build.character.metadata.facts;
+    const bindings = { ...(heal.condition !== undefined && { applies: expression(heal.condition, facts) }),
+      ...(heal.basisFactor !== undefined && { factor: expression(heal.basisFactor, facts) }),
+      ...(heal.basisAmount !== undefined && { amount: expression(heal.basisAmount, facts) }),
+      ...(multiplierGrant && { increased: expression(multiplierGrant.condition, facts) }) };
+    const reading = evaluateCombatBindings(runtime.team.program, runtime.context, bindings, {
       ownerId: record.actor, recipientId: recipient, contributorId: null, targetId: 'target', eventId: record.id, phase: 'before',
-      sourceEventId: record.sourceEventIds?.[0] ?? null, facts: {}, actorFacts: {}, factOverrides: [], applications: [], captures: {}, hit: null,
+      sourceEventId: record.sourceEventIds?.[0] ?? null, facts: subjectFacts(healing.facts, { kind: 'event' }) ?? {},
+      actorFacts: {}, factOverrides: [], applications: [], captures: {}, hit: null,
     });
-    const applies = reading.outputs.applies;
-    if (applies?.state === 'known' && applies.value.kind === 'boolean') {
-      if (!applies.value.value) return { status: 'excluded', healing: 0 };
-    } else missing.push(...(reading.diagnostics.length ? reading.diagnostics.map(d => d.message) : ['治疗生效条件']));
+    const { applies, factor, amount, increased } = reading.outputs;
+    if (heal.condition !== undefined) {
+      if (applies?.state === 'known' && applies.value.kind === 'boolean') {
+        if (!applies.value.value) return { status: 'excluded', healing: 0 };
+      } else missing.push(...(reading.diagnostics.length ? reading.diagnostics.map(d => d.message) : ['治疗生效条件']));
+    }
+    if (heal.basisFactor !== undefined) {
+      if (factor?.state === 'known' && factor.value.kind === 'quantity' && factor.value.unit === 'scalar') basisFactor = factor.value.value;
+      else missing.push(...(reading.diagnostics.length ? reading.diagnostics.map(d => d.message) : ['基础治疗量比例']));
+    }
+    if (heal.basisAmount !== undefined) {
+      if (amount?.state === 'known' && amount.value.kind === 'quantity' && amount.value.unit === 'hp' && amount.value.value >= 0) recordedBasis = amount.value.value;
+      else missing.push(...(reading.diagnostics.length ? reading.diagnostics.map(d => d.message) : ['本次事件的生命值基数']));
+    }
+    if (multiplierGrant) {
+      if (increased?.state === 'known' && increased.value.kind === 'boolean') {
+        if (increased.value.value) {
+          multiplier = multiplierGrant.value;
+          multiplierBonusUnverified = multiplierGrant.bonusInteraction === 'unverified';
+        }
+      } else multiplierMissing.push(...(reading.diagnostics.length ? reading.diagnostics.map(d => d.message) : ['本次治疗倍率生效条件']));
+    }
   }
   const rank = runtime.team.talentRank(build, talent.category);
-  const parameter = (id: string) => talentParameterAt(talent, id, rank);
+  const parameter = (id: string | number) => typeof id === 'number' ? id : talentParameterAt(talent, id, rank);
   const rate = parameter(heal.rate), flat = heal.flat ? parameter(heal.flat) : 0;
   const owner = readRuntimePanel(runtime, record.actor, record);
   const receiver = recipient === record.actor ? owner : readRuntimePanel(runtime, recipient, record);
-  const basis = owner.stats[heal.stat], outgoing = owner.stats.healingBonus, incoming = receiver.attributes?.incomingHealingBonus;
-  if (basis == null) missing.push(record.actor + '/' + heal.stat);
+  const basis = heal.stat ? (heal.basisActor === 'recipient' ? receiver : owner).stats[heal.stat] : recordedBasis;
+  const outgoing = owner.stats.healingBonus, incoming = receiver.attributes?.incomingHealingBonus;
+  if (heal.stat && basis == null) missing.push((heal.basisActor === 'recipient' ? recipient : record.actor) + '/' + heal.stat);
+  const recipientHp = receiver.stats.hp;
+  if (heal.recipientHpCap !== undefined && recipientHp == null) missing.push(recipient + '/hp');
+  if (rate === undefined || flat === undefined) missing.push(talent.id + '/parameters');
+  let extra = 0;
+  if (heal.extra && healingGrant(build, heal.extra.origin).unlocked) {
+    const stat = owner.stats[heal.extra.stat], coefficient = parameter(heal.extra.rate);
+    if (stat == null || coefficient === undefined) missing.push(talent.id + '/' + heal.extra.rate);
+    else extra = Math.min(heal.extra.cap ?? Infinity, stat * coefficient);
+  }
+  if (missing.length) return { status: 'unknown', missing };
+  const perOccurrence = (basis! * rate! * basisFactor + extra + flat!) * multiplier;
+  const cap = heal.recipientHpCap === undefined ? Infinity : recipientHp! * heal.recipientHpCap;
+  const baseHealing = Math.min(perOccurrence, cap) * count;
+  if (!Number.isFinite(baseHealing) || baseHealing < 0) return { status: 'unknown', missing: ['有限非负基础治疗量'] };
+  missing.push(...multiplierMissing);
   if (outgoing == null) missing.push(record.actor + '/healingBonus');
   if (incoming == null) missing.push(recipient + '/incomingHealingBonus');
-  if (rate === undefined || flat === undefined) missing.push(talent.id + '/parameters');
-  if (missing.length) return { status: 'unknown', missing };
-  const value = (basis! * rate! + flat!) * (1 + outgoing! + incoming!) * count;
+  if (outgoing !== 0 || incoming !== 0) {
+    if (multiplierBonusUnverified) missing.push('本次治疗倍率与治疗加成、受治疗加成的叠加方式');
+    else if (heal.bonusInteraction === 'unverified') missing.push('该回复与治疗加成、受治疗加成的结算依据');
+    else if (heal.bonusInteraction === 'incoming-unverified' && incoming !== 0) missing.push('该回复与受治疗加成的结算依据');
+  }
+  if (missing.length) return { status: 'unknown', baseHealing, missing };
+  const value = Math.min(perOccurrence * (1 + outgoing! + incoming!), cap) * count;
   return Number.isFinite(value) && value >= 0 ? { status: 'applied', healing: value } : { status: 'unknown', missing: ['有限非负治疗量'] };
 }
 
@@ -61,8 +111,8 @@ function castHeals(project: Project): Project {
   const actors = new Map(project.candidate.actors.map(actor => [actor.id, actor]));
   const casts = project.timeline.flatMap(record => {
     if (record.kind !== 'action') return [];
-    const character = actors.get(record.actor)?.build?.character;
-    const heals = character?.talents.find(t => t.id === record.skillId)?.heals?.filter(h => h.trigger === 'cast');
+    const build = actors.get(record.actor)?.build, character = build?.character;
+    const heals = character?.talents.find(t => t.id === record.skillId)?.heals?.filter(h => h.trigger === 'cast' && healingGrant(build!, h.origin).unlocked);
     return character && heals?.length ? [{ record, character, heals }] : [];
   });
   if (!casts.length) return project;

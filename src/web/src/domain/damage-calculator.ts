@@ -1,8 +1,8 @@
-import { findBuildHit } from '@leyline/schema';
+import { definitionKey, findBuildHit, matchingSceneHits } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { unpackDocument } from './content-document';
 import { getArtifactSet, getCharacter, getWeapon } from '@leyline/game-data';
-import { damageCalculatorSchema, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project } from '@leyline/schema';
+import { damageCalculatorSchema, projectSchema, type AccountCharacter, type LocalAccount, type AxisRequest, type Build, type DamageCalculatorDocument, type DamageRequest, type Enemy, type Project, type SceneHitRequest } from '@leyline/schema';
 import { loadAccountGameData } from './account-presentation';
 import { addActorFromBuild } from './real-project';
 import { createEmptyProject, nextRecordId } from './workbench-project';
@@ -76,10 +76,31 @@ export function createDamageCalculation(build: Build, damage: DamageRequest, ene
   return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, recordId });
 }
 
+export function calculatorSceneHits(project: Project | undefined) {
+  const choices = new Map((project?.sceneEffects ?? []).filter(({ definition }) => definition.hits?.length)
+    .map(({ definition }) => [definitionKey(definition), definition]));
+  return [...choices.values()];
+}
+
+export function addCalculatorSceneHit(project: Project, actorId: string, scene: SceneHitRequest['scene'], timeMs: number, replaceId?: string) {
+  const previous = project.timeline.find(record => record.id === replaceId);
+  if (replaceId && (!previous || previous.kind !== 'damage' || previous.actor !== actorId)) throw new Error('场景冲击的计算记录已失效。');
+  if (!matchingSceneHits(project.sceneEffects, scene).length) throw new Error('请先选择对应难度的场景效果。');
+  const id = previous?.id ?? nextRecordId(project);
+  const record: Project['timeline'][number] = {
+    id, actor: actorId, timeMs, order: previous?.order ?? Math.max(-1, ...project.timeline.map(entry => entry.order)) + 1,
+    kind: 'damage', definition: `${actorId}-real-damage`,
+    sceneHit: { scene, elementLevelCo: null, triggered: null, targetHit: null },
+  };
+  project.timeline = previous ? project.timeline.map(entry => entry.id === id ? record : entry) : [...project.timeline, record];
+  if (!previous && project.objective.damageIds) project.objective.damageIds.push(id);
+  return id;
+}
+
 export function calculatorRequest(input: DamageCalculatorDocument, taskId: number): AxisRequest {
   const document = damageCalculatorSchema.parse(input);
   for (const project of [document.project, ...document.baseline ? [document.baseline] : []]) {
-    const prepared = prepareStructuredBuilds(project.candidate.actors.map(({ id, build, element }) => ({ id, build, element })), undefined, project.sceneEffects);
+    const prepared = prepareStructuredBuilds(project.candidate.actors.map(({ id, build, element }) => ({ id, build, element })), project.reactionRules, project.sceneEffects);
     if (!prepared.ok) throw new Error(prepared.diagnostics.map(diagnostic => diagnostic.message).join('；'));
   }
   return calculatorWorkerRequest(document, taskId);
@@ -89,7 +110,7 @@ export function calculatorRequest(input: DamageCalculatorDocument, taskId: numbe
 export function calculatorWorkerRequest(document: DamageCalculatorDocument, taskId: number): AxisRequest {
   if (!document.baseline) return { taskId, session: 1, revision: taskId, project: document.project };
   const baseline = document.baseline;
-  for (const key of ['timeline', 'conditions', 'enemy', 'combatStates', 'reactionRules', 'actionStates', 'objective', 'effectRevisions', 'definitions'] as const) {
+  for (const key of ['timeline', 'conditions', 'enemy', 'combatStates', 'sceneEffects', 'reactionRules', 'actionStates', 'objective', 'effectRevisions', 'definitions'] as const) {
     if (JSON.stringify(baseline[key]) !== JSON.stringify(document.project[key])) throw new Error('同轴比较须保留基准的记录、条件与定义，请先结束对照。');
   }
   if (baseline.candidate.actors.length !== document.project.candidate.actors.length) throw new Error('比较队员已变化。');
@@ -111,7 +132,7 @@ export function parseDamageCalculator(content: string): DamageCalculatorDocument
 
 export function copyProjectForCalculator(input: Project): DamageCalculatorDocument {
   const project = projectSchema.parse(input);
-  const record = project.timeline.find(record => record.kind === 'damage' && (record.damage || record.reactionEvent));
+  const record = project.timeline.find(record => record.kind === 'damage' && (record.damage || record.reactionEvent || record.sceneHit));
   const actorId = record?.actor ?? project.candidate.actors.find(actor => actor.build)?.id;
   if (!actorId) throw new Error('当前轴没有完整配装，请先准备队伍。');
   return damageCalculatorSchema.parse({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId, ...(record ? { recordId: record.id } : {}) });

@@ -27,8 +27,9 @@ export function eventMatches(selector: CalculationEventSelector, event: Calculat
   if (selector.categories) checks.push(event.category === undefined ? null : selector.categories.includes(event.category));
   if (selector.reactionIds || selector.reactionElements) {
     const elements = event.reactionId && selector.reactionElements?.[event.reactionId];
-    checks.push(event.reactionId === undefined ? null : selector.reactionIds?.includes(event.reactionId) ? true
-      : elements ? event.reactionElement === undefined ? null : elements.includes(event.reactionElement) : false);
+    checks.push(event.reactionId === undefined ? null
+      : elements ? event.reactionElement === undefined ? null : elements.includes(event.reactionElement)
+      : selector.reactionIds?.includes(event.reactionId) ?? false);
   }
   if (selector.actionIds) checks.push(event.actionId === undefined ? null : selector.actionIds.includes(event.actionId));
   if (selector.observation) {
@@ -42,10 +43,22 @@ export function hitMatches(selector: CalculationHitSelector, hit: CombatFrame['h
   if (!Object.keys(selector).length) return true;
   if (!hit) return null;
   return (!selector.skillIds || hit.skillId !== null && selector.skillIds.includes(hit.skillId)) && (!selector.hitIds || hit.hitId !== null && selector.hitIds.includes(hit.hitId))
+    && (!selector.excludeHitIds || hit.hitId === null || !selector.excludeHitIds.includes(hit.hitId))
     && (!selector.elements || selector.elements.includes(hit.element)) && (!selector.categories || hit.category !== null && selector.categories.includes(hit.category))
     && (!selector.families || selector.families.includes(hit.family)) && (!selector.origins || selector.origins.includes(hit.origin))
     && (!selector.reactionIds || hit.reactionId !== null && selector.reactionIds.includes(hit.reactionId));
 }
+export function effectRecipientMatches(recipient: EffectDefinition['recipient'], ownerId: string, recipientId: string,
+  identity?: Pick<NonNullable<CombatActor['identity']>, 'element' | 'weaponType'>, factActor?: string | null): boolean | null {
+  if (recipient.role === 'owner') return ownerId === recipientId;
+  if (recipient.role === 'target') return true;
+  if (recipient.role === 'fact-actor') return factActor == null ? null : factActor === recipientId;
+  if (recipient.excludeOwner && ownerId === recipientId
+    || recipient.elements && identity && !recipient.elements.includes(identity.element)
+    || recipient.weaponTypes && identity?.weaponType && !recipient.weaponTypes.includes(identity.weaponType)) return false;
+  return recipient.elements && !identity || recipient.weaponTypes && !identity?.weaponType ? null : true;
+}
+
 export function buffTriggerMatches(definition: EffectDefinition, event: CalculationEvent, ownerId: string, targetId: string): boolean | null {
   if (definition.trigger.kind !== 'event') return false;
   if (event.confirmedBuff) {
@@ -62,11 +75,12 @@ export function buffTriggerMatches(definition: EffectDefinition, event: Calculat
   }
   return unknown ? null : false;
 }
-export function effectUnlocked(activation: EffectDefinition['activation'], owner: Pick<CombatActor, 'ascension' | 'constellation' | 'refinement' | 'setCounts'> & { identity?: Pick<NonNullable<CombatActor['identity']>,'element'|'weaponType'> }): boolean {
+export function effectUnlocked(activation: EffectDefinition['activation'], owner: Pick<CombatActor, 'ascension' | 'constellation' | 'refinement' | 'setCounts'> & { identity?: Pick<NonNullable<CombatActor['identity']>,'element'|'weaponType'|'gameId'> }): boolean {
   return owner.ascension !== null && owner.ascension >= (activation.ascension ?? 0)
     && owner.constellation !== null && owner.constellation >= (activation.constellation ?? 0)
     && owner.refinement !== null && owner.refinement >= (activation.refinement ?? 1)
     && (!activation.weaponTypes || !!owner.identity?.weaponType && activation.weaponTypes.includes(owner.identity.weaponType))
+    && (!activation.characterGameIds || !!owner.identity?.gameId && activation.characterGameIds.includes(owner.identity.gameId))
     && (!activation.elements || !!owner.identity && activation.elements.includes(owner.identity.element))
     && (!activation.set || (owner.setCounts[activation.set.id] ?? 0) >= activation.set.pieces);
 }

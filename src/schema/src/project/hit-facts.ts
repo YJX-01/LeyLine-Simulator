@@ -17,6 +17,13 @@ export const hitFactsSchema = z.array(z.object({ subject, values: z.record(idSch
     if (seen.has(key)) validation.addIssue({ code: 'custom', path: [index, 'subject'], message: '同一主体的命中事实重复。' });
     seen.add(key);
     for (const [field, fact] of Object.entries(row.values)) {
+      if (['sigewinne.partyBondOfLife', 'chrysosShieldDamage', 'recoveryOrbBaseHealing', 'recoveryOrbBaseStamina'].includes(field)) {
+        const unit = field === 'recoveryOrbBaseStamina' ? 'stamina' : 'hp';
+        const scope = field === 'sigewinne.partyBondOfLife' ? 'team' : 'event';
+        if (row.subject.kind !== scope || fact.value && (fact.value.kind !== 'quantity' || fact.value.unit !== unit || fact.value.value < 0)) {
+          validation.addIssue({ code: 'custom', path: [index, 'values', field], message: '恢复基数或队伍总量的主体、单位或取值无效。' });
+        }
+      }
       if (['currentEnergy','skillCooldownRemaining','nearbyEnemies','deathmatch.enemiesAtUpdate'].includes(field)) {
         const unit = field === 'currentEnergy' ? 'energy' : field === 'skillCooldownRemaining' ? 'milliseconds' : 'count';
         if (row.subject.kind !== 'actor' || fact.value && (fact.value.kind !== 'quantity' || fact.value.unit !== unit || fact.value.value < 0 || unit !== 'energy' && !Number.isSafeInteger(fact.value.value))) {

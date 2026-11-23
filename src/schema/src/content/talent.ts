@@ -5,16 +5,20 @@ import { elements } from './stats';
 import { calculationQuantityTypeSchema } from '../calculation/values';
 import type { CharacterMetadata } from './character-metadata';
 import type { StructuredBuild } from '../account/structured-build';
+import { partyInfusionElements } from '../calculation/party-infusion.mjs';
 export const damageScalingStatSchema = z.enum(['attack', 'hp', 'defense', 'elementalMastery']);
 export type DamageScalingStat = z.infer<typeof damageScalingStatSchema>;
 export const parameterSchema = z.object({ id: idSchema, unit: z.enum(['ratio','scalar','seconds','energy','stamina','staminaPerSecond','pointsPerSecond','hp','attack','defense','elementalMastery','count','unknown']), values: z.array(finiteSchema).min(1).max(30) }).strict();
 export const talentInputSchema = z.object({
   id: idSchema, type: calculationQuantityTypeSchema, min: finiteSchema.nonnegative(), max: finiteSchema.nonnegative(), integer: z.boolean(),
+  usage: z.literal('healing').optional(),
   constellationLimits: z.array(z.object({ rank: z.number().int().min(1).max(6), max: finiteSchema.nonnegative() }).strict()).max(6).optional(),
 }).strict().refine(input => input.max >= input.min && (!input.integer || (Number.isInteger(input.min) && Number.isInteger(input.max)))
   && (input.constellationLimits ?? []).every(limit => limit.max >= input.min && (!input.integer || Number.isInteger(limit.max)))
   && new Set(input.constellationLimits?.map(limit => limit.rank)).size === (input.constellationLimits ?? []).length, '技能输入范围无效。');
 const frames = z.number().int().nonnegative().max(36000);
+const healingOrigin = z.union([z.object({ passive: z.number().int().nonnegative() }).strict(),
+  z.object({ constellation: z.number().int().nonnegative() }).strict()]);
 export const linkedSummonSchema = z.object({
   durationParameter: idSchema, capacity: z.number().int().min(1).max(8), rankHits: z.array(idSchema).min(1).max(10),
   extraRankAt: z.number().int().min(1).max(6), fps: z.number().int().min(1).max(240), spawn: frames, firstShot: frames,
@@ -31,13 +35,25 @@ export const talentFieldsSchema = z.object({ id: idSchema, name: idSchema, descr
     hitCounter:z.object({input:idSchema,hits:z.array(idSchema).min(1),intervalMs:z.number().int().nonnegative(),ascension:z.object({rank:z.number().int().min(1).max(6),initial:z.number().int().nonnegative(),fillHit:idSchema}).strict()}).strict().optional(),
     contact:z.object({hit:idSchema,ready:idSchema,intervalMs:z.number().int().positive()}).strict().optional() }).strict().optional(),
   parameters: z.array(parameterSchema).max(100), details: z.array(z.object({ label: z.string().max(500), template: z.string().max(2000) }).strict()).max(100),
-  heals: z.array(z.object({ id: idSchema, detail: z.number().int().nonnegative(), stat: damageScalingStatSchema,
-    rate: idSchema, flat: idSchema.optional(), recipient: z.enum(['self', 'other', 'party', 'on-field']),
+  heals: z.array(z.object({ id: idSchema, detail: z.number().int().nonnegative().optional(), stat: damageScalingStatSchema.optional(),
+    origin: healingOrigin.optional(),
+    rate: z.union([idSchema, finiteSchema.nonnegative()]), flat: z.union([idSchema, finiteSchema.nonnegative()]).optional(),
+    basisActor: z.literal('recipient').optional(), basisAmount: combatExpressionSchema.optional(), recipientHpCap: finiteSchema.nonnegative().optional(),
+    recipient: z.enum(['self', 'other', 'party', 'on-field']),
+    bonusInteraction: z.enum(['unverified', 'incoming-unverified']).optional(),
+    basisFactor: combatExpressionSchema.optional(), extra: z.object({ stat: damageScalingStatSchema,
+      rate: z.union([idSchema, finiteSchema.nonnegative()]), cap: finiteSchema.nonnegative().optional(), origin: healingOrigin.optional() }).strict().optional(),
+    label: idSchema.optional(), multiplier: z.union([finiteSchema.positive(), z.object({
+      value: finiteSchema.positive(), condition: combatExpressionSchema, origin: healingOrigin.optional(),
+      bonusInteraction: z.literal('unverified').optional(),
+    }).strict()]).optional(),
     condition: combatExpressionSchema.optional(), count: z.object({ fact: idSchema, cap: z.number().int().positive().optional() }).strict().optional(),
     trigger: z.literal('cast').optional() }).strict()
+    .refine(heal => (heal.stat !== undefined) !== (heal.basisAmount !== undefined) && (!heal.basisActor || heal.stat !== undefined), '治疗基数须选取配装属性或本次生命值表达式。')
     .refine(heal => !heal.trigger || heal.recipient === 'self' || heal.recipient === 'party', '施放时的自动治疗须有确定的受益人。')).min(1).max(32).optional(),
   inputs: z.array(talentInputSchema).max(20).optional(), summon: linkedSummonSchema.optional(),
   noIndependentDamage: z.literal(true).optional(),
+  partyInfusion: z.enum(partyInfusionElements).optional(),
 }).strict();
 const talentCategory = z.enum(['normal', 'skill', 'burst']);
 const talentBonus = z.object({ category: talentCategory, levels: z.literal(3) }).strict();
@@ -48,8 +64,19 @@ export const passiveSchema = z.object({ id: idSchema, name: idSchema, descriptio
 }).strict();
 export const constellationSchema = z.object({ rank:z.number().int().min(1).max(6), name:idSchema, description:z.string().max(40000),
   extraSkillCharge:z.literal(1).optional(),
+  partyInfusion: z.enum(partyInfusionElements).optional(),
   talentBonuses:z.array(talentBonus).max(3) }).strict();
 export type Talent = CharacterMetadata['talents'][number];
+
+export function healingGrant(build: Pick<StructuredBuild, 'character' | 'ascension' | 'constellation'>, origin: NonNullable<Talent['heals']>[number]['origin']) {
+  if (!origin) return { unlocked: true };
+  if ('passive' in origin) {
+    const passive = build.character.metadata.passives[origin.passive];
+    return { name: passive?.name, unlocked: !!passive && build.ascension >= (passive.unlockAscension ?? 0) };
+  }
+  const entry = build.character.metadata.constellations[origin.constellation];
+  return { name: entry?.name, unlocked: !!entry && build.constellation >= entry.rank };
+}
 
 export function talentInputMaximum(input: NonNullable<Talent['inputs']>[number], constellation: number): number {
   return (input.constellationLimits ?? []).reduce((current, limit) => limit.rank <= constellation && limit.rank > current.rank ? limit : current, {rank:0,max:input.max}).max;

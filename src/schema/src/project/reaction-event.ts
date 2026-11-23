@@ -16,6 +16,7 @@ export const projectReactionSchema = z.object({
   family: z.enum([...aggregateReactionFamilies,...transformativeFamilies]),
   triggerActorId: idSchema.nullable().optional(),
   element: z.enum(elements),
+  facts: damageRequestSchema.shape.facts, effectApplications: damageRequestSchema.shape.effectApplications,
   coefficient: finiteSchema.nonnegative().nullable().optional(),
   contributors: z.array(z.object({
     actorId: idSchema,
@@ -27,8 +28,8 @@ export const projectReactionSchema = z.object({
 }).strict().superRefine((reaction, context) => {
   const contributors = reaction.contributors.map(contributor => contributor.actorId);
   if (isTransformative(reaction.family) && (contributors.length !== 1 || reaction.triggerActorId !== contributors[0] || reaction.contributors[0].qualified !== true
-    || reaction.contributors[0].crit !== 'noncritical' || reaction.jointCrit || !transformativeElements[reaction.family].includes(reaction.element))) {
-    context.addIssue({ code: 'custom', message: '普通剧变反应的每次伤害须记录触发队员、对应元素与非暴击口径。' });
+    || reaction.jointCrit || !transformativeElements[reaction.family].includes(reaction.element))) {
+    context.addIssue({ code: 'custom', message: '普通剧变反应的每次伤害须记录触发队员与对应元素。' });
   }
   if (new Set(contributors).size !== contributors.length) context.addIssue({ code: 'custom', path: ['contributors'], message: '参与队员不得重复。' });
   if (reaction.family !== 'stellar-swirl' && reaction.coefficient !== undefined) context.addIssue({ code: 'custom', path: ['coefficient'], message: '此反应使用固定系数。' });

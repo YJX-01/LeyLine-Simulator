@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { attackTypeSchema } from '../content/effects';
 import { idSchema, millisecondsSchema } from '../common/values';
 import { calculationFactSchema, type CalculationFact } from './binding';
 import { hitFactsSchema } from '../project/hit-facts';
@@ -31,7 +32,7 @@ export const calculationEventSchema = z.object({
   actionId: idSchema.optional(),
   actorId: idSchema.nullable(), targetIds: z.array(idSchema).max(10000).nullable(),
   timeMs: millisecondsSchema, order: z.number().int().nonnegative().safe(),
-  skillId: idSchema.optional(), hitId: idSchema.optional(), category: z.enum(['normal', 'charged', 'plunge', 'skill', 'burst']).optional(),
+  skillId: idSchema.optional(), hitId: idSchema.optional(), category: attackTypeSchema.optional(),
   applications: z.array(z.object({ instanceId: z.string(), active: z.boolean().nullable() }).strict()).optional(),
   reactionId: idSchema.optional(), reactionElement: z.enum(elements).optional(), sourceEventIds: z.array(idSchema).max(1000), facts: z.record(idSchema, calculationFactSchema),
   subjectFacts: hitFactsSchema.refine(rows => rows.every(row => row.subject.kind !== 'event'), '事件字段须存入事件事实。').optional(),
@@ -45,7 +46,7 @@ export const calculationEventSelectorSchema = z.object({
   actionIds: z.array(idSchema).min(1).max(1000).optional(),
   actor: z.enum(['owner', 'any']), target: z.enum(['query', 'any', 'enemy']),
   skillIds: z.array(idSchema).min(1).max(1000).optional(), hitIds: z.array(idSchema).min(1).max(1000).optional(),
-  categories: z.array(z.enum(['normal', 'charged', 'plunge', 'skill', 'burst'])).min(1).max(5).optional(),
+  categories: z.array(attackTypeSchema).min(1).max(attackTypeSchema.options.length).optional(),
   allowZeroDamage: z.literal(true).optional(),
   reactionIds: z.array(idSchema).min(1).max(1000).optional(),
   reactionElements: z.record(idSchema,z.array(z.enum(elements)).min(1).max(elements.length)).optional(),

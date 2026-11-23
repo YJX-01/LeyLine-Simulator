@@ -5,11 +5,12 @@ import { idSchema } from '../common/values';
 import { definitionRefSchema } from '../calculation/values';
 import { calculationCoverageRecordSchema } from '../calculation/coverage';
 import { artifactSetFieldsSchema, weaponFieldsSchema } from './entity-fields';
-import { buffsSchema, characterMetadataSchema, namedHitBaseSchema, validateMetadataFields } from './character-metadata';
+import { buffsSchema, buffExpressionSchema, characterMetadataSchema, namedHitBaseSchema, validateMetadataFields } from './character-metadata';
 
 const coverage = z.object(calculationCoverageRecordSchema.shape).pick({ resolution: true, evidence: true, reason: true, mechanisms: true });
 const hits = z.array(z.object({ id: idSchema, name: idSchema, element: equipmentHitSchema.shape.element,
-  category: equipmentHitSchema.shape.category, accumulate: equipmentHitSchema.shape.accumulate, base: namedHitBaseSchema, family: z.enum(['ordinary', 'resistance-only']), when: z.array(idSchema).optional() }).strict()).optional();
+  category: equipmentHitSchema.shape.category, critical: equipmentHitSchema.shape.critical, reactions: equipmentHitSchema.shape.reactions, accumulate: equipmentHitSchema.shape.accumulate,
+  base: namedHitBaseSchema, family: z.enum(['ordinary', 'resistance-only']), when: z.array(z.union([idSchema, buffExpressionSchema])).optional() }).strict()).optional();
 const fields = {
   schemaVersion: z.literal(APP_VERSION), namespace: definitionRefSchema.shape.namespace, revision: idSchema,
   facts: characterMetadataSchema.shape.facts, formulas: characterMetadataSchema.shape.formulas, buffs: buffsSchema,

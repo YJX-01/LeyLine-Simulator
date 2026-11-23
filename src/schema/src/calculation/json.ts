@@ -1,16 +1,17 @@
 import { calculationJsonPointer, type CalculationDiagnostic } from './diagnostic';
 
 export const calculationJsonLimits = Object.freeze({ bytes: 8 * 1024 * 1024, depth: 128, values: 100000 });
+export const calculationLibraryValueLimit = 500000;
 export type CalculationJsonResult = { ok: true; value: unknown } | { ok: false; diagnostics: CalculationDiagnostic[] };
 
 /** Object callers must obey the same finite tree boundary as serialized documents. */
-export function inspectCalculationStructure(input: unknown): CalculationDiagnostic[] {
+export function inspectCalculationStructure(input: unknown, valueLimit: number = calculationJsonLimits.values): CalculationDiagnostic[] {
   const active = new Set<object>();
   let visits = 0;
   const walk = (value: unknown, depth: number, path: (string | number)[]): CalculationDiagnostic | undefined => {
     const fail = (code: CalculationDiagnostic['code'], message: string): CalculationDiagnostic => ({ code, message,
       severity: 'error', jsonPointer: calculationJsonPointer(path), affectedOutputIds: [] });
-    if (++visits > calculationJsonLimits.values || depth > calculationJsonLimits.depth) return fail('budget', '计算对象结构超过预算。');
+    if (++visits > valueLimit || depth > calculationJsonLimits.depth) return fail('budget', '计算对象结构超过预算。');
     if (!value || typeof value !== 'object') return undefined;
     if (active.has(value)) return fail('cycle', '计算对象必须是有限的 JSON 树。');
     if (!Array.isArray(value) && Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) return fail('invalid-range', '计算对象必须使用普通 JSON 对象。');

@@ -13,6 +13,7 @@ export * from './calculation/binding';
 export * from './calculation/event';
 export * from './calculation/effect';
 export * from './calculation/context';
+export * from './calculation/party-infusion.mjs';
 export * from './calculation/query';
 export * from './calculation/coverage';
 export * from './calculation/closure';

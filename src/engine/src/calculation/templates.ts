@@ -78,7 +78,8 @@ function attributeConversion(recipe: FormulaDefinition, selected: Extract<Formul
 
 function quantityCondition(recipe: FormulaDefinition, selected: Extract<FormulaDefinition['template'], { id: 'quantity-condition' }>): FormulaGraph {
   const b = new TemplateBuilder(recipe), input = b.input(selected.input, q(selected.unit), { min: 0, ...selected.maxInput === undefined ? {} : { max: selected.maxInput } });
-  const threshold = b.quantity('$threshold', selected.unit, selected.threshold);
+  const threshold = selected.thresholdInput === undefined ? b.quantity('$threshold', selected.unit, selected.threshold!)
+    : b.input(selected.thresholdInput, q(selected.unit), { min: 0 });
   b.output('active', b.compare('$active', selected.relation, input, threshold), { kind: 'boolean' }); return b.finish();
 }
 
@@ -101,9 +102,28 @@ function linearBonus(recipe: FormulaDefinition, selected: Extract<FormulaDefinit
   const threshold = b.quantity('$threshold', selected.inputUnit, selected.threshold), zero = b.quantity('$zero', selected.inputUnit, 0);
   const excess = b.max('$excess', b.subtract('$difference', input, threshold), zero);
   const scalar = selected.inputUnit === 'scalar' ? excess : b.divide('$normalized', excess, b.quantity('$unit', selected.inputUnit, 1));
+  const step = selected.confirmedStep;
+  const basis = step === undefined ? scalar : b.node({ id: '$confirmed', op: 'confirmed-multiple', basis: scalar, step });
   const rate = b.quantity('$rate', selected.outputUnit, selected.rate), offset = b.quantity('$offset', selected.outputUnit, selected.offset);
-  let value = b.add('$value', b.multiply('$scaled', scalar, rate), offset);
-  if (selected.cap !== undefined) value = b.min('$capped', value, b.quantity('$cap', selected.outputUnit, selected.cap));
+  let value = b.add('$value', b.multiply('$scaled', basis, rate), offset);
+  if (selected.capInput !== undefined) value = b.min('$dynamicCap', value, b.input(selected.capInput, q(selected.outputUnit), { min: 0 }));
+  if (selected.cap !== undefined) {
+    let cap = b.quantity('$cap', selected.outputUnit, selected.cap);
+    for (const [index, increase] of (selected.capIncreases ?? []).entries()) {
+      const active = b.input(increase.input, { kind: 'boolean' });
+      const increased = b.add('$increasedCap' + index, cap, b.quantity('$capIncrease' + index, selected.outputUnit, increase.amount));
+      cap = b.select('$activeCap' + index, active, increased, cap);
+    }
+    value = b.min('$capped', value, cap);
+    if (step !== undefined) {
+      const capStep = Math.ceil(Math.max(0, selected.cap - selected.offset) / selected.rate / step);
+      const capBasis = capStep * step;
+      if (Number.isFinite(capBasis)) {
+        const reached = b.compare('$reachedCap', 'gte', scalar, b.quantity('$capBasis', 'scalar', capBasis));
+        value = b.select('$knownCap', reached, cap, value);
+      }
+    }
+  }
   b.output(selected.output, value, q(selected.outputUnit)); return b.finish();
 }
 
@@ -119,9 +139,29 @@ export function instantiateCalculationTemplate(recipe: FormulaDefinition): Formu
     case 'defense': return defense(recipe);
     case 'resistance': return resistance(recipe);
     case 'crit': return crit(recipe);
+    case 'discounted-stamina-cost': {
+      const b = new TemplateBuilder(recipe);
+      const base = b.input('base', q('stamina'), { min: 0 });
+      const reduction = b.input('reduction', q('scalar'));
+      const ratio = b.subtract('remaining', b.quantity('one', 'scalar', 1), reduction);
+      const cost = b.multiply('cost', base, b.max('nonnegative', ratio, b.quantity('zero', 'scalar', 0)));
+      b.output('cost', cost, q('stamina'));
+      return b.finish();
+    }
     case 'read-milliseconds': {
       const b = new TemplateBuilder(recipe), value = b.input('value', q('milliseconds'), { min: 1 });
       b.output('value', value, q('milliseconds')); return b.finish();
+    }
+    case 'restore-skill-charges': {
+      const b = new TemplateBuilder(recipe), range = { min: 0, max: selected.capacity };
+      const available = b.input('available', q('count'), range), resets = b.input('resets', q('count'), range);
+      const capacity = b.quantity('$capacity', 'count', selected.capacity), zero = b.quantity('$zero', 'count', 0);
+      const missing = b.subtract('$missing', capacity, available);
+      const empty = b.node({ id: '$noRecovery', op: 'condition-group', operator: 'any', conditions: [
+        b.compare('$full', 'eq', missing, zero), b.compare('$noResets', 'eq', resets, zero),
+      ] });
+      b.output('value', b.select('$restored', empty, zero, b.min('$limited', missing, resets)), q('count'));
+      return b.finish();
     }
     case 'crit-selected': return selectedCrit(recipe, selected.calculation);
     case 'reaction-em-bonus': return reactionMasteryBonus(recipe);
@@ -152,6 +192,26 @@ export function instantiateCalculationTemplate(recipe: FormulaDefinition): Formu
     case 'stat-product': {
       const b = new TemplateBuilder(recipe);
       b.output('value', b.multiply('$product', b.input('basis', q(selected.unit)), b.input('rate', q('scalar'))), q(selected.unit));
+      return b.finish();
+    }
+    case 'healing-amount': {
+      const b = new TemplateBuilder(recipe);
+      const hp = selected.basis === 'attack'
+        ? b.multiply('$hpBasis', b.divide('$attackBasis', b.input('attack', q('attack'), { min: 0 }), b.quantity('$attack', 'attack', 1)), b.quantity('$hp', 'hp', 1))
+        : b.input('maxHp', q('hp'), { min: 0 });
+      const rate = b.input('rate', q('scalar'), { min: 0 });
+      const outgoing = b.input('outgoing', q('scalar')), incoming = b.input('incoming', q('scalar'));
+      const multiplier = b.add('$multiplier', b.add('$outgoing', b.quantity('$one', 'scalar', 1), outgoing), incoming);
+      b.output('value', b.multiply('$healing', b.multiply('$base', hp, rate), multiplier), q('hp'));
+      return b.finish();
+    }
+    case 'shield-absorption': {
+      const b = new TemplateBuilder(recipe);
+      const basis = b.input('basis', q(selected.basis), { min: 0 });
+      const normalized = b.divide('$basis', basis, b.quantity('$unit', selected.basis, 1));
+      const scaled = b.multiply('$scaled', normalized, b.input('rate', q('scalar'), { min: 0 }));
+      const absorption = b.multiply('$absorption', scaled, b.quantity('$hp', 'hp', 1));
+      b.output('value', b.add('$total', absorption, b.input('flat', q('hp'), { min: 0 })), q('hp'));
       return b.finish();
     }
     case 'energy-full': {

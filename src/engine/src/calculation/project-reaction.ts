@@ -7,9 +7,10 @@ const fact = (value: Value | null): CalculationFact => ({ value, provenance: 'ex
 const critical = { kind: 'enum' as const, value: 'critical' };
 const noncritical = { kind: 'enum' as const, value: 'noncritical' };
 
-export function reactionOccurrence(eventId: string, reaction: ProjectReaction, frameFor: (actorId: string) => CombatFrame): DamageOccurrence {
+export function reactionOccurrence(eventId: string, reaction: ProjectReaction, frameFor: (actorId: string) => CombatFrame,
+  hasAttribute: (id: string) => boolean): DamageOccurrence {
   const { family, element } = reaction;
-  const { attr, call, critFactor, resistanceFactor } = combatDamageBindings(element);
+  const { attr, call, mode, critFactor, resistanceFactor } = combatDamageBindings(element);
   if (isTransformative(family)) {
     const owner = reaction.contributors[0], frame = frameFor(owner.actorId);
     const hit = { skillId: null, hitId: null, category: null, family: 'transformative', element, origin: 'reaction' as const, reactionId: family };
@@ -17,7 +18,13 @@ export function reactionOccurrence(eventId: string, reaction: ProjectReaction, f
       computation: { kind: 'formula', invocation: { formula: ref('transformative'), output: 'value', captures: [], bindings: {
         levelMultiplier: call('reaction-level-multiplier', { level: attr('level') }), em: attr('elementalMastery'), resistanceFactor,
         reactionBonus: attr('reaction.transformative.damageBonus'), reactionCoefficient: attr('reaction.' + family + '.coefficient'),
-      } }, frame: { ...frame, hit, contributorId: owner.actorId, factOverrides: [...frame.factOverrides.filter(r => r.subject.kind !== 'actor' || r.subject.id !== owner.actorId),
+        ...(hasAttribute('reaction.transformative.flatBaseBonus') && { flatBaseBonus: attr('reaction.transformative.flatBaseBonus') }),
+        ...(hasAttribute('reaction.transformative.critRate') && hasAttribute('reaction.transformative.critDamage') && {
+          critFactor: call('crit-selected', { mode: mode('critMode', ['noncritical','critical','expected']),
+            critRate: attr('reaction.transformative.critRate'), critDamage: attr('reaction.transformative.critDamage') }),
+        }),
+      } }, frame: { ...frame, hit, facts: { ...frame.facts, critMode: fact(owner.crit && {kind:'enum',value:owner.crit}) },
+        contributorId: owner.actorId, factOverrides: [...frame.factOverrides.filter(r => r.subject.kind !== 'actor' || r.subject.id !== owner.actorId),
         { subject: { kind: 'actor', id: owner.actorId }, facts: { ...frame.factOverrides.find(r => r.subject.kind === 'actor' && r.subject.id === owner.actorId)?.facts, ...owner.facts } }] } } };
   }
   const stellar = family === 'stellar-swirl';
@@ -41,7 +48,7 @@ export function reactionOccurrence(eventId: string, reaction: ProjectReaction, f
     } }, frame: { ...frame, contributorId: actorId,
       factOverrides: [...frame.factOverrides.filter(entry => entry.subject.kind !== 'actor' || entry.subject.id !== actorId),
         { subject: { kind: 'actor', id: actorId }, facts: { ...frame.factOverrides.find(entry => entry.subject.kind === 'actor' && entry.subject.id === actorId)?.facts, ...facts } }],
-      facts: { ...facts, critMode: fact(crit === null ? null : { kind: 'enum', value: crit }),
+      facts: { ...frame.facts, ...facts, critMode: fact(crit === null ? null : { kind: 'enum', value: crit }),
         ...(stellar ? { reactionCoefficient: fact(reaction.coefficient == null ? null : { kind: 'quantity', unit: 'scalar', value: reaction.coefficient }) } : {}) },
       hit: { skillId: null, hitId: null, category: null, family, element, origin: 'reaction', reactionId: family },
     } };

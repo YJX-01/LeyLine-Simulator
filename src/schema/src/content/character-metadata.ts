@@ -21,7 +21,8 @@ export const namedHitBaseSchema = z.object({ template: idSchema, inputs: z.recor
 const damageFamily = z.enum(['ordinary', 'stellar-swirl', 'stellar-conduct', ...directLunarFamilies]);
 const hit = z.object({
   id: idSchema, name: idSchema, element: structuredHitSchema.shape.element.optional(), category: structuredHitSchema.shape.category.optional(),
-  elementBy: structuredHitSchema.shape.elementBy, coordinated: structuredHitSchema.shape.coordinated, infusion: structuredHitSchema.shape.infusion,
+  elementBy: structuredHitSchema.shape.elementBy, coordinated: structuredHitSchema.shape.coordinated, infusion: structuredHitSchema.shape.infusion, critical: structuredHitSchema.shape.critical, reactions: structuredHitSchema.shape.reactions,
+  selection: structuredHitSchema.shape.selection,
   snapshot: structuredHitSchema.shape.snapshot.unwrap().omit({ source: true }).optional(),
   base: z.union([z.array(scaling).min(1).max(128), namedHitBaseSchema]),
   family: z.union([damageFamily, z.literal('unresolved'), z.object({ by: idSchema, cases: z.record(idSchema, damageFamily) }).strict()]).optional(),
@@ -33,8 +34,10 @@ const support = z.object(calculationCoverageRecordSchema.shape).pick({ resolutio
   maxConstellation: z.number().int().min(0).max(6), mechanisms: z.array(z.object({ id: idSchema, resolution: z.enum(['implemented','irrelevant','unavailable']),
     reason: z.string().min(1).optional(), rules: ids.optional(), impact: coverageImpactSchema.optional() }).strict()).min(1),
 });
-const modifier = z.object({ target: idSchema, value: expression, condition: expression.optional(), ownerElements:effectDefinitionSchema.shape.activation.shape.elements, appliesTo: effectDefinitionSchema.shape.appliesTo.optional(),
-  recipient: z.literal('owner').optional(), constellation: z.number().int().min(1).max(6).optional() }).strict();
+const modifier = z.object({ target: idSchema, value: expression, extraAttack: z.literal(true).optional(), condition: expression.optional(), ownerElements:effectDefinitionSchema.shape.activation.shape.elements, appliesTo: effectDefinitionSchema.shape.appliesTo.optional(),
+  recipientElements: effectDefinitionSchema.shape.activation.shape.elements, recipientWeaponTypes: effectDefinitionSchema.shape.activation.shape.weaponTypes,
+  recipient: z.enum(['owner', 'team', 'target']).optional(), constellation: z.number().int().min(1).max(6).optional() }).strict()
+  .refine(entry => !entry.extraAttack || entry.target === 'attribute.attack', '额外攻击力贡献须指向攻击力。');
 const damageChange = z.object({
   critical: z.boolean(), categories: effectDefinitionSchema.shape.appliesTo.shape.categories,
   chance: z.array(finiteSchema.min(0).max(1)).length(5), cooldownMs: z.array(z.number().int().nonnegative()).length(5),
@@ -56,7 +59,9 @@ const buff = z.object(effectDefinitionSchema.shape).pick({ trigger: true, lifeti
   stacking: effectDefinitionSchema.shape.stacking.partial().optional(),
 }).strict().refine(buff => buff.onDamage || buff.periodicEnergy ? !(buff.onDamage && buff.periodicEnergy) && !buff.modifiers.length && !buff.trigger && !buff.condition && !buff.activation
   && !buff.appliesTo && !buff.recipient && !buff.lifetime && !buff.charges && !buff.counter && !buff.stacking && !buff.application && !buff.duration
-  : buff.modifiers.length > 0, '即时变化与属性授予各自声明适用条件。');
+  : buff.modifiers.length > 0, '即时变化与属性授予各自声明适用条件。')
+  .refine(buff => buff.modifiers.every(modifier => !(modifier.recipientElements || modifier.recipientWeaponTypes)
+    || (modifier.recipient ?? buff.recipient) === 'team'), '受益队员筛选须用于队伍增益。');
 export { expression as buffExpressionSchema };
 export const buffsSchema = z.array(buff).max(1000).optional();
 const buffs = buffsSchema;
@@ -71,7 +76,8 @@ export const characterMetadataSchema = characterFieldsSchema.pick({ kind: true, 
   passives: z.array(passiveSchema.extend({ buffs, hits: grantedHits })).max(30),
   constellations: z.array(constellationSchema.extend({ buffs, hits: grantedHits })).max(6),
   support: z.record(idSchema, support), contextSupport: idSchema, contextCoverageId: idSchema.optional(), curves: z.record(idSchema, z.array(finiteSchema.nonnegative()).min(91).max(101)).optional(),
-  facts: z.record(idSchema, z.object({ scope: z.enum(['owner','recipient','query','team','target','contributor','source-event']), type: calculationValueTypeSchema }).strict()).optional(),
+  facts: z.record(idSchema, z.object({ scope: z.enum(['owner','recipient','query','team','target','contributor','source-event']),
+    type: calculationValueTypeSchema, label: idSchema.optional() }).strict()).optional(),
   formulas: z.array(z.object({ id: idSchema, template: formulaDefinitionSchema.shape.template }).strict()).optional(), buffs,
 }).strict().superRefine((character, validation) => {
   validateMetadataFields(character,validation);
@@ -132,8 +138,14 @@ export const characterMetadataSchema = characterFieldsSchema.pick({ kind: true, 
     if (heal.count && (counter?.scope !== 'query' || counter.type.kind !== 'quantity' || counter.type.unit !== 'count')) {
       validation.addIssue({ code: 'custom', path: ['talents', i, 'heals', j, 'count'], message: '治疗次数须引用本次事件的计数事实。' });
     }
-    if (!talent.details[heal.detail] || !rate || rate.unit !== 'ratio' || heal.flat && (!flat || flat.unit !== 'hp')) {
-      validation.addIssue({ code: 'custom', path: ['talents', i, 'heals', j], message: '治疗须引用本技能的详情、治疗倍率及固定生命值。' });
+    const grantExists = (grant: typeof heal.origin) => grant && ('passive' in grant ? character.passives[grant.passive] : character.constellations[grant.constellation]);
+    const origin = grantExists(heal.origin);
+    const multiplierOrigin = typeof heal.multiplier === 'object' ? heal.multiplier.origin : undefined;
+    if (heal.origin && (!origin || !heal.label) || (heal.detail === undefined ? !origin : !talent.details[heal.detail])
+      || heal.extra?.origin && !grantExists(heal.extra.origin) || multiplierOrigin && !grantExists(multiplierOrigin)
+      || typeof heal.rate === 'string' && rate?.unit !== 'ratio' || typeof heal.flat === 'string' && flat?.unit !== 'hp'
+      || typeof heal.extra?.rate === 'string' && !talent.parameters.some(parameter => parameter.id === heal.extra!.rate && parameter.unit === 'ratio')) {
+      validation.addIssue({ code: 'custom', path: ['talents', i, 'heals', j], message: '治疗须关联有效的详情或命名授予来源，并使用有效倍率和固定生命值。' });
     }
   }
   const allHits = [...character.talents.flatMap(talent => talent.hits), ...granted];
@@ -165,6 +177,10 @@ export const characterMetadataSchema = characterFieldsSchema.pick({ kind: true, 
     }
   }
   for (const hit of allHits) {
+    const rank = hit.selection?.minConstellation;
+    if (rank && ('skill' in hit || !character.constellations.some(entry => entry.rank === rank))) {
+      validation.addIssue({ code: 'custom', path: ['hits', hit.id, 'selection', 'minConstellation'], message: '技能内命中的解锁条件须引用自身已有的命座。' });
+    }
     if (hit.infusion && (hit.elementBy || hit.coordinated || hit.family && hit.family !== 'ordinary' || character.facts?.[hit.infusion.fact]?.scope !== 'owner'
       || character.facts[hit.infusion.fact].type.kind !== 'boolean')) validation.addIssue({ code:'custom',path:['hits',hit.id,'infusion'],message:'属性转化须引用自身布尔状态和普通直伤。' });
     if (hit.coordinated) {

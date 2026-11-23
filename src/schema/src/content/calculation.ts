@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { attackTypeSchema } from './effects';
 import { calculationBundleSchema } from '../calculation/bundle';
 import { definitionKey, definitionRefSchema } from '../calculation/values';
 import { reactionRulesSchema } from './reactions';
@@ -7,12 +8,19 @@ import { elements, statSchema } from './stats';
 import { boundFormulaSchema, calculationBindingSchema } from '../calculation/binding';
 
 export const structuredHitSchema = z.object({
-  id: idSchema, name: idSchema, element: z.enum(elements), category: z.enum(['normal', 'charged', 'plunge', 'skill', 'burst']),
+  id: idSchema, name: idSchema, element: z.enum(elements), category: attackTypeSchema,
+  critical: z.literal('always').optional(),
+  reactions: z.literal(false).optional(),
+  selection: z.object({
+    kind: z.enum(['variant', 'source-event']).optional(),
+    repetitions: z.number().int().min(2).max(100).optional(),
+    minConstellation: z.number().int().min(1).max(6).optional(),
+  }).strict().optional(),
   elementBy: z.enum(['absorbedElement', 'partyPriorityElement', 'strikingHand']).optional(),
-  infusion: z.object({ fact:idSchema, element:z.enum(elements) }).strict().optional(),
+  infusion: z.object({ fact:idSchema, element:z.enum(elements), minConstellation:z.number().int().min(1).max(6).optional() }).strict().optional(),
   coordinated: z.object({ dealer: z.literal('on-field'), readyFact: idSchema, cooldownMs: z.number().int().positive(),
     window: z.object({ duration: idSchema, charges: idSchema }).strict().optional() }).strict().optional(),
-  snapshot: z.object({ sourceSkillId: idSchema, attributes: z.array(statSchema).min(1).max(30), source: contentSourceSchema.optional() }).strict().optional(),
+  snapshot: z.object({ sourceSkillId: idSchema, attributes: z.array(z.union([statSchema, z.literal('damageBonus')])).min(1).max(30), source: contentSourceSchema.optional() }).strict().optional(),
   base: boundFormulaSchema, sources: z.array(idSchema).min(1).max(1000),
   origin: z.enum(['talent', 'triggered']), damage: z.record(idSchema, boundFormulaSchema),
   coverageRefs: z.array(definitionRefSchema).min(1).max(1000),

@@ -54,7 +54,7 @@ export interface EvaluationResult {
 
 export interface CombatChange {
   source: string; actor: string; effect: string; timeMs: number; kind: 'clear-particles' | 'elemental-particles' | 'reset-skill' | 'particle-energy' | 'passive-energy' | 'skill-charge' | 'burst-energy' | 'burst-cooldown' | 'aura-duration' | 'talent-healing';
-  healing?: number; sourceEventIds?: string[];
+  healing?: number; baseHealing?: number; sourceEventIds?: string[];
   particleElement?: import('../content/stats').Element;
   durationMs?: number;
   status: 'applied' | 'excluded' | 'unknown'; probability?: number; nextTriggerMs?: number; missing?: string[];

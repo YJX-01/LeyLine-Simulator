@@ -16,9 +16,13 @@ export function createContentLinker({ schemas, collectCalculationRoots, library 
     roots.push(...entity.calculation.ruleIds);
     if (kind === 'character') {
       if (entity.talents.some(talent => talent.heals?.length)) roots.push({ namespace: 'builtin', id: 'attribute.incomingHealingBonus', revision: '1' });
-      roots.push({ namespace: 'builtin', id: 'attribute.shieldStrength', revision: '1' }, ...(entity.calculation.resonances ?? []).flatMap(rule => rule.ruleIds));
+      roots.push(...['shieldStrength', 'shieldAbsorption', 'shieldAbsorptionCap', 'shieldAbsorptionAdded', 'summonInitialHp', 'talentHealingChance',
+        'paleHymnFromMoonsong', 'bondOfLifeFromHealing', 'directEnergyRestored', 'staminaRestored', 'chargedAttackSpeed', 'effectiveShieldAbsorption',
+        'actorEndureDelta', 'reaction.electro-charged.rangeBonus'].map(key => ({ namespace: 'builtin', id: 'attribute.' + key, revision: '1' })),
+        ...(entity.calculation.resonances ?? []).flatMap(rule => rule.ruleIds));
       roots.push(...entity.calculation.gleam?.ruleIds ?? []);
       for (const id of ['attribute.reaction.transformative.damageBonus','attribute.reaction.stellar-swirl.damageBonus','attribute.reaction.lunar.damageBonus',
+        ...['physical','anemo','cryo','dendro','electro','geo','hydro','pyro'].map(element => 'target.resistance.' + element),
         'scene.autumn-platform.pyro','scene.autumn-platform.cryo',
         ...['sprint','glide','swim','climb'].map(mode=>'attribute.staminaCostReduction.'+mode)]) roots.push({ namespace: 'builtin', id, revision: '1' });
       if (entity.talents.some(t => t.cooldownParameter)) roots.push({ namespace: 'builtin', id: 'attribute.skillCooldownReduction', revision: '1' });
@@ -26,12 +30,15 @@ export function createContentLinker({ schemas, collectCalculationRoots, library 
         ...entity.passives.flatMap(passive => passive.ruleIds), ...entity.constellations.flatMap(constellation => constellation.ruleIds));
       for (const talent of entity.talents) {
         roots.push(...talent.ruleIds);
-        for (const heal of talent.heals ?? []) if (heal.condition !== undefined) bindingRoots(expression(heal.condition, entity.metadata.facts), roots);
+        for (const heal of talent.heals ?? []) for (const term of [heal.condition, heal.basisFactor, heal.basisAmount,
+          typeof heal.multiplier === 'object' ? heal.multiplier.condition : undefined]) {
+          if (term !== undefined) bindingRoots(expression(term, entity.metadata.facts), roots);
+        }
         talent.sources.forEach(source => sourceIds.add(source));
         for (const hit of talent.hits) {
           hit.sources.forEach(source => sourceIds.add(source)); roots.push(...hit.coverageRefs);
           Object.keys(hit.damage).forEach(family => families.add(family));
-          const invocations = hitInvocations(hit);
+          const invocations = hitInvocations(hit, talent.category === 'normal' ? entity.identity.weaponType : undefined);
           for (const invocation of invocations) {
             roots.push(invocation.formula, ...invocation.captures.flatMap(capture => capture.attributes));
             Object.values(invocation.bindings).forEach(binding => bindingRoots(binding, roots));

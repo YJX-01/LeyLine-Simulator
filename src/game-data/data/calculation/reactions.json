@@ -197,6 +197,10 @@
       {
         "id": "content.reaction-blessings",
         "kind": "definition"
+      },
+      {
+        "id": "mona.transformative-flat-crit",
+        "kind": "definition"
       }
     ],
     "formulas": [
@@ -548,6 +552,7 @@
           "id": "reaction-hit",
           "family": "stellar-conduct",
           "origin": "direct",
+          "baseMultiplier": true,
           "mastery": {
             "namespace": "builtin",
             "id": "stellar-em-bonus",
@@ -1280,6 +1285,82 @@
         "combine": "sum",
         "sources": [
           "kqm.web.lunar"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.transformative.flatBaseBonus",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "damage"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "damage",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "sources": [
+          "mona.transformative-flat-crit"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.transformative.critRate",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "sum",
+        "bounds": {
+          "min": 0,
+          "max": 1
+        },
+        "sources": [
+          "mona.transformative-flat-crit"
+        ]
+      },
+      {
+        "identity": {
+          "namespace": "builtin",
+          "id": "attribute.reaction.transformative.critDamage",
+          "revision": "1"
+        },
+        "type": {
+          "kind": "quantity",
+          "unit": "scalar"
+        },
+        "scope": "hit",
+        "base": {
+          "kind": "constant",
+          "value": {
+            "kind": "quantity",
+            "unit": "scalar",
+            "value": 0
+          }
+        },
+        "combine": "max",
+        "sources": [
+          "mona.transformative-flat-crit"
         ]
       },
       {

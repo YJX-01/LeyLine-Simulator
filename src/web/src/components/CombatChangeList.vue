@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { CombatChange, Project } from '@leyline/schema';
 import { buffFactNames } from '../domain/calculator-buffs';
-import { realElementLabel } from '../domain/workbench-labels';
+import { healName, realElementLabel } from '../domain/workbench-labels';
 const props = defineProps<{ changes?: CombatChange[]; team: Project['candidate']['actors'] }>();
 const member = (id: string) => props.team.find(m => m.id === id);
 const format = (n: number) => n.toLocaleString('zh-CN', { maximumFractionDigits: 4 });
 function name(row: CombatChange) {
   const actor = member(row.actor);
-  if (row.kind === 'talent-healing') return actor?.build?.character.talents.find(t => t.heals?.some(h => h.id === row.effect))?.name ?? row.effect;
+  if (row.kind === 'talent-healing') return healName(actor?.build, row.effect);
   if (row.particleElement) return '元素共鸣 · '+realElementLabel(row.particleElement);
   if (row.kind==='aura-duration') return (actor?.name ?? row.actor)+' · '+buffFactNames[row.effect];
   if (row.kind === 'passive-energy') return actor?.name;
@@ -32,6 +32,7 @@ const missing: Record<string,string> = { previousTrigger: '此前触发结果', 
       <template v-else-if="row.status === 'applied' && (row.kind === 'particle-energy' || row.kind === 'passive-energy')">{{ member(row.recipient!)?.name }} 获得 {{ format(row.energyGain!) }} 点元素能量<template v-if="row.energyAfter !== undefined">，当前 {{ format(row.energyAfter) }} 点</template></template>
       <template v-else-if="row.status === 'applied'">重置一次元素战技冷却<template v-if="row.cooldownAfterMs !== undefined">，剩余 {{ format(row.cooldownAfterMs / 1000) }} 秒</template></template>
       <template v-if="row.probability !== undefined">（触发概率 {{ format(row.probability * 100) }}%）</template>
+      <template v-if="row.status === 'unknown' && row.baseHealing !== undefined">基础治疗量 {{ format(row.baseHealing) }} 点，</template>
       <template v-if="row.missing?.length">待确认{{ row.missing.map(key => buffFactNames[key] ?? missing[key] ?? key).join('、') }}</template>
     </li></ul>
   </details>

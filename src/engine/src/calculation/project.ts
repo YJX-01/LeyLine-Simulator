@@ -1,4 +1,5 @@
-import { authoredHit, effectiveHitElement } from '@leyline/schema/hit-bindings';
+import { authoredHit } from '@leyline/schema/hit-bindings';
+import { combatFactDeclaration } from '@leyline/schema/buffs';
 import { isTransformative } from '@leyline/schema';
 import { subjectFacts, findBuildHit, buildSchema, combatConditionsSchema, damageRequestSchema, definitionKey, elements, statKeys, talentInputIssues, talentParameterAt,
   type AttributePanel, type Build, type CalculationBinding, type CalculationFact, type CalculationIssue, type CombatConditions,
@@ -12,11 +13,14 @@ import { damageBreakdown, lastTrace } from './damage-view';
 import { compileCharacterActions } from './actions';
 import { evaluateStateMachine } from './state-machine';
 import { reactionOccurrence } from './project-reaction';
+import { evaluateSceneHit } from './project-scene-hit';
 import { castWindowStates } from './cast-windows';
+import { resolveCombatHitElement } from './party-infusion';
 
 type RecordEntry = Project['timeline'][number];
 type World = Pick<Project, 'candidate' | 'timeline' | 'combatStates' | 'enemy' | 'reactionRules' | 'actionStates' | 'sceneEffects' | 'effectRevisions'>;
 export interface ProjectRuntime { team: PreparedStructuredTeam; context: CombatContext; setup: StructuredCombatSetup; builds: Map<string, Build>; projectApplications: Set<string>; feasibility: CalculationFeasibility[];
+  sceneEffects: Project['sceneEffects'];
   followUps: ReturnType<typeof castWindowStates>['followUps'] }
 type Runtime = ProjectRuntime;
 type PreparedRuntime = { ok: true; runtime: Runtime } | { ok: false; issues: CalculationIssue[] };
@@ -28,21 +32,26 @@ const conditionsFacts = (conditions: CombatConditions = {}): Record<string, Calc
 const issue = (code: CalculationIssue['code'], message: string): CalculationIssue => ({ code, message });
 
 export function projectCalculationEvent(record: RecordEntry, build?: Build): CalculationEvent {
+  // Keep a frame for the query while excluding the independent scene hit from character triggers.
+  if (record.sceneHit) return { id: record.id, kind: 'hit', actorId: null, targetIds: [], occurred: false,
+    timeMs: record.timeMs, order: record.order, sourceEventIds: [], facts: {} };
   const selected = findBuildHit(build, record.damage?.hit);
   const skillId = selected?.talent?.id ?? record.skillId;
   const talent = selected?.talent ?? build?.character.talents.find(talent => talent.id === record.skillId);
   const hitId = record.damage?.hit.hitId;
   const captureId = record.damage?.capture?.recordId;
-  const scoped = (record.damage?.facts ?? record.talentHeal?.facts)?.filter(row => row.subject.kind !== 'event');
+  const facts = record.damage?.facts ?? record.reactionEvent?.facts ?? record.talentHeal?.facts ?? record.captureFacts;
+  const scoped = facts?.filter(row => row.subject.kind !== 'event');
   const reaction = record.damage?.reaction;
   const sourceEventIds = [...new Set([...(record.sourceEventIds ?? []), ...(captureId && captureId !== record.id ? [captureId] : [])])];
   return { id: record.id, kind: record.reactionEvent || record.observedReaction ? 'reaction' : record.kind === 'damage' ? 'hit' : record.kind,
     actorId: record.reactionEvent ? record.reactionEvent.triggerActorId ?? null : record.actor, targetIds: record.kind === 'damage' || record.observedReaction ? ['target'] : [],
     timeMs: record.timeMs, order: record.order, actionId: record.actionId, confirmedBuff: record.confirmedBuff, skillId, hitId, category: selected?.hit.category ?? talent?.category,
-    ...(scoped?.length ? { subjectFacts: scoped } : {}), applications: record.damage?.effectApplications,
+    ...(scoped?.length ? { subjectFacts: scoped } : {}), applications: record.damage?.effectApplications ?? record.reactionEvent?.effectApplications,
     reactionId: record.reactionEvent?.family ?? record.observedReaction ?? (reaction && reaction !== 'none' && reaction.trigger === 'record-owner' ? reaction.type : undefined),
     reactionElement: record.reactionEvent?.element ?? record.crystalElement,
-    sourceEventIds, facts: { ...record.facts, ...subjectFacts(record.damage?.facts ?? record.talentHeal?.facts, { kind: 'event' }) } };
+    sourceEventIds, facts: { ...record.facts, ...subjectFacts(facts, { kind: 'event' }),
+      ...(record.fieldSwitch && { enteredField: { value: { kind: 'boolean', value: true }, provenance: 'derived', sourceRefs: [] } }) } };
 }
 
 /** Current project records are explicit query anchors; this function never schedules extra actions or hits. */
@@ -75,7 +84,8 @@ export function prepareProjectRuntime(world: World): PreparedRuntime {
         context.events[index].actorId = dealer?.id ?? null;
       }
     }
-    const runtime = { team: prepared.team, context, setup, builds, followUps, projectApplications: new Set<string>(), feasibility: [structuredTeamFeasibility(prepared.team)] };
+    const runtime = { team: prepared.team, context, setup, builds, followUps, sceneEffects: world.sceneEffects,
+      projectApplications: new Set<string>(), feasibility: [structuredTeamFeasibility(prepared.team)] };
     updateHitOccurrences(runtime, world.timeline);
     if (world.effectRevisions?.length) {
       const available = new Set(runtimeEffectViews(runtime, () => true).map(instance => instance.id));
@@ -122,10 +132,10 @@ export function evaluateProjectStates(runtime: Runtime, actionStates: NonNullabl
 function frameFor(runtime: Runtime, actorId: string, record: RecordEntry, conditions: CombatConditions = {}, query = record.damage, phase: CombatFrame['phase'] = 'before'): CombatFrame {
   const build = runtime.builds.get(actorId), source = record.actor === actorId ? undefined : findBuildHit(runtime.builds.get(record.actor), query?.hit);
   const selected = findBuildHit(build, query?.hit) ?? (source?.hit.coordinated ? source : undefined);
-  const skill = selected?.talent, hit = selected?.hit, family = hit && Object.keys(hit.damage)[0];
+  const skill = selected?.talent, hit = selected?.hit;
   const dealer = hit?.coordinated ? runtime.context.events.find(event => event.id === record.id)?.actorId : undefined;
   const dealerElement = dealer ? runtime.builds.get(dealer)?.character.identity.element : undefined;
-  const rows = query?.facts ?? [];
+  const rows = query?.facts ?? record.reactionEvent?.facts ?? [];
   const factOverrides: CombatFrame['factOverrides'] = rows.flatMap(row => row.subject.kind === 'event' ? [] : [{ subject: row.subject, facts: row.values }]);
   const current = factOverrides.find(entry => entry.subject.kind === 'actor' && entry.subject.id === actorId);
   const inherited = conditionsFacts(conditions);
@@ -144,11 +154,26 @@ function frameFor(runtime: Runtime, actorId: string, record: RecordEntry, condit
     const ready = runtime.context.events.find(e => e.id === record.id)?.facts[contact.ready];
     if (ready?.provenance === 'derived' && (!facts[contact.ready] || ready.value?.value !== true)) facts[contact.ready]=ready;
   }
-  return { ownerId: actorId, recipientId: actorId, contributorId: null, targetId: 'target', eventId: record.id, sourceEventId: record.damage?.capture?.recordId ?? null, phase,
-    facts, actorFacts: {}, captures, applications: (record.damage?.effectApplications ?? []).filter(application => !runtime.projectApplications.has(application.instanceId)),
-    factOverrides,
-    hit: hit ? { skillId: skill?.id ?? null, hitId: hit.id, category: hit.category, element: dealerElement ?? effectiveHitElement(hit, hit.elementBy ? subjectFacts(query?.facts, { kind: 'event' })?.[hit.elementBy]?.value : null, runtime.context.actors.map(actor => actor.identity?.element)), family: family ?? 'ordinary', origin: hit.origin,
-      reactionId: query?.reaction && query.reaction !== 'none' && query.reaction.trigger ? query.reaction.type : null } : null };
+  const frame: CombatFrame = { ownerId: actorId, recipientId: actorId, contributorId: null, targetId: 'target', eventId: record.id, sourceEventId: record.damage?.capture?.recordId ?? null, phase,
+    facts, actorFacts: {}, captures, applications: (record.damage?.effectApplications ?? record.reactionEvent?.effectApplications ?? []).filter(application => !runtime.projectApplications.has(application.instanceId)),
+    factOverrides, hit: null };
+  if (hit) {
+    const owner = runtime.builds.get(record.actor)?.character;
+    const selector = authoredHit(owner?.metadata, skill?.id, hit.id)?.family;
+    let family = typeof selector === 'string' ? selector : Object.keys(hit.damage)[0] ?? 'ordinary';
+    if (typeof selector === 'object') {
+      const declaration = combatFactDeclaration(owner?.metadata.facts, selector.by)!;
+      const value = evaluateCombatBindings(runtime.team.program, runtime.context, { family: { kind: 'fact', key: selector.by, ...declaration } }, frame).outputs.family;
+      if (value?.state === 'known' && value.value.kind === 'enum') family = selector.cases[value.value.value];
+    }
+    frame.hit = { skillId: skill?.id ?? null, hitId: hit.id, category: hit.category,
+      element: dealerElement ?? resolveCombatHitElement(runtime.team.program, runtime.context, frame, hit, family, skill?.category === 'normal', build, runtime.builds.values()).element,
+      family, origin: hit.origin, reactionId: query?.reaction && query.reaction !== 'none' && query.reaction.trigger ? query.reaction.type : null };
+  } else if (record.reactionEvent) {
+    frame.hit = { skillId: null, hitId: null, category: null, element: record.reactionEvent.element, origin: 'reaction',
+      family: isTransformative(record.reactionEvent.family) ? 'transformative' : record.reactionEvent.family, reactionId: record.reactionEvent.family };
+  }
+  return frame;
 }
 
 function emptyPanel(issues: CalculationIssue[]): AttributePanel {
@@ -187,9 +212,39 @@ export function readRuntimePanel(runtime: Runtime, actorId: string, record: Reco
   const keys = [...new Set([...statKeys, ...[...data.attributes.values()].filter(attribute => (attribute.scope === 'actor' || frame.hit && attribute.scope === 'hit')
     && attribute.identity.namespace === 'builtin' && attribute.identity.id.startsWith('attribute.')).map(attribute => attribute.identity.id.slice('attribute.'.length))])];
   const bindings: Record<string, CalculationBinding> = Object.fromEntries(keys.map(key => [key, { kind: 'attribute', actor: { role: 'owner' }, key: build.character.attributes.outputs[key as StatKey] ?? ref('attribute.' + key), at: { kind: 'current', phase: 'same' } }]));
+  const target = frame.hit && runtime.context.targets.find(entry => entry.id === frame.targetId);
+  if (target) for (const element of elements) {
+    const id = 'target.resistance.' + element;
+    if (target.inputs['resistance.' + element] && data.attributes.has(definitionKey(ref(id)))) {
+      bindings[id] = { kind: 'enemy', key: ref(id), at: { kind: 'current', phase: 'same' } };
+    }
+  }
+  for (const effect of frame.hit ? data.effects.values() : []) {
+    if (effect.target.kind !== 'attribute') continue;
+    const target = effect.target.attribute;
+    if (!target.id.startsWith('target.') || data.attributes.get(definitionKey(target))?.scope !== 'target') continue;
+    bindings[target.id] = { kind: 'enemy', key: target, at: { kind: 'current', phase: 'same' } };
+  }
   const read = evaluateCombatBindings(runtime.team.program, runtime.context, bindings, frame);
   const panel = emptyPanel([]);
-  panel.attributes = Object.fromEntries(keys.map(key => { const value = read.outputs[key]; return [key, value?.state === 'known' && value.value.kind === 'quantity' ? value.value.value : null]; }));
+  const effectValues = new Map<string, NonNullable<AttributePanel['effectValues']>[number]>();
+  const trace = new Map(read.trace.map(node => [node.id, node]));
+  const pending = Object.values(read.outputs).map(value => value.traceId);
+  const visited = new Set<string>();
+  while (pending.length) {
+    const id = pending.pop()!;
+    if (visited.has(id)) continue;
+    visited.add(id);
+    const node = trace.get(id);
+    if (!node) continue;
+    pending.push(...node.dependencies);
+    const context = node.context;
+    if (node.kind !== 'effect' || !context?.effectInstanceId || context.recipientId !== actorId || context.eventId !== record.id || context.phase !== phase) continue;
+    const quantity = node.value?.kind === 'quantity' ? node.value : undefined;
+    effectValues.set(JSON.stringify([context.effectInstanceId, node.nodeId]), { instanceId: context.effectInstanceId, modifierId: node.nodeId, value: quantity?.value ?? null, unit: quantity?.unit });
+  }
+  if (effectValues.size) panel.effectValues = [...effectValues.values()];
+  panel.attributes = Object.fromEntries(Object.entries(read.outputs).map(([key, value]) => [key, value.state === 'known' && value.value.kind === 'quantity' ? value.value.value : null]));
   for (const key of statKeys) { const value = read.outputs[key]; panel.stats[key] = value?.state === 'known' && value.value.kind === 'quantity' ? value.value.value : null; }
   panel.issues = read.diagnostics.map(diagnostic => ({ code: diagnostic.code === 'missing-fact' ? 'unknown' : 'invalid-input', message: diagnostic.message,
     affects: diagnostic.affectedOutputIds.filter(key => statKeys.includes(key as StatKey)).map(stat => ({ stat: stat as StatKey })) }));
@@ -216,6 +271,7 @@ export function readBuildPanel(input: unknown, conditions: CombatConditions = {}
 }
 
 export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: RecordEntry, conditions: CombatConditions = {}, attributeReader?: BoundAttributeReader): DamageResult {
+  if (record.sceneHit) return evaluateSceneHit(runtime.sceneEffects, record.sceneHit, record.timeMs, emptyPanel([]));
   const damage = record.damage, build = runtime.builds.get(actorId), panel = readRuntimePanel(runtime, actorId, record, conditions);
   const empty = (issues: CalculationIssue[]): DamageResult => ({ status: issues.some(issue => issue.code === 'invalid-input') ? 'invalid' : 'partial', value: null, panel,
     parts: { attack: panel.stats.attack, multiplier: null, bonus: null, crit: null, defense: null, resistance: null }, baseDamage: null, scaling: [], diagnostics: issues.map(issue => issue.message), issues });
@@ -223,14 +279,18 @@ export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: Re
     const program = compiledData(runtime.team.program)!, family = record.reactionEvent.family;
     if (isTransformative(family) ? !program.attributes.has(definitionKey(ref('attribute.reaction.' + family + '.coefficient')))
       : !program.aggregates.has(definitionKey(ref(family)))) return empty([issue('unknown', '尚未提供此反应的求值规则。')]);
-    const output = reactionOccurrence(record.id, record.reactionEvent, id => frameFor(runtime, id, record, id === actorId ? conditions : {}));
+    const output = reactionOccurrence(record.id, record.reactionEvent, id => frameFor(runtime, id, record, id === actorId ? conditions : {}),
+      id => program.attributes.has(definitionKey(ref('attribute.' + id))));
     const result = evaluateStructuredReaction(runtime.team, runtime.context, output, attributeReader);
     return { ...empty(resultIssues(result)), status: result.execution, ...resultValues(result), structured: result };
   }
   if (!damage || !build) return empty([issue('unknown', '尚未选择角色和明确输出。')]);
   const frame = frameFor(runtime, actorId, record, conditions), { ownerId, recipientId, contributorId, hit: metadata, ...requestFrame } = frame;
   const selected = findBuildHit(build, damage.hit), skill = selected?.talent, hit = selected?.hit;
-  if (skill?.noIndependentDamage) return empty([issue('invalid-input', '该技能没有独立伤害。')]);
+  if (damage.hitOrdinal !== undefined && damage.hitOrdinal > (hit?.selection?.repetitions ?? 0)) {
+    return empty([issue('invalid-input', '命中序号须在所选单击的重复次数内。')]);
+  }
+  if (skill?.noIndependentDamage && hit?.origin !== 'triggered') return empty([issue('invalid-input', '该技能没有独立伤害。')]);
   const triggerPending = damage.reaction !== null && damage.reaction !== 'none' && damage.reaction.trigger === null;
   const result = evaluateStructuredHit(runtime.team, runtime.setup, { actorId, hit: damage.hit, frame: requestFrame,
     critMode: damage.crit, reactionMode: damage.reaction === null || triggerPending ? null : damage.reaction === 'none' ? 'none' : damage.reaction.type }, { context: runtime.context, attributeReader });
@@ -242,7 +302,8 @@ export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: Re
   const dealer = hit?.coordinated ? result.outputs[0]?.actorId : actorId;
   const dealtPanel = dealer && dealer !== actorId ? readRuntimePanel(runtime, dealer, record) : panel;
   const dealtElement = dealer && hit?.coordinated ? runtime.builds.get(dealer)?.character.identity.element : undefined;
-  const resolvedHit = hit && dealtElement ? { ...hit, element: dealtElement } : hit?.elementBy ? { ...hit, element: effectiveHitElement(hit, (subjectFacts(damage.facts, { kind: 'event' })?.[hit.elementBy] ?? record.facts?.[hit.elementBy])?.value, runtime.context.actors.map(actor => actor.identity?.element)) } : hit;
+  const resolvedElement = dealtElement ?? metadata?.element;
+  const resolvedHit = hit && resolvedElement ? { ...hit, element: resolvedElement } : hit;
   const breakdown = damageBreakdown(compiledData(runtime.team.program)!, damage, resolvedHit, result);
   const multiplier = selectedMultiplier ?? breakdown.scaling[0]?.multiplier ?? null;
   const attackRead = lastTrace(result.trace, node => node.kind === 'attribute' && node.nodeId === 'attribute.attack' && node.context?.actorId === dealer);

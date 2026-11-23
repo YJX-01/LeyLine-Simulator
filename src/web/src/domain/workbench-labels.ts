@@ -1,4 +1,4 @@
-import { findBuildHit } from '@leyline/schema';
+import { findBuildHit, healingGrant, matchingSceneHits, type SceneDefinition } from '@leyline/schema';
 import type { CharacterDefinition, Project, QuantityUnit } from '@leyline/schema';
 export const observedReactionNames = {quicken:'原激化',freeze:'冻结',crystallize:'结晶','lunar-bloom':'月绽放','stellar-conduct':'星超导'};
 
@@ -25,15 +25,29 @@ export function actorLabel(project: Project, id: string): string {
   const index = project.candidate.actors.findIndex(entry => entry.id === id);
   return index < 0 ? '缺失角色' : id === 'actor' ? '示例角色' : `角色${index + 1}`;
 }
+export function sceneHitLabel(scene?: SceneDefinition) {
+  if (!scene) return '场景冲击';
+  const suffix = scene.hits?.[0]?.recipient === 'character' ? ' · 高能打击' : ' · 冲击波';
+  return scene.name.endsWith(suffix) ? scene.name : scene.name + suffix;
+}
+export function healName(build: Project['candidate']['actors'][number]['build'], id: string): string {
+  if (!build) return id;
+  for (const talent of build.character.talents) {
+    const heal = talent.heals?.find(row => row.id === id);
+    if (heal) return heal.origin ? [healingGrant(build, heal.origin).name, heal.label].filter(Boolean).join(' · ') : talent.name;
+  }
+  return id;
+}
+
 export function recordLabel(project: Project, id: string): string {
   const record = project.timeline.find(entry => entry.id === id);
   if (!record) return '缺失记录';
   if (record.talentHeal) {
     const build = project.candidate.actors.find(actor => actor.id === record.actor)?.build;
-    const talent = build?.character.talents.find(t => t.heals?.some(h => h.id === record.talentHeal!.healId));
-    return (talent?.name ?? '技能') + '治疗 · ' + actorLabel(project, record.talentHeal.recipientId);
+    return healName(build, record.talentHeal.healId) + '治疗 · ' + actorLabel(project, record.talentHeal.recipientId);
   }
   if (record.reactionEvent) return damageFamilyLabel(record.reactionEvent.family);
+  if (record.sceneHit) return sceneHitLabel(matchingSceneHits(project.sceneEffects, record.sceneHit.scene)[0]?.definition);
   if (record.observedReaction) return (record.crystalElement ? realElementLabel(record.crystalElement)+'元素' : '') + observedReactionNames[record.observedReaction];
   if (record.aura) return realElementLabel(record.aura.element)+'元素附着';
   if (record.confirmedBuff) return '已触发增益 · ' + record.confirmedBuff.id;
@@ -73,7 +87,9 @@ export const errorLabel = (message: string) => message.includes('JSON') ? '项�
 
 export const localDataErrorLabel = (message: string) => /[\u3400-\u9fff]/.test(message) ? message : '资料操作未完成，请检查文件或存储位置后重试。';
 
-export const realStatLabels: Record<string, string> = { hp: '生命值', hpPercent: '生命值加成', attack: '攻击力', attackPercent: '攻击力加成', defense: '防御力', defensePercent: '防御力加成', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成' };
+export const realStatLabels: Record<string, string> = { hp: '生命值', hpPercent: '生命值加成', attack: '攻击力', attackPercent: '攻击力加成', defense: '防御力', defensePercent: '防御力加成', critRate: '暴击率', critDamage: '暴击伤害', energyRecharge: '充能效率', elementalMastery: '元素精通', physicalBonus: '物理伤害加成', anemoBonus: '风元素伤害加成', geoBonus: '岩元素伤害加成', electroBonus: '雷元素伤害加成', hydroBonus: '水元素伤害加成', pyroBonus: '火元素伤害加成', cryoBonus: '冰元素伤害加成', dendroBonus: '草元素伤害加成', healingBonus: '治疗加成',
+  incomingHealingBonus: '受治疗加成', equipmentHealing: '本次装备治疗量', equipmentBaseHealingTotal: '装备效果全程基础回复量',
+  equipmentBaseHealingTick: '装备效果单次基础回复量' };
 export const realStatLabel = (key: string) => lookup(realStatLabels, key, '未识别属性');
 export const realElementLabel = (key: string) => lookup({ physical: '物理', anemo: '风', geo: '岩', electro: '雷', hydro: '水', pyro: '火', cryo: '冰', dendro: '草' }, key, '未知元素');
 export const damageFamilyLabel = (key: string) => lookup({ ordinary: '普通直伤', 'stellar-swirl': '星扩散', 'stellar-conduct': '星超导',

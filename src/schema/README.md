@@ -78,6 +78,18 @@ account/structured-build.ts接收 calculation-build，携带角色与装备定�
 
 ## 动作与事件状态契约
 
+正式命中可由技能、突破被动、命座、武器或套装件数授予。独立追加伤害只有在来源确认没有普攻、重击、下落、战技或爆发分类时才用 `other`。`critical: "always"` 表示必定暴击，`reactions: false` 表示该段不能触发元素反应。多段沿用各自的参数、伤害族、来源元素和伤害类型。
+
+装备与角色效果的 `recipientElements`、`recipientWeaponTypes` 限制实际受益队员。场景可以声明带类型的事实、公式和敌人属性修饰。单击条件以角色、队伍、敌人或当前事件为作用对象。`facts` 同时适用于技能命中与单独记录的反应。独立捕获或技能施放记录可用 `captureFacts` 保存当时的条件。读取施放时的属性时，绑定指定取值阶段和作用对象。尼可战技按施放前的非额外攻击力确定上限，并排除她上一次战技的加成。
+
+装备效果的 `activation.characterGameIds` 按持有角色的 `identity.gameId` 授予，空和荧的各元素形态分别共用自己的游戏角色 ID。一次已确认的直接回能用能量单位表示，`directEnergyRestored` 给出回复量，`directEnergyChange` 可以表示扣除或恢复。
+
+队伍附魔保存为本击的 `partyInfusion`。可用元素由实际配装、武器、命座及所选攻击共同决定。保护效果分别保存基础吸收量和声明的上限，单位为生命值。一次治疗的基数可来自配装属性或本次事件的生命值，单次上限可取受益者生命上限的指定比例。治疗加成的结算方式缺少依据时，结果可返回已知的 `baseHealing`，并列出确认最终回复量所需的依据。
+
+技能可用 `inputs[].usage = "healing"` 为治疗记录声明整数或数值范围。复苏按受益者生命上限取基数时，好感等事实随本次治疗记录保存。导入文件和计算器表单使用同一范围校验。
+
+场景快照的 `dependencies` 可携带该场景使用的感电影响范围或抗打断属性及其来源。给已有配装选择新场景时，求值器合并对应修订；同身份定义冲突会在导入或求值时报告。
+
 content/actions.ts定义可选的 character-actions 文档：自身identity、精确character引用、稳定actions及技能/命中/输出引用、来源、状态机和具体缺口。durationMs、cancelAfterMs、offsetsMs中的null表示未采用时刻，不能当作零。动作只引用角色伤害与参数；game-data 按实体目录发现实际存在的动作文件。
 
 calculation/state-machine.ts约束event-state修订1。普通值可有单一时效；stacked必须有正整数容量、零清除值和逐层时效。同阶段priority必须唯一，不用ID裁定顺序。条件和时效使用同一BoundFormula，状态更新限于set/add/consume/clear/unknown；独立层数的逐层消耗未声明顺序时拒绝。容量未知可给已核验下界，超过可证明范围保持未知；缺口不会增加默认规则。

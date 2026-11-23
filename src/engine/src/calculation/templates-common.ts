@@ -13,6 +13,7 @@ export function ordinaryHit(recipe: FormulaDefinition, baseFlat: 'attribute' | '
   b.input('defenseFactor', q('scalar'), {'required':true,'min':0});
   b.input('resistanceFactor', q('scalar'), {'required':true,'min':0});
   b.input('amplificationFactor', q('scalar'), {'required':false,'default':{'kind':'quantity','unit':'scalar','value':1}});
+  b.input('elevationFactor', q('scalar'), {'required':false,'min':0,'default':{'kind':'quantity','unit':'scalar','value':1}});
   b.quantity('one', 'scalar', 1);
   b.multiply('scaledBase', 'skillBase', 'baseMultiplier');
   b.add('preReactionBase', 'scaledBase', 'preReactionFlat');
@@ -22,7 +23,8 @@ export function ordinaryHit(recipe: FormulaDefinition, baseFlat: 'attribute' | '
   b.multiply('afterCrit', 'afterBonus', 'critFactor');
   b.multiply('afterDefense', 'afterCrit', 'defenseFactor');
   b.multiply('afterResistance', 'afterDefense', 'resistanceFactor');
-  b.multiply('value', 'afterResistance', 'amplificationFactor');
+  b.multiply('afterAmplification', 'afterResistance', 'amplificationFactor');
+  b.multiply('value', 'afterAmplification', 'elevationFactor');
   if (baseFlat === 'effect-port') b.graph.modifierPorts = { 'base-flat': { input: 'preReactionFlat', type: q('damage'), combine: 'sum', neutral: { kind: 'quantity', unit: 'damage', value: 0 }, scope: 'hit' } };
   b.output('value', 'value', q('damage'));
   b.stage('skill-base', 'skillBase', 'damage.skill-base');
@@ -34,6 +36,7 @@ export function ordinaryHit(recipe: FormulaDefinition, baseFlat: 'attribute' | '
   b.stage('defense', 'defenseFactor', 'damage.defense');
   b.stage('resistance', 'resistanceFactor', 'damage.resistance');
   b.stage('amplification', 'amplificationFactor', 'damage.amplification');
+  b.stage('ordinary-elevation', 'elevationFactor', 'damage.elevation');
   return b.finish();
 }
 

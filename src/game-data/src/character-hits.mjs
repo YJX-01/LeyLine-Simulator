@@ -39,7 +39,7 @@ export function assembleHit(hit, skillId, branches, facts = {}) {
   function assembleOutput(output) {
     const { condition } = output;
     const hitData = { ...hit, base };
-    if (output.family === 'ordinary') return ordinaryHitInvocation(hitData, condition);
+    if (output.family === 'ordinary') return ordinaryHitInvocation(hitData, condition, true);
     const { attr, critFactor, resistanceFactor, skillBase } = hitBindings(hitData);
     if (output.family === 'resistance-only') return invocation(formula('product.damage', { basis: skillBase, rate: resistanceFactor }), condition);
     const stellar = output.family === 'stellar-swirl' || output.family === 'stellar-conduct';
@@ -50,8 +50,9 @@ export function assembleHit(hit, skillId, branches, facts = {}) {
     if (stellar) {
       result = formula(output.family + '-direct', { ...inputs,
         scaledBase: formula('product.damage', { basis: skillBase, rate: special('baseMultiplier') }),
-        ...(output.family === 'stellar-conduct' ? { reactionCoefficient: formula('stellar.attach-coefficient', {
-          count: { kind: 'fact', key: 'stellarAttachments', scope: 'query', type: { kind: 'quantity', unit: 'count' } } }) } : {}),
+        ...(output.family === 'stellar-conduct' ? { baseMultiplier: attr('baseMultiplier'),
+          reactionCoefficient: formula('stellar.attach-coefficient', {
+            count: { kind: 'fact', key: 'stellarAttachments', scope: 'query', type: { kind: 'quantity', unit: 'count' } } }) } : {}),
         elevationFactor: formula('stellar-elevation-factor', { input: special('elevation') }) });
     } else {
       result = formula(output.family + '-direct', { ...inputs, elevationFactor: special('elevationFactor') });

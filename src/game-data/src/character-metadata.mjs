@@ -36,7 +36,7 @@ export function assembleCharacter(metadata, curves, dataVersion) {
   const builtTalents = talents.map(({ buffs, ...talent }) => {
     const ruleIds = grant({ buffs }, {}, talent);
     return { ...talent, sources, ruleIds, hits: authoredHitEntries(metadata, talent.id).map(({ hit: declaration, unlock }) => {
-      const { support: profile, coverageId, family = 'ordinary', when = [], origin = unlock ? 'triggered' : 'talent', skill: owningSkill, ...hit } = declaration;
+      const { support: profile, coverageId, family = 'ordinary', when = [], skill: owningSkill, origin = owningSkill ? 'triggered' : 'talent', ...hit } = declaration;
       const coverageRefs = certify(profile, { kind: 'hit', skillId: talent.id, hitId: hit.id }, coverageId ?? 'coverage.' + hit.id);
       const conditions = when.map(v => expression(typeof v === 'string' ? { fact: v } : v, facts));
       if (hit.coordinated) conditions.push(expression({ fact: hit.coordinated.readyFact }, facts));

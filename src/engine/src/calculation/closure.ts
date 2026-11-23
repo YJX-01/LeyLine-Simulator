@@ -1,6 +1,6 @@
 import { hitInvocations } from '@leyline/schema/hit-bindings';
 import { APP_VERSION } from '@leyline/schema/version';
-import { calculationClosureRequestSchema, calculationJsonPointer, definitionKey, inspectCalculationStructure, structuredCharacterDefinitionSchema,
+import { calculationClosureRequestSchema, calculationJsonPointer, definitionKey, inspectCalculationStructure, partyInfusionElements, structuredCharacterDefinitionSchema,
   type CalculationBinding, type CalculationBundle, type CalculationDiagnostic, type DefinitionRef } from '@leyline/schema';
 import { compileCalculation, compiledData, type CompiledCalculation } from './compile';
 import { compileStructuredCharacter } from './character';
@@ -91,6 +91,8 @@ export function collectCalculationClosure(characterInput: unknown, registry?: un
     ...character.passives.flatMap(passive => passive.ruleIds), ...character.constellations.flatMap(constellation => constellation.ruleIds),
     ...(character.calculation.resonances ?? []).flatMap(entry => entry.ruleIds), ...character.calculation.gleam?.ruleIds ?? []];
   const sourceIds = new Set(character.sources), families = new Set<string>();
+  const availableFormulas = new Set(character.calculation.bundle.formulas.map(formula => formula.identity.id));
+  const partyInfusion = registry !== undefined || partyInfusionElements.every(element => availableFormulas.has(element + '-ordinary-reaction'));
   const bindingRoots = (binding: CalculationBinding): void => {
     if (binding.kind === 'attribute' || binding.kind === 'enemy' || binding.kind === 'team-attribute') roots.push(binding.key);
     if (binding.kind === 'formula') { roots.push(binding.formula); Object.values(binding.inputs).forEach(bindingRoots); }
@@ -100,7 +102,7 @@ export function collectCalculationClosure(characterInput: unknown, registry?: un
     talent.sources.forEach(source => sourceIds.add(source));
     for (const hit of talent.hits) {
       hit.sources.forEach(source => sourceIds.add(source)); roots.push(...hit.coverageRefs);
-      for (const invocation of hitInvocations(hit)) {
+      for (const invocation of hitInvocations(hit, partyInfusion && talent.category === 'normal' ? character.identity.weaponType : undefined)) {
         roots.push(invocation.formula, ...invocation.captures.flatMap(slot => slot.attributes)); Object.values(invocation.bindings).forEach(bindingRoots);
         if (invocation.predicate) bindingRoots(invocation.predicate);
       }

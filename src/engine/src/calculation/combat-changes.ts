@@ -1,5 +1,5 @@
 import { passiveEnergyClock } from './passive-energy';
-import { findBuildHit, subjectFacts, talentParameterAt, type CalculationBinding, type CalculationFact, type CombatChange, type CombatFrame, type Project } from '@leyline/schema';
+import { definitionKey, findBuildHit, subjectFacts, talentParameterAt, type CalculationBinding, type CalculationFact, type CombatChange, type CombatFrame, type Project } from '@leyline/schema';
 import { actorIsOnField, grantedSceneEffects } from './build-context';
 import { evaluateCombatBindings } from './context';
 import { grantedBuildEffects, grantedDamageChanges, grantedPeriodicEnergy, grantedResonances } from './grants';
@@ -64,6 +64,13 @@ export function resolveCombatChanges(project: Project, runtime: ProjectRuntime):
       key: { namespace: 'builtin', id: 'attribute.' + key, revision: '1' }, at: { kind: 'current', phase: 'same' } } }, frame(actor,eventId)).outputs.value;
     return result?.state === 'known' && result.value.kind === 'quantity' ? result.value.value : undefined;
   };
+  const hasSkillReduction = compiledData(runtime.team.program)!.attributes.has(definitionKey({ namespace: 'builtin', id: 'attribute.elementalSkillCooldownReduction', revision: '1' }));
+  const hasParticleBonus = compiledData(runtime.team.program)!.attributes.has(definitionKey({ namespace: 'builtin', id: 'attribute.particleEnergyRecharge', revision: '1' }));
+  function skillReduction(actor: string, eventId: string) {
+    const general = stat(actor, eventId, 'skillCooldownReduction');
+    const specific = hasSkillReduction ? stat(actor, eventId, 'elementalSkillCooldownReduction') : 0;
+    return general === undefined || specific === undefined ? undefined : Math.min(1, general + specific);
+  }
   function publish(entry: Entry, phase: 'before' | 'after') {
     if (!trackFacts && !partyParticles.length) return;
     const states = events.get(entry.id)!.derivedStates ??= { before: {}, after: {} };
@@ -92,10 +99,12 @@ export function resolveCombatChanges(project: Project, runtime: ProjectRuntime):
         results.push(change);
         continue;
       }
-      const recharge = member.build && stat(member.id, entry.id, 'energyRecharge');
-      if (recharge === undefined || teamSize > 4) {
+      const ordinaryRecharge = member.build && stat(member.id, entry.id, 'energyRecharge');
+      const particleBonus = hasParticleBonus ? stat(member.id, entry.id, 'particleEnergyRecharge') : 0;
+      if (ordinaryRecharge === undefined || particleBonus === undefined || teamSize > 4) {
         change.status = 'unknown'; change.missing = [teamSize > 4 ? 'partySize' : 'energyRecharge']; energy.set(member.id, undefined);
       } else {
+        const recharge = ordinaryRecharge + particleBonus;
         const share = member.id === entry.actor ? 1 : (10 - teamSize) / 10;
         const perParticle = drop.particleElement ? member.build?.character.identity.element === drop.particleElement ? 3 : 1 : 2;
         change.energyGain = drop.particles! * perParticle * share * recharge;
@@ -147,7 +156,7 @@ export function resolveCombatChanges(project: Project, runtime: ProjectRuntime):
         const queue = queues.get(entry.actor) ?? [];
         const maxCharges = (talent.skillCharges ?? 1) + build.character.constellations.filter(c=>c.rank<=build.constellation && c.extraSkillCharge).length;
         const saved = queue.length ? chargeReduction.get(entry.actor) : undefined;
-        const adjustment = seconds === undefined ? undefined : saved ?? stat(entry.actor, entry.id, 'skillCooldownReduction');
+        const adjustment = seconds === undefined ? undefined : saved ?? skillReduction(entry.actor, entry.id);
         const duration = entry.facts?.skillCooldownMs ? number(entry.facts.skillCooldownMs)
           : seconds !== undefined && adjustment !== undefined ? Math.round(1000 * seconds * (1 - adjustment)) : undefined;
         if (queue.length >= maxCharges) {

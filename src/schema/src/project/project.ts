@@ -3,7 +3,7 @@ import { APP_VERSION } from '../version.mjs';
 import { z } from 'zod';
 import { idSchema,millisecondsSchema,quantitySchema } from '../common/values';
 import { buildSchema } from '../account/build';
-import { sceneSelectionsSchema } from './scenes';
+import { sceneHitRequestSchema, sceneSelectionsSchema } from './scenes';
 import { damageRequestSchema } from './damage';
 import { enemySchema } from './enemy';
 import { hitFactsSchema, subjectFacts } from './hit-facts';
@@ -42,7 +42,7 @@ const projectFields = z.object({
   timeline: z.array(z.object({
     id: idSchema, timeMs: millisecondsSchema, order: z.number().int().nonnegative(), actor: idSchema,
     kind: z.enum(['action', 'damage', 'capture', 'state-change']), definition: idSchema, skillId: idSchema.optional(), damage: damageRequestSchema.optional(),
-    reactionEvent: projectReactionSchema.optional(), actionId: idSchema.optional(),
+    reactionEvent: projectReactionSchema.optional(), sceneHit: sceneHitRequestSchema.optional(), actionId: idSchema.optional(), captureFacts: hitFactsSchema.optional(),
     coordinatedMode: z.object({ crit: damageRequestSchema.shape.crit, reaction: damageRequestSchema.shape.reaction }).strict().optional(),
     particleSource: idSchema.optional(),
     particleEffect: idSchema.optional(),
@@ -67,6 +67,8 @@ export const projectSchema = projectFields.superRefine((project, context) => {
     });
   });
   const captureActors = new Map(project.candidate.actors.map(actor => [actor.id, actor]));
+  const teamFacts = project.candidate.actors.flatMap(actor => actor.build
+    ? [actor.build.character, actor.build.weapon, ...actor.build.sets].flatMap(entity => entity ? [entity.metadata.facts] : []) : []);
   const captureRecords = new Map(project.timeline.map(record => [record.id, record]));
   const actionStates = new Map((project.actionStates ?? []).map(state => [state.actorId, state]));
   if (actionStates.size !== (project.actionStates?.length ?? 0)) context.addIssue({ code: 'custom', path: ['actionStates'], message: '同一队员只能配置一个动作状态。' });
@@ -87,10 +89,15 @@ export const projectSchema = projectFields.superRefine((project, context) => {
       const character = build?.character;
       const talent = character?.talents.find(t => t.heals?.some(h => h.id === record.talentHeal!.healId));
       for (const row of record.talentHeal.facts ?? []) for (const [key, fact] of Object.entries(row.values)) {
-        const field = combatFactDeclaration(character?.metadata.facts, key);
-        const subject = field?.scope === 'query' ? row.subject.kind === 'event' : row.subject.kind === 'actor' && captureActors.has(row.subject.id);
-        if (!field || !subject || fact.value && (!valueMatchesType(fact.value, field.type) || fact.value.kind === 'quantity' && fact.value.unit === 'count'
-          && (!Number.isSafeInteger(fact.value.value) || fact.value.value < 0))) {
+        const declared = teamFacts.some(facts => {
+          const field = combatFactDeclaration(facts, key);
+          if (!field || fact.value && !valueMatchesType(fact.value, field.type)) return false;
+          if (row.subject.kind === 'event') return field.scope === 'query';
+          if (row.subject.kind === 'team') return field.scope === 'team';
+          if (row.subject.kind === 'target') return field.scope === 'target' && row.subject.id === 'target';
+          return ['owner', 'recipient', 'event-actor', 'contributor'].includes(field.scope) && captureActors.has(row.subject.id);
+        });
+        if (!declared || fact.value?.kind === 'quantity' && fact.value.unit === 'count' && (!Number.isSafeInteger(fact.value.value) || fact.value.value < 0)) {
           context.addIssue({ code: 'custom', path: ['timeline',index,'talentHeal','facts',key], message: '治疗事实的字段、主体、类型或数值无效。' });
         }
         if (row.subject.kind === 'event' && talent?.inputs?.some(input => input.id === key) && fact.value?.kind === 'quantity') {
@@ -153,6 +160,10 @@ export const projectSchema = projectFields.superRefine((project, context) => {
     if (record.reactionEvent && (record.kind !== 'damage' || record.damage || record.reactionEvent.triggerActorId && !captureActors.has(record.reactionEvent.triggerActorId) || record.reactionEvent.contributors.some(({ actorId }) => !captureActors.has(actorId)))) {
       context.addIssue({ code: 'custom', path: ['timeline', index, 'reactionEvent'], message: '反应伤害须明确引用项目队员，并单独记录。' });
     }
+    if (record.sceneHit && (record.kind !== 'damage' || record.damage || record.reactionEvent || record.skillId || record.actionId
+      || record.coordinatedMode || record.facts || record.sourceEventIds?.length || !captureActors.has(record.actor))) {
+      context.addIssue({ code: 'custom', path: ['timeline', index, 'sceneHit'], message: '场景冲击须使用独立伤害记录及自身条件。' });
+    }
     if (record.actionId !== undefined) {
       const action = actionStates.get(record.actor)?.actions.actions.find(action => action.id === record.actionId);
       const matchesHit = record.damage && action?.hits.some(hit => hit.hitId === record.damage!.hit.hitId);
@@ -160,13 +171,19 @@ export const projectSchema = projectFields.superRefine((project, context) => {
         context.addIssue({ code: 'custom', path: ['timeline', index, 'actionId'], message: '动作必须引用该队员定义的技能、命中或独立事件。' });
       }
     }
+    if (record.captureFacts && record.kind !== 'capture' && !(record.kind === 'action' && record.skillId)) {
+      context.addIssue({ code: 'custom', path: ['timeline', index, 'captureFacts'], message: '捕获时的条件须附在属性捕获点或技能施放记录上。' });
+    }
+    for (const row of record.damage?.facts ?? record.reactionEvent?.facts ?? record.captureFacts ?? []) {
+      if (row.subject.kind === 'actor' && !captureActors.has(row.subject.id) || row.subject.kind === 'target' && row.subject.id !== 'target') {
+        context.addIssue({ code: 'custom', path: ['timeline', index, ...record.captureFacts ? ['captureFacts'] : [record.damage ? 'damage' : 'reactionEvent', 'facts']], message: '条件引用了不存在的队员或目标。' });
+      }
+    }
     if (record.damage) {
       const build = captureActors.get(record.actor)?.build;
       const found = findBuildHit(build, record.damage.hit);
-      for (const row of record.damage.facts ?? []) {
-        if (row.subject.kind === 'actor' && !captureActors.has(row.subject.id) || row.subject.kind === 'target' && row.subject.id !== 'target') {
-          context.addIssue({ code: 'custom', path: ['timeline', index, 'damage', 'facts'], message: '命中事实引用了不存在的队员或目标。' });
-        }
+      if (record.damage.hitOrdinal !== undefined && record.damage.hitOrdinal > (found?.hit.selection?.repetitions ?? 0)) {
+        context.addIssue({ code: 'custom', path: ['timeline', index, 'damage', 'hitOrdinal'], message: '命中序号须在所选单击的重复次数内。' });
       }
       if (found && build) for (const message of hitEventFactIssues(found.entity, found.talent, subjectFacts(record.damage.facts, { kind: 'event' }) ?? {}, build.constellation, project.candidate.actors.flatMap(actor => actor.build ? [actor.build] : []))) {
         context.addIssue({ code: 'custom', path: ['timeline', index, 'damage', 'facts'], message });

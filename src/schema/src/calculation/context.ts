@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { attackTypeSchema } from '../content/effects';
 import { idSchema, millisecondsSchema } from '../common/values';
 import { elements } from '../content/stats';
 import { calculationFactSchema } from './binding';
@@ -24,7 +25,8 @@ export const calculationFactFrameSchema = z.object({ id: idSchema, subject: fact
   phase: z.enum(['before', 'after']), facts: stateFacts.refine(values => Object.keys(values).length > 0, '事件状态不得为空。') }).strict();
 export const combatActorSchema = z.object({
   id: idSchema, inputs: facts, facts: stateFacts, actorFacts,
-  identity: z.object({ element: z.enum(elements), region:z.string().max(160).optional(), weaponType: idSchema.optional(), sourceRefs: z.array(idSchema).max(1000) }).strict().optional(),
+  identity: z.object({ element: z.enum(elements), region:z.string().max(160).optional(), weaponType: idSchema.optional(),
+    gameId: z.number().int().positive().optional(), sourceRefs: z.array(idSchema).max(1000) }).strict().optional(),
   ascension: z.number().int().min(0).max(6).nullable(), constellation: z.number().int().min(0).max(6).nullable(), refinement: z.number().int().min(1).max(5).nullable(),
   setCounts: z.record(idSchema, z.number().int().min(0).max(5)), effects: z.array(definitionRefSchema).max(10000),
   talents: z.array(z.object({ id: idSchema, level: z.number().int().min(1).max(30), upperLevel: z.number().int().min(1).max(30).optional(), sourceRefs: z.array(idSchema).max(1000).default([]),
@@ -101,7 +103,7 @@ export const combatFrameSchema = z.object({
   ownerId: idSchema, recipientId: idSchema, contributorId: idSchema.nullable(), targetId: idSchema, eventId: idSchema,
   sourceEventId: idSchema.nullable(), phase: z.enum(['before', 'after']),
   facts, actorFacts,
-  hit: z.object({ skillId: idSchema.nullable(), hitId: idSchema.nullable(), element: z.enum(elements), category: z.enum(['normal', 'charged', 'plunge', 'skill', 'burst']).nullable(),
+  hit: z.object({ skillId: idSchema.nullable(), hitId: idSchema.nullable(), element: z.enum(elements), category: attackTypeSchema.nullable(),
     family: idSchema, origin: z.enum(['talent', 'reaction', 'triggered']), reactionId: idSchema.nullable() }).strict().superRefine((hit, validation) => {
     if (hit.origin === 'talent' && (hit.skillId === null || hit.hitId === null || hit.category === null)) validation.addIssue({ code: 'custom', message: '技能命中必须关联技能、稳定命中身份和类别。' });
     if (hit.origin === 'reaction' && (hit.reactionId === null || hit.category !== null)) validation.addIssue({ code: 'custom', message: '独立反应须有反应身份，且不继承普通攻击类别。' });
