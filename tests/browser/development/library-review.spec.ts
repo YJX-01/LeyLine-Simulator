@@ -13,7 +13,9 @@ test('actual inventory: isolated pickers, retained configurations, independent f
   await page.getByRole('button',{name:'确认导入 458 件圣遗物',exact:true}).click();
   await page.getByTestId('workspace-nav-characters').click();
   await restoreRecordedNoteSetup(page);
-  await expect(page.locator('.character-card')).toHaveCount(55);
+  await expect(page.locator('.library-result-count')).toHaveText('55 名角色');
+  const columns=await page.locator('.character-cards').evaluate(node=>getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).length);
+  await expect(page.locator('.character-card')).toHaveCount(columns*5);
   const baseline=await page.evaluate(()=>localStorage.getItem('leyline-account-0.2.0'));
   await page.getByLabel('搜索账号角色',{exact:true}).fill('甘雨');
   await page.getByTestId('workspace-nav-loadouts').click();

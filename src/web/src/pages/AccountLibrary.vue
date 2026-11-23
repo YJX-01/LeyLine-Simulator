@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
-import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue';
+import { computed, defineAsyncComponent, nextTick, onMounted, ref, shallowRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { cloneAccount, accountSlots, type AccountCharacter } from '../domain/account';
 import { buildRollBasis } from '../domain/effective-roll-basis';
@@ -23,11 +23,16 @@ import ArtifactForm from './ArtifactForm.vue';
 import CharacterCardPortraits from '../components/CharacterCardPortraits.vue';
 import CharacterLibraryTools from '../components/CharacterLibraryTools.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
+import LibraryListHeader from '../components/LibraryListHeader.vue';
+import LibraryPagination from '../components/LibraryPagination.vue';
 import LibraryImportActions from '../components/LibraryImportActions.vue';
 import StatusBadge from '../components/StatusBadge.vue';
 import ConfirmationDialog from '../components/ConfirmationDialog.vue';
 import FavoriteMark from '../components/FavoriteMark.vue';
 import { useLibraryScroll } from '../composables/use-library-scroll';
+import { useGridPageSize } from '../composables/use-grid-page-size';
+import { useLibraryPreferencesStore } from '../stores/library-preferences';
+import { useLibraryViewStore } from '../stores/library-view';
 import { characterListGroup } from '../domain/elemental-forms';
 import { teamArtifactEntries, teamMemberName, type TeamMember } from '../domain/team-members';
 import { releaseMetadata, compareReleaseNewest } from '../domain/catalog-release';
@@ -49,6 +54,18 @@ const weaponFilter = props.pick ? ref<string[]>([]) : context.characterWeapon;
 const rarityFilter = props.pick ? ref<string[]>([]) : context.characterRarity;
 const sort = props.pick ? ref('release') : context.characterSort;
 const sortDirection = props.pick ? ref<'asc'|'desc'>('desc') : context.characterSortDirection;
+const preferences = useLibraryPreferencesStore();
+const views = useLibraryViewStore();
+const characterView = computed(() => views.forAccount(account.value.id));
+const pickerCharacterOffset = ref(0);
+const characterOffset = computed({
+  get: () => props.pick ? pickerCharacterOffset.value : characterView.value.characterOffset,
+  set: value => { if (props.pick) pickerCharacterOffset.value = value; else characterView.value.characterOffset = value; },
+});
+const characterGrid = ref<HTMLElement>();
+const characterDensity = ref<'relaxed'|'compact'>('relaxed');
+const characterRows = computed(() => ({ relaxed: preferences.rows.characters, compact: preferences.rows.characters }));
+const characterPageSize = useGridPageSize(characterGrid, characterDensity, characterRows);
 const inventoryIndex = computed(() => new Map(account.value.artifacts.map((item, index) => [item.id, { item, index }])));
 const loadouts = useCharacterLoadoutsStore();
 const characterMenu=ref<{id:string;x:number;y:number}>(),deleteCharacterId=ref('');
@@ -136,7 +153,21 @@ const visibleCharacters = computed(() => {
   });
   return items.sort((a,b) => characterListGroup(a.build?.character.id ?? catalog.value?.characters.find(item=>item.name===a.name)?.id)-characterListGroup(b.build?.character.id ?? catalog.value?.characters.find(item=>item.name===b.name)?.id) || (sortDirection.value==='desc'?1:-1)*(sort.value==='favorite' ? loadouts.favoriteLevel(account.value.id,b.id)-loadouts.favoriteLevel(account.value.id,a.id) : sort.value==='release' ? compareReleaseNewest(characterRelease(a),characterRelease(b)) : sort.value==='level' ? (b.build?.level??-1)-(a.build?.level??-1) : sort.value==='constellation' ? (b.build?.constellation??-1)-(a.build?.constellation??-1) : sort.value==='rolls' ? roleRolls(b)-roleRolls(a) : sort.value==='name'?b.name.localeCompare(a.name,'zh-CN'):0) || a.name.localeCompare(b.name,'zh-CN'));
 });
-const galleryEntries = computed(()=>visibleCharacters.value.map(entry=>({
+const characterPages = computed(() => Math.max(1, Math.ceil(visibleCharacters.value.length / characterPageSize.value)));
+const characterPage = computed({
+  get: () => Math.min(characterPages.value, Math.floor(characterOffset.value / characterPageSize.value) + 1),
+  set: value => { characterOffset.value = (Math.max(1, Math.min(value, characterPages.value)) - 1) * characterPageSize.value; },
+});
+watch([query,elementFilter,weaponFilter,rarityFilter,favoriteFilter,sort,sortDirection], () => {
+  if (!props.pick) characterPage.value = 1;
+}, { deep: true });
+watch([characterPages,characterPageSize,() => account.value.id], () => {
+  const lastOffset = (characterPages.value - 1) * characterPageSize.value;
+  if (characterOffset.value > lastOffset) characterOffset.value = lastOffset;
+});
+const galleryEntries = computed(()=>(props.pick ? visibleCharacters.value : visibleCharacters.value.slice(
+  (characterPage.value - 1) * characterPageSize.value, characterPage.value * characterPageSize.value,
+)).map(entry=>({
   ...entry, presetId:'', galleryKey:entry.id, ready:props.pickMembers || props.pickShowcase ? entry.build?.artifacts.length === accountSlots.length : configurationReady(account.value,entry),
   artifacts: props.pickMembers || props.pickShowcase ? teamArtifactEntries(entry.build).flatMap(slot => slot.item ?? []) : Object.keys(entry.equipment).length ? inventoryEquipment(entry) : accountSlots.flatMap(slot=>showcaseArtifact(entry,slot) ?? []),
 })));
@@ -145,7 +176,13 @@ function openGallery(entry: { id: string; presetId: string }) {
   else openCharacter(entry.id, entry.presetId);
 }
 function resetFilters() { elementFilter.value=[]; weaponFilter.value=[]; rarityFilter.value=[]; favoriteFilter.value=[]; }
-function showImportedCharacter(id:string) { query.value='';resetFilters();modal.value='';characterId.value=id; }
+function showImportedCharacter(id:string) {
+  query.value='';resetFilters();modal.value='';characterId.value=id;
+  void nextTick(() => {
+    const index = visibleCharacters.value.findIndex(entry => entry.id === id);
+    if (index >= 0) characterPage.value = Math.floor(index / characterPageSize.value) + 1;
+  });
+}
 function inventoryEquipment(entry: AccountCharacter) {
   return Object.values(entry.equipment).flatMap(id => inventoryIndex.value.get(id) ?? [])
     .sort((a,b)=>a.index-b.index).map(({item})=>item);
@@ -160,29 +197,33 @@ function inventoryEquipment(entry: AccountCharacter) {
     <div v-if="error" class="account-error" role="alert">{{ localDataErrorLabel(error) }}<details><summary>技术详情</summary>{{ error }}</details></div>
 
     <template v-if="page === 'characters'">
-      <CharacterLibraryTools v-model:query="query" v-model:elements="elementFilter" v-model:weapons="weaponFilter" v-model:rarities="rarityFilter" v-model:favorites="favoriteFilter" v-model:sort="sort" v-model:direction="sortDirection" label="搜索账号角色" :sort-options="sortOptions"><template v-if="!props.pick" #actions><LibraryImportActions :mona="false" showcase @showcase="modal='network'" @create="modal='create'" /></template></CharacterLibraryTools>
+      <div class="character-library-list">
+        <CharacterLibraryTools v-model:query="query" v-model:elements="elementFilter" v-model:weapons="weaponFilter" v-model:rarities="rarityFilter" v-model:favorites="favoriteFilter" v-model:sort="sort" v-model:direction="sortDirection" label="搜索账号角色" :sort-options="sortOptions"><template v-if="!props.pick" #actions><LibraryImportActions :mona="false" showcase @showcase="modal='network'" @create="modal='create'" /></template></CharacterLibraryTools>
 
-      <div class="character-cards">
-        <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :data-card-action="pick ? 'select' : 'detail'" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && (detail?.presetId ?? '')===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
-          <span class="character-card-header">
-            <span class="character-card-status">
-              <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'"
-                :description="props.pickShowcase || props.pickMembers ? (entry.ready ? '配装快照的培养资料和五件圣遗物齐全' : '配装快照的培养资料或圣遗物尚未齐全') : (entry.ready ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全')"
-                :accessible-name="(props.pickShowcase ? '展柜配置' : props.pickMembers ? '队员配置' : '本地配置') + (entry.ready ? '就绪' : '缺失')" />
-              <StatusBadge v-if="entry.showcase" label="展柜" tone="electro" state="complete" description="有独立展柜快照" accessible-name="有展柜信息" />
+        <LibraryListHeader v-if="!props.pick" v-model:page="characterPage" :pages="characterPages" :count="visibleCharacters.length" :total="availableCharacters.length" unit="名角色" />
+        <div v-if="galleryEntries.length" ref="characterGrid" class="character-cards">
+          <button v-for="entry in galleryEntries" :key="entry.galleryKey" class="character-card" :data-card-action="pick ? 'select' : 'detail'" :class="{ selected:props.pick ? props.selectedId===entry.id : characterId === entry.id && (detail?.presetId ?? '')===entry.presetId }" :aria-label="props.pick ? `选择${entry.name}` : `查看${entry.name}详情`" @click="openGallery(entry)" @contextmenu="openCharacterMenu($event,entry.id)">
+            <span class="character-card-header">
+              <span class="character-card-status">
+                <StatusBadge :label="entry.ready ? '就绪' : '缺失'" :state="entry.ready ? 'complete' : 'missing'"
+                  :description="props.pickShowcase || props.pickMembers ? (entry.ready ? '配装快照的培养资料和五件圣遗物齐全' : '配装快照的培养资料或圣遗物尚未齐全') : (entry.ready ? '培养资料与五个部位的本地实物配置齐全' : '本地培养资料或五个部位的实物配置尚未齐全')"
+                  :accessible-name="(props.pickShowcase ? '展柜配置' : props.pickMembers ? '队员配置' : '本地配置') + (entry.ready ? '就绪' : '缺失')" />
+                <StatusBadge v-if="entry.showcase" label="展柜" tone="electro" state="complete" description="有独立展柜快照" accessible-name="有展柜信息" />
+              </span>
+              <strong>{{ entry.name }}</strong>
+              <span class="character-card-trailing"><span v-if="loadouts.favoriteLevel(account.id,entry.id)" class="card-favorite" :aria-label="`${loadouts.favoriteLevel(account.id,entry.id)}级收藏`"><FavoriteMark :level="loadouts.favoriteLevel(account.id,entry.id)" /></span><svg class="character-card-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5H5v14h14v-3M13 5h6v6m0-6-9 9"/></svg></span>
             </span>
-            <strong>{{ entry.name }}</strong>
-            <span class="character-card-trailing"><span v-if="loadouts.favoriteLevel(account.id,entry.id)" class="card-favorite" :aria-label="`${loadouts.favoriteLevel(account.id,entry.id)}级收藏`"><FavoriteMark :level="loadouts.favoriteLevel(account.id,entry.id)" /></span><svg class="character-card-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5H5v14h14v-3M13 5h6v6m0-6-9 9"/></svg></span>
-          </span>
-          <CharacterCardPortraits :build="entry.build" :name="entry.name" :artifacts="entry.artifacts" />
-        </button>
+            <CharacterCardPortraits :build="entry.build" :name="entry.name" :artifacts="entry.artifacts" />
+          </button>
+        </div>
+        <LibraryEmptyState v-if="!visibleCharacters.length && pickMembers" title="没有符合条件的队员" action="清除搜索与筛选" @action="query='';resetFilters()" />
+        <LibraryEmptyState v-else-if="!visibleCharacters.length" title="角色库还是空的" filtered-title="没有符合条件的角色"
+          :filtered="!!availableCharacters.length" create-label="手动添加角色"
+          @create="modal='create'" @clear="query='';resetFilters()" />
+        <LibraryPagination v-if="!props.pick" v-model:page="characterPage" :pages="characterPages" always position="底部" full />
       </div>
       <ContextMenu v-if="characterMenu && !props.pick" :x="characterMenu.x" :y="characterMenu.y" label="角色操作" :options="[{id:'details',label:'查看详情'},{id:'delete',label:'彻底删除',danger:true}]" @close="characterMenu=undefined" @select="characterMenuAction" />
       <ConfirmationDialog v-if="deletingCharacter" title="彻底删除角色？" confirm-label="彻底删除" @cancel="deleteCharacterId=''" @confirm="deleteCharacter"><p>清除「{{ deletingCharacter.name }}」的本地、展柜、全部配装和收藏。</p><p>圣遗物保留在库中。</p></ConfirmationDialog>
-      <LibraryEmptyState v-if="!visibleCharacters.length && pickMembers" title="没有符合条件的队员" action="清除搜索与筛选" @action="query='';resetFilters()" />
-      <LibraryEmptyState v-else-if="!visibleCharacters.length" title="角色库还是空的" filtered-title="没有符合条件的角色"
-        :filtered="!!availableCharacters.length" create-label="手动添加角色"
-        @create="modal='create'" @clear="query='';resetFilters()" />
       <ManualCharacterImport ref="manual" v-if="modal==='create'" @saved="openCharacter" @close="modal=''" />
       <CharacterDetailDialog v-if="detail" ref="editor" :key="detail.id" :character-id="detail.id" :preset-id="detail.presetId" @close="closeCharacter" />
     </template>
@@ -199,6 +240,8 @@ function inventoryEquipment(entry: AccountCharacter) {
 </template>
 
 <style scoped>
+.character-library-list { display:grid; gap:12px; min-width:0; }
+.character-library-list :deep(.character-shortcut-row) { margin:0; }
 .character-card-header { position:relative; display:grid; grid-template-columns:var(--character-card-media-columns); align-items:center; gap:var(--character-card-media-gap); width:100%; }
 .character-card-header > strong { grid-column:2; grid-row:1; text-align:center; font-size:var(--font-control); line-height:22px; overflow-wrap:anywhere; }
 .character-card-status { grid-column:1; grid-row:1; justify-self:start; display:grid; grid-template-columns:repeat(auto-fill,minmax(36px,1fr)); gap:4px; width:var(--character-card-equipment-size); }

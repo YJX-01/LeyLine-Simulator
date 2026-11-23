@@ -7,6 +7,7 @@ import { loadAccountGameData } from '../domain/account-presentation';
 import { useAccountStore } from '../stores/account';
 import { useArtifactCombinationsStore } from '../stores/artifact-combinations';
 import { useLibraryViewStore } from '../stores/library-view';
+import { useLibraryPreferencesStore } from '../stores/library-preferences';
 import ArtifactCombinationEditor from './ArtifactCombinationEditor.vue';
 import LibraryToolbar from '../components/LibraryToolbar.vue';
 import LibraryEmptyState from '../components/LibraryEmptyState.vue';
@@ -29,14 +30,15 @@ defineExpose({requestLeave:(action:()=>void)=>editorView.value?editorView.value.
 const props=defineProps<{pick?:boolean;stats?:StatKey[];referenceName?:string}>();
 const emit=defineEmits<{select:[combination:ArtifactCombination]}>();
 const account=useAccountStore(),store=useArtifactCombinationsStore(),views=useLibraryViewStore();
-const view=computed(()=>views.forAccount(account.account.id)),localQuery=ref(''),localPage=ref(1);
+const view=computed(()=>views.forAccount(account.account.id)),localQuery=ref(''),localOffset=ref(0);
 const query=computed({get:()=>props.pick?localQuery.value:view.value.query,set:value=>{if(props.pick)localQuery.value=value;else view.value.query=value;page.value=1;}});
-const storedPage=computed({get:()=>props.pick?localPage.value:view.value.page,set:value=>{if(props.pick)localPage.value=value;else view.value.page=value;}});
+const offset=computed({get:()=>props.pick?localOffset.value:view.value.combinationOffset,set:value=>{if(props.pick)localOffset.value=value;else view.value.combinationOffset=value;}});
 const characters=ref<{id:string;name:string}[]>([]);
 const sets=ref<{id:string;name:string;rarity:number}[]>([]),error=ref('');
 const editor=ref<ArtifactCombination>(),creating=ref(false),deleteId=ref(''),filterOpen=ref(false),sortOpen=ref(false);
 const selectedSets=ref<string[]>([]),favoriteFilter=ref<string[]>([]),sort=ref('rolls'),direction=ref<'asc'|'desc'>('desc');
-const pageSize=5,library=ref<HTMLElement>();
+const preferences=useLibraryPreferencesStore();
+const pageSize=computed(()=>props.pick?5:preferences.rows.combinations),library=ref<HTMLElement>();
 let deleteFocus:HTMLButtonElement|undefined;
 const all=computed(()=>store.combinations.filter(combination=>combination.accountId===account.account.id));
 function name(combination:ArtifactCombination){return combinationName(combination,sets.value);}
@@ -45,10 +47,10 @@ const shown=computed(()=>all.value.filter(combination=>name(combination).include
   const difference=sort.value==='rolls'?(effectiveTotal(a.items,stats(a),a.basis) ?? -1)-(effectiveTotal(b.items,stats(b),b.basis) ?? -1):sort.value==='favorite'?(a.favorite ?? 0)-(b.favorite ?? 0):sort.value==='pieces'?a.items.length-b.items.length:all.value.indexOf(a)-all.value.indexOf(b);
   return (direction.value==='asc'?1:-1)*difference;
 }));
-const pages=computed(()=>Math.max(1,Math.ceil(shown.value.length/pageSize)));
-const page=computed({get:()=>Math.max(1,Math.min(storedPage.value,pages.value)),set:value=>{storedPage.value=Math.max(1,Math.min(value,pages.value));}});
-const visible=computed(()=>shown.value.slice((page.value-1)*pageSize,page.value*pageSize));
-watch([storedPage,pages],()=>{if(storedPage.value!==page.value)storedPage.value=page.value;},{immediate:true});
+const pages=computed(()=>Math.max(1,Math.ceil(shown.value.length/pageSize.value)));
+const page=computed({get:()=>Math.min(pages.value,Math.floor(offset.value/pageSize.value)+1),set:value=>{offset.value=(Math.max(1,Math.min(value,pages.value))-1)*pageSize.value;}});
+const visible=computed(()=>shown.value.slice((page.value-1)*pageSize.value,page.value*pageSize.value));
+watch(()=>shown.value.length,count=>{if(offset.value>=count)offset.value=Math.max(0,count-1);},{immediate:true});
 watch([selectedSets,favoriteFilter,sort,direction],()=>{page.value=1;},{deep:true});
 watch(()=>account.account.id,()=>{editor.value=undefined;creating.value=false;deleteId.value='';menu.value=undefined;});
 onMounted(async()=>{try{const data=await loadAccountGameData();sets.value=data.catalog.sets;characters.value=data.catalog.characters;}catch{error.value='套装目录加载失败，请重新打开。';}});
@@ -72,7 +74,7 @@ function closeEditor(deleted=false){creating.value=false;editor.value=undefined;
     <LibraryListHeader v-model:page="page" :pages="pages" :count="shown.length" :total="all.length" unit="组组合" />
     <p v-if="pick && referenceName" class="pick-reference">按{{ referenceName }}统计</p>
     <p v-if="error || store.error" role="alert">{{ error || store.error }}</p>
-    <div class="combination-list"><article v-for="combination in visible" :key="combination.id" class="combination-row" :data-card-action="pick ? 'select' : 'detail'" :data-combination-id="combination.id" @contextmenu.prevent="openMenu($event,combination)">
+    <div v-if="visible.length" class="combination-list"><article v-for="combination in visible" :key="combination.id" class="combination-row" :data-card-action="pick ? 'select' : 'detail'" :data-combination-id="combination.id" @contextmenu.prevent="openMenu($event,combination)">
       <div class="combination-heading"><h3>{{ name(combination) }}</h3><span v-if="stale(combination)" class="stale">{{ combination.items.some(item=>item.inventoryId===null)?'含未入库':'库存已变化' }}</span><span v-if="combination.referenceName" class="combination-reference" role="img" :title="`参考角色：${combination.referenceName}`" :aria-label="`参考角色：${combination.referenceName}`"><GameIcon kind="characters" :id="referenceId(combination)" :name="combination.referenceName" :size="32" /></span><span v-if="combination.favorite" class="combination-favorite" :title="`${combination.favorite}级收藏`" :aria-label="`${combination.favorite}级收藏`"><FavoriteMark :level="combination.favorite" /></span></div>
       <EquipmentStrip :effective-stats="stats(combination)" :entries="accountSlots.map(slot=>({slot,item:combination.items.find(item=>item.slot===slot)}))" />
       <EffectiveRollSummary inline :basis="combination.basis" :items="combination.items" :selected-stats="stats(combination)" />

@@ -16,6 +16,7 @@ import { useLibraryScroll } from '../composables/use-library-scroll';
 import { teamMemberName, teamMemberPortrait } from '../domain/team-members';
 import { useAccountStore } from '../stores/account';
 import { teamSortDefaults, useLibraryViewStore } from '../stores/library-view';
+import { useLibraryPreferencesStore } from '../stores/library-preferences';
 import { useSavedTeamsStore, type SavedTeam } from '../stores/saved-teams';
 
 const TeamEditorDialog = defineAsyncComponent(() => import('./TeamEditorDialog.vue'));
@@ -25,9 +26,10 @@ const library = ref<HTMLElement>();
 const saved = useSavedTeamsStore();
 const accounts = useAccountStore();
 const views = useLibraryViewStore();
-const pickerView = reactive({ teamQuery: '', teamMember: '', teamFavorites: [] as string[], teamPage: 1, teamSort: teamSortDefaults.key as string, teamDirection: teamSortDefaults.direction as 'asc' | 'desc' });
+const pickerView = reactive({ teamQuery: '', teamMember: '', teamFavorites: [] as string[], teamOffset: 0, teamSort: teamSortDefaults.key as string, teamDirection: teamSortDefaults.direction as 'asc' | 'desc' });
 const browse = computed(() => props.pick ? pickerView : views.forAccount(accounts.account.id));
-const pageSize = 5;
+const preferences = useLibraryPreferencesStore();
+const pageSize = computed(() => props.pick ? 5 : preferences.rows.teams);
 const filterOpen = ref(false);
 const sortOpen = ref(false);
 const sortOptions = [
@@ -53,7 +55,7 @@ const query = computed({
   get: () => browse.value.teamQuery,
   set: value => {
     browse.value.teamQuery = value;
-    browse.value.teamPage = 1;
+    browse.value.teamOffset = 0;
   },
 });
 const matches = computed(() => {
@@ -71,14 +73,17 @@ const matches = computed(() => {
   if (teamSort === 'favorite') return filtered.sort((a, b) => sign * ((a.favorite ?? 0) - (b.favorite ?? 0)));
   return filtered.sort((a, b) => sign * a.name.localeCompare(b.name, 'zh-CN', { numeric: true }));
 });
-const pages = computed(() => Math.max(1, Math.ceil(matches.value.length / pageSize)));
+const pages = computed(() => Math.max(1, Math.ceil(matches.value.length / pageSize.value)));
 const page = computed({
-  get: () => Math.min(browse.value.teamPage, pages.value),
-  set: value => { browse.value.teamPage = Math.max(1, Math.min(value, pages.value)); },
+  get: () => Math.min(pages.value, Math.floor(browse.value.teamOffset / pageSize.value) + 1),
+  set: value => { browse.value.teamOffset = (Math.max(1, Math.min(value, pages.value)) - 1) * pageSize.value; },
 });
-const visible = computed(() => matches.value.slice((page.value - 1) * pageSize, page.value * pageSize));
+const visible = computed(() => matches.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value));
+watch(() => matches.value.length, count => {
+  if (browse.value.teamOffset >= count) browse.value.teamOffset = Math.max(0, count - 1);
+}, { immediate: true });
 watch(() => [browse.value.teamMember, browse.value.teamFavorites, browse.value.teamSort, browse.value.teamDirection], () => {
-  browse.value.teamPage = 1;
+  browse.value.teamOffset = 0;
 });
 
 function resetFilters() {
@@ -109,7 +114,7 @@ defineExpose({ requestLeave });
 
 function closeDeleted() {
   activeTeam.value = undefined;
-  browse.value.teamPage = page.value;
+  page.value = page.value;
   void nextTick(() => library.value?.querySelector<HTMLInputElement>('input[name=library-search]')?.focus({ preventScroll: true }));
 }
 </script>

@@ -22,6 +22,7 @@ import FilterActions from '../components/FilterActions.vue';
 import LibraryPagination from '../components/LibraryPagination.vue';
 import LibraryListHeader from '../components/LibraryListHeader.vue';
 import { useGridPageSize } from '../composables/use-grid-page-size';
+import { useLibraryPreferencesStore } from '../stores/library-preferences';
 import ContextMenu from '../components/ContextMenu.vue';
 import {configurationSortDefaults,useLibraryViewStore} from '../stores/library-view';
 import {effectiveTotal} from '../domain/artifact-combinations';
@@ -74,7 +75,11 @@ const filterOpen=ref(false),sortOpen=ref(false);
 const selectedRole=computed(()=>props.selectable?'':view.value.characterId);
 const density = computed(() => props.selectable ? 'compact' : view.value.configurationDensity);
 const grid = ref<HTMLElement>();
-const pageSize = useGridPageSize(grid, density, { relaxed: 5, compact: 5 });
+const preferences = useLibraryPreferencesStore();
+const rows = computed(() => props.selectable ? { relaxed: 5, compact: 5 } : {
+  relaxed: preferences.rows.configurationRelaxed, compact: preferences.rows.configurationCompact,
+});
+const pageSize = useGridPageSize(grid, density, rows);
 const selectedCharacter=computed(()=>account.account.characters.find(character=>character.id===selectedRole.value));
 watch([selectedRole,selectedCharacter],([id,character])=>{
   if(id && !character)view.value.characterId='';

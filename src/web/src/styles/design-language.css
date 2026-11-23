@@ -61,6 +61,25 @@ html { scrollbar-gutter:stable; }
 .workspace-design button.ui-action[data-size=md][data-width=short] { min-width:var(--control-width-short); font-size:var(--font-control); font-weight:700; }
 
 .workspace-design .workspace-body > .panel.library-page { margin:0 var(--library-page-margin); padding:var(--library-page-padding); min-width:0; }
+.workspace-design .library-page { container:library-page-layout / inline-size; }
+.workspace-design .library-page:has(.library-empty:not(dialog *)) :is(.character-library-list,.character-configuration-list,.artifact-browser):not(dialog *) .library-toolbar:not(dialog *) { min-height:40px; align-content:start; }
+.workspace-design .library-page:has(.library-empty:not(dialog *)) :is(.character-shortcut-row,.inventory-options,.configuration-shortcuts):not(dialog *) { min-height:40px; align-content:start; }
+.workspace-design .library-page .artifact-browser:not(dialog *) { display:grid; gap:12px; }
+.workspace-design .library-page :is(.inventory-options,.inventory-results):not(dialog *) { margin:0; }
+.workspace-design .library-page:has(.library-empty:not(dialog *)) .inventory-options:not(dialog *) { row-gap:8px; }
+.workspace-design .library-page .library-pagination:not(dialog *) { margin-top:0; }
+@container library-page-layout (max-width:900px) {
+  .workspace-design .library-page:has(.library-empty:not(dialog *)) :is(.character-library-list,.character-configuration-list,.artifact-browser):not(dialog *) .library-toolbar:not(dialog *) { min-height:90px; }
+}
+@container library-page-layout (max-width:420px) {
+  .workspace-design .library-page:has(.library-empty:not(dialog *)) :is(.character-library-list,.character-configuration-list,.artifact-browser):not(dialog *) .library-toolbar:not(dialog *) { min-height:140px; }
+}
+@container library-page-layout (max-width:850px) {
+  .workspace-design .library-page:has(.library-empty:not(dialog *)) :is(.character-shortcut-row,.inventory-options,.configuration-shortcuts):not(dialog *) { min-height:88px; }
+}
+@container library-page-layout (max-width:700px) {
+  .workspace-design .library-page:has(.library-empty:not(dialog *)) :is(.character-shortcut-row,.inventory-options,.configuration-shortcuts):not(dialog *) { min-height:136px; }
+}
 .workspace-design .library-page-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; min-width:0; }
 .workspace-design .library-page-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:0; }
 .workspace-design .library-page-toolbar > .library-page-actions { margin-inline-start:auto; }

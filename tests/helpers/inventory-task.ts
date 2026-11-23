@@ -173,9 +173,23 @@ export async function inventoryTask(page: Page, info: TestInfo, url = '/') {
   await page.getByRole('group', { name:'卡片密度' }).getByRole('button', { name:'紧凑', exact:true }).click();
   await page.getByTestId('workspace-nav-characters').click();
   await restoreRecordedNoteSetup(page);
-  await expect(page.locator('.character-cards > button')).toHaveCount(55);
-  await expect(page.locator('.character-card [data-tone=electro]')).toHaveCount(0);
-  await expect(page.locator('.character-card [data-state=missing]')).toHaveCount(55);
+  await expect(page.locator('.library-result-count')).toHaveText('55 名角色');
+  const characterColumns = await page.locator('.character-cards').evaluate(node => getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).length);
+  let checkedCharacters = 0;
+  let characterPage = 1;
+  while (checkedCharacters < 55) {
+    await expect(page.locator('.character-cards > button')).toHaveCount(Math.min(characterColumns * 5, 55 - checkedCharacters));
+    const visible = await page.locator('.character-cards > button').count();
+    expect(visible).toBeGreaterThan(0);
+    await expect(page.locator('.character-card [data-tone=electro]')).toHaveCount(0);
+    await expect(page.locator('.character-card [data-state=missing]')).toHaveCount(visible);
+    checkedCharacters += visible;
+    if (checkedCharacters < 55) {
+      await page.getByRole('navigation', { name: '底部列表分页' }).getByRole('button', { name: '下一页', exact: true }).click();
+      await expect(page.getByLabel('顶部页码', { exact: true })).toHaveValue(String(++characterPage));
+    }
+  }
+  expect(checkedCharacters).toBe(55);
   await page.getByTestId('workspace-nav-artifacts').click();
   await expect(page.locator('.inventory-card .effective-substat')).toHaveCount(0);
   await page.getByTestId('workspace-nav-characters').click();

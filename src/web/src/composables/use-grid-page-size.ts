@@ -1,19 +1,19 @@
-import { ref, watch, type Ref } from 'vue';
+import { ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue';
 
 type CardDensity = 'relaxed' | 'compact';
 
 export function useGridPageSize(
   grid: Ref<HTMLElement | undefined>,
   density: Readonly<Ref<CardDensity>>,
-  rows: Readonly<Record<CardDensity, number>>,
-  size: Ref<number> = ref(rows[density.value]),
+  rows: MaybeRefOrGetter<Readonly<Record<CardDensity, number>>>,
+  size: Ref<number> = ref(toValue(rows)[density.value]),
 ) {
-  watch([grid, density], ([element, layout], _previous, onCleanup) => {
+  watch([grid, density, () => toValue(rows)[density.value]], ([element, , rowCount], _previous, onCleanup) => {
     if (!element) return;
     const measure = () => {
       if (!element.clientWidth) return;
       const columns = getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length;
-      size.value = rows[layout] * columns;
+      size.value = rowCount * columns;
     };
     let frame = 0;
     let width: number | undefined;
