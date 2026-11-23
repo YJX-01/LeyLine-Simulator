@@ -12,16 +12,18 @@ import { ordinaryReactions } from '@leyline/schema/hit-bindings';
 import { putHitFact, subjectFacts, findBuildHit, isTransformative, partyInfusionFact, talentInputMaximum } from '@leyline/schema';
 import { APP_VERSION } from '@leyline/schema/version';
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, ref, shallowRef, toRaw, watch } from 'vue';
-import { getReactionCalculationBundle, loadCatalog, type GameCatalog } from '@leyline/game-data';
+import { getReactionCalculationBundle } from '@leyline/game-data';
 import type { TransformativeFamily, ProjectReaction } from '@leyline/schema';
-import { damageCalculatorSchema, projectSchema, type ValueType, elements, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest } from '@leyline/schema';
-import type { AccountCharacter } from '../domain/account';
-import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorSceneHits, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
+import { damageCalculatorSchema, projectSchema, type ValueType, elements, createTalentRankReader, type AxisResponse, type Build, type DamageCalculatorDocument, type DamageRequest, type StatKey } from '@leyline/schema';
+import type { AccountCharacter, LocalAccount } from '../domain/account';
+import { addCalculatorCapture, addCalculatorSceneHit, calculatorRequest, calculatorSceneHits, calculatorSnapshotDraft, calculatorWorkerRequest, copyProjectForCalculator, parseDamageCalculator, readCalculatorSource, prepareCalculatorContentUpdate } from '../domain/damage-calculator';
 import { addActorFromBuild, addTransformativeReaction, defaultEnemy } from '../domain/real-project';
 import { createEmptyProject, nextRecordId } from '../domain/workbench-project';
-import { teamArtifactEntries } from '../domain/team-members';
+import { teamArtifactEntries, type TeamConfigurationRef } from '../domain/team-members';
 import { buildRollBasis } from '../domain/effective-roll-basis';
 import { defaultEffectiveStats, equipmentConfigurationLabel } from '../domain/character-loadout-name';
+import { physicalArtifact } from '../domain/build-snapshot';
+import { fileSignature } from '../domain/file-signature';
 import { useCharacterLoadoutsStore } from '../stores/character-loadouts';
 import { applyCharacterDefinition, copyCharacterDefinition, parseCharacterDefinition } from '../domain/character-definition';
 import { exportCharacterSnapshot } from '../domain/structured-character-import';
@@ -36,7 +38,7 @@ import ChoiceGroup from '../components/ChoiceGroup.vue';
 import LibraryCornerOrnaments from '../components/LibraryCornerOrnaments.vue';
 import UnsavedChangesDialog from '../components/UnsavedChangesDialog.vue';
 import WorkbenchDialog from '../components/WorkbenchDialog.vue';
-import CatalogBrowser from '../components/CatalogBrowser.vue';
+import CharacterCatalogBrowser from '../components/CharacterCatalogBrowser.vue';
 import GameIcon from '../components/GameIcon.vue';
 import TeamCard from '../components/TeamCard.vue';
 import CalculatorDamagePicker from '../components/CalculatorDamagePicker.vue';
@@ -51,7 +53,8 @@ import { loadSavedDamage, saveDamageSnapshot } from '../platform/saved-damage';
 const SavedDamageList = defineAsyncComponent(() => import('../components/SavedDamageList.vue'));
 const TeamLibrary = defineAsyncComponent(() => import('./TeamLibrary.vue'));
 const CharacterSelectionDialog = defineAsyncComponent(() => import('../components/CharacterSelectionDialog.vue'));
-const CalculatorBuildEditor = defineAsyncComponent(() => import('./CalculatorBuildEditor.vue'));
+const CharacterDetailDialog = defineAsyncComponent(() => import('./CharacterDetailDialog.vue'));
+const ManualCharacterImport = defineAsyncComponent(() => import('./ManualCharacterImport.vue'));
 
 const account = useAccountStore(), axis = useAxisWorkspaceStore();
 const document = shallowRef<DamageCalculatorDocument>();
@@ -63,7 +66,6 @@ const savingDamage = ref(false);
 const response = shallowRef<AxisResponse>();
 const expectedResult = shallowRef<AxisResponse['result']>();
 const picker = ref<'team' | 'character' | 'candidate' | 'damage' | 'buff' | 'list'>();
-const catalog = shallowRef<GameCatalog>();
 const characterSource = ref<'local' | 'showcase' | 'catalog'>('local');
 const sourceChoices = computed(() => [
   { value: 'local', label: '本地' },
@@ -73,9 +75,11 @@ const sourceChoices = computed(() => [
 const pendingTeam = shallowRef<Pick<SavedTeam,'id' | 'name' | 'project'>>();
 const selectedTeam = computed(() => document.value?.team ?? pendingTeam.value);
 const teamProject = computed(() => document.value?.team ? document.value.project : pendingTeam.value?.project);
-const editor = shallowRef<{ name: string; character?: AccountCharacter; initialCharacterId?: string;
-  equipment?: Pick<Build, 'artifacts' | 'sets'>; newSource?: string }>();
-const editorDialog = ref<InstanceType<typeof CalculatorBuildEditor>>();
+const linkedConfiguration = shallowRef<TeamConfigurationRef>();
+const editor = shallowRef<{ characterId: string; presetId?: string; complete?: boolean; snapshot?: LocalAccount }>();
+const editorDialog = ref<InstanceType<typeof CharacterDetailDialog>>();
+const catalogCharacter = shallowRef<{ id: string; name: string }>();
+const catalogEditor = ref<InstanceType<typeof ManualCharacterImport>>();
 const contentReview = ref<Awaited<ReturnType<typeof prepareCalculatorContentUpdate>>>();
 let reviewSignature = '';
 const emptyDamage = (): DamageRequest => ({ hit: { definition: { group: 'characters', namespace: 'builtin', id: '', revision: '' }, hitId: '' }, crit: 'critical', reaction: 'none' });
@@ -321,7 +325,13 @@ function editCaptureFact(record: CaptureRecord, field: CaptureField, event: Even
 const loadouts = useCharacterLoadoutsStore();
 const entries = computed(() => teamArtifactEntries(actor.value?.build, account.account));
 const basis = computed(() => buildRollBasis(actor.value?.build));
+const calculationStats = ref<Record<string, readonly StatKey[]>>({});
 function effectiveStats(name: string) {
+  const linked = linkedConfiguration.value;
+  if (linked?.accountId === account.account.id) return loadouts.effectiveStats(linked.accountId, linked.characterId, name);
+  const definition = actor.value?.build?.character;
+  const selected = definition?.identity.name === name ? calculationStats.value[definitionKey(definition)] : undefined;
+  if (selected) return selected;
   const entry = account.account.characters.find(character => character.name === name);
   return entry ? loadouts.effectiveStats(account.account.id, entry.id, name) : defaultEffectiveStats(name);
 }
@@ -344,6 +354,9 @@ watch(document, invalidate, { flush: 'sync' });
 watch([damage, enemy, hitTime], invalidate, { deep: true, flush: 'sync' });
 onBeforeUnmount(stop);
 function install(next: DamageCalculatorDocument, saved = false) {
+  const keepsActor = !saved && next.project.id === document.value?.project.id && next.actorId === document.value.actorId
+    && fileSignature(next.project.candidate.actors.find(member => member.id === next.actorId)?.build) === fileSignature(actor.value?.build);
+  if (!keepsActor) { linkedConfiguration.value = undefined; source.value = ''; }
   sourceRead++;
   listed.value = undefined;
   invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = damageCalculatorSchema.parse(next);
@@ -356,7 +369,7 @@ function install(next: DamageCalculatorDocument, saved = false) {
   }
   hitTime.value = (record?.timeMs ?? 0) / 1000; captureTime.value = '';
   enemy.value = next.project.enemy ? JSON.parse(JSON.stringify(next.project.enemy)) : defaultEnemy();
-  error.value = ''; source.value = '';
+  error.value = '';
   savedSignature.value = saved ? signature() : '';
 }
 function clearCalculation() {
@@ -364,17 +377,26 @@ function clearCalculation() {
   listed.value = undefined;
   invalidate(); pendingTeam.value = undefined; contentReview.value = undefined; document.value = undefined;
   damage.value = emptyDamage(); enemy.value = defaultEnemy(); hitTime.value = 0; captureTime.value = '';
-  editor.value = undefined; error.value = ''; source.value = '';
+  editor.value = undefined; linkedConfiguration.value = undefined; error.value = ''; source.value = '';
 }
 function newCalculation() { requestLeave(clearCalculation); }
 function copyAxis() { requestLeave(() => { try { const copy = copyProjectForCalculator(axis.project); install(copy); if (copy.recordId) void calculate(); } catch (cause) { showError(cause); } }); }
 function showError(cause: unknown) { error.value = cause instanceof Error ? cause.message : '计算未完成。'; }
-async function openCharacters() {
+function openCharacters() {
   characterSource.value = !account.account.characters.length ? 'catalog' : source.value.startsWith('showcase:') ? 'showcase' : 'local';
   picker.value = 'character';
-  try { catalog.value ??= await loadCatalog(); } catch (cause) { showError(cause); }
 }
 const roleName = computed(() => queryCharacter.value?.identity.name);
+function openCharacterDetails() {
+  if (!actor.value?.build) return;
+  const linked = linkedConfiguration.value;
+  if (!document.value?.baseline && linked && configurationAccount(linked)?.characters.some(entry => entry.id === linked.characterId && entry.build)) {
+    editor.value = { characterId: linked.characterId, presetId: linked.presetId };
+    return;
+  }
+  const draft = calculatorSnapshotDraft(account.account, actor.value.build);
+  editor.value = { characterId: draft.character.id, snapshot: draft.account };
+}
 function chooseTeam(team?: SavedTeam) {
   picker.value = undefined;
   if (team?.id === selectedTeam.value?.id) return;
@@ -406,12 +428,15 @@ function chooseCharacter(id: string) {
     } catch (cause) { showError(cause); }
     return;
   }
-  if (characterSource.value === 'catalog') {
-    requestLeave(() => { editor.value = { initialCharacterId: id, name: catalog.value?.characters.find(item => item.id === id)?.name ?? id, newSource: 'catalog:' + id }; });
-  } else {
-    const kind = characterSource.value;
-    requestLeave(() => { void loadSource(kind, id); });
-  }
+  const kind = characterSource.value;
+  if (kind !== 'catalog') requestLeave(() => { void loadSource(kind, id); });
+}
+function chooseCatalogCharacter(entry: { id: string; name: string }) {
+  requestLeave(() => { catalogCharacter.value = entry; });
+}
+function useSavedCharacter(id: string) {
+  picker.value = undefined;
+  void loadSource('local', id);
 }
 function selectDamage(choice: CalculatorHitChoice) {
   if (!choice.available) return;
@@ -501,28 +526,68 @@ async function loadSource(kind: 'local' | 'showcase', id: string) {
   const entry = owner.characters.find(character => character.id === id);
   if (!entry) return;
   try {
+    if (kind === 'local' && !entry.build) {
+      editor.value = { characterId: id, complete: true };
+      return;
+    }
     const next = await readCalculatorSource(owner, id, kind);
     if (read !== sourceRead) return;
     if (owner !== account.account) throw new Error('账号已切换，请重新选择。');
-    if (!next.character.build) {
-      editor.value = { ...next, name: next.character.name, newSource: kind + ':' + id }; return;
-    }
-    const project = createEmptyProject();
-    const actorId = addActorFromBuild(project, next.character.build);
-    install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId });
+    startWithBuild(next.character.build!);
     source.value = kind + ':' + id;
+    if (kind === 'local') linkedConfiguration.value = { accountId: owner.id, characterId: id, presetId: '' };
   } catch (cause) { if (read === sourceRead) showError(cause); }
 }
+function configurationAccount(link: TeamConfigurationRef) {
+  if (link.accountId !== account.account.id) return;
+  return link.presetId ? loadouts.loadouts.find(entry => entry.id === link.presetId
+    && entry.accountId === link.accountId && entry.characterId === link.characterId)?.snapshot : account.account;
+}
+async function useSavedConfiguration(characterId: string, presetId: string) {
+  const session = editor.value;
+  const current = document.value;
+  const link = { accountId: account.account.id, characterId, presetId };
+  const saved = configurationAccount(link);
+  if (!saved) return;
+  try {
+    const { character } = await readCalculatorSource(saved, characterId, 'local');
+    if (document.value !== current || configurationAccount(link) !== saved || !character.build) return;
+    if (session?.complete) { startWithBuild(character.build); editor.value = undefined; }
+    else applyBuild(character.build);
+    if (!document.value?.baseline) {
+      linkedConfiguration.value = link;
+      source.value = 'local:' + characterId;
+    }
+  } catch (cause) { showError(cause); }
+}
+async function saveSnapshotDraft(draft: LocalAccount, stats: readonly StatKey[]) {
+  const session = editor.value, snapshot = session?.snapshot, owner = account.account;
+  if (!snapshot) throw new Error('请重新打开角色详情。');
+  const { character } = await readCalculatorSource(draft, session.characterId, 'local');
+  if (session !== editor.value || owner !== account.account) throw new Error('编辑对象已变化，未保存。');
+  const build = character.build!;
+  const before = snapshot.characters.find(entry => entry.id === session.characterId);
+  build.artifacts = build.artifacts.map(piece => {
+    const previous = before?.build?.artifacts.find(artifact => artifact.slot === piece.slot);
+    const initialItem = snapshot.artifacts.find(item => item.id === before?.equipment[piece.slot]);
+    const currentItem = owner.artifacts.find(item => item.id === piece.id);
+    if (piece.id === initialItem?.id && previous && fileSignature(initialItem.real) === fileSignature(physicalArtifact(piece))) return previous;
+    return fileSignature(currentItem?.real) === fileSignature(physicalArtifact(piece)) ? piece : { ...piece, inventory: null };
+  });
+  applyBuild(build);
+  calculationStats.value[definitionKey(build.character)] = [...stats];
+  editor.value = undefined;
+}
+function startWithBuild(build: Build) {
+  const project = createEmptyProject();
+  const actorId = addActorFromBuild(project, build);
+  install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId });
+}
 function applyBuild(build: Build) {
-  if (editor.value?.newSource) {
-    const project = createEmptyProject();
-    const actorId = addActorFromBuild(project, build);
-    install({ schemaVersion: APP_VERSION, kind: 'damage-calculator', project, actorId });
-    source.value = editor.value.newSource;
-    return;
-  }
   const current = document.value;
   if (!current) return;
+  if (fileSignature(actor.value?.build) === fileSignature(build)) return;
+  linkedConfiguration.value = undefined;
   const { project } = current;
   const actors = project.candidate.actors.map(member => member.id === current.actorId ? { ...member, build } : member);
   document.value = { ...current, project: { ...project, candidate: { ...project.candidate, actors } } };
@@ -796,7 +861,8 @@ function setCapture(event: Event) {
   damage.value.capture = { recordId, phase: recordId === document.value?.recordId ? 'before' : damage.value.capture?.phase ?? 'before' };
 }
 function leaveCalculator(action: () => void) {
-  if (editorDialog.value) editorDialog.value.requestLeave(() => { editor.value = undefined; requestLeave(action); });
+  if (catalogEditor.value) catalogEditor.value.requestLeave(() => { catalogCharacter.value = undefined; requestLeave(action); });
+  else if (editorDialog.value) editorDialog.value.requestLeave(() => { editor.value = undefined; requestLeave(action); });
   else requestLeave(action);
 }
 defineExpose({ requestLeave: leaveCalculator });
@@ -815,14 +881,13 @@ defineExpose({ requestLeave: leaveCalculator });
       <button v-else type="button" class="selection-tile primary-slot" data-card-action="select" aria-haspopup="dialog" :disabled="!!document?.baseline" @click="picker = 'team'">
         <span class="add-mark" aria-hidden="true">+</span><strong>选择队伍</strong>
       </button>
-      <button type="button" class="selection-tile primary-slot role-slot" :data-card-action="roleName ? 'replace' : 'select'" aria-label="选择角色" aria-haspopup="dialog"
-        :class="{ filled: roleName }" :disabled="!!document?.baseline" @click="openCharacters">
-        <template v-if="roleName">
-          <GameIcon kind="characters" :id="queryCharacter?.derivedFrom?.id ?? queryCharacter?.id" :name="roleName" :size="64" :replaceable="!document?.baseline"
-            :level="hitOwner?.build?.level" :constellation="hitOwner?.build?.constellation" />
-          <span><small>角色</small><strong>{{ roleName }}</strong></span>
-        </template>
-        <template v-else><span class="add-mark" aria-hidden="true">+</span><strong>选择角色</strong></template>
+      <CharacterConfigurationCard v-if="character?.build" class="primary-slot" compact
+        :character-name="character.name" :configuration-name="configurationName" :build="character.build" :entries="entries" :basis="basis"
+        :effective-stats="effectiveStats(character.name)" :open-label="`查看${character.name}详情`"
+        :replace-label="document?.baseline ? undefined : `更换${character.name}`" @open="openCharacterDetails" @replace="openCharacters" />
+      <button v-else type="button" class="selection-tile primary-slot" data-card-action="select" aria-haspopup="dialog"
+        :disabled="!!document?.baseline" @click="openCharacters">
+        <span class="add-mark" aria-hidden="true">+</span><strong>选择角色</strong>
       </button>
       <button type="button" class="selection-tile secondary-slot" :data-card-action="selectedLabel ? 'replace' : 'select'" aria-label="选择伤害" aria-haspopup="dialog" :data-hit-id="damage.hit.hitId"
         :disabled="!queryCharacter || !!document?.baseline" @click="picker = 'damage'">
@@ -919,9 +984,6 @@ defineExpose({ requestLeave: leaveCalculator });
       <header class="result-heading"><h3>角色配置</h3>
         <button v-if="document && !document.team && document.project.candidate.actors.length > 1" class="ui-action soft" data-size="md" @click="picker = 'candidate'">试配队员</button>
       </header>
-      <CharacterConfigurationCard compact :character-name="character.name" :configuration-name="configurationName" :build="character.build"
-        :entries="entries" :basis="basis" :effective-stats="effectiveStats(character.name)" open-label="编辑角色配置"
-        @open="editor = { name: character.name, character }" />
       <details v-if="!document?.baseline" class="result-support"><summary>角色定义</summary>
         <div class="library-page-actions"><button class="ui-action soft" data-accent="hydro" :disabled="working" @click="reviewContent">检查当前内容</button>
           <button class="ui-action soft" data-accent="hydro" @click="exportMetadata">导出角色定义副本</button>
@@ -952,7 +1014,9 @@ defineExpose({ requestLeave: leaveCalculator });
           @update:model-value="characterSource = $event as typeof characterSource" />
       </template>
       <template v-if="!teamProject && characterSource === 'catalog'" #browser>
-        <CatalogBrowser :options="catalog?.characters ?? []" kind="characters" label="游戏角色" :selected-id="queryCharacter?.id" @select="chooseCharacter" />
+        <CharacterCatalogBrowser :selected-id="queryCharacter?.id" @select="chooseCatalogCharacter" />
+        <ManualCharacterImport v-if="catalogCharacter" ref="catalogEditor" :initial-character="catalogCharacter"
+          @saved="useSavedCharacter" @close="catalogCharacter = undefined" />
       </template>
     </CharacterSelectionDialog>
     <CalculatorDamagePicker v-if="picker === 'damage'" :choices="hitChoices" :selected="damage.hit.hitId ?? undefined" :scenes="sceneChoices"
@@ -960,8 +1024,9 @@ defineExpose({ requestLeave: leaveCalculator });
     <CalculatorBuffPicker v-if="picker === 'buff' && hitOwner" :choices="buffs" :damage="damage" :actor-id="hitOwner.id" :intervals="intervals"
       :fields="factFields" :hit-facts="hitFacts" :time="hitTime" @close="picker = undefined" @apply="applyBuffs" />
     <CharacterSelectionDialog v-if="picker === 'candidate' && document" title="试配队员" :members="document.project.candidate.actors" :selected-id="document.actorId" @close="picker = undefined" @select="switchActor" />
-    <CalculatorBuildEditor v-if="editor" ref="editorDialog" :name="editor.name" :initial-character-id="editor.initialCharacterId" :character="editor.character"
-      :equipment="editor.equipment" :effective-stats="effectiveStats(editor.name)" @close="editor = undefined" @apply="applyBuild" />
+    <CharacterDetailDialog v-if="editor" ref="editorDialog" :character-id="editor.characterId" :preset-id="editor.presetId" :complete="editor.complete"
+      :detached="editor.snapshot && { account: editor.snapshot, effectiveStats: effectiveStats(character?.name ?? ''), apply: saveSnapshotDraft }"
+      @configuration-saved="useSavedConfiguration" @close="editor = undefined" />
     <WorkbenchDialog v-if="contentReview" title="更新计算副本内容" @close="contentReview = undefined"><p>替换当前试配队员的内容定义，保留培养与装备选择。账号和原轴保留原记录，已有条件与效果引用继续校验。</p><ul v-if="contentReview.changes.length"><li v-for="change in contentReview.changes" :key="change">{{ change }}</li></ul><p v-else>当前定义已与内置内容一致。</p><button v-if="contentReview.changes.length" class="ui-action" data-accent="hydro" @click="applyContent">采用当前内容并重算</button></WorkbenchDialog>
     <UnsavedChangesDialog v-if="discardOpen" @continue="cancelDiscard" @discard="discardChanges" @save="saveAndLeave(selectedLabel ? saveDamage : save)" />
   </section>
@@ -974,13 +1039,13 @@ defineExpose({ requestLeave: leaveCalculator });
 .selection-tile { box-sizing:border-box; display:flex; align-items:center; justify-content:center; gap:12px; min-width:0; width:100%; padding:16px; background:var(--surface); color:var(--ink); }
 
 .primary-slot,.calculator-team { min-height:140px; }
-.primary-slot:not(.filled) { flex-direction:column; border-style:dashed; }
-.selection-tile.filled:disabled,.secondary-slot:disabled:has(small),.calculator-team:disabled { opacity:1; }
+.selection-tile.primary-slot { flex-direction:column; border-style:dashed; }
+.secondary-slot:disabled:has(small),.calculator-team:disabled { opacity:1; }
 .selection-tile strong { display:block; overflow-wrap:anywhere; font-size:var(--font-control); }
 .selection-tile small,.damage-totals small { font-size:var(--font-body); color:var(--muted); font-weight:400; }
 .add-mark { display:grid; place-items:center; width:40px; height:40px; color:var(--element-anemo-deep); background:var(--element-anemo-light); border-radius:7px; font-size:var(--font-title); font-weight:400; }
 .add-mark.small { width:32px; height:32px; }
-.secondary-slot { justify-content:flex-start; min-height:68px; padding:10px 16px; text-align:left; }.role-slot.filled { text-align:left; }
+.secondary-slot { justify-content:flex-start; min-height:68px; padding:10px 16px; text-align:left; }
 button.calculator-team { grid-template-columns:minmax(0,1fr) auto; gap:4px; }
 .calculator-team :deep(.team-row-members) { grid-row:2; grid-column:1/-1; }
 .calculator-team :deep(.team-row-trailing) { grid-row:1; grid-column:2; }
@@ -1006,9 +1071,12 @@ dl { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; font-va
 dd { margin:0; text-align:right; }p,li { overflow-wrap:anywhere; }ul { margin:0; padding-left:20px; }
 @media(max-width:600px) {
   .calculator-selections { gap:8px; }.primary-slot,.calculator-team { min-height:114px; }.secondary-slot { padding:8px; gap:6px; }
-  .role-slot.filled { flex-direction:column; text-align:center; }.damage-totals { grid-template-columns:1fr; padding:4px 12px; }
+  .damage-totals { grid-template-columns:1fr; padding:4px 12px; }
   .damage-totals > div,.damage-totals > div + div { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; padding:8px 0; border-left:0; }
   .damage-totals > div + div { border-top:1px solid var(--line); }
   .calculator-team :deep(.team-row-members) { gap:4px; }
+}
+@media(max-width:480px) {
+  .calculator-selections:has(> .configuration-row) > :is(.primary-slot,.calculator-team) { grid-column:1/-1; }
 }
 </style>

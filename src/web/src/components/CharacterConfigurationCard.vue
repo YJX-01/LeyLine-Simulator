@@ -51,7 +51,7 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
     <div class="configuration-body">
       <component v-if="compact" :is="replaceLabel ? 'button' : 'div'" class="configuration-portraits"
         :class="{ 'replace-portrait': replaceLabel }" :type="replaceLabel ? 'button' : undefined"
-        :aria-label="replaceLabel" :title="replaceLabel"
+        :aria-label="replaceLabel" :title="replaceLabel" :aria-haspopup="replaceLabel ? 'dialog' : undefined"
         @click="replaceLabel && emit('replace')" @keydown="replaceLabel && emit('openKeydown', $event)">
         <GameIcon kind="characters" :id="build?.character.derivedFrom?.id ?? build?.character.id" :name="characterName" :size="48"
           :level="build?.level" :constellation="build?.constellation" />
@@ -94,6 +94,7 @@ const items = computed(() => props.entries.flatMap(entry => entry.item ? [entry.
 .configuration-portraits.replace-portrait {
   z-index:2; align-self:stretch; padding:0; border:0; background:transparent;
 }
+.configuration-portraits.replace-portrait:enabled:hover > :deep(.card-replace-layer) { visibility:visible; }
 .compact .effective-roll-summary { flex:1 1 232px; min-width:0; }
 .configuration-open:disabled { opacity:1; }
 @media(max-width:600px) { .configuration-top { align-items:start; }.configuration-row { padding:12px; } }

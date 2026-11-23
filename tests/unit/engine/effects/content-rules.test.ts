@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { DATA_VERSION, getArtifactMain, getBuildSources, getCharacter, getWeapon } from '@leyline/game-data';
 import { elements, type Build, type Enemy, type Project, type StatKey } from '@leyline/schema';
-import { compileStructuredCharacter, evaluateDamage, evaluateTimeline, resolveBuild } from '@leyline/engine';
+import { compileStructuredCharacter, evaluateDamage, evaluateTimeline, resolveBuild, resolveEquipmentPanel } from '@leyline/engine';
 import { addActorFromBuild } from '../../../../src/web/src/domain/real-project';
 import { createEmptyProject } from '../../../../src/web/src/domain/workbench-project';
 import { createAccount } from '../../../../src/web/src/domain/account';
@@ -76,6 +76,20 @@ describe('canonical content rules share panel, direct damage and timeline evalua
 });
 
 describe('existing passive effects through the current panel', () => {
+  it('keeps equipment attack and crit when conditional weapon bonuses lack combat facts', async () => {
+    const build = await setting('noelle', 'athousandblazingsuns');
+    Object.assign(build, { level: 1, ascension: 0, weaponLevel: 1, weaponAscension: 0, talents: { normal: 1, skill: 1, burst: 1 } });
+    expect(resolveBuild(build).stats).toMatchObject({ attack: null, critDamage: null });
+    expect(resolveEquipmentPanel(build).stats).toMatchObject({ attack: 16.0272 + 49.1377, critRate: 0.05 + 0.024, critDamage: 0.5 });
+  });
+
+  it('includes unconditional attribute conversion in the equipped stats', async () => {
+    const build = await setting('jean', 'primordialjadecutter');
+    const hp = (1143.984 * 8.739 + 4697.817) * 1.2;
+    const attack = 18.62 * 8.739 + 76.4582 + 44.3358 * 8.01 + 186.7 + hp * 0.012;
+    expect(resolveEquipmentPanel(build).stats.attack).toBeCloseTo(attack, 8);
+  });
+
   it.each([[0.3, 0], [0.5, 0.12], [0.8, 0.3], [1, 0.3]])('uses Neuvillette A4 HP ratio %s', async (hpRatio, bonus) => {
     const build = await setting('neuvillette', 'apprenticesnotes');
     build.weaponLevel = 70; build.weaponAscension = 4;

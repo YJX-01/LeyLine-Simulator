@@ -23,6 +23,7 @@ export type { StateMachineEvaluation } from './calculation/state-machine';
 export type { AggregateEvaluationOptions } from './calculation/aggregate';
 export { compareTimelineLoadouts } from './timeline/loadout-comparison';
 export { resolveBuild, evaluateDamage } from './attributes/queries';
+export { resolveEquipmentPanel } from './calculation/project';
 export type { EvaluationResult, DamagePoint, EffectInstance, AttributeRead, AttributePanel, DamageResult } from '@leyline/schema';
 export { describeCalculationTemplate, standardReactionParameters } from './calculation/templates';
 export { grantedBuildEffects, grantedDamageChanges, grantedGleamEffects, grantedResonances } from './calculation/grants';

@@ -270,6 +270,44 @@ export function readBuildPanel(input: unknown, conditions: CombatConditions = {}
   return prepared.ok ? readRuntimePanel(prepared.runtime, 'owner', record, conditions, query) : emptyPanel(prepared.issues);
 }
 
+function needsCombatContext(binding: CalculationBinding): boolean {
+  switch (binding.kind) {
+    case 'constant':
+    case 'refinement-parameter':
+      return false;
+    case 'attribute':
+      if (binding.at.kind !== 'current') return true;
+      return binding.actor.role !== 'owner' && binding.actor.role !== 'recipient';
+    case 'actor-state':
+    case 'talent-parameter':
+      return binding.actor.role !== 'owner' && binding.actor.role !== 'recipient';
+    case 'formula':
+      return Object.values(binding.inputs).some(needsCombatContext);
+    default:
+      return true;
+  }
+}
+
+/** Read the equipped build with its passive stats, without assuming a combat state. */
+export function resolveEquipmentPanel(input: unknown): AttributePanel {
+  const parsed = buildSchema.safeParse(input);
+  if (!parsed.success) return emptyPanel([issue('invalid-input', '配装格式无效。')]);
+  const { world, record } = directWorld(parsed.data);
+  const prepared = prepareProjectRuntime(world);
+  if (!prepared.ok) return emptyPanel(prepared.issues);
+  const { runtime } = prepared;
+  const data = compiledData(runtime.team.program)!;
+  for (const actor of runtime.context.actors) {
+    actor.effects = actor.effects.filter(reference => {
+      const effect = data.effects.get(definitionKey(reference))!;
+      return effect.trigger.kind === 'permanent' && effect.application === 'always' && !Object.keys(effect.appliesTo).length
+        && effect.recipient.role !== 'fact-actor' && (!effect.predicate || !needsCombatContext(effect.predicate))
+        && !needsCombatContext(effect.value);
+    });
+  }
+  return readRuntimePanel(runtime, 'owner', record);
+}
+
 export function evaluateRuntimeHit(runtime: Runtime, actorId: string, record: RecordEntry, conditions: CombatConditions = {}, attributeReader?: BoundAttributeReader): DamageResult {
   if (record.sceneHit) return evaluateSceneHit(runtime.sceneEffects, record.sceneHit, record.timeMs, emptyPanel([]));
   const damage = record.damage, build = runtime.builds.get(actorId), panel = readRuntimePanel(runtime, actorId, record, conditions);
