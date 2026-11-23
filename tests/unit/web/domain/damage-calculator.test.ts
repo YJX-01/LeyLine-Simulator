@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
 import { calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
-import { projectSchema, type DamageCalculatorDocument } from '@leyline/schema';
+import { projectSchema, putHitFact, type DamageCalculatorDocument } from '@leyline/schema';
 import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
 import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
 import { addActorFromBuild, addSkillHit, defaultEnemy } from '../../../../src/web/src/domain/real-project';
@@ -55,13 +55,16 @@ it.skipIf(!existsSync(vesnaRecording))('the recorded Varesa trial uses the same 
   const recordId = nextRecordId(project);
   project.timeline.push({ id: recordId, actor: actorId, kind: 'damage', definition: actorId + '-real-damage', timeMs: 0, order: 0,
     damage: { hit: characterHitRef(build.character, hit.id), crit: 'critical', reaction: 'none' } });
+  const inputs = project.timeline[0].damage!.facts ??= [];
+  putHitFact(inputs, { kind: 'actor', id: actorId }, 'thewidsith.debutSong', { kind: 'quantity', unit: 'count', value: 0 });
+  putHitFact(inputs, { kind: 'actor', id: actorId }, 'shimenawasreminiscence.energy-spentActive', { kind: 'boolean', value: false });
   const document: DamageCalculatorDocument = { schemaVersion: project.schemaVersion, kind: 'damage-calculator', project, actorId, recordId };
   expect(projectSchema.safeParse(project).success).toBe(true);
   const saved = JSON.stringify(document);
   const evaluate = () => evaluateTimeline(calculatorWorkerRequest(document, 1).project).points.find(point => point.id === recordId)!;
   const point = evaluate();
 
-  expect(point.value).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
+  expect(point.value, point.real?.diagnostics.join(' / ')).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
   const output = point.real!.structured!.outputs[0].value;
   const modeled = output.state === 'known' ? output.value : undefined;
   expect(modeled?.kind === 'quantity' && modeled.value).toBeCloseTo(recordedVaresaPlunge('critical'), 5);
@@ -108,6 +111,7 @@ it.skipIf(!existsSync(officialShowcase))('selecting the recorded Bennett Nobless
   const damage = project.timeline[0].damage!;
   damage.facts = [{ subject: { kind: 'actor', id: recipient }, values: { onField: { value: { kind: 'boolean', value: false }, provenance: 'explicit', sourceRefs: [] } } }];
   const initial = calculatorBuffChoices(project,recipient,damage,1000,hitId);
+  putHitFact(damage.facts!, { kind: 'actor', id: source }, 'freedomsworn.rebelSong', { kind: 'boolean', value: false });
   const set = initial.find(option => option.ownerId === source && option.effect.id === 'noblesseoblige.burst-team-attack.team-attack')!;
   expect(set.checked).toBe(false);
   const active = applyCalculatorBuffs(project,damage,initial,new Map([[set.id,true]]),1000,hitId);
@@ -121,7 +125,7 @@ it.skipIf(!existsSync(officialShowcase))('selecting the recorded Bennett Nobless
   const off = applyCalculatorBuffs(active.project,damage,available,new Map([[applied.id,false]]),1000,hitId);
   const onPanel = evaluateTimeline(active.project).points.find(point => point.id === hitId)!.real!.panel;
   const offPanel = evaluateTimeline(off.project).points.find(point => point.id === hitId)!.real!.panel;
-  expect(onPanel.stats.attack! - offPanel.stats.attack!).toBeCloseTo(offPanel.baseStats!.attack * 0.20, 6);
+  expect(onPanel.stats.attack! - offPanel.stats.attack!, [...onPanel.diagnostics, ...offPanel.diagnostics].join(' / ')).toBeCloseTo(offPanel.baseStats!.attack * 0.20, 6);
   expect(off.project.timeline).toEqual(active.project.timeline);
   expect(active.project.effectRevisions).toBeUndefined();
 });

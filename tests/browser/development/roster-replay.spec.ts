@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import * as engine from '@leyline/engine';
-import { combatObservationUnits, type AxisRequest, type AxisResponse, type Build, type DamageRequest, type Project } from '@leyline/schema';
+import { combatObservationUnits, putHitFact, type AxisRequest, type AxisResponse, type Build, type CalculationFact, type DamageRequest, type Project } from '@leyline/schema';
 import { catalogSnapshotFields } from '../../helpers/catalog-snapshot-fields';
 import { auditTalentHealing, type HealingExpectation } from '../../../tools/lib/talent-healing-audit.mjs';
 import { createRuntimeCatalog } from '../../../tools/lib/runtime-catalog.mjs';
@@ -9,8 +9,9 @@ import { readCalculationData } from '../../../tools/lib/catalog-data.mjs';
 import { assembleCalculationLibrary } from '../../../tools/lib/calculation-library.mjs';
 import { auditHealingWindows, type HealingWindowCase } from '../../../tools/lib/set-condition-audit.mjs';
 
-type ReopenedCase = RosterReplayQuery & { anemoResistance?: number; missingInput?: string; hpChanges?: number[]; additionalMembers?: Build[];
-  reactionRecords?: { kind: 'freeze' | 'shatter'; timeMs: number; byTeammate?: boolean }[];
+type ReopenedCase = RosterReplayQuery & { anemoResistance?: number; physicalResistance?: number; missingInput?: string; hpChanges?: number[]; additionalMembers?: Build[];
+  reactionRecords?: (({ kind: 'freeze' | 'shatter' } | { kind: 'swirl'; element: 'pyro' | 'hydro' | 'cryo' | 'electro' })
+    & { timeMs: number; byTeammate?: boolean })[];
   priorHits?: { category: 'skill' | 'normal'; timeMs: number; byTeammate?: boolean }[];
   fieldChanges?: { timeMs: number; byTeammate?: boolean }[];
   reactionRules?: Project['reactionRules']; timeMs?: number };
@@ -29,10 +30,13 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
       worker.onmessage = event => resolve(event.data); worker.onerror = event => reject(Error(event.message)); worker.postMessage(request);
     });
     const values = [];
+    let current = '';
     try {
-      for (const { build, damage, teammate, additionalMembers, capture, cast, anemoResistance, hpChanges, reactionRecords, reactionRules, timeMs, priorHits, fieldChanges } of cases) {
+      for (const { label, build, damage, teammate, additionalMembers, capture, cast, anemoResistance, physicalResistance, hpChanges, reactionRecords, reactionRules, timeMs, priorHits, fieldChanges } of cases) {
+        current = label;
         const enemy = defaultEnemy(); enemy.level = build.level;
         if (anemoResistance !== undefined) enemy.resistances.anemo = anemoResistance;
+        if (physicalResistance !== undefined) enemy.resistances.physical = physicalResistance;
         const file = createDamageCalculation(build, damage, enemy);
         const peer = teammate && addActorFromBuild(file.project, teammate);
         for (const member of additionalMembers ?? []) addActorFromBuild(file.project, member);
@@ -56,12 +60,17 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
         for (const reaction of reactionRecords ?? []) {
           const actor = reaction.byTeammate ? peer : file.actorId;
           if (reaction.kind === 'shatter') addTransformativeReaction(file.project, actor, 'shatter', 'physical', reaction.timeMs, reactionRules);
+          else if (reaction.kind === 'swirl') addTransformativeReaction(file.project, actor, 'swirl', reaction.element, reaction.timeMs, reactionRules);
           else addReactionObservation(file.project, actor, reaction.timeMs, reaction.kind);
         }
         if (reactionRecords || priorHits) file.project.objective.damageIds = [file.recordId];
         if (capture) {
           file.project.timeline[0].timeMs = 1;
           const recordId = addAttributeCapture(file.project, file.actorId, capture.skillId, 0);
+          const anchor = file.project.timeline.find((row: Project['timeline'][number]) => row.id === recordId);
+          if (capture.facts) anchor.captureFacts = capture.facts.map(row => ({
+            ...row, subject: row.subject.kind === 'actor' && row.subject.id === 'owner' ? { kind: 'actor', id: file.actorId } : row.subject,
+          }));
           file.project.timeline[0].damage.capture = { recordId, phase: capture.phase };
         }
         const reopened = parseDamageCalculator(JSON.stringify(packDocument('damage-calculator', file)));
@@ -75,6 +84,8 @@ async function compareReopenedQueries(page: Page, cases: ReopenedCase[]) {
           issues: r.totalValue === null ? r.diagnostics.map(d => d.message).slice(0, 3) : []
         })));
       }
+    } catch (cause) {
+      throw new Error(current + ' · ' + (cause instanceof Error ? cause.message : String(cause)));
     } finally { worker.terminate(); }
     return values;
   }, cases);
@@ -111,11 +122,18 @@ test('every character form reopens its first normal attack in the calculator and
         return sum + atk * rate;
       }, 0) * .5 * .9;
       const flag = (value: boolean) => ({ value: { kind: 'boolean' as const, value }, sourceRefs: [], provenance: 'explicit' as const });
-      const actorFacts = Object.fromEntries(Object.entries(character.metadata.facts ?? {}).filter(([, f]) => f.scope === 'owner' && f.type.kind === 'boolean').map(([key]) => [key, flag(false)]));
       const damage: DamageRequest = {
         hit: { definition: { group: 'characters', namespace: character.namespace, id, revision: character.revision }, hitId: first.id }, crit: 'noncritical', reaction: 'none',
-        facts: [{ subject: { kind: 'actor', id: 'owner' }, values: { ...actorFacts, onField: flag(true), shielded: flag(false), hpRatio: { value: { kind: 'quantity', unit: 'scalar', value: 1 }, sourceRefs: [], provenance: 'explicit' } } }]
+        facts: [{ subject: { kind: 'actor', id: 'owner' }, values: { onField: flag(true), shielded: flag(false), hpRatio: { value: { kind: 'quantity', unit: 'scalar', value: 1 }, sourceRefs: [], provenance: 'explicit' } } }]
       };
+      for (const [key, field] of Object.entries(character.metadata.facts ?? {})) {
+        if (!['owner','recipient','team','target','query'].includes(field.scope) || character.talents.some(talent => talent.id !== normal.id && talent.inputs?.some(input => input.id === key))) continue;
+        const subject = field.scope === 'team' ? { kind: 'team' as const } : field.scope === 'target' ? { kind: 'target' as const, id: 'target' }
+          : field.scope === 'query' ? { kind: 'event' as const } : { kind: 'actor' as const, id: 'owner' };
+        const type = field.type;
+        putHitFact(damage.facts!, subject, key, type.kind === 'boolean' ? { kind:'boolean', value:false }
+          : type.kind === 'quantity' ? { ...type, value: 0 } : { kind: 'enum', value: type.values.includes('none') ? 'none' : type.values[0] });
+      }
       return { label: id, build, damage, expected };
     }));
     failures.push(...await compareReopenedQueries(page, cases));
@@ -178,22 +196,24 @@ test('Mailed Flower replays either trigger, field changes and shared expiry in b
   await page.goto('/');
   expect(await compareReopenedQueries(page,cases)).toEqual([]);
 });
-test('Varka keeps the recorded striking hand and reports an undetermined charged hit in both save formats', async ({ page }) => {
+test('Varka ignores a legacy striking-hand fact on current charged hits in both save formats', async ({ page }) => {
   const starter = { sets: [], artifacts: [], level: 1, ascension: 0, constellation: 0, weaponLevel: 1, weaponAscension: 0,
     refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };
   const build: Build = { ...await catalogSnapshotFields('varka', 'wastergreatsword'), ...starter };
   const teammate: Build = { ...await catalogSnapshotFields('amber', 'huntersbow'), ...starter };
   const skill = build.character.talents[1], attack = build.character.attributes.base.attack + build.weapon!.baseAttack;
   const cases: ReopenedCase[] = [];
-  for (const index of [12, 13]) for (const party of [false, true]) for (const hand of ['left', 'right', null]) for (const stance of [false, true]) {
+  for (const index of [12, 13]) for (const party of [false, true]) for (const hand of [undefined, 'left', 'right', null]) for (const stance of [false, true]) {
     const raw = attack * skill.parameters.find(p => p.id === 'param' + index)!.values[0] * .5;
-    const expected = !stance ? 0 : party && hand === null ? null : raw * (!party || hand === 'left' ? .6 : .9);
-    cases.push({ label: [index, party, hand, stance].join('/'), build, ...(party ? { teammate } : {}), anemoResistance: .4,
-      expected, ...(expected === null ? { missingInput: 'strikingHand' } : {}),
+    const expected = stance ? raw * (index === 13 ? .6 : party ? .9 : .8) : 0;
+    cases.push({ label: [index, party, hand === undefined ? 'omitted' : String(hand), stance].join('/'), build, ...(party ? { teammate } : {}), anemoResistance: .4,
+      physicalResistance: .2, expected,
       damage: { hit: { definition: { group: 'characters', namespace: 'builtin', id: 'varka', revision: build.character.revision }, hitId: skill.id + '.param' + index },
         crit: 'noncritical', reaction: 'none', facts: [
           { subject: { kind: 'actor', id: 'owner' }, values: { 'varka.stance': { value: { kind: 'boolean', value: stance }, provenance: 'explicit', sourceRefs: [] } } },
-          { subject: { kind: 'event' }, values: { strikingHand: { value: hand ? { kind: 'enum', value: hand } : null, provenance: 'explicit', sourceRefs: [] } } },
+          ...(hand === undefined ? [] : [{ subject: { kind: 'event' as const }, values: {
+            strikingHand: { value: hand ? { kind: 'enum' as const, value: hand } : null, provenance: 'explicit' as const, sourceRefs: [] },
+          } }]),
         ] } });
   }
   await page.goto('/');
@@ -260,6 +280,72 @@ test('Freminet distinguishes his own freezes and shatters, Pressure hits and bot
   expect(await compareReopenedQueries(page, cases)).toEqual([]);
 });
 
+test('the Geo Travelers’ second explosion and Lynette’s second Vivid Shot keep their own trigger on replay', async ({ page }) => {
+  const cases: ReopenedCase[] = [];
+  for (const id of ['aether-geo', 'lumine-geo', 'lynette']) {
+    const build: Build = { ...await catalogSnapshotFields(id, 'dullblade'), sets: [], artifacts: [], level: 1, ascension: 0,
+      constellation: 2, weaponLevel: 1, weaponAscension: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 } };
+    const lynette = id === 'lynette';
+    const gate = id + (lynette ? '.vividShotFired' : '.rockcoreDestroyed');
+    const hitId = id + (lynette ? '.c2.second-vivid-shot' : '.c2.rockcore-meltdown');
+    const full = lynette ? (19.41072 + 23.245) * .456 * .45 : (17.808 + 23.245) * 2.48 * .45;
+    for (const triggered of [false, true, null]) {
+      const facts: NonNullable<DamageRequest['facts']> = [];
+      if (triggered !== null) putHitFact(facts, { kind: 'event' }, gate, { kind: 'boolean', value: triggered });
+      if (lynette) putHitFact(facts, { kind: 'event' }, 'absorbedElement', { kind: 'enum', value: 'cryo' });
+      cases.push({ label: id + '/' + triggered, build, expected: triggered === null ? null : triggered ? full : 0,
+        ...(!lynette ? { capture: { skillId: id + '.skill', phase: 'before' as const } } : {}),
+        ...(triggered === null ? { missingInput: gate } : {}), damage: { crit: 'noncritical', reaction: 'none', facts,
+          hit: { definition: { group: 'characters', namespace: 'builtin', id, revision: build.character.revision }, hitId } } });
+      if (!lynette && triggered === true) cases.push({ label: id + '/missing-rock-creation', build, expected: null, missingInput: 'panel',
+        damage: { crit: 'noncritical', reaction: 'none', facts,
+          hit: { definition: { group: 'characters', namespace: 'builtin', id, revision: build.character.revision }, hitId } } });
+    }
+  }
+  await page.goto('/');
+  expect(await compareReopenedQueries(page, cases)).toEqual([]);
+});
+
+test('Kazuha grants Klee the elemental bonus from a matching Swirl in both reopened files', async ({ page }) => {
+  const basic = { level: 1, ascension: 0, weaponLevel: 1, weaponAscension: 0, constellation: 0,
+    refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const build: Build = { ...await catalogSnapshotFields('klee', 'apprenticesnotes'), ...basic };
+  const teammate: Build = { ...await catalogSnapshotFields('kaedeharakazuha', 'dullblade'), ...basic, level: 70, ascension: 4 };
+  const rules = assembleCalculationLibrary(readCalculationData('src/game-data/data/calculation/common.json'),
+    readCalculationData('src/game-data/data/calculation/reactions.json'), []);
+  const cases: ReopenedCase[] = [];
+  for (const element of ['pyro', 'hydro'] as const) for (const timeMs of [101, 8100]) {
+    const bonus = element === 'pyro' && timeMs < 8100 ? 57.6 * .0004 : 0;
+    cases.push({ label: '可莉/' + element + '/' + timeMs, build, teammate, timeMs, reactionRules: rules,
+      damage: { hit: { definition: { group: 'characters', namespace: 'builtin', id: 'klee', revision: build.character.revision },
+        hitId: 'klee.normal.param1' }, crit: 'noncritical', reaction: 'none' },
+      reactionRecords: [{ kind: 'swirl', element, byTeammate: true, timeMs: 100 }],
+      expected: (24.206 + 23.245) * .7216 * (1 + bonus) * .45 });
+  }
+  await page.goto('/');
+  expect(await compareReopenedQueries(page, cases)).toEqual([]);
+});
+
+test('Iansan reads her attack before the Kinetic Energy Scale bonus on both sides of 42 Nightsoul', async ({ page }) => {
+  const build: Build = { ...await catalogSnapshotFields('iansan', 'beginnersprotector'), level: 1, ascension: 0,
+    weaponLevel: 1, weaponAscension: 0, constellation: 0, refinement: 1, talents: { normal: 1, skill: 1, burst: 1 }, artifacts: [], sets: [] };
+  const cases: RosterReplayQuery[] = [];
+  for (const points of [15, 41, 42, 54]) for (const active of [false, true]) {
+    const facts: NonNullable<DamageRequest['facts']> = [];
+    const owner = { kind: 'actor' as const, id: 'owner' };
+    putHitFact(facts, owner, 'onField', { kind: 'boolean', value: true });
+    putHitFact(facts, owner, 'iansan.kineticMarkerActive', { kind: 'boolean', value: active });
+    putHitFact(facts, owner, 'iansan.kineticNightsoul', { kind: 'quantity', unit: 'count', value: points });
+    const white = 21.54768 + 23.245;
+    const bonus = active ? Math.min(330, white * (points >= 42 ? .27 : points * .005)) : 0;
+    cases.push({ label: `伊安珊/${active}/${points}`, build, damage: { hit: { definition: { group: 'characters', namespace: 'builtin',
+      id: 'iansan', revision: build.character.revision }, hitId: 'iansan.normal.param1' }, crit: 'noncritical', reaction: 'none', facts },
+      expected: (white + bonus) * .469758 * .5 * .9 });
+  }
+  await page.goto('/');
+  expect(await compareReopenedQueries(page, cases)).toEqual([]);
+});
+
 test('Engulfing Lightning separates the attack cap and burst recharge through both file formats at every refinement', async ({ page }) => {
   test.setTimeout(120000);
   const catalog = await createRuntimeCatalog();
@@ -309,7 +395,10 @@ test('Hu Tao selects one burst damage tier at the 50 percent boundary in both re
   for (const [index, multiplier] of [3.03272,3.7909].entries()) for (const hp of [.499,.5,.501,null]) {
     const expected = hp === null ? null : (hp <= .5) === (index === 1) ? (8.2859 + 23.245) * multiplier * .45 : 0;
     cases.push({ build, label: [index,hp].join('/'), expected, ...(hp === null ? {missingInput:'hpRatio'} : {}),
-      capture: { skillId:'hutao.burst',phase:'before' }, damage: {
+      capture: { skillId:'hutao.burst',phase:'before',facts: [{subject:{kind:'actor',id:'owner'},values:{
+        'hutao.paramitaPapilio': {value:{kind:'boolean',value:false},provenance:'explicit',sourceRefs:[]},
+        onField: {value:{kind:'boolean',value:true},provenance:'explicit',sourceRefs:[]}
+      }}] }, damage: {
         hit: { definition: { group:'characters', namespace:'builtin', id:'hutao',revision:build.character.revision }, hitId:'hutao.burst.param' + (index + 1) },
         crit:'noncritical', reaction:'none', facts:[{subject:{kind:'actor',id:'owner'}, values: { hpRatio: {
           value:hp === null ? null : {kind:'quantity',unit:'scalar',value:hp}, provenance:'explicit',sourceRefs:[] } } }] } });
@@ -360,7 +449,7 @@ test('talent healing reads both builds and feeds one clam bubble after calculato
   const cases: { project: Project; expected: HealingExpectation[]; bubble?: number }[] = [];
   const { summary } = await auditTalentHealing(await createRuntimeCatalog(), engine, (project, expected, bubble) => cases.push({ project, expected, bubble }));
   expect(summary.talentHealingFailures).toBe(0);
-  expect(summary.verifiedTalentHeals).toBe(41);
+  expect(summary.verifiedTalentHeals).toBe(48);
   await page.goto('/');
   for (const entry of cases) {
     const runs = await page.evaluate(async project => {
@@ -407,7 +496,8 @@ for (const domain of ['character hits', 'weapon refinements and set thresholds']
   const cases: RosterReplayQuery[] = [];
   if (domain === 'character hits') {
     const { summary } = rosterEvaluation(entities, engine, entry => cases.push(entry));
-    expect(summary.compared).toBe(2142);
+    const formalHits = entities.characters.reduce((count, character) => count + character.talents.reduce((total, talent) => total + talent.hits.length, 0), 0);
+    expect(summary.compared).toBe(formalHits);
     expect(cases).toHaveLength(summary.compared);
   } else {
     const { summary } = rosterEquipmentEvaluation(entities, engine, combatObservationUnits, entry => cases.push(entry));
@@ -427,10 +517,17 @@ test('continuous scene attributes apply and expire after saving a calculator or 
   const checked = auditPublicScenes(entities, engine);
   type Scene = NonNullable<Project['sceneEffects']>[number]['definition'];
   const definitions: Scene[] = readCalculationData('src/game-data/data/calculation/battle-scenes.json');
-  const cases = definitions.filter(s => s.buffs.every(b => !b.trigger && b.modifiers.every(m => !m.target.includes('.reaction.')))).map(scene => {
+  const cases = definitions.filter(s => s.buffs.length && s.buffs.every(b => !b.trigger && b.modifiers.every(m => !m.target.includes('.reaction.')))).map(scene => {
     const rows = checked.rows.filter(r => r.entity === scene.id);
+    const active = rows.find(r => r.input && r.recipient === 'actor' && r.onField && r.timeMs === 100
+      && Object.values(r.input).some(fact => (fact as { value?: { value?: number | boolean } }).value?.value)
+      && rows.some(other => other.target === r.target && other.timeMs === 25000 && other.expected !== r.expected));
+    const probe = active ? rows.filter(r => r.timeMs === 100 && r.category === active.category && r.recipient === active.recipient
+      && r.onField && JSON.stringify(r.input) === JSON.stringify(active.input)) : rows;
     return {
-      scene, expected: rows.map(r => ({ stat: r.target.slice('attribute.'.length), delta: r.expectedDelta ?? r.expected })),
+      scene, expected: probe.map(r => ({ stat: r.target.replace(/^attribute\./, ''),
+        delta: active ? r.expected! - rows.find(other => other.timeMs === 25000 && other.target === r.target)!.expected! : r.expectedDelta ?? r.expected })),
+      category: active?.category ?? 'normal', input: active?.input as Record<string, CalculationFact> | undefined,
       platform: scene.name.includes('炎祝') ? 'pyro' : scene.name.includes('霜祝') ? 'cryo' : null,
       moonsign: scene.buffs.some(b => b.condition && typeof b.condition === 'object' && 'fact' in b.condition && b.condition.fact === 'firstMoonsign')
     };
@@ -456,13 +553,23 @@ test('continuous scene attributes apply and expire after saving a calculator or 
         worker.onmessage = e => resolve(e.data); worker.onerror = e => reject(Error(e.message)); worker.postMessage(request);
       });
       try {
-        for (const { scene, expected, platform, moonsign } of entries) {
+        for (const { scene, expected, platform, moonsign, category, input } of entries) {
           const { id, revision, namespace } = build.character;
-          const doc = createDamageCalculation(build, { hit: { definition: { group: 'characters', id, revision, namespace }, hitId: 'kaeya.normal.param1' }, crit: 'noncritical', reaction: 'none' }, defaultEnemy());
+          const hit = build.character.talents.flatMap(talent => talent.hits).find(hit => hit.category === category)!;
+          const doc = createDamageCalculation(build, { hit: { definition: { group: 'characters', id, revision, namespace }, hitId: hit.id }, crit: 'noncritical', reaction: 'none' }, defaultEnemy());
           if (moonsign) addActorFromBuild(doc.project, moon);
           const startMs = 100, endMs = startMs + (scene.durationMs ?? 1000);
           doc.project.sceneEffects = [{ definition: scene, startMs, endMs }];
           doc.project.timeline[0].timeMs = endMs - 1;
+          if (input) {
+            const rows = [{ subject: { kind: 'actor', id: doc.actorId }, values: { onField: { value: { kind: 'boolean', value: true }, provenance: 'explicit', sourceRefs: [] } } }] as NonNullable<DamageRequest['facts']>;
+            for (const [key, value] of Object.entries(input)) {
+              const scope = scene.facts?.[key]?.scope;
+              if (scope === 'team' || scope === 'target') rows.push({ subject: scope === 'team' ? { kind: 'team' } : { kind: 'target', id: 'target' }, values: { [key]: value } });
+              else rows[0].values[key] = value;
+            }
+            doc.project.timeline[0].damage.facts = rows;
+          }
           if (platform) doc.project.timeline[0].damage.facts = [{
             subject: { kind: 'actor', id: doc.actorId }, values: {
               onField: { value: { kind: 'boolean', value: true }, provenance: 'explicit', sourceRefs: [] },
@@ -490,7 +597,7 @@ test('continuous scene attributes apply and expire after saving a calculator or 
     }, { entries: cases.slice(offset, offset + 16), build, moon });
     failures.push(...result);
   }
-  expect(cases).toHaveLength(500);
+  expect(cases.filter(c => !c.input)).toHaveLength(500);
   expect(cases.every(c => c.expected.length > 0)).toBe(true);
   expect(failures).toEqual([]);
 });
@@ -511,6 +618,7 @@ test('reaction and event-driven fields replay their source and expiry in the cal
     const observation = selector?.observation?.key;
     const reaction = selector?.reactionIds?.includes('bloom') ? 'bloom' : selector?.reactionIds?.includes('lunar-bloom') ? 'lunar-bloom' : selector?.reactionIds?.[0];
     const source = observation ?? reaction ?? (selector ? 'plunge' : positive.probe);
+    if (!source) throw new Error(scene.id + ' 缺少用于重放的来源事件');
     const holder = source === 'swirl' ? 'sucrose' : source === 'electro-charged' ? 'lisa' : source === 'bloom' ? 'barbara' : source === 'lunar-bloom' ? 'columbina' :
       source.startsWith('nightsoul') ? 'kachina' : source === 'bondOfLifeChange' ? 'arlecchino' : 'kaeya';
     const life = scene.buffs[0].lifetime;
@@ -543,8 +651,10 @@ test('reaction and event-driven fields replay their source and expiry in the cal
         worker.onmessage = e => resolve(e.data); worker.onerror = e => reject(Error(e.message)); worker.postMessage(request);
       });
       const issues = [];
+      let current = '';
       try {
         for (const { scene, holder, source, observation, reaction, triggered, duration, stat, delta } of entries) {
+          current = scene.id + ' / ' + source;
           const b = builds[holder], c = b.character, talent = c.talents[0];
           const doc = createDamageCalculation(b, {
             hit: { definition: { group: 'characters', namespace: c.namespace, id: c.id, revision: c.revision }, hitId: talent.hits[0].id },
@@ -579,6 +689,8 @@ test('reaction and event-driven fields replay their source and expiry in the cal
           const actual = [calculator, axis].map(v => typeof v !== 'number' || typeof expired !== 'number' ? null : triggered ? v - expired : v / expired - 1);
           if (actual.some(v => v === null || !Number.isFinite(v) || Math.abs(v - delta) > 1e-8)) issues.push({ scene: scene.id, source, stat, delta, calculator, axis, expired });
         }
+      } catch (cause) {
+        throw new Error(current + ' · ' + (cause instanceof Error ? cause.message : String(cause)));
       } finally { worker.terminate(); }
       return issues;
     }, { entries: cases.slice(offset, offset + 10), builds, rules });
