@@ -6,7 +6,9 @@ import { damageCalculatorSchema, projectSchema, type AccountCharacter, type Loca
 import { loadAccountGameData } from './account-presentation';
 import { addActorFromBuild } from './real-project';
 import { createEmptyProject, nextRecordId } from './workbench-project';
-import { calculationArtifact } from './build-snapshot';
+import { accountSlotLabels, cloneAccount, type AccountArtifact } from './account';
+import { calculationArtifact, physicalArtifact, resolveBuildEquipment } from './build-snapshot';
+import { orderedArtifactContent } from './showcase-inventory';
 import { prepareStructuredBuilds } from '@leyline/engine';
 
 /** Read wearing references even when Mona supplied no cultivation/weapon build. Never borrow a showcase. */
@@ -23,12 +25,44 @@ export async function readCalculatorSource(account: LocalAccount, characterId: s
   const artifacts: Build['artifacts'] = Object.entries(character.equipment).map(([slot, id]) => {
     const item = account.artifacts.find(item => item.id === id);
     if (!item?.real || item.mona?.setIdentityPending || item.slot !== slot) throw new Error('本地装备的数值或套装身份待补全。');
-    return calculationArtifact(JSON.parse(JSON.stringify(item.real)), account.id);
+    return calculationArtifact(JSON.parse(JSON.stringify(item.real)), item.inventoryId === null ? undefined : account.id);
   });
-  const sets = await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => character.build?.sets.find(set => set.id === id) ?? getArtifactSet(id)));
-  const equipment = { artifacts, sets };
+  const equipment = await resolveBuildEquipment(artifacts, character.build);
   if (character.build) Object.assign(character.build, equipment);
   return { character, equipment };
+}
+
+/** Present independent calculation snapshots in the shared character editor. */
+export function calculatorSnapshotDraft(account: LocalAccount, build: Build) {
+  const current = account.characters.find(entry => {
+    const definition = entry.build?.character ?? entry.showcase?.build.character;
+    return definition ? definition.id === build.character.id && definition.namespace === build.character.namespace
+      : build.character.namespace === 'builtin' && entry.name === build.character.identity.name;
+  });
+  const draft = cloneAccount(account);
+  const character: AccountCharacter = {
+    ...current, id: current?.id ?? crypto.randomUUID(), name: build.character.identity.name,
+    attack: 0, weapon: build.weapon?.name ?? '', equipment: {}, build,
+  };
+  for (const piece of build.artifacts) {
+    const snapshot: AccountArtifact = {
+      id: piece.id, slot: piece.slot, real: physicalArtifact(piece), attack: 0,
+      name: `${build.sets.find(set => set.id === piece.setId)?.name ?? '圣遗物'} ${accountSlotLabels[piece.slot]}`,
+    };
+    const local = piece.inventory?.accountId === account.id
+      ? draft.artifacts.find(item => item.id === piece.inventory?.itemId) : undefined;
+    if (local?.real && local.inventoryId !== null && !local.mona?.setIdentityPending
+      && orderedArtifactContent(local, build.artifactMain) === orderedArtifactContent(snapshot, build.artifactMain)) {
+      character.equipment[piece.slot] = local.id;
+    } else {
+      const id = crypto.randomUUID();
+      draft.artifacts.push({ ...snapshot, id, real: { ...snapshot.real!, id }, inventoryId: null });
+      character.equipment[piece.slot] = id;
+    }
+  }
+  if (current) draft.characters[draft.characters.findIndex(entry => entry.id === current.id)] = character;
+  else draft.characters.push(character);
+  return { account: draft, character };
 }
 
 /** Explicit review candidate. Saved/custom definitions are never silently rebound on file open. */

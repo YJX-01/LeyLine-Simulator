@@ -1,35 +1,34 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import GameIcon from '../components/GameIcon.vue';
-import { resolveBuild } from '@leyline/engine';
-import { getArtifactSet } from '@leyline/game-data';
+import { resolveEquipmentPanel } from '@leyline/engine';
+import type { Build, StatKey } from '@leyline/schema';
 import type { AccountCharacter, LocalAccount } from '../domain/account';
 import { accountStatLabels } from '../domain/account-real';
-import { calculationArtifact } from '../domain/build-snapshot';
+import { calculationArtifact, resolveBuildEquipment } from '../domain/build-snapshot';
 import { formatGameStat } from '../domain/account-presentation';
-import type { Build, StatKey } from '@leyline/schema';
 const props = defineProps<{ character: AccountCharacter; build?: Build; showcase: boolean; account: LocalAccount }>();
 const stats = ref<Partial<Record<StatKey, number | null>>>({});
 const message = ref('');
 const element = computed(() => props.build?.character.identity.element ?? 'physical');
-const damageStat = computed<StatKey>(() => `${element.value}Bonus` as StatKey);
+const damageStat = computed(() => `${element.value}Bonus` as const);
 const columns = computed<readonly (readonly StatKey[])[]>(() => [
   ['hp', 'attack', 'defense', 'elementalMastery'],
   ['critRate', 'critDamage', 'energyRecharge', damageStat.value],
 ]);
 const equipped = computed(() => props.showcase ? [] : Object.values(props.character.equipment).map(id => props.account.artifacts.find(item => item.id === id)));
-watch([() => props.build, equipped], async ([build, items], _, onCleanup) => {
+watch([() => props.build, () => props.showcase, () => props.character.build, equipped], async ([build, showcase, savedBuild, items], _, onCleanup) => {
   let current = true;
   onCleanup(() => { current = false; });
   message.value = '';
   if (!build) { stats.value = {}; return; }
   try {
-    if (!props.showcase && items.some(item => !item?.real || item.mona?.setIdentityPending)) throw new Error('装备词条或套装身份待补全，暂不展示计算面板。');
-    const artifacts = props.showcase ? build.artifacts : items.map(item => calculationArtifact(item!.real!, item!.inventoryId === null ? undefined : props.account.id));
-    const sets = props.showcase ? build.sets : await Promise.all([...new Set(artifacts.map(item => item.setId))].filter(id => id !== 'none').map(id => getArtifactSet(id)));
+    if (!showcase && items.some(item => !item?.real || item.mona?.setIdentityPending)) throw new Error('装备词条或套装身份待补全，暂不展示计算面板。');
+    const equipment = showcase ? build : await resolveBuildEquipment(items.map(item =>
+      calculationArtifact(item!.real!, item!.inventoryId === null ? undefined : props.account.id)), savedBuild ?? build);
     if (!current) return;
-    const result = resolveBuild({ ...build, artifacts, sets });
-    stats.value = result.status === 'invalid' ? {} : result.stats;
+    const result = resolveEquipmentPanel({ ...build, ...equipment });
+    stats.value = result.stats;
     message.value = result.status === 'invalid' ? result.issues.filter(issue => issue.code === 'invalid-input').map(issue => issue.message).join('；') : '';
   } catch (cause) { if (current) { stats.value = {}; message.value = cause instanceof Error ? cause.message : '面板加载失败。'; } }
 }, { immediate: true });
@@ -37,7 +36,14 @@ watch([() => props.build, equipped], async ([build, items], _, onCleanup) => {
 <template>
   <section v-if="build" class="character-stats">
     <h3>{{ showcase ? '展柜快照面板' : '当前装备面板' }}</h3><p v-if="message">{{ message }}</p>
-    <div class="stats-columns"><dl v-for="(column, index) in columns" :key="index" :data-column="index === 0 ? 'left' : 'right'"><template v-for="stat in column" :key="stat"><dt :data-stat="stat"><GameIcon v-if="stat === damageStat && element !== 'physical'" kind="elements" :id="element" :size="20" /><GameIcon v-else kind="stats" :id="stat" :size="20" /><span>{{ accountStatLabels[stat] }}</span></dt><dd :data-stat-value="stat">{{ formatGameStat(stat, stats[stat]) }}</dd></template></dl></div>
+    <div class="stats-columns">
+      <dl v-for="(column, index) in columns" :key="index" :data-column="index === 0 ? 'left' : 'right'">
+        <template v-for="stat in column" :key="stat">
+          <dt :data-stat="stat"><GameIcon v-if="stat === damageStat && element !== 'physical'" kind="elements" :id="element" :size="20" /><GameIcon v-else kind="stats" :id="stat" :size="20" /><span>{{ accountStatLabels[stat] }}</span></dt>
+          <dd :data-stat-value="stat">{{ formatGameStat(stat, stats[stat]) }}</dd>
+        </template>
+      </dl>
+    </div>
   </section>
 </template>
 <style scoped>

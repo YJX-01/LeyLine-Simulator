@@ -41,8 +41,11 @@ const props = defineProps<{
   configurationDetail?: boolean;
   catalogCharacter?: { id: string; name: string };
   selectOnSave?: boolean;
+  complete?: boolean;
+  detached?: { account: LocalAccount; effectiveStats: readonly StatKey[];
+    apply: (draft: LocalAccount, stats: readonly StatKey[]) => Promise<void> };
 }>();
-const emit = defineEmits<{ close: []; back: []; saved: [id: string] }>();
+const emit = defineEmits<{ close: []; back: []; saved: [id: string]; configurationSaved: [id: string, presetId: string] }>();
 const store = useAccountStore();
 const { account, error } = storeToRefs(store);
 const characterId = computed(() => props.characterId);
@@ -75,12 +78,13 @@ const detailDirty = computed(() => {
     || (toRaw(draft.artifacts) !== baselineArtifacts && JSON.stringify(toRaw(draft.artifacts)) !== JSON.stringify(baselineArtifacts));
 });
 const availableLoadouts = computed(() => loadouts.loadouts.filter(item => item.accountId === account.value.id && item.characterId === characterId.value));
-const savedStats = computed(()=>loadouts.effectiveStats(account.value.id,characterId.value,character.value?.name));
+const savedStats = computed(() => props.detached ? [...props.detached.effectiveStats]
+  : loadouts.effectiveStats(account.value.id, characterId.value, character.value?.name));
 const effectiveStats = computed(() => draftStats.value ?? savedStats.value);
 const savedCharacter = computed(() => account.value.characters.find(entry => entry.id === characterId.value));
+const hasPreferred = computed(() => !!savedCharacter.value && hasLocalConfiguration(savedCharacter.value));
 const useCurrent = computed(() => !!savedCharacter.value?.build && !detailDirty.value);
 const effectiveBasis=computed(()=>equipmentView.value==='showcase'?buildRollBasis(character.value?.showcase?.build):characterForm.value?.rollBasis ?? buildRollBasis(character.value?.build));
-function configurationName(entry:AccountCharacter, source:LocalAccount) { return characterLoadoutName(entry,source,loadouts.effectiveStats(source.id,entry.id,entry.name),catalog.value?.sets ?? []); }
 const draftLabel=computed(()=>character.value?equipmentConfigurationLabel(equippedItems.value,effectiveStats.value,catalog.value?.sets ?? [],effectiveBasis.value,effectiveBasis.value.weaponName ?? '未配武器'):'');
 function toggleEffectiveStat(stat:StatKey) {
   const values=effectiveStatGroups.filter(group=>effectiveStats.value.includes(group.stat)).map(group=>group.stat);
@@ -89,7 +93,7 @@ function toggleEffectiveStat(stat:StatKey) {
 function setEffectiveChoices(values:string|number|(string|number)[]) {
   if(!Array.isArray(values))return;
   const stats = effectiveStatGroups.filter(group=>values.includes(group.stat)).flatMap(group=>group.members);
-  if (props.catalogCharacter) {
+  if (props.catalogCharacter || props.detached) {
     draftStats.value = stats.length === savedStats.value.length && stats.every(stat => savedStats.value.includes(stat)) ? undefined : stats;
     return;
   }
@@ -114,7 +118,7 @@ function setCleanDraft(next: LocalAccount) {
 function resetDraft() {
   equipmentPickerOpen.value=false;
   baseSnapshot = JSON.stringify(toRaw(account.value));
-  const next: LocalAccount = JSON.parse(baseSnapshot);
+  const next: LocalAccount = props.detached ? cloneAccount(props.detached.account) : JSON.parse(baseSnapshot);
   if (props.catalogCharacter && !savedCharacter.value) {
     next.characters.push({ id: characterId.value, name: props.catalogCharacter.name, attack: 0, weapon: '', equipment: {} });
   }
@@ -133,7 +137,7 @@ async function saveDetail(asPreset = false) {
     if (props.catalogCharacter && useCurrent.value) return true;
     const next = cloneAccount(draft);
     let entry = next.characters.find(item => item.id === characterId.value)!;
-    if (cultivationDirty.value || (props.catalogCharacter && !entry.build)) {
+    if (cultivationDirty.value || ((props.catalogCharacter || props.complete) && !entry.build)) {
       const prepared = await characterForm.value?.prepare();
       if (!prepared) return false;
       entry = prepared;
@@ -142,6 +146,10 @@ async function saveDetail(asPreset = false) {
     if (draftAccount.value !== draft || !active || JSON.stringify(toRaw(account.value)) !== baseSnapshot) throw new Error('编辑对象已变化，未保存。');
     if (!asPreset && presetBaseline && availableLoadouts.value.find(item => item.id === presetBaseline?.id) !== presetBaseline) {
       throw new Error('原配置已变化，请还原并核对后再保存。');
+    }
+    if (props.detached && !asPreset) {
+      await props.detached.apply(next, effectiveStats.value);
+      return true;
     }
     const valid = parseAccount(next);
     if(asPreset && !hasLocalConfiguration(entry))throw new Error('没有本地配置可另存。');
@@ -154,9 +162,9 @@ async function saveDetail(asPreset = false) {
       } else {resetDraft();}
       return true;
     }
-    if (asPreset || editingPresetId.value) {
+    if ((asPreset && (!props.detached || hasPreferred.value)) || editingPresetId.value) {
       if(!effectiveStats.value.length)throw new Error('请选择用于命名的有效词条。');
-      const name=configurationName(entry,valid);
+      const name=characterLoadoutName(entry,valid,effectiveStats.value,catalog.value?.sets ?? []);
       if(asPreset)editingPresetId.value=loadouts.save(name,valid,entry);
       else loadouts.update(editingPresetId.value,name,valid,entry);
       presetBaseline=availableLoadouts.value.find(item=>item.id===editingPresetId.value);
@@ -167,6 +175,8 @@ async function saveDetail(asPreset = false) {
       else store.commitEdit(valid);
       resetDraft();
     }
+    emit('configurationSaved', entry.id, editingPresetId.value);
+    if (props.detached) closeCharacter();
     return true;
   } catch (cause) { detailError.value = cause instanceof Error ? cause.message : '保存失败，原配置保持不变。'; return false; }
   finally { detailBusy.value = false; }
@@ -257,11 +267,11 @@ function equipmentContext(slot:AccountSlot,event:MouseEvent|KeyboardEvent){
   equipmentMenu.value={slot,x:'clientX' in event?event.clientX:bounds.left+12,y:'clientY' in event?event.clientY:bounds.top+12};
 }
 function openInspectedArtifact(slot:AccountSlot){
-  if(props.catalogCharacter || equipmentView.value==='showcase'){inspectingSlot.value=slot;return;}
+  if(props.catalogCharacter || props.detached || equipmentView.value==='showcase'){inspectingSlot.value=slot;return;}
   const preset=editingPresetId.value;
   requestLeave(()=>{if(detailDirty.value){resetDraft();if(preset)tryPreset(preset);}inspectingSlot.value=slot;});
 }
-function closeInspectedArtifact(){const editable=!props.catalogCharacter && equipmentView.value==='local',preset=editingPresetId.value;inspectingSlot.value=undefined;if(editable){resetDraft();if(preset)tryPreset(preset);}}
+function closeInspectedArtifact(){const editable=!props.catalogCharacter && !props.detached && equipmentView.value==='local',preset=editingPresetId.value;inspectingSlot.value=undefined;if(editable){resetDraft();if(preset)tryPreset(preset);}}
 function equipmentAction(action:string){const slot=equipmentMenu.value?.slot;equipmentMenu.value=undefined;if(!slot)return;
   if(action==='details')openInspectedArtifact(slot);
   else if(action==='replace')openEquipmentPicker(slot);
@@ -350,25 +360,29 @@ defineExpose({ requestLeave });
   <WorkbenchDialog editor class="character-detail-dialog" v-if="character" :title="character.name"
     :dirty="detailDirty" :before-close="requestLeave" @close="closeCharacter">
     <template #title><h2 class="configuration-title">{{ character.name }}</h2></template>
-    <template v-if="!catalogCharacter" #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name"
+    <template v-if="!catalogCharacter && !detached" #header-trailing><CharacterFavorite :account-id="account.id" :character-id="character.id" :name="character.name"
       :preset-id="configurationDetail || editingPresetId ? editingPresetId : undefined" /></template>
-    <template v-if="!catalogCharacter" #header-secondary>
+    <template v-if="!catalogCharacter && !detached" #header-secondary>
       <button class="configuration-title-button" :aria-label="`选择${character.name}配置`" @click="configurationPickerOpen=true">切换配置<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
     </template>
     <template #header-leading>
-      <div v-if="catalogCharacter" class="character-header-tools">
+      <EditorActions v-if="detached" :dirty="detailDirty" :busy="detailBusy" allow-save-as
+        :can-save="!!characterForm?.canSave && (detailDirty || !character.build)" :can-save-as="!!characterForm?.canSave"
+        @save="saveDetail()" @save-as="openSaveAs" @restore="restoreConfiguration" />
+      <div v-else-if="catalogCharacter" class="character-header-tools">
         <button type="button" class="ui-action soft" data-size="md" aria-label="返回角色列表" @click="requestLeave(()=>emit('back'))">返回</button>
         <EditorActions :dirty="detailDirty" :busy="detailBusy" :can-save="!!characterForm?.canSave"
           :save-label="selectOnSave && useCurrent ? '选用当前配置' : '保存'" @save="saveCatalogCharacter" @restore="restoreConfiguration" />
       </div>
-      <div v-else class="character-header-tools"><div class="equipment-view-tabs" role="group" aria-label="角色资料来源"><button ref="localViewTab" data-view="local" :aria-pressed="equipmentView==='local'" :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地</button><button v-if="character.showcase" data-view="showcase" :aria-pressed="equipmentView==='showcase'" :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜</button></div><EditorActions v-if="equipmentView==='local'" :dirty="detailDirty" :busy="detailBusy" allow-save-as @save="saveDetail()" @save-as="openSaveAs" @restore="restoreConfiguration" /><button class="clear-showcase ui-action soft" data-size="md" data-accent="pyro" @click="requestClearShowcase">删除</button></div>
+      <div v-else class="character-header-tools"><div class="equipment-view-tabs" role="group" aria-label="角色资料来源"><button ref="localViewTab" data-view="local" :aria-pressed="equipmentView==='local'" :class="{active:equipmentView==='local'}" @click="equipmentView = 'local'">本地</button><button v-if="character.showcase" data-view="showcase" :aria-pressed="equipmentView==='showcase'" :class="{active:equipmentView==='showcase'}" @click="equipmentView = 'showcase'">展柜</button></div><EditorActions v-if="equipmentView==='local'" :dirty="detailDirty" :busy="detailBusy" :can-save="complete && !character.build ? !!characterForm?.canSave : undefined" allow-save-as @save="saveDetail()" @save-as="openSaveAs" @restore="restoreConfiguration" /><button class="clear-showcase ui-action soft" data-size="md" data-accent="pyro" @click="requestClearShowcase">删除</button></div>
     </template>
     <div class="account-editor">
       <p v-if="detailError || loadouts.error" role="alert">{{ detailError || loadouts.error }}</p>
 
       <div v-if="error" class="account-error" role="alert">{{ localDataErrorLabel(error) }}</div>
 
-      <CharacterForm ref="characterForm" v-show="equipmentView==='local'" details detached :key="`${character.id}-${formRevision}`" :character="character" :initial-character-id="catalogCharacter?.id" @dirty-change="cultivationDirty=$event" />
+      <CharacterForm ref="characterForm" v-show="equipmentView==='local'" details detached :key="`${character.id}-${formRevision}`" :character="character" :initial-character-id="catalogCharacter?.id"
+        :candidate="!!detached" :resolve-identity="complete" @dirty-change="cultivationDirty=$event" />
       <CharacterForm v-if="equipmentView==='showcase'" details :character="character" showcase />
       <section class="detail-panel"><DisclosureHeading class="inline-section-heading" title="角色面板" label="面板" :controls="panelId" :expanded="panelOpen" @toggle="panelOpen = !panelOpen" /><div :id="panelId"><CharacterStats v-if="panelOpen" :account="editingAccount" :character="character"
         :build="equipmentView === 'showcase' ? character.showcase?.build : characterForm?.draftBuild" :showcase="equipmentView === 'showcase'" /></div></section>
@@ -382,7 +396,7 @@ defineExpose({ requestLeave });
   <ContextMenu v-if="equipmentMenu" :x="equipmentMenu.x" :y="equipmentMenu.y" label="角色圣遗物操作" :options="[{id:'details',label:'查看详情'},...(equipmentView==='showcase'?[{id:'import',label:'入库',accent:'anemo' as const}]:[{id:'replace',label:'替换'},{id:'remove',label:'卸下',danger:true}])]" @close="equipmentMenu=undefined" @select="equipmentAction" />
   <ArtifactDetail v-if="inspectingSlot && equipmentItem(inspectingSlot)" :item="equipmentItem(inspectingSlot)!"
     :reference-item-id="inspectedInventoryId"
-    :account="catalogCharacter ? editingAccount : undefined" :readonly="equipmentView==='showcase' || equipmentItem(inspectingSlot)?.inventoryId===null" @close="closeInspectedArtifact">
+    :account="catalogCharacter || detached ? editingAccount : undefined" :readonly="equipmentView==='showcase' || equipmentItem(inspectingSlot)?.inventoryId===null" @close="closeInspectedArtifact">
     <template v-if="equipmentView==='showcase'" #actions><button class="ui-action soft" data-size="md" data-accent="anemo" @click="requestShowcasePiece(inspectingSlot)">入库</button></template>
   </ArtifactDetail>
   <ConfirmationDialog v-if="importingSlot" title="入库圣遗物？" :danger="false" confirm-label="入库" @cancel="importingSlot=undefined" @confirm="importShowcasePiece"><p>相同内容合并，优先采用展柜强化次数；当前穿戴不变。</p></ConfirmationDialog>
@@ -394,7 +408,7 @@ defineExpose({ requestLeave });
 
   <UnsavedChangesDialog v-if="discardOpen" :busy="detailBusy" @save="saveAndLeave(()=>saveDetail())" @continue="cancelDiscard" @discard="discardChanges" />
   <ConfirmationDialog v-if="clearShowcaseOpen" :title="clearTarget==='local'?'清除本地配装？':'清除展柜信息？'" confirm-label="确认清除" @cancel="clearShowcaseOpen=false" @confirm="clearShowcase"><p>{{ clearTarget==='local'?'清除本地培养与穿戴，圣遗物保留在库存。':'清除该角色的展柜信息。' }}</p><p v-if="clearPreview?.promotedId">保存后由下一套备选接替首选。</p><p v-if="clearPreview?.removedCharacter">已无其他配置及展柜，保存后移除角色。</p><p>保存后生效。</p></ConfirmationDialog>
-  <WorkbenchDialog v-if="saveAsOpen && character" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="`${character.name} | ${draftLabel}`" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名；首选配置和实际穿戴不变。</p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
+  <WorkbenchDialog v-if="saveAsOpen && character" title="另存角色配装方案" @close="saveAsOpen=false"><label>方案名称<input :value="`${character.name} | ${draftLabel}`" aria-label="配装方案名称" readonly></label><p>按角色、有效平均词条数、套装和武器自动命名。<template v-if="!detached || hasPreferred">首选配置和实际穿戴不变。</template></p><p v-if="!effectiveStats.length" role="alert">请先在详情中选择有效属性。</p><p v-if="detailError" role="alert">{{ detailError }}</p><button class="ui-action" data-accent="anemo" :disabled="detailBusy || !effectiveStats.length" @click="saveDetail(true)">确认另存</button></WorkbenchDialog>
 </template>
 
 <style scoped>

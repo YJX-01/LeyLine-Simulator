@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAccount } from '../../../../src/web/src/domain/account';
 import { previewEnkaImport, confirmEnkaImport } from '../../../../src/web/src/domain/enka-import';
-import { calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
+import { calculatorSnapshotDraft, calculatorWorkerRequest, readCalculatorSource } from '../../../../src/web/src/domain/damage-calculator';
 import { projectSchema, putHitFact, type DamageCalculatorDocument } from '@leyline/schema';
 import { recordedVaresaPlunge, vesnaRecording } from '../../../helpers/recorded-vesna';
 import { applyCalculatorBuffs, calculatorBuffChoices } from '../../../../src/web/src/domain/calculator-buffs';
@@ -14,6 +14,29 @@ import { createEmptyProject, nextRecordId } from '../../../../src/web/src/domain
 import { evaluateTimeline } from '@leyline/engine';
 import { getWeapon } from '@leyline/game-data';
 import { calculatorIntervals, setCalculatorCondition } from '../../../../src/web/src/domain/calculator-conditions';
+
+const datedShowcase = '.references/enka/official-example-2026-11-13.json';
+it.skipIf(!existsSync(datedShowcase))('editing a calculator snapshot preserves owned references and leaves public gear unowned', async () => {
+  const account = createAccount();
+  const preview = await previewEnkaImport(JSON.parse(readFileSync(datedShowcase, 'utf8')), '618285856', account);
+  const entry = preview.rows[0].character;
+  confirmEnkaImport(account, preview, [entry.id], true);
+  const before = JSON.stringify(account);
+  const { character: local } = await readCalculatorSource(account, account.characters[0].id, 'local');
+  const owned = calculatorSnapshotDraft(account, local.build!);
+  expect(owned.character.id).toBe(local.id);
+  expect(owned.character.equipment).toEqual(local.equipment);
+
+  const showcase = entry.showcase!.build;
+  expect(showcase.artifacts.length).toBeGreaterThan(0);
+  const draft = calculatorSnapshotDraft(account, showcase);
+  const artifacts = draft.account.artifacts.filter(item => Object.values(draft.character.equipment).includes(item.id));
+  expect(artifacts).toHaveLength(showcase.artifacts.length);
+  expect(artifacts.every(item => item.inventoryId === null)).toBe(true);
+  const { character } = await readCalculatorSource(draft.account, draft.character.id, 'local');
+  expect(character.build!.artifacts.every(piece => piece.inventory === null)).toBe(true);
+  expect(JSON.stringify(account)).toBe(before);
+});
 
 describe.skipIf(!existsSync(officialShowcase))('calculator reads original public showcase and local inventory independently', () => {
   it('retains real wearing IDs when a format derivative lacks a local cultivation build', async () => {

@@ -97,6 +97,7 @@ const draftBuild = computed<Build | undefined>(() => {
     character: definition, weapon, level: level.value, ascension: ascension.value, constellation: constellation.value,
     talents: { ...talents.value }, weaponLevel: weapon ? weaponLevel.value : 1, weaponAscension: weapon ? weaponAscension.value : 0, refinement: weapon ? refinement.value : 1,
     artifacts: props.candidate ? snapshot?.artifacts ?? [] : [], sets: props.candidate ? snapshot?.sets ?? [] : [],
+    ...(props.candidate && snapshot?.theoreticalSetSlots ? { theoreticalSetSlots: snapshot.theoreticalSetSlots } : {}),
   }, snapshot ?? catalog!);
 });
 const canSave = computed(() => !!draftBuild.value);

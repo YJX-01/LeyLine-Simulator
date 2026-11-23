@@ -20,7 +20,7 @@ test('scene shockwave uses the selected difficulty, explicit coefficient and ene
   await weapons.getByRole('button', { name: '无锋剑', exact: true }).click();
   await calculator.getByLabel('武器等级', { exact: true }).click();
   await button('武器等级 70').click();
-  await page.getByRole('dialog', { name: '凯亚 · 角色配置' }).getByRole('button', { name: '保存', exact: true }).click();
+  await page.getByRole('dialog', { name: '凯亚', exact: true }).getByRole('button', { name: '保存', exact: true }).click();
   await calculator.getByText('场景效果', { exact: true }).click();
   const field = calculator.getByRole('combobox', { name: '场地', exact: true });
   await field.selectOption(first);

@@ -7,9 +7,10 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import type { AxisResponse, Build, DamageCalculatorDocument, Project } from '@leyline/schema';
 import { recordedVaresaPlunge, recordedVesnaDamage, vesnaRecording } from '../../helpers/recorded-vesna';
 
-const buildEditor = (calculator: Locator) => calculator.getByRole('dialog', { name: / · 角色配置$/ });
-const editBuild = (calculator: Locator) => calculator.getByRole('button', { name: '编辑角色配置', exact: true }).click();
+const buildEditor = (calculator: Locator) => calculator.locator('dialog.character-detail-dialog');
+const editBuild = (calculator: Locator) => calculator.getByRole('button', { name: /^查看.+详情$/ }).click();
 const saveBuild = (calculator: Locator) => buildEditor(calculator).getByRole('button', { name: '保存', exact: true }).click();
+const saveCatalogCharacter = (calculator: Locator, name: string) => calculator.getByRole('dialog', { name, exact: true }).getByRole('button', { name: '保存', exact: true }).click();
 
 async function openSingleBuild(page: Page, build: Build, castSkill?: string) {
   await page.goto('/');
@@ -136,7 +137,7 @@ test('calculator shares the team and character pickers and retains a four-member
   await calculatorFactValue().toBeCloseTo(recordedVaresaPlunge('critical'), 5);
   await expectedValue().toBeCloseTo(recordedVaresaPlunge('expected'), 5);
   await expect(calculator.getByText('模型伤害（待核验）', { exact: false }).first()).toBeVisible();
-  await button('选择角色').click();
+  await button('更换瓦雷莎').click();
   await roles.getByRole('button',{name:'选择薇斯纳'}).click();
   await button('选择伤害').click();
   const normal = hits.getByRole('region',{name:'普通攻击'});
@@ -176,7 +177,7 @@ test('calculator shares the team and character pickers and retains a four-member
   await calculator.getByLabel('打开伤害计算文件').setInputFiles({name:'队伍计算.json',mimeType:'application/json',buffer:Buffer.from(content)});
   await calculatorFactValue().toBeCloseTo(critical, 5);
   await expect(button('选择队伍')).toContainText(teamName);
-  await button('选择角色').click();
+  await button('更换薇斯纳').click();
   await expect(roles.locator('.character-card')).toHaveCount(4);
   await page.keyboard.press('Escape');
   await page.setViewportSize({width:390,height:844});
@@ -211,6 +212,165 @@ test('calculator shares the team and character pickers and retains a four-member
   await expect(list).toContainText('还没有保存的伤害');
 });
 
+test.describe('calculator character card on a touch-capable device', () => {
+  test.use({ hasTouch: true });
+
+  test('calculator uses the shared catalog character editor and saves to the local library', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    expect(await page.evaluate(() => matchMedia('(any-hover: hover)').matches)).toBe(false);
+    await page.getByRole('button', { name: '打开功能导航' }).click();
+    await page.getByTestId('workspace-nav-calculator').click();
+    const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
+    const button = (name: string) => calculator.getByRole('button', { name, exact: true });
+    const editor = buildEditor(calculator);
+    const stored = () => page.evaluate(async () => {
+      // @ts-expect-error Vite browser source URL.
+      const { useAccountStore } = await import('/src/stores/account.ts');
+      // @ts-expect-error Vite browser source URL.
+      const { useCharacterLoadoutsStore } = await import('/src/stores/character-loadouts.ts');
+      return {
+        preferred: useAccountStore().account.characters.map((entry: { build?: Build }) => entry.build?.constellation),
+        alternates: useCharacterLoadoutsStore().loadouts.map((entry: { snapshot: { characters: { build?: Build }[] } }) => entry.snapshot.characters[0].build?.constellation),
+      };
+    });
+    await button('选择角色').click();
+    const catalogSearch = calculator.getByLabel('搜索游戏角色', { exact: true });
+    await catalogSearch.pressSequentially('凯亚');
+    const kaeya = button('选择凯亚');
+    await kaeya.click();
+    const creation = calculator.getByRole('dialog', { name: '凯亚', exact: true });
+    await expect(creation.getByRole('button', { name: '展开面板' })).toBeVisible();
+    await expect(creation.getByRole('button', { name: '应用组合' })).toBeVisible();
+    await expect(creation.getByRole('button', { name: '保存到本地库' })).toHaveCount(0);
+    expect(await stored()).toEqual({ preferred: [], alternates: [] });
+    await creation.getByRole('button', { name: '返回角色列表' }).click();
+    await expect(kaeya).toBeFocused();
+    await expect(catalogSearch).toHaveValue('凯亚');
+    await kaeya.click();
+    await saveCatalogCharacter(calculator, '凯亚');
+    await expect(creation).toHaveCount(0);
+    await expect(calculator.getByRole('dialog', { name: '选择角色', exact: true })).toHaveCount(0);
+    expect(await stored()).toEqual({ preferred: [0], alternates: [] });
+    const details = button('查看凯亚详情');
+    const card = calculator.locator('.calculator-selections .configuration-row');
+    const portrait = button('更换凯亚');
+    const strip = card.locator('.configuration-portraits');
+    await expect(card.getByText('临时角色', { exact: true })).toHaveCount(0);
+    await expect(strip).toHaveAttribute('aria-label', '更换凯亚');
+    await expect(strip.locator(':scope > .game-icon.characters')).toHaveCount(1);
+    await expect(strip.locator(':scope > .card-sets')).toHaveCount(1);
+    let calculatorSize: { width: number; height: number } | undefined;
+    for (const width of [1280, 451, 320, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await portrait.hover({ position: { x: 3, y: 6 } });
+      const layer = portrait.locator('.card-replace-layer');
+      await expect(layer).toBeVisible();
+      const target = await portrait.boundingBox();
+      expect(await layer.boundingBox()).toEqual(target);
+      if (width === 1280) calculatorSize = { width: target!.width, height: target!.height };
+      expect(await strip.evaluate(node => node.getBoundingClientRect().right <= node.closest('.configuration-row')!.getBoundingClientRect().right)).toBe(true);
+    }
+    await details.hover({ position: { x: 10, y: 8 } });
+    await expect(portrait.locator('.card-replace-layer')).toBeHidden();
+    await details.press('Enter');
+    await expect(editor.getByRole('button', { name: '0命' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(editor.getByRole('button', { name: '展开面板' })).toBeVisible();
+    await expect(editor.getByRole('button', { name: '保存到本地库' })).toHaveCount(0);
+    expect(await editor.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(details).toBeFocused();
+    await portrait.click({ position: { x: 3, y: 6 } });
+    await expect(calculator.getByRole('dialog', { name: '选择角色', exact: true })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(portrait).toBeFocused();
+    const setBounds = await card.locator('.card-sets').boundingBox();
+    await page.mouse.click(setBounds!.x + setBounds!.width / 2, setBounds!.y + setBounds!.height / 2);
+    await expect(calculator.getByRole('dialog', { name: '选择角色', exact: true })).toBeVisible();
+    await page.keyboard.press('Escape');
+    const statsBounds = await card.locator('.effective-roll-summary').boundingBox();
+    await page.mouse.click(statsBounds!.x + statsBounds!.width / 2, statsBounds!.y + statsBounds!.height / 2);
+    await expect(editor).toBeVisible();
+    await editor.getByRole('button', { name: '3命', exact: true }).click();
+    await saveBuild(calculator);
+    await expect.poll(stored).toEqual({ preferred: [3], alternates: [] });
+    await expect(editor.getByRole('button', { name: '保存', exact: true })).toBeDisabled();
+    await page.keyboard.press('Escape');
+    await details.press('Enter');
+    await expect(editor.getByRole('button', { name: '3命' })).toHaveAttribute('aria-pressed', 'true');
+    await editor.getByRole('button', { name: '4命', exact: true }).click();
+    await editor.getByRole('button', { name: '另存', exact: true }).click();
+    await calculator.getByRole('dialog', { name: '另存角色配装方案' }).getByRole('button', { name: '确认另存' }).click();
+    await expect.poll(stored).toEqual({ preferred: [3], alternates: [4] });
+    await page.keyboard.press('Escape');
+    await details.press('Enter');
+    await expect(editor.getByRole('button', { name: '4命' })).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('Escape');
+    await page.setViewportSize({ width: 1280, height: 844 });
+    await page.getByTestId('workspace-nav-team').click();
+    await page.getByRole('dialog', { name: '有未保存的修改', exact: true }).getByRole('button', { name: '放弃修改', exact: true }).click();
+    await page.locator('.library-empty').getByRole('button', { name: '新建队伍', exact: true }).click();
+    const team = page.getByRole('dialog', { name: '新建队伍', exact: true });
+    await team.getByRole('button', { name: '选择队员1', exact: true }).click();
+    await page.getByRole('button', { name: '选择凯亚首选配置', exact: true }).click();
+    await team.getByRole('button', { name: '保存', exact: true }).click();
+    const teamDetail = page.getByRole('dialog', { name: '队伍详情', exact: true });
+    const teamPortraits = teamDetail.getByRole('button', { name: '选择凯亚的角色配置', exact: true });
+    await expect(teamPortraits.locator('.card-sets')).toHaveCount(1);
+    await teamPortraits.hover({ position: { x: 3, y: 6 } });
+    const teamLayer = teamPortraits.locator('.card-replace-layer');
+    await expect(teamLayer).toBeVisible();
+    const teamBounds = (await teamPortraits.boundingBox())!;
+    expect(teamBounds.width).toBeCloseTo(calculatorSize!.width, 0);
+    expect(teamBounds.height).toBeCloseTo(calculatorSize!.height, 0);
+    expect(await teamLayer.boundingBox()).toEqual(teamBounds);
+    await teamPortraits.click();
+    await expect(page.getByRole('dialog', { name: '选择角色配置', exact: true })).toBeVisible();
+  });
+});
+
+test('character library and calculator show equipped attack and crit without combat facts', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('workspace-nav-characters').click();
+  await page.getByRole('button', { name: '手动添加', exact: true }).click();
+  const catalog = page.getByRole('dialog', { name: '手动添加角色', exact: true });
+  await catalog.getByLabel('搜索游戏角色').fill('诺艾尔');
+  await catalog.getByRole('button', { name: '选择诺艾尔', exact: true }).click();
+  const detail = page.getByRole('dialog', { name: '诺艾尔', exact: true });
+  const action = (name: string) => detail.getByRole('button', { name, exact: true });
+  await action('更换武器').click();
+  const weapons = page.getByRole('dialog', { name: '选择武器', exact: true });
+  await weapons.getByLabel('搜索装备武器').fill('焚曜千阳');
+  await weapons.getByRole('button', { name: '焚曜千阳', exact: true }).click();
+  for (const label of ['角色等级', '武器等级']) {
+    await detail.getByLabel(label, { exact: true }).click();
+    const level = detail.getByRole('spinbutton', { name: `自定义${label}`, exact: true });
+    await level.fill('1');
+    await level.blur();
+    await level.press('Escape');
+  }
+  await action('保存').click();
+  await action('关闭诺艾尔').click();
+  await expect(detail).toHaveCount(0);
+  await page.getByRole('button', { name: '查看诺艾尔详情', exact: true }).click();
+  const stat = (key: string) => detail.locator(`[data-stat-value="${key}"]`);
+  const expectPanel = async () => {
+    await action('展开面板').click();
+    await expect(stat('attack')).toHaveText('65'); // 16.0272 + 49.1377 at level 1.
+    await expect(stat('critRate')).toHaveText('7.4%');
+    await expect(stat('critDamage')).toHaveText('50.0%');
+    await expect(detail.locator('[data-stat-value]')).toHaveCount(8);
+  };
+  await expectPanel();
+  await page.keyboard.press('Escape');
+  await page.getByTestId('workspace-nav-calculator').click();
+  const calc = page.getByRole('region', { name: '伤害计算', exact: true });
+  await calc.getByRole('button', { name: '选择角色', exact: true }).click();
+  await calc.getByRole('button', { name: '选择诺艾尔', exact: true }).click();
+  await editBuild(calc);
+  await expectPanel();
+});
+
 // Source-based legal single-point calculations, separate from player records/game observations.
 test('calculator uses formal Beidou damage, isolated candidates and saved-file Worker recomputation', async ({ page }) => {
   test.setTimeout(60000);
@@ -232,7 +392,7 @@ test('calculator uses formal Beidou damage, isolated candidates and saved-file W
   await calculator.getByRole('button', { name: '武器等级 70', exact: true }).click();
   await calculator.getByRole('spinbutton', { name: '战技', exact: true }).clear();
   await calculator.getByRole('spinbutton', { name: '战技', exact: true }).pressSequentially('9');
-  await saveBuild(calculator);
+  await saveCatalogCharacter(calculator, '北斗');
   await selectHit(calculator, 'beidou.skill');
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
@@ -307,7 +467,7 @@ test('calculator creates a named independent Kaeya capture, saves it and recompu
   await calculator.getByRole('button', { name: '1命', exact: true }).click();
   const talent = calculator.getByRole('spinbutton', { name: '爆发', exact: true });
   await talent.clear(); await talent.pressSequentially('9');
-  await saveBuild(calculator);
+  await saveCatalogCharacter(calculator, '凯亚');
   await selectHit(calculator, 'kaeya.burst');
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
@@ -364,7 +524,7 @@ test('Kaeya C3 sequential talent editing, dirty navigation and formal Worker res
   await page.keyboard.press('Escape');
   await page.getByRole('dialog', { name: '有未保存的修改', exact: true }).getByRole('button', { name: '继续编辑', exact: true }).click();
   await expect(talent).toHaveValue('12');
-  await saveBuild(calculator);
+  await saveCatalogCharacter(calculator, '凯亚');
   await selectHit(calculator, 'kaeya.skill');
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
@@ -478,7 +638,7 @@ test('missing-build derivative of the original account stays selectable and carr
     // Missing-field format derivative, never a claim about the recorded player's missing cultivation.
     delete next.characters[0].build;
     useAccountStore().commitEdit(next);
-    return { account: localStorage.getItem('leyline-account-0.2.0'), equipment: next.characters[0].equipment };
+    return { characterId: next.characters[0].id, equipment: next.characters[0].equipment };
   }, JSON.parse(readFileSync(officialShowcase, 'utf8')));
   await page.getByTestId('workspace-nav-calculator').click();
   const calculator = page.getByRole('region', { name: '伤害计算', exact: true });
@@ -503,7 +663,10 @@ test('missing-build derivative of the original account stays selectable and carr
   expect(copied.artifacts.map(item => item.id)).toEqual(Object.values(before.equipment));
   expect(copied.artifacts).toHaveLength(5);
   expect(copied.weapon?.id).toBe('dullblade');
-  expect(await page.evaluate(() => localStorage.getItem('leyline-account-0.2.0'))).toBe(before.account);
+  const linked = await page.evaluate(() => JSON.parse(localStorage.getItem('leyline-account-0.2.0')!).document.characters[0]);
+  expect(linked.id).toBe(before.characterId);
+  expect(linked.equipment).toEqual(before.equipment);
+  expect(linked.build.weapon.id).toBe('dullblade');
 });
 
 test('old saved content changes only after review and explicit adoption in the calculator copy', async ({ page }) => {
@@ -585,7 +748,7 @@ for (const entry of [
     const bounds = stepper.getBoundingClientRect();
     return Array.from(stepper.querySelectorAll('button,input')).every(node => { const box = node.getBoundingClientRect(); return box.left >= bounds.left && box.right <= bounds.right + 1; });
   })).toBe(true);
-  await saveBuild(calculator);
+  await saveCatalogCharacter(calculator, entry.name);
   await selectHit(calculator, `${entry.id}.${entry.skill}`, entry.hitIndex);
   await calculator.getByRole('combobox', { name: '暴击', exact: true }).selectOption('noncritical');
   await calculator.getByRole('combobox', { name: '反应', exact: true }).selectOption('none');
