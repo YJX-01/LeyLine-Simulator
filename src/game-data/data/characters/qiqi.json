@@ -1008,6 +1008,50 @@
           "rate": "param1",
           "flat": "param2",
           "recipient": "party"
+        },
+        {
+          "id": "qiqi.burst.heal.revival",
+          "label": "已确认复苏时的生命值恢复",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 0.5,
+          "basisActor": "recipient",
+          "recipient": "other",
+          "bonusInteraction": "incoming-unverified",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "reviveFallenRecipient",
+                        "of": "recipient"
+                      },
+                      "term1": {
+                        "fact": "qiqiRevivalBurstCast"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "qiqiRevivalNearby",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "qiqiRevivalReady"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     }
@@ -1208,6 +1252,34 @@
         "kind": "boolean"
       },
       "label": "目标当前带有七七的度厄真符"
+    },
+    "reviveFallenRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该受益角色在本次复苏前已确认倒下"
+    },
+    "qiqiRevivalReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次复苏距上次已满15分钟，或是首次触发"
+    },
+    "qiqiRevivalBurstCast": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "七七本次成功施放仙法·救苦度厄"
+    },
+    "qiqiRevivalNearby": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受益角色在七七施放仙法·救苦度厄时处于附近"
     }
   }
 }

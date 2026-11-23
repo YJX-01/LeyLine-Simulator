@@ -737,6 +737,34 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "xingqiu.skill.heal.rain-sword-broken",
+          "label": "雨帘剑受击破碎治疗",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "hp",
+          "rate": 0.06,
+          "recipient": "on-field",
+          "condition": {
+            "fact": "xingqiu.rainSword-broken"
+          }
+        },
+        {
+          "id": "xingqiu.skill.heal.rain-sword-expired",
+          "label": "雨帘剑持续时间结束治疗",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "hp",
+          "rate": 0.06,
+          "recipient": "on-field",
+          "condition": {
+            "fact": "xingqiu.rainSword-expired"
+          }
+        }
       ]
     },
     {
@@ -1090,6 +1118,20 @@
         "kind": "boolean"
       },
       "label": "每三次剑雨中的增强剑雨本次命中敌人"
+    },
+    "xingqiu.rainSword-broken": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为一柄雨帘剑受击破碎"
+    },
+    "xingqiu.rainSword-expired": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为一柄雨帘剑持续时间结束"
     }
   },
   "formulas": [

@@ -901,6 +901,163 @@
           "max": 1,
           "integer": false
         }
+      ],
+      "heals": [
+        {
+          "id": "yumemizukimizuki.burst.heal.snack-self",
+          "detail": 2,
+          "stat": "elementalMastery",
+          "rate": "param3",
+          "recipient": "self",
+          "label": "瑞希拾取点心治疗",
+          "flat": "param7",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yumemizukimizuki.snackHealCollector"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "hp.above70",
+                    "inputs": {
+                      "ratio": {
+                        "fact": "hpRatio",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "multiplier": 2
+        },
+        {
+          "id": "yumemizukimizuki.burst.heal.snack-peer",
+          "detail": 2,
+          "stat": "elementalMastery",
+          "rate": "param3",
+          "recipient": "other",
+          "label": "队友拾取点心治疗",
+          "flat": "param7",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yumemizukimizuki.snackHealCollector"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "hp.above70",
+                    "inputs": {
+                      "ratio": {
+                        "fact": "hpRatio",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "yumemizukimizuki.burst.heal.snack-c4-self",
+          "label": "瑞希拾取点心追加治疗资格",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "elementalMastery",
+          "rate": "param3",
+          "recipient": "self",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yumemizukimizuki.snackHealCollector"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "call": "hp.above70",
+                        "inputs": {
+                          "ratio": {
+                            "fact": "hpRatio",
+                            "of": "recipient"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "flat": "param7",
+          "multiplier": 2
+        },
+        {
+          "id": "yumemizukimizuki.burst.heal.snack-c4-peer",
+          "label": "队友拾取点心追加治疗资格",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "elementalMastery",
+          "rate": "param3",
+          "recipient": "other",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yumemizukimizuki.snackHealCollector"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "call": "hp.above70",
+                        "inputs": {
+                          "ratio": {
+                            "fact": "hpRatio",
+                            "of": "recipient"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "flat": "param7",
+          "multiplier": 1
+        }
       ]
     }
   ],
@@ -1299,6 +1456,13 @@
         "unit": "scalar"
       },
       "label": "点心拾取者生命比例"
+    },
+    "yumemizukimizuki.snackHealCollector": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队员拾取了本次梦见风名物点心"
     },
     "yumemizukimizuki.directEnergy.c4": {
       "scope": "owner",

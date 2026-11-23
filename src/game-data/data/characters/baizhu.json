@@ -542,6 +542,34 @@
           "rate": "param2",
           "flat": "param3",
           "recipient": "party"
+        },
+        {
+          "id": "baizhu.skill.heal.herbal-nourishment",
+          "label": "采集物交互恢复",
+          "origin": {
+            "passive": 2
+          },
+          "stat": "hp",
+          "rate": 0.025,
+          "recipient": "on-field",
+          "condition": {
+            "fact": "baizhu.herbalNourishmentCollected"
+          }
+        },
+        {
+          "id": "baizhu.skill.heal.gossamer-sprite-splice",
+          "label": "游丝徵灵·切返回治疗",
+          "origin": {
+            "constellation": 1
+          },
+          "stat": "hp",
+          "rate": "param2",
+          "recipient": "party",
+          "condition": {
+            "fact": "baizhu.gossamerSpriteReturned"
+          },
+          "flat": "param3",
+          "multiplier": 0.2
         }
       ]
     },
@@ -1161,6 +1189,20 @@
         "kind": "boolean"
       },
       "label": "当前场上角色由无郤气护盾庇护"
+    },
+    "baizhu.herbalNourishmentCollected": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "白术在队伍中，且本次交互为味草之滋可触发的采集物"
+    },
+    "baizhu.gossamerSpriteReturned": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为游丝徵灵·切返回并为此队员治疗"
     }
   },
   "formulas": [

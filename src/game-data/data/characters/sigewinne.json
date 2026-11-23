@@ -709,6 +709,37 @@
           "stat": "hp",
           "rate": "param4",
           "recipient": "self"
+        },
+        {
+          "id": "sigewinne.skill.heal.acute-dosage-total",
+          "label": "急性剂量2.5秒基础总回复",
+          "origin": {
+            "passive": 2
+          },
+          "stat": "hp",
+          "rate": 0.5,
+          "basisActor": "recipient",
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "sigewinne.acuteDosageEligible"
+              },
+              "term1": {
+                "call": "sigewinne.acute-dosage-hp-below50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "bonusInteraction": "unverified"
         }
       ],
       "buffs": [
@@ -1289,6 +1320,13 @@
       },
       "label": "本次治疗前队伍所有角色当前生命之契总值（生命值）"
     },
+    "sigewinne.acuteDosageEligible": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "自己的受益角色在水下，本次生命值刚降到阈值且急性剂量20秒限次已就绪"
+    },
     "sigewinne.acuteDosageResistanceActive": {
       "scope": "recipient",
       "type": {
@@ -1386,6 +1424,18 @@
         "output": "value",
         "revision": "1",
         "cap": 0.3
+      }
+    },
+    {
+      "id": "sigewinne.acute-dosage-hp-below50",
+      "template": {
+        "id": "quantity-condition",
+        "unit": "scalar",
+        "input": "ratio",
+        "relation": "lt",
+        "threshold": 0.5,
+        "maxInput": 1,
+        "revision": "1"
       }
     },
     {

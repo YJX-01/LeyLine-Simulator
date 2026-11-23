@@ -761,6 +761,43 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "dahlia.burst.heal.revival",
+          "label": "已确认复苏时的生命值恢复",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 1,
+          "basisActor": "recipient",
+          "recipient": "on-field",
+          "bonusInteraction": "unverified",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "reviveFallenRecipient",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "dahlia.favonianFavor",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "dahliaRevivalReady"
+              }
+            },
+            "output": "active"
+          }
+        }
       ]
     }
   ],
@@ -1061,6 +1098,20 @@
         "kind": "boolean"
       },
       "label": "该角色获祝颂消耗后重唤的圣眷护盾庇护，眷怜启应仍生效"
+    },
+    "reviveFallenRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该受益角色在本次复苏前已确认倒下"
+    },
+    "dahliaRevivalReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次复苏距上次已满15分钟，或是首次触发"
     },
     "world.locationType": {
       "scope": "team",

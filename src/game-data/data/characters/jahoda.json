@@ -1038,7 +1038,117 @@
       "energyCapacity": {
         "parameter": "param9"
       },
-      "cooldownParameter": "param8"
+      "cooldownParameter": "param8",
+      "heals": [
+        {
+          "id": "jahoda.burst.heal.active",
+          "detail": 3,
+          "stat": "attack",
+          "rate": "param4",
+          "recipient": "on-field",
+          "flat": "param5",
+          "condition": {
+            "call": "condition.not",
+            "inputs": {
+              "term0": {
+                "fact": "jahoda.coordinatorHydroBoost"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "jahoda.burst.heal.active-hydro",
+          "detail": 3,
+          "stat": "attack",
+          "rate": "param4",
+          "recipient": "on-field",
+          "label": "协调器治疗（水元素强化）",
+          "flat": "param5",
+          "condition": {
+            "fact": "jahoda.coordinatorHydroBoost"
+          },
+          "multiplier": 1.2
+        },
+        {
+          "id": "jahoda.burst.heal.lowest",
+          "detail": 4,
+          "stat": "attack",
+          "rate": "param6",
+          "recipient": "party",
+          "flat": "param7",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "hp.above70",
+                    "inputs": {
+                      "ratio": {
+                        "fact": "jahoda.coordinatorActiveHpRatio"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "jahoda.coordinatorLowestHpRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.not",
+                "inputs": {
+                  "term0": {
+                    "fact": "jahoda.coordinatorHydroBoost"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "jahoda.burst.heal.lowest-hydro",
+          "detail": 4,
+          "stat": "attack",
+          "rate": "param6",
+          "recipient": "party",
+          "label": "最低生命值角色额外治疗（水元素强化）",
+          "flat": "param7",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "hp.above70",
+                    "inputs": {
+                      "ratio": {
+                        "fact": "jahoda.coordinatorActiveHpRatio"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "jahoda.coordinatorLowestHpRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "jahoda.coordinatorHydroBoost"
+              }
+            },
+            "output": "active"
+          },
+          "multiplier": 1.2
+        }
+      ]
     }
   ],
   "passives": [
@@ -1335,6 +1445,28 @@
         "kind": "boolean"
       },
       "label": "本次猫猫球命中后成功触发弹跳"
+    },
+    "jahoda.coordinatorHydroBoost": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "索酬的巧计的水元素治疗强化生效"
+    },
+    "jahoda.coordinatorLowestHpRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队员是协调器选中的附近最低生命值角色"
+    },
+    "jahoda.coordinatorActiveHpRatio": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "本次主治疗判定时场上角色的生命比例"
     },
     "jahoda.directEnergy.c4": {
       "scope": "owner",

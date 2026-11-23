@@ -754,6 +754,32 @@
           "stat": "hp",
           "rate": "param4",
           "recipient": "self"
+        },
+        {
+          "id": "lynette.skill.heal.recovery-orb",
+          "label": "复苏水团额外生命回复",
+          "origin": {
+            "passive": 2
+          },
+          "basisAmount": {
+            "fact": "recoveryOrbBaseHealing"
+          },
+          "rate": 0.25,
+          "recipient": "party",
+          "bonusInteraction": "unverified",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "recoveryOrbContact"
+              },
+              "term1": {
+                "fact": "recoveryOrbRecipient",
+                "of": "recipient"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     },
@@ -1230,6 +1256,14 @@
         "kind": "boolean"
       },
       "label": "本角色是本次接触复苏水团的已确认受益者"
+    },
+    "recoveryOrbBaseHealing": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "本次复苏水团对该受益者的基准生命回复量"
     },
     "recoveryOrbBaseStamina": {
       "scope": "query",

@@ -475,6 +475,29 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "heals": [
+        {
+          "id": "wriothesley.normal.heal.rebuke",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "hp",
+          "rate": 1,
+          "recipient": "self",
+          "condition": {
+            "fact": "wriothesley.graciousRebuke"
+          },
+          "basisFactor": {
+            "call": "wriothesley.rebuke-healing-rate",
+            "inputs": {
+              "constellation": {
+                "state": "constellation"
+              }
+            }
+          },
+          "label": "惩戒·凌跃拳"
+        }
       ]
     },
     {
@@ -1279,6 +1302,21 @@
         ],
         "equals": "off-field",
         "revision": "1"
+      }
+    },
+    {
+      "id": "wriothesley.rebuke-healing-rate",
+      "template": {
+        "id": "linear-bonus",
+        "revision": "1",
+        "input": "constellation",
+        "inputUnit": "count",
+        "outputUnit": "scalar",
+        "rate": 0.2,
+        "offset": 0.3,
+        "threshold": 3,
+        "cap": 0.5,
+        "output": "value"
       }
     }
   ]

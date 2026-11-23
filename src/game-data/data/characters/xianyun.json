@@ -595,7 +595,120 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param5"
+      "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "xianyun.skill.heal.cloudwave-1",
+          "label": "施放1次步天梯后的冲击波治疗",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "attack",
+          "rate": 0.5,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "xianyun.cloudwaveHealingHit"
+                  },
+                  "term1": {
+                    "fact": "xianyun.cloudwaveHealingRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "xianyun.cloudwave-crit-1",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.skyladderUses"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "xianyun.skill.heal.cloudwave-2",
+          "label": "施放2次步天梯后的冲击波治疗",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "attack",
+          "rate": 0.8,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "xianyun.cloudwaveHealingHit"
+                  },
+                  "term1": {
+                    "fact": "xianyun.cloudwaveHealingRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "xianyun.cloudwave-crit-2",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.skyladderUses"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "xianyun.skill.heal.cloudwave-3",
+          "label": "施放3次步天梯后的冲击波治疗",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "attack",
+          "rate": 1.5,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "xianyun.cloudwaveHealingHit"
+                  },
+                  "term1": {
+                    "fact": "xianyun.cloudwaveHealingRecipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "xianyun.cloudwave-crit-3",
+                "inputs": {
+                  "value": {
+                    "fact": "xianyun.skyladderUses"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        }
+      ]
     },
     {
       "id": "xianyun.burst",
@@ -1334,6 +1447,20 @@
         "kind": "boolean"
       },
       "label": "本次为附有仙力助推的坠地冲击，且此敌人为本次助推目标"
+    },
+    "xianyun.cloudwaveHealingHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为鹤云幻化期间冲击波命中，且奥妙烹黍珠可触发"
+    },
+    "xianyun.cloudwaveHealingRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次闲云冲击波触发治疗时该队员在附近"
     },
     "movement.mode": {
       "scope": "recipient",

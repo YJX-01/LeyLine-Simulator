@@ -1,0 +1,184 @@
+{
+  "retrievedAt": "2026-11-22T20:24:18.942Z",
+  "source": {
+    "repository": "https://gitlab.com/Dimbreath/AnimeGameData2",
+    "mirror": "https://github.com/DimbreathBot/AnimeGameData",
+    "revision": "bd35e243fa436f141f015cf221a6e19d0c34b7ca"
+  },
+  "clientText": "tools/data/sources/genshin-db/8e5badd60b5d894284ccc927a56c9683529d2592/ChineseSimplified/talents/columbina.json#passive4",
+  "handler": {
+    "path": "BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Columbina.json",
+    "abilityName": "Avatar_Columbina_Revive",
+    "modifier": "Avatar_Columbina_Revive_Handler",
+    "attachment": [
+      {
+        "$type": "AttachModifier",
+        "modifierName": "Avatar_Columbina_Revive_Handler"
+      }
+    ],
+    "onAdded": [
+      {
+        "$type": "TriggerThinkInterval"
+      }
+    ],
+    "modifierMixin": {
+      "$type": "DoReviveMixin",
+      "type": "OffStage",
+      "onKillActions": [
+        {
+          "successActions": [
+            {
+              "$type": "ReviveAvatar",
+              "amountByTargetMaxHPRatio": [
+                "_ABILITY_Columbina_Friendship",
+                0.1,
+                "MUL"
+              ],
+              "doOffStage": true,
+              "target": "CurLocalAvatar",
+              "AMAHJLOKEIE": ""
+            },
+            {
+              "$type": "AvatarSkillStart",
+              "cdRatio": 1,
+              "costStaminaRatio": 1,
+              "doOffStage": true,
+              "skillID": 11256,
+              "target": "Caster",
+              "NKOFINBNOOK": 1
+            }
+          ],
+          "target": "Caster",
+          "targetPredicates": [
+            {
+              "$type": "BySkillReady",
+              "skillID": 11256,
+              "target": "Caster"
+            },
+            {
+              "$type": "ByTargetInArea",
+              "areas": [
+                7
+              ],
+              "target": "CurLocalAvatar"
+            },
+            {
+              "$type": "ByCurrentSceneTypes",
+              "sceneTypes": [
+                "SCENE_WORLD",
+                "SCENE_ROOM"
+              ],
+              "target": "CurLocalAvatar"
+            }
+          ]
+        }
+      ]
+    },
+    "onKill": [
+      {
+        "successActions": [
+          {
+            "$type": "ReviveAvatar",
+            "amountByTargetMaxHPRatio": [
+              "_ABILITY_Columbina_Friendship",
+              0.1,
+              "MUL"
+            ],
+            "doOffStage": true,
+            "target": "CurLocalAvatar",
+            "AMAHJLOKEIE": ""
+          },
+          {
+            "$type": "AvatarSkillStart",
+            "cdRatio": 1,
+            "costStaminaRatio": 1,
+            "doOffStage": true,
+            "skillID": 11256,
+            "target": "Caster",
+            "NKOFINBNOOK": 1,
+            "JJOFDJNFKKB": true
+          }
+        ],
+        "target": "Caster",
+        "targetPredicates": [
+          {
+            "$type": "BySkillReady",
+            "skillID": 11256,
+            "target": "Caster"
+          },
+          {
+            "$type": "ByTargetInArea",
+            "areas": [
+              7
+            ],
+            "target": "CurLocalAvatar"
+          },
+          {
+            "$type": "ByCurrentSceneTypes",
+            "sceneTypes": [
+              "SCENE_WORLD",
+              "SCENE_ROOM"
+            ],
+            "target": "CurLocalAvatar"
+          }
+        ]
+      }
+    ],
+    "onThinkInterval": [
+      {
+        "$type": "SetFriendshipToGlobalValue",
+        "doOffStage": true,
+        "gvKey": "_ABILITY_Columbina_Friendship"
+      },
+      {
+        "$type": "SetGlobalValue",
+        "doOffStage": true,
+        "key": "_ABILITY_Columbina_Friendship",
+        "maxValue": 0,
+        "minValue": 0,
+        "predicates": [
+          {
+            "$type": "ByTargetGlobalValue",
+            "compareType": "LessAndEqual",
+            "key": "_ABILITY_Columbina_Friendship",
+            "value": 1
+          }
+        ],
+        "value": 1
+      }
+    ],
+    "thinkInterval": 5
+  },
+  "cooldown": {
+    "path": "ExcelBinOutput/AvatarSkillExcelConfigData.json",
+    "record": {
+      "id": 11256,
+      "cdTime": 100,
+      "ignoreCDMinusRatio": true,
+      "maxChargeNum": 1
+    }
+  },
+  "region": {
+    "path": "ExcelBinOutput/WorldAreaConfigData.json",
+    "record": {
+      "id": 2700,
+      "areaID1": 7,
+      "areaType": "LEVEL_1",
+      "sceneID": 3,
+      "areaNameTextMapHash": 2202974
+    }
+  },
+  "friendshipNamecard": {
+    "path": "ExcelBinOutput/FetterCharacterCardExcelConfigData.json",
+    "record": {
+      "avatarId": 10000125,
+      "fetterLevel": 10,
+      "rewardId": 241108
+    }
+  },
+  "reading": {
+    "hp": "复苏的生命值以当前本地受益者的生命上限为基数，采样好感等级每级0.1。采样好感值低于或等于1时，处理器写入1。",
+    "qualification": "显式确认倒下的是自己的场上角色、当前地区和场景满足条件、11256仍有一次可用。配置读取地区判定值7及SCENE_WORLD或SCENE_ROOM。中文文本包括挪德卡莱、霜月区域，并排除秘境、征讨领域、深境螺旋。",
+    "remainder": "需要从时间轴独立追踪倒下、地区边界、场景、5秒好感采样、技能冷却和复苏对象。ReviveAvatar 的好感比例是动作输入。还需要固定低于10级的好感，分别改变施救者治疗加成及受益者受治疗加成，观测复苏时生命上限、到账及舍入。"
+  }
+}

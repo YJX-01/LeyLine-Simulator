@@ -443,6 +443,30 @@
           ],
           "support": "hit-complete"
         }
+      ],
+      "heals": [
+        {
+          "id": "jean.normal.heal.wind-companion",
+          "label": "普通攻击命中后顺风而行治疗",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "attack",
+          "rate": 0.15,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "jean.windCompanionHit"
+              },
+              "term1": {
+                "fact": "jean.windCompanionRoll"
+              }
+            },
+            "output": "active"
+          }
+        }
       ]
     },
     {
@@ -1049,6 +1073,20 @@
         "kind": "boolean"
       },
       "label": "敌人位于此琴的蒲公英之风领域内"
+    },
+    "jean.windCompanionHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次琴的普通攻击命中敌人"
+    },
+    "jean.windCompanionRoll": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次顺风而行的50%治疗判定成功"
     },
     "jean.pickedUpElementalEnergy": {
       "scope": "query",

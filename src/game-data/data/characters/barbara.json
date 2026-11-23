@@ -609,6 +609,31 @@
           "rate": "param1",
           "flat": "param2",
           "recipient": "on-field"
+        },
+        {
+          "id": "barbara.skill.heal.normal-hit",
+          "detail": 0,
+          "stat": "hp",
+          "rate": "param3",
+          "recipient": "party",
+          "label": "普攻命中治疗",
+          "flat": "param4",
+          "condition": {
+            "fact": "barbara.melodyLoop"
+          }
+        },
+        {
+          "id": "barbara.skill.heal.charged-hit",
+          "detail": 0,
+          "stat": "hp",
+          "rate": "param3",
+          "recipient": "party",
+          "label": "重击命中治疗",
+          "flat": "param4",
+          "condition": {
+            "fact": "barbara.melodyLoop"
+          },
+          "multiplier": 4
         }
       ]
     },
@@ -734,6 +759,46 @@
           "flat": "param2",
           "recipient": "party",
           "trigger": "cast"
+        },
+        {
+          "id": "barbara.burst.heal.revival",
+          "label": "已确认复苏时的生命值恢复",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 1,
+          "basisActor": "recipient",
+          "recipient": "other",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "reviveFallenRecipient",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "fact": "onField",
+                        "of": "owner"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "barbaraRevivalReady"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     }
@@ -973,6 +1038,20 @@
         "kind": "boolean"
       },
       "label": "芭芭拉本次使用重击"
+    },
+    "reviveFallenRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该受益角色在本次复苏前已确认倒下"
+    },
+    "barbaraRevivalReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次复苏距上次已满15分钟，或是首次触发"
     }
   },
   "formulas": [

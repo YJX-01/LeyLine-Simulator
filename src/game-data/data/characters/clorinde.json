@@ -951,6 +951,87 @@
         }
       ],
       "cooldownParameter": "param13",
+      "heals": [
+        {
+          "id": "clorinde.skill.heal.low-bond",
+          "detail": 3,
+          "stat": "hp",
+          "rate": "param6",
+          "recipient": "self",
+          "label": "贯夜治疗",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "clorinde.nightVigil"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "bond.above-zero",
+                    "inputs": {
+                      "ratio": {
+                        "fact": "clorinde.impaleBondRatio"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.not",
+                    "inputs": {
+                      "term0": {
+                        "call": "bond.at-least-one",
+                        "inputs": {
+                          "ratio": {
+                            "fact": "clorinde.impaleBondRatio"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "basisFactor": {
+            "fact": "clorinde.impaleBondRatio"
+          }
+        },
+        {
+          "id": "clorinde.skill.heal.high-bond",
+          "detail": 3,
+          "stat": "hp",
+          "rate": "param8",
+          "recipient": "self",
+          "label": "贯夜·契令治疗",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "clorinde.nightVigil"
+              },
+              "term1": {
+                "call": "bond.at-least-one",
+                "inputs": {
+                  "ratio": {
+                    "fact": "clorinde.impaleBondRatio"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          },
+          "basisFactor": {
+            "fact": "clorinde.impaleBondRatio"
+          }
+        }
+      ],
       "buffs": [
         {
           "id": "clorinde.bond-of-life-from-healing",
@@ -1633,6 +1714,14 @@
         "unit": "scalar"
       },
       "label": "残光将终命中时生命之契占生命上限的比例"
+    },
+    "clorinde.impaleBondRatio": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "施放贯夜时、清除前的生命之契比例"
     },
     "clorinde.nonImpaleHealingConfirmed": {
       "scope": "query",

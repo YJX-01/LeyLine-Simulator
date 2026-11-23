@@ -782,6 +782,56 @@
           "rate": "param2",
           "flat": "param3",
           "recipient": "party"
+        },
+        {
+          "id": "escoffier.burst.heal.restorative-diet",
+          "label": "康复食疗每次恢复",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "attack",
+          "rate": 1.3824,
+          "recipient": "on-field",
+          "condition": {
+            "fact": "escoffier.restorativeDietTick"
+          }
+        },
+        {
+          "id": "escoffier.burst.heal.restorative-diet-double",
+          "label": "康复食疗倍增追加量",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "attack",
+          "rate": 1.3824,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "escoffier.restorative-diet-ascension",
+                    "inputs": {
+                      "value": {
+                        "state": "ascension"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "escoffier.restorativeDietTick"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "escoffier.directEnergy.c4"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     }
@@ -1122,6 +1172,13 @@
         "kind": "boolean"
       },
       "label": "确认本次康复食疗治疗触发四命提升，且未达本轮7次上限"
+    },
+    "escoffier.restorativeDietTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为康复食疗对附近当前角色的一次有效回复"
     }
   },
   "formulas": [
@@ -1162,6 +1219,18 @@
         "threshold": 0,
         "output": "value",
         "revision": "1"
+      }
+    },
+    {
+      "id": "escoffier.restorative-diet-ascension",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1,
+        "maxInput": 6
       }
     }
   ]

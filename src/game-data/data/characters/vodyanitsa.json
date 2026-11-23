@@ -696,7 +696,23 @@
           "stat": "hp",
           "rate": "param6",
           "flat": "param5",
-          "recipient": "on-field"
+          "recipient": "on-field",
+          "multiplier": {
+            "value": 1.5,
+            "origin": {
+              "constellation": 3
+            },
+            "condition": {
+              "call": "vodyanitsa.c4-low-hp",
+              "inputs": {
+                "ratio": {
+                  "fact": "hpRatio",
+                  "of": "recipient"
+                }
+              },
+              "output": "active"
+            }
+          }
         }
       ],
       "buffs": [
@@ -1271,6 +1287,18 @@
     }
   },
   "formulas": [
+    {
+      "id": "vodyanitsa.c4-low-hp",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "ratio",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.4,
+        "maxInput": 1
+      }
+    },
     {
       "id": "vodyanitsa.song-attack",
       "template": {

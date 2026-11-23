@@ -742,7 +742,90 @@
           ]
         }
       ],
-      "cooldownParameter": "param10"
+      "cooldownParameter": "param10",
+      "inputs": [
+        {
+          "id": "columbina.revival.friendship",
+          "type": {
+            "kind": "quantity",
+            "unit": "count"
+          },
+          "min": 0,
+          "max": 10,
+          "integer": true,
+          "usage": "healing"
+        }
+      ],
+      "heals": [
+        {
+          "id": "columbina.skill.heal.revival",
+          "label": "月的守望·复苏生命值",
+          "origin": {
+            "passive": 3
+          },
+          "stat": "hp",
+          "rate": 1,
+          "basisActor": "recipient",
+          "recipient": "party",
+          "bonusInteraction": "unverified",
+          "basisFactor": {
+            "call": "columbina.revival-ratio",
+            "inputs": {
+              "friendship": {
+                "call": "capped.party-bonus",
+                "inputs": {
+                  "basis": {
+                    "fact": "columbina.revival.friendship"
+                  },
+                  "rate": 1,
+                  "cap": 10
+                }
+              }
+            }
+          },
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "reviveFallenRecipient",
+                    "of": "recipient"
+                  },
+                  "term1": {
+                    "fact": "columbina.revival.localRecipient",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "columbina.revival.ready"
+                  },
+                  "term1": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "columbina.revival.inRegion"
+                      },
+                      "term1": {
+                        "fact": "columbina.revival.sceneEligible"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        }
+      ]
     },
     {
       "id": "columbina.burst",
@@ -1696,6 +1779,49 @@
       },
       "label": "本次引力干涉可触发四命回复（间隔至少15秒）"
     },
+    "reviveFallenRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该受益角色本次倒下"
+    },
+    "columbina.revival.localRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "倒下的是自己的场上角色"
+    },
+    "columbina.revival.ready": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次复苏的100秒限次已就绪"
+    },
+    "columbina.revival.inRegion": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次位于挪德卡莱或霜月区域"
+    },
+    "columbina.revival.sceneEligible": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次不在秘境、征讨领域或深境螺旋"
+    },
+    "columbina.revival.friendship": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "本次复苏采样的哥伦比娅好感等级"
+    },
     "columbina.c1.lunarBloomProtectionWindow": {
       "scope": "owner",
       "type": {
@@ -1705,6 +1831,21 @@
     }
   },
   "formulas": [
+    {
+      "id": "columbina.revival-ratio",
+      "template": {
+        "revision": "1",
+        "id": "linear-bonus",
+        "input": "friendship",
+        "inputUnit": "scalar",
+        "outputUnit": "scalar",
+        "rate": 0.1,
+        "offset": 0.1,
+        "threshold": 1,
+        "output": "value",
+        "maxInput": 10
+      }
+    },
     {
       "id": "columbina.temptation-count",
       "template": {

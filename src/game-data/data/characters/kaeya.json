@@ -552,7 +552,22 @@
           "support": "hit-complete-2"
         }
       ],
-      "cooldownParameter": "param2"
+      "cooldownParameter": "param2",
+      "heals": [
+        {
+          "id": "kaeya.skill.heal.cold-blooded-strike",
+          "label": "霜袭每命中一个目标后恢复",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "attack",
+          "rate": 0.15,
+          "recipient": "self",
+          "condition": {
+            "fact": "kaeya.frostgnawHit"
+          }
+        }
+      ]
     },
     {
       "id": "kaeya.burst",
@@ -1097,6 +1112,13 @@
         "kind": "boolean"
       },
       "label": "凯亚本次施放凛冽轮舞"
+    },
+    "kaeya.frostgnawHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次记录对应霜袭命中的一个目标"
     },
     "kaeya.c4.frozen-kiss.hit-eligible": {
       "scope": "owner",

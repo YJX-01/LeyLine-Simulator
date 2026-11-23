@@ -768,6 +768,31 @@
           "support": "hit-unavailable",
           "elementBy": "absorbedElement"
         }
+      ],
+      "heals": [
+        {
+          "id": "sayu.skill.heal.someone-more-capable",
+          "label": "在场触发扩散或星扩散治疗",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "elementalMastery",
+          "rate": 1.2,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "onField"
+              },
+              "term1": {
+                "fact": "sayu.swirlHealingReady"
+              }
+            },
+            "output": "active"
+          },
+          "flat": 300
+        }
       ]
     },
     {
@@ -1034,6 +1059,135 @@
           "rate": "param3",
           "flat": "param2",
           "recipient": "party"
+        },
+        {
+          "id": "sayu.burst.heal.daruma",
+          "detail": 3,
+          "stat": "attack",
+          "rate": "param6",
+          "recipient": "on-field",
+          "flat": "param5",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "sayu.darumaHealRecipient"
+              },
+              "term1": {
+                "call": "condition.any",
+                "inputs": {
+                  "term0": {
+                    "call": "constellation.one",
+                    "inputs": {
+                      "rank": {
+                        "state": "constellation"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "call": "condition.any",
+                    "inputs": {
+                      "term0": {
+                        "call": "condition.not",
+                        "inputs": {
+                          "term0": {
+                            "fact": "sayu.darumaEnemyNearby"
+                          }
+                        },
+                        "output": "active"
+                      },
+                      "term1": {
+                        "call": "condition.not",
+                        "inputs": {
+                          "term0": {
+                            "call": "hp.above70",
+                            "inputs": {
+                              "ratio": {
+                                "fact": "hpRatio",
+                                "of": "recipient"
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "sayu.burst.heal.daruma-splash",
+          "label": "不倒貉貉溅射每次治疗",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "attack",
+          "rate": "param6",
+          "recipient": "on-field",
+          "condition": {
+            "fact": "sayu.darumaSplashRecipient"
+          },
+          "flat": "param5",
+          "multiplier": 0.2
+        },
+        {
+          "id": "sayu.burst.heal.daruma-mastery",
+          "label": "不倒貉貉主目标精通治疗追加量",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "elementalMastery",
+          "rate": 0,
+          "recipient": "on-field",
+          "condition": {
+            "fact": "sayu.darumaMainHealConfirmed"
+          },
+          "extra": {
+            "stat": "elementalMastery",
+            "rate": 3,
+            "cap": 6000
+          }
+        },
+        {
+          "id": "sayu.burst.heal.daruma-splash-mastery",
+          "label": "不倒貉貉溅射精通治疗追加量",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "elementalMastery",
+          "rate": 0,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "sayu.daruma-splash-ascension",
+                "inputs": {
+                  "value": {
+                    "state": "ascension"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "sayu.darumaSplashRecipient"
+              }
+            },
+            "output": "active"
+          },
+          "extra": {
+            "stat": "elementalMastery",
+            "rate": 0.6,
+            "cap": 1200
+          }
         }
       ]
     }
@@ -1237,12 +1391,47 @@
       },
       "label": "本次长按处于风风轮状态的完整半秒数"
     },
+    "sayu.darumaHealRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该队员是不倒貉貉选中的附近最低生命比例角色"
+    },
+    "sayu.darumaEnemyNearby": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "不倒貉貉附近有敌人"
+    },
     "sayu.directEnergy.c4": {
       "scope": "owner",
       "type": {
         "kind": "boolean"
       },
       "label": "早柚在场上触发扩散或星扩散，本次可回复能量（间隔至少2秒）"
+    },
+    "sayu.swirlHealingReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为早柚触发扩散或星扩散的有效治疗，距上次至少两秒"
+    },
+    "sayu.darumaSplashRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为不倒貉貉实际治疗主目标后的溅射，该角色为主目标附近的另一场上角色"
+    },
+    "sayu.darumaMainHealConfirmed": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为不倒貉貉对主目标的一次有效治疗"
     }
   },
   "formulas": [
@@ -1288,6 +1477,18 @@
         "output": "value",
         "cap": 4,
         "revision": "1"
+      }
+    },
+    {
+      "id": "sayu.daruma-splash-ascension",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 4,
+        "maxInput": 6
       }
     }
   ]

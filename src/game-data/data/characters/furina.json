@@ -1038,6 +1038,69 @@
           "rate": "param9",
           "flat": "param10",
           "recipient": "on-field"
+        },
+        {
+          "id": "furina.skill.heal.endless-waltz",
+          "label": "停不了的圆舞每次恢复",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "hp",
+          "rate": 0.02,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "furina.endlessWaltzExternalHeal"
+                      },
+                      "term1": {
+                        "fact": "furina.endlessWaltzOverflow"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "furina.endlessWaltzTick"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "furina.endlessWaltzNearbyRecipient"
+              }
+            },
+            "output": "active"
+          },
+          "basisActor": "recipient"
+        },
+        {
+          "id": "furina.skill.heal.center-of-attention",
+          "label": "荒性万众瞩目每次恢复",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 0.04,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "furina.centerOusiaHealTick"
+              },
+              "term1": {
+                "fact": "furina.centerOusiaHealRecipient"
+              }
+            },
+            "output": "active"
+          }
         }
       ],
       "inputs": [
@@ -1819,6 +1882,48 @@
         "kind": "boolean"
       },
       "label": "沙龙成员命中敌人或众水的歌者治疗场上队员，本次可回复能量（间隔至少5秒）"
+    },
+    "furina.endlessWaltzExternalHeal": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发圆舞的治疗由芙宁娜以外的来源为当时的当前角色施加"
+    },
+    "furina.endlessWaltzOverflow": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "触发圆舞的那次治疗溢出"
+    },
+    "furina.endlessWaltzTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为停不了的圆舞触发后四秒内的一次回复"
+    },
+    "furina.endlessWaltzNearbyRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "圆舞回复时受益角色在附近"
+    },
+    "furina.centerOusiaHealTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为荒性万众瞩目下有效攻击命中后的一次回复"
+    },
+    "furina.centerOusiaHealRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "荒性万众瞩目回复时受益角色在附近"
     },
     "furina.utility.fontemerAbilityUsed": {
       "scope": "query",

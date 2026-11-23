@@ -656,7 +656,14 @@
           "stat": "hp",
           "rate": "param2",
           "flat": "param3",
-          "recipient": "on-field"
+          "recipient": "on-field",
+          "extra": {
+            "stat": "elementalMastery",
+            "rate": 0.75,
+            "origin": {
+              "passive": 1
+            }
+          }
         }
       ]
     },

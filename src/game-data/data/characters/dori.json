@@ -510,6 +510,21 @@
             "minConstellation": 6
           }
         }
+      ],
+      "heals": [
+        {
+          "id": "dori.normal.heal.sprinkling-weight",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 0.04,
+          "recipient": "party",
+          "condition": {
+            "fact": "dori.c6HealingReady"
+          },
+          "label": "不思议援手（六命）"
+        }
       ]
     },
     {
@@ -1119,6 +1134,13 @@
         "kind": "boolean"
       },
       "label": "本次命中由战技后三秒内的多莉六命雷附魔作用"
+    },
+    "dori.c6HealingReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "战技后三秒内普攻命中，距前次触发至少0.1秒，且所选受益人在附近"
     },
     "dori.a1.jinniLinkedReactor": {
       "scope": "owner",

@@ -772,6 +772,25 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "zhongli.skill.heal.chrysos",
+          "label": "玉璋护盾受击回复",
+          "origin": {
+            "constellation": 5
+          },
+          "basisAmount": {
+            "fact": "chrysosShieldDamage"
+          },
+          "rate": 0.4,
+          "recipient": "on-field",
+          "recipientHpCap": 0.08,
+          "bonusInteraction": "unverified",
+          "condition": {
+            "fact": "chrysosJadeShieldHit"
+          }
+        }
       ]
     },
     {
@@ -1190,6 +1209,21 @@
         "unit": "count"
       },
       "label": "当前玉璋护盾实例在本次受击前确认的坚璧层数（最多5层）"
+    },
+    "chrysosJadeShieldHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为钟离的玉璋护盾有效受击（排除环境伤害和侵蚀）"
+    },
+    "chrysosShieldDamage": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "hp"
+      },
+      "label": "本次玉璋护盾触发回复所采用的伤害量"
     }
   }
 }

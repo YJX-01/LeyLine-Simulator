@@ -782,7 +782,45 @@
           ]
         }
       ],
-      "cooldownParameter": "param8"
+      "cooldownParameter": "param8",
+      "heals": [
+        {
+          "id": "aether-hydro.skill.heal.spotless-waters",
+          "label": "拾取源水之滴恢复",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "hp",
+          "rate": 0.07,
+          "recipient": "self",
+          "condition": {
+            "fact": "aether-hydro.spotlessWatersPickup"
+          }
+        },
+        {
+          "id": "aether-hydro.skill.heal.tides-of-justice",
+          "label": "拾取源水之滴追加治疗",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 0.06,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "aether-hydro.spotlessWatersPickup"
+              },
+              "term1": {
+                "fact": "aether-hydro.tidesOfJusticeRecipient"
+              }
+            },
+            "output": "active"
+          },
+          "basisActor": "recipient"
+        }
+      ]
     },
     {
       "id": "aether-hydro.burst",
@@ -1160,6 +1198,20 @@
         "kind": "boolean"
       },
       "label": "水元素旅行者本次拾取一枚源水之滴"
+    },
+    "aether-hydro.spotlessWatersPickup": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "旅行者本次拾取由自己的水纹剑产生的源水之滴"
+    },
+    "aether-hydro.tidesOfJusticeRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次选为附近生命值百分比最低的治疗对象"
     },
     "aether-hydro.torrentSurgeShieldActive": {
       "scope": "owner",

@@ -527,6 +527,35 @@
           "rate": "param1",
           "flat": "param2",
           "recipient": "on-field"
+        },
+        {
+          "id": "sangonomiyakokomi.skill.heal.sea-moon-bonus",
+          "label": "化海月低生命治疗追加量",
+          "origin": {
+            "constellation": 1
+          },
+          "stat": "hp",
+          "rate": 0.045,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "hp.at-most50",
+                "inputs": {
+                  "ratio": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "sangonomiyakokomi.bakeKurageHealing"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     },
@@ -873,6 +902,44 @@
           "rate": "param2",
           "flat": "param3",
           "recipient": "party"
+        },
+        {
+          "id": "sangonomiyakokomi.burst.heal.ceremonial-garment-bonus",
+          "label": "仪来羽衣低生命治疗追加量",
+          "origin": {
+            "constellation": 1
+          },
+          "stat": "hp",
+          "rate": 0.006,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "hp.at-most50",
+                    "inputs": {
+                      "ratio": {
+                        "fact": "hpRatio",
+                        "of": "recipient"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "sangonomiyakokomi.garment"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "sangonomiyakokomi.garmentHealingHit"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     }
@@ -1176,6 +1243,20 @@
         "kind": "boolean"
       },
       "label": "仪来羽衣下普通攻击命中敌人，本次可回复能量（间隔至少0.2秒）"
+    },
+    "sangonomiyakokomi.bakeKurageHealing": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为化海月对该当前角色的一次治疗"
+    },
+    "sangonomiyakokomi.garmentHealingHit": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为仪来羽衣下普通攻击或重击命中后的治疗"
     }
   },
   "formulas": [

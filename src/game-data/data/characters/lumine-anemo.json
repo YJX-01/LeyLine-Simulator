@@ -684,6 +684,21 @@
           ],
           "support": "hit-unavailable"
         }
+      ],
+      "heals": [
+        {
+          "id": "lumine-anemo.skill.heal.slain-wind",
+          "label": "风涡剑击败后的每次恢复",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "hp",
+          "rate": 0.02,
+          "recipient": "self",
+          "condition": {
+            "fact": "lumine-anemo.secondWindTick"
+          }
+        }
       ]
     },
     {
@@ -1163,6 +1178,13 @@
         ]
       },
       "label": "该次风息激荡减抗对应的转化元素"
+    },
+    "lumine-anemo.secondWindTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为风涡剑击败敌人后五秒内的一次复苏之风回复"
     }
   },
   "formulas": [

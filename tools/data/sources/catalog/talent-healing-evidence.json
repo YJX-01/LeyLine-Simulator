@@ -1,0 +1,76 @@
+{
+  "scope": "按手工记录的一次技能治疗求基础数值，核对实际受益者与本次条件。测试使用固定天赋表及独立面板算式。",
+  "rows": [
+    {
+      "entity": "arlecchino",
+      "field": "/talents/2/details/1",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/arlecchino.json#combat3",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Arlecchino.json#Avatar_Arlecchino_ElementalBurst_Attack",
+        "kqm-theorycrafting-library@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/characters/pyro/arlecchino.md#burst-mechanics"
+      ],
+      "basis": "受益者是阿蕾奇诺。生命上限乘回收血偿勒令后、清除前的生命之契比例，再乘 param3，另加当前攻击力乘 param4。该治疗在爆发伤害后。",
+      "pending": "自动回收血偿勒令、扣除生命之契与实际生命变化。"
+    },
+    {
+      "entity": "barbara",
+      "field": "/talents/1/details/0",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/barbara.json#combat2"
+      ],
+      "basis": "歌声之环持续期间，普攻命中时按 param3 乘生命上限加 param4，重击命中按整项四倍。受益者包含自己的队伍成员。录入一次命中治疗时指定对应队员。",
+      "pending": "自动识别普攻与重击命中、联机友方距离和命中治疗时序。"
+    },
+    {
+      "entity": "clorinde",
+      "field": "/talents/1/details/3",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/clorinde.json#combat2"
+      ],
+      "basis": "在夜巡状态下为克洛琳德本人治疗。生命之契为零时无治疗。生命之契比例低于100%时，生命之契数值乘 param6，达到100%时切换为 param8。",
+      "pending": "自动赋予、清除生命之契与夜巡期间的外部治疗转化。"
+    },
+    {
+      "entity": "jahoda",
+      "field": "/talents/2/details/3",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/jahoda.json#combat3",
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/jahoda.json#passive1",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Jahoda.json#Avatar_Jahoda_ElementBurst_Heal"
+      ],
+      "basis": "协调器给本次场上队员治疗，按 param4 乘攻击力加 param5。水元素强化生效时，倍率和固定值同乘1.2。",
+      "pending": "自动计算协调器触发与水元素强化归属。"
+    },
+    {
+      "entity": "jahoda",
+      "field": "/talents/2/details/4",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/jahoda.json#combat3",
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/jahoda.json#passive1",
+        "anime-game-data-2@bd35e243fa436f141f015cf221a6e19d0c34b7ca:BinOutput/Ability/Temp/AvatarAbilities/ConfigAbility_Avatar_Jahoda.json#Avatar_Jahoda_ElementBurst_Heal"
+      ],
+      "basis": "主治疗和额外治疗使用独立的 HealHP 操作。当前场上队员通过严格高于70%的生命判定时，额外治疗量按 param6 乘攻击力加 param7。实际选中的附近最低生命比例队员由本次记录提供。水元素强化同样使整项乘1.2。",
+      "pending": "自动比较候选队员距离、生命比例及并列时的排序。"
+    },
+    {
+      "entity": "sayu",
+      "field": "/talents/2/details/3",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/sayu.json#combat3",
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/constellations/sayu.json#c1",
+        "kqm-theorycrafting-library@7fb4e7d54d38e9e7549f778ac9bdcfc626c646d5:docs/evidence/characters/anemo/sayu.md#burst-mechanics"
+      ],
+      "basis": "不倒貉貉给本次选中的附近场上最低生命比例角色治疗，按 param6 乘攻击力加 param5。附近有敌人时，零命要求受益者生命不高于70%。一命解除生命限制。",
+      "pending": "召唤物的面板捕获、各次治疗的自动时序，以及原治疗的受治疗加成如何传递给邻近受益者。"
+    },
+    {
+      "entity": "yumemizukimizuki",
+      "field": "/talents/2/details/2",
+      "sources": [
+        "genshin-db@8e5badd60b5d894284ccc927a56c9683529d2592:src/data/ChineseSimplified/talents/yumemizukimizuki.json#combat3"
+      ],
+      "basis": "点心给生命比例不高于70%的实际拾取者治疗。按瑞希的元素精通乘 param3 加 param7。瑞希自己拾取时整项乘二。",
+      "pending": "自动生成、拾取与超时爆炸。"
+    }
+  ]
+}

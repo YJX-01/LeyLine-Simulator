@@ -571,7 +571,22 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param3"
+      "cooldownParameter": "param3",
+      "heals": [
+        {
+          "id": "gaming.skill.heal.dance-of-amity",
+          "label": "踏云献瑞命中后每次恢复",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "hp",
+          "rate": 0.015,
+          "recipient": "self",
+          "condition": {
+            "fact": "gaming.danceOfAmityTick"
+          }
+        }
+      ]
     },
     {
       "id": "gaming.burst",
@@ -734,6 +749,19 @@
           "rate": "param2",
           "recipient": "self",
           "trigger": "cast"
+        },
+        {
+          "id": "gaming.burst.heal.man-chai-reunion",
+          "label": "猊兽·文仔会合恢复",
+          "origin": {
+            "constellation": 0
+          },
+          "stat": "hp",
+          "rate": 0.15,
+          "recipient": "self",
+          "condition": {
+            "fact": "gaming.manChaiReunion"
+          }
         }
       ]
     }
@@ -1011,6 +1039,20 @@
         "kind": "boolean"
       },
       "label": "踏云献瑞命中敌人，本次可回复能量（间隔至少0.2秒）"
+    },
+    "gaming.danceOfAmityTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为踏云献瑞命中敌人后0.8秒内的一次舞起升平回复"
+    },
+    "gaming.manChaiReunion": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次猊兽·文仔成功与嘉明会合"
     },
     "world.locationType": {
       "scope": "team",

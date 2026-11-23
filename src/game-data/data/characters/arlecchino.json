@@ -1036,6 +1036,22 @@
         "parameter": "param6"
       },
       "cooldownParameter": "param5",
+      "heals": [
+        {
+          "id": "arlecchino.burst.heal.burst-bond",
+          "detail": 1,
+          "stat": "hp",
+          "rate": "param3",
+          "recipient": "self",
+          "basisFactor": {
+            "fact": "arlecchino.consumedBondRatio"
+          },
+          "extra": {
+            "stat": "attack",
+            "rate": "param4"
+          }
+        }
+      ],
       "buffs": [
         {
           "id": "arlecchino.skillReset",
@@ -1584,6 +1600,14 @@
         "kind": "boolean"
       },
       "label": "本次回收血偿勒令·结触发厄月血火"
+    },
+    "arlecchino.consumedBondRatio": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "scalar"
+      },
+      "label": "回收血偿勒令后、清除前的生命之契比例"
     },
     "arlecchino.directEnergy.c4": {
       "scope": "owner",

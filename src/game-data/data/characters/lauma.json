@@ -930,6 +930,39 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "lauma.skill.heal.lifeweave",
+          "label": "生之纺线月绽放恢复",
+          "origin": {
+            "constellation": 0
+          },
+          "stat": "elementalMastery",
+          "rate": 5,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "lauma.lifeweaveActive"
+                  },
+                  "term1": {
+                    "fact": "lauma.lifeweaveLunarBloom"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "lauma.lifeweaveNearby"
+              }
+            },
+            "output": "active"
+          }
+        }
       ]
     },
     {
@@ -1719,6 +1752,27 @@
         "kind": "boolean"
       },
       "label": "霜林圣域攻击命中敌人，本次可回复能量（间隔至少5秒）"
+    },
+    "lauma.lifeweaveActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "菈乌玛施放战技或爆发后的20秒生之纺线有效"
+    },
+    "lauma.lifeweaveLunarBloom": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "附近队员触发月绽放且距离上次生之纺线治疗至少1.9秒"
+    },
+    "lauma.lifeweaveNearby": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "受治疗角色处于生之纺线的附近范围"
     },
     "lauma.a4.spiritEnvoyFormEnded": {
       "scope": "query",

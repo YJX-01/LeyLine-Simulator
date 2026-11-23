@@ -1022,6 +1022,59 @@
           "rate": "param4",
           "flat": "param5",
           "recipient": "on-field"
+        },
+        {
+          "id": "charlotte.burst.heal.verification",
+          "label": "「核实」印记每次恢复",
+          "origin": {
+            "constellation": 0
+          },
+          "stat": "attack",
+          "rate": 0.8,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "charlotte.verificationTick"
+              },
+              "term1": {
+                "fact": "charlotte.verificationRecipient"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "charlotte.burst.heal.focused-impression",
+          "label": "「聚焦印象」协同攻击治疗",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "attack",
+          "rate": 0.42,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "charlotte.c6-focus"
+                  },
+                  "term1": {
+                    "fact": "charlotte.focusHealReady"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "charlotte.focusHealArea"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     }
@@ -1384,6 +1437,34 @@
         "kind": "boolean"
       },
       "label": "定格·全方位确证命中有瞬时剪影或聚焦印象印记的敌人，本次未达每20秒5次上限"
+    },
+    "charlotte.verificationTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为元素爆发治疗施加「核实」后的一次回复"
+    },
+    "charlotte.verificationRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次受益角色持有「核实」印记"
+    },
+    "charlotte.focusHealReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次聚焦印象协同攻击可触发，距上次至少六秒"
+    },
+    "charlotte.focusHealArea": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次当前角色在温亨廷先生协同攻击范围内"
     },
     "charlotte.a1.focusedImpressionCooldownUses": {
       "scope": "owner",

@@ -620,6 +620,41 @@
           "rate": "param2",
           "flat": "param3",
           "recipient": "party"
+        },
+        {
+          "id": "yaoyao.skill.heal.in-others-shoes",
+          "label": "白玉萝卜后续每次恢复",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "hp",
+          "rate": 0.008,
+          "recipient": "party",
+          "condition": {
+            "fact": "yaoyao.radishRegenThrow"
+          }
+        },
+        {
+          "id": "yaoyao.skill.heal.mega-radish",
+          "label": "超厉害·大萝卜炸裂治疗",
+          "origin": {
+            "constellation": 5
+          },
+          "stat": "hp",
+          "rate": 0.075,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "yaoyao.c6MegaRadishReady"
+              },
+              "term1": {
+                "fact": "yaoyao.megaRadishHealRecipient"
+              }
+            },
+            "output": "active"
+          }
         }
       ]
     },
@@ -866,6 +901,19 @@
           "rate": "param2",
           "flat": "param3",
           "recipient": "party"
+        },
+        {
+          "id": "yaoyao.burst.heal.in-others-shoes",
+          "label": "白玉萝卜后续每次恢复",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "hp",
+          "rate": 0.008,
+          "recipient": "party",
+          "condition": {
+            "fact": "yaoyao.radishRegenJump"
+          }
         }
       ],
       "buffs": [
@@ -1132,6 +1180,27 @@
         "kind": "boolean"
       },
       "label": "桂子仙机时白玉萝卜炸裂命中敌人，本次可回复能量（间隔至少0.8秒）"
+    },
+    "yaoyao.radishRegenThrow": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色在月桂·抛掷型的白玉萝卜炸裂时在范围内且在场，本次为其后续一次回复"
+    },
+    "yaoyao.radishRegenJump": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "该角色在月桂·弹跳型或桂子仙机的白玉萝卜炸裂时在范围内且在场，本次为其后续一次回复"
+    },
+    "yaoyao.megaRadishHealRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "超厉害·大萝卜炸裂时，当前受益角色处于范围内"
     }
   },
   "formulas": [

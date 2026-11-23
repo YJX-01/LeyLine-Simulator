@@ -527,6 +527,36 @@
           "rate": "param2",
           "flat": "param3",
           "recipient": "party"
+        },
+        {
+          "id": "ifa.skill.heal.field-medic",
+          "label": "温敷战术包扎治疗当前队员",
+          "origin": {
+            "passive": 3
+          },
+          "stat": "hp",
+          "rate": 0.4,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "ifa.field-medic-hp-below40",
+                "inputs": {
+                  "value": {
+                    "fact": "hpRatio",
+                    "of": "recipient"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "ifa.fieldMedicPhlogiston"
+              }
+            },
+            "output": "active"
+          },
+          "basisActor": "recipient"
         }
       ]
     },
@@ -1177,6 +1207,13 @@
       },
       "label": "援护射击命中敌人，本次可回复能量（间隔至少8秒）"
     },
+    "ifa.fieldMedicPhlogiston": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次位于有效的燃素区域，燃素至少10点，温敷战术包扎可触发"
+    },
     "ifa.rescueNightsoulBlessing": {
       "scope": "owner",
       "type": {
@@ -1253,6 +1290,17 @@
     }
   },
   "formulas": [
+    {
+      "id": "ifa.field-medic-hp-below40",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.4
+      }
+    },
     {
       "id": "ifa.rescue-excess",
       "template": {

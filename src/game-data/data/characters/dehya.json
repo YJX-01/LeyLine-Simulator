@@ -763,6 +763,49 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "dehya.skill.heal.stout-heart-initial",
+          "label": "低于40%生命的立即恢复",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "hp",
+          "rate": 0.2,
+          "recipient": "self",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "dehya.stout-heart-hp-below40",
+                "inputs": {
+                  "value": {
+                    "fact": "hpRatio"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "dehya.stoutHeartReady"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "dehya.skill.heal.stout-heart-tick",
+          "label": "崇诚之真后续每次恢复",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "hp",
+          "rate": 0.06,
+          "recipient": "self",
+          "condition": {
+            "fact": "dehya.stoutHeartTick"
+          }
+        }
       ]
     },
     {
@@ -978,7 +1021,22 @@
       "energyCapacity": {
         "parameter": "param7"
       },
-      "cooldownParameter": "param6"
+      "cooldownParameter": "param6",
+      "heals": [
+        {
+          "id": "dehya.burst.heal.flame-ignition",
+          "label": "炽鬃拳或焚落踢命中恢复",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "hp",
+          "rate": 0.025,
+          "recipient": "self",
+          "condition": {
+            "fact": "dehya.directEnergy.c4"
+          }
+        }
+      ]
     }
   ],
   "passives": [
@@ -1364,6 +1422,20 @@
       },
       "label": "炽鬃拳或焚落踢命中敌人，本次可回复能量（间隔至少0.2秒）"
     },
+    "dehya.stoutHeartReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次达到崇诚之真的触发条件且距离上次触发至少20秒"
+    },
+    "dehya.stoutHeartTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为崇诚之真触发后十秒内的一次后续回复"
+    },
     "dehya.incomingRedmaneBlood": {
       "scope": "query",
       "type": {
@@ -1422,6 +1494,17 @@
         "output": "value",
         "maxInput": 4,
         "revision": "1"
+      }
+    },
+    {
+      "id": "dehya.stout-heart-hp-below40",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "scalar",
+        "relation": "lt",
+        "threshold": 0.4
       }
     }
   ]

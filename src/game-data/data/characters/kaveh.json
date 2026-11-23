@@ -581,7 +581,31 @@
           "support": "hit-unavailable"
         }
       ],
-      "cooldownParameter": "param2"
+      "cooldownParameter": "param2",
+      "heals": [
+        {
+          "id": "kaveh.skill.heal.architects-undertaking",
+          "label": "承受草原核伤害后恢复",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "elementalMastery",
+          "rate": 3,
+          "recipient": "self",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "kaveh.dendroCoreDamageTaken"
+              },
+              "term1": {
+                "fact": "kaveh.architectsUndertakingReady"
+              }
+            },
+            "output": "active"
+          }
+        }
+      ]
     },
     {
       "id": "kaveh.burst",
@@ -1032,6 +1056,20 @@
         "kind": "boolean"
       },
       "label": "繁绘隅穹持续中"
+    },
+    "kaveh.dendroCoreDamageTaken": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次卡维受到草原核、烈绽放或超绽放伤害"
+    },
+    "kaveh.architectsUndertakingReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次营造者的担当可触发，距上次至少0.5秒"
     },
     "kaveh.c6PairidaezasLightReady": {
       "scope": "query",

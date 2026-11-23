@@ -836,7 +836,53 @@
       "energyCapacity": {
         "parameter": "param5"
       },
-      "cooldownParameter": "param4"
+      "cooldownParameter": "param4",
+      "heals": [
+        {
+          "id": "alyosha.burst.heal.tugarin-active",
+          "label": "图加林攻击治疗当前角色",
+          "origin": {
+            "passive": 0
+          },
+          "stat": "attack",
+          "rate": 1.2,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "alyosha.tugarinAttacked"
+              },
+              "term1": {
+                "fact": "alyosha.tugarinNearbyRecipient"
+              }
+            },
+            "output": "active"
+          }
+        },
+        {
+          "id": "alyosha.burst.heal.tugarin-lowest",
+          "label": "图加林攻击治疗最低生命比例角色",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "attack",
+          "rate": 0.6,
+          "recipient": "party",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "fact": "alyosha.tugarinAttacked"
+              },
+              "term1": {
+                "fact": "alyosha.tugarinLowestHpRecipient"
+              }
+            },
+            "output": "active"
+          }
+        }
+      ]
     }
   ],
   "passives": [
@@ -1138,6 +1184,27 @@
         "kind": "boolean"
       },
       "label": "附近队员对敌人触发雷元素相关反应，本次可回复能量（间隔至少18秒）"
+    },
+    "alyosha.tugarinAttacked": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为图加林发动攻击"
+    },
+    "alyosha.tugarinNearbyRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次图加林攻击时，受益角色在附近"
+    },
+    "alyosha.tugarinLowestHpRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次图加林攻击时，受益角色在附近且被选为生命值百分比最低者"
     }
   }
 }

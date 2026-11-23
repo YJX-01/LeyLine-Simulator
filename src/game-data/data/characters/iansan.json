@@ -875,6 +875,45 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "iansan.burst.heal.warm-up",
+          "label": "热身效应恢复夜魂时治疗",
+          "origin": {
+            "passive": 1
+          },
+          "stat": "attack",
+          "rate": 0.6,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "fact": "iansan.warmUpActive"
+                  },
+                  "term1": {
+                    "call": "iansan.warm-up-restored",
+                    "inputs": {
+                      "value": {
+                        "fact": "iansan.nightsoulRestored"
+                      }
+                    },
+                    "output": "active"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "iansan.warmUpHealingReady"
+              }
+            },
+            "output": "active"
+          }
+        }
       ]
     }
   ],
@@ -1185,6 +1224,28 @@
       },
       "label": "战斗中伊安珊处于夜魂加持并消耗满6点夜魂值，本次可回复能量（间隔至少18秒）"
     },
+    "iansan.nightsoulRestored": {
+      "scope": "query",
+      "type": {
+        "kind": "quantity",
+        "unit": "count"
+      },
+      "label": "伊安珊本次实际恢复的夜魂值"
+    },
+    "iansan.warmUpActive": {
+      "scope": "owner",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次夜魂恢复时热身效应仍有效"
+    },
+    "iansan.warmUpHealingReady": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次热身效应可触发治疗，距上次至少2.8秒"
+    },
     "natlanPhlogistonArea": {
       "scope": "team",
       "type": {
@@ -1232,6 +1293,17 @@
         "threshold": 0,
         "output": "value",
         "maxInput": 41
+      }
+    },
+    {
+      "id": "iansan.warm-up-restored",
+      "template": {
+        "revision": "1",
+        "id": "quantity-condition",
+        "input": "value",
+        "unit": "count",
+        "relation": "gte",
+        "threshold": 1
       }
     }
   ]

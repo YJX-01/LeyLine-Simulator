@@ -883,6 +883,81 @@
             }
           ]
         }
+      ],
+      "heals": [
+        {
+          "id": "gorou.burst.heal.lapping-hound",
+          "label": "大将威仪每次治疗",
+          "origin": {
+            "constellation": 3
+          },
+          "stat": "defense",
+          "rate": 0.5,
+          "recipient": "on-field",
+          "condition": {
+            "call": "condition.all",
+            "inputs": {
+              "term0": {
+                "call": "condition.all",
+                "inputs": {
+                  "term0": {
+                    "call": "condition.all",
+                    "inputs": {
+                      "term0": {
+                        "fact": "gorou.burstDomain"
+                      },
+                      "term1": {
+                        "call": "condition.any",
+                        "inputs": {
+                          "term0": {
+                            "call": "gorou.banner-level-2",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "geo"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          },
+                          "term1": {
+                            "call": "gorou.banner-level-3",
+                            "inputs": {
+                              "value": {
+                                "teamCount": {
+                                  "elements": [
+                                    "geo"
+                                  ],
+                                  "match": "include",
+                                  "excludeOwner": false
+                                }
+                              }
+                            },
+                            "output": "active"
+                          }
+                        },
+                        "output": "active"
+                      }
+                    },
+                    "output": "active"
+                  },
+                  "term1": {
+                    "fact": "gorou.generalsGloryTick"
+                  }
+                },
+                "output": "active"
+              },
+              "term1": {
+                "fact": "gorou.generalsGloryRecipient"
+              }
+            },
+            "output": "active"
+          }
+        }
       ]
     }
   ],
@@ -1261,6 +1336,20 @@
         "kind": "boolean"
       },
       "label": "当前大将威仪领域生效"
+    },
+    "gorou.generalsGloryTick": {
+      "scope": "query",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次为大将威仪每1.5秒的一次有效治疗"
+    },
+    "gorou.generalsGloryRecipient": {
+      "scope": "recipient",
+      "type": {
+        "kind": "boolean"
+      },
+      "label": "本次当前角色在大将威仪范围内"
     },
     "gorou.c1.otherActiveGeoDamage": {
       "scope": "owner",
